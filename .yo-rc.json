@@ -1,0 +1,42 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "br.ufpa.labes.spm",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.2.0",
+    "applicationType": "monolith",
+    "baseName": "spm",
+    "packageName": "br.ufpa.labes.spm",
+    "packageFolder": "br/ufpa/labes/spm",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": "kafka",
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "NDNlOTU2OWI1MjRlYWEzMWJkMzJkYjM1OWVmZGFkMDEwMWI5ZGViNDRiZGRhZDZjYmRiZjk1YTIxMzYwNGYzOWI5YmQ3YmFhMDc4ZjRmZDRmMTdhZTkyZWZhYWU2ZjUyZjZlNDQ1ZWQxZDFkNGMwMjdiZmM2ZmM0NTllOGRiMWY=",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "skipClient": true,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": [
+      "en",
+      "pt-br"
+    ],
+    "blueprints": []
+  }
+}
