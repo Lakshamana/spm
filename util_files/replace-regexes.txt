@@ -1,0 +1,9 @@
+** Regexes úteis para facilitar a migração do SPM para Spring **
+
+* Substituir, usando o VS Code, as ocorrências de trechos de códigos na implementação antiga do SPM que casam com as regexes indicadas pela tag 'search' pelas substituições descritas pelas tags 'replaceby', nas seguintes ocorrências:
+
+* A cada novo padrão encontrado, adicioná-lo ao final do arquivo:
+
+- De subtipos de Activity por Objetos de Activity:
+  search: (\().*\((Normal|Decomposed)\) ([\w]*).*(\))\.
+  replaceby: $3.get$2Sub().

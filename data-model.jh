@@ -1,0 +1,1227 @@
+//package activities -------------------------------------------
+entity Activity {
+    ident String,
+    name String
+}
+//PlainActivity state enum
+enum PlainActivityStatus {
+    WAITING, READY, FAILED, CANCELED, ACTIVE, PAUSED, FINISHED
+}
+entity DecomposedActivity {
+}
+
+entity PlainActivity {
+    requirements TextBlob,
+    plainActivityStatus PlainActivityStatus, //TODO: mover para EnactionDescription (?)
+    automatic Boolean
+}
+
+relationship ManyToOne {
+    Activity{theActivityType} to ActivityType{theActivity}
+}
+
+relationship OneToMany {
+    Activity{theModelingActivityEvent} to Event{theActivity},
+    Activity{hasVersions} to Activity{theAncestorActitvity},
+    Activity{fromSimpleCon} to SimpleCon{fromActivity},
+    Activity{toSimpleCon} to SimpleCon{toActivity},
+    Activity{fromJoinCon} to JoinCon{toActivity},
+    Activity{toBranchCon} to BranchCon{fromActivity},
+    Activity{activityMetric} to Metric{theActivity},
+    Activity{theActivityEstimation} to ActivityEstimation{theActivity},
+
+    PlainActivity{theGlobalActivityEvent} to Event{thePlainActivity}
+}
+
+relationship ManyToMany {
+    Activity{toJoinCon} to JoinCon{fromActivity},
+    Activity{toBranchANDCon} to BranchANDCon{fromActivity},
+    Activity{fromArtifactCon} to ArtifactCon{toActivity},
+    Activity{toArtifactCon} to ArtifactCon{fromActivity}
+}
+
+relationship OneToOne {
+    Activity{thePlainActivitySub} to PlainActivity{theActivitySuper},
+    Activity{theDecomposedActivitySub} to DecomposedActivity{theActivitySuper},
+
+    PlainActivity{theEnactionDescription} to EnactionDescription{thePlainActivity}
+}
+
+//package agent -------------------------------------------
+
+entity Ability {
+    ident String,
+    name String
+    description TextBlob
+}
+
+entity Agent {
+    ident String,
+    name String,
+    email String,
+    costHour Float,
+    passwordHash String,
+    tipoUser Integer,
+    isActive Boolean,
+    online Boolean,
+    photoURL String
+    upload String
+}
+
+entity AgentAffinityAgent {
+    degree Integer
+}
+
+entity AgentHasAbility {
+    degree Integer
+}
+
+entity AgentPlaysRole {
+    sinceDate LocalDate
+}
+
+//EmailConfiguration enums
+enum EmailSecurityLevels {
+    WITHOUT_SECURITY,
+    TLS_IF_AVAILABLE,
+    TLS,
+    SSL
+}
+
+enum EmailNotificationConfig {
+    NOTIFY_ALL_MANAGERS,
+    NOTIFY_SPECIFIC_MANAGERS,
+    NOT_NOTIFY
+}
+
+enum EmailProcessStatusNotifications {
+    PROCESS_HAS_FINISHED,
+    FIRST_ACTIVITY_HAS_STARTED,
+    CONSUMABLE_RESOURCE_5_AMOUNT,
+    ACTIVITY_IS_READY_INSTANTIATED,
+    TASK_DELEGATED,
+    DECISION_BRANCH_COND
+}
+
+entity EmailConfiguration {
+    processFinished Boolean,
+    firstActStarted Boolean,
+    consumableResourceAmount Boolean,
+    activityInstantied Boolean,
+    taskDelegated Boolean,
+
+    //enums
+    securityLevels EmailSecurityLevels,
+    notificationConfig EmailNotificationConfig,
+    processNotifications EmailProcessStatusNotifications
+}
+
+entity WorkGroup {
+    ident String,
+    name String,
+    description TextBlob,
+    isActive Boolean
+}
+
+entity OutOfWorkPeriod {
+    why TextBlob,
+    fromDate String,
+    toDate String
+}
+
+entity Role {
+    ident String,
+    name String,
+    description TextBlob
+}
+
+entity RoleNeedsAbility {
+    degree Integer
+}
+
+relationship ManyToOne {
+    Ability{theAbilityType} to AbilityType{theAbility}
+
+    Agent{theResourceEvent} to Event{theRequestorAgent}, // O agente solicita um recurso
+
+    AgentAffinityAgent{fromAffinity} to Agent{fromAgentAffinity},
+    AgentAffinityAgent{toAffinity} to Agent{toAgentAffinity},
+
+    AgentHasAbility{theAgent} to Agent{theAgentHasAbility},
+
+    AgentPlaysRole{theAgent} to Agent{theAgentPlaysRole},
+    AgentPlaysRole{theRole} to Role{theAgentPlaysRole},
+
+    WorkGroup{theWorkGroupType} to WorkGroupType{theWorkGroup}
+    WorkGroup{superWorkGroup} to WorkGroup{subWorkGroups},
+
+    OutOfWorkPeriod{theAgent} to Agent{theOutOfWorkPeriod},
+
+    Role{subordinate} to Role{theRole},
+    Role{theRoleType} to RoleType{theRole}
+
+    RoleNeedsAbility{theRole} to Role{theRoleNeedsAbility},
+    RoleNeedsAbility{theAbility} to Ability{theRoleNeedsAbility}
+}
+
+relationship OneToMany {
+    Ability{theReqAgentRequiresAbility} to ReqAgentRequiresAbility{theAbility},
+    Ability{theAgentHasAbility} to AgentHasAbility{theAbility},
+
+    Agent{delegates} to Task{delegatedFrom},
+    Agent{isDelegatedFor} to Task{delegatedTo},
+    Agent{theModelingActivityEvent} to Event{theAgent},
+    Agent{theReqAgent} to ReqAgent{theAgent},
+    Agent{theAgentMetric} to AgentMetric{theAgent},
+    Agent{theAgentEstimation} to AgentEstimation{theAgent},
+    Agent{theManagedOrgUnits} to CompanyUnit{theAgent},
+
+    EmailConfiguration{theProcesses} to Process{theEmailConfiguration},
+    EmailConfiguration{theManagers} to Agent{theEmailConfiguration},
+
+    WorkGroup{theReqWorkGroup} to ReqWorkGroup{theWorkGroup},
+    WorkGroup{theWorkGroupMetric} to WorkGroupMetric{theWorkGroup},
+    WorkGroup{theWorkGroupEstimation} to WorkGroupEstimation{theWorkGroup},
+
+    Role{theReqAgent} to ReqAgent{theRole}
+}
+
+relationship ManyToMany {
+    Agent{theProcesses} to Process{theAgent}, // ** Qual o papel deste agent? Autor do process? **
+    Agent{theWorkGroups} to WorkGroup{theAgent},
+    Agent{theOrgUnits} to CompanyUnit{theAgent}
+}
+
+relationship OneToOne {
+    Agent{theTaskAgenda} to TaskAgenda{theAgent},
+    Agent{configuration} to SpmConfiguration{theAgent}
+}
+
+//package artifacts -------------------------------------------
+
+entity Artifact {
+    ident String,
+    name String,
+    description String,
+    pathName String,
+    fileName String,
+    latestVersion String,
+    isTemplate Boolean,
+    isActive Boolean
+}
+
+entity ArtifactTask {
+    inWorkspaceVersion String,
+    outWorkspaceVersion String
+}
+
+relationship ManyToOne {
+    Artifact{theArtifactType} to ArtifactType{theArtifact}
+    Artifact{derivedFrom} to Artifact{possess},
+
+    ArtifactTask{theArtifact} to Artifact{theArtifactTasks},
+    ArtifactTask{theTask} to Task{theArtifactTasks}
+}
+
+relationship OneToMany {
+    Artifact{theInvolvedArtifacts} to InvolvedArtifact{theArtifact},
+    Artifact{theArtifactParams} to ArtifactParam{theArtifact},
+    Artifact{theAutomatic} to AutomaticActivity{theArtifact},
+    Artifact{theArtifactMetric} to ArtifactMetric{theArtifact},
+    Artifact{theArtifactEstimation} to ArtifactEstimation{theArtifact},
+    Artifact{theVCSRepository} to VCSRepository{theArtifact}
+}
+
+//package assets -------------------------------------------
+
+//AssetVisibility enum
+enum AssetVisibility {
+    VISIBILITY_PUBLIC,
+    VISIBILITY_PRIVATE
+}
+
+entity Asset {
+    uid String,
+    creationDate LocalDate,
+    publishDate LocalDate,
+    name String,
+    description String,
+    applicability String,
+    tags String,
+    path String,
+    latestVersion String,
+    readOnly Boolean,
+    assetVisibility AssetVisibility
+}
+
+entity AssetRelationship {
+    description String
+}
+
+entity AssetStat {
+    voteCount Long,
+    visitCount Long,
+    downloadCount Long,
+    tVotes Double,
+    rate Double
+}
+
+entity AuthorStat {
+    rate Double,
+    visitCount Long,
+    downloadCount Long
+}
+
+entity LessonLearned {
+    name String,
+    description TextBlob,
+    creationDate LocalDate
+}
+
+entity Message {
+    content TextBlob,
+    time LocalDate
+}
+
+entity RelationshipKind {
+    typeIdent String,
+    description String
+}
+
+entity Tag {
+    ident String
+}
+
+entity TagStat {
+    count Long
+}
+
+relationship ManyToOne {
+    Asset{owner} to Author{theAssets},
+
+    AssetRelationship{kind} to RelationshipKind{theAssetRelationship},
+
+    AuthorStat{author} to Author{theAuthorStats},
+
+    LessonLearned{author} to Author{theLessonLearned},
+
+    Message{sender} to Author{sentMessages},
+    Message{recipient} to Author{receivedMessages},
+
+    TagStat{tag} to Tag{theTagStat}
+}
+
+relationship OneToMany {
+    Asset{authorStats} to AuthorStat{theAsset},
+    Asset{tagStats} to TagStat{theAsset},
+    Asset{lessonsLearned} to LessonLearned{theAsset},
+    Asset{relatedAssets} to AssetRelationship{theAsset},
+    Asset{relatedByAssets} to AssetRelationship{relatedAsset},
+    Asset{comments} to Message{theAsset}
+}
+
+relationship ManyToMany {
+    Asset{favoritedBy} to Author{favorites},
+    Asset{followers} to Author{assetsFollowed},
+    Asset{collaborators} to Author{collaborateOnAssets}
+}
+
+relationship OneToOne {
+    Asset{stats} to AssetStat{theAsset}
+}
+
+//package calendar -------------------------------------------
+
+entity CalendarDay {
+    day String
+}
+
+entity Calendar {
+    name String
+}
+
+relationship OneToMany {
+    Calendar{notWorkingDays} to CalendarDay{theCalendar},
+    Calendar{project} to Project{theCalendar}
+}
+
+//package chat -------------------------------------------
+
+entity ChatMessage {
+    ident String,
+    text String,
+    timestamp LocalDate required
+}
+
+relationship OneToOne {
+    ChatMessage{fromAgent} to Agent{theChatMessage}
+}
+
+//package SpmConfiguration -------------------------------------------
+
+entity SpmConfiguration {
+    filtro String,
+    idioma String,
+    graficoDeEsforco Boolean,
+    graficoDeCustos Boolean,
+    graficoDeDesempenho Boolean,
+    graficoDeTarefas Boolean,
+    senhaEmRecuperacao Boolean
+}
+
+//package connections -------------------------------------------
+
+entity ArtifactCon {} //extends Connection
+
+entity SimpleCon {} //extends Connection
+
+entity Feedback {} //extends SimpleCon
+
+entity Sequence {} //extends SimpleCon
+
+entity Connection {
+    ident String
+}
+
+entity Dependency {
+    kindDep String
+}
+
+entity JoinCon {  //extends MultipleCon
+    kindJoinCon String
+}
+
+entity MultipleCon {
+    fired Boolean
+}
+
+entity BranchCon {} //extends MultipleCon
+
+entity BranchANDCon {} //extends BranchCon
+
+relationship ManyToOne {
+    ArtifactCon{theArtifact} to Artifact{theArtifactCon},
+    ArtifactCon{theArtifactType} to ArtifactType{theArtifactCon}
+
+    Connection{theProcessModel} to ProcessModel{theConnection},
+    Connection{theConnectionType} to ConnectionType{theConnection}
+
+    MultipleCon{theDependency} to Dependency{theMultipleCon},
+
+    BranchCon{fromMultipleCon} to MultipleCon{toBranchCon},
+
+    Sequence{theDependency} to Dependency{theSequence}
+}
+
+relationship OneToOne {
+    Connection{theMultipleConSub} to MultipleCon{theConnectionSuper},
+    Connection{theSimpleConSub} to SimpleCon{theConnectionSuper},
+    Connection{theArtifactConSub} to ArtifactCon{theConnectionSuper},
+
+    SimpleCon{theFeedbackSub} to Feedback{theSimpleConSuper},
+    SimpleCon{theSequenceSub} to Sequence{theSimpleConSuper},
+
+    MultipleCon{theJoinConSub} to JoinCon{theMultipleConSuper},
+    MultipleCon{theBranchConSub} to BranchCon{theMultipleConSuper},
+
+    BranchCon{theBranchANDConSub} to BranchANDCon{theBranchConSuper}
+}
+
+relationship ManyToMany {
+    ArtifactCon{toMultipleCon} to MultipleCon{theArtifactCon},
+
+    BranchANDCon{toMultipleCon} to MultipleCon{fromMultipleCon},
+
+    JoinCon{fromMultipleCon} to MultipleCon{theJoinCon}
+}
+
+//package driver -------------------------------------------
+
+entity Driver {
+    tipo String, // ?
+    appKey String,
+    appSecret String
+}
+
+relationship OneToOne {
+    Driver{thePlugin} to Plugin{theDriver}
+}
+
+//package email -------------------------------------------
+
+entity Email {
+    emailServerHost String,
+    emailServerPort String,
+    userName String,
+    passwordHash String
+    servicoTls Boolean,
+    servicoSsl Boolean,
+    teste Boolean
+}
+
+
+//package log -------------------------------------------
+
+entity CatalogEvent {
+    description TextBlob
+}
+
+entity ChatLog {
+    log String,
+    date LocalDate
+}
+
+entity Event {
+    why TextBlob,
+    when LocalDate,
+    isCreatedByApsee Boolean
+}
+
+entity AgendaEvent {} //extends Event
+
+entity CatalogEvent {} //extends Event
+
+entity ConnectionEvent {} //extends Event
+
+entity GlobalActivityEvent {} //extends Event
+
+entity ModelingActivityEvent {} //extends Event
+
+entity ProcessEvent {} //extends Event
+
+entity ProcessModelEvent {} //extends Event
+
+entity ResourceEvent {} //extends Event
+
+entity SpmLog {}
+
+relationship ManyToOne {
+    Event{theCatalogEvents} to CatalogEvent{theAgendaEvent},
+    Event{theTask} to Task{theAgendaEvent},
+
+    CatalogEvent{theAgendaEvent} to AgendaEvent{theCatalogEventToAgenda},
+    CatalogEvent{theCatalogEvent} to CatalogEvent{theCatalogEventToCatalog},
+    CatalogEvent{theConnectionEvent} to ConnectionEvent{theCatalogEventToConnection},
+    CatalogEvent{theGlobalActivityEvent} to GlobalActivityEvent{theCatalogEventToGlobalActivity},
+    CatalogEvent{theModelingActivityEvent} to ModelingActivityEvent{theCatalogEventToModelingActivity},
+    CatalogEvent{theProcessEvent} to ProcessEvent{theCatalogEventToProcess},
+    CatalogEvent{theProcessModelEvent} to ProcessModelEvent{theCatalogEventToProcessModel},
+    CatalogEvent{theResourceEvent} to ResourceEvent{theCatalogEventToResource},
+
+    Event{theLog} to SpmLog{theEvent},
+    Event{theEventType} to EventType{theEvent}
+
+    CatalogEvent{thePlainActivity} to PlainActivity{theCatalogEvent},
+
+    ProcessEvent{theProcess} to Process{theProcessEvent},
+    ProcessModelEvent{theProcessModel} to ProcessModel{theProcessModelEvent},
+    ResourceEvent{theResource} to Resource{theResourceEvent}
+}
+
+relationship ManyToMany {
+    ChatLog{involvedAgentsInChat} to Agent{theChatLog}
+}
+
+relationship OneToOne {
+    SpmLog{theProcess} to Process{theLog},
+
+    ResourceEvent{theNormal} to Normal{theResourceEvent},
+
+    Event{theAgendaEventSub} to AgendaEvent{theEventSuper},
+    Event{theCatalogEventSub} to CatalogEvent{theEventSuper},
+    Event{theConnectionEventSub} to ConnectionEvent{theEventSuper},
+    Event{theGlobalActivityEventSub} to GlobalActivityEvent{theEventSuper},
+    Event{theModelingActivityEventSub} to ModelingActivityEvent{theEventSuper},
+    Event{theProcessEventSub} to ProcessEvent{theEventSuper},
+    Event{theProcessModelEventSub} to ProcessModelEvent{theEventSuper},
+    Event{theResourceEventSub} to ResourceEvent{theEventSuper}
+}
+
+//package organizationPolicies -------------------------------------------
+
+entity Company {
+    ident String,
+    cnpj String,
+    fantasyName String,
+    socialReason String,
+    acronym String,
+    address String,
+    phone String,
+    description TextBlob,
+    imageURL String
+    url String,
+    automaticInstantiation Boolean
+}
+
+entity CompanyUnit {
+    ident String,
+    name String,
+    description TextBlob
+}
+
+entity Node {
+    ident String,
+    data String,
+    serviceFileId String
+}
+
+entity Project {
+    ident String,
+    name String,
+    description TextBlob,
+    beginDate LocalDate,
+    endDate LocalDate
+}
+
+entity VCSRepository {
+    ident String,
+    controlVersionSystem String,
+    server String,
+    repositoryPath String
+    //defaultUser Boolean
+}
+
+entity Structure {}
+
+entity DevelopingSystem {
+    ident String,
+    name String,
+    description TextBlob
+}
+
+relationship ManyToOne {
+    CompanyUnit{theOrganization} to Company{theCompanyUnit},
+    CompanyUnit{theCommand} to CompanyUnit{theCompanyUnit},
+
+    Project{processRefered} to Process{theProject},
+    Project{theSystem} to DevelopingSystem{theProject},
+
+    VCSRepository{theStructure} to Structure{theVCSRepository},
+
+    Structure{rootElement} to Node{theStructure},
+
+    DevelopingSystem{theOrganization} to Company{theDevelopingSystem}
+}
+
+relationship OneToMany {
+    Company{organizationMetric} to OrganizationMetric{theCompany},
+    Company{theCompanyEstimation} to OrganizationEstimation{theCompany},
+
+    Node{children} to Node{theNode},
+
+    Project{finalArtifacts} to Artifact{theProject}
+}
+
+//package people -------------------------------------------
+
+entity Author {
+    uid String,
+    version Integer, //Annotate as @Version
+    name String,
+    email String,
+    interests String,
+    city String,
+    country String,
+    photoURL String
+}
+
+entity Organization {
+    domain String
+}
+
+entity Person {
+    gender String
+}
+
+relationship ManyToMany {
+    Author{authorsFollowed} to Author{theAuthor}
+}
+
+relationship OneToOne {
+    Author{user} to User{theAuthor},
+    Author{theOrganizationSub} to Organization{theAuthorSuper},
+    Author{thePersonSub} to Person{theAuthorSuper}
+}
+
+//package plainActivities -------------------------------------------
+
+entity AutomaticActivity {} //extends PlainActivity (package activities: line 1)
+
+entity EnactionDescription {
+    actualBegin LocalDate,
+    actualEnd LocalDate,
+    state String
+}
+
+entity InvolvedArtifact {}
+
+entity Normal {
+    howLong Float,
+    howLongUnit String,
+    plannedBegin LocalDate,
+    plannedEnd LocalDate,
+    script TextBlob,
+    delegable Boolean,
+    autoAllocable Boolean
+}
+
+entity Parameter {
+    description TextBlob
+}
+
+entity ArtifactParam {} //extends Parameter
+
+entity PrimitiveParam {} //extends Parameter
+
+
+entity ReqAgentRequiresAbility {
+    degree Integer
+}
+
+entity RequiredPeople {}
+
+entity ReqAgent {} //extends RequiredPeople
+
+entity ReqWorkGroup {} //extends RequiredPeople
+
+entity RequiredResource {
+    amountNeeded Float
+}
+
+relationship ManyToOne {
+    InvolvedArtifact{inInvolvedArtifacts} to Normal{theInvolvedArtifactToNormal},
+    InvolvedArtifact{outInvolvedArtifacts} to Normal{theInvolvedArtifactsFromNormal},
+    InvolvedArtifact{theArtifactType} to ArtifactType{theInvolvedArtifact}
+
+    Parameter{theAutomatic} to AutomaticActivity{theParameters},
+
+    ReqAgentRequiresAbility{theReqAgent} to RequiredPeople{theReqAgentRequiresAbility},
+
+    ReqWorkGroup{theWorkGroupType} to WorkGroupType{theReqWorkGroup}
+
+    RequiredPeople{theNormal} to Normal{theRequiredPeople},
+
+    RequiredResource{theNormal} to Normal{theRequiredResource},
+    RequiredResource{theResourceType} to ResourceType{theRequiredResource}
+    RequiredResource{theResource} to Resource{theRequiredResource}
+}
+
+relationship OneToMany {
+    Normal{theTasks} to Task{theNormal},
+    Normal{theReservation} to Reservation{theNormal}
+}
+
+relationship OneToOne {
+    PlainActivity{theAutomaticActivitySub} to AutomaticActivity{theAutomatic},
+    AutomaticActivity{theSubroutine} to Subroutine{theAutomaticActivity},
+
+    Parameter{theArtifactParameterSub} to ArtifactParam{theParameterSuper},
+    Parameter{thePrimitiveParamSub} to PrimitiveParam{theParameterSuper},
+
+    RequiredPeople{theReqWorkGroupSub} to ReqWorkGroup{theRequiredPeopleSuper},
+    RequiredPeople{theReqAgentSub} to ReqAgent{theRequiredPeopleSuper}
+}
+
+//package plannerInfo -------------------------------------------
+
+entity ActivityInstantiated {}
+
+entity AgentInstSuggestionToAgent {
+    orderCriteriaResult Float
+}
+
+entity AgentWorkingLoad {
+    begin LocalDate,
+    end LocalDate
+}
+
+entity InstantiationSuggestion {}
+
+entity PeopleInstSug {} //extends InstantiationSuggestion
+
+entity AgentInstSug {} //extends PeopleInstSug
+
+entity WorkGroupInstSug {} //extends PeopleInstSug
+
+entity ResourcePossibleUse {
+    begin LocalDate,
+    end LocalDate,
+    amountNeeded Float
+}
+
+relationship ManyToOne {
+    ActivityInstantiated{theActivity} to Activity{theActivityInstantiated},
+
+    AgentInstSug{theRole} to Role{theAgentInstSug},
+    AgentInstSug{chosenAgent} to Agent{theAgentInstSug},
+
+    AgentInstSuggestionToAgent{theInstAgSug} to PeopleInstSug{theAgentInstSugToAgent},
+    AgentInstSuggestionToAgent{theAgent} to Agent{theAgentInstSugToAgent},
+
+    AgentWorkingLoad{theAgent} to Agent{theAgentWorkingLoad},
+
+    WorkGroupInstSug{chosenWorkGroup} to WorkGroup{sugToChosenWorkGroup},
+    WorkGroupInstSug{workGroupTypeRequired} to Type{sugToReqWorkGroup},
+
+    InstantiationSuggestion{theActivityInstantiated} to ActivityInstantiated{theInstSug},
+
+    InstantiationSuggestion{chosenResource} to Resource{instSugToResource},
+    InstantiationSuggestion{requiredResourceType} to Type{instSugToType},
+
+    ResourcePossibleUse{theResource} to Resource{theResourcePossibleUse}
+}
+
+relationship ManyToMany {
+    WorkGroupInstSug{sugWorkGroup} to WorkGroup{theWorkGroupInstSug},
+    InstantiationSuggestion{sugRsrc} to Resource{instSuggestions}
+}
+
+relationship OneToOne {
+    InstantiationSuggestion{thePeopleInstSugSub} to PeopleInstSug{theInstSugSuper},
+
+    PeopleInstSug{theAgentInstSug} to AgentInstSug{thePeopleInstSugSuper},
+    PeopleInstSug{theWorkGroupInstSug} to WorkGroupInstSug{thePeopleInstSugSuper}
+}
+
+//package processKnowledge -------------------------------------------
+
+entity Estimation {
+    value Float,
+    unit String
+}
+
+entity ActivityEstimation {} //extends Estimation
+
+entity AgentEstimation {} //extends Estimation
+
+entity ArtifactEstimation {} //extends Estimation
+
+entity WorkGroupEstimation {} //extends Estimation
+
+entity OrganizationEstimation {} //extends Estimation
+
+entity ProcessEstimation {} //extends Estimation
+
+entity ResourceEstimation {} //extends Estimation
+
+entity Metric {
+    value Float,
+    unit String,
+    periodBegin LocalDate,
+    periodEnd LocalDate
+}
+
+entity ActivityMetric {} //extends Metric
+
+entity AgentMetric {} //extends Metric
+
+entity ArtifactMetric {} //extends Metric
+
+entity WorkGroupMetric {} //extends Metric
+
+entity OrganizationMetric {} //extends Metric
+
+entity ProcessMetric {} //extends Metric
+
+entity ResourceMetric {} //extends Metric
+
+/**
+* MetricDefinition String Values List Wrapper
+*/
+entity MetricDefinitionUnit {
+    unit String
+}
+
+entity MetricDefinition {
+    name String,
+    description TextBlob,
+    kind String,
+    rangeFrom Float,
+    rangeTo Float,
+    howToMeasure TextBlob
+}
+
+relationship ManyToOne {
+    MetricDefinition{theMetricType} to MetricType{theMetricDefinition}
+
+    Estimation{theMetricDefinition} to MetricDefinition{theEstimation},
+
+    Metric{theMetricDefinition} to MetricDefinition{theMetric},
+
+    ActivityMetric{theActivity} to Activity{theActivityMetric},
+
+    OrganizationMetric{theOrganization} to Organization{theOrganizationMetric},
+
+    ProcessMetric{theProcess} to Process{theProcessMetric},
+
+    ResourceMetric{theResource} to Resource{theResourceMetric},
+
+    ResourceEstimation{theResource} to Resource{theResourceEstimation},
+
+    OrganizationEstimation{theOrganization} to Organization{theOrganizationEstimation},
+
+    ProcessEstimation{theProcess} to Process{theProcessEstimation},
+
+    ResourceEstimation{theResource} to Resource{theResourceEstimation}
+}
+
+relationship OneToMany {
+    MetricDefinition{units} to MetricDefinitionUnit{theMetricDefinition}
+}
+
+relationship OneToOne {
+    Metric{theActivityMetricSub} to ActivityMetric{theMetricSuper},
+    Metric{theAgentMetricSub} to AgentMetric{theMetricSuper},
+    Metric{theArtifactMetricSub} to ArtifactMetric{theMetricSuper},
+    Metric{theWorkGroupMetricSub} to WorkGroupMetric{theMetricSuper},
+    Metric{theOrganizationMetricSub} to OrganizationMetric{theMetricSuper},
+    Metric{theProcessMetricSub} to ProcessMetric{theMetricSuper},
+    Metric{theResourceMetricSub} to ResourceMetric{theMetricSuper},
+
+    Estimation{theActivityEstimationSub} to ActivityEstimation{theEstimationSuper},
+    Estimation{theAgentEstimationSub} to AgentEstimation{theEstimationSuper},
+    Estimation{theArtifactEstimationSub} to ArtifactEstimation{theEstimationSuper},
+    Estimation{theWorkGroupEstimationSub} to WorkGroupEstimation{theEstimationSuper},
+    Estimation{theOrganizationEstimationSub} to OrganizationEstimation{theEstimationSuper},
+    Estimation{theProcessEstimationSub} to ProcessEstimation{theEstimationSuper},
+    Estimation{theResourceEstimationSub} to ResourceEstimation{theEstimationSuper}
+}
+
+//package processModelGraphical -------------------------------------------
+
+entity GraphicCoordinate {
+    x Integer,
+    y Integer,
+    visible Boolean,
+    theProcess String
+}
+
+//WebAPSEEObject enum
+enum WebAPSEEObjectType {
+    ACTIVITY,
+    REQ_AGENT,
+    REQ_RESOURCE,
+    REQ_WORKGROUP,
+    CONNECTION
+}
+
+entity WebAPSEEObject {
+    theReferredOid Long required,
+    className String required,
+    webAPSEEObjectType WebAPSEEObjectType
+}
+
+relationship OneToOne {
+    WebAPSEEObject{theGraphicCoordinate} to GraphicCoordinate{theObjectReference}
+}
+
+//package processModels -------------------------------------------
+
+entity Description {
+    date LocalDate,
+    why TextBlob
+}
+
+//Process enum
+enum ProcessStatus {
+    NOT_STARTED,
+    ENACTING,
+    FINISHED
+}
+
+entity Process {
+    ident String,
+    pStatus ProcessStatus
+}
+
+//ProcessModel enum
+enum ProcessModelStatus {
+    REQUIREMENTS,
+    ABSTRACT,
+    INSTANTIATED,
+    ENACTING,
+    FAILED,
+    CANCELED,
+    MIXED,
+    FINISHED
+}
+
+entity ProcessModel {
+    requirements String,
+    pmStatus ProcessModelStatus
+}
+
+//Template enum
+enum TemplateStatus{
+    DRAFT,
+    DEFINED,
+    PENDING,
+    OUTDATED
+}
+
+entity Template {
+    tStatus TemplateStatus
+}
+
+relationship ManyToOne {
+    Description{theTemplateOldVersion} to Template{theDerivedVersionDescription},
+    Description{theTemplateNewVersion} to Template{theTemplateNewDescription},
+
+    Template{theOriginalVersionDescription} to Description{descTemplateOriginalVersion},
+
+    Process{theActivityType} to ActivityType{theProcess}
+}
+
+relationship OneToMany {
+    Process{theProcessAgendas} to ProcessAgenda{theProcess},
+    
+    ProcessModel{theActivity} to Activity{theProcessModel},
+    
+    Template{theProcessModel} to ProcessModel{theOrigin}
+}
+
+relationship OneToOne {
+    Process{theProcessModel} to ProcessModel{theProcess},
+    Process{theTemplateSub} to Template{theProcessSuper}
+}
+
+//package resources -------------------------------------------
+
+//Consumable enum
+enum ConsumableStatus {
+    AVAILABLE,
+    NOT_AUTHORIZED,
+    FINISHED
+}
+
+entity Consumable {
+    unit String,
+    consumableStatus ConsumableStatus,
+    totalQuantity Float,
+    amountUsed Float
+}
+
+//Exclusive enum
+enum ExclusiveStatus {
+    AVAILABLE,
+    LOCKED,
+    DEFECT
+}
+
+entity Exclusive {
+    exclusiveStatus ExclusiveStatus,
+    unitOfCost String
+}
+
+entity Reservation {
+    fromDate LocalDate,
+    toDate LocalDate
+}
+
+//Shareable enum
+enum ShareableStatus{
+    AVAILABLE,
+    NOT_AVAILABLE
+}
+
+entity Shareable {
+    shareableStatus ShareableStatus,
+    unitOfCost String
+}
+
+entity Resource {
+    ident String,
+    name String,
+    description TextBlob,
+    mtbfTime Float,
+    mtbfUnitTime String,
+    currency String,
+    cost Float,
+    isActive Boolean
+}
+
+relationship ManyToOne {
+    Reservation{theExclusive} to Exclusive{theReservation},
+
+    Resource{belongsTo} to Resource{theResource},
+
+    Resource{theResourceType} to ResourceType{theResource}
+}
+
+relationship OneToOne {
+    Resource{theConsumableSub} to Consumable{theResourceSuper},
+    Resource{theExclusiveSub} to Exclusive{theResourceSuper},
+    Resource{theShareableSub} to Shareable{theResourceSuper}
+}
+
+//package security -------------------------------------------
+
+//Credential enum
+enum OperationEnum {
+    CREATE,
+    DELETE,
+    UPDATE,
+    VIEW,
+    VOTE,
+    FAVORITE,
+    UNFAVORITE,
+    FOLLOW,
+    UNFOLLOW,
+    COMMENT
+}
+
+entity Credential {
+    className String,
+    uid String,
+    operationEnum OperationEnum
+}
+
+entity LogEntry {
+    date LocalDate,
+    operationEnum OperationEnum,
+    className String,
+    uid String
+}
+
+relationship ManyToOne {
+    Credential{user} to User{theCredential},
+
+    LogEntry{user} to User{theLogEntry}
+}
+
+//package taskagenda -------------------------------------------
+
+entity Ocurrence {
+    date LocalDate,
+    time Instant,
+    event String
+}
+
+entity ProcessAgenda {}
+
+entity Task {
+    localState String,
+    beginDate LocalDate,
+    endDate LocalDate,
+    workingHours Float,
+    dateDelegatedTo LocalDate,
+    dateDelegatedFrom LocalDate
+}
+
+entity TaskAgenda {}
+
+relationship ManyToOne {
+    Ocurrence{theTask} to Task{theOcurrence},
+
+    ProcessAgenda{theTaskAgenda} to TaskAgenda{theProcessAgenda},
+
+    Task{theProcessAgenda} to ProcessAgenda{theTask}
+}
+
+//package tools -------------------------------------------
+
+entity ClassMethodCall {
+    className String,
+    methodName String,
+    description TextBlob
+}
+
+entity PrimitiveType {
+    ident String
+}
+
+entity Script {
+    fileName String,
+    description TextBlob
+}
+
+entity Subroutine {
+    ident String
+}
+
+entity ToolDefinition {
+    ident String,
+    name String,
+    description TextBlob
+}
+
+entity ToolParameter {
+    label String,
+    separatorSymbol String
+}
+
+relationship ManyToOne {
+    Subroutine{theArtifactType} to ArtifactType{theSubroutine}
+
+    ToolDefinition{theToolType} to ToolType{theToolDefinition}
+
+    ToolParameter{theArtifactType} to ArtifactType{theToolParameter}
+    ToolParameter{theSubroutine} to Subroutine{theToolParameter},
+    ToolParameter{thePrimitiveType} to PrimitiveType{theToolParameter}
+}
+
+relationship ManyToMany {
+    ToolDefinition{theArtifactTypes} to Type{theToolDefinitionToArtifactType}
+}
+
+relationship OneToOne {
+    Subroutine{theClassMethodCallSub} to ClassMethodCall{theSubroutineSuper},
+    Subroutine{theScriptSub} to Script{theSubroutineSuper}
+}
+
+//package types -------------------------------------------
+
+entity Type {
+    ident String,
+    description TextBlob,
+    userDefined Boolean
+}
+
+entity AbilityType {} //extends Type
+
+entity ActivityType {} //extends Type
+
+entity ArtifactType {} //extends Type
+
+entity ConnectionType {} //extends Type
+
+entity EventType {} //extends Type
+
+entity WorkGroupType {} //extends Type
+
+entity MetricType {} //extends Type
+
+entity ResourceType {} //extends Type
+
+entity RoleType {} //extends Type
+
+entity ToolType {} //extends Type
+
+relationship ManyToOne {
+    Type{superType} to Type{subType}
+}
+
+relationship OneToOne {
+    Type{theAbilityTypeSub} to AbilityType{theTypeSuper},
+    Type{theActivityTypeSub} to ActivityType{theTypeSuper},
+    Type{theArtifactTypeSub} to ArtifactType{theTypeSuper},
+    Type{theConnectionTypeSub} to ConnectionType{theTypeSuper},
+    Type{theEventTypeSub} to EventType{theTypeSuper},
+    Type{theWorkGroupTypeSub} to WorkGroupType{theTypeSuper},
+    Type{theMetricTypeSub} to MetricType{theTypeSuper},
+    Type{theResourceTypeSub} to ResourceType{theTypeSuper},
+    Type{theRoleTypeSub} to RoleType{theTypeSuper},
+    Type{theToolTypeSub} to ToolType{theTypeSuper}
+}
+
+//package plugins -------------------------------------------
+
+entity Plugin {
+    name String required,
+    developerName String required,
+    jsonConfigFile String required
+}
+
+relationship ManyToMany {
+    Plugin{user(login)} to User{theUserPlugins}
+}
