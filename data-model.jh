@@ -479,8 +479,6 @@ entity Event {
 
 entity AgendaEvent {} //extends Event
 
-entity CatalogEvent {} //extends Event
-
 entity ConnectionEvent {} //extends Event
 
 entity GlobalActivityEvent {} //extends Event
@@ -974,9 +972,9 @@ relationship ManyToOne {
 
 relationship OneToMany {
     Process{theProcessAgendas} to ProcessAgenda{theProcess},
-    
+
     ProcessModel{theActivity} to Activity{theProcessModel},
-    
+
     Template{theProcessModel} to ProcessModel{theOrigin}
 }
 
@@ -1225,3 +1223,103 @@ entity Plugin {
 relationship ManyToMany {
     Plugin{user(login)} to User{theUserPlugins}
 }
+
+// Services
+service SpmConfiguration with serviceImpl
+service MetricDefinition with serviceImpl
+service Ability with serviceImpl
+service Company with serviceImpl
+service Metric with serviceImpl
+service Template with serviceImpl
+service WorkGroup with serviceImpl
+service Notification with serviceImpl
+service VCSRepository with serviceImpl
+service ChatMessage with serviceImpl
+service Driver with serviceImpl
+service Agent with serviceImpl
+service Artifact with serviceImpl
+service Email with serviceImpl
+service Calendar with serviceImpl
+service Project with serviceImpl
+service Resource with serviceImpl
+service ToolDefinition with serviceImpl
+service Role with serviceImpl
+service Process with serviceImpl
+service Estimation with serviceImpl
+service Task with serviceImpl
+service Type with serviceImpl
+service DevelopingSystem with serviceImpl
+// service EasyModeling with serviceImpl
+// service Help with serviceImpl
+// EnactmentEngine
+// service Report with serviceImpl
+// service WebAPSEEVO with serviceImpl
+// service Account with serviceImpl
+// service Editor with serviceImpl
+// EnactmentEngineLocal
+// Logging
+// DynamicModeling
+// service Gantt with serviceImpl
+
+// DTOs
+dto AgentAffinityAgent with mapstruct
+dto Agent with mapstruct
+dto AgentHasAbility with mapstruct
+dto SpmConfiguration with mapstruct
+dto WorkGroup with mapstruct
+dto Email with mapstruct
+dto Metric with mapstruct
+dto Estimation with mapstruct
+dto MetricDefinition with mapstruct
+dto Driver with mapstruct
+dto Artifact with mapstruct
+dto VCSRepository with mapstruct
+dto Structure with mapstruct
+dto Node with mapstruct
+dto DevelopingSystem with mapstruct
+dto WebAPSEEObject with mapstruct
+dto Activity with mapstruct
+dto DecomposedActivity with mapstruct
+dto Role with mapstruct
+dto RoleNeedsAbility with mapstruct
+dto ToolDefinition with mapstruct
+dto Calendar with mapstruct
+dto Type with mapstruct
+dto Template with mapstruct
+dto Ability with mapstruct
+dto Process with mapstruct
+dto ProcessModel with mapstruct
+dto Resource with mapstruct
+dto Project with mapstruct
+dto Task with mapstruct
+dto AgendaEvent with mapstruct
+dto Company with mapstruct
+dto CompanyUnit with mapstruct
+// dto Agents with mapstruct
+// dto Groups with mapstruct
+// dto MetricDefinitions with mapstruct
+// dto Artifacts with mapstruct
+// dto ProjectCopy with mapstruct
+// dto Repositories with mapstruct
+// dto Repository with mapstruct
+// dto Systems with mapstruct
+// dto System with mapstruct
+// dto Activitys with mapstruct
+// dto Decomposed with mapstruct
+// dto Roles with mapstruct
+// dto Tools with mapstruct
+// dto GanttActivitys with mapstruct
+// dto GanttActivity with mapstruct
+// dto Calendars with mapstruct
+// dto Types with mapstruct
+// dto Abilitys with mapstruct
+// dto Processes with mapstruct
+// dto Resources with mapstruct
+// dto HelpTopic with mapstruct
+// dto Projects with mapstruct
+// dto SimpleUpdate with mapstruct
+// dto AgendaEvents with mapstruct
+// dto SimpleArtifactDescriptor with mapstruct
+// dto CompanyUnits with mapstruct
+// dto Companies with mapstruct
+// SessionAttributesCurrent

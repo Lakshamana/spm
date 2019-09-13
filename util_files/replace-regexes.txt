@@ -7,3 +7,12 @@
 - De subtipos de Activity por Objetos de Activity:
   search: (\().*\((Normal|Decomposed)\) ([\w]*).*(\))\.
   replaceby: $3.get$2Sub().
+
+*** Comandos BASH úteis:
+* Obter de maneira rápida as entidades de serviços:
+  - Com o terminal aberto em SPMServices/.../services/[interfaces|impl]
+    `find . -maxdepth 1 -type f | tr './' ' ' | awk '{print $1}' | sed -r 's/(.*)Services/service \1 with serviceImpl/g'`
+
+* Obter de maneira rápida as entidades de DTO:
+  - Com o terminal aberto em SPMDTO/.../dtos
+    `find . | grep DTO.java | sed -r 's/.\/(.*)\/(.*)DTO.java/dto \2 with mapstruct/g'`
