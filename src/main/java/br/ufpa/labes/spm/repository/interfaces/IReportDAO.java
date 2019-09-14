@@ -4,13 +4,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Local;
 import javax.persistence.EntityManager;
 
 import org.qrconsult.spm.util.PagingContext;
 import org.qrconsult.spm.util.SortCriteria;
 
-@Local
 public interface IReportDAO{
 	public EntityManager getPersistenceContext();
 	

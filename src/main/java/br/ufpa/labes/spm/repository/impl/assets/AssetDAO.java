@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.repository.impl.assets;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -12,7 +11,6 @@ import br.ufpa.labes.spm.domain.AssetRelationship;
 import org.qrconsult.spm.vo.AssetCatalog;
 
 
-@Stateless
 public class AssetDAO extends BaseDAO<Asset, String> implements IAssetDAO {
 
 	public AssetDAO() {

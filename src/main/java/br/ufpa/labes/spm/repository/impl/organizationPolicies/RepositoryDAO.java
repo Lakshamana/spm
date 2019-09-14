@@ -1,6 +1,5 @@
 package br.ufpa.labes.spm.repository.impl.organizationPolicies;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -8,7 +7,6 @@ import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IRepositoryD
 import br.ufpa.labes.spm.domain.Repository;
 import br.ufpa.labes.spm.domain.Structure;
 
-@Stateless
 public class RepositoryDAO extends BaseDAO<Repository, String> implements IRepositoryDAO {
 	protected RepositoryDAO(Class<Repository> businessClass) {
 		super(businessClass);

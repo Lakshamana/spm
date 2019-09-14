@@ -3,7 +3,6 @@ package br.ufpa.labes.spm.repository.impl.processModels;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -13,7 +12,6 @@ import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.Process;
 import org.qrconsult.spm.services.interfaces.commonData.SimpleActivityQueryResult;
 
-@Stateless
 public class ProcessDAO extends BaseDAO<Process, String> implements IProcessDAO {
 
 	protected ProcessDAO(Class<Process> businessClass) {

@@ -3,7 +3,6 @@ package br.ufpa.labes.spm.repository.impl.plainActivities;
 import java.util.Collection;
 import java.util.HashSet;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -13,7 +12,6 @@ import br.ufpa.labes.spm.domain.ReqAgent;
 import br.ufpa.labes.spm.domain.ReqGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 
-@Stateless
 public class RequiredPeopleDAO extends BaseDAO<RequiredPeople, Integer> implements IRequiredPeopleDAO{
 
 	protected RequiredPeopleDAO(Class<RequiredPeople> businessClass) {

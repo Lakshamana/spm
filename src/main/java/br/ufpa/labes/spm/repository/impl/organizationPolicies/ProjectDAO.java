@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.repository.impl.organizationPolicies;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -10,7 +9,6 @@ import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.Project;
 
-@Stateless
 public class ProjectDAO extends BaseDAO<Project, String> implements IProjectDAO{
 
 	protected ProjectDAO(Class<Project> businessClass) {

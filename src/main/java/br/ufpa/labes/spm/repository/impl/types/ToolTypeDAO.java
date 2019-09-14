@@ -1,12 +1,10 @@
 package br.ufpa.labes.spm.repository.impl.types;
 
-import javax.ejb.Stateless;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IToolTypeDAO;
 import br.ufpa.labes.spm.domain.ToolType;
 
-@Stateless
 public class ToolTypeDAO extends BaseDAO<ToolType, String> implements IToolTypeDAO{
 
 	protected ToolTypeDAO(Class<ToolType> businessClass) {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -14,7 +13,6 @@ import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactCon;
 import br.ufpa.labes.spm.domain.InvolvedArtifacts;
 
-@Stateless
 public class ArtifactDAO extends BaseDAO<Artifact, String> implements IArtifactDAO{
 
 	protected ArtifactDAO(Class<Artifact> businessClass) {

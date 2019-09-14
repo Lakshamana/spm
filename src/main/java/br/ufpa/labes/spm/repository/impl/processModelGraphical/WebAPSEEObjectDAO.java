@@ -3,7 +3,6 @@ package br.ufpa.labes.spm.repository.impl.processModelGraphical;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IWebAPSEEObjectDAO;
@@ -11,7 +10,6 @@ import org.qrconsult.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
 import br.ufpa.labes.spm.domain.WebAPSEEObject;
 
-@Stateless
 public class WebAPSEEObjectDAO extends BaseDAO<org.qrconsult.spm.model.processModelGraphical.WebAPSEEObject, String>
 		implements IWebAPSEEObjectDAO {
 

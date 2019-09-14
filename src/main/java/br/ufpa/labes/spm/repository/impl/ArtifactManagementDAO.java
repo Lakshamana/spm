@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.repository.impl;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -13,7 +12,6 @@ import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactCon;
 import br.ufpa.labes.spm.domain.Task;
 
-@Stateless
 public class ArtifactManagementDAO implements IArtifactManagementDAO {
 
 	@PersistenceContext(unitName = "SPMPU")

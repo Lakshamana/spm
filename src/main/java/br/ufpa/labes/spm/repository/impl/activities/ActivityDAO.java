@@ -1,12 +1,10 @@
 package br.ufpa.labes.spm.repository.impl.activities;
 
-import javax.ejb.Stateless;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
 import br.ufpa.labes.spm.domain.Activity;
 
-@Stateless
 public class ActivityDAO extends BaseDAO<Activity, String> implements IActivityDAO{
 
 	public ActivityDAO(Class<Activity> businessClass) {

@@ -1,6 +1,5 @@
 package br.ufpa.labes.spm.repository.impl.agent;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -8,7 +7,6 @@ import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
 import org.qrconsult.spm.dtos.formAgent.AgentDTO;
 import br.ufpa.labes.spm.domain.Agent;
 
-@Stateless
 public class AgentDAO extends BaseDAO<Agent, Integer> implements IAgentDAO {
 
 	protected AgentDAO(Class<Agent> businessClass) {

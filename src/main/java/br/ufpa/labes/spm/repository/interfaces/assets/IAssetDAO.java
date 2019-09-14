@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.repository.interfaces.assets;
 
 import java.util.List;
 
-import javax.ejb.Local;
 
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.domain.Asset;
@@ -10,7 +9,6 @@ import br.ufpa.labes.spm.domain.AssetRelationship;
 import org.qrconsult.spm.vo.AssetCatalog;
 
 
-@Local
 public interface IAssetDAO extends IBaseDAO<Asset, String> {
 
 	public List<AssetRelationship> retrieveRelatedAssetsTo(String assetUid);

@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.repository.impl.assets;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -10,7 +9,6 @@ import br.ufpa.labes.spm.repository.interfaces.assets.ITagStatsDAO;
 import br.ufpa.labes.spm.domain.TagStats;
 
 
-@Stateless
 public class TagStatsDAO extends BaseDAO<TagStats, Long> implements ITagStatsDAO {
 
 	protected TagStatsDAO() {

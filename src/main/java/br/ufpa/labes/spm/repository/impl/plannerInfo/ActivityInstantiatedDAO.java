@@ -1,12 +1,10 @@
 package br.ufpa.labes.spm.repository.impl.plannerInfo;
 
-import javax.ejb.Stateless;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.plannerInfo.IActivityInstantiatedDAO;
 import br.ufpa.labes.spm.domain.ActivityInstantiated;
 
-@Stateless
 public class ActivityInstantiatedDAO  extends BaseDAO<ActivityInstantiated, Integer> implements IActivityInstantiatedDAO{
 
 	protected ActivityInstantiatedDAO(Class<ActivityInstantiated> businessClass) {

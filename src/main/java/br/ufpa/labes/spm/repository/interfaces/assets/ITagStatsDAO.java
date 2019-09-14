@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.repository.interfaces.assets;
 
 import java.util.List;
 
-import javax.ejb.Local;
 
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.domain.TagStats;
@@ -10,7 +9,6 @@ import org.qrconsult.spm.util.PagingContext;
 import org.qrconsult.spm.util.SortCriteria;
 
 
-@Local
 public interface ITagStatsDAO extends IBaseDAO<TagStats, Long> {
 
 	public List<TagStats> retrieveMostVotedTags(int numResults);

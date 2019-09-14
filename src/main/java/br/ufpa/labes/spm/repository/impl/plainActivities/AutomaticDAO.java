@@ -1,12 +1,10 @@
 package br.ufpa.labes.spm.repository.impl.plainActivities;
 
-import javax.ejb.Stateless;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IAutomaticDAO;
 import br.ufpa.labes.spm.domain.Automatic;
 
-@Stateless
 public class AutomaticDAO extends BaseDAO<Automatic, String> implements IAutomaticDAO{
 
 	protected AutomaticDAO(Class<Automatic> businessClass) {

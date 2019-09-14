@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.repository.impl.processKnowledge;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -10,7 +9,6 @@ import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IProcessEstimati
 import br.ufpa.labes.spm.domain.ActivityEstimation;
 import br.ufpa.labes.spm.domain.ProcessEstimation;
 
-@Stateless
 public class ProcessEstimationDAO extends BaseDAO<ProcessEstimation, Integer> implements IProcessEstimationDAO{
 
 	private static final String ACTIVITY_METRIC_DEFINITION_NAME = "Activity Effort";

@@ -2,14 +2,12 @@ package br.ufpa.labes.spm.repository.impl.plainActivities;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredResourceDAO;
 import br.ufpa.labes.spm.domain.RequiredResource;
 
-@Stateless
 public class RequiredResourceDAO extends BaseDAO<RequiredResource, Integer> implements IRequiredResourceDAO {
 
 	protected RequiredResourceDAO(Class<RequiredResource> businessClass) {

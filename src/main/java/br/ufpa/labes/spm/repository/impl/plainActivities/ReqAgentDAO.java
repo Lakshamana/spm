@@ -2,14 +2,12 @@ package br.ufpa.labes.spm.repository.impl.plainActivities;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqAgentDAO;
 import br.ufpa.labes.spm.domain.ReqAgent;
 
-@Stateless
 public class ReqAgentDAO extends BaseDAO<ReqAgent, Integer> implements IReqAgentDAO {
 
 	protected ReqAgentDAO(Class<ReqAgent> businessClass) {

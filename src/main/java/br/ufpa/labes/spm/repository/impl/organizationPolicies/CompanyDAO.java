@@ -1,7 +1,6 @@
 package br.ufpa.labes.spm.repository.impl.organizationPolicies;
 
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -9,7 +8,6 @@ import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.ICompanyDAO;
 import br.ufpa.labes.spm.domain.Company;
 import br.ufpa.labes.spm.domain.CompanyUnit;
 
-@Stateless
 public class CompanyDAO extends BaseDAO<Company, String> implements ICompanyDAO{
 
 	protected CompanyDAO(Class<Company> businessClass) {

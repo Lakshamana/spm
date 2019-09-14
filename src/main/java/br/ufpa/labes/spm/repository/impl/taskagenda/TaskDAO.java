@@ -3,7 +3,6 @@ package br.ufpa.labes.spm.repository.impl.taskagenda;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -14,7 +13,6 @@ import br.ufpa.labes.spm.domain.Task;
 import org.qrconsult.spm.util.ServicesUtil;
 
 
-@Stateless
 public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO{
 
 	protected TaskDAO(Class<Task> businessClass) {

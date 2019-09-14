@@ -1,10 +1,8 @@
 package br.ufpa.labes.spm.repository.interfaces.types;
 
-import javax.ejb.Local;
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.domain.RoleType;
 
-@Local
 public interface IRoleTypeDAO  extends IBaseDAO<RoleType, String>{
 
 }

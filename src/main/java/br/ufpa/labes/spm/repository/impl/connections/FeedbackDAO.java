@@ -1,12 +1,10 @@
 package br.ufpa.labes.spm.repository.impl.connections;
 
-import javax.ejb.Stateless;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.connections.IFeedbackDAO;
 import br.ufpa.labes.spm.domain.Feedback;
 
-@Stateless
 public class FeedbackDAO extends BaseDAO<Feedback, String> implements IFeedbackDAO{
 
 	protected FeedbackDAO(Class<Feedback> businessClass) {

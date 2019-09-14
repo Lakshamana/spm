@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
@@ -19,7 +18,6 @@ import br.ufpa.labes.spm.domain.ReqGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 import br.ufpa.labes.spm.domain.RequiredResource;
 
-@Stateless
 public class NormalDAO extends BaseDAO<Normal, Integer> implements INormalDAO {
 
 	protected NormalDAO(Class<Normal> businessClass) {

@@ -3,14 +3,12 @@ package br.ufpa.labes.spm.repository.impl.processModelGraphical;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ejb.Stateless;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IGraphicCoordinateDAO;
 import org.qrconsult.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
 
-@Stateless
 public class GraphicCoordinateDAO extends BaseDAO<GraphicCoordinate,String> implements IGraphicCoordinateDAO{
 
 	protected GraphicCoordinateDAO(Class<GraphicCoordinate> businessClass) {
