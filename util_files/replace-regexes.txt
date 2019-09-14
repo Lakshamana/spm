@@ -8,6 +8,18 @@
   search: (\().*\((Normal|Decomposed)\) ([\w]*).*(\))\.
   replaceby: $3.get$2Sub().
 
+- De pacotes de modelos SPM por objetos domain JHipster (modelos):
+  search: (package|import) org\.qrconsult\.spm\.model\.(.*)\.(.*);
+  replaceby: br.ufpa.labes.spm.domain.$2;
+
+- De pacotes DAO por pacotes DAO JHipster SPM:
+  search: (package|import) org\.qrconsult\.spm\.dataAccess\.(.*)\.(.*);
+  replaceby: $1 br.ufpa.labes.spm.repository.$2.$3;
+
+- De pacotes globais DAO SPM por globais DAO JHipster SPM:
+  search: package org\.qrconsult\.spm\.dataAccess\.(.*);
+  replaceby: package br.ufpa.labes.spm.repository.$1;
+
 *** Comandos BASH úteis:
 * Obter de maneira rápida as entidades de serviços:
   - Com o terminal aberto em SPMServices/.../services/[interfaces|impl]
