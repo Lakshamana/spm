@@ -5,7 +5,7 @@
 * A cada novo padrão encontrado, adicioná-lo ao final do arquivo:
 
 - De subtipos de Activity por Objetos de Activity:
-  search: (\().*\((Normal|Decomposed)\) ([\w]*).*(\))\.
+  search: (\().*\([ ]*(Normal|Decomposed)[ ]*\) ([\w]*).*(\))\.
   replaceby: $3.get$2Sub().
 
 - De pacotes de modelos SPM por objetos domain JHipster (modelos):
