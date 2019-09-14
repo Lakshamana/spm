@@ -15,8 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -27,7 +25,6 @@ import br.ufpa.labes.spm.repository.interfaces.IHelpTopicDAO;
 import br.ufpa.labes.spm.repository.interfaces.IReportDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
-import org.qrconsult.spm.dtos.help.HelpTopicDTO;
 import org.qrconsult.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Decomposed;
@@ -61,7 +58,6 @@ import br.ufpa.labes.spm.domain.ProcessAgenda;
 import br.ufpa.labes.spm.domain.Task;
 import org.qrconsult.spm.services.impl.CriticalPathMethod;
 
-@Stateless
 public class HelpTopicDAO extends BaseDAO<HelpTopic, String> implements IHelpTopicDAO{
 
 	public HelpTopicDAO(){
@@ -75,7 +71,6 @@ public class HelpTopicDAO extends BaseDAO<HelpTopic, String> implements IHelpTop
 	@PersistenceContext(unitName = "SPMPU")
 	private EntityManager em;
 
-	@EJB
 	IHelpTopicDAO helpTopicDAO;
 
 	@Override

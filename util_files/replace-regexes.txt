@@ -20,6 +20,10 @@
   search: package org\.qrconsult\.spm\.dataAccess\.(.*);
   replaceby: package br.ufpa.labes.spm.repository.$1;
 
+- Remover anotações EJB e Stateless no mesmo arquivo:
+  search: .*(Stateless|EJB).*\n
+  replaceby:
+
 *** Comandos BASH úteis:
 * Obter de maneira rápida as entidades de serviços:
   - Com o terminal aberto em SPMServices/.../services/[interfaces|impl]

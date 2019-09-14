@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.repository.impl.taskagenda;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.taskagenda.IProcessAgendaDAO;
 import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
@@ -13,10 +10,8 @@ import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.ProcessAgenda;
 import br.ufpa.labes.spm.domain.Task;
 
-@Stateless
 public class ProcessAgendaDAO extends BaseDAO<ProcessAgenda, Integer> implements IProcessAgendaDAO {
 
-	@EJB
 	ITaskDAO taskDAO;
 
 	protected ProcessAgendaDAO(Class<ProcessAgenda> businessClass) {

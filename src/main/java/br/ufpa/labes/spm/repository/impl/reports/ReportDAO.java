@@ -15,8 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -58,7 +56,6 @@ import br.ufpa.labes.spm.domain.ProcessAgenda;
 import br.ufpa.labes.spm.domain.Task;
 import org.qrconsult.spm.services.impl.CriticalPathMethod;
 
-@Stateless
 public class ReportDAO implements IReportDAO{
 
 	private static final String ACTIVITY_METRIC_DEFINITION_NAME = "Activity Effort";
@@ -66,10 +63,8 @@ public class ReportDAO implements IReportDAO{
 	@PersistenceContext(unitName = "SPMPU")
 	private EntityManager em;
 
-	@EJB
 	IProjectDAO dao;
 
-	@EJB
 	IProcessDAO processDAO;
 
 	@Override
