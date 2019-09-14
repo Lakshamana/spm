@@ -8,12 +8,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * A DecomposedActivity.
+ * A Decomposed.
  */
 @Entity
-@Table(name = "decomposed_activity")
+@Table(name = "decomposed")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class DecomposedActivity implements Serializable {
+public class Decomposed implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,7 +21,7 @@ public class DecomposedActivity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "theDecomposedActivitySub")
+    @OneToOne(mappedBy = "theDecomposedSub")
     @JsonIgnore
     private Activity theActivitySuper;
 
@@ -38,7 +38,7 @@ public class DecomposedActivity implements Serializable {
         return theActivitySuper;
     }
 
-    public DecomposedActivity theActivitySuper(Activity activity) {
+    public Decomposed theActivitySuper(Activity activity) {
         this.theActivitySuper = activity;
         return this;
     }
@@ -53,10 +53,10 @@ public class DecomposedActivity implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DecomposedActivity)) {
+        if (!(o instanceof Decomposed)) {
             return false;
         }
-        return id != null && id.equals(((DecomposedActivity) o).id);
+        return id != null && id.equals(((Decomposed) o).id);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class DecomposedActivity implements Serializable {
 
     @Override
     public String toString() {
-        return "DecomposedActivity{" +
+        return "Decomposed{" +
             "id=" + getId() +
             "}";
     }

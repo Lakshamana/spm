@@ -25,8 +25,8 @@
             </column>
             <column name="the_plain_activity_sub_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_activity_the_plain_activity_sub_id" />
-            </column>            <column name="the_decomposed_activity_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_activity_the_decomposed_activity_sub_id" />
+            </column>            <column name="the_decomposed_sub_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_activity_the_decomposed_sub_id" />
             </column>
             <column name="the_activity_type_id" type="bigint">
                 <constraints nullable="true" />

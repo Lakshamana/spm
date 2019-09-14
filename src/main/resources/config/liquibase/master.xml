@@ -15,7 +15,7 @@
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033720_added_entity_Activity.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190914033721_added_entity_DecomposedActivity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033721_added_entity_Decomposed.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033722_added_entity_PlainActivity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033723_added_entity_Ability.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033724_added_entity_Agent.xml" relativeToChangelogFile="false"/>

@@ -3,9 +3,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A DTO for the {@link br.ufpa.labes.spm.domain.DecomposedActivity} entity.
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Decomposed} entity.
  */
-public class DecomposedActivityDTO implements Serializable {
+public class DecomposedDTO implements Serializable {
 
     private Long id;
 
@@ -27,11 +27,11 @@ public class DecomposedActivityDTO implements Serializable {
             return false;
         }
 
-        DecomposedActivityDTO decomposedActivityDTO = (DecomposedActivityDTO) o;
-        if (decomposedActivityDTO.getId() == null || getId() == null) {
+        DecomposedDTO decomposedDTO = (DecomposedDTO) o;
+        if (decomposedDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), decomposedActivityDTO.getId());
+        return Objects.equals(getId(), decomposedDTO.getId());
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DecomposedActivityDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "DecomposedActivityDTO{" +
+        return "DecomposedDTO{" +
             "id=" + getId() +
             "}";
     }

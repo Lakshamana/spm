@@ -21,9 +21,9 @@
         },
         {
             "relationshipType": "one-to-one",
-            "otherEntityName": "decomposedActivity",
+            "otherEntityName": "decomposed",
             "otherEntityRelationshipName": "theActivitySuper",
-            "relationshipName": "theDecomposedActivitySub",
+            "relationshipName": "theDecomposedSub",
             "otherEntityField": "id",
             "ownerSide": true
         },

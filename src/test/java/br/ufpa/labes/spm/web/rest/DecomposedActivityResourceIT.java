@@ -1,11 +1,11 @@
 package br.ufpa.labes.spm.web.rest;
 
 import br.ufpa.labes.spm.SpmApp;
-import br.ufpa.labes.spm.domain.DecomposedActivity;
-import br.ufpa.labes.spm.repository.DecomposedActivityRepository;
-import br.ufpa.labes.spm.service.DecomposedActivityService;
-import br.ufpa.labes.spm.service.dto.DecomposedActivityDTO;
-import br.ufpa.labes.spm.service.mapper.DecomposedActivityMapper;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.repository.DecomposedRepository;
+import br.ufpa.labes.spm.service.DecomposedService;
+import br.ufpa.labes.spm.service.dto.DecomposedDTO;
+import br.ufpa.labes.spm.service.mapper.DecomposedMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,20 +32,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link DecomposedActivityResource} REST controller.
+ * Integration tests for the {@link DecomposedResource} REST controller.
  */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
-public class DecomposedActivityResourceIT {
+public class DecomposedResourceIT {
 
     @Autowired
-    private DecomposedActivityRepository decomposedActivityRepository;
+    private DecomposedRepository decomposedRepository;
 
     @Autowired
-    private DecomposedActivityMapper decomposedActivityMapper;
+    private DecomposedMapper decomposedMapper;
 
     @Autowired
-    private DecomposedActivityService decomposedActivityService;
+    private DecomposedService decomposedService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -62,15 +62,15 @@ public class DecomposedActivityResourceIT {
     @Autowired
     private Validator validator;
 
-    private MockMvc restDecomposedActivityMockMvc;
+    private MockMvc restDecomposedMockMvc;
 
-    private DecomposedActivity decomposedActivity;
+    private Decomposed decomposed;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final DecomposedActivityResource decomposedActivityResource = new DecomposedActivityResource(decomposedActivityService);
-        this.restDecomposedActivityMockMvc = MockMvcBuilders.standaloneSetup(decomposedActivityResource)
+        final DecomposedResource decomposedResource = new DecomposedResource(decomposedService);
+        this.restDecomposedMockMvc = MockMvcBuilders.standaloneSetup(decomposedResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
@@ -84,9 +84,9 @@ public class DecomposedActivityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static DecomposedActivity createEntity(EntityManager em) {
-        DecomposedActivity decomposedActivity = new DecomposedActivity();
-        return decomposedActivity;
+    public static Decomposed createEntity(EntityManager em) {
+        Decomposed decomposed = new Decomposed();
+        return decomposed;
     }
     /**
      * Create an updated entity for this test.
@@ -94,52 +94,52 @@ public class DecomposedActivityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static DecomposedActivity createUpdatedEntity(EntityManager em) {
-        DecomposedActivity decomposedActivity = new DecomposedActivity();
-        return decomposedActivity;
+    public static Decomposed createUpdatedEntity(EntityManager em) {
+        Decomposed decomposed = new Decomposed();
+        return decomposed;
     }
 
     @BeforeEach
     public void initTest() {
-        decomposedActivity = createEntity(em);
+        decomposed = createEntity(em);
     }
 
     @Test
     @Transactional
-    public void createDecomposedActivity() throws Exception {
-        int databaseSizeBeforeCreate = decomposedActivityRepository.findAll().size();
+    public void createDecomposed() throws Exception {
+        int databaseSizeBeforeCreate = decomposedRepository.findAll().size();
 
-        // Create the DecomposedActivity
-        DecomposedActivityDTO decomposedActivityDTO = decomposedActivityMapper.toDto(decomposedActivity);
-        restDecomposedActivityMockMvc.perform(post("/api/decomposed-activities")
+        // Create the Decomposed
+        DecomposedDTO decomposedDTO = decomposedMapper.toDto(decomposed);
+        restDecomposedMockMvc.perform(post("/api/decomposed-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(decomposedActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(decomposedDTO)))
             .andExpect(status().isCreated());
 
-        // Validate the DecomposedActivity in the database
-        List<DecomposedActivity> decomposedActivityList = decomposedActivityRepository.findAll();
-        assertThat(decomposedActivityList).hasSize(databaseSizeBeforeCreate + 1);
-        DecomposedActivity testDecomposedActivity = decomposedActivityList.get(decomposedActivityList.size() - 1);
+        // Validate the Decomposed in the database
+        List<Decomposed> decomposedList = decomposedRepository.findAll();
+        assertThat(decomposedList).hasSize(databaseSizeBeforeCreate + 1);
+        Decomposed testDecomposed = decomposedList.get(decomposedList.size() - 1);
     }
 
     @Test
     @Transactional
-    public void createDecomposedActivityWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = decomposedActivityRepository.findAll().size();
+    public void createDecomposedWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = decomposedRepository.findAll().size();
 
-        // Create the DecomposedActivity with an existing ID
-        decomposedActivity.setId(1L);
-        DecomposedActivityDTO decomposedActivityDTO = decomposedActivityMapper.toDto(decomposedActivity);
+        // Create the Decomposed with an existing ID
+        decomposed.setId(1L);
+        DecomposedDTO decomposedDTO = decomposedMapper.toDto(decomposed);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restDecomposedActivityMockMvc.perform(post("/api/decomposed-activities")
+        restDecomposedMockMvc.perform(post("/api/decomposed-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(decomposedActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(decomposedDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the DecomposedActivity in the database
-        List<DecomposedActivity> decomposedActivityList = decomposedActivityRepository.findAll();
-        assertThat(decomposedActivityList).hasSize(databaseSizeBeforeCreate);
+        // Validate the Decomposed in the database
+        List<Decomposed> decomposedList = decomposedRepository.findAll();
+        assertThat(decomposedList).hasSize(databaseSizeBeforeCreate);
     }
 
 
@@ -147,133 +147,133 @@ public class DecomposedActivityResourceIT {
     @Transactional
     public void getAllDecomposedActivities() throws Exception {
         // Initialize the database
-        decomposedActivityRepository.saveAndFlush(decomposedActivity);
+        decomposedRepository.saveAndFlush(decomposed);
 
-        // Get all the decomposedActivityList
-        restDecomposedActivityMockMvc.perform(get("/api/decomposed-activities?sort=id,desc"))
+        // Get all the decomposedList
+        restDecomposedMockMvc.perform(get("/api/decomposed-activities?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(decomposedActivity.getId().intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(decomposed.getId().intValue())));
     }
     
     @Test
     @Transactional
-    public void getDecomposedActivity() throws Exception {
+    public void getDecomposed() throws Exception {
         // Initialize the database
-        decomposedActivityRepository.saveAndFlush(decomposedActivity);
+        decomposedRepository.saveAndFlush(decomposed);
 
-        // Get the decomposedActivity
-        restDecomposedActivityMockMvc.perform(get("/api/decomposed-activities/{id}", decomposedActivity.getId()))
+        // Get the decomposed
+        restDecomposedMockMvc.perform(get("/api/decomposed-activities/{id}", decomposed.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(decomposedActivity.getId().intValue()));
+            .andExpect(jsonPath("$.id").value(decomposed.getId().intValue()));
     }
 
     @Test
     @Transactional
-    public void getNonExistingDecomposedActivity() throws Exception {
-        // Get the decomposedActivity
-        restDecomposedActivityMockMvc.perform(get("/api/decomposed-activities/{id}", Long.MAX_VALUE))
+    public void getNonExistingDecomposed() throws Exception {
+        // Get the decomposed
+        restDecomposedMockMvc.perform(get("/api/decomposed-activities/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    public void updateDecomposedActivity() throws Exception {
+    public void updateDecomposed() throws Exception {
         // Initialize the database
-        decomposedActivityRepository.saveAndFlush(decomposedActivity);
+        decomposedRepository.saveAndFlush(decomposed);
 
-        int databaseSizeBeforeUpdate = decomposedActivityRepository.findAll().size();
+        int databaseSizeBeforeUpdate = decomposedRepository.findAll().size();
 
-        // Update the decomposedActivity
-        DecomposedActivity updatedDecomposedActivity = decomposedActivityRepository.findById(decomposedActivity.getId()).get();
-        // Disconnect from session so that the updates on updatedDecomposedActivity are not directly saved in db
-        em.detach(updatedDecomposedActivity);
-        DecomposedActivityDTO decomposedActivityDTO = decomposedActivityMapper.toDto(updatedDecomposedActivity);
+        // Update the decomposed
+        Decomposed updatedDecomposed = decomposedRepository.findById(decomposed.getId()).get();
+        // Disconnect from session so that the updates on updatedDecomposed are not directly saved in db
+        em.detach(updatedDecomposed);
+        DecomposedDTO decomposedDTO = decomposedMapper.toDto(updatedDecomposed);
 
-        restDecomposedActivityMockMvc.perform(put("/api/decomposed-activities")
+        restDecomposedMockMvc.perform(put("/api/decomposed-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(decomposedActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(decomposedDTO)))
             .andExpect(status().isOk());
 
-        // Validate the DecomposedActivity in the database
-        List<DecomposedActivity> decomposedActivityList = decomposedActivityRepository.findAll();
-        assertThat(decomposedActivityList).hasSize(databaseSizeBeforeUpdate);
-        DecomposedActivity testDecomposedActivity = decomposedActivityList.get(decomposedActivityList.size() - 1);
+        // Validate the Decomposed in the database
+        List<Decomposed> decomposedList = decomposedRepository.findAll();
+        assertThat(decomposedList).hasSize(databaseSizeBeforeUpdate);
+        Decomposed testDecomposed = decomposedList.get(decomposedList.size() - 1);
     }
 
     @Test
     @Transactional
-    public void updateNonExistingDecomposedActivity() throws Exception {
-        int databaseSizeBeforeUpdate = decomposedActivityRepository.findAll().size();
+    public void updateNonExistingDecomposed() throws Exception {
+        int databaseSizeBeforeUpdate = decomposedRepository.findAll().size();
 
-        // Create the DecomposedActivity
-        DecomposedActivityDTO decomposedActivityDTO = decomposedActivityMapper.toDto(decomposedActivity);
+        // Create the Decomposed
+        DecomposedDTO decomposedDTO = decomposedMapper.toDto(decomposed);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restDecomposedActivityMockMvc.perform(put("/api/decomposed-activities")
+        restDecomposedMockMvc.perform(put("/api/decomposed-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(decomposedActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(decomposedDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the DecomposedActivity in the database
-        List<DecomposedActivity> decomposedActivityList = decomposedActivityRepository.findAll();
-        assertThat(decomposedActivityList).hasSize(databaseSizeBeforeUpdate);
+        // Validate the Decomposed in the database
+        List<Decomposed> decomposedList = decomposedRepository.findAll();
+        assertThat(decomposedList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
-    public void deleteDecomposedActivity() throws Exception {
+    public void deleteDecomposed() throws Exception {
         // Initialize the database
-        decomposedActivityRepository.saveAndFlush(decomposedActivity);
+        decomposedRepository.saveAndFlush(decomposed);
 
-        int databaseSizeBeforeDelete = decomposedActivityRepository.findAll().size();
+        int databaseSizeBeforeDelete = decomposedRepository.findAll().size();
 
-        // Delete the decomposedActivity
-        restDecomposedActivityMockMvc.perform(delete("/api/decomposed-activities/{id}", decomposedActivity.getId())
+        // Delete the decomposed
+        restDecomposedMockMvc.perform(delete("/api/decomposed-activities/{id}", decomposed.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<DecomposedActivity> decomposedActivityList = decomposedActivityRepository.findAll();
-        assertThat(decomposedActivityList).hasSize(databaseSizeBeforeDelete - 1);
+        List<Decomposed> decomposedList = decomposedRepository.findAll();
+        assertThat(decomposedList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test
     @Transactional
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DecomposedActivity.class);
-        DecomposedActivity decomposedActivity1 = new DecomposedActivity();
-        decomposedActivity1.setId(1L);
-        DecomposedActivity decomposedActivity2 = new DecomposedActivity();
-        decomposedActivity2.setId(decomposedActivity1.getId());
-        assertThat(decomposedActivity1).isEqualTo(decomposedActivity2);
-        decomposedActivity2.setId(2L);
-        assertThat(decomposedActivity1).isNotEqualTo(decomposedActivity2);
-        decomposedActivity1.setId(null);
-        assertThat(decomposedActivity1).isNotEqualTo(decomposedActivity2);
+        TestUtil.equalsVerifier(Decomposed.class);
+        Decomposed decomposed1 = new Decomposed();
+        decomposed1.setId(1L);
+        Decomposed decomposed2 = new Decomposed();
+        decomposed2.setId(decomposed1.getId());
+        assertThat(decomposed1).isEqualTo(decomposed2);
+        decomposed2.setId(2L);
+        assertThat(decomposed1).isNotEqualTo(decomposed2);
+        decomposed1.setId(null);
+        assertThat(decomposed1).isNotEqualTo(decomposed2);
     }
 
     @Test
     @Transactional
     public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DecomposedActivityDTO.class);
-        DecomposedActivityDTO decomposedActivityDTO1 = new DecomposedActivityDTO();
-        decomposedActivityDTO1.setId(1L);
-        DecomposedActivityDTO decomposedActivityDTO2 = new DecomposedActivityDTO();
-        assertThat(decomposedActivityDTO1).isNotEqualTo(decomposedActivityDTO2);
-        decomposedActivityDTO2.setId(decomposedActivityDTO1.getId());
-        assertThat(decomposedActivityDTO1).isEqualTo(decomposedActivityDTO2);
-        decomposedActivityDTO2.setId(2L);
-        assertThat(decomposedActivityDTO1).isNotEqualTo(decomposedActivityDTO2);
-        decomposedActivityDTO1.setId(null);
-        assertThat(decomposedActivityDTO1).isNotEqualTo(decomposedActivityDTO2);
+        TestUtil.equalsVerifier(DecomposedDTO.class);
+        DecomposedDTO decomposedDTO1 = new DecomposedDTO();
+        decomposedDTO1.setId(1L);
+        DecomposedDTO decomposedDTO2 = new DecomposedDTO();
+        assertThat(decomposedDTO1).isNotEqualTo(decomposedDTO2);
+        decomposedDTO2.setId(decomposedDTO1.getId());
+        assertThat(decomposedDTO1).isEqualTo(decomposedDTO2);
+        decomposedDTO2.setId(2L);
+        assertThat(decomposedDTO1).isNotEqualTo(decomposedDTO2);
+        decomposedDTO1.setId(null);
+        assertThat(decomposedDTO1).isNotEqualTo(decomposedDTO2);
     }
 
     @Test
     @Transactional
     public void testEntityFromId() {
-        assertThat(decomposedActivityMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(decomposedActivityMapper.fromId(null)).isNull();
+        assertThat(decomposedMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(decomposedMapper.fromId(null)).isNull();
     }
 }

@@ -1,17 +1,17 @@
 {
-    "name": "DecomposedActivity",
+    "name": "Decomposed",
     "fields": [],
     "relationships": [
         {
             "relationshipType": "one-to-one",
             "otherEntityName": "activity",
-            "otherEntityRelationshipName": "theDecomposedActivitySub",
+            "otherEntityRelationshipName": "theDecomposedSub",
             "relationshipName": "theActivitySuper",
             "ownerSide": false
         }
     ],
     "changelogDate": "20190914033721",
-    "entityTableName": "decomposed_activity",
+    "entityTableName": "decomposed",
     "dto": "mapstruct",
     "pagination": "no",
     "service": "serviceClass",

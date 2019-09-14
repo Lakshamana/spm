@@ -7,7 +7,7 @@ entity Activity {
 enum PlainActivityStatus {
     WAITING, READY, FAILED, CANCELED, ACTIVE, PAUSED, FINISHED
 }
-entity DecomposedActivity {
+entity Decomposed {
 }
 
 entity PlainActivity {
@@ -42,7 +42,7 @@ relationship ManyToMany {
 
 relationship OneToOne {
     Activity{thePlainActivitySub} to PlainActivity{theActivitySuper},
-    Activity{theDecomposedActivitySub} to DecomposedActivity{theActivitySuper},
+    Activity{theDecomposedSub} to Decomposed{theActivitySuper},
 
     PlainActivity{theEnactionDescription} to EnactionDescription{thePlainActivity}
 }
@@ -1280,7 +1280,7 @@ dto * with mapstruct
 // dto DevelopingSystem with mapstruct
 // dto WebAPSEEObject with mapstruct
 // dto Activity with mapstruct
-// dto DecomposedActivity with mapstruct
+// dto Decomposed with mapstruct
 // dto Role with mapstruct
 // dto RoleNeedsAbility with mapstruct
 // dto ToolDefinition with mapstruct

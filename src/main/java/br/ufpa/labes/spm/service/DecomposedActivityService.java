@@ -1,9 +1,9 @@
 package br.ufpa.labes.spm.service;
 
-import br.ufpa.labes.spm.domain.DecomposedActivity;
-import br.ufpa.labes.spm.repository.DecomposedActivityRepository;
-import br.ufpa.labes.spm.service.dto.DecomposedActivityDTO;
-import br.ufpa.labes.spm.service.mapper.DecomposedActivityMapper;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.repository.DecomposedRepository;
+import br.ufpa.labes.spm.service.dto.DecomposedDTO;
+import br.ufpa.labes.spm.service.mapper.DecomposedMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,34 +17,34 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * Service Implementation for managing {@link DecomposedActivity}.
+ * Service Implementation for managing {@link Decomposed}.
  */
 @Service
 @Transactional
-public class DecomposedActivityService {
+public class DecomposedService {
 
-    private final Logger log = LoggerFactory.getLogger(DecomposedActivityService.class);
+    private final Logger log = LoggerFactory.getLogger(DecomposedService.class);
 
-    private final DecomposedActivityRepository decomposedActivityRepository;
+    private final DecomposedRepository decomposedRepository;
 
-    private final DecomposedActivityMapper decomposedActivityMapper;
+    private final DecomposedMapper decomposedMapper;
 
-    public DecomposedActivityService(DecomposedActivityRepository decomposedActivityRepository, DecomposedActivityMapper decomposedActivityMapper) {
-        this.decomposedActivityRepository = decomposedActivityRepository;
-        this.decomposedActivityMapper = decomposedActivityMapper;
+    public DecomposedService(DecomposedRepository decomposedRepository, DecomposedMapper decomposedMapper) {
+        this.decomposedRepository = decomposedRepository;
+        this.decomposedMapper = decomposedMapper;
     }
 
     /**
-     * Save a decomposedActivity.
+     * Save a decomposed.
      *
-     * @param decomposedActivityDTO the entity to save.
+     * @param decomposedDTO the entity to save.
      * @return the persisted entity.
      */
-    public DecomposedActivityDTO save(DecomposedActivityDTO decomposedActivityDTO) {
-        log.debug("Request to save DecomposedActivity : {}", decomposedActivityDTO);
-        DecomposedActivity decomposedActivity = decomposedActivityMapper.toEntity(decomposedActivityDTO);
-        decomposedActivity = decomposedActivityRepository.save(decomposedActivity);
-        return decomposedActivityMapper.toDto(decomposedActivity);
+    public DecomposedDTO save(DecomposedDTO decomposedDTO) {
+        log.debug("Request to save Decomposed : {}", decomposedDTO);
+        Decomposed decomposed = decomposedMapper.toEntity(decomposedDTO);
+        decomposed = decomposedRepository.save(decomposed);
+        return decomposedMapper.toDto(decomposed);
     }
 
     /**
@@ -53,10 +53,10 @@ public class DecomposedActivityService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<DecomposedActivityDTO> findAll() {
+    public List<DecomposedDTO> findAll() {
         log.debug("Request to get all DecomposedActivities");
-        return decomposedActivityRepository.findAll().stream()
-            .map(decomposedActivityMapper::toDto)
+        return decomposedRepository.findAll().stream()
+            .map(decomposedMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -67,35 +67,35 @@ public class DecomposedActivityService {
      *  @return the list of entities.
      */
     @Transactional(readOnly = true) 
-    public List<DecomposedActivityDTO> findAllWhereTheActivitySuperIsNull() {
+    public List<DecomposedDTO> findAllWhereTheActivitySuperIsNull() {
         log.debug("Request to get all decomposedActivities where TheActivitySuper is null");
         return StreamSupport
-            .stream(decomposedActivityRepository.findAll().spliterator(), false)
-            .filter(decomposedActivity -> decomposedActivity.getTheActivitySuper() == null)
-            .map(decomposedActivityMapper::toDto)
+            .stream(decomposedRepository.findAll().spliterator(), false)
+            .filter(decomposed -> decomposed.getTheActivitySuper() == null)
+            .map(decomposedMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
-     * Get one decomposedActivity by id.
+     * Get one decomposed by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<DecomposedActivityDTO> findOne(Long id) {
-        log.debug("Request to get DecomposedActivity : {}", id);
-        return decomposedActivityRepository.findById(id)
-            .map(decomposedActivityMapper::toDto);
+    public Optional<DecomposedDTO> findOne(Long id) {
+        log.debug("Request to get Decomposed : {}", id);
+        return decomposedRepository.findById(id)
+            .map(decomposedMapper::toDto);
     }
 
     /**
-     * Delete the decomposedActivity by id.
+     * Delete the decomposed by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete DecomposedActivity : {}", id);
-        decomposedActivityRepository.deleteById(id);
+        log.debug("Request to delete Decomposed : {}", id);
+        decomposedRepository.deleteById(id);
     }
 }

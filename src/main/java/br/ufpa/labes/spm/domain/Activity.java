@@ -35,7 +35,7 @@ public class Activity implements Serializable {
 
     @OneToOne
     @JoinColumn(unique = true)
-    private DecomposedActivity theDecomposedActivitySub;
+    private Decomposed theDecomposedSub;
 
     @OneToMany(mappedBy = "theActivity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -165,17 +165,17 @@ public class Activity implements Serializable {
         this.thePlainActivitySub = plainActivity;
     }
 
-    public DecomposedActivity getTheDecomposedActivitySub() {
-        return theDecomposedActivitySub;
+    public Decomposed getTheDecomposedSub() {
+        return theDecomposedSub;
     }
 
-    public Activity theDecomposedActivitySub(DecomposedActivity decomposedActivity) {
-        this.theDecomposedActivitySub = decomposedActivity;
+    public Activity theDecomposedSub(Decomposed decomposed) {
+        this.theDecomposedSub = decomposed;
         return this;
     }
 
-    public void setTheDecomposedActivitySub(DecomposedActivity decomposedActivity) {
-        this.theDecomposedActivitySub = decomposedActivity;
+    public void setTheDecomposedSub(Decomposed decomposed) {
+        this.theDecomposedSub = decomposed;
     }
 
     public Set<Event> getTheModelingActivityEvents() {

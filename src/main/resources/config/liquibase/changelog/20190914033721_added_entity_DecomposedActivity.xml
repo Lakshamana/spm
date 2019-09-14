@@ -9,10 +9,10 @@
     <property name="autoIncrement" value="true"/>
 
     <!--
-        Added the entity DecomposedActivity.
+        Added the entity Decomposed.
     -->
     <changeSet id="20190914033721-1" author="jhipster">
-        <createTable tableName="decomposed_activity">
+        <createTable tableName="decomposed">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -36,9 +36,9 @@
     -->
     <changeSet id="20190914033721-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/decomposed_activity.csv"
+                  file="config/liquibase/fake-data/decomposed.csv"
                   separator=";"
-                  tableName="decomposed_activity">
+                  tableName="decomposed">
             <column name="id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
