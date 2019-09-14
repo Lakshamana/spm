@@ -1,0 +1,28 @@
+{
+    "name": "ToolType",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "type",
+            "otherEntityRelationshipName": "theToolTypeSub",
+            "relationshipName": "theTypeSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "toolDefinition",
+            "otherEntityRelationshipName": "theToolType",
+            "relationshipName": "theToolDefinition"
+        }
+    ],
+    "changelogDate": "20190914033932",
+    "entityTableName": "tool_type",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

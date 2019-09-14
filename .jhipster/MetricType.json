@@ -1,0 +1,28 @@
+{
+    "name": "MetricType",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "type",
+            "otherEntityRelationshipName": "theMetricTypeSub",
+            "relationshipName": "theTypeSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "metricDefinition",
+            "otherEntityRelationshipName": "theMetricType",
+            "relationshipName": "theMetricDefinition"
+        }
+    ],
+    "changelogDate": "20190914033929",
+    "entityTableName": "metric_type",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

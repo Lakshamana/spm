@@ -1,0 +1,29 @@
+{
+    "name": "ProcessEstimation",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "process",
+            "otherEntityRelationshipName": "theProcessEstimation",
+            "relationshipName": "theProcess",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "estimation",
+            "otherEntityRelationshipName": "theProcessEstimationSub",
+            "relationshipName": "theEstimationSuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033847",
+    "entityTableName": "process_estimation",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,26 @@
+{
+    "name": "PrimitiveType",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "toolParameter",
+            "otherEntityRelationshipName": "thePrimitiveType",
+            "relationshipName": "theToolParameter"
+        }
+    ],
+    "changelogDate": "20190914033917",
+    "entityTableName": "primitive_type",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

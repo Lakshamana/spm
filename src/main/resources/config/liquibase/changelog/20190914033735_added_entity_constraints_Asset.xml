@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Asset.
+    -->
+    <changeSet id="20190914033735-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="stats_id"
+                                 baseTableName="asset"
+                                 constraintName="fk_asset_stats_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_stat"/>
+
+        <addForeignKeyConstraint baseColumnNames="owner_id"
+                                 baseTableName="asset"
+                                 constraintName="fk_asset_owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="author"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_id"
+                                 baseTableName="asset_favorited_by"
+                                 constraintName="fk_asset_favorited_by_asset_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset"/>
+
+        <addForeignKeyConstraint baseColumnNames="favorited_by_id"
+                                 baseTableName="asset_favorited_by"
+                                 constraintName="fk_asset_favorited_by_favorited_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="author"/>
+        
+        <addForeignKeyConstraint baseColumnNames="asset_id"
+                                 baseTableName="asset_followers"
+                                 constraintName="fk_asset_followers_asset_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset"/>
+
+        <addForeignKeyConstraint baseColumnNames="followers_id"
+                                 baseTableName="asset_followers"
+                                 constraintName="fk_asset_followers_followers_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="author"/>
+        
+        <addForeignKeyConstraint baseColumnNames="asset_id"
+                                 baseTableName="asset_collaborators"
+                                 constraintName="fk_asset_collaborators_asset_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset"/>
+
+        <addForeignKeyConstraint baseColumnNames="collaborators_id"
+                                 baseTableName="asset_collaborators"
+                                 constraintName="fk_asset_collaborators_collaborators_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="author"/>
+        
+    </changeSet>
+</databaseChangeLog>

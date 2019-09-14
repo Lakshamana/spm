@@ -1,0 +1,34 @@
+{
+    "name": "ReqAgentRequiresAbility",
+    "fields": [
+        {
+            "fieldName": "degree",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "requiredPeople",
+            "otherEntityRelationshipName": "theReqAgentRequiresAbility",
+            "relationshipName": "theReqAgent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "ability",
+            "otherEntityRelationshipName": "theReqAgentRequiresAbility",
+            "relationshipName": "theAbility",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033828",
+    "entityTableName": "req_agent_requires_ability",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

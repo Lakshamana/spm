@@ -1,0 +1,45 @@
+{
+    "name": "Description",
+    "fields": [
+        {
+            "fieldName": "date",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "why",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "template",
+            "otherEntityRelationshipName": "theDerivedVersionDescription",
+            "relationshipName": "theTemplateOldVersion",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "template",
+            "otherEntityRelationshipName": "theTemplateNewDescription",
+            "relationshipName": "theTemplateNewVersion",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "template",
+            "otherEntityRelationshipName": "theOriginalVersionDescription",
+            "relationshipName": "descTemplateOriginalVersion"
+        }
+    ],
+    "changelogDate": "20190914033901",
+    "entityTableName": "description",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

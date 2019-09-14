@@ -1,0 +1,64 @@
+{
+    "name": "Project",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "beginDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "endDate",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "theProject",
+            "relationshipName": "finalArtifacts"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "process",
+            "otherEntityRelationshipName": "theProject",
+            "relationshipName": "processRefered",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "developingSystem",
+            "otherEntityRelationshipName": "theProject",
+            "relationshipName": "theSystem",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "calendar",
+            "otherEntityRelationshipName": "project",
+            "relationshipName": "theCalendar",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033814",
+    "entityTableName": "project",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,142 @@
+{
+    "name": "Author",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "version",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "interests",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "city",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "country",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "photoURL",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "theAuthor",
+            "relationshipName": "user",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "organization",
+            "otherEntityRelationshipName": "theAuthorSuper",
+            "relationshipName": "theOrganizationSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "person",
+            "otherEntityRelationshipName": "theAuthorSuper",
+            "relationshipName": "thePersonSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "author",
+            "otherEntityRelationshipName": "theAuthor",
+            "relationshipName": "authorsFollowed",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "asset",
+            "otherEntityRelationshipName": "owner",
+            "relationshipName": "theAssets"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "authorStat",
+            "otherEntityRelationshipName": "author",
+            "relationshipName": "theAuthorStats"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "lessonLearned",
+            "otherEntityRelationshipName": "author",
+            "relationshipName": "theLessonLearned"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "message",
+            "otherEntityRelationshipName": "sender",
+            "relationshipName": "sentMessages"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "message",
+            "otherEntityRelationshipName": "recipient",
+            "relationshipName": "receivedMessages"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "asset",
+            "otherEntityRelationshipName": "favoritedBy",
+            "relationshipName": "favorites",
+            "otherEntityField": "id",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "asset",
+            "otherEntityRelationshipName": "followers",
+            "relationshipName": "assetsFollowed",
+            "otherEntityField": "id",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "asset",
+            "otherEntityRelationshipName": "collaborators",
+            "relationshipName": "collaborateOnAssets",
+            "otherEntityField": "id",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "author",
+            "otherEntityRelationshipName": "authorsFollowed",
+            "relationshipName": "theAuthor",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033818",
+    "entityTableName": "author",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

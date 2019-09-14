@@ -1,0 +1,39 @@
+{
+    "name": "Organization",
+    "fields": [
+        {
+            "fieldName": "domain",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "author",
+            "otherEntityRelationshipName": "theOrganizationSub",
+            "relationshipName": "theAuthorSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "organizationMetric",
+            "otherEntityRelationshipName": "theOrganization",
+            "relationshipName": "theOrganizationMetric"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "organizationEstimation",
+            "otherEntityRelationshipName": "theOrganization",
+            "relationshipName": "theOrganizationEstimation"
+        }
+    ],
+    "changelogDate": "20190914033819",
+    "entityTableName": "organization",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

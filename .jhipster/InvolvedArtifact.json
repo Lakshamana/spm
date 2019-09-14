@@ -1,0 +1,43 @@
+{
+    "name": "InvolvedArtifact",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "normal",
+            "otherEntityRelationshipName": "theInvolvedArtifactToNormal",
+            "relationshipName": "inInvolvedArtifacts",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "normal",
+            "otherEntityRelationshipName": "theInvolvedArtifactsFromNormal",
+            "relationshipName": "outInvolvedArtifacts",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifactType",
+            "otherEntityRelationshipName": "theInvolvedArtifact",
+            "relationshipName": "theArtifactType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "theInvolvedArtifacts",
+            "relationshipName": "theArtifact",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033823",
+    "entityTableName": "involved_artifact",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

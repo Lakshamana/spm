@@ -1,0 +1,27 @@
+{
+    "name": "CalendarDay",
+    "fields": [
+        {
+            "fieldName": "day",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "calendar",
+            "otherEntityRelationshipName": "notWorkingDays",
+            "relationshipName": "theCalendar",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033744",
+    "entityTableName": "calendar_day",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

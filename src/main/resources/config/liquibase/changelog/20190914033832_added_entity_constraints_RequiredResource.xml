@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity RequiredResource.
+    -->
+    <changeSet id="20190914033832-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_normal_id"
+                                 baseTableName="required_resource"
+                                 constraintName="fk_required_resource_the_normal_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="normal"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_resource_type_id"
+                                 baseTableName="required_resource"
+                                 constraintName="fk_required_resource_the_resource_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="resource_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_resource_id"
+                                 baseTableName="required_resource"
+                                 constraintName="fk_required_resource_the_resource_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="resource"/>
+
+    </changeSet>
+</databaseChangeLog>

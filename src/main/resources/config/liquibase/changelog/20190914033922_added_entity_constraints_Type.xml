@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Type.
+    -->
+    <changeSet id="20190914033922-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_ability_type_sub_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_the_ability_type_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ability_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_activity_type_sub_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_the_activity_type_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="activity_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_artifact_type_sub_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_the_artifact_type_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="artifact_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_connection_type_sub_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_the_connection_type_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="connection_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_event_type_sub_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_the_event_type_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="event_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_work_group_type_sub_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_the_work_group_type_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_group_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_metric_type_sub_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_the_metric_type_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="metric_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_resource_type_sub_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_the_resource_type_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="resource_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_role_type_sub_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_the_role_type_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="role_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_tool_type_sub_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_the_tool_type_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tool_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="super_type_id"
+                                 baseTableName="type"
+                                 constraintName="fk_type_super_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="type"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,32 @@
+{
+    "name": "Dependency",
+    "fields": [
+        {
+            "fieldName": "kindDep",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "multipleCon",
+            "otherEntityRelationshipName": "theDependency",
+            "relationshipName": "theMultipleCon"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "sequence",
+            "otherEntityRelationshipName": "theDependency",
+            "relationshipName": "theSequence"
+        }
+    ],
+    "changelogDate": "20190914033753",
+    "entityTableName": "dependency",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

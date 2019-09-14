@@ -1,0 +1,57 @@
+{
+    "name": "ProcessModel",
+    "fields": [
+        {
+            "fieldName": "requirements",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "pmStatus",
+            "fieldType": "ProcessModelStatus",
+            "fieldValues": "REQUIREMENTS,ABSTRACT,INSTANTIATED,ENACTING,FAILED,CANCELED,MIXED,FINISHED"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "theProcessModel",
+            "relationshipName": "theActivity"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "process",
+            "otherEntityRelationshipName": "theProcessModel",
+            "relationshipName": "theProcess",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "template",
+            "otherEntityRelationshipName": "theProcessModel",
+            "relationshipName": "theOrigin",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "connection",
+            "otherEntityRelationshipName": "theProcessModel",
+            "relationshipName": "theConnection"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "processModelEvent",
+            "otherEntityRelationshipName": "theProcessModel",
+            "relationshipName": "theProcessModelEvent"
+        }
+    ],
+    "changelogDate": "20190914033903",
+    "entityTableName": "process_model",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

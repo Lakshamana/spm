@@ -1,0 +1,29 @@
+{
+    "name": "AgentMetric",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "metric",
+            "otherEntityRelationshipName": "theAgentMetricSub",
+            "relationshipName": "theMetricSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theAgentMetric",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033851",
+    "entityTableName": "agent_metric",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,29 @@
+{
+    "name": "WorkGroupEstimation",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "estimation",
+            "otherEntityRelationshipName": "theWorkGroupEstimationSub",
+            "relationshipName": "theEstimationSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "workGroup",
+            "otherEntityRelationshipName": "theWorkGroupEstimation",
+            "relationshipName": "theWorkGroup",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033845",
+    "entityTableName": "work_group_estimation",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

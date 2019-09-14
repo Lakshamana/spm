@@ -1,0 +1,56 @@
+{
+    "name": "Subroutine",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "classMethodCall",
+            "otherEntityRelationshipName": "theSubroutineSuper",
+            "relationshipName": "theClassMethodCallSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "script",
+            "otherEntityRelationshipName": "theSubroutineSuper",
+            "relationshipName": "theScriptSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifactType",
+            "otherEntityRelationshipName": "theSubroutine",
+            "relationshipName": "theArtifactType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "automaticActivity",
+            "otherEntityRelationshipName": "theSubroutine",
+            "relationshipName": "theAutomaticActivity",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "toolParameter",
+            "otherEntityRelationshipName": "theSubroutine",
+            "relationshipName": "theToolParameter"
+        }
+    ],
+    "changelogDate": "20190914033919",
+    "entityTableName": "subroutine",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,32 @@
+{
+    "name": "Shareable",
+    "fields": [
+        {
+            "fieldName": "shareableStatus",
+            "fieldType": "ShareableStatus",
+            "fieldValues": "AVAILABLE,NOT_AVAILABLE"
+        },
+        {
+            "fieldName": "unitOfCost",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "theShareableSub",
+            "relationshipName": "theResourceSuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033908",
+    "entityTableName": "shareable",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

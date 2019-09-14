@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Process.
+    -->
+    <changeSet id="20190914033902-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_process_model_id"
+                                 baseTableName="process"
+                                 constraintName="fk_process_the_process_model_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="process_model"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_template_sub_id"
+                                 baseTableName="process"
+                                 constraintName="fk_process_the_template_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="template"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_activity_type_id"
+                                 baseTableName="process"
+                                 constraintName="fk_process_the_activity_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="activity_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_email_configuration_id"
+                                 baseTableName="process"
+                                 constraintName="fk_process_the_email_configuration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="email_configuration"/>
+
+    </changeSet>
+</databaseChangeLog>

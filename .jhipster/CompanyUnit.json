@@ -1,0 +1,64 @@
+{
+    "name": "CompanyUnit",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "company",
+            "otherEntityRelationshipName": "theCompanyUnit",
+            "relationshipName": "theOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "companyUnit",
+            "otherEntityRelationshipName": "theCompanyUnit",
+            "relationshipName": "theCommand",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theManagedOrgUnits",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "companyUnit",
+            "otherEntityRelationshipName": "theCommand",
+            "relationshipName": "theCompanyUnit"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theOrgUnits",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033812",
+    "entityTableName": "company_unit",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,29 @@
+{
+    "name": "WorkGroupMetric",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "metric",
+            "otherEntityRelationshipName": "theWorkGroupMetricSub",
+            "relationshipName": "theMetricSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "workGroup",
+            "otherEntityRelationshipName": "theWorkGroupMetric",
+            "relationshipName": "theWorkGroup",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033853",
+    "entityTableName": "work_group_metric",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

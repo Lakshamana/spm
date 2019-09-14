@@ -1,0 +1,44 @@
+{
+    "name": "ToolDefinition",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "toolType",
+            "otherEntityRelationshipName": "theToolDefinition",
+            "relationshipName": "theToolType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "type",
+            "otherEntityRelationshipName": "theToolDefinitionToArtifactType",
+            "relationshipName": "theArtifactTypes",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190914033920",
+    "entityTableName": "tool_definition",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

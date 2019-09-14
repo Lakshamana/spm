@@ -1,0 +1,43 @@
+{
+    "name": "Email",
+    "fields": [
+        {
+            "fieldName": "emailServerHost",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "emailServerPort",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "userName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "passwordHash",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "servicoTls",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "servicoSsl",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "teste",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20190914033759",
+    "entityTableName": "email",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

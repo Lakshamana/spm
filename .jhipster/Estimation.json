@@ -1,0 +1,87 @@
+{
+    "name": "Estimation",
+    "fields": [
+        {
+            "fieldName": "value",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "unit",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "activityEstimation",
+            "otherEntityRelationshipName": "theEstimationSuper",
+            "relationshipName": "theActivityEstimationSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "agentEstimation",
+            "otherEntityRelationshipName": "theEstimationSuper",
+            "relationshipName": "theAgentEstimationSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "artifactEstimation",
+            "otherEntityRelationshipName": "theEstimationSuper",
+            "relationshipName": "theArtifactEstimationSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "workGroupEstimation",
+            "otherEntityRelationshipName": "theEstimationSuper",
+            "relationshipName": "theWorkGroupEstimationSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "organizationEstimation",
+            "otherEntityRelationshipName": "theEstimationSuper",
+            "relationshipName": "theOrganizationEstimationSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "processEstimation",
+            "otherEntityRelationshipName": "theEstimationSuper",
+            "relationshipName": "theProcessEstimationSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "resourceEstimation",
+            "otherEntityRelationshipName": "theEstimationSuper",
+            "relationshipName": "theResourceEstimationSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "metricDefinition",
+            "otherEntityRelationshipName": "theEstimation",
+            "relationshipName": "theMetricDefinition",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033841",
+    "entityTableName": "estimation",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

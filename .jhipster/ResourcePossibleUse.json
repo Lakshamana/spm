@@ -1,0 +1,35 @@
+{
+    "name": "ResourcePossibleUse",
+    "fields": [
+        {
+            "fieldName": "begin",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "end",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "amountNeeded",
+            "fieldType": "Float"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "theResourcePossibleUse",
+            "relationshipName": "theResource",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033840",
+    "entityTableName": "resource_possible_use",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

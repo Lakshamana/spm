@@ -1,0 +1,34 @@
+{
+    "name": "AgentHasAbility",
+    "fields": [
+        {
+            "fieldName": "degree",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theAgentHasAbility",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "ability",
+            "otherEntityRelationshipName": "theAgentHasAbility",
+            "relationshipName": "theAbility",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033726",
+    "entityTableName": "agent_has_ability",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

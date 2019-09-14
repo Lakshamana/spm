@@ -1,0 +1,29 @@
+{
+    "name": "Sequence",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "dependency",
+            "otherEntityRelationshipName": "theSequence",
+            "relationshipName": "theDependency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "simpleCon",
+            "otherEntityRelationshipName": "theSequenceSub",
+            "relationshipName": "theSimpleConSuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033751",
+    "entityTableName": "sequence",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

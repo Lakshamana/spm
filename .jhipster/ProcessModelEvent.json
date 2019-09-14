@@ -1,0 +1,35 @@
+{
+    "name": "ProcessModelEvent",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "processModel",
+            "otherEntityRelationshipName": "theProcessModelEvent",
+            "relationshipName": "theProcessModel",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theProcessModelEventSub",
+            "relationshipName": "theEventSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theProcessModelEvent",
+            "relationshipName": "theCatalogEventToProcessModel"
+        }
+    ],
+    "changelogDate": "20190914033808",
+    "entityTableName": "process_model_event",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,65 @@
+{
+    "name": "PlainActivity",
+    "fields": [
+        {
+            "fieldName": "requirements",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "plainActivityStatus",
+            "fieldType": "PlainActivityStatus",
+            "fieldValues": "WAITING,READY,FAILED,CANCELED,ACTIVE,PAUSED,FINISHED"
+        },
+        {
+            "fieldName": "automatic",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "enactionDescription",
+            "otherEntityRelationshipName": "thePlainActivity",
+            "relationshipName": "theEnactionDescription",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "automaticActivity",
+            "otherEntityRelationshipName": "theAutomatic",
+            "relationshipName": "theAutomaticActivitySub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "thePlainActivity",
+            "relationshipName": "theGlobalActivityEvent"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "thePlainActivitySub",
+            "relationshipName": "theActivitySuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "thePlainActivity",
+            "relationshipName": "theCatalogEvent"
+        }
+    ],
+    "changelogDate": "20190914033722",
+    "entityTableName": "plain_activity",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

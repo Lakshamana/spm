@@ -1,0 +1,34 @@
+{
+    "name": "RoleNeedsAbility",
+    "fields": [
+        {
+            "fieldName": "degree",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "role",
+            "otherEntityRelationshipName": "theRoleNeedsAbility",
+            "relationshipName": "theRole",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "ability",
+            "otherEntityRelationshipName": "theRoleNeedsAbility",
+            "relationshipName": "theAbility",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033732",
+    "entityTableName": "role_needs_ability",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,43 @@
+{
+    "name": "AssetStat",
+    "fields": [
+        {
+            "fieldName": "voteCount",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "visitCount",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "downloadCount",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "tVotes",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "rate",
+            "fieldType": "Double"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "asset",
+            "otherEntityRelationshipName": "stats",
+            "relationshipName": "theAsset",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033737",
+    "entityTableName": "asset_stat",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

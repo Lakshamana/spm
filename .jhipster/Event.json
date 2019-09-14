@@ -1,0 +1,148 @@
+{
+    "name": "Event",
+    "fields": [
+        {
+            "fieldName": "why",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "when",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "isCreatedByApsee",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "agendaEvent",
+            "otherEntityRelationshipName": "theEventSuper",
+            "relationshipName": "theAgendaEventSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theEventSuper",
+            "relationshipName": "theCatalogEventSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "connectionEvent",
+            "otherEntityRelationshipName": "theEventSuper",
+            "relationshipName": "theConnectionEventSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "globalActivityEvent",
+            "otherEntityRelationshipName": "theEventSuper",
+            "relationshipName": "theGlobalActivityEventSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "modelingActivityEvent",
+            "otherEntityRelationshipName": "theEventSuper",
+            "relationshipName": "theModelingActivityEventSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "processEvent",
+            "otherEntityRelationshipName": "theEventSuper",
+            "relationshipName": "theProcessEventSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "processModelEvent",
+            "otherEntityRelationshipName": "theEventSuper",
+            "relationshipName": "theProcessModelEventSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "resourceEvent",
+            "otherEntityRelationshipName": "theEventSuper",
+            "relationshipName": "theResourceEventSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theAgendaEvent",
+            "relationshipName": "theCatalogEvents",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "task",
+            "otherEntityRelationshipName": "theAgendaEvent",
+            "relationshipName": "theTask",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "spmLog",
+            "otherEntityRelationshipName": "theEvent",
+            "relationshipName": "theLog",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "eventType",
+            "otherEntityRelationshipName": "theEvent",
+            "relationshipName": "theEventType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "theModelingActivityEvent",
+            "relationshipName": "theActivity",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "plainActivity",
+            "otherEntityRelationshipName": "theGlobalActivityEvent",
+            "relationshipName": "thePlainActivity",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theModelingActivityEvent",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theResourceEvent",
+            "relationshipName": "theRequestorAgent"
+        }
+    ],
+    "changelogDate": "20190914033802",
+    "entityTableName": "event",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

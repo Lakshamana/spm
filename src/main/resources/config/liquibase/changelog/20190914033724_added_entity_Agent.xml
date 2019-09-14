@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="autoIncrement" value="true"/>
+
+    <!--
+        Added the entity Agent.
+    -->
+    <changeSet id="20190914033724-1" author="jhipster">
+        <createTable tableName="agent">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ident" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="email" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="cost_hour" type="${floatType}">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="password_hash" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="tipo_user" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="is_active" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="online" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="photo_url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="upload" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="the_task_agenda_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_agent_the_task_agenda_id" />
+            </column>            <column name="configuration_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_agent_configuration_id" />
+            </column>
+            <column name="the_resource_event_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="the_email_configuration_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="20190914033724-1-relations" author="jhipster">
+
+        <createTable tableName="agent_the_processes">
+            <column name="the_processes_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="agent_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="agent_id, the_processes_id" tableName="agent_the_processes"/>
+        
+        <createTable tableName="agent_the_work_groups">
+            <column name="the_work_groups_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="agent_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="agent_id, the_work_groups_id" tableName="agent_the_work_groups"/>
+        
+        <createTable tableName="agent_the_org_units">
+            <column name="the_org_units_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="agent_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="agent_id, the_org_units_id" tableName="agent_the_org_units"/>
+        
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20190914033724-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/agent.csv"
+                  separator=";"
+                  tableName="agent">
+            <column name="id" type="numeric"/>
+            <column name="ident" type="string"/>
+            <column name="name" type="string"/>
+            <column name="email" type="string"/>
+            <column name="cost_hour" type="numeric"/>
+            <column name="password_hash" type="string"/>
+            <column name="tipo_user" type="numeric"/>
+            <column name="is_active" type="boolean"/>
+            <column name="online" type="boolean"/>
+            <column name="photo_url" type="string"/>
+            <column name="upload" type="string"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,28 @@
+{
+    "name": "MetricDefinitionUnit",
+    "fields": [
+        {
+            "fieldName": "unit",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "metricDefinition",
+            "otherEntityRelationshipName": "units",
+            "relationshipName": "theMetricDefinition",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033857",
+    "javadoc": "MetricDefinition String Values List Wrapper",
+    "entityTableName": "metric_definition_unit",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

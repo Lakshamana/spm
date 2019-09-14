@@ -1,0 +1,123 @@
+{
+    "name": "Artifact",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "pathName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "fileName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "latestVersion",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "isTemplate",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "isActive",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "involvedArtifact",
+            "otherEntityRelationshipName": "theArtifact",
+            "relationshipName": "theInvolvedArtifacts"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "artifactParam",
+            "otherEntityRelationshipName": "theArtifact",
+            "relationshipName": "theArtifactParams"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "automaticActivity",
+            "otherEntityRelationshipName": "theArtifact",
+            "relationshipName": "theAutomatic"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "artifactMetric",
+            "otherEntityRelationshipName": "theArtifact",
+            "relationshipName": "theArtifactMetric"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "artifactEstimation",
+            "otherEntityRelationshipName": "theArtifact",
+            "relationshipName": "theArtifactEstimation"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "vCSRepository",
+            "otherEntityRelationshipName": "theArtifact",
+            "relationshipName": "theVCSRepository"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifactType",
+            "otherEntityRelationshipName": "theArtifact",
+            "relationshipName": "theArtifactType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "possess",
+            "relationshipName": "derivedFrom",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "project",
+            "otherEntityRelationshipName": "finalArtifacts",
+            "relationshipName": "theProject",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "derivedFrom",
+            "relationshipName": "possess"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "artifactTask",
+            "otherEntityRelationshipName": "theArtifact",
+            "relationshipName": "theArtifactTasks"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "artifactCon",
+            "otherEntityRelationshipName": "theArtifact",
+            "relationshipName": "theArtifactCon"
+        }
+    ],
+    "changelogDate": "20190914033733",
+    "entityTableName": "artifact",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

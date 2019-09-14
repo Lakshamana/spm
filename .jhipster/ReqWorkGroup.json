@@ -1,0 +1,36 @@
+{
+    "name": "ReqWorkGroup",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "workGroupType",
+            "otherEntityRelationshipName": "theReqWorkGroup",
+            "relationshipName": "theWorkGroupType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "requiredPeople",
+            "otherEntityRelationshipName": "theReqWorkGroupSub",
+            "relationshipName": "theRequiredPeopleSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "workGroup",
+            "otherEntityRelationshipName": "theReqWorkGroup",
+            "relationshipName": "theWorkGroup",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033831",
+    "entityTableName": "req_work_group",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

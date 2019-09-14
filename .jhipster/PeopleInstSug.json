@@ -1,0 +1,44 @@
+{
+    "name": "PeopleInstSug",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "agentInstSug",
+            "otherEntityRelationshipName": "thePeopleInstSugSuper",
+            "relationshipName": "theAgentInstSug",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "workGroupInstSug",
+            "otherEntityRelationshipName": "thePeopleInstSugSuper",
+            "relationshipName": "theWorkGroupInstSug",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "instantiationSuggestion",
+            "otherEntityRelationshipName": "thePeopleInstSugSub",
+            "relationshipName": "theInstSugSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentInstSuggestionToAgent",
+            "otherEntityRelationshipName": "theInstAgSug",
+            "relationshipName": "theAgentInstSugToAgent"
+        }
+    ],
+    "changelogDate": "20190914033837",
+    "entityTableName": "people_inst_sug",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

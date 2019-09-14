@@ -1,0 +1,53 @@
+{
+    "name": "Template",
+    "fields": [
+        {
+            "fieldName": "tStatus",
+            "fieldType": "TemplateStatus",
+            "fieldValues": "DRAFT,DEFINED,PENDING,OUTDATED"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "processModel",
+            "otherEntityRelationshipName": "theOrigin",
+            "relationshipName": "theProcessModel"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "description",
+            "otherEntityRelationshipName": "descTemplateOriginalVersion",
+            "relationshipName": "theOriginalVersionDescription",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "process",
+            "otherEntityRelationshipName": "theTemplateSub",
+            "relationshipName": "theProcessSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "description",
+            "otherEntityRelationshipName": "theTemplateOldVersion",
+            "relationshipName": "theDerivedVersionDescription"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "description",
+            "otherEntityRelationshipName": "theTemplateNewVersion",
+            "relationshipName": "theTemplateNewDescription"
+        }
+    ],
+    "changelogDate": "20190914033904",
+    "entityTableName": "template",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

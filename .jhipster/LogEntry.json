@@ -1,0 +1,40 @@
+{
+    "name": "LogEntry",
+    "fields": [
+        {
+            "fieldName": "date",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "operationEnum",
+            "fieldType": "OperationEnum",
+            "fieldValues": "CREATE,DELETE,UPDATE,VIEW,VOTE,FAVORITE,UNFAVORITE,FOLLOW,UNFOLLOW,COMMENT"
+        },
+        {
+            "fieldName": "className",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "theLogEntry",
+            "relationshipName": "user",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033911",
+    "entityTableName": "log_entry",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

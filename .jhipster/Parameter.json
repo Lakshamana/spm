@@ -1,0 +1,44 @@
+{
+    "name": "Parameter",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "artifactParam",
+            "otherEntityRelationshipName": "theParameterSuper",
+            "relationshipName": "theArtifactParameterSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "primitiveParam",
+            "otherEntityRelationshipName": "theParameterSuper",
+            "relationshipName": "thePrimitiveParamSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "automaticActivity",
+            "otherEntityRelationshipName": "theParameters",
+            "relationshipName": "theAutomatic",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033825",
+    "entityTableName": "parameter",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

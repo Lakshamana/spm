@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity ReqAgentRequiresAbility.
+    -->
+    <changeSet id="20190914033828-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_req_agent_id"
+                                 baseTableName="req_agent_requires_ability"
+                                 constraintName="fk_req_agent_requires_ability_the_req_agent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="required_people"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_ability_id"
+                                 baseTableName="req_agent_requires_ability"
+                                 constraintName="fk_req_agent_requires_ability_the_ability_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ability"/>
+
+    </changeSet>
+</databaseChangeLog>

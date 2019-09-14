@@ -1,0 +1,29 @@
+{
+    "name": "ActivityMetric",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "theActivityMetric",
+            "relationshipName": "theActivity",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "metric",
+            "otherEntityRelationshipName": "theActivityMetricSub",
+            "relationshipName": "theMetricSuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033850",
+    "entityTableName": "activity_metric",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

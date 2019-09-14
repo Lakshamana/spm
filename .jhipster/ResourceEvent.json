@@ -1,0 +1,43 @@
+{
+    "name": "ResourceEvent",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "normal",
+            "otherEntityRelationshipName": "theResourceEvent",
+            "relationshipName": "theNormal",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "theResourceEvent",
+            "relationshipName": "theResource",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theResourceEventSub",
+            "relationshipName": "theEventSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theResourceEvent",
+            "relationshipName": "theCatalogEventToResource"
+        }
+    ],
+    "changelogDate": "20190914033809",
+    "entityTableName": "resource_event",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

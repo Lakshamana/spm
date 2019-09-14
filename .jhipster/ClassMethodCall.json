@@ -1,0 +1,36 @@
+{
+    "name": "ClassMethodCall",
+    "fields": [
+        {
+            "fieldName": "className",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "methodName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "subroutine",
+            "otherEntityRelationshipName": "theClassMethodCallSub",
+            "relationshipName": "theSubroutineSuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033916",
+    "entityTableName": "class_method_call",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

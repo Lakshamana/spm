@@ -1,0 +1,44 @@
+{
+    "name": "BranchCon",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "branchANDCon",
+            "otherEntityRelationshipName": "theBranchConSuper",
+            "relationshipName": "theBranchANDConSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "multipleCon",
+            "otherEntityRelationshipName": "toBranchCon",
+            "relationshipName": "fromMultipleCon",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "multipleCon",
+            "otherEntityRelationshipName": "theBranchConSub",
+            "relationshipName": "theMultipleConSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "toBranchCon",
+            "relationshipName": "fromActivity",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033756",
+    "entityTableName": "branch_con",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

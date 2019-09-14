@@ -1,0 +1,29 @@
+{
+    "name": "ProcessMetric",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "process",
+            "otherEntityRelationshipName": "theProcessMetric",
+            "relationshipName": "theProcess",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "metric",
+            "otherEntityRelationshipName": "theProcessMetricSub",
+            "relationshipName": "theMetricSuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033855",
+    "entityTableName": "process_metric",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

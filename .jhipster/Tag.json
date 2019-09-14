@@ -1,0 +1,26 @@
+{
+    "name": "Tag",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "tagStat",
+            "otherEntityRelationshipName": "tag",
+            "relationshipName": "theTagStat"
+        }
+    ],
+    "changelogDate": "20190914033742",
+    "entityTableName": "tag",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

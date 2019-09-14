@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Connection.
+    -->
+    <changeSet id="20190914033752-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_multiple_con_sub_id"
+                                 baseTableName="connection"
+                                 constraintName="fk_connection_the_multiple_con_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="multiple_con"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_simple_con_sub_id"
+                                 baseTableName="connection"
+                                 constraintName="fk_connection_the_simple_con_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="simple_con"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_artifact_con_sub_id"
+                                 baseTableName="connection"
+                                 constraintName="fk_connection_the_artifact_con_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="artifact_con"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_process_model_id"
+                                 baseTableName="connection"
+                                 constraintName="fk_connection_the_process_model_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="process_model"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_connection_type_id"
+                                 baseTableName="connection"
+                                 constraintName="fk_connection_the_connection_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="connection_type"/>
+
+    </changeSet>
+</databaseChangeLog>

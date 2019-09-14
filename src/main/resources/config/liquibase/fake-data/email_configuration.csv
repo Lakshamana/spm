@@ -1,0 +1,11 @@
+id;process_finished;first_act_started;consumable_resource_amount;activity_instantied;task_delegated;security_levels;notification_config;process_notifications
+1;true;false;false;false;true;SSL;NOTIFY_SPECIFIC_MANAGERS;ACTIVITY_IS_READY_INSTANTIATED
+2;true;false;true;false;false;WITHOUT_SECURITY;NOT_NOTIFY;FIRST_ACTIVITY_HAS_STARTED
+3;false;true;true;true;true;SSL;NOTIFY_SPECIFIC_MANAGERS;FIRST_ACTIVITY_HAS_STARTED
+4;false;false;true;true;true;WITHOUT_SECURITY;NOTIFY_ALL_MANAGERS;CONSUMABLE_RESOURCE_5_AMOUNT
+5;false;false;false;false;true;WITHOUT_SECURITY;NOTIFY_SPECIFIC_MANAGERS;CONSUMABLE_RESOURCE_5_AMOUNT
+6;false;true;true;true;false;TLS;NOTIFY_ALL_MANAGERS;ACTIVITY_IS_READY_INSTANTIATED
+7;true;false;true;true;true;SSL;NOT_NOTIFY;FIRST_ACTIVITY_HAS_STARTED
+8;false;true;false;false;false;WITHOUT_SECURITY;NOT_NOTIFY;PROCESS_HAS_FINISHED
+9;false;false;true;false;true;SSL;NOTIFY_SPECIFIC_MANAGERS;CONSUMABLE_RESOURCE_5_AMOUNT
+10;false;false;true;true;true;TLS;NOTIFY_ALL_MANAGERS;ACTIVITY_IS_READY_INSTANTIATED

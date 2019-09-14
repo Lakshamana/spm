@@ -1,0 +1,86 @@
+{
+    "name": "Task",
+    "fields": [
+        {
+            "fieldName": "localState",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "beginDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "endDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "workingHours",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "dateDelegatedTo",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateDelegatedFrom",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "processAgenda",
+            "otherEntityRelationshipName": "theTask",
+            "relationshipName": "theProcessAgenda",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "delegates",
+            "relationshipName": "delegatedFrom",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "isDelegatedFor",
+            "relationshipName": "delegatedTo",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "normal",
+            "otherEntityRelationshipName": "theTasks",
+            "relationshipName": "theNormal",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "artifactTask",
+            "otherEntityRelationshipName": "theTask",
+            "relationshipName": "theArtifactTasks"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theTask",
+            "relationshipName": "theAgendaEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "ocurrence",
+            "otherEntityRelationshipName": "theTask",
+            "relationshipName": "theOcurrence"
+        }
+    ],
+    "changelogDate": "20190914033914",
+    "entityTableName": "task",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

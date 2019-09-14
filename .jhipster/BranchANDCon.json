@@ -1,0 +1,38 @@
+{
+    "name": "BranchANDCon",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "multipleCon",
+            "otherEntityRelationshipName": "fromMultipleCon",
+            "relationshipName": "toMultipleCon",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "branchCon",
+            "otherEntityRelationshipName": "theBranchANDConSub",
+            "relationshipName": "theBranchConSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "toBranchANDCon",
+            "relationshipName": "fromActivity",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033757",
+    "entityTableName": "branch_and_con",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

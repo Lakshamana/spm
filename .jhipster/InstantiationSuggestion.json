@@ -1,0 +1,52 @@
+{
+    "name": "InstantiationSuggestion",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "peopleInstSug",
+            "otherEntityRelationshipName": "theInstSugSuper",
+            "relationshipName": "thePeopleInstSugSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activityInstantiated",
+            "otherEntityRelationshipName": "theInstSug",
+            "relationshipName": "theActivityInstantiated",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "instSugToResource",
+            "relationshipName": "chosenResource",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "type",
+            "otherEntityRelationshipName": "instSugToType",
+            "relationshipName": "requiredResourceType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "instSuggestions",
+            "relationshipName": "sugRsrc",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190914033836",
+    "entityTableName": "instantiation_suggestion",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

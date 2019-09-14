@@ -1,0 +1,29 @@
+{
+    "name": "ResourceMetric",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "theResourceMetric",
+            "relationshipName": "theResource",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "metric",
+            "otherEntityRelationshipName": "theResourceMetricSub",
+            "relationshipName": "theMetricSuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033856",
+    "entityTableName": "resource_metric",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

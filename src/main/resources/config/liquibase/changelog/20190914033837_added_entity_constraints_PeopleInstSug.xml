@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity PeopleInstSug.
+    -->
+    <changeSet id="20190914033837-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_agent_inst_sug_id"
+                                 baseTableName="people_inst_sug"
+                                 constraintName="fk_people_inst_sug_the_agent_inst_sug_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agent_inst_sug"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_work_group_inst_sug_id"
+                                 baseTableName="people_inst_sug"
+                                 constraintName="fk_people_inst_sug_the_work_group_inst_sug_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_group_inst_sug"/>
+
+    </changeSet>
+</databaseChangeLog>

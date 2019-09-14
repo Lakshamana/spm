@@ -1,0 +1,100 @@
+{
+    "name": "Process",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "pStatus",
+            "fieldType": "ProcessStatus",
+            "fieldValues": "NOT_STARTED,ENACTING,FINISHED"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "processModel",
+            "otherEntityRelationshipName": "theProcess",
+            "relationshipName": "theProcessModel",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "template",
+            "otherEntityRelationshipName": "theProcessSuper",
+            "relationshipName": "theTemplateSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "processAgenda",
+            "otherEntityRelationshipName": "theProcess",
+            "relationshipName": "theProcessAgendas"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activityType",
+            "otherEntityRelationshipName": "theProcess",
+            "relationshipName": "theActivityType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "spmLog",
+            "otherEntityRelationshipName": "theProcess",
+            "relationshipName": "theLog",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "emailConfiguration",
+            "otherEntityRelationshipName": "theProcesses",
+            "relationshipName": "theEmailConfiguration",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "processEvent",
+            "otherEntityRelationshipName": "theProcess",
+            "relationshipName": "theProcessEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "project",
+            "otherEntityRelationshipName": "processRefered",
+            "relationshipName": "theProject"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "processMetric",
+            "otherEntityRelationshipName": "theProcess",
+            "relationshipName": "theProcessMetric"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "processEstimation",
+            "otherEntityRelationshipName": "theProcess",
+            "relationshipName": "theProcessEstimation"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theProcesses",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033902",
+    "entityTableName": "process",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

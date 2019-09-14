@@ -1,0 +1,30 @@
+{
+    "name": "RelationshipKind",
+    "fields": [
+        {
+            "fieldName": "typeIdent",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "assetRelationship",
+            "otherEntityRelationshipName": "kind",
+            "relationshipName": "theAssetRelationship"
+        }
+    ],
+    "changelogDate": "20190914033741",
+    "entityTableName": "relationship_kind",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,88 @@
+{
+    "name": "Normal",
+    "fields": [
+        {
+            "fieldName": "howLong",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "howLongUnit",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "plannedBegin",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "plannedEnd",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "script",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "delegable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "autoAllocable",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "task",
+            "otherEntityRelationshipName": "theNormal",
+            "relationshipName": "theTasks"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "reservation",
+            "otherEntityRelationshipName": "theNormal",
+            "relationshipName": "theReservation"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "resourceEvent",
+            "otherEntityRelationshipName": "theNormal",
+            "relationshipName": "theResourceEvent",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "involvedArtifact",
+            "otherEntityRelationshipName": "inInvolvedArtifacts",
+            "relationshipName": "theInvolvedArtifactToNormal"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "involvedArtifact",
+            "otherEntityRelationshipName": "outInvolvedArtifacts",
+            "relationshipName": "theInvolvedArtifactsFromNormal"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "requiredPeople",
+            "otherEntityRelationshipName": "theNormal",
+            "relationshipName": "theRequiredPeople"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "requiredResource",
+            "otherEntityRelationshipName": "theNormal",
+            "relationshipName": "theRequiredResource"
+        }
+    ],
+    "changelogDate": "20190914033824",
+    "entityTableName": "normal",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

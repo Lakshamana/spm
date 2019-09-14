@@ -1,0 +1,29 @@
+{
+    "name": "AgentEstimation",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "estimation",
+            "otherEntityRelationshipName": "theAgentEstimationSub",
+            "relationshipName": "theEstimationSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theAgentEstimation",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033843",
+    "entityTableName": "agent_estimation",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

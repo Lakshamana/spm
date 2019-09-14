@@ -1,0 +1,28 @@
+{
+    "name": "Structure",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "node",
+            "otherEntityRelationshipName": "theStructure",
+            "relationshipName": "rootElement",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "vCSRepository",
+            "otherEntityRelationshipName": "theStructure",
+            "relationshipName": "theVCSRepository"
+        }
+    ],
+    "changelogDate": "20190914033816",
+    "entityTableName": "structure",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

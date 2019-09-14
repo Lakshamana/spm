@@ -1,0 +1,215 @@
+{
+    "name": "Agent",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "costHour",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "passwordHash",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "tipoUser",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "isActive",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "online",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "photoURL",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "upload",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "taskAgenda",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theTaskAgenda",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "spmConfiguration",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "configuration",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "task",
+            "otherEntityRelationshipName": "delegatedFrom",
+            "relationshipName": "delegates"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "task",
+            "otherEntityRelationshipName": "delegatedTo",
+            "relationshipName": "isDelegatedFor"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theModelingActivityEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "reqAgent",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theReqAgent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentMetric",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theAgentMetric"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentEstimation",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theAgentEstimation"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "companyUnit",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theManagedOrgUnits"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theRequestorAgent",
+            "relationshipName": "theResourceEvent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "process",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theProcesses",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "workGroup",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theWorkGroups",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "companyUnit",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theOrgUnits",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "chatMessage",
+            "otherEntityRelationshipName": "fromAgent",
+            "relationshipName": "theChatMessage",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "emailConfiguration",
+            "otherEntityRelationshipName": "theManagers",
+            "relationshipName": "theEmailConfiguration",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentAffinityAgent",
+            "otherEntityRelationshipName": "fromAffinity",
+            "relationshipName": "fromAgentAffinity"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentAffinityAgent",
+            "otherEntityRelationshipName": "toAffinity",
+            "relationshipName": "toAgentAffinity"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentHasAbility",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theAgentHasAbility"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentPlaysRole",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theAgentPlaysRole"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "outOfWorkPeriod",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theOutOfWorkPeriod"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentInstSug",
+            "otherEntityRelationshipName": "chosenAgent",
+            "relationshipName": "theAgentInstSug"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentInstSuggestionToAgent",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theAgentInstSugToAgent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentWorkingLoad",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theAgentWorkingLoad"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "chatLog",
+            "otherEntityRelationshipName": "involvedAgentsInChat",
+            "relationshipName": "theChatLog",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033724",
+    "entityTableName": "agent",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

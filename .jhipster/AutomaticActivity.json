@@ -1,0 +1,43 @@
+{
+    "name": "AutomaticActivity",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "subroutine",
+            "otherEntityRelationshipName": "theAutomaticActivity",
+            "relationshipName": "theSubroutine",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "plainActivity",
+            "otherEntityRelationshipName": "theAutomaticActivitySub",
+            "relationshipName": "theAutomatic",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "theAutomatic",
+            "relationshipName": "theArtifact",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "parameter",
+            "otherEntityRelationshipName": "theAutomatic",
+            "relationshipName": "theParameters"
+        }
+    ],
+    "changelogDate": "20190914033821",
+    "entityTableName": "automatic_activity",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

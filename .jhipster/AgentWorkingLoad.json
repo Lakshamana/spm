@@ -1,0 +1,31 @@
+{
+    "name": "AgentWorkingLoad",
+    "fields": [
+        {
+            "fieldName": "begin",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "end",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theAgentWorkingLoad",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033835",
+    "entityTableName": "agent_working_load",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

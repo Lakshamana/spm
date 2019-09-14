@@ -1,0 +1,38 @@
+{
+    "name": "Reservation",
+    "fields": [
+        {
+            "fieldName": "fromDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "toDate",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "exclusive",
+            "otherEntityRelationshipName": "theReservation",
+            "relationshipName": "theExclusive",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "normal",
+            "otherEntityRelationshipName": "theReservation",
+            "relationshipName": "theNormal",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033907",
+    "entityTableName": "reservation",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

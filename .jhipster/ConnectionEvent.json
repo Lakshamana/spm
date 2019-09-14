@@ -1,0 +1,28 @@
+{
+    "name": "ConnectionEvent",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theConnectionEventSub",
+            "relationshipName": "theEventSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theConnectionEvent",
+            "relationshipName": "theCatalogEventToConnection"
+        }
+    ],
+    "changelogDate": "20190914033804",
+    "entityTableName": "connection_event",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

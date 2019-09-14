@@ -1,0 +1,29 @@
+{
+    "name": "ArtifactParam",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "parameter",
+            "otherEntityRelationshipName": "theArtifactParameterSub",
+            "relationshipName": "theParameterSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "theArtifactParams",
+            "relationshipName": "theArtifact",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033826",
+    "entityTableName": "artifact_param",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

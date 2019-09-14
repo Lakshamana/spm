@@ -1,0 +1,36 @@
+{
+    "name": "OrganizationMetric",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "organization",
+            "otherEntityRelationshipName": "theOrganizationMetric",
+            "relationshipName": "theOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "metric",
+            "otherEntityRelationshipName": "theOrganizationMetricSub",
+            "relationshipName": "theMetricSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "company",
+            "otherEntityRelationshipName": "organizationMetric",
+            "relationshipName": "theCompany",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033854",
+    "entityTableName": "organization_metric",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity AutomaticActivity.
+    -->
+    <changeSet id="20190914033821-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_subroutine_id"
+                                 baseTableName="automatic_activity"
+                                 constraintName="fk_automatic_activity_the_subroutine_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="subroutine"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_artifact_id"
+                                 baseTableName="automatic_activity"
+                                 constraintName="fk_automatic_activity_the_artifact_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="artifact"/>
+
+    </changeSet>
+</databaseChangeLog>

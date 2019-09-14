@@ -1,0 +1,36 @@
+{
+    "name": "Driver",
+    "fields": [
+        {
+            "fieldName": "tipo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "appKey",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "appSecret",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "plugin",
+            "otherEntityRelationshipName": "theDriver",
+            "relationshipName": "thePlugin",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190914033758",
+    "entityTableName": "driver",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,29 @@
+{
+    "name": "ArtifactMetric",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "metric",
+            "otherEntityRelationshipName": "theArtifactMetricSub",
+            "relationshipName": "theMetricSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "theArtifactMetric",
+            "relationshipName": "theArtifact",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033852",
+    "entityTableName": "artifact_metric",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,85 @@
+{
+    "name": "Company",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cnpj",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "fantasyName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "socialReason",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "acronym",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "address",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "phone",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "imageURL",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "url",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "automaticInstantiation",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "organizationMetric",
+            "otherEntityRelationshipName": "theCompany",
+            "relationshipName": "organizationMetric"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "organizationEstimation",
+            "otherEntityRelationshipName": "theCompany",
+            "relationshipName": "theCompanyEstimation"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "companyUnit",
+            "otherEntityRelationshipName": "theOrganization",
+            "relationshipName": "theCompanyUnit"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "developingSystem",
+            "otherEntityRelationshipName": "theOrganization",
+            "relationshipName": "theDevelopingSystem"
+        }
+    ],
+    "changelogDate": "20190914033811",
+    "entityTableName": "company",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

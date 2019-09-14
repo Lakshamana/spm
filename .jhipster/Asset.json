@@ -1,0 +1,136 @@
+{
+    "name": "Asset",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "creationDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "publishDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "applicability",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "tags",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "path",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "latestVersion",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "readOnly",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "assetVisibility",
+            "fieldType": "AssetVisibility",
+            "fieldValues": "VISIBILITY_PUBLIC,VISIBILITY_PRIVATE"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "assetStat",
+            "otherEntityRelationshipName": "theAsset",
+            "relationshipName": "stats",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "authorStat",
+            "otherEntityRelationshipName": "theAsset",
+            "relationshipName": "authorStats"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "tagStat",
+            "otherEntityRelationshipName": "theAsset",
+            "relationshipName": "tagStats"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "lessonLearned",
+            "otherEntityRelationshipName": "theAsset",
+            "relationshipName": "lessonsLearned"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "assetRelationship",
+            "otherEntityRelationshipName": "theAsset",
+            "relationshipName": "relatedAssets"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "assetRelationship",
+            "otherEntityRelationshipName": "relatedAsset",
+            "relationshipName": "relatedByAssets"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "message",
+            "otherEntityRelationshipName": "theAsset",
+            "relationshipName": "comments"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "author",
+            "otherEntityRelationshipName": "theAssets",
+            "relationshipName": "owner",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "author",
+            "otherEntityRelationshipName": "favorites",
+            "relationshipName": "favoritedBy",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "author",
+            "otherEntityRelationshipName": "assetsFollowed",
+            "relationshipName": "followers",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "author",
+            "otherEntityRelationshipName": "collaborateOnAssets",
+            "relationshipName": "collaborators",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190914033735",
+    "entityTableName": "asset",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

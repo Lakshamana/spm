@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity InvolvedArtifact.
+    -->
+    <changeSet id="20190914033823-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="in_involved_artifacts_id"
+                                 baseTableName="involved_artifact"
+                                 constraintName="fk_involved_artifact_in_involved_artifacts_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="normal"/>
+
+        <addForeignKeyConstraint baseColumnNames="out_involved_artifacts_id"
+                                 baseTableName="involved_artifact"
+                                 constraintName="fk_involved_artifact_out_involved_artifacts_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="normal"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_artifact_type_id"
+                                 baseTableName="involved_artifact"
+                                 constraintName="fk_involved_artifact_the_artifact_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="artifact_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_artifact_id"
+                                 baseTableName="involved_artifact"
+                                 constraintName="fk_involved_artifact_the_artifact_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="artifact"/>
+
+    </changeSet>
+</databaseChangeLog>

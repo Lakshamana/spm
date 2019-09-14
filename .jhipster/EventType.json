@@ -1,0 +1,28 @@
+{
+    "name": "EventType",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "type",
+            "otherEntityRelationshipName": "theEventTypeSub",
+            "relationshipName": "theTypeSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theEventType",
+            "relationshipName": "theEvent"
+        }
+    ],
+    "changelogDate": "20190914033927",
+    "entityTableName": "event_type",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

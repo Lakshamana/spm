@@ -1,0 +1,153 @@
+{
+    "name": "Activity",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "plainActivity",
+            "otherEntityRelationshipName": "theActivitySuper",
+            "relationshipName": "thePlainActivitySub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "decomposedActivity",
+            "otherEntityRelationshipName": "theActivitySuper",
+            "relationshipName": "theDecomposedActivitySub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theActivity",
+            "relationshipName": "theModelingActivityEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "theAncestorActitvity",
+            "relationshipName": "hasVersions"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "simpleCon",
+            "otherEntityRelationshipName": "fromActivity",
+            "relationshipName": "fromSimpleCon"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "simpleCon",
+            "otherEntityRelationshipName": "toActivity",
+            "relationshipName": "toSimpleCon"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "joinCon",
+            "otherEntityRelationshipName": "toActivity",
+            "relationshipName": "fromJoinCon"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "branchCon",
+            "otherEntityRelationshipName": "fromActivity",
+            "relationshipName": "toBranchCon"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "metric",
+            "otherEntityRelationshipName": "theActivity",
+            "relationshipName": "activityMetric"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "activityEstimation",
+            "otherEntityRelationshipName": "theActivity",
+            "relationshipName": "theActivityEstimation"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activityType",
+            "otherEntityRelationshipName": "theActivity",
+            "relationshipName": "theActivityType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "joinCon",
+            "otherEntityRelationshipName": "fromActivity",
+            "relationshipName": "toJoinCon",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "branchANDCon",
+            "otherEntityRelationshipName": "fromActivity",
+            "relationshipName": "toBranchANDCon",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "artifactCon",
+            "otherEntityRelationshipName": "toActivity",
+            "relationshipName": "fromArtifactCon",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "artifactCon",
+            "otherEntityRelationshipName": "fromActivity",
+            "relationshipName": "toArtifactCon",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "hasVersions",
+            "relationshipName": "theAncestorActitvity",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "processModel",
+            "otherEntityRelationshipName": "theActivity",
+            "relationshipName": "theProcessModel",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "activityInstantiated",
+            "otherEntityRelationshipName": "theActivity",
+            "relationshipName": "theActivityInstantiated"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "activityMetric",
+            "otherEntityRelationshipName": "theActivity",
+            "relationshipName": "theActivityMetric"
+        }
+    ],
+    "changelogDate": "20190914033720",
+    "entityTableName": "activity",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

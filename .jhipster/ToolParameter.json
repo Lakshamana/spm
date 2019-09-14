@@ -1,0 +1,45 @@
+{
+    "name": "ToolParameter",
+    "fields": [
+        {
+            "fieldName": "label",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "separatorSymbol",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifactType",
+            "otherEntityRelationshipName": "theToolParameter",
+            "relationshipName": "theArtifactType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "subroutine",
+            "otherEntityRelationshipName": "theToolParameter",
+            "relationshipName": "theSubroutine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "primitiveType",
+            "otherEntityRelationshipName": "theToolParameter",
+            "relationshipName": "thePrimitiveType",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033921",
+    "entityTableName": "tool_parameter",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

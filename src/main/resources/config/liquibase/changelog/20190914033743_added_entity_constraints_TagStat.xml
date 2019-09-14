@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity TagStat.
+    -->
+    <changeSet id="20190914033743-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="tag_id"
+                                 baseTableName="tag_stat"
+                                 constraintName="fk_tag_stat_tag_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tag"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_asset_id"
+                                 baseTableName="tag_stat"
+                                 constraintName="fk_tag_stat_the_asset_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset"/>
+
+    </changeSet>
+</databaseChangeLog>

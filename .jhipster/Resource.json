@@ -1,0 +1,137 @@
+{
+    "name": "Resource",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "mtbfTime",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "mtbfUnitTime",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "currency",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cost",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "isActive",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "consumable",
+            "otherEntityRelationshipName": "theResourceSuper",
+            "relationshipName": "theConsumableSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "exclusive",
+            "otherEntityRelationshipName": "theResourceSuper",
+            "relationshipName": "theExclusiveSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "shareable",
+            "otherEntityRelationshipName": "theResourceSuper",
+            "relationshipName": "theShareableSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "theResource",
+            "relationshipName": "belongsTo",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resourceType",
+            "otherEntityRelationshipName": "theResource",
+            "relationshipName": "theResourceType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "resourceEvent",
+            "otherEntityRelationshipName": "theResource",
+            "relationshipName": "theResourceEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "requiredResource",
+            "otherEntityRelationshipName": "theResource",
+            "relationshipName": "theRequiredResource"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "instantiationSuggestion",
+            "otherEntityRelationshipName": "chosenResource",
+            "relationshipName": "instSugToResource"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "resourcePossibleUse",
+            "otherEntityRelationshipName": "theResource",
+            "relationshipName": "theResourcePossibleUse"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "resourceMetric",
+            "otherEntityRelationshipName": "theResource",
+            "relationshipName": "theResourceMetric"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "resourceEstimation",
+            "otherEntityRelationshipName": "theResource",
+            "relationshipName": "theResourceEstimation"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "belongsTo",
+            "relationshipName": "theResource"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "instantiationSuggestion",
+            "otherEntityRelationshipName": "sugRsrc",
+            "relationshipName": "instSuggestions",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033909",
+    "entityTableName": "resource",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

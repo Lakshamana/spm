@@ -1,0 +1,28 @@
+{
+    "name": "RoleType",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "type",
+            "otherEntityRelationshipName": "theRoleTypeSub",
+            "relationshipName": "theTypeSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "role",
+            "otherEntityRelationshipName": "theRoleType",
+            "relationshipName": "theRole"
+        }
+    ],
+    "changelogDate": "20190914033931",
+    "entityTableName": "role_type",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

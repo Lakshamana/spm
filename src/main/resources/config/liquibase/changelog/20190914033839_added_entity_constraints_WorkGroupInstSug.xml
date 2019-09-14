@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity WorkGroupInstSug.
+    -->
+    <changeSet id="20190914033839-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="chosen_work_group_id"
+                                 baseTableName="work_group_inst_sug"
+                                 constraintName="fk_work_group_inst_sug_chosen_work_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_group"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_group_type_required_id"
+                                 baseTableName="work_group_inst_sug"
+                                 constraintName="fk_work_group_inst_sug_work_group_type_required_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="type"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_group_inst_sug_id"
+                                 baseTableName="work_group_inst_sug_sug_work_group"
+                                 constraintName="fk_work_group_inst_sug_sug_work_group_work_group_inst_sug_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_group_inst_sug"/>
+
+        <addForeignKeyConstraint baseColumnNames="sug_work_group_id"
+                                 baseTableName="work_group_inst_sug_sug_work_group"
+                                 constraintName="fk_work_group_inst_sug_sug_work_group_sug_work_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_group"/>
+        
+    </changeSet>
+</databaseChangeLog>

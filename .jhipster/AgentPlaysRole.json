@@ -1,0 +1,34 @@
+{
+    "name": "AgentPlaysRole",
+    "fields": [
+        {
+            "fieldName": "sinceDate",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theAgentPlaysRole",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "role",
+            "otherEntityRelationshipName": "theAgentPlaysRole",
+            "relationshipName": "theRole",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033727",
+    "entityTableName": "agent_plays_role",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

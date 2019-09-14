@@ -1,0 +1,73 @@
+{
+    "name": "Role",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "reqAgent",
+            "otherEntityRelationshipName": "theRole",
+            "relationshipName": "theReqAgent"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "role",
+            "otherEntityRelationshipName": "theRole",
+            "relationshipName": "subordinate",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "roleType",
+            "otherEntityRelationshipName": "theRole",
+            "relationshipName": "theRoleType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentPlaysRole",
+            "otherEntityRelationshipName": "theRole",
+            "relationshipName": "theAgentPlaysRole"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "role",
+            "otherEntityRelationshipName": "subordinate",
+            "relationshipName": "theRole"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "roleNeedsAbility",
+            "otherEntityRelationshipName": "theRole",
+            "relationshipName": "theRoleNeedsAbility"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentInstSug",
+            "otherEntityRelationshipName": "theRole",
+            "relationshipName": "theAgentInstSug"
+        }
+    ],
+    "changelogDate": "20190914033731",
+    "entityTableName": "role",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,40 @@
+{
+    "name": "Consumable",
+    "fields": [
+        {
+            "fieldName": "unit",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "consumableStatus",
+            "fieldType": "ConsumableStatus",
+            "fieldValues": "AVAILABLE,NOT_AUTHORIZED,FINISHED"
+        },
+        {
+            "fieldName": "totalQuantity",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "amountUsed",
+            "fieldType": "Float"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "theConsumableSub",
+            "relationshipName": "theResourceSuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033905",
+    "entityTableName": "consumable",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,46 @@
+{
+    "name": "VCSRepository",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "controlVersionSystem",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "server",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "repositoryPath",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "structure",
+            "otherEntityRelationshipName": "theVCSRepository",
+            "relationshipName": "theStructure",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "theVCSRepository",
+            "relationshipName": "theArtifact",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033815",
+    "entityTableName": "vcs_repository",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

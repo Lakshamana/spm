@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity BranchANDCon.
+    -->
+    <changeSet id="20190914033757-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="branchandcon_id"
+                                 baseTableName="branch_and_con_to_multiple_con"
+                                 constraintName="fk_branch_and_con_to_multiple_con_branch_and_con_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="branch_and_con"/>
+
+        <addForeignKeyConstraint baseColumnNames="to_multiple_con_id"
+                                 baseTableName="branch_and_con_to_multiple_con"
+                                 constraintName="fk_branch_and_con_to_multiple_con_to_multiple_con_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="multiple_con"/>
+        
+    </changeSet>
+</databaseChangeLog>

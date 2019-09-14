@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity InstantiationSuggestion.
+    -->
+    <changeSet id="20190914033836-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_people_inst_sug_sub_id"
+                                 baseTableName="instantiation_suggestion"
+                                 constraintName="fk_instantiation_suggestion_the_people_inst_sug_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="people_inst_sug"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_activity_instantiated_id"
+                                 baseTableName="instantiation_suggestion"
+                                 constraintName="fk_instantiation_suggestion_the_activity_instantiated_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="activity_instantiated"/>
+
+        <addForeignKeyConstraint baseColumnNames="chosen_resource_id"
+                                 baseTableName="instantiation_suggestion"
+                                 constraintName="fk_instantiation_suggestion_chosen_resource_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="resource"/>
+
+        <addForeignKeyConstraint baseColumnNames="required_resource_type_id"
+                                 baseTableName="instantiation_suggestion"
+                                 constraintName="fk_instantiation_suggestion_required_resource_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="type"/>
+
+        <addForeignKeyConstraint baseColumnNames="instantiation_suggestion_id"
+                                 baseTableName="instantiation_suggestion_sug_rsrc"
+                                 constraintName="instantiation_suggestion_sug_rs_instantiation_suggestion_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="instantiation_suggestion"/>
+
+        <addForeignKeyConstraint baseColumnNames="sug_rsrc_id"
+                                 baseTableName="instantiation_suggestion_sug_rsrc"
+                                 constraintName="fk_instantiation_suggestion_sug_rsrc_sug_rsrc_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="resource"/>
+        
+    </changeSet>
+</databaseChangeLog>

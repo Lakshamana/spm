@@ -1,0 +1,11 @@
+id;how_long;how_long_unit;planned_begin;planned_end;script;delegable;auto_allocable
+1;91679;port target Ball;2019-09-13;2019-09-14;../fake-data/blob/hipster.txt;true;true
+2;72172;optimizing;2019-09-13;2019-09-13;../fake-data/blob/hipster.txt;false;false
+3;18903;auxiliary port;2019-09-13;2019-09-13;../fake-data/blob/hipster.txt;true;false
+4;58326;Alley end-to-end Mobility;2019-09-14;2019-09-13;../fake-data/blob/hipster.txt;true;false
+5;82671;Concrete Texas;2019-09-13;2019-09-13;../fake-data/blob/hipster.txt;true;true
+6;90719;Division functionalities seize;2019-09-13;2019-09-13;../fake-data/blob/hipster.txt;true;false
+7;11602;Sleek Rubber Shirt Web calculating;2019-09-13;2019-09-14;../fake-data/blob/hipster.txt;false;false
+8;25423;SMTP Chips radical;2019-09-14;2019-09-13;../fake-data/blob/hipster.txt;true;true
+9;94398;attitude-oriented;2019-09-13;2019-09-13;../fake-data/blob/hipster.txt;true;true
+10;99946;Fantastic;2019-09-13;2019-09-13;../fake-data/blob/hipster.txt;false;true

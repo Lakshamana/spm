@@ -1,0 +1,29 @@
+{
+    "name": "ActivityEstimation",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "estimation",
+            "otherEntityRelationshipName": "theActivityEstimationSub",
+            "relationshipName": "theEstimationSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "theActivityEstimation",
+            "relationshipName": "theActivity",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033842",
+    "entityTableName": "activity_estimation",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

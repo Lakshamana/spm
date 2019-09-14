@@ -1,0 +1,29 @@
+{
+    "name": "SpmLog",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "process",
+            "otherEntityRelationshipName": "theLog",
+            "relationshipName": "theProcess",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theLog",
+            "relationshipName": "theEvent"
+        }
+    ],
+    "changelogDate": "20190914033810",
+    "entityTableName": "spm_log",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

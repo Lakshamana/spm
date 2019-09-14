@@ -1,0 +1,44 @@
+{
+    "name": "RequiredPeople",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "reqWorkGroup",
+            "otherEntityRelationshipName": "theRequiredPeopleSuper",
+            "relationshipName": "theReqWorkGroupSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "reqAgent",
+            "otherEntityRelationshipName": "theRequiredPeopleSuper",
+            "relationshipName": "theReqAgentSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "normal",
+            "otherEntityRelationshipName": "theRequiredPeople",
+            "relationshipName": "theNormal",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "reqAgentRequiresAbility",
+            "otherEntityRelationshipName": "theReqAgent",
+            "relationshipName": "theReqAgentRequiresAbility"
+        }
+    ],
+    "changelogDate": "20190914033829",
+    "entityTableName": "required_people",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

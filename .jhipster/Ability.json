@@ -1,0 +1,54 @@
+{
+    "name": "Ability",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "reqAgentRequiresAbility",
+            "otherEntityRelationshipName": "theAbility",
+            "relationshipName": "theReqAgentRequiresAbility"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentHasAbility",
+            "otherEntityRelationshipName": "theAbility",
+            "relationshipName": "theAgentHasAbility"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "abilityType",
+            "otherEntityRelationshipName": "theAbility",
+            "relationshipName": "theAbilityType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "roleNeedsAbility",
+            "otherEntityRelationshipName": "theAbility",
+            "relationshipName": "theRoleNeedsAbility"
+        }
+    ],
+    "changelogDate": "20190914033723",
+    "entityTableName": "ability",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

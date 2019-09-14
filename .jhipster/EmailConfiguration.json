@@ -1,0 +1,63 @@
+{
+    "name": "EmailConfiguration",
+    "fields": [
+        {
+            "fieldName": "processFinished",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "firstActStarted",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "consumableResourceAmount",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "activityInstantied",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "taskDelegated",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "securityLevels",
+            "fieldType": "EmailSecurityLevels",
+            "fieldValues": "WITHOUT_SECURITY,TLS_IF_AVAILABLE,TLS,SSL"
+        },
+        {
+            "fieldName": "notificationConfig",
+            "fieldType": "EmailNotificationConfig",
+            "fieldValues": "NOTIFY_ALL_MANAGERS,NOTIFY_SPECIFIC_MANAGERS,NOT_NOTIFY"
+        },
+        {
+            "fieldName": "processNotifications",
+            "fieldType": "EmailProcessStatusNotifications",
+            "fieldValues": "PROCESS_HAS_FINISHED,FIRST_ACTIVITY_HAS_STARTED,CONSUMABLE_RESOURCE_5_AMOUNT,ACTIVITY_IS_READY_INSTANTIATED,TASK_DELEGATED,DECISION_BRANCH_COND"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "process",
+            "otherEntityRelationshipName": "theEmailConfiguration",
+            "relationshipName": "theProcesses"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theEmailConfiguration",
+            "relationshipName": "theManagers"
+        }
+    ],
+    "changelogDate": "20190914033728",
+    "entityTableName": "email_configuration",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

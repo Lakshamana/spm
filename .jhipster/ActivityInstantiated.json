@@ -1,0 +1,28 @@
+{
+    "name": "ActivityInstantiated",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "theActivityInstantiated",
+            "relationshipName": "theActivity",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "instantiationSuggestion",
+            "otherEntityRelationshipName": "theActivityInstantiated",
+            "relationshipName": "theInstSug"
+        }
+    ],
+    "changelogDate": "20190914033833",
+    "entityTableName": "activity_instantiated",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

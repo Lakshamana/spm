@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Author.
+    -->
+    <changeSet id="20190914033818-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="author"
+                                 constraintName="fk_author_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_organization_sub_id"
+                                 baseTableName="author"
+                                 constraintName="fk_author_the_organization_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_person_sub_id"
+                                 baseTableName="author"
+                                 constraintName="fk_author_the_person_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="person"/>
+
+        <addForeignKeyConstraint baseColumnNames="author_id"
+                                 baseTableName="author_authors_followed"
+                                 constraintName="fk_author_authors_followed_author_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="author"/>
+
+        <addForeignKeyConstraint baseColumnNames="authors_followed_id"
+                                 baseTableName="author_authors_followed"
+                                 constraintName="fk_author_authors_followed_authors_followed_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="author"/>
+        
+    </changeSet>
+</databaseChangeLog>

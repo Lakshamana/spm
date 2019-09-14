@@ -1,0 +1,41 @@
+{
+    "name": "AssetRelationship",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "relationshipKind",
+            "otherEntityRelationshipName": "theAssetRelationship",
+            "relationshipName": "kind",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "asset",
+            "otherEntityRelationshipName": "relatedAssets",
+            "relationshipName": "theAsset",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "asset",
+            "otherEntityRelationshipName": "relatedByAssets",
+            "relationshipName": "relatedAsset",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033736",
+    "entityTableName": "asset_relationship",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

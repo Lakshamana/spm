@@ -1,0 +1,60 @@
+{
+    "name": "ArtifactCon",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "theArtifactCon",
+            "relationshipName": "theArtifact",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifactType",
+            "otherEntityRelationshipName": "theArtifactCon",
+            "relationshipName": "theArtifactType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "multipleCon",
+            "otherEntityRelationshipName": "theArtifactCon",
+            "relationshipName": "toMultipleCon",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "connection",
+            "otherEntityRelationshipName": "theArtifactConSub",
+            "relationshipName": "theConnectionSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "fromArtifactCon",
+            "relationshipName": "toActivity",
+            "otherEntityField": "id",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "toArtifactCon",
+            "relationshipName": "fromActivity",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033748",
+    "entityTableName": "artifact_con",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

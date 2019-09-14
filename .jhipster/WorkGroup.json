@@ -1,0 +1,93 @@
+{
+    "name": "WorkGroup",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "isActive",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "reqWorkGroup",
+            "otherEntityRelationshipName": "theWorkGroup",
+            "relationshipName": "theReqWorkGroup"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "workGroupMetric",
+            "otherEntityRelationshipName": "theWorkGroup",
+            "relationshipName": "theWorkGroupMetric"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "workGroupEstimation",
+            "otherEntityRelationshipName": "theWorkGroup",
+            "relationshipName": "theWorkGroupEstimation"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "workGroupType",
+            "otherEntityRelationshipName": "theWorkGroup",
+            "relationshipName": "theWorkGroupType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "workGroup",
+            "otherEntityRelationshipName": "subWorkGroups",
+            "relationshipName": "superWorkGroup",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "workGroup",
+            "otherEntityRelationshipName": "superWorkGroup",
+            "relationshipName": "subWorkGroups"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "workGroupInstSug",
+            "otherEntityRelationshipName": "chosenWorkGroup",
+            "relationshipName": "sugToChosenWorkGroup"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theWorkGroups",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "workGroupInstSug",
+            "otherEntityRelationshipName": "sugWorkGroup",
+            "relationshipName": "theWorkGroupInstSug",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033729",
+    "entityTableName": "work_group",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

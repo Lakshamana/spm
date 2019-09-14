@@ -1,0 +1,29 @@
+{
+    "name": "ArtifactEstimation",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "estimation",
+            "otherEntityRelationshipName": "theArtifactEstimationSub",
+            "relationshipName": "theEstimationSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "theArtifactEstimation",
+            "relationshipName": "theArtifact",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033844",
+    "entityTableName": "artifact_estimation",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

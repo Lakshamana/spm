@@ -1,0 +1,52 @@
+{
+    "name": "SimpleCon",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "feedback",
+            "otherEntityRelationshipName": "theSimpleConSuper",
+            "relationshipName": "theFeedbackSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "sequence",
+            "otherEntityRelationshipName": "theSimpleConSuper",
+            "relationshipName": "theSequenceSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "connection",
+            "otherEntityRelationshipName": "theSimpleConSub",
+            "relationshipName": "theConnectionSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "fromSimpleCon",
+            "relationshipName": "fromActivity",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "toSimpleCon",
+            "relationshipName": "toActivity",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033749",
+    "entityTableName": "simple_con",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

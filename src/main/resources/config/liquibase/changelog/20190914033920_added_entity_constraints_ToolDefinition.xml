@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity ToolDefinition.
+    -->
+    <changeSet id="20190914033920-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_tool_type_id"
+                                 baseTableName="tool_definition"
+                                 constraintName="fk_tool_definition_the_tool_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tool_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="tool_definition_id"
+                                 baseTableName="tool_definition_the_artifact_types"
+                                 constraintName="fk_tool_definition_the_artifact_types_tool_definition_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tool_definition"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_artifact_types_id"
+                                 baseTableName="tool_definition_the_artifact_types"
+                                 constraintName="fk_tool_definition_the_artifact_types_the_artifact_types_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="type"/>
+        
+    </changeSet>
+</databaseChangeLog>

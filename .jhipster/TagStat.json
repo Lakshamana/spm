@@ -1,0 +1,34 @@
+{
+    "name": "TagStat",
+    "fields": [
+        {
+            "fieldName": "count",
+            "fieldType": "Long"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "tag",
+            "otherEntityRelationshipName": "theTagStat",
+            "relationshipName": "tag",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "asset",
+            "otherEntityRelationshipName": "tagStats",
+            "relationshipName": "theAsset",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033743",
+    "entityTableName": "tag_stat",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

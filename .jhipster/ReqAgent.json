@@ -1,0 +1,36 @@
+{
+    "name": "ReqAgent",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "requiredPeople",
+            "otherEntityRelationshipName": "theReqAgentSub",
+            "relationshipName": "theRequiredPeopleSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theReqAgent",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "role",
+            "otherEntityRelationshipName": "theReqAgent",
+            "relationshipName": "theRole",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033830",
+    "entityTableName": "req_agent",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

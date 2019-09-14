@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Agent.
+    -->
+    <changeSet id="20190914033724-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_task_agenda_id"
+                                 baseTableName="agent"
+                                 constraintName="fk_agent_the_task_agenda_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="task_agenda"/>
+
+        <addForeignKeyConstraint baseColumnNames="configuration_id"
+                                 baseTableName="agent"
+                                 constraintName="fk_agent_configuration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="spm_configuration"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_resource_event_id"
+                                 baseTableName="agent"
+                                 constraintName="fk_agent_the_resource_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="event"/>
+
+        <addForeignKeyConstraint baseColumnNames="agent_id"
+                                 baseTableName="agent_the_processes"
+                                 constraintName="fk_agent_the_processes_agent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agent"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_processes_id"
+                                 baseTableName="agent_the_processes"
+                                 constraintName="fk_agent_the_processes_the_processes_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="process"/>
+        
+        <addForeignKeyConstraint baseColumnNames="agent_id"
+                                 baseTableName="agent_the_work_groups"
+                                 constraintName="fk_agent_the_work_groups_agent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agent"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_work_groups_id"
+                                 baseTableName="agent_the_work_groups"
+                                 constraintName="fk_agent_the_work_groups_the_work_groups_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_group"/>
+        
+        <addForeignKeyConstraint baseColumnNames="agent_id"
+                                 baseTableName="agent_the_org_units"
+                                 constraintName="fk_agent_the_org_units_agent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agent"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_org_units_id"
+                                 baseTableName="agent_the_org_units"
+                                 constraintName="fk_agent_the_org_units_the_org_units_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="company_unit"/>
+        
+        <addForeignKeyConstraint baseColumnNames="the_email_configuration_id"
+                                 baseTableName="agent"
+                                 constraintName="fk_agent_the_email_configuration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="email_configuration"/>
+
+    </changeSet>
+</databaseChangeLog>

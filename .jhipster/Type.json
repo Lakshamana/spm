@@ -1,0 +1,142 @@
+{
+    "name": "Type",
+    "fields": [
+        {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "userDefined",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "abilityType",
+            "otherEntityRelationshipName": "theTypeSuper",
+            "relationshipName": "theAbilityTypeSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "activityType",
+            "otherEntityRelationshipName": "theTypeSuper",
+            "relationshipName": "theActivityTypeSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "artifactType",
+            "otherEntityRelationshipName": "theTypeSuper",
+            "relationshipName": "theArtifactTypeSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "connectionType",
+            "otherEntityRelationshipName": "theTypeSuper",
+            "relationshipName": "theConnectionTypeSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "eventType",
+            "otherEntityRelationshipName": "theTypeSuper",
+            "relationshipName": "theEventTypeSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "workGroupType",
+            "otherEntityRelationshipName": "theTypeSuper",
+            "relationshipName": "theWorkGroupTypeSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "metricType",
+            "otherEntityRelationshipName": "theTypeSuper",
+            "relationshipName": "theMetricTypeSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "resourceType",
+            "otherEntityRelationshipName": "theTypeSuper",
+            "relationshipName": "theResourceTypeSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "roleType",
+            "otherEntityRelationshipName": "theTypeSuper",
+            "relationshipName": "theRoleTypeSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "toolType",
+            "otherEntityRelationshipName": "theTypeSuper",
+            "relationshipName": "theToolTypeSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "type",
+            "otherEntityRelationshipName": "subType",
+            "relationshipName": "superType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "workGroupInstSug",
+            "otherEntityRelationshipName": "workGroupTypeRequired",
+            "relationshipName": "sugToReqWorkGroup"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "instantiationSuggestion",
+            "otherEntityRelationshipName": "requiredResourceType",
+            "relationshipName": "instSugToType"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "type",
+            "otherEntityRelationshipName": "superType",
+            "relationshipName": "subType"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "toolDefinition",
+            "otherEntityRelationshipName": "theArtifactTypes",
+            "relationshipName": "theToolDefinitionToArtifactType",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033922",
+    "entityTableName": "type",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

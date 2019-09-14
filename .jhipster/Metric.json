@@ -1,0 +1,102 @@
+{
+    "name": "Metric",
+    "fields": [
+        {
+            "fieldName": "value",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "unit",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "periodBegin",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "periodEnd",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "activityMetric",
+            "otherEntityRelationshipName": "theMetricSuper",
+            "relationshipName": "theActivityMetricSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "agentMetric",
+            "otherEntityRelationshipName": "theMetricSuper",
+            "relationshipName": "theAgentMetricSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "artifactMetric",
+            "otherEntityRelationshipName": "theMetricSuper",
+            "relationshipName": "theArtifactMetricSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "workGroupMetric",
+            "otherEntityRelationshipName": "theMetricSuper",
+            "relationshipName": "theWorkGroupMetricSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "organizationMetric",
+            "otherEntityRelationshipName": "theMetricSuper",
+            "relationshipName": "theOrganizationMetricSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "processMetric",
+            "otherEntityRelationshipName": "theMetricSuper",
+            "relationshipName": "theProcessMetricSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "resourceMetric",
+            "otherEntityRelationshipName": "theMetricSuper",
+            "relationshipName": "theResourceMetricSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "metricDefinition",
+            "otherEntityRelationshipName": "theMetric",
+            "relationshipName": "theMetricDefinition",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "activityMetric",
+            "relationshipName": "theActivity",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033849",
+    "entityTableName": "metric",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

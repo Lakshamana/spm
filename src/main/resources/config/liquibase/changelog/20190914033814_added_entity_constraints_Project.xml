@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Project.
+    -->
+    <changeSet id="20190914033814-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="process_refered_id"
+                                 baseTableName="project"
+                                 constraintName="fk_project_process_refered_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="process"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_system_id"
+                                 baseTableName="project"
+                                 constraintName="fk_project_the_system_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="developing_system"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_calendar_id"
+                                 baseTableName="project"
+                                 constraintName="fk_project_the_calendar_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="calendar"/>
+
+    </changeSet>
+</databaseChangeLog>

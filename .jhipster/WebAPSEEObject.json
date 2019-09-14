@@ -1,0 +1,43 @@
+{
+    "name": "WebAPSEEObject",
+    "fields": [
+        {
+            "fieldName": "theReferredOid",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "className",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "webAPSEEObjectType",
+            "fieldType": "WebAPSEEObjectType",
+            "fieldValues": "ACTIVITY,REQ_AGENT,REQ_RESOURCE,REQ_WORKGROUP,CONNECTION"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "graphicCoordinate",
+            "otherEntityRelationshipName": "theObjectReference",
+            "relationshipName": "theGraphicCoordinate",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190914033900",
+    "entityTableName": "web_apsee_object",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

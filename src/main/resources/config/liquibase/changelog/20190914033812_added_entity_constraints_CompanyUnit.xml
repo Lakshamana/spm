@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity CompanyUnit.
+    -->
+    <changeSet id="20190914033812-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_organization_id"
+                                 baseTableName="company_unit"
+                                 constraintName="fk_company_unit_the_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="company"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_command_id"
+                                 baseTableName="company_unit"
+                                 constraintName="fk_company_unit_the_command_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="company_unit"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_agent_id"
+                                 baseTableName="company_unit"
+                                 constraintName="fk_company_unit_the_agent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agent"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,22 @@
+{
+    "name": "DecomposedActivity",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "theDecomposedActivitySub",
+            "relationshipName": "theActivitySuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033721",
+    "entityTableName": "decomposed_activity",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,28 @@
+{
+    "name": "GlobalActivityEvent",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theGlobalActivityEventSub",
+            "relationshipName": "theEventSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theGlobalActivityEvent",
+            "relationshipName": "theCatalogEventToGlobalActivity"
+        }
+    ],
+    "changelogDate": "20190914033805",
+    "entityTableName": "global_activity_event",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,41 @@
+{
+    "name": "RequiredResource",
+    "fields": [
+        {
+            "fieldName": "amountNeeded",
+            "fieldType": "Float"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "normal",
+            "otherEntityRelationshipName": "theRequiredResource",
+            "relationshipName": "theNormal",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resourceType",
+            "otherEntityRelationshipName": "theRequiredResource",
+            "relationshipName": "theResourceType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "theRequiredResource",
+            "relationshipName": "theResource",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033832",
+    "entityTableName": "required_resource",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

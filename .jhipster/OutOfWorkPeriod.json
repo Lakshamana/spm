@@ -1,0 +1,36 @@
+{
+    "name": "OutOfWorkPeriod",
+    "fields": [
+        {
+            "fieldName": "why",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "fromDate",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "toDate",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theOutOfWorkPeriod",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190914033730",
+    "entityTableName": "out_of_work_period",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

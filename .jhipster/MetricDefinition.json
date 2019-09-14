@@ -1,0 +1,67 @@
+{
+    "name": "MetricDefinition",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "kind",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "rangeFrom",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "rangeTo",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "howToMeasure",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "metricDefinitionUnit",
+            "otherEntityRelationshipName": "theMetricDefinition",
+            "relationshipName": "units"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "metricType",
+            "otherEntityRelationshipName": "theMetricDefinition",
+            "relationshipName": "theMetricType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "estimation",
+            "otherEntityRelationshipName": "theMetricDefinition",
+            "relationshipName": "theEstimation"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "metric",
+            "otherEntityRelationshipName": "theMetricDefinition",
+            "relationshipName": "theMetric"
+        }
+    ],
+    "changelogDate": "20190914033858",
+    "entityTableName": "metric_definition",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

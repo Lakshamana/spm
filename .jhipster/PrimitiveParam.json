@@ -1,0 +1,22 @@
+{
+    "name": "PrimitiveParam",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "parameter",
+            "otherEntityRelationshipName": "thePrimitiveParamSub",
+            "relationshipName": "theParameterSuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033827",
+    "entityTableName": "primitive_param",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

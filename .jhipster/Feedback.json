@@ -1,0 +1,22 @@
+{
+    "name": "Feedback",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "simpleCon",
+            "otherEntityRelationshipName": "theFeedbackSub",
+            "relationshipName": "theSimpleConSuper",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190914033750",
+    "entityTableName": "feedback",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

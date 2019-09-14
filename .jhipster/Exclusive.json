@@ -1,0 +1,38 @@
+{
+    "name": "Exclusive",
+    "fields": [
+        {
+            "fieldName": "exclusiveStatus",
+            "fieldType": "ExclusiveStatus",
+            "fieldValues": "AVAILABLE,LOCKED,DEFECT"
+        },
+        {
+            "fieldName": "unitOfCost",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "theExclusiveSub",
+            "relationshipName": "theResourceSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "reservation",
+            "otherEntityRelationshipName": "theExclusive",
+            "relationshipName": "theReservation"
+        }
+    ],
+    "changelogDate": "20190914033906",
+    "entityTableName": "exclusive",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

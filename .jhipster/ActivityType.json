@@ -1,0 +1,34 @@
+{
+    "name": "ActivityType",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "type",
+            "otherEntityRelationshipName": "theActivityTypeSub",
+            "relationshipName": "theTypeSuper",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "activity",
+            "otherEntityRelationshipName": "theActivityType",
+            "relationshipName": "theActivity"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "process",
+            "otherEntityRelationshipName": "theActivityType",
+            "relationshipName": "theProcess"
+        }
+    ],
+    "changelogDate": "20190914033924",
+    "entityTableName": "activity_type",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}
