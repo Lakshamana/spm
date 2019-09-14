@@ -334,6 +334,9 @@
                 <groupId>com.coveo</groupId>
                 <artifactId>fmt-maven-plugin</artifactId>
                 <version>2.9</version>
+                <configuration>
+                    <skipSortingImports>true</skipSortingImports>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
