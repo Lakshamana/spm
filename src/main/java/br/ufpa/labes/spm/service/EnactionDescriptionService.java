@@ -63,15 +63,15 @@ public class EnactionDescriptionService {
 
 
     /**
-    *  Get all the enactionDescriptions where ThePlainActivity is {@code null}.
+    *  Get all the enactionDescriptions where ThePlain is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true) 
-    public List<EnactionDescriptionDTO> findAllWhereThePlainActivityIsNull() {
-        log.debug("Request to get all enactionDescriptions where ThePlainActivity is null");
+    @Transactional(readOnly = true)
+    public List<EnactionDescriptionDTO> findAllWhereThePlainIsNull() {
+        log.debug("Request to get all enactionDescriptions where ThePlain is null");
         return StreamSupport
             .stream(enactionDescriptionRepository.findAll().spliterator(), false)
-            .filter(enactionDescription -> enactionDescription.getThePlainActivity() == null)
+            .filter(enactionDescription -> enactionDescription.getThePlain() == null)
             .map(enactionDescriptionMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

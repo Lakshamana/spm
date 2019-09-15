@@ -1,9 +1,9 @@
 package br.ufpa.labes.spm.service;
 
-import br.ufpa.labes.spm.domain.PlainActivity;
-import br.ufpa.labes.spm.repository.PlainActivityRepository;
-import br.ufpa.labes.spm.service.dto.PlainActivityDTO;
-import br.ufpa.labes.spm.service.mapper.PlainActivityMapper;
+import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.repository.PlainRepository;
+import br.ufpa.labes.spm.service.dto.PlainDTO;
+import br.ufpa.labes.spm.service.mapper.PlainMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,34 +17,34 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * Service Implementation for managing {@link PlainActivity}.
+ * Service Implementation for managing {@link Plain}.
  */
 @Service
 @Transactional
-public class PlainActivityService {
+public class PlainService {
 
-    private final Logger log = LoggerFactory.getLogger(PlainActivityService.class);
+    private final Logger log = LoggerFactory.getLogger(PlainService.class);
 
-    private final PlainActivityRepository plainActivityRepository;
+    private final PlainRepository plainRepository;
 
-    private final PlainActivityMapper plainActivityMapper;
+    private final PlainMapper plainMapper;
 
-    public PlainActivityService(PlainActivityRepository plainActivityRepository, PlainActivityMapper plainActivityMapper) {
-        this.plainActivityRepository = plainActivityRepository;
-        this.plainActivityMapper = plainActivityMapper;
+    public PlainService(PlainRepository plainRepository, PlainMapper plainMapper) {
+        this.plainRepository = plainRepository;
+        this.plainMapper = plainMapper;
     }
 
     /**
-     * Save a plainActivity.
+     * Save a plain.
      *
-     * @param plainActivityDTO the entity to save.
+     * @param plainDTO the entity to save.
      * @return the persisted entity.
      */
-    public PlainActivityDTO save(PlainActivityDTO plainActivityDTO) {
-        log.debug("Request to save PlainActivity : {}", plainActivityDTO);
-        PlainActivity plainActivity = plainActivityMapper.toEntity(plainActivityDTO);
-        plainActivity = plainActivityRepository.save(plainActivity);
-        return plainActivityMapper.toDto(plainActivity);
+    public PlainDTO save(PlainDTO plainDTO) {
+        log.debug("Request to save Plain : {}", plainDTO);
+        Plain plain = plainMapper.toEntity(plainDTO);
+        plain = plainRepository.save(plain);
+        return plainMapper.toDto(plain);
     }
 
     /**
@@ -53,10 +53,10 @@ public class PlainActivityService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<PlainActivityDTO> findAll() {
+    public List<PlainDTO> findAll() {
         log.debug("Request to get all PlainActivities");
-        return plainActivityRepository.findAll().stream()
-            .map(plainActivityMapper::toDto)
+        return plainRepository.findAll().stream()
+            .map(plainMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -66,36 +66,36 @@ public class PlainActivityService {
     *  Get all the plainActivities where TheActivitySuper is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true) 
-    public List<PlainActivityDTO> findAllWhereTheActivitySuperIsNull() {
+    @Transactional(readOnly = true)
+    public List<PlainDTO> findAllWhereTheActivitySuperIsNull() {
         log.debug("Request to get all plainActivities where TheActivitySuper is null");
         return StreamSupport
-            .stream(plainActivityRepository.findAll().spliterator(), false)
-            .filter(plainActivity -> plainActivity.getTheActivitySuper() == null)
-            .map(plainActivityMapper::toDto)
+            .stream(plainRepository.findAll().spliterator(), false)
+            .filter(plain -> plain.getTheActivitySuper() == null)
+            .map(plainMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
-     * Get one plainActivity by id.
+     * Get one plain by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<PlainActivityDTO> findOne(Long id) {
-        log.debug("Request to get PlainActivity : {}", id);
-        return plainActivityRepository.findById(id)
-            .map(plainActivityMapper::toDto);
+    public Optional<PlainDTO> findOne(Long id) {
+        log.debug("Request to get Plain : {}", id);
+        return plainRepository.findById(id)
+            .map(plainMapper::toDto);
     }
 
     /**
-     * Delete the plainActivity by id.
+     * Delete the plain by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete PlainActivity : {}", id);
-        plainActivityRepository.deleteById(id);
+        log.debug("Request to delete Plain : {}", id);
+        plainRepository.deleteById(id);
     }
 }

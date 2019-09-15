@@ -6,4 +6,4 @@ for file in `find . -regextype posix-extended -regex '.*[Pp]lain[_]*[Aa]ctivity.
   mv $file $replace
 done
 
-echo 'Finish renaming DecomposedActivity to Decomposed entity...'
+echo 'Finish renaming entity...'

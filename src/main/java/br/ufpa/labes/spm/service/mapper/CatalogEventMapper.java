@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link CatalogEvent} and its DTO {@link CatalogEventDTO}.
  */
-@Mapper(componentModel = "spring", uses = {AgendaEventMapper.class, ConnectionEventMapper.class, GlobalActivityEventMapper.class, ModelingActivityEventMapper.class, ProcessEventMapper.class, ProcessModelEventMapper.class, ResourceEventMapper.class, PlainActivityMapper.class})
+@Mapper(componentModel = "spring", uses = {AgendaEventMapper.class, ConnectionEventMapper.class, GlobalActivityEventMapper.class, ModelingActivityEventMapper.class, ProcessEventMapper.class, ProcessModelEventMapper.class, ResourceEventMapper.class, PlainMapper.class})
 public interface CatalogEventMapper extends EntityMapper<CatalogEventDTO, CatalogEvent> {
 
     @Mapping(source = "theAgendaEvent.id", target = "theAgendaEventId")
@@ -19,7 +19,7 @@ public interface CatalogEventMapper extends EntityMapper<CatalogEventDTO, Catalo
     @Mapping(source = "theProcessEvent.id", target = "theProcessEventId")
     @Mapping(source = "theProcessModelEvent.id", target = "theProcessModelEventId")
     @Mapping(source = "theResourceEvent.id", target = "theResourceEventId")
-    @Mapping(source = "thePlainActivity.id", target = "thePlainActivityId")
+    @Mapping(source = "thePlain.id", target = "thePlainId")
     CatalogEventDTO toDto(CatalogEvent catalogEvent);
 
     @Mapping(source = "theAgendaEventId", target = "theAgendaEvent")
@@ -30,7 +30,7 @@ public interface CatalogEventMapper extends EntityMapper<CatalogEventDTO, Catalo
     @Mapping(source = "theProcessEventId", target = "theProcessEvent")
     @Mapping(source = "theProcessModelEventId", target = "theProcessModelEvent")
     @Mapping(source = "theResourceEventId", target = "theResourceEvent")
-    @Mapping(source = "thePlainActivityId", target = "thePlainActivity")
+    @Mapping(source = "thePlainId", target = "thePlain")
     @Mapping(target = "theEventSuper", ignore = true)
     @Mapping(target = "theAgendaEvents", ignore = true)
     @Mapping(target = "removeTheAgendaEvent", ignore = true)

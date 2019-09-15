@@ -45,7 +45,7 @@ public class EventDTO implements Serializable {
 
     private Long theActivityId;
 
-    private Long thePlainActivityId;
+    private Long thePlainId;
 
     private Long theAgentId;
 
@@ -185,12 +185,12 @@ public class EventDTO implements Serializable {
         this.theActivityId = activityId;
     }
 
-    public Long getThePlainActivityId() {
-        return thePlainActivityId;
+    public Long getThePlainId() {
+        return thePlainId;
     }
 
-    public void setThePlainActivityId(Long plainActivityId) {
-        this.thePlainActivityId = plainActivityId;
+    public void setThePlainId(Long plainId) {
+        this.thePlainId = plainId;
     }
 
     public Long getTheAgentId() {
@@ -242,7 +242,7 @@ public class EventDTO implements Serializable {
             ", theLog=" + getTheLogId() +
             ", theEventType=" + getTheEventTypeId() +
             ", theActivity=" + getTheActivityId() +
-            ", thePlainActivity=" + getThePlainActivityId() +
+            ", thePlain=" + getThePlainId() +
             ", theAgent=" + getTheAgentId() +
             "}";
     }

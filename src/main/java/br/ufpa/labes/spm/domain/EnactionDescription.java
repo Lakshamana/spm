@@ -33,7 +33,7 @@ public class EnactionDescription implements Serializable {
 
     @OneToOne(mappedBy = "theEnactionDescription")
     @JsonIgnore
-    private PlainActivity thePlainActivity;
+    private Plain thePlain;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -83,17 +83,17 @@ public class EnactionDescription implements Serializable {
         this.state = state;
     }
 
-    public PlainActivity getThePlainActivity() {
-        return thePlainActivity;
+    public Plain getThePlain() {
+        return thePlain;
     }
 
-    public EnactionDescription thePlainActivity(PlainActivity plainActivity) {
-        this.thePlainActivity = plainActivity;
+    public EnactionDescription thePlain(Plain plain) {
+        this.thePlain = plain;
         return this;
     }
 
-    public void setThePlainActivity(PlainActivity plainActivity) {
-        this.thePlainActivity = plainActivity;
+    public void setThePlain(Plain plain) {
+        this.thePlain = plain;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

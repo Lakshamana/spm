@@ -1,19 +1,19 @@
 package br.ufpa.labes.spm.service.mapper;
 
 import br.ufpa.labes.spm.domain.*;
-import br.ufpa.labes.spm.service.dto.PlainActivityDTO;
+import br.ufpa.labes.spm.service.dto.PlainDTO;
 
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity {@link PlainActivity} and its DTO {@link PlainActivityDTO}.
+ * Mapper for the entity {@link Plain} and its DTO {@link PlainDTO}.
  */
 @Mapper(componentModel = "spring", uses = {EnactionDescriptionMapper.class, AutomaticActivityMapper.class})
-public interface PlainActivityMapper extends EntityMapper<PlainActivityDTO, PlainActivity> {
+public interface PlainMapper extends EntityMapper<PlainDTO, Plain> {
 
     @Mapping(source = "theEnactionDescription.id", target = "theEnactionDescriptionId")
     @Mapping(source = "theAutomaticActivitySub.id", target = "theAutomaticActivitySubId")
-    PlainActivityDTO toDto(PlainActivity plainActivity);
+    PlainDTO toDto(Plain plain);
 
     @Mapping(source = "theEnactionDescriptionId", target = "theEnactionDescription")
     @Mapping(source = "theAutomaticActivitySubId", target = "theAutomaticActivitySub")
@@ -22,14 +22,14 @@ public interface PlainActivityMapper extends EntityMapper<PlainActivityDTO, Plai
     @Mapping(target = "theActivitySuper", ignore = true)
     @Mapping(target = "theCatalogEvents", ignore = true)
     @Mapping(target = "removeTheCatalogEvent", ignore = true)
-    PlainActivity toEntity(PlainActivityDTO plainActivityDTO);
+    Plain toEntity(PlainDTO plainDTO);
 
-    default PlainActivity fromId(Long id) {
+    default Plain fromId(Long id) {
         if (id == null) {
             return null;
         }
-        PlainActivity plainActivity = new PlainActivity();
-        plainActivity.setId(id);
-        return plainActivity;
+        Plain plain = new Plain();
+        plain.setId(id);
+        return plain;
     }
 }

@@ -1,11 +1,11 @@
 package br.ufpa.labes.spm.web.rest;
 
 import br.ufpa.labes.spm.SpmApp;
-import br.ufpa.labes.spm.domain.PlainActivity;
-import br.ufpa.labes.spm.repository.PlainActivityRepository;
-import br.ufpa.labes.spm.service.PlainActivityService;
-import br.ufpa.labes.spm.service.dto.PlainActivityDTO;
-import br.ufpa.labes.spm.service.mapper.PlainActivityMapper;
+import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.repository.PlainRepository;
+import br.ufpa.labes.spm.service.PlainService;
+import br.ufpa.labes.spm.service.dto.PlainDTO;
+import br.ufpa.labes.spm.service.mapper.PlainMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,31 +32,31 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.PlainActivityStatus;
+import br.ufpa.labes.spm.domain.enumeration.PlainStatus;
 /**
- * Integration tests for the {@link PlainActivityResource} REST controller.
+ * Integration tests for the {@link PlainResource} REST controller.
  */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
-public class PlainActivityResourceIT {
+public class PlainResourceIT {
 
     private static final String DEFAULT_REQUIREMENTS = "AAAAAAAAAA";
     private static final String UPDATED_REQUIREMENTS = "BBBBBBBBBB";
 
-    private static final PlainActivityStatus DEFAULT_PLAIN_ACTIVITY_STATUS = PlainActivityStatus.WAITING;
-    private static final PlainActivityStatus UPDATED_PLAIN_ACTIVITY_STATUS = PlainActivityStatus.READY;
+    private static final PlainStatus DEFAULT_PLAIN_STATUS = PlainStatus.WAITING;
+    private static final PlainStatus UPDATED_PLAIN_STATUS = PlainStatus.READY;
 
     private static final Boolean DEFAULT_AUTOMATIC = false;
     private static final Boolean UPDATED_AUTOMATIC = true;
 
     @Autowired
-    private PlainActivityRepository plainActivityRepository;
+    private PlainRepository plainRepository;
 
     @Autowired
-    private PlainActivityMapper plainActivityMapper;
+    private PlainMapper plainMapper;
 
     @Autowired
-    private PlainActivityService plainActivityService;
+    private PlainService plainService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -73,15 +73,15 @@ public class PlainActivityResourceIT {
     @Autowired
     private Validator validator;
 
-    private MockMvc restPlainActivityMockMvc;
+    private MockMvc restPlainMockMvc;
 
-    private PlainActivity plainActivity;
+    private Plain plain;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PlainActivityResource plainActivityResource = new PlainActivityResource(plainActivityService);
-        this.restPlainActivityMockMvc = MockMvcBuilders.standaloneSetup(plainActivityResource)
+        final PlainResource plainResource = new PlainResource(plainService);
+        this.restPlainMockMvc = MockMvcBuilders.standaloneSetup(plainResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
@@ -95,12 +95,12 @@ public class PlainActivityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static PlainActivity createEntity(EntityManager em) {
-        PlainActivity plainActivity = new PlainActivity()
+    public static Plain createEntity(EntityManager em) {
+        Plain plain = new Plain()
             .requirements(DEFAULT_REQUIREMENTS)
-            .plainActivityStatus(DEFAULT_PLAIN_ACTIVITY_STATUS)
+            .plainStatus(DEFAULT_PLAIN_STATUS)
             .automatic(DEFAULT_AUTOMATIC);
-        return plainActivity;
+        return plain;
     }
     /**
      * Create an updated entity for this test.
@@ -108,58 +108,58 @@ public class PlainActivityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static PlainActivity createUpdatedEntity(EntityManager em) {
-        PlainActivity plainActivity = new PlainActivity()
+    public static Plain createUpdatedEntity(EntityManager em) {
+        Plain plain = new Plain()
             .requirements(UPDATED_REQUIREMENTS)
-            .plainActivityStatus(UPDATED_PLAIN_ACTIVITY_STATUS)
+            .plainStatus(UPDATED_PLAIN_STATUS)
             .automatic(UPDATED_AUTOMATIC);
-        return plainActivity;
+        return plain;
     }
 
     @BeforeEach
     public void initTest() {
-        plainActivity = createEntity(em);
+        plain = createEntity(em);
     }
 
     @Test
     @Transactional
-    public void createPlainActivity() throws Exception {
-        int databaseSizeBeforeCreate = plainActivityRepository.findAll().size();
+    public void createPlain() throws Exception {
+        int databaseSizeBeforeCreate = plainRepository.findAll().size();
 
-        // Create the PlainActivity
-        PlainActivityDTO plainActivityDTO = plainActivityMapper.toDto(plainActivity);
-        restPlainActivityMockMvc.perform(post("/api/plain-activities")
+        // Create the Plain
+        PlainDTO plainDTO = plainMapper.toDto(plain);
+        restPlainMockMvc.perform(post("/api/plain-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(plainActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
             .andExpect(status().isCreated());
 
-        // Validate the PlainActivity in the database
-        List<PlainActivity> plainActivityList = plainActivityRepository.findAll();
-        assertThat(plainActivityList).hasSize(databaseSizeBeforeCreate + 1);
-        PlainActivity testPlainActivity = plainActivityList.get(plainActivityList.size() - 1);
-        assertThat(testPlainActivity.getRequirements()).isEqualTo(DEFAULT_REQUIREMENTS);
-        assertThat(testPlainActivity.getPlainActivityStatus()).isEqualTo(DEFAULT_PLAIN_ACTIVITY_STATUS);
-        assertThat(testPlainActivity.isAutomatic()).isEqualTo(DEFAULT_AUTOMATIC);
+        // Validate the Plain in the database
+        List<Plain> plainList = plainRepository.findAll();
+        assertThat(plainList).hasSize(databaseSizeBeforeCreate + 1);
+        Plain testPlain = plainList.get(plainList.size() - 1);
+        assertThat(testPlain.getRequirements()).isEqualTo(DEFAULT_REQUIREMENTS);
+        assertThat(testPlain.getPlainStatus()).isEqualTo(DEFAULT_PLAIN_STATUS);
+        assertThat(testPlain.isAutomatic()).isEqualTo(DEFAULT_AUTOMATIC);
     }
 
     @Test
     @Transactional
-    public void createPlainActivityWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = plainActivityRepository.findAll().size();
+    public void createPlainWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = plainRepository.findAll().size();
 
-        // Create the PlainActivity with an existing ID
-        plainActivity.setId(1L);
-        PlainActivityDTO plainActivityDTO = plainActivityMapper.toDto(plainActivity);
+        // Create the Plain with an existing ID
+        plain.setId(1L);
+        PlainDTO plainDTO = plainMapper.toDto(plain);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restPlainActivityMockMvc.perform(post("/api/plain-activities")
+        restPlainMockMvc.perform(post("/api/plain-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(plainActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the PlainActivity in the database
-        List<PlainActivity> plainActivityList = plainActivityRepository.findAll();
-        assertThat(plainActivityList).hasSize(databaseSizeBeforeCreate);
+        // Validate the Plain in the database
+        List<Plain> plainList = plainRepository.findAll();
+        assertThat(plainList).hasSize(databaseSizeBeforeCreate);
     }
 
 
@@ -167,146 +167,146 @@ public class PlainActivityResourceIT {
     @Transactional
     public void getAllPlainActivities() throws Exception {
         // Initialize the database
-        plainActivityRepository.saveAndFlush(plainActivity);
+        plainRepository.saveAndFlush(plain);
 
-        // Get all the plainActivityList
-        restPlainActivityMockMvc.perform(get("/api/plain-activities?sort=id,desc"))
+        // Get all the plainList
+        restPlainMockMvc.perform(get("/api/plain-activities?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(plainActivity.getId().intValue())))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(plain.getId().intValue())))
             .andExpect(jsonPath("$.[*].requirements").value(hasItem(DEFAULT_REQUIREMENTS.toString())))
-            .andExpect(jsonPath("$.[*].plainActivityStatus").value(hasItem(DEFAULT_PLAIN_ACTIVITY_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].plainStatus").value(hasItem(DEFAULT_PLAIN_STATUS.toString())))
             .andExpect(jsonPath("$.[*].automatic").value(hasItem(DEFAULT_AUTOMATIC.booleanValue())));
     }
-    
+
     @Test
     @Transactional
-    public void getPlainActivity() throws Exception {
+    public void getPlain() throws Exception {
         // Initialize the database
-        plainActivityRepository.saveAndFlush(plainActivity);
+        plainRepository.saveAndFlush(plain);
 
-        // Get the plainActivity
-        restPlainActivityMockMvc.perform(get("/api/plain-activities/{id}", plainActivity.getId()))
+        // Get the plain
+        restPlainMockMvc.perform(get("/api/plain-activities/{id}", plain.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(plainActivity.getId().intValue()))
+            .andExpect(jsonPath("$.id").value(plain.getId().intValue()))
             .andExpect(jsonPath("$.requirements").value(DEFAULT_REQUIREMENTS.toString()))
-            .andExpect(jsonPath("$.plainActivityStatus").value(DEFAULT_PLAIN_ACTIVITY_STATUS.toString()))
+            .andExpect(jsonPath("$.plainStatus").value(DEFAULT_PLAIN_STATUS.toString()))
             .andExpect(jsonPath("$.automatic").value(DEFAULT_AUTOMATIC.booleanValue()));
     }
 
     @Test
     @Transactional
-    public void getNonExistingPlainActivity() throws Exception {
-        // Get the plainActivity
-        restPlainActivityMockMvc.perform(get("/api/plain-activities/{id}", Long.MAX_VALUE))
+    public void getNonExistingPlain() throws Exception {
+        // Get the plain
+        restPlainMockMvc.perform(get("/api/plain-activities/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    public void updatePlainActivity() throws Exception {
+    public void updatePlain() throws Exception {
         // Initialize the database
-        plainActivityRepository.saveAndFlush(plainActivity);
+        plainRepository.saveAndFlush(plain);
 
-        int databaseSizeBeforeUpdate = plainActivityRepository.findAll().size();
+        int databaseSizeBeforeUpdate = plainRepository.findAll().size();
 
-        // Update the plainActivity
-        PlainActivity updatedPlainActivity = plainActivityRepository.findById(plainActivity.getId()).get();
-        // Disconnect from session so that the updates on updatedPlainActivity are not directly saved in db
-        em.detach(updatedPlainActivity);
-        updatedPlainActivity
+        // Update the plain
+        Plain updatedPlain = plainRepository.findById(plain.getId()).get();
+        // Disconnect from session so that the updates on updatedPlain are not directly saved in db
+        em.detach(updatedPlain);
+        updatedPlain
             .requirements(UPDATED_REQUIREMENTS)
-            .plainActivityStatus(UPDATED_PLAIN_ACTIVITY_STATUS)
+            .plainStatus(UPDATED_PLAIN_STATUS)
             .automatic(UPDATED_AUTOMATIC);
-        PlainActivityDTO plainActivityDTO = plainActivityMapper.toDto(updatedPlainActivity);
+        PlainDTO plainDTO = plainMapper.toDto(updatedPlain);
 
-        restPlainActivityMockMvc.perform(put("/api/plain-activities")
+        restPlainMockMvc.perform(put("/api/plain-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(plainActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
             .andExpect(status().isOk());
 
-        // Validate the PlainActivity in the database
-        List<PlainActivity> plainActivityList = plainActivityRepository.findAll();
-        assertThat(plainActivityList).hasSize(databaseSizeBeforeUpdate);
-        PlainActivity testPlainActivity = plainActivityList.get(plainActivityList.size() - 1);
-        assertThat(testPlainActivity.getRequirements()).isEqualTo(UPDATED_REQUIREMENTS);
-        assertThat(testPlainActivity.getPlainActivityStatus()).isEqualTo(UPDATED_PLAIN_ACTIVITY_STATUS);
-        assertThat(testPlainActivity.isAutomatic()).isEqualTo(UPDATED_AUTOMATIC);
+        // Validate the Plain in the database
+        List<Plain> plainList = plainRepository.findAll();
+        assertThat(plainList).hasSize(databaseSizeBeforeUpdate);
+        Plain testPlain = plainList.get(plainList.size() - 1);
+        assertThat(testPlain.getRequirements()).isEqualTo(UPDATED_REQUIREMENTS);
+        assertThat(testPlain.getPlainStatus()).isEqualTo(UPDATED_PLAIN_STATUS);
+        assertThat(testPlain.isAutomatic()).isEqualTo(UPDATED_AUTOMATIC);
     }
 
     @Test
     @Transactional
-    public void updateNonExistingPlainActivity() throws Exception {
-        int databaseSizeBeforeUpdate = plainActivityRepository.findAll().size();
+    public void updateNonExistingPlain() throws Exception {
+        int databaseSizeBeforeUpdate = plainRepository.findAll().size();
 
-        // Create the PlainActivity
-        PlainActivityDTO plainActivityDTO = plainActivityMapper.toDto(plainActivity);
+        // Create the Plain
+        PlainDTO plainDTO = plainMapper.toDto(plain);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restPlainActivityMockMvc.perform(put("/api/plain-activities")
+        restPlainMockMvc.perform(put("/api/plain-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(plainActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the PlainActivity in the database
-        List<PlainActivity> plainActivityList = plainActivityRepository.findAll();
-        assertThat(plainActivityList).hasSize(databaseSizeBeforeUpdate);
+        // Validate the Plain in the database
+        List<Plain> plainList = plainRepository.findAll();
+        assertThat(plainList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
-    public void deletePlainActivity() throws Exception {
+    public void deletePlain() throws Exception {
         // Initialize the database
-        plainActivityRepository.saveAndFlush(plainActivity);
+        plainRepository.saveAndFlush(plain);
 
-        int databaseSizeBeforeDelete = plainActivityRepository.findAll().size();
+        int databaseSizeBeforeDelete = plainRepository.findAll().size();
 
-        // Delete the plainActivity
-        restPlainActivityMockMvc.perform(delete("/api/plain-activities/{id}", plainActivity.getId())
+        // Delete the plain
+        restPlainMockMvc.perform(delete("/api/plain-activities/{id}", plain.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<PlainActivity> plainActivityList = plainActivityRepository.findAll();
-        assertThat(plainActivityList).hasSize(databaseSizeBeforeDelete - 1);
+        List<Plain> plainList = plainRepository.findAll();
+        assertThat(plainList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test
     @Transactional
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(PlainActivity.class);
-        PlainActivity plainActivity1 = new PlainActivity();
-        plainActivity1.setId(1L);
-        PlainActivity plainActivity2 = new PlainActivity();
-        plainActivity2.setId(plainActivity1.getId());
-        assertThat(plainActivity1).isEqualTo(plainActivity2);
-        plainActivity2.setId(2L);
-        assertThat(plainActivity1).isNotEqualTo(plainActivity2);
-        plainActivity1.setId(null);
-        assertThat(plainActivity1).isNotEqualTo(plainActivity2);
+        TestUtil.equalsVerifier(Plain.class);
+        Plain plain1 = new Plain();
+        plain1.setId(1L);
+        Plain plain2 = new Plain();
+        plain2.setId(plain1.getId());
+        assertThat(plain1).isEqualTo(plain2);
+        plain2.setId(2L);
+        assertThat(plain1).isNotEqualTo(plain2);
+        plain1.setId(null);
+        assertThat(plain1).isNotEqualTo(plain2);
     }
 
     @Test
     @Transactional
     public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(PlainActivityDTO.class);
-        PlainActivityDTO plainActivityDTO1 = new PlainActivityDTO();
-        plainActivityDTO1.setId(1L);
-        PlainActivityDTO plainActivityDTO2 = new PlainActivityDTO();
-        assertThat(plainActivityDTO1).isNotEqualTo(plainActivityDTO2);
-        plainActivityDTO2.setId(plainActivityDTO1.getId());
-        assertThat(plainActivityDTO1).isEqualTo(plainActivityDTO2);
-        plainActivityDTO2.setId(2L);
-        assertThat(plainActivityDTO1).isNotEqualTo(plainActivityDTO2);
-        plainActivityDTO1.setId(null);
-        assertThat(plainActivityDTO1).isNotEqualTo(plainActivityDTO2);
+        TestUtil.equalsVerifier(PlainDTO.class);
+        PlainDTO plainDTO1 = new PlainDTO();
+        plainDTO1.setId(1L);
+        PlainDTO plainDTO2 = new PlainDTO();
+        assertThat(plainDTO1).isNotEqualTo(plainDTO2);
+        plainDTO2.setId(plainDTO1.getId());
+        assertThat(plainDTO1).isEqualTo(plainDTO2);
+        plainDTO2.setId(2L);
+        assertThat(plainDTO1).isNotEqualTo(plainDTO2);
+        plainDTO1.setId(null);
+        assertThat(plainDTO1).isNotEqualTo(plainDTO2);
     }
 
     @Test
     @Transactional
     public void testEntityFromId() {
-        assertThat(plainActivityMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(plainActivityMapper.fromId(null)).isNull();
+        assertThat(plainMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(plainMapper.fromId(null)).isNull();
     }
 }

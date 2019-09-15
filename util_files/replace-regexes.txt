@@ -22,7 +22,11 @@
 
 - Remover anotações EJB e Stateless no mesmo arquivo:
   search: .*(Stateless|EJB).*\n
-  replaceby:
+  replaceby: ''
+
+- Renomear entidade PlainActivity para Plain:
+  search: ([Pp]lain)([_])*([Aa]ctivity)
+  replaceby: $1
 
 *** Comandos BASH úteis:
 * Obter de maneira rápida as entidades de serviços:

@@ -88,7 +88,7 @@ public class Event implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theGlobalActivityEvents")
-    private PlainActivity thePlainActivity;
+    private Plain thePlain;
 
     @ManyToOne
     @JsonIgnoreProperties("theModelingActivityEvents")
@@ -315,17 +315,17 @@ public class Event implements Serializable {
         this.theActivity = activity;
     }
 
-    public PlainActivity getThePlainActivity() {
-        return thePlainActivity;
+    public Plain getThePlain() {
+        return thePlain;
     }
 
-    public Event thePlainActivity(PlainActivity plainActivity) {
-        this.thePlainActivity = plainActivity;
+    public Event thePlain(Plain plain) {
+        this.thePlain = plain;
         return this;
     }
 
-    public void setThePlainActivity(PlainActivity plainActivity) {
-        this.thePlainActivity = plainActivity;
+    public void setThePlain(Plain plain) {
+        this.thePlain = plain;
     }
 
     public Agent getTheAgent() {

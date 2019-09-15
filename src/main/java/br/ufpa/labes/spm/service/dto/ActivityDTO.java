@@ -16,7 +16,7 @@ public class ActivityDTO implements Serializable {
     private String name;
 
 
-    private Long thePlainActivitySubId;
+    private Long thePlainSubId;
 
     private Long theDecomposedSubId;
 
@@ -58,12 +58,12 @@ public class ActivityDTO implements Serializable {
         this.name = name;
     }
 
-    public Long getThePlainActivitySubId() {
-        return thePlainActivitySubId;
+    public Long getThePlainSubId() {
+        return thePlainSubId;
     }
 
-    public void setThePlainActivitySubId(Long plainActivityId) {
-        this.thePlainActivitySubId = plainActivityId;
+    public void setThePlainSubId(Long plainId) {
+        this.thePlainSubId = plainId;
     }
 
     public Long getTheDecomposedSubId() {
@@ -157,7 +157,7 @@ public class ActivityDTO implements Serializable {
             "id=" + getId() +
             ", ident='" + getIdent() + "'" +
             ", name='" + getName() + "'" +
-            ", thePlainActivitySub=" + getThePlainActivitySubId() +
+            ", thePlainSub=" + getThePlainSubId() +
             ", theDecomposedSub=" + getTheDecomposedSubId() +
             ", theActivityType=" + getTheActivityTypeId() +
             ", theAncestorActitvity=" + getTheAncestorActitvityId() +

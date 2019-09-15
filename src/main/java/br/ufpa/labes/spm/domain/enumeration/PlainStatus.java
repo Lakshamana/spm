@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.domain.enumeration;
 
 /**
- * The PlainActivityStatus enumeration.
+ * The PlainStatus enumeration.
  */
-public enum PlainActivityStatus {
+public enum PlainStatus {
     WAITING, READY, FAILED, CANCELED, ACTIVE, PAUSED, FINISHED
 }

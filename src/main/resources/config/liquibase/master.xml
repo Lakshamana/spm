@@ -16,7 +16,7 @@
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033720_added_entity_Activity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033721_added_entity_Decomposed.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190914033722_added_entity_PlainActivity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033722_added_entity_Plain.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033723_added_entity_Ability.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033724_added_entity_Agent.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033725_added_entity_AgentAffinityAgent.xml" relativeToChangelogFile="false"/>
@@ -150,7 +150,7 @@
     <include file="config/liquibase/changelog/20190914033933_added_entity_Plugin.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20190914033720_added_entity_constraints_Activity.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190914033722_added_entity_constraints_PlainActivity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033722_added_entity_constraints_Plain.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033723_added_entity_constraints_Ability.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033724_added_entity_constraints_Agent.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033725_added_entity_constraints_AgentAffinityAgent.xml" relativeToChangelogFile="false"/>

@@ -62,7 +62,7 @@ public class CatalogEvent implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theCatalogEvents")
-    private PlainActivity thePlainActivity;
+    private Plain thePlain;
 
     @OneToOne(mappedBy = "theCatalogEventSub")
     @JsonIgnore
@@ -202,17 +202,17 @@ public class CatalogEvent implements Serializable {
         this.theResourceEvent = resourceEvent;
     }
 
-    public PlainActivity getThePlainActivity() {
-        return thePlainActivity;
+    public Plain getThePlain() {
+        return thePlain;
     }
 
-    public CatalogEvent thePlainActivity(PlainActivity plainActivity) {
-        this.thePlainActivity = plainActivity;
+    public CatalogEvent thePlain(Plain plain) {
+        this.thePlain = plain;
         return this;
     }
 
-    public void setThePlainActivity(PlainActivity plainActivity) {
-        this.thePlainActivity = plainActivity;
+    public void setThePlain(Plain plain) {
+        this.thePlain = plain;
     }
 
     public Event getTheEventSuper() {

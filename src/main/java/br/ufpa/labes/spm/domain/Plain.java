@@ -9,15 +9,15 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.ufpa.labes.spm.domain.enumeration.PlainActivityStatus;
+import br.ufpa.labes.spm.domain.enumeration.PlainStatus;
 
 /**
- * A PlainActivity.
+ * A Plain.
  */
 @Entity
-@Table(name = "plain_activity")
+@Table(name = "plain")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class PlainActivity implements Serializable {
+public class Plain implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,8 +30,8 @@ public class PlainActivity implements Serializable {
     private String requirements;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "plain_activity_status")
-    private PlainActivityStatus plainActivityStatus;
+    @Column(name = "plain_status")
+    private PlainStatus plainStatus;
 
     @Column(name = "automatic")
     private Boolean automatic;
@@ -44,15 +44,15 @@ public class PlainActivity implements Serializable {
     @JoinColumn(unique = true)
     private AutomaticActivity theAutomaticActivitySub;
 
-    @OneToMany(mappedBy = "thePlainActivity")
+    @OneToMany(mappedBy = "thePlain")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Event> theGlobalActivityEvents = new HashSet<>();
 
-    @OneToOne(mappedBy = "thePlainActivitySub")
+    @OneToOne(mappedBy = "thePlainSub")
     @JsonIgnore
     private Activity theActivitySuper;
 
-    @OneToMany(mappedBy = "thePlainActivity")
+    @OneToMany(mappedBy = "thePlain")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<CatalogEvent> theCatalogEvents = new HashSet<>();
 
@@ -69,7 +69,7 @@ public class PlainActivity implements Serializable {
         return requirements;
     }
 
-    public PlainActivity requirements(String requirements) {
+    public Plain requirements(String requirements) {
         this.requirements = requirements;
         return this;
     }
@@ -78,24 +78,24 @@ public class PlainActivity implements Serializable {
         this.requirements = requirements;
     }
 
-    public PlainActivityStatus getPlainActivityStatus() {
-        return plainActivityStatus;
+    public PlainStatus getPlainStatus() {
+        return plainStatus;
     }
 
-    public PlainActivity plainActivityStatus(PlainActivityStatus plainActivityStatus) {
-        this.plainActivityStatus = plainActivityStatus;
+    public Plain plainStatus(PlainStatus plainStatus) {
+        this.plainStatus = plainStatus;
         return this;
     }
 
-    public void setPlainActivityStatus(PlainActivityStatus plainActivityStatus) {
-        this.plainActivityStatus = plainActivityStatus;
+    public void setPlainStatus(PlainStatus plainStatus) {
+        this.plainStatus = plainStatus;
     }
 
     public Boolean isAutomatic() {
         return automatic;
     }
 
-    public PlainActivity automatic(Boolean automatic) {
+    public Plain automatic(Boolean automatic) {
         this.automatic = automatic;
         return this;
     }
@@ -108,7 +108,7 @@ public class PlainActivity implements Serializable {
         return theEnactionDescription;
     }
 
-    public PlainActivity theEnactionDescription(EnactionDescription enactionDescription) {
+    public Plain theEnactionDescription(EnactionDescription enactionDescription) {
         this.theEnactionDescription = enactionDescription;
         return this;
     }
@@ -121,7 +121,7 @@ public class PlainActivity implements Serializable {
         return theAutomaticActivitySub;
     }
 
-    public PlainActivity theAutomaticActivitySub(AutomaticActivity automaticActivity) {
+    public Plain theAutomaticActivitySub(AutomaticActivity automaticActivity) {
         this.theAutomaticActivitySub = automaticActivity;
         return this;
     }
@@ -134,20 +134,20 @@ public class PlainActivity implements Serializable {
         return theGlobalActivityEvents;
     }
 
-    public PlainActivity theGlobalActivityEvents(Set<Event> events) {
+    public Plain theGlobalActivityEvents(Set<Event> events) {
         this.theGlobalActivityEvents = events;
         return this;
     }
 
-    public PlainActivity addTheGlobalActivityEvent(Event event) {
+    public Plain addTheGlobalActivityEvent(Event event) {
         this.theGlobalActivityEvents.add(event);
-        event.setThePlainActivity(this);
+        event.setThePlain(this);
         return this;
     }
 
-    public PlainActivity removeTheGlobalActivityEvent(Event event) {
+    public Plain removeTheGlobalActivityEvent(Event event) {
         this.theGlobalActivityEvents.remove(event);
-        event.setThePlainActivity(null);
+        event.setThePlain(null);
         return this;
     }
 
@@ -159,7 +159,7 @@ public class PlainActivity implements Serializable {
         return theActivitySuper;
     }
 
-    public PlainActivity theActivitySuper(Activity activity) {
+    public Plain theActivitySuper(Activity activity) {
         this.theActivitySuper = activity;
         return this;
     }
@@ -172,20 +172,20 @@ public class PlainActivity implements Serializable {
         return theCatalogEvents;
     }
 
-    public PlainActivity theCatalogEvents(Set<CatalogEvent> catalogEvents) {
+    public Plain theCatalogEvents(Set<CatalogEvent> catalogEvents) {
         this.theCatalogEvents = catalogEvents;
         return this;
     }
 
-    public PlainActivity addTheCatalogEvent(CatalogEvent catalogEvent) {
+    public Plain addTheCatalogEvent(CatalogEvent catalogEvent) {
         this.theCatalogEvents.add(catalogEvent);
-        catalogEvent.setThePlainActivity(this);
+        catalogEvent.setThePlain(this);
         return this;
     }
 
-    public PlainActivity removeTheCatalogEvent(CatalogEvent catalogEvent) {
+    public Plain removeTheCatalogEvent(CatalogEvent catalogEvent) {
         this.theCatalogEvents.remove(catalogEvent);
-        catalogEvent.setThePlainActivity(null);
+        catalogEvent.setThePlain(null);
         return this;
     }
 
@@ -199,10 +199,10 @@ public class PlainActivity implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof PlainActivity)) {
+        if (!(o instanceof Plain)) {
             return false;
         }
-        return id != null && id.equals(((PlainActivity) o).id);
+        return id != null && id.equals(((Plain) o).id);
     }
 
     @Override
@@ -212,10 +212,10 @@ public class PlainActivity implements Serializable {
 
     @Override
     public String toString() {
-        return "PlainActivity{" +
+        return "Plain{" +
             "id=" + getId() +
             ", requirements='" + getRequirements() + "'" +
-            ", plainActivityStatus='" + getPlainActivityStatus() + "'" +
+            ", plainStatus='" + getPlainStatus() + "'" +
             ", automatic='" + isAutomatic() + "'" +
             "}";
     }

@@ -12,7 +12,7 @@ import org.mapstruct.*;
 public interface EnactionDescriptionMapper extends EntityMapper<EnactionDescriptionDTO, EnactionDescription> {
 
 
-    @Mapping(target = "thePlainActivity", ignore = true)
+    @Mapping(target = "thePlain", ignore = true)
     EnactionDescription toEntity(EnactionDescriptionDTO enactionDescriptionDTO);
 
     default EnactionDescription fromId(Long id) {

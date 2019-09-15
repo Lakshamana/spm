@@ -30,7 +30,7 @@ public class AutomaticActivity implements Serializable {
 
     @OneToOne(mappedBy = "theAutomaticActivitySub")
     @JsonIgnore
-    private PlainActivity theAutomatic;
+    private Plain theAutomatic;
 
     @ManyToOne
     @JsonIgnoreProperties("theAutomatics")
@@ -62,17 +62,17 @@ public class AutomaticActivity implements Serializable {
         this.theSubroutine = subroutine;
     }
 
-    public PlainActivity getTheAutomatic() {
+    public Plain getTheAutomatic() {
         return theAutomatic;
     }
 
-    public AutomaticActivity theAutomatic(PlainActivity plainActivity) {
-        this.theAutomatic = plainActivity;
+    public AutomaticActivity theAutomatic(Plain plain) {
+        this.theAutomatic = plain;
         return this;
     }
 
-    public void setTheAutomatic(PlainActivity plainActivity) {
-        this.theAutomatic = plainActivity;
+    public void setTheAutomatic(Plain plain) {
+        this.theAutomatic = plain;
     }
 
     public Artifact getTheArtifact() {

@@ -66,9 +66,9 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "plainActivity",
+            "otherEntityName": "plain",
             "otherEntityRelationshipName": "theCatalogEvent",
-            "relationshipName": "thePlainActivity",
+            "relationshipName": "thePlain",
             "otherEntityField": "id"
         },
         {

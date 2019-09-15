@@ -12,7 +12,7 @@
         },
         {
             "relationshipType": "one-to-one",
-            "otherEntityName": "plainActivity",
+            "otherEntityName": "plain",
             "otherEntityRelationshipName": "theAutomaticActivitySub",
             "relationshipName": "theAutomatic",
             "ownerSide": false

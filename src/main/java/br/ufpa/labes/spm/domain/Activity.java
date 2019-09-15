@@ -31,7 +31,7 @@ public class Activity implements Serializable {
 
     @OneToOne
     @JoinColumn(unique = true)
-    private PlainActivity thePlainActivitySub;
+    private Plain thePlainSub;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -152,17 +152,17 @@ public class Activity implements Serializable {
         this.name = name;
     }
 
-    public PlainActivity getThePlainActivitySub() {
-        return thePlainActivitySub;
+    public Plain getThePlainSub() {
+        return thePlainSub;
     }
 
-    public Activity thePlainActivitySub(PlainActivity plainActivity) {
-        this.thePlainActivitySub = plainActivity;
+    public Activity thePlainSub(Plain plain) {
+        this.thePlainSub = plain;
         return this;
     }
 
-    public void setThePlainActivitySub(PlainActivity plainActivity) {
-        this.thePlainActivitySub = plainActivity;
+    public void setThePlainSub(Plain plain) {
+        this.thePlainSub = plain;
     }
 
     public Decomposed getTheDecomposedSub() {

@@ -30,7 +30,7 @@ public class CatalogEventDTO implements Serializable {
 
     private Long theResourceEventId;
 
-    private Long thePlainActivityId;
+    private Long thePlainId;
 
     public Long getId() {
         return id;
@@ -112,12 +112,12 @@ public class CatalogEventDTO implements Serializable {
         this.theResourceEventId = resourceEventId;
     }
 
-    public Long getThePlainActivityId() {
-        return thePlainActivityId;
+    public Long getThePlainId() {
+        return thePlainId;
     }
 
-    public void setThePlainActivityId(Long plainActivityId) {
-        this.thePlainActivityId = plainActivityId;
+    public void setThePlainId(Long plainId) {
+        this.thePlainId = plainId;
     }
 
     @Override
@@ -154,7 +154,7 @@ public class CatalogEventDTO implements Serializable {
             ", theProcessEvent=" + getTheProcessEventId() +
             ", theProcessModelEvent=" + getTheProcessModelEventId() +
             ", theResourceEvent=" + getTheResourceEventId() +
-            ", thePlainActivity=" + getThePlainActivityId() +
+            ", thePlain=" + getThePlainId() +
             "}";
     }
 }

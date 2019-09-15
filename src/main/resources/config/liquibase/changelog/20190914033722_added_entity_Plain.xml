@@ -9,10 +9,10 @@
     <property name="autoIncrement" value="true"/>
 
     <!--
-        Added the entity PlainActivity.
+        Added the entity Plain.
     -->
     <changeSet id="20190914033722-1" author="jhipster">
-        <createTable tableName="plain_activity">
+        <createTable tableName="plain">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -20,7 +20,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="plain_activity_status" type="varchar(255)">
+            <column name="plain_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
@@ -28,9 +28,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="the_enaction_description_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_plain_activity_the_enaction_description_id" />
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_plain_the_enaction_description_id" />
             </column>            <column name="the_automatic_activity_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_plain_activity_the_automatic_activity_sub_id" />
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_plain_the_automatic_activity_sub_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
@@ -52,12 +52,12 @@
     -->
     <changeSet id="20190914033722-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/plain_activity.csv"
+                  file="config/liquibase/fake-data/plain.csv"
                   separator=";"
-                  tableName="plain_activity">
+                  tableName="plain">
             <column name="id" type="numeric"/>
             <column name="requirements" type="clob"/>
-            <column name="plain_activity_status" type="string"/>
+            <column name="plain_status" type="string"/>
             <column name="automatic" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>

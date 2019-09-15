@@ -117,9 +117,9 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "plainActivity",
+            "otherEntityName": "plain",
             "otherEntityRelationshipName": "theGlobalActivityEvent",
-            "relationshipName": "thePlainActivity",
+            "relationshipName": "thePlain",
             "otherEntityField": "id"
         },
         {

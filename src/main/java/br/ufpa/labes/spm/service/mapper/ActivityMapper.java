@@ -8,17 +8,17 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Activity} and its DTO {@link ActivityDTO}.
  */
-@Mapper(componentModel = "spring", uses = {PlainActivityMapper.class, DecomposedMapper.class, ActivityTypeMapper.class, JoinConMapper.class, BranchANDConMapper.class, ArtifactConMapper.class, ProcessModelMapper.class})
+@Mapper(componentModel = "spring", uses = {PlainMapper.class, DecomposedMapper.class, ActivityTypeMapper.class, JoinConMapper.class, BranchANDConMapper.class, ArtifactConMapper.class, ProcessModelMapper.class})
 public interface ActivityMapper extends EntityMapper<ActivityDTO, Activity> {
 
-    @Mapping(source = "thePlainActivitySub.id", target = "thePlainActivitySubId")
+    @Mapping(source = "thePlainSub.id", target = "thePlainSubId")
     @Mapping(source = "theDecomposedSub.id", target = "theDecomposedSubId")
     @Mapping(source = "theActivityType.id", target = "theActivityTypeId")
     @Mapping(source = "theAncestorActitvity.id", target = "theAncestorActitvityId")
     @Mapping(source = "theProcessModel.id", target = "theProcessModelId")
     ActivityDTO toDto(Activity activity);
 
-    @Mapping(source = "thePlainActivitySubId", target = "thePlainActivitySub")
+    @Mapping(source = "thePlainSubId", target = "thePlainSub")
     @Mapping(source = "theDecomposedSubId", target = "theDecomposedSub")
     @Mapping(target = "theModelingActivityEvents", ignore = true)
     @Mapping(target = "removeTheModelingActivityEvent", ignore = true)

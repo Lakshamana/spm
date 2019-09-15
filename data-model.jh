@@ -3,16 +3,16 @@ entity Activity {
     ident String,
     name String
 }
-//PlainActivity state enum
-enum PlainActivityStatus {
+//Plain state enum
+enum PlainStatus {
     WAITING, READY, FAILED, CANCELED, ACTIVE, PAUSED, FINISHED
 }
 entity Decomposed {
 }
 
-entity PlainActivity {
+entity Plain {
     requirements TextBlob,
-    plainActivityStatus PlainActivityStatus, //TODO: mover para EnactionDescription (?)
+    plainStatus PlainStatus, //TODO: mover para EnactionDescription (?)
     automatic Boolean
 }
 
@@ -30,7 +30,7 @@ relationship OneToMany {
     Activity{activityMetric} to Metric{theActivity},
     Activity{theActivityEstimation} to ActivityEstimation{theActivity},
 
-    PlainActivity{theGlobalActivityEvent} to Event{thePlainActivity}
+    Plain{theGlobalActivityEvent} to Event{thePlain}
 }
 
 relationship ManyToMany {
@@ -41,10 +41,10 @@ relationship ManyToMany {
 }
 
 relationship OneToOne {
-    Activity{thePlainActivitySub} to PlainActivity{theActivitySuper},
+    Activity{thePlainSub} to Plain{theActivitySuper},
     Activity{theDecomposedSub} to Decomposed{theActivitySuper},
 
-    PlainActivity{theEnactionDescription} to EnactionDescription{thePlainActivity}
+    Plain{theEnactionDescription} to EnactionDescription{thePlain}
 }
 
 //package agent -------------------------------------------
@@ -509,7 +509,7 @@ relationship ManyToOne {
     Event{theLog} to SpmLog{theEvent},
     Event{theEventType} to EventType{theEvent}
 
-    CatalogEvent{thePlainActivity} to PlainActivity{theCatalogEvent},
+    CatalogEvent{thePlain} to Plain{theCatalogEvent},
 
     ProcessEvent{theProcess} to Process{theProcessEvent},
     ProcessModelEvent{theProcessModel} to ProcessModel{theProcessModelEvent},
@@ -643,7 +643,7 @@ relationship OneToOne {
 
 //package plainActivities -------------------------------------------
 
-entity AutomaticActivity {} //extends PlainActivity (package activities: line 1)
+entity AutomaticActivity {} //extends Plain (package activities: line 1)
 
 entity EnactionDescription {
     actualBegin LocalDate,
@@ -710,7 +710,7 @@ relationship OneToMany {
 }
 
 relationship OneToOne {
-    PlainActivity{theAutomaticActivitySub} to AutomaticActivity{theAutomatic},
+    Plain{theAutomaticActivitySub} to AutomaticActivity{theAutomatic},
     AutomaticActivity{theSubroutine} to Subroutine{theAutomaticActivity},
 
     Parameter{theArtifactParameterSub} to ArtifactParam{theParameterSuper},

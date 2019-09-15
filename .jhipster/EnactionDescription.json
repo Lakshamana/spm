@@ -17,9 +17,9 @@
     "relationships": [
         {
             "relationshipType": "one-to-one",
-            "otherEntityName": "plainActivity",
+            "otherEntityName": "plain",
             "otherEntityRelationshipName": "theEnactionDescription",
-            "relationshipName": "thePlainActivity",
+            "relationshipName": "thePlain",
             "ownerSide": false
         }
     ],

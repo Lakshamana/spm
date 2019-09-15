@@ -1,5 +1,5 @@
 {
-    "name": "PlainActivity",
+    "name": "Plain",
     "fields": [
         {
             "fieldName": "requirements",
@@ -7,8 +7,8 @@
             "fieldTypeBlobContent": "text"
         },
         {
-            "fieldName": "plainActivityStatus",
-            "fieldType": "PlainActivityStatus",
+            "fieldName": "plainStatus",
+            "fieldType": "PlainStatus",
             "fieldValues": "WAITING,READY,FAILED,CANCELED,ACTIVE,PAUSED,FINISHED"
         },
         {
@@ -20,7 +20,7 @@
         {
             "relationshipType": "one-to-one",
             "otherEntityName": "enactionDescription",
-            "otherEntityRelationshipName": "thePlainActivity",
+            "otherEntityRelationshipName": "thePlain",
             "relationshipName": "theEnactionDescription",
             "otherEntityField": "id",
             "ownerSide": true
@@ -36,25 +36,25 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "event",
-            "otherEntityRelationshipName": "thePlainActivity",
+            "otherEntityRelationshipName": "thePlain",
             "relationshipName": "theGlobalActivityEvent"
         },
         {
             "relationshipType": "one-to-one",
             "otherEntityName": "activity",
-            "otherEntityRelationshipName": "thePlainActivitySub",
+            "otherEntityRelationshipName": "thePlainSub",
             "relationshipName": "theActivitySuper",
             "ownerSide": false
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "catalogEvent",
-            "otherEntityRelationshipName": "thePlainActivity",
+            "otherEntityRelationshipName": "thePlain",
             "relationshipName": "theCatalogEvent"
         }
     ],
     "changelogDate": "20190914033722",
-    "entityTableName": "plain_activity",
+    "entityTableName": "plain",
     "dto": "mapstruct",
     "pagination": "no",
     "service": "serviceClass",

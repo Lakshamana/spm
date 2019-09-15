@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Event} and its DTO {@link EventDTO}.
  */
-@Mapper(componentModel = "spring", uses = {AgendaEventMapper.class, CatalogEventMapper.class, ConnectionEventMapper.class, GlobalActivityEventMapper.class, ModelingActivityEventMapper.class, ProcessEventMapper.class, ProcessModelEventMapper.class, ResourceEventMapper.class, TaskMapper.class, SpmLogMapper.class, EventTypeMapper.class, ActivityMapper.class, PlainActivityMapper.class, AgentMapper.class})
+@Mapper(componentModel = "spring", uses = {AgendaEventMapper.class, CatalogEventMapper.class, ConnectionEventMapper.class, GlobalActivityEventMapper.class, ModelingActivityEventMapper.class, ProcessEventMapper.class, ProcessModelEventMapper.class, ResourceEventMapper.class, TaskMapper.class, SpmLogMapper.class, EventTypeMapper.class, ActivityMapper.class, PlainMapper.class, AgentMapper.class})
 public interface EventMapper extends EntityMapper<EventDTO, Event> {
 
     @Mapping(source = "theAgendaEventSub.id", target = "theAgendaEventSubId")
@@ -24,7 +24,7 @@ public interface EventMapper extends EntityMapper<EventDTO, Event> {
     @Mapping(source = "theLog.id", target = "theLogId")
     @Mapping(source = "theEventType.id", target = "theEventTypeId")
     @Mapping(source = "theActivity.id", target = "theActivityId")
-    @Mapping(source = "thePlainActivity.id", target = "thePlainActivityId")
+    @Mapping(source = "thePlain.id", target = "thePlainId")
     @Mapping(source = "theAgent.id", target = "theAgentId")
     EventDTO toDto(Event event);
 
@@ -41,7 +41,7 @@ public interface EventMapper extends EntityMapper<EventDTO, Event> {
     @Mapping(source = "theLogId", target = "theLog")
     @Mapping(source = "theEventTypeId", target = "theEventType")
     @Mapping(source = "theActivityId", target = "theActivity")
-    @Mapping(source = "thePlainActivityId", target = "thePlainActivity")
+    @Mapping(source = "thePlainId", target = "thePlain")
     @Mapping(source = "theAgentId", target = "theAgent")
     @Mapping(target = "theRequestorAgents", ignore = true)
     @Mapping(target = "removeTheRequestorAgent", ignore = true)

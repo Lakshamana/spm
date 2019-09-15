@@ -2,19 +2,19 @@ package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Lob;
-import br.ufpa.labes.spm.domain.enumeration.PlainActivityStatus;
+import br.ufpa.labes.spm.domain.enumeration.PlainStatus;
 
 /**
- * A DTO for the {@link br.ufpa.labes.spm.domain.PlainActivity} entity.
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Plain} entity.
  */
-public class PlainActivityDTO implements Serializable {
+public class PlainDTO implements Serializable {
 
     private Long id;
 
     @Lob
     private String requirements;
 
-    private PlainActivityStatus plainActivityStatus;
+    private PlainStatus plainStatus;
 
     private Boolean automatic;
 
@@ -39,12 +39,12 @@ public class PlainActivityDTO implements Serializable {
         this.requirements = requirements;
     }
 
-    public PlainActivityStatus getPlainActivityStatus() {
-        return plainActivityStatus;
+    public PlainStatus getPlainStatus() {
+        return plainStatus;
     }
 
-    public void setPlainActivityStatus(PlainActivityStatus plainActivityStatus) {
-        this.plainActivityStatus = plainActivityStatus;
+    public void setPlainStatus(PlainStatus plainStatus) {
+        this.plainStatus = plainStatus;
     }
 
     public Boolean isAutomatic() {
@@ -80,11 +80,11 @@ public class PlainActivityDTO implements Serializable {
             return false;
         }
 
-        PlainActivityDTO plainActivityDTO = (PlainActivityDTO) o;
-        if (plainActivityDTO.getId() == null || getId() == null) {
+        PlainDTO plainDTO = (PlainDTO) o;
+        if (plainDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), plainActivityDTO.getId());
+        return Objects.equals(getId(), plainDTO.getId());
     }
 
     @Override
@@ -94,10 +94,10 @@ public class PlainActivityDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "PlainActivityDTO{" +
+        return "PlainDTO{" +
             "id=" + getId() +
             ", requirements='" + getRequirements() + "'" +
-            ", plainActivityStatus='" + getPlainActivityStatus() + "'" +
+            ", plainStatus='" + getPlainStatus() + "'" +
             ", automatic='" + isAutomatic() + "'" +
             ", theEnactionDescription=" + getTheEnactionDescriptionId() +
             ", theAutomaticActivitySub=" + getTheAutomaticActivitySubId() +

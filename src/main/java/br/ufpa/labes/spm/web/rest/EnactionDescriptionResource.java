@@ -88,9 +88,9 @@ public class EnactionDescriptionResource {
      */
     @GetMapping("/enaction-descriptions")
     public List<EnactionDescriptionDTO> getAllEnactionDescriptions(@RequestParam(required = false) String filter) {
-        if ("theplainactivity-is-null".equals(filter)) {
-            log.debug("REST request to get all EnactionDescriptions where thePlainActivity is null");
-            return enactionDescriptionService.findAllWhereThePlainActivityIsNull();
+        if ("theplain-is-null".equals(filter)) {
+            log.debug("REST request to get all EnactionDescriptions where thePlain is null");
+            return enactionDescriptionService.findAllWhereThePlainIsNull();
         }
         log.debug("REST request to get all EnactionDescriptions");
         return enactionDescriptionService.findAll();

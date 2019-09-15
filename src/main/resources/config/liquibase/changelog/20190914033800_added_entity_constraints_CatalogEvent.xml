@@ -7,7 +7,7 @@
         Added the constraints for entity CatalogEvent.
     -->
     <changeSet id="20190914033800-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="the_agenda_event_id"
                                  baseTableName="catalog_event"
                                  constraintName="fk_catalog_event_the_agenda_event_id"
@@ -56,11 +56,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="resource_event"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_plain_activity_id"
+        <addForeignKeyConstraint baseColumnNames="the_plain_id"
                                  baseTableName="catalog_event"
-                                 constraintName="fk_catalog_event_the_plain_activity_id"
+                                 constraintName="fk_catalog_event_the_plain_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="plain_activity"/>
+                                 referencedTableName="plain"/>
 
     </changeSet>
 </databaseChangeLog>

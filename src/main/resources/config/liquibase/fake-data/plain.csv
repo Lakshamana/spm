@@ -1,4 +1,4 @@
-id;requirements;plain_activity_status;automatic
+id;requirements;plain_status;automatic
 1;../fake-data/blob/hipster.txt;WAITING;true
 2;../fake-data/blob/hipster.txt;FAILED;true
 3;../fake-data/blob/hipster.txt;READY;true

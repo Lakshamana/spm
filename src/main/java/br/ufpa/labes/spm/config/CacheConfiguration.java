@@ -59,9 +59,9 @@ public class CacheConfiguration {
             createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theActivityInstantiateds");
             createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theActivityMetrics");
             createCache(cm, br.ufpa.labes.spm.domain.Decomposed.class.getName());
-            createCache(cm, br.ufpa.labes.spm.domain.PlainActivity.class.getName());
-            createCache(cm, br.ufpa.labes.spm.domain.PlainActivity.class.getName() + ".theGlobalActivityEvents");
-            createCache(cm, br.ufpa.labes.spm.domain.PlainActivity.class.getName() + ".theCatalogEvents");
+            createCache(cm, br.ufpa.labes.spm.domain.Plain.class.getName());
+            createCache(cm, br.ufpa.labes.spm.domain.Plain.class.getName() + ".theGlobalActivityEvents");
+            createCache(cm, br.ufpa.labes.spm.domain.Plain.class.getName() + ".theCatalogEvents");
             createCache(cm, br.ufpa.labes.spm.domain.Ability.class.getName());
             createCache(cm, br.ufpa.labes.spm.domain.Ability.class.getName() + ".theReqAgentRequiresAbilities");
             createCache(cm, br.ufpa.labes.spm.domain.Ability.class.getName() + ".theAgentHasAbilities");
