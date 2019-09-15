@@ -226,7 +226,7 @@ relationship ManyToOne {
 relationship OneToMany {
     Artifact{theInvolvedArtifacts} to InvolvedArtifact{theArtifact},
     Artifact{theArtifactParams} to ArtifactParam{theArtifact},
-    Artifact{theAutomatic} to AutomaticActivity{theArtifact},
+    Artifact{theAutomatic} to Automatic{theArtifact},
     Artifact{theArtifactMetric} to ArtifactMetric{theArtifact},
     Artifact{theArtifactEstimation} to ArtifactEstimation{theArtifact},
     Artifact{theVCSRepository} to VCSRepository{theArtifact}
@@ -643,7 +643,7 @@ relationship OneToOne {
 
 //package plainActivities -------------------------------------------
 
-entity AutomaticActivity {} //extends Plain (package activities: line 1)
+entity Automatic {} //extends Plain (package activities: line 1)
 
 entity EnactionDescription {
     actualBegin LocalDate,
@@ -691,7 +691,7 @@ relationship ManyToOne {
     InvolvedArtifact{outInvolvedArtifacts} to Normal{theInvolvedArtifactsFromNormal},
     InvolvedArtifact{theArtifactType} to ArtifactType{theInvolvedArtifact}
 
-    Parameter{theAutomatic} to AutomaticActivity{theParameters},
+    Parameter{theAutomatic} to Automatic{theParameters},
 
     ReqAgentRequiresAbility{theReqAgent} to RequiredPeople{theReqAgentRequiresAbility},
 
@@ -710,10 +710,10 @@ relationship OneToMany {
 }
 
 relationship OneToOne {
-    Plain{theAutomaticActivitySub} to AutomaticActivity{theAutomatic},
+    Plain{theAutomaticSub} to Automatic{thePlainSuper},
     Plain{theNormalSub} to Normal{thePlainSuper},
-    
-    AutomaticActivity{theSubroutine} to Subroutine{theAutomaticActivity},
+
+    Automatic{theSubroutine} to Subroutine{theAutomatic},
 
     Parameter{theArtifactParameterSub} to ArtifactParam{theParameterSuper},
     Parameter{thePrimitiveParamSub} to PrimitiveParam{theParameterSuper},
