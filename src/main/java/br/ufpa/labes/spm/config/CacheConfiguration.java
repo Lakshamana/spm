@@ -366,6 +366,8 @@ public class CacheConfiguration {
             createCache(cm, br.ufpa.labes.spm.domain.ToolType.class.getName() + ".theToolDefinitions");
             createCache(cm, br.ufpa.labes.spm.domain.Plugin.class.getName());
             createCache(cm, br.ufpa.labes.spm.domain.Plugin.class.getName() + ".users");
+            createCache(cm, br.ufpa.labes.spm.domain.Automatic.class.getName());
+            createCache(cm, br.ufpa.labes.spm.domain.Automatic.class.getName() + ".theParameters");
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -21,7 +21,9 @@ public class PlainDTO implements Serializable {
 
     private Long theEnactionDescriptionId;
 
-    private Long theAutomaticActivitySubId;
+    private Long theAutomaticSubId;
+
+    private Long theNormalSubId;
 
     public Long getId() {
         return id;
@@ -63,12 +65,20 @@ public class PlainDTO implements Serializable {
         this.theEnactionDescriptionId = enactionDescriptionId;
     }
 
-    public Long getTheAutomaticActivitySubId() {
-        return theAutomaticActivitySubId;
+    public Long getTheAutomaticSubId() {
+        return theAutomaticSubId;
     }
 
-    public void setTheAutomaticActivitySubId(Long automaticActivityId) {
-        this.theAutomaticActivitySubId = automaticActivityId;
+    public void setTheAutomaticSubId(Long automaticId) {
+        this.theAutomaticSubId = automaticId;
+    }
+
+    public Long getTheNormalSubId() {
+        return theNormalSubId;
+    }
+
+    public void setTheNormalSubId(Long normalId) {
+        this.theNormalSubId = normalId;
     }
 
     @Override
@@ -100,7 +110,8 @@ public class PlainDTO implements Serializable {
             ", plainStatus='" + getPlainStatus() + "'" +
             ", automatic='" + isAutomatic() + "'" +
             ", theEnactionDescription=" + getTheEnactionDescriptionId() +
-            ", theAutomaticActivitySub=" + getTheAutomaticActivitySubId() +
+            ", theAutomaticSub=" + getTheAutomaticSubId() +
+            ", theNormalSub=" + getTheNormalSubId() +
             "}";
     }
 }

@@ -56,8 +56,8 @@ public class ParameterDTO implements Serializable {
         return theAutomaticId;
     }
 
-    public void setTheAutomaticId(Long automaticActivityId) {
-        this.theAutomaticId = automaticActivityId;
+    public void setTheAutomaticId(Long automaticId) {
+        this.theAutomaticId = automaticId;
     }
 
     @Override

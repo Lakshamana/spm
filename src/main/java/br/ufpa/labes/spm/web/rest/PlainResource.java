@@ -40,26 +40,26 @@ public class PlainResource {
     }
 
     /**
-     * {@code POST  /plain-activities} : Create a new plain.
+     * {@code POST  /plains} : Create a new plain.
      *
      * @param plainDTO the plainDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new plainDTO, or with status {@code 400 (Bad Request)} if the plain has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/plain-activities")
+    @PostMapping("/plains")
     public ResponseEntity<PlainDTO> createPlain(@RequestBody PlainDTO plainDTO) throws URISyntaxException {
         log.debug("REST request to save Plain : {}", plainDTO);
         if (plainDTO.getId() != null) {
             throw new BadRequestAlertException("A new plain cannot already have an ID", ENTITY_NAME, "idexists");
         }
         PlainDTO result = plainService.save(plainDTO);
-        return ResponseEntity.created(new URI("/api/plain-activities/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/plains/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /plain-activities} : Updates an existing plain.
+     * {@code PUT  /plains} : Updates an existing plain.
      *
      * @param plainDTO the plainDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated plainDTO,
@@ -67,7 +67,7 @@ public class PlainResource {
      * or with status {@code 500 (Internal Server Error)} if the plainDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/plain-activities")
+    @PutMapping("/plains")
     public ResponseEntity<PlainDTO> updatePlain(@RequestBody PlainDTO plainDTO) throws URISyntaxException {
         log.debug("REST request to update Plain : {}", plainDTO);
         if (plainDTO.getId() == null) {
@@ -80,29 +80,29 @@ public class PlainResource {
     }
 
     /**
-     * {@code GET  /plain-activities} : get all the plainActivities.
+     * {@code GET  /plains} : get all the plains.
      *
 
      * @param filter the filter of the request.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of plainActivities in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of plains in body.
      */
-    @GetMapping("/plain-activities")
-    public List<PlainDTO> getAllPlainActivities(@RequestParam(required = false) String filter) {
+    @GetMapping("/plains")
+    public List<PlainDTO> getAllPlains(@RequestParam(required = false) String filter) {
         if ("theactivitysuper-is-null".equals(filter)) {
             log.debug("REST request to get all Plains where theActivitySuper is null");
             return plainService.findAllWhereTheActivitySuperIsNull();
         }
-        log.debug("REST request to get all PlainActivities");
+        log.debug("REST request to get all Plains");
         return plainService.findAll();
     }
 
     /**
-     * {@code GET  /plain-activities/:id} : get the "id" plain.
+     * {@code GET  /plains/:id} : get the "id" plain.
      *
      * @param id the id of the plainDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the plainDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/plain-activities/{id}")
+    @GetMapping("/plains/{id}")
     public ResponseEntity<PlainDTO> getPlain(@PathVariable Long id) {
         log.debug("REST request to get Plain : {}", id);
         Optional<PlainDTO> plainDTO = plainService.findOne(id);
@@ -110,12 +110,12 @@ public class PlainResource {
     }
 
     /**
-     * {@code DELETE  /plain-activities/:id} : delete the "id" plain.
+     * {@code DELETE  /plains/:id} : delete the "id" plain.
      *
      * @param id the id of the plainDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/plain-activities/{id}")
+    @DeleteMapping("/plains/{id}")
     public ResponseEntity<Void> deletePlain(@PathVariable Long id) {
         log.debug("REST request to delete Plain : {}", id);
         plainService.delete(id);

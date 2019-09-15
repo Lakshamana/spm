@@ -42,7 +42,11 @@ public class Plain implements Serializable {
 
     @OneToOne
     @JoinColumn(unique = true)
-    private AutomaticActivity theAutomaticActivitySub;
+    private Automatic theAutomaticSub;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Normal theNormalSub;
 
     @OneToMany(mappedBy = "thePlain")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -117,17 +121,30 @@ public class Plain implements Serializable {
         this.theEnactionDescription = enactionDescription;
     }
 
-    public AutomaticActivity getTheAutomaticActivitySub() {
-        return theAutomaticActivitySub;
+    public Automatic getTheAutomaticSub() {
+        return theAutomaticSub;
     }
 
-    public Plain theAutomaticActivitySub(AutomaticActivity automaticActivity) {
-        this.theAutomaticActivitySub = automaticActivity;
+    public Plain theAutomaticSub(Automatic automatic) {
+        this.theAutomaticSub = automatic;
         return this;
     }
 
-    public void setTheAutomaticActivitySub(AutomaticActivity automaticActivity) {
-        this.theAutomaticActivitySub = automaticActivity;
+    public void setTheAutomaticSub(Automatic automatic) {
+        this.theAutomaticSub = automatic;
+    }
+
+    public Normal getTheNormalSub() {
+        return theNormalSub;
+    }
+
+    public Plain theNormalSub(Normal normal) {
+        this.theNormalSub = normal;
+        return this;
+    }
+
+    public void setTheNormalSub(Normal normal) {
+        this.theNormalSub = normal;
     }
 
     public Set<Event> getTheGlobalActivityEvents() {

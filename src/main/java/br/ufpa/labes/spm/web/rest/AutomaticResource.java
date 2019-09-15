@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AutomaticActivityService;
+import br.ufpa.labes.spm.service.AutomaticService;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AutomaticActivityDTO;
+import br.ufpa.labes.spm.service.dto.AutomaticDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -20,105 +20,105 @@ import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 /**
- * REST controller for managing {@link br.ufpa.labes.spm.domain.AutomaticActivity}.
+ * REST controller for managing {@link br.ufpa.labes.spm.domain.Automatic}.
  */
 @RestController
 @RequestMapping("/api")
-public class AutomaticActivityResource {
+public class AutomaticResource {
 
-    private final Logger log = LoggerFactory.getLogger(AutomaticActivityResource.class);
+    private final Logger log = LoggerFactory.getLogger(AutomaticResource.class);
 
-    private static final String ENTITY_NAME = "automaticActivity";
+    private static final String ENTITY_NAME = "automatic";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AutomaticActivityService automaticActivityService;
+    private final AutomaticService automaticService;
 
-    public AutomaticActivityResource(AutomaticActivityService automaticActivityService) {
-        this.automaticActivityService = automaticActivityService;
+    public AutomaticResource(AutomaticService automaticService) {
+        this.automaticService = automaticService;
     }
 
     /**
-     * {@code POST  /automatic-activities} : Create a new automaticActivity.
+     * {@code POST  /automatics} : Create a new automatic.
      *
-     * @param automaticActivityDTO the automaticActivityDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new automaticActivityDTO, or with status {@code 400 (Bad Request)} if the automaticActivity has already an ID.
+     * @param automaticDTO the automaticDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new automaticDTO, or with status {@code 400 (Bad Request)} if the automatic has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/automatic-activities")
-    public ResponseEntity<AutomaticActivityDTO> createAutomaticActivity(@RequestBody AutomaticActivityDTO automaticActivityDTO) throws URISyntaxException {
-        log.debug("REST request to save AutomaticActivity : {}", automaticActivityDTO);
-        if (automaticActivityDTO.getId() != null) {
-            throw new BadRequestAlertException("A new automaticActivity cannot already have an ID", ENTITY_NAME, "idexists");
+    @PostMapping("/automatics")
+    public ResponseEntity<AutomaticDTO> createAutomatic(@RequestBody AutomaticDTO automaticDTO) throws URISyntaxException {
+        log.debug("REST request to save Automatic : {}", automaticDTO);
+        if (automaticDTO.getId() != null) {
+            throw new BadRequestAlertException("A new automatic cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AutomaticActivityDTO result = automaticActivityService.save(automaticActivityDTO);
-        return ResponseEntity.created(new URI("/api/automatic-activities/" + result.getId()))
+        AutomaticDTO result = automaticService.save(automaticDTO);
+        return ResponseEntity.created(new URI("/api/automatics/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /automatic-activities} : Updates an existing automaticActivity.
+     * {@code PUT  /automatics} : Updates an existing automatic.
      *
-     * @param automaticActivityDTO the automaticActivityDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated automaticActivityDTO,
-     * or with status {@code 400 (Bad Request)} if the automaticActivityDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the automaticActivityDTO couldn't be updated.
+     * @param automaticDTO the automaticDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated automaticDTO,
+     * or with status {@code 400 (Bad Request)} if the automaticDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the automaticDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/automatic-activities")
-    public ResponseEntity<AutomaticActivityDTO> updateAutomaticActivity(@RequestBody AutomaticActivityDTO automaticActivityDTO) throws URISyntaxException {
-        log.debug("REST request to update AutomaticActivity : {}", automaticActivityDTO);
-        if (automaticActivityDTO.getId() == null) {
+    @PutMapping("/automatics")
+    public ResponseEntity<AutomaticDTO> updateAutomatic(@RequestBody AutomaticDTO automaticDTO) throws URISyntaxException {
+        log.debug("REST request to update Automatic : {}", automaticDTO);
+        if (automaticDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AutomaticActivityDTO result = automaticActivityService.save(automaticActivityDTO);
+        AutomaticDTO result = automaticService.save(automaticDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, automaticActivityDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, automaticDTO.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code GET  /automatic-activities} : get all the automaticActivities.
+     * {@code GET  /automatics} : get all the automatics.
      *
 
      * @param filter the filter of the request.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of automaticActivities in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of automatics in body.
      */
-    @GetMapping("/automatic-activities")
-    public List<AutomaticActivityDTO> getAllAutomaticActivities(@RequestParam(required = false) String filter) {
-        if ("theautomatic-is-null".equals(filter)) {
-            log.debug("REST request to get all AutomaticActivitys where theAutomatic is null");
-            return automaticActivityService.findAllWhereTheAutomaticIsNull();
+    @GetMapping("/automatics")
+    public List<AutomaticDTO> getAllAutomatics(@RequestParam(required = false) String filter) {
+        if ("theplainsuper-is-null".equals(filter)) {
+            log.debug("REST request to get all Automatics where thePlainSuper is null");
+            return automaticService.findAllWhereThePlainSuperIsNull();
         }
-        log.debug("REST request to get all AutomaticActivities");
-        return automaticActivityService.findAll();
+        log.debug("REST request to get all Automatics");
+        return automaticService.findAll();
     }
 
     /**
-     * {@code GET  /automatic-activities/:id} : get the "id" automaticActivity.
+     * {@code GET  /automatics/:id} : get the "id" automatic.
      *
-     * @param id the id of the automaticActivityDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the automaticActivityDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the automaticDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the automaticDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/automatic-activities/{id}")
-    public ResponseEntity<AutomaticActivityDTO> getAutomaticActivity(@PathVariable Long id) {
-        log.debug("REST request to get AutomaticActivity : {}", id);
-        Optional<AutomaticActivityDTO> automaticActivityDTO = automaticActivityService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(automaticActivityDTO);
+    @GetMapping("/automatics/{id}")
+    public ResponseEntity<AutomaticDTO> getAutomatic(@PathVariable Long id) {
+        log.debug("REST request to get Automatic : {}", id);
+        Optional<AutomaticDTO> automaticDTO = automaticService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(automaticDTO);
     }
 
     /**
-     * {@code DELETE  /automatic-activities/:id} : delete the "id" automaticActivity.
+     * {@code DELETE  /automatics/:id} : delete the "id" automatic.
      *
-     * @param id the id of the automaticActivityDTO to delete.
+     * @param id the id of the automaticDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/automatic-activities/{id}")
-    public ResponseEntity<Void> deleteAutomaticActivity(@PathVariable Long id) {
-        log.debug("REST request to delete AutomaticActivity : {}", id);
-        automaticActivityService.delete(id);
+    @DeleteMapping("/automatics/{id}")
+    public ResponseEntity<Void> deleteAutomatic(@PathVariable Long id) {
+        log.debug("REST request to delete Automatic : {}", id);
+        automaticService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

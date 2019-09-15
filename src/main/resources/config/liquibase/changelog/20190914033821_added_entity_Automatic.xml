@@ -9,14 +9,14 @@
     <property name="autoIncrement" value="true"/>
 
     <!--
-        Added the entity AutomaticActivity.
+        Added the entity Automatic.
     -->
     <changeSet id="20190914033821-1" author="jhipster">
-        <createTable tableName="automatic_activity">
+        <createTable tableName="automatic">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>            <column name="the_subroutine_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_automatic_activity_the_subroutine_id" />
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_automatic_the_subroutine_id" />
             </column>
             <column name="the_artifact_id" type="bigint">
                 <constraints nullable="true" />
@@ -42,9 +42,9 @@
     -->
     <changeSet id="20190914033821-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/automatic_activity.csv"
+                  file="config/liquibase/fake-data/automatic.csv"
                   separator=";"
-                  tableName="automatic_activity">
+                  tableName="automatic">
             <column name="id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>

@@ -128,7 +128,7 @@ public class PlainResourceIT {
 
         // Create the Plain
         PlainDTO plainDTO = plainMapper.toDto(plain);
-        restPlainMockMvc.perform(post("/api/plain-activities")
+        restPlainMockMvc.perform(post("/api/plains")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
             .andExpect(status().isCreated());
@@ -152,7 +152,7 @@ public class PlainResourceIT {
         PlainDTO plainDTO = plainMapper.toDto(plain);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restPlainMockMvc.perform(post("/api/plain-activities")
+        restPlainMockMvc.perform(post("/api/plains")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
             .andExpect(status().isBadRequest());
@@ -165,12 +165,12 @@ public class PlainResourceIT {
 
     @Test
     @Transactional
-    public void getAllPlainActivities() throws Exception {
+    public void getAllPlains() throws Exception {
         // Initialize the database
         plainRepository.saveAndFlush(plain);
 
         // Get all the plainList
-        restPlainMockMvc.perform(get("/api/plain-activities?sort=id,desc"))
+        restPlainMockMvc.perform(get("/api/plains?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(plain.getId().intValue())))
@@ -178,7 +178,7 @@ public class PlainResourceIT {
             .andExpect(jsonPath("$.[*].plainStatus").value(hasItem(DEFAULT_PLAIN_STATUS.toString())))
             .andExpect(jsonPath("$.[*].automatic").value(hasItem(DEFAULT_AUTOMATIC.booleanValue())));
     }
-
+    
     @Test
     @Transactional
     public void getPlain() throws Exception {
@@ -186,7 +186,7 @@ public class PlainResourceIT {
         plainRepository.saveAndFlush(plain);
 
         // Get the plain
-        restPlainMockMvc.perform(get("/api/plain-activities/{id}", plain.getId()))
+        restPlainMockMvc.perform(get("/api/plains/{id}", plain.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(plain.getId().intValue()))
@@ -199,7 +199,7 @@ public class PlainResourceIT {
     @Transactional
     public void getNonExistingPlain() throws Exception {
         // Get the plain
-        restPlainMockMvc.perform(get("/api/plain-activities/{id}", Long.MAX_VALUE))
+        restPlainMockMvc.perform(get("/api/plains/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
@@ -221,7 +221,7 @@ public class PlainResourceIT {
             .automatic(UPDATED_AUTOMATIC);
         PlainDTO plainDTO = plainMapper.toDto(updatedPlain);
 
-        restPlainMockMvc.perform(put("/api/plain-activities")
+        restPlainMockMvc.perform(put("/api/plains")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
             .andExpect(status().isOk());
@@ -244,7 +244,7 @@ public class PlainResourceIT {
         PlainDTO plainDTO = plainMapper.toDto(plain);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restPlainMockMvc.perform(put("/api/plain-activities")
+        restPlainMockMvc.perform(put("/api/plains")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
             .andExpect(status().isBadRequest());
@@ -263,7 +263,7 @@ public class PlainResourceIT {
         int databaseSizeBeforeDelete = plainRepository.findAll().size();
 
         // Delete the plain
-        restPlainMockMvc.perform(delete("/api/plain-activities/{id}", plain.getId())
+        restPlainMockMvc.perform(delete("/api/plains/{id}", plain.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 

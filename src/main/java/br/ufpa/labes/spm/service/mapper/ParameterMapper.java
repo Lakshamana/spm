@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Parameter} and its DTO {@link ParameterDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ArtifactParamMapper.class, PrimitiveParamMapper.class, AutomaticActivityMapper.class})
+@Mapper(componentModel = "spring", uses = {ArtifactParamMapper.class, PrimitiveParamMapper.class, AutomaticMapper.class})
 public interface ParameterMapper extends EntityMapper<ParameterDTO, Parameter> {
 
     @Mapping(source = "theArtifactParameterSub.id", target = "theArtifactParameterSubId")

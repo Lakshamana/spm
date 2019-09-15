@@ -1,11 +1,11 @@
 package br.ufpa.labes.spm.web.rest;
 
 import br.ufpa.labes.spm.SpmApp;
-import br.ufpa.labes.spm.domain.AutomaticActivity;
-import br.ufpa.labes.spm.repository.AutomaticActivityRepository;
-import br.ufpa.labes.spm.service.AutomaticActivityService;
-import br.ufpa.labes.spm.service.dto.AutomaticActivityDTO;
-import br.ufpa.labes.spm.service.mapper.AutomaticActivityMapper;
+import br.ufpa.labes.spm.domain.Automatic;
+import br.ufpa.labes.spm.repository.AutomaticRepository;
+import br.ufpa.labes.spm.service.AutomaticService;
+import br.ufpa.labes.spm.service.dto.AutomaticDTO;
+import br.ufpa.labes.spm.service.mapper.AutomaticMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,20 +32,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link AutomaticActivityResource} REST controller.
+ * Integration tests for the {@link AutomaticResource} REST controller.
  */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
-public class AutomaticActivityResourceIT {
+public class AutomaticResourceIT {
 
     @Autowired
-    private AutomaticActivityRepository automaticActivityRepository;
+    private AutomaticRepository automaticRepository;
 
     @Autowired
-    private AutomaticActivityMapper automaticActivityMapper;
+    private AutomaticMapper automaticMapper;
 
     @Autowired
-    private AutomaticActivityService automaticActivityService;
+    private AutomaticService automaticService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -62,15 +62,15 @@ public class AutomaticActivityResourceIT {
     @Autowired
     private Validator validator;
 
-    private MockMvc restAutomaticActivityMockMvc;
+    private MockMvc restAutomaticMockMvc;
 
-    private AutomaticActivity automaticActivity;
+    private Automatic automatic;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AutomaticActivityResource automaticActivityResource = new AutomaticActivityResource(automaticActivityService);
-        this.restAutomaticActivityMockMvc = MockMvcBuilders.standaloneSetup(automaticActivityResource)
+        final AutomaticResource automaticResource = new AutomaticResource(automaticService);
+        this.restAutomaticMockMvc = MockMvcBuilders.standaloneSetup(automaticResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
@@ -84,9 +84,9 @@ public class AutomaticActivityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static AutomaticActivity createEntity(EntityManager em) {
-        AutomaticActivity automaticActivity = new AutomaticActivity();
-        return automaticActivity;
+    public static Automatic createEntity(EntityManager em) {
+        Automatic automatic = new Automatic();
+        return automatic;
     }
     /**
      * Create an updated entity for this test.
@@ -94,186 +94,186 @@ public class AutomaticActivityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static AutomaticActivity createUpdatedEntity(EntityManager em) {
-        AutomaticActivity automaticActivity = new AutomaticActivity();
-        return automaticActivity;
+    public static Automatic createUpdatedEntity(EntityManager em) {
+        Automatic automatic = new Automatic();
+        return automatic;
     }
 
     @BeforeEach
     public void initTest() {
-        automaticActivity = createEntity(em);
+        automatic = createEntity(em);
     }
 
     @Test
     @Transactional
-    public void createAutomaticActivity() throws Exception {
-        int databaseSizeBeforeCreate = automaticActivityRepository.findAll().size();
+    public void createAutomatic() throws Exception {
+        int databaseSizeBeforeCreate = automaticRepository.findAll().size();
 
-        // Create the AutomaticActivity
-        AutomaticActivityDTO automaticActivityDTO = automaticActivityMapper.toDto(automaticActivity);
-        restAutomaticActivityMockMvc.perform(post("/api/automatic-activities")
+        // Create the Automatic
+        AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
+        restAutomaticMockMvc.perform(post("/api/automatics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
             .andExpect(status().isCreated());
 
-        // Validate the AutomaticActivity in the database
-        List<AutomaticActivity> automaticActivityList = automaticActivityRepository.findAll();
-        assertThat(automaticActivityList).hasSize(databaseSizeBeforeCreate + 1);
-        AutomaticActivity testAutomaticActivity = automaticActivityList.get(automaticActivityList.size() - 1);
+        // Validate the Automatic in the database
+        List<Automatic> automaticList = automaticRepository.findAll();
+        assertThat(automaticList).hasSize(databaseSizeBeforeCreate + 1);
+        Automatic testAutomatic = automaticList.get(automaticList.size() - 1);
     }
 
     @Test
     @Transactional
-    public void createAutomaticActivityWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = automaticActivityRepository.findAll().size();
+    public void createAutomaticWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = automaticRepository.findAll().size();
 
-        // Create the AutomaticActivity with an existing ID
-        automaticActivity.setId(1L);
-        AutomaticActivityDTO automaticActivityDTO = automaticActivityMapper.toDto(automaticActivity);
+        // Create the Automatic with an existing ID
+        automatic.setId(1L);
+        AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restAutomaticActivityMockMvc.perform(post("/api/automatic-activities")
+        restAutomaticMockMvc.perform(post("/api/automatics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the AutomaticActivity in the database
-        List<AutomaticActivity> automaticActivityList = automaticActivityRepository.findAll();
-        assertThat(automaticActivityList).hasSize(databaseSizeBeforeCreate);
+        // Validate the Automatic in the database
+        List<Automatic> automaticList = automaticRepository.findAll();
+        assertThat(automaticList).hasSize(databaseSizeBeforeCreate);
     }
 
 
     @Test
     @Transactional
-    public void getAllAutomaticActivities() throws Exception {
+    public void getAllAutomatics() throws Exception {
         // Initialize the database
-        automaticActivityRepository.saveAndFlush(automaticActivity);
+        automaticRepository.saveAndFlush(automatic);
 
-        // Get all the automaticActivityList
-        restAutomaticActivityMockMvc.perform(get("/api/automatic-activities?sort=id,desc"))
+        // Get all the automaticList
+        restAutomaticMockMvc.perform(get("/api/automatics?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(automaticActivity.getId().intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(automatic.getId().intValue())));
     }
     
     @Test
     @Transactional
-    public void getAutomaticActivity() throws Exception {
+    public void getAutomatic() throws Exception {
         // Initialize the database
-        automaticActivityRepository.saveAndFlush(automaticActivity);
+        automaticRepository.saveAndFlush(automatic);
 
-        // Get the automaticActivity
-        restAutomaticActivityMockMvc.perform(get("/api/automatic-activities/{id}", automaticActivity.getId()))
+        // Get the automatic
+        restAutomaticMockMvc.perform(get("/api/automatics/{id}", automatic.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(automaticActivity.getId().intValue()));
+            .andExpect(jsonPath("$.id").value(automatic.getId().intValue()));
     }
 
     @Test
     @Transactional
-    public void getNonExistingAutomaticActivity() throws Exception {
-        // Get the automaticActivity
-        restAutomaticActivityMockMvc.perform(get("/api/automatic-activities/{id}", Long.MAX_VALUE))
+    public void getNonExistingAutomatic() throws Exception {
+        // Get the automatic
+        restAutomaticMockMvc.perform(get("/api/automatics/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    public void updateAutomaticActivity() throws Exception {
+    public void updateAutomatic() throws Exception {
         // Initialize the database
-        automaticActivityRepository.saveAndFlush(automaticActivity);
+        automaticRepository.saveAndFlush(automatic);
 
-        int databaseSizeBeforeUpdate = automaticActivityRepository.findAll().size();
+        int databaseSizeBeforeUpdate = automaticRepository.findAll().size();
 
-        // Update the automaticActivity
-        AutomaticActivity updatedAutomaticActivity = automaticActivityRepository.findById(automaticActivity.getId()).get();
-        // Disconnect from session so that the updates on updatedAutomaticActivity are not directly saved in db
-        em.detach(updatedAutomaticActivity);
-        AutomaticActivityDTO automaticActivityDTO = automaticActivityMapper.toDto(updatedAutomaticActivity);
+        // Update the automatic
+        Automatic updatedAutomatic = automaticRepository.findById(automatic.getId()).get();
+        // Disconnect from session so that the updates on updatedAutomatic are not directly saved in db
+        em.detach(updatedAutomatic);
+        AutomaticDTO automaticDTO = automaticMapper.toDto(updatedAutomatic);
 
-        restAutomaticActivityMockMvc.perform(put("/api/automatic-activities")
+        restAutomaticMockMvc.perform(put("/api/automatics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
             .andExpect(status().isOk());
 
-        // Validate the AutomaticActivity in the database
-        List<AutomaticActivity> automaticActivityList = automaticActivityRepository.findAll();
-        assertThat(automaticActivityList).hasSize(databaseSizeBeforeUpdate);
-        AutomaticActivity testAutomaticActivity = automaticActivityList.get(automaticActivityList.size() - 1);
+        // Validate the Automatic in the database
+        List<Automatic> automaticList = automaticRepository.findAll();
+        assertThat(automaticList).hasSize(databaseSizeBeforeUpdate);
+        Automatic testAutomatic = automaticList.get(automaticList.size() - 1);
     }
 
     @Test
     @Transactional
-    public void updateNonExistingAutomaticActivity() throws Exception {
-        int databaseSizeBeforeUpdate = automaticActivityRepository.findAll().size();
+    public void updateNonExistingAutomatic() throws Exception {
+        int databaseSizeBeforeUpdate = automaticRepository.findAll().size();
 
-        // Create the AutomaticActivity
-        AutomaticActivityDTO automaticActivityDTO = automaticActivityMapper.toDto(automaticActivity);
+        // Create the Automatic
+        AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restAutomaticActivityMockMvc.perform(put("/api/automatic-activities")
+        restAutomaticMockMvc.perform(put("/api/automatics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the AutomaticActivity in the database
-        List<AutomaticActivity> automaticActivityList = automaticActivityRepository.findAll();
-        assertThat(automaticActivityList).hasSize(databaseSizeBeforeUpdate);
+        // Validate the Automatic in the database
+        List<Automatic> automaticList = automaticRepository.findAll();
+        assertThat(automaticList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
-    public void deleteAutomaticActivity() throws Exception {
+    public void deleteAutomatic() throws Exception {
         // Initialize the database
-        automaticActivityRepository.saveAndFlush(automaticActivity);
+        automaticRepository.saveAndFlush(automatic);
 
-        int databaseSizeBeforeDelete = automaticActivityRepository.findAll().size();
+        int databaseSizeBeforeDelete = automaticRepository.findAll().size();
 
-        // Delete the automaticActivity
-        restAutomaticActivityMockMvc.perform(delete("/api/automatic-activities/{id}", automaticActivity.getId())
+        // Delete the automatic
+        restAutomaticMockMvc.perform(delete("/api/automatics/{id}", automatic.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<AutomaticActivity> automaticActivityList = automaticActivityRepository.findAll();
-        assertThat(automaticActivityList).hasSize(databaseSizeBeforeDelete - 1);
+        List<Automatic> automaticList = automaticRepository.findAll();
+        assertThat(automaticList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test
     @Transactional
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AutomaticActivity.class);
-        AutomaticActivity automaticActivity1 = new AutomaticActivity();
-        automaticActivity1.setId(1L);
-        AutomaticActivity automaticActivity2 = new AutomaticActivity();
-        automaticActivity2.setId(automaticActivity1.getId());
-        assertThat(automaticActivity1).isEqualTo(automaticActivity2);
-        automaticActivity2.setId(2L);
-        assertThat(automaticActivity1).isNotEqualTo(automaticActivity2);
-        automaticActivity1.setId(null);
-        assertThat(automaticActivity1).isNotEqualTo(automaticActivity2);
+        TestUtil.equalsVerifier(Automatic.class);
+        Automatic automatic1 = new Automatic();
+        automatic1.setId(1L);
+        Automatic automatic2 = new Automatic();
+        automatic2.setId(automatic1.getId());
+        assertThat(automatic1).isEqualTo(automatic2);
+        automatic2.setId(2L);
+        assertThat(automatic1).isNotEqualTo(automatic2);
+        automatic1.setId(null);
+        assertThat(automatic1).isNotEqualTo(automatic2);
     }
 
     @Test
     @Transactional
     public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AutomaticActivityDTO.class);
-        AutomaticActivityDTO automaticActivityDTO1 = new AutomaticActivityDTO();
-        automaticActivityDTO1.setId(1L);
-        AutomaticActivityDTO automaticActivityDTO2 = new AutomaticActivityDTO();
-        assertThat(automaticActivityDTO1).isNotEqualTo(automaticActivityDTO2);
-        automaticActivityDTO2.setId(automaticActivityDTO1.getId());
-        assertThat(automaticActivityDTO1).isEqualTo(automaticActivityDTO2);
-        automaticActivityDTO2.setId(2L);
-        assertThat(automaticActivityDTO1).isNotEqualTo(automaticActivityDTO2);
-        automaticActivityDTO1.setId(null);
-        assertThat(automaticActivityDTO1).isNotEqualTo(automaticActivityDTO2);
+        TestUtil.equalsVerifier(AutomaticDTO.class);
+        AutomaticDTO automaticDTO1 = new AutomaticDTO();
+        automaticDTO1.setId(1L);
+        AutomaticDTO automaticDTO2 = new AutomaticDTO();
+        assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
+        automaticDTO2.setId(automaticDTO1.getId());
+        assertThat(automaticDTO1).isEqualTo(automaticDTO2);
+        automaticDTO2.setId(2L);
+        assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
+        automaticDTO1.setId(null);
+        assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
     }
 
     @Test
     @Transactional
     public void testEntityFromId() {
-        assertThat(automaticActivityMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(automaticActivityMapper.fromId(null)).isNull();
+        assertThat(automaticMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(automaticMapper.fromId(null)).isNull();
     }
 }

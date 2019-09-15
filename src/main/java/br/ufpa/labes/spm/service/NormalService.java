@@ -76,6 +76,21 @@ public class NormalService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
+    /**
+    *  Get all the normals where ThePlainSuper is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true) 
+    public List<NormalDTO> findAllWhereThePlainSuperIsNull() {
+        log.debug("Request to get all normals where ThePlainSuper is null");
+        return StreamSupport
+            .stream(normalRepository.findAll().spliterator(), false)
+            .filter(normal -> normal.getThePlainSuper() == null)
+            .map(normalMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
     /**
      * Get one normal by id.
      *

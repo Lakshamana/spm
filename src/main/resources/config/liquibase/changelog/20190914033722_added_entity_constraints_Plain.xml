@@ -7,18 +7,24 @@
         Added the constraints for entity Plain.
     -->
     <changeSet id="20190914033722-2" author="jhipster">
-
+        
         <addForeignKeyConstraint baseColumnNames="the_enaction_description_id"
                                  baseTableName="plain"
                                  constraintName="fk_plain_the_enaction_description_id"
                                  referencedColumnNames="id"
                                  referencedTableName="enaction_description"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_automatic_activity_sub_id"
+        <addForeignKeyConstraint baseColumnNames="the_automatic_sub_id"
                                  baseTableName="plain"
-                                 constraintName="fk_plain_the_automatic_activity_sub_id"
+                                 constraintName="fk_plain_the_automatic_sub_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="automatic_activity"/>
+                                 referencedTableName="automatic"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_normal_sub_id"
+                                 baseTableName="plain"
+                                 constraintName="fk_plain_the_normal_sub_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="normal"/>
 
     </changeSet>
 </databaseChangeLog>

@@ -35,7 +35,7 @@ public class Parameter implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theParameters")
-    private AutomaticActivity theAutomatic;
+    private Automatic theAutomatic;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -85,17 +85,17 @@ public class Parameter implements Serializable {
         this.thePrimitiveParamSub = primitiveParam;
     }
 
-    public AutomaticActivity getTheAutomatic() {
+    public Automatic getTheAutomatic() {
         return theAutomatic;
     }
 
-    public Parameter theAutomatic(AutomaticActivity automaticActivity) {
-        this.theAutomatic = automaticActivity;
+    public Parameter theAutomatic(Automatic automatic) {
+        this.theAutomatic = automatic;
         return this;
     }
 
-    public void setTheAutomatic(AutomaticActivity automaticActivity) {
-        this.theAutomatic = automaticActivity;
+    public void setTheAutomatic(Automatic automatic) {
+        this.theAutomatic = automatic;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -24,7 +24,7 @@
                                  baseTableName="parameter"
                                  constraintName="fk_parameter_the_automatic_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="automatic_activity"/>
+                                 referencedTableName="automatic"/>
 
     </changeSet>
 </databaseChangeLog>

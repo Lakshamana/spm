@@ -58,6 +58,10 @@ public class Normal implements Serializable {
     @JsonIgnore
     private ResourceEvent theResourceEvent;
 
+    @OneToOne(mappedBy = "theNormalSub")
+    @JsonIgnore
+    private Plain thePlainSuper;
+
     @OneToMany(mappedBy = "inInvolvedArtifacts")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<InvolvedArtifact> theInvolvedArtifactToNormals = new HashSet<>();
@@ -235,6 +239,19 @@ public class Normal implements Serializable {
 
     public void setTheResourceEvent(ResourceEvent resourceEvent) {
         this.theResourceEvent = resourceEvent;
+    }
+
+    public Plain getThePlainSuper() {
+        return thePlainSuper;
+    }
+
+    public Normal thePlainSuper(Plain plain) {
+        this.thePlainSuper = plain;
+        return this;
+    }
+
+    public void setThePlainSuper(Plain plain) {
+        this.thePlainSuper = plain;
     }
 
     public Set<InvolvedArtifact> getTheInvolvedArtifactToNormals() {

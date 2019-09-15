@@ -27,9 +27,17 @@
         },
         {
             "relationshipType": "one-to-one",
-            "otherEntityName": "automaticActivity",
-            "otherEntityRelationshipName": "theAutomatic",
-            "relationshipName": "theAutomaticActivitySub",
+            "otherEntityName": "automatic",
+            "otherEntityRelationshipName": "thePlainSuper",
+            "relationshipName": "theAutomaticSub",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "normal",
+            "otherEntityRelationshipName": "thePlainSuper",
+            "relationshipName": "theNormalSub",
             "otherEntityField": "id",
             "ownerSide": true
         },

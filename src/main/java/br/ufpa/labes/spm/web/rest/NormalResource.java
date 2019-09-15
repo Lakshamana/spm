@@ -92,6 +92,10 @@ public class NormalResource {
             log.debug("REST request to get all Normals where theResourceEvent is null");
             return normalService.findAllWhereTheResourceEventIsNull();
         }
+        if ("theplainsuper-is-null".equals(filter)) {
+            log.debug("REST request to get all Normals where thePlainSuper is null");
+            return normalService.findAllWhereThePlainSuperIsNull();
+        }
         log.debug("REST request to get all Normals");
         return normalService.findAll();
     }

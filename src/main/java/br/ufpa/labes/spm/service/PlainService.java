@@ -48,13 +48,13 @@ public class PlainService {
     }
 
     /**
-     * Get all the plainActivities.
+     * Get all the plains.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public List<PlainDTO> findAll() {
-        log.debug("Request to get all PlainActivities");
+        log.debug("Request to get all Plains");
         return plainRepository.findAll().stream()
             .map(plainMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
@@ -63,12 +63,12 @@ public class PlainService {
 
 
     /**
-    *  Get all the plainActivities where TheActivitySuper is {@code null}.
+    *  Get all the plains where TheActivitySuper is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) 
     public List<PlainDTO> findAllWhereTheActivitySuperIsNull() {
-        log.debug("Request to get all plainActivities where TheActivitySuper is null");
+        log.debug("Request to get all plains where TheActivitySuper is null");
         return StreamSupport
             .stream(plainRepository.findAll().spliterator(), false)
             .filter(plain -> plain.getTheActivitySuper() == null)

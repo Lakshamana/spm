@@ -19,7 +19,7 @@ public interface SubroutineMapper extends EntityMapper<SubroutineDTO, Subroutine
     @Mapping(source = "theClassMethodCallSubId", target = "theClassMethodCallSub")
     @Mapping(source = "theScriptSubId", target = "theScriptSub")
     @Mapping(source = "theArtifactTypeId", target = "theArtifactType")
-    @Mapping(target = "theAutomaticActivity", ignore = true)
+    @Mapping(target = "theAutomatic", ignore = true)
     @Mapping(target = "theToolParameters", ignore = true)
     @Mapping(target = "removeTheToolParameter", ignore = true)
     Subroutine toEntity(SubroutineDTO subroutineDTO);

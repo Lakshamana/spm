@@ -41,7 +41,7 @@ public class Subroutine implements Serializable {
 
     @OneToOne(mappedBy = "theSubroutine")
     @JsonIgnore
-    private AutomaticActivity theAutomaticActivity;
+    private Automatic theAutomatic;
 
     @OneToMany(mappedBy = "theSubroutine")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -108,17 +108,17 @@ public class Subroutine implements Serializable {
         this.theArtifactType = artifactType;
     }
 
-    public AutomaticActivity getTheAutomaticActivity() {
-        return theAutomaticActivity;
+    public Automatic getTheAutomatic() {
+        return theAutomatic;
     }
 
-    public Subroutine theAutomaticActivity(AutomaticActivity automaticActivity) {
-        this.theAutomaticActivity = automaticActivity;
+    public Subroutine theAutomatic(Automatic automatic) {
+        this.theAutomatic = automatic;
         return this;
     }
 
-    public void setTheAutomaticActivity(AutomaticActivity automaticActivity) {
-        this.theAutomaticActivity = automaticActivity;
+    public void setTheAutomatic(Automatic automatic) {
+        this.theAutomatic = automatic;
     }
 
     public Set<ToolParameter> getTheToolParameters() {

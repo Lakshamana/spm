@@ -1,11 +1,11 @@
 {
-    "name": "AutomaticActivity",
+    "name": "Automatic",
     "fields": [],
     "relationships": [
         {
             "relationshipType": "one-to-one",
             "otherEntityName": "subroutine",
-            "otherEntityRelationshipName": "theAutomaticActivity",
+            "otherEntityRelationshipName": "theAutomatic",
             "relationshipName": "theSubroutine",
             "otherEntityField": "id",
             "ownerSide": true
@@ -13,8 +13,8 @@
         {
             "relationshipType": "one-to-one",
             "otherEntityName": "plain",
-            "otherEntityRelationshipName": "theAutomaticActivitySub",
-            "relationshipName": "theAutomatic",
+            "otherEntityRelationshipName": "theAutomaticSub",
+            "relationshipName": "thePlainSuper",
             "ownerSide": false
         },
         {
@@ -32,7 +32,7 @@
         }
     ],
     "changelogDate": "20190914033821",
-    "entityTableName": "automatic_activity",
+    "entityTableName": "automatic",
     "dto": "mapstruct",
     "pagination": "no",
     "service": "serviceClass",

@@ -3,9 +3,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A DTO for the {@link br.ufpa.labes.spm.domain.AutomaticActivity} entity.
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Automatic} entity.
  */
-public class AutomaticActivityDTO implements Serializable {
+public class AutomaticDTO implements Serializable {
 
     private Long id;
 
@@ -47,11 +47,11 @@ public class AutomaticActivityDTO implements Serializable {
             return false;
         }
 
-        AutomaticActivityDTO automaticActivityDTO = (AutomaticActivityDTO) o;
-        if (automaticActivityDTO.getId() == null || getId() == null) {
+        AutomaticDTO automaticDTO = (AutomaticDTO) o;
+        if (automaticDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), automaticActivityDTO.getId());
+        return Objects.equals(getId(), automaticDTO.getId());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class AutomaticActivityDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "AutomaticActivityDTO{" +
+        return "AutomaticDTO{" +
             "id=" + getId() +
             ", theSubroutine=" + getTheSubroutineId() +
             ", theArtifact=" + getTheArtifactId() +

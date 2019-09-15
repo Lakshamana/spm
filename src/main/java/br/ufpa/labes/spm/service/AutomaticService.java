@@ -1,9 +1,9 @@
 package br.ufpa.labes.spm.service;
 
-import br.ufpa.labes.spm.domain.AutomaticActivity;
-import br.ufpa.labes.spm.repository.AutomaticActivityRepository;
-import br.ufpa.labes.spm.service.dto.AutomaticActivityDTO;
-import br.ufpa.labes.spm.service.mapper.AutomaticActivityMapper;
+import br.ufpa.labes.spm.domain.Automatic;
+import br.ufpa.labes.spm.repository.AutomaticRepository;
+import br.ufpa.labes.spm.service.dto.AutomaticDTO;
+import br.ufpa.labes.spm.service.mapper.AutomaticMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,85 +17,85 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * Service Implementation for managing {@link AutomaticActivity}.
+ * Service Implementation for managing {@link Automatic}.
  */
 @Service
 @Transactional
-public class AutomaticActivityService {
+public class AutomaticService {
 
-    private final Logger log = LoggerFactory.getLogger(AutomaticActivityService.class);
+    private final Logger log = LoggerFactory.getLogger(AutomaticService.class);
 
-    private final AutomaticActivityRepository automaticActivityRepository;
+    private final AutomaticRepository automaticRepository;
 
-    private final AutomaticActivityMapper automaticActivityMapper;
+    private final AutomaticMapper automaticMapper;
 
-    public AutomaticActivityService(AutomaticActivityRepository automaticActivityRepository, AutomaticActivityMapper automaticActivityMapper) {
-        this.automaticActivityRepository = automaticActivityRepository;
-        this.automaticActivityMapper = automaticActivityMapper;
+    public AutomaticService(AutomaticRepository automaticRepository, AutomaticMapper automaticMapper) {
+        this.automaticRepository = automaticRepository;
+        this.automaticMapper = automaticMapper;
     }
 
     /**
-     * Save a automaticActivity.
+     * Save a automatic.
      *
-     * @param automaticActivityDTO the entity to save.
+     * @param automaticDTO the entity to save.
      * @return the persisted entity.
      */
-    public AutomaticActivityDTO save(AutomaticActivityDTO automaticActivityDTO) {
-        log.debug("Request to save AutomaticActivity : {}", automaticActivityDTO);
-        AutomaticActivity automaticActivity = automaticActivityMapper.toEntity(automaticActivityDTO);
-        automaticActivity = automaticActivityRepository.save(automaticActivity);
-        return automaticActivityMapper.toDto(automaticActivity);
+    public AutomaticDTO save(AutomaticDTO automaticDTO) {
+        log.debug("Request to save Automatic : {}", automaticDTO);
+        Automatic automatic = automaticMapper.toEntity(automaticDTO);
+        automatic = automaticRepository.save(automatic);
+        return automaticMapper.toDto(automatic);
     }
 
     /**
-     * Get all the automaticActivities.
+     * Get all the automatics.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<AutomaticActivityDTO> findAll() {
-        log.debug("Request to get all AutomaticActivities");
-        return automaticActivityRepository.findAll().stream()
-            .map(automaticActivityMapper::toDto)
+    public List<AutomaticDTO> findAll() {
+        log.debug("Request to get all Automatics");
+        return automaticRepository.findAll().stream()
+            .map(automaticMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
 
     /**
-    *  Get all the automaticActivities where TheAutomatic is {@code null}.
+    *  Get all the automatics where ThePlainSuper is {@code null}.
      *  @return the list of entities.
      */
     @Transactional(readOnly = true) 
-    public List<AutomaticActivityDTO> findAllWhereTheAutomaticIsNull() {
-        log.debug("Request to get all automaticActivities where TheAutomatic is null");
+    public List<AutomaticDTO> findAllWhereThePlainSuperIsNull() {
+        log.debug("Request to get all automatics where ThePlainSuper is null");
         return StreamSupport
-            .stream(automaticActivityRepository.findAll().spliterator(), false)
-            .filter(automaticActivity -> automaticActivity.getTheAutomatic() == null)
-            .map(automaticActivityMapper::toDto)
+            .stream(automaticRepository.findAll().spliterator(), false)
+            .filter(automatic -> automatic.getThePlainSuper() == null)
+            .map(automaticMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
-     * Get one automaticActivity by id.
+     * Get one automatic by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<AutomaticActivityDTO> findOne(Long id) {
-        log.debug("Request to get AutomaticActivity : {}", id);
-        return automaticActivityRepository.findById(id)
-            .map(automaticActivityMapper::toDto);
+    public Optional<AutomaticDTO> findOne(Long id) {
+        log.debug("Request to get Automatic : {}", id);
+        return automaticRepository.findById(id)
+            .map(automaticMapper::toDto);
     }
 
     /**
-     * Delete the automaticActivity by id.
+     * Delete the automatic by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete AutomaticActivity : {}", id);
-        automaticActivityRepository.deleteById(id);
+        log.debug("Request to delete Automatic : {}", id);
+        automaticRepository.deleteById(id);
     }
 }

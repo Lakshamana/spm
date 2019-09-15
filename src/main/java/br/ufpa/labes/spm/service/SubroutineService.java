@@ -63,15 +63,15 @@ public class SubroutineService {
 
 
     /**
-    *  Get all the subroutines where TheAutomaticActivity is {@code null}.
+    *  Get all the subroutines where TheAutomatic is {@code null}.
      *  @return the list of entities.
      */
     @Transactional(readOnly = true) 
-    public List<SubroutineDTO> findAllWhereTheAutomaticActivityIsNull() {
-        log.debug("Request to get all subroutines where TheAutomaticActivity is null");
+    public List<SubroutineDTO> findAllWhereTheAutomaticIsNull() {
+        log.debug("Request to get all subroutines where TheAutomatic is null");
         return StreamSupport
             .stream(subroutineRepository.findAll().spliterator(), false)
-            .filter(subroutine -> subroutine.getTheAutomaticActivity() == null)
+            .filter(subroutine -> subroutine.getTheAutomatic() == null)
             .map(subroutineMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

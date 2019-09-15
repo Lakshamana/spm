@@ -88,9 +88,9 @@ public class SubroutineResource {
      */
     @GetMapping("/subroutines")
     public List<SubroutineDTO> getAllSubroutines(@RequestParam(required = false) String filter) {
-        if ("theautomaticactivity-is-null".equals(filter)) {
-            log.debug("REST request to get all Subroutines where theAutomaticActivity is null");
-            return subroutineService.findAllWhereTheAutomaticActivityIsNull();
+        if ("theautomatic-is-null".equals(filter)) {
+            log.debug("REST request to get all Subroutines where theAutomatic is null");
+            return subroutineService.findAllWhereTheAutomaticIsNull();
         }
         log.debug("REST request to get all Subroutines");
         return subroutineService.findAll();

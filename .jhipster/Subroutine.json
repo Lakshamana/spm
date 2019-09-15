@@ -32,9 +32,9 @@
         },
         {
             "relationshipType": "one-to-one",
-            "otherEntityName": "automaticActivity",
+            "otherEntityName": "automatic",
             "otherEntityRelationshipName": "theSubroutine",
-            "relationshipName": "theAutomaticActivity",
+            "relationshipName": "theAutomatic",
             "ownerSide": false
         },
         {

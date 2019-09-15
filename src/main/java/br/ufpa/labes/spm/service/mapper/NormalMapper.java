@@ -17,6 +17,7 @@ public interface NormalMapper extends EntityMapper<NormalDTO, Normal> {
     @Mapping(target = "theReservations", ignore = true)
     @Mapping(target = "removeTheReservation", ignore = true)
     @Mapping(target = "theResourceEvent", ignore = true)
+    @Mapping(target = "thePlainSuper", ignore = true)
     @Mapping(target = "theInvolvedArtifactToNormals", ignore = true)
     @Mapping(target = "removeTheInvolvedArtifactToNormal", ignore = true)
     @Mapping(target = "theInvolvedArtifactsFromNormals", ignore = true)

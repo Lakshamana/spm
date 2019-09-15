@@ -57,7 +57,7 @@ public class Artifact implements Serializable {
 
     @OneToMany(mappedBy = "theArtifact")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<AutomaticActivity> theAutomatics = new HashSet<>();
+    private Set<Automatic> theAutomatics = new HashSet<>();
 
     @OneToMany(mappedBy = "theArtifact")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -258,29 +258,29 @@ public class Artifact implements Serializable {
         this.theArtifactParams = artifactParams;
     }
 
-    public Set<AutomaticActivity> getTheAutomatics() {
+    public Set<Automatic> getTheAutomatics() {
         return theAutomatics;
     }
 
-    public Artifact theAutomatics(Set<AutomaticActivity> automaticActivities) {
-        this.theAutomatics = automaticActivities;
+    public Artifact theAutomatics(Set<Automatic> automatics) {
+        this.theAutomatics = automatics;
         return this;
     }
 
-    public Artifact addTheAutomatic(AutomaticActivity automaticActivity) {
-        this.theAutomatics.add(automaticActivity);
-        automaticActivity.setTheArtifact(this);
+    public Artifact addTheAutomatic(Automatic automatic) {
+        this.theAutomatics.add(automatic);
+        automatic.setTheArtifact(this);
         return this;
     }
 
-    public Artifact removeTheAutomatic(AutomaticActivity automaticActivity) {
-        this.theAutomatics.remove(automaticActivity);
-        automaticActivity.setTheArtifact(null);
+    public Artifact removeTheAutomatic(Automatic automatic) {
+        this.theAutomatics.remove(automatic);
+        automatic.setTheArtifact(null);
         return this;
     }
 
-    public void setTheAutomatics(Set<AutomaticActivity> automaticActivities) {
-        this.theAutomatics = automaticActivities;
+    public void setTheAutomatics(Set<Automatic> automatics) {
+        this.theAutomatics = automatics;
     }
 
     public Set<ArtifactMetric> getTheArtifactMetrics() {

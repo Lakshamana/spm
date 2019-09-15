@@ -26,7 +26,7 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "automaticActivity",
+            "otherEntityName": "automatic",
             "otherEntityRelationshipName": "theParameters",
             "relationshipName": "theAutomatic",
             "otherEntityField": "id"

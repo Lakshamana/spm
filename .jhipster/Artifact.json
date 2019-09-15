@@ -49,7 +49,7 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "automaticActivity",
+            "otherEntityName": "automatic",
             "otherEntityRelationshipName": "theArtifact",
             "relationshipName": "theAutomatic"
         },

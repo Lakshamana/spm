@@ -8,15 +8,17 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Plain} and its DTO {@link PlainDTO}.
  */
-@Mapper(componentModel = "spring", uses = {EnactionDescriptionMapper.class, AutomaticActivityMapper.class})
+@Mapper(componentModel = "spring", uses = {EnactionDescriptionMapper.class, AutomaticMapper.class, NormalMapper.class})
 public interface PlainMapper extends EntityMapper<PlainDTO, Plain> {
 
     @Mapping(source = "theEnactionDescription.id", target = "theEnactionDescriptionId")
-    @Mapping(source = "theAutomaticActivitySub.id", target = "theAutomaticActivitySubId")
+    @Mapping(source = "theAutomaticSub.id", target = "theAutomaticSubId")
+    @Mapping(source = "theNormalSub.id", target = "theNormalSubId")
     PlainDTO toDto(Plain plain);
 
     @Mapping(source = "theEnactionDescriptionId", target = "theEnactionDescription")
-    @Mapping(source = "theAutomaticActivitySubId", target = "theAutomaticActivitySub")
+    @Mapping(source = "theAutomaticSubId", target = "theAutomaticSub")
+    @Mapping(source = "theNormalSubId", target = "theNormalSub")
     @Mapping(target = "theGlobalActivityEvents", ignore = true)
     @Mapping(target = "removeTheGlobalActivityEvent", ignore = true)
     @Mapping(target = "theActivitySuper", ignore = true)

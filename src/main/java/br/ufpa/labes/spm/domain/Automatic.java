@@ -11,12 +11,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A AutomaticActivity.
+ * A Automatic.
  */
 @Entity
-@Table(name = "automatic_activity")
+@Table(name = "automatic")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class AutomaticActivity implements Serializable {
+public class Automatic implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,9 +28,9 @@ public class AutomaticActivity implements Serializable {
     @JoinColumn(unique = true)
     private Subroutine theSubroutine;
 
-    @OneToOne(mappedBy = "theAutomaticActivitySub")
+    @OneToOne(mappedBy = "theAutomaticSub")
     @JsonIgnore
-    private Plain theAutomatic;
+    private Plain thePlainSuper;
 
     @ManyToOne
     @JsonIgnoreProperties("theAutomatics")
@@ -53,7 +53,7 @@ public class AutomaticActivity implements Serializable {
         return theSubroutine;
     }
 
-    public AutomaticActivity theSubroutine(Subroutine subroutine) {
+    public Automatic theSubroutine(Subroutine subroutine) {
         this.theSubroutine = subroutine;
         return this;
     }
@@ -62,24 +62,24 @@ public class AutomaticActivity implements Serializable {
         this.theSubroutine = subroutine;
     }
 
-    public Plain getTheAutomatic() {
-        return theAutomatic;
+    public Plain getThePlainSuper() {
+        return thePlainSuper;
     }
 
-    public AutomaticActivity theAutomatic(Plain plain) {
-        this.theAutomatic = plain;
+    public Automatic thePlainSuper(Plain plain) {
+        this.thePlainSuper = plain;
         return this;
     }
 
-    public void setTheAutomatic(Plain plain) {
-        this.theAutomatic = plain;
+    public void setThePlainSuper(Plain plain) {
+        this.thePlainSuper = plain;
     }
 
     public Artifact getTheArtifact() {
         return theArtifact;
     }
 
-    public AutomaticActivity theArtifact(Artifact artifact) {
+    public Automatic theArtifact(Artifact artifact) {
         this.theArtifact = artifact;
         return this;
     }
@@ -92,18 +92,18 @@ public class AutomaticActivity implements Serializable {
         return theParameters;
     }
 
-    public AutomaticActivity theParameters(Set<Parameter> parameters) {
+    public Automatic theParameters(Set<Parameter> parameters) {
         this.theParameters = parameters;
         return this;
     }
 
-    public AutomaticActivity addTheParameters(Parameter parameter) {
+    public Automatic addTheParameters(Parameter parameter) {
         this.theParameters.add(parameter);
         parameter.setTheAutomatic(this);
         return this;
     }
 
-    public AutomaticActivity removeTheParameters(Parameter parameter) {
+    public Automatic removeTheParameters(Parameter parameter) {
         this.theParameters.remove(parameter);
         parameter.setTheAutomatic(null);
         return this;
@@ -119,10 +119,10 @@ public class AutomaticActivity implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AutomaticActivity)) {
+        if (!(o instanceof Automatic)) {
             return false;
         }
-        return id != null && id.equals(((AutomaticActivity) o).id);
+        return id != null && id.equals(((Automatic) o).id);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class AutomaticActivity implements Serializable {
 
     @Override
     public String toString() {
-        return "AutomaticActivity{" +
+        return "Automatic{" +
             "id=" + getId() +
             "}";
     }
