@@ -6,7 +6,7 @@
 
 - De subtipos de Activity por Objetos de Activity:
   search: (\().*\([ ]*(Normal|Decomposed)[ ]*\) ([\w]*).*(\))\.
-  replaceby: $3.get$2Sub().
+  replaceby: $3.getThe$2Sub().
 
 - De pacotes de modelos SPM por objetos domain JHipster (modelos):
   search: (package|import) org\.qrconsult\.spm\.model\.(.*)\.(.*);
