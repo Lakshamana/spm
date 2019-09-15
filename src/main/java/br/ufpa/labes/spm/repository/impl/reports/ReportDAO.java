@@ -33,7 +33,6 @@ import br.ufpa.labes.spm.domain.AgentPlaysRole;
 import br.ufpa.labes.spm.domain.Group;
 import br.ufpa.labes.spm.domain.Role;
 import br.ufpa.labes.spm.domain.Artifact;
-import br.ufpa.labes.spm.domain.KnowledgeItem;
 import br.ufpa.labes.spm.domain.AgendaEvent;
 import br.ufpa.labes.spm.domain.Company;
 import br.ufpa.labes.spm.domain.Project;

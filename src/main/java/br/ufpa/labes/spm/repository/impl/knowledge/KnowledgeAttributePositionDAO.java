@@ -2,8 +2,6 @@ package br.ufpa.labes.spm.repository.impl.knowledge;
 
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
-import br.ufpa.labes.spm.repository.interfaces.knowledge.IKnowledgeAttributePositionDAO;
-import br.ufpa.labes.spm.domain.KnowledgeAttributePosition;
 
 public class KnowledgeAttributePositionDAO extends BaseDAO<KnowledgeAttributePosition, Integer> implements IKnowledgeAttributePositionDAO{
 
