@@ -2,6 +2,10 @@
     "name": "Normal",
     "fields": [
         {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "howLong",
             "fieldType": "Float"
         },

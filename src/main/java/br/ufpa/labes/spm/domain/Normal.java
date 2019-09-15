@@ -24,6 +24,9 @@ public class Normal implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "ident")
+    private String ident;
+
     @Column(name = "how_long")
     private Float howLong;
 
@@ -85,6 +88,19 @@ public class Normal implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIdent() {
+        return ident;
+    }
+
+    public Normal ident(String ident) {
+        this.ident = ident;
+        return this;
+    }
+
+    public void setIdent(String ident) {
+        this.ident = ident;
     }
 
     public Float getHowLong() {
@@ -375,6 +391,7 @@ public class Normal implements Serializable {
     public String toString() {
         return "Normal{" +
             "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
             ", howLong=" + getHowLong() +
             ", howLongUnit='" + getHowLongUnit() + "'" +
             ", plannedBegin='" + getPlannedBegin() + "'" +
