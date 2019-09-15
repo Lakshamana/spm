@@ -75,7 +75,7 @@
     <include file="config/liquibase/changelog/20190914033818_added_entity_Author.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033819_added_entity_Organization.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033820_added_entity_Person.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190914033821_added_entity_AutomaticActivity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033821_added_entity_Automatic.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033822_added_entity_EnactionDescription.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033823_added_entity_InvolvedArtifact.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033824_added_entity_Normal.xml" relativeToChangelogFile="false"/>
@@ -198,7 +198,7 @@
     <include file="config/liquibase/changelog/20190914033816_added_entity_constraints_Structure.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033817_added_entity_constraints_DevelopingSystem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033818_added_entity_constraints_Author.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190914033821_added_entity_constraints_AutomaticActivity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033821_added_entity_constraints_Automatic.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033823_added_entity_constraints_InvolvedArtifact.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033825_added_entity_constraints_Parameter.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033826_added_entity_constraints_ArtifactParam.xml" relativeToChangelogFile="false"/>

@@ -226,8 +226,8 @@ public class CacheConfiguration {
             createCache(cm, br.ufpa.labes.spm.domain.Organization.class.getName() + ".theOrganizationMetrics");
             createCache(cm, br.ufpa.labes.spm.domain.Organization.class.getName() + ".theOrganizationEstimations");
             createCache(cm, br.ufpa.labes.spm.domain.Person.class.getName());
-            createCache(cm, br.ufpa.labes.spm.domain.AutomaticActivity.class.getName());
-            createCache(cm, br.ufpa.labes.spm.domain.AutomaticActivity.class.getName() + ".theParameters");
+            createCache(cm, br.ufpa.labes.spm.domain.Automatic.class.getName());
+            createCache(cm, br.ufpa.labes.spm.domain.Automatic.class.getName() + ".theParameters");
             createCache(cm, br.ufpa.labes.spm.domain.EnactionDescription.class.getName());
             createCache(cm, br.ufpa.labes.spm.domain.InvolvedArtifact.class.getName());
             createCache(cm, br.ufpa.labes.spm.domain.Normal.class.getName());
