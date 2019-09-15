@@ -711,6 +711,8 @@ relationship OneToMany {
 
 relationship OneToOne {
     Plain{theAutomaticActivitySub} to AutomaticActivity{theAutomatic},
+    Plain{theNormalSub} to Normal{thePlainSuper},
+    
     AutomaticActivity{theSubroutine} to Subroutine{theAutomaticActivity},
 
     Parameter{theArtifactParameterSub} to ArtifactParam{theParameterSuper},
