@@ -219,7 +219,7 @@ public abstract class BaseDAO<T, PK> implements IBaseDAO<T, PK> {
 
 	public static void main(String[] args) {
 		Agent a = new Agent();
-		a.setId(336);
+		a.setId(336L);
 		AgentDAO agentDAO = new AgentDAO();
 		System.out.println(
 				agentDAO.generateIdent("Template - Plano de Gerência de Documentos e Plano de Comunicação", a));
