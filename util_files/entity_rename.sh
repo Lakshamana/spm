@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for file in `find . -regextype posix-extended -regex '.*Tag[Ss]tat[^s]*'`; do
+for file in `find . -regextype posix-extended -regex '.*[I]*[Req]*GroupDAO.java'`; do
   echo $file
-  replace=`echo $file | sed -r 's/(.*)(Tag[Ss]tat)(.*)/\1\2s\3/'`
+  replace=`echo $file | sed -r 's/(.*[I]*[Req]*)GroupDAO.java/\1Work\2\3/'`
   mv $file $replace
 done
 
