@@ -47,11 +47,11 @@ public class BranchConCondToMultipleConDTO implements Serializable {
             return false;
         }
 
-        BranchConCondToMultipleConDTO branchCondToMultipleConDTO = (BranchConCondToMultipleConDTO) o;
-        if (branchCondToMultipleConDTO.getId() == null || getId() == null) {
+        BranchConCondToMultipleConDTO branchConCondToMultipleConDTO = (BranchConCondToMultipleConDTO) o;
+        if (branchConCondToMultipleConDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), branchCondToMultipleConDTO.getId());
+        return Objects.equals(getId(), branchConCondToMultipleConDTO.getId());
     }
 
     @Override

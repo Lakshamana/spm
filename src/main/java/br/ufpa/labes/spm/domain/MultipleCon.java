@@ -49,7 +49,7 @@ public class MultipleCon implements Serializable {
 
     @OneToMany(mappedBy = "theMultipleCon")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<BranchCondToMultipleCon> theBranchCondToMultipleCons = new HashSet<>();
+    private Set<BranchConCondToMultipleCon> theBranchConCondToMultipleCons = new HashSet<>();
 
     @ManyToMany(mappedBy = "toMultipleCons")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -165,29 +165,29 @@ public class MultipleCon implements Serializable {
         this.toBranchCons = branchCons;
     }
 
-    public Set<BranchCondToMultipleCon> getTheBranchCondToMultipleCons() {
-        return theBranchCondToMultipleCons;
+    public Set<BranchConCondToMultipleCon> getTheBranchConCondToMultipleCons() {
+        return theBranchConCondToMultipleCons;
     }
 
-    public MultipleCon theBranchCondToMultipleCons(Set<BranchCondToMultipleCon> branchCondToMultipleCons) {
-        this.theBranchCondToMultipleCons = branchCondToMultipleCons;
+    public MultipleCon theBranchConCondToMultipleCons(Set<BranchConCondToMultipleCon> branchConCondToMultipleCons) {
+        this.theBranchConCondToMultipleCons = branchConCondToMultipleCons;
         return this;
     }
 
-    public MultipleCon addTheBranchCondToMultipleCon(BranchCondToMultipleCon branchCondToMultipleCon) {
-        this.theBranchCondToMultipleCons.add(branchCondToMultipleCon);
-        branchCondToMultipleCon.setTheMultipleCon(this);
+    public MultipleCon addTheBranchConCondToMultipleCon(BranchConCondToMultipleCon branchConCondToMultipleCon) {
+        this.theBranchConCondToMultipleCons.add(branchConCondToMultipleCon);
+        branchConCondToMultipleCon.setTheMultipleCon(this);
         return this;
     }
 
-    public MultipleCon removeTheBranchCondToMultipleCon(BranchCondToMultipleCon branchCondToMultipleCon) {
-        this.theBranchCondToMultipleCons.remove(branchCondToMultipleCon);
-        branchCondToMultipleCon.setTheMultipleCon(null);
+    public MultipleCon removeTheBranchConCondToMultipleCon(BranchConCondToMultipleCon branchConCondToMultipleCon) {
+        this.theBranchConCondToMultipleCons.remove(branchConCondToMultipleCon);
+        branchConCondToMultipleCon.setTheMultipleCon(null);
         return this;
     }
 
-    public void setTheBranchCondToMultipleCons(Set<BranchCondToMultipleCon> branchCondToMultipleCons) {
-        this.theBranchCondToMultipleCons = branchCondToMultipleCons;
+    public void setTheBranchConCondToMultipleCons(Set<BranchConCondToMultipleCon> branchConCondToMultipleCons) {
+        this.theBranchConCondToMultipleCons = branchConCondToMultipleCons;
     }
 
     public Set<ArtifactCon> getTheArtifactCons() {

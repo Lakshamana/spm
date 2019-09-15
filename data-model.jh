@@ -403,13 +403,13 @@ entity BranchConCond {
   kindBranch String
 }
 
-entity BranchCondToActivity {}
+entity BranchConCondToActivity {}
 
-entity BranchCondToMultipleCon {}
+entity BranchConCondToMultipleCon {}
 
 relationship OneToMany {
-  BranchConCond{theBranchCondToActivity} to BranchCondToActivity{theBranchConCond},
-  BranchConCond{theBranchCondToMultipleCon} to BranchCondToMultipleCon{theBranchConCond}
+  BranchConCond{theBranchConCondToActivity} to BranchConCondToActivity{theBranchConCond},
+  BranchConCond{theBranchConCondToMultipleCon} to BranchConCondToMultipleCon{theBranchConCond}
 }
 
 relationship ManyToOne {
@@ -423,9 +423,9 @@ relationship ManyToOne {
 
     BranchCon{fromMultipleCon} to MultipleCon{toBranchCon},
 
-    BranchCondToActivity{theActivity} to Activity{theBranchCondToActivity},
+    BranchConCondToActivity{theActivity} to Activity{theBranchConCondToActivity},
 
-    BranchCondToMultipleCon{theMultipleCon} to MultipleCon{theBranchCondToMultipleCon},
+    BranchConCondToMultipleCon{theMultipleCon} to MultipleCon{theBranchConCondToMultipleCon},
 
     Sequence{theDependency} to Dependency{theSequence}
 }

@@ -27,11 +27,11 @@ public class BranchConCond implements Serializable {
 
     @OneToMany(mappedBy = "theBranchConCond")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<BranchCondToActivity> theBranchCondToActivities = new HashSet<>();
+    private Set<BranchConCondToActivity> theBranchConCondToActivities = new HashSet<>();
 
     @OneToMany(mappedBy = "theBranchConCond")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<BranchCondToMultipleCon> theBranchCondToMultipleCons = new HashSet<>();
+    private Set<BranchConCondToMultipleCon> theBranchConCondToMultipleCons = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -55,54 +55,54 @@ public class BranchConCond implements Serializable {
         this.kindBranch = kindBranch;
     }
 
-    public Set<BranchCondToActivity> getTheBranchCondToActivities() {
-        return theBranchCondToActivities;
+    public Set<BranchConCondToActivity> getTheBranchConCondToActivities() {
+        return theBranchConCondToActivities;
     }
 
-    public BranchConCond theBranchCondToActivities(Set<BranchCondToActivity> branchCondToActivities) {
-        this.theBranchCondToActivities = branchCondToActivities;
+    public BranchConCond theBranchConCondToActivities(Set<BranchConCondToActivity> branchConCondToActivities) {
+        this.theBranchConCondToActivities = branchConCondToActivities;
         return this;
     }
 
-    public BranchConCond addTheBranchCondToActivity(BranchCondToActivity branchCondToActivity) {
-        this.theBranchCondToActivities.add(branchCondToActivity);
-        branchCondToActivity.setTheBranchConCond(this);
+    public BranchConCond addTheBranchConCondToActivity(BranchConCondToActivity branchConCondToActivity) {
+        this.theBranchConCondToActivities.add(branchConCondToActivity);
+        branchConCondToActivity.setTheBranchConCond(this);
         return this;
     }
 
-    public BranchConCond removeTheBranchCondToActivity(BranchCondToActivity branchCondToActivity) {
-        this.theBranchCondToActivities.remove(branchCondToActivity);
-        branchCondToActivity.setTheBranchConCond(null);
+    public BranchConCond removeTheBranchConCondToActivity(BranchConCondToActivity branchConCondToActivity) {
+        this.theBranchConCondToActivities.remove(branchConCondToActivity);
+        branchConCondToActivity.setTheBranchConCond(null);
         return this;
     }
 
-    public void setTheBranchCondToActivities(Set<BranchCondToActivity> branchCondToActivities) {
-        this.theBranchCondToActivities = branchCondToActivities;
+    public void setTheBranchConCondToActivities(Set<BranchConCondToActivity> branchConCondToActivities) {
+        this.theBranchConCondToActivities = branchConCondToActivities;
     }
 
-    public Set<BranchCondToMultipleCon> getTheBranchCondToMultipleCons() {
-        return theBranchCondToMultipleCons;
+    public Set<BranchConCondToMultipleCon> getTheBranchConCondToMultipleCons() {
+        return theBranchConCondToMultipleCons;
     }
 
-    public BranchConCond theBranchCondToMultipleCons(Set<BranchCondToMultipleCon> branchCondToMultipleCons) {
-        this.theBranchCondToMultipleCons = branchCondToMultipleCons;
+    public BranchConCond theBranchConCondToMultipleCons(Set<BranchConCondToMultipleCon> branchConCondToMultipleCons) {
+        this.theBranchConCondToMultipleCons = branchConCondToMultipleCons;
         return this;
     }
 
-    public BranchConCond addTheBranchCondToMultipleCon(BranchCondToMultipleCon branchCondToMultipleCon) {
-        this.theBranchCondToMultipleCons.add(branchCondToMultipleCon);
-        branchCondToMultipleCon.setTheBranchConCond(this);
+    public BranchConCond addTheBranchConCondToMultipleCon(BranchConCondToMultipleCon branchConCondToMultipleCon) {
+        this.theBranchConCondToMultipleCons.add(branchConCondToMultipleCon);
+        branchConCondToMultipleCon.setTheBranchConCond(this);
         return this;
     }
 
-    public BranchConCond removeTheBranchCondToMultipleCon(BranchCondToMultipleCon branchCondToMultipleCon) {
-        this.theBranchCondToMultipleCons.remove(branchCondToMultipleCon);
-        branchCondToMultipleCon.setTheBranchConCond(null);
+    public BranchConCond removeTheBranchConCondToMultipleCon(BranchConCondToMultipleCon branchConCondToMultipleCon) {
+        this.theBranchConCondToMultipleCons.remove(branchConCondToMultipleCon);
+        branchConCondToMultipleCon.setTheBranchConCond(null);
         return this;
     }
 
-    public void setTheBranchCondToMultipleCons(Set<BranchCondToMultipleCon> branchCondToMultipleCons) {
-        this.theBranchCondToMultipleCons = branchCondToMultipleCons;
+    public void setTheBranchConCondToMultipleCons(Set<BranchConCondToMultipleCon> branchConCondToMultipleCons) {
+        this.theBranchConCondToMultipleCons = branchConCondToMultipleCons;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

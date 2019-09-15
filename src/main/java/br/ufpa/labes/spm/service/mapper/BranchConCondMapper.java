@@ -12,10 +12,10 @@ import org.mapstruct.*;
 public interface BranchConCondMapper extends EntityMapper<BranchConCondDTO, BranchConCond> {
 
 
-    @Mapping(target = "theBranchCondToActivities", ignore = true)
-    @Mapping(target = "removeTheBranchCondToActivity", ignore = true)
-    @Mapping(target = "theBranchCondToMultipleCons", ignore = true)
-    @Mapping(target = "removeTheBranchCondToMultipleCon", ignore = true)
+    @Mapping(target = "theBranchConCondToActivities", ignore = true)
+    @Mapping(target = "removeTheBranchConCondToActivity", ignore = true)
+    @Mapping(target = "theBranchConCondToMultipleCons", ignore = true)
+    @Mapping(target = "removeTheBranchConCondToMultipleCon", ignore = true)
     BranchConCond toEntity(BranchConCondDTO branchConCondDTO);
 
     default BranchConCond fromId(Long id) {

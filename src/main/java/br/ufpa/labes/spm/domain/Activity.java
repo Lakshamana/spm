@@ -111,7 +111,7 @@ public class Activity implements Serializable {
 
     @OneToMany(mappedBy = "theActivity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<BranchCondToActivity> theBranchCondToActivities = new HashSet<>();
+    private Set<BranchConCondToActivity> theBranchConCondToActivities = new HashSet<>();
 
     @OneToMany(mappedBy = "theActivity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -521,29 +521,29 @@ public class Activity implements Serializable {
         this.theProcessModel = processModel;
     }
 
-    public Set<BranchCondToActivity> getTheBranchCondToActivities() {
-        return theBranchCondToActivities;
+    public Set<BranchConCondToActivity> getTheBranchConCondToActivities() {
+        return theBranchConCondToActivities;
     }
 
-    public Activity theBranchCondToActivities(Set<BranchCondToActivity> branchCondToActivities) {
-        this.theBranchCondToActivities = branchCondToActivities;
+    public Activity theBranchConCondToActivities(Set<BranchConCondToActivity> branchConCondToActivities) {
+        this.theBranchConCondToActivities = branchConCondToActivities;
         return this;
     }
 
-    public Activity addTheBranchCondToActivity(BranchCondToActivity branchCondToActivity) {
-        this.theBranchCondToActivities.add(branchCondToActivity);
-        branchCondToActivity.setTheActivity(this);
+    public Activity addTheBranchConCondToActivity(BranchConCondToActivity branchConCondToActivity) {
+        this.theBranchConCondToActivities.add(branchConCondToActivity);
+        branchConCondToActivity.setTheActivity(this);
         return this;
     }
 
-    public Activity removeTheBranchCondToActivity(BranchCondToActivity branchCondToActivity) {
-        this.theBranchCondToActivities.remove(branchCondToActivity);
-        branchCondToActivity.setTheActivity(null);
+    public Activity removeTheBranchConCondToActivity(BranchConCondToActivity branchConCondToActivity) {
+        this.theBranchConCondToActivities.remove(branchConCondToActivity);
+        branchConCondToActivity.setTheActivity(null);
         return this;
     }
 
-    public void setTheBranchCondToActivities(Set<BranchCondToActivity> branchCondToActivities) {
-        this.theBranchCondToActivities = branchCondToActivities;
+    public void setTheBranchConCondToActivities(Set<BranchConCondToActivity> branchConCondToActivities) {
+        this.theBranchConCondToActivities = branchConCondToActivities;
     }
 
     public Set<ActivityInstantiated> getTheActivityInstantiateds() {

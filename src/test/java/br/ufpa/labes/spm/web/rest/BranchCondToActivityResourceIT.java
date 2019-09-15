@@ -1,11 +1,11 @@
 package br.ufpa.labes.spm.web.rest;
 
 import br.ufpa.labes.spm.SpmApp;
-import br.ufpa.labes.spm.domain.BranchCondToActivity;
-import br.ufpa.labes.spm.repository.BranchCondToActivityRepository;
-import br.ufpa.labes.spm.service.BranchCondToActivityService;
-import br.ufpa.labes.spm.service.dto.BranchCondToActivityDTO;
-import br.ufpa.labes.spm.service.mapper.BranchCondToActivityMapper;
+import br.ufpa.labes.spm.domain.BranchConCondToActivity;
+import br.ufpa.labes.spm.repository.BranchConCondToActivityRepository;
+import br.ufpa.labes.spm.service.BranchConCondToActivityService;
+import br.ufpa.labes.spm.service.dto.BranchConCondToActivityDTO;
+import br.ufpa.labes.spm.service.mapper.BranchConCondToActivityMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,20 +32,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link BranchCondToActivityResource} REST controller.
+ * Integration tests for the {@link BranchConCondToActivityResource} REST controller.
  */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
-public class BranchCondToActivityResourceIT {
+public class BranchConCondToActivityResourceIT {
 
     @Autowired
-    private BranchCondToActivityRepository branchCondToActivityRepository;
+    private BranchConCondToActivityRepository branchCondToActivityRepository;
 
     @Autowired
-    private BranchCondToActivityMapper branchCondToActivityMapper;
+    private BranchConCondToActivityMapper branchCondToActivityMapper;
 
     @Autowired
-    private BranchCondToActivityService branchCondToActivityService;
+    private BranchConCondToActivityService branchCondToActivityService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -62,15 +62,15 @@ public class BranchCondToActivityResourceIT {
     @Autowired
     private Validator validator;
 
-    private MockMvc restBranchCondToActivityMockMvc;
+    private MockMvc restBranchConCondToActivityMockMvc;
 
-    private BranchCondToActivity branchCondToActivity;
+    private BranchConCondToActivity branchCondToActivity;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final BranchCondToActivityResource branchCondToActivityResource = new BranchCondToActivityResource(branchCondToActivityService);
-        this.restBranchCondToActivityMockMvc = MockMvcBuilders.standaloneSetup(branchCondToActivityResource)
+        final BranchConCondToActivityResource branchCondToActivityResource = new BranchConCondToActivityResource(branchCondToActivityService);
+        this.restBranchConCondToActivityMockMvc = MockMvcBuilders.standaloneSetup(branchCondToActivityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
@@ -84,8 +84,8 @@ public class BranchCondToActivityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static BranchCondToActivity createEntity(EntityManager em) {
-        BranchCondToActivity branchCondToActivity = new BranchCondToActivity();
+    public static BranchConCondToActivity createEntity(EntityManager em) {
+        BranchConCondToActivity branchCondToActivity = new BranchConCondToActivity();
         return branchCondToActivity;
     }
     /**
@@ -94,8 +94,8 @@ public class BranchCondToActivityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static BranchCondToActivity createUpdatedEntity(EntityManager em) {
-        BranchCondToActivity branchCondToActivity = new BranchCondToActivity();
+    public static BranchConCondToActivity createUpdatedEntity(EntityManager em) {
+        BranchConCondToActivity branchCondToActivity = new BranchConCondToActivity();
         return branchCondToActivity;
     }
 
@@ -106,64 +106,64 @@ public class BranchCondToActivityResourceIT {
 
     @Test
     @Transactional
-    public void createBranchCondToActivity() throws Exception {
+    public void createBranchConCondToActivity() throws Exception {
         int databaseSizeBeforeCreate = branchCondToActivityRepository.findAll().size();
 
-        // Create the BranchCondToActivity
-        BranchCondToActivityDTO branchCondToActivityDTO = branchCondToActivityMapper.toDto(branchCondToActivity);
-        restBranchCondToActivityMockMvc.perform(post("/api/branch-cond-to-activities")
+        // Create the BranchConCondToActivity
+        BranchConCondToActivityDTO branchCondToActivityDTO = branchCondToActivityMapper.toDto(branchCondToActivity);
+        restBranchConCondToActivityMockMvc.perform(post("/api/branch-cond-to-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(branchCondToActivityDTO)))
             .andExpect(status().isCreated());
 
-        // Validate the BranchCondToActivity in the database
-        List<BranchCondToActivity> branchCondToActivityList = branchCondToActivityRepository.findAll();
+        // Validate the BranchConCondToActivity in the database
+        List<BranchConCondToActivity> branchCondToActivityList = branchCondToActivityRepository.findAll();
         assertThat(branchCondToActivityList).hasSize(databaseSizeBeforeCreate + 1);
-        BranchCondToActivity testBranchCondToActivity = branchCondToActivityList.get(branchCondToActivityList.size() - 1);
+        BranchConCondToActivity testBranchConCondToActivity = branchCondToActivityList.get(branchCondToActivityList.size() - 1);
     }
 
     @Test
     @Transactional
-    public void createBranchCondToActivityWithExistingId() throws Exception {
+    public void createBranchConCondToActivityWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = branchCondToActivityRepository.findAll().size();
 
-        // Create the BranchCondToActivity with an existing ID
+        // Create the BranchConCondToActivity with an existing ID
         branchCondToActivity.setId(1L);
-        BranchCondToActivityDTO branchCondToActivityDTO = branchCondToActivityMapper.toDto(branchCondToActivity);
+        BranchConCondToActivityDTO branchCondToActivityDTO = branchCondToActivityMapper.toDto(branchCondToActivity);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restBranchCondToActivityMockMvc.perform(post("/api/branch-cond-to-activities")
+        restBranchConCondToActivityMockMvc.perform(post("/api/branch-cond-to-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(branchCondToActivityDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the BranchCondToActivity in the database
-        List<BranchCondToActivity> branchCondToActivityList = branchCondToActivityRepository.findAll();
+        // Validate the BranchConCondToActivity in the database
+        List<BranchConCondToActivity> branchCondToActivityList = branchCondToActivityRepository.findAll();
         assertThat(branchCondToActivityList).hasSize(databaseSizeBeforeCreate);
     }
 
 
     @Test
     @Transactional
-    public void getAllBranchCondToActivities() throws Exception {
+    public void getAllBranchConCondToActivities() throws Exception {
         // Initialize the database
         branchCondToActivityRepository.saveAndFlush(branchCondToActivity);
 
         // Get all the branchCondToActivityList
-        restBranchCondToActivityMockMvc.perform(get("/api/branch-cond-to-activities?sort=id,desc"))
+        restBranchConCondToActivityMockMvc.perform(get("/api/branch-cond-to-activities?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(branchCondToActivity.getId().intValue())));
     }
-    
+
     @Test
     @Transactional
-    public void getBranchCondToActivity() throws Exception {
+    public void getBranchConCondToActivity() throws Exception {
         // Initialize the database
         branchCondToActivityRepository.saveAndFlush(branchCondToActivity);
 
         // Get the branchCondToActivity
-        restBranchCondToActivityMockMvc.perform(get("/api/branch-cond-to-activities/{id}", branchCondToActivity.getId()))
+        restBranchConCondToActivityMockMvc.perform(get("/api/branch-cond-to-activities/{id}", branchCondToActivity.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(branchCondToActivity.getId().intValue()));
@@ -171,81 +171,81 @@ public class BranchCondToActivityResourceIT {
 
     @Test
     @Transactional
-    public void getNonExistingBranchCondToActivity() throws Exception {
+    public void getNonExistingBranchConCondToActivity() throws Exception {
         // Get the branchCondToActivity
-        restBranchCondToActivityMockMvc.perform(get("/api/branch-cond-to-activities/{id}", Long.MAX_VALUE))
+        restBranchConCondToActivityMockMvc.perform(get("/api/branch-cond-to-activities/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    public void updateBranchCondToActivity() throws Exception {
+    public void updateBranchConCondToActivity() throws Exception {
         // Initialize the database
         branchCondToActivityRepository.saveAndFlush(branchCondToActivity);
 
         int databaseSizeBeforeUpdate = branchCondToActivityRepository.findAll().size();
 
         // Update the branchCondToActivity
-        BranchCondToActivity updatedBranchCondToActivity = branchCondToActivityRepository.findById(branchCondToActivity.getId()).get();
-        // Disconnect from session so that the updates on updatedBranchCondToActivity are not directly saved in db
-        em.detach(updatedBranchCondToActivity);
-        BranchCondToActivityDTO branchCondToActivityDTO = branchCondToActivityMapper.toDto(updatedBranchCondToActivity);
+        BranchConCondToActivity updatedBranchConCondToActivity = branchCondToActivityRepository.findById(branchCondToActivity.getId()).get();
+        // Disconnect from session so that the updates on updatedBranchConCondToActivity are not directly saved in db
+        em.detach(updatedBranchConCondToActivity);
+        BranchConCondToActivityDTO branchCondToActivityDTO = branchCondToActivityMapper.toDto(updatedBranchConCondToActivity);
 
-        restBranchCondToActivityMockMvc.perform(put("/api/branch-cond-to-activities")
+        restBranchConCondToActivityMockMvc.perform(put("/api/branch-cond-to-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(branchCondToActivityDTO)))
             .andExpect(status().isOk());
 
-        // Validate the BranchCondToActivity in the database
-        List<BranchCondToActivity> branchCondToActivityList = branchCondToActivityRepository.findAll();
+        // Validate the BranchConCondToActivity in the database
+        List<BranchConCondToActivity> branchCondToActivityList = branchCondToActivityRepository.findAll();
         assertThat(branchCondToActivityList).hasSize(databaseSizeBeforeUpdate);
-        BranchCondToActivity testBranchCondToActivity = branchCondToActivityList.get(branchCondToActivityList.size() - 1);
+        BranchConCondToActivity testBranchConCondToActivity = branchCondToActivityList.get(branchCondToActivityList.size() - 1);
     }
 
     @Test
     @Transactional
-    public void updateNonExistingBranchCondToActivity() throws Exception {
+    public void updateNonExistingBranchConCondToActivity() throws Exception {
         int databaseSizeBeforeUpdate = branchCondToActivityRepository.findAll().size();
 
-        // Create the BranchCondToActivity
-        BranchCondToActivityDTO branchCondToActivityDTO = branchCondToActivityMapper.toDto(branchCondToActivity);
+        // Create the BranchConCondToActivity
+        BranchConCondToActivityDTO branchCondToActivityDTO = branchCondToActivityMapper.toDto(branchCondToActivity);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restBranchCondToActivityMockMvc.perform(put("/api/branch-cond-to-activities")
+        restBranchConCondToActivityMockMvc.perform(put("/api/branch-cond-to-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(branchCondToActivityDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the BranchCondToActivity in the database
-        List<BranchCondToActivity> branchCondToActivityList = branchCondToActivityRepository.findAll();
+        // Validate the BranchConCondToActivity in the database
+        List<BranchConCondToActivity> branchCondToActivityList = branchCondToActivityRepository.findAll();
         assertThat(branchCondToActivityList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
-    public void deleteBranchCondToActivity() throws Exception {
+    public void deleteBranchConCondToActivity() throws Exception {
         // Initialize the database
         branchCondToActivityRepository.saveAndFlush(branchCondToActivity);
 
         int databaseSizeBeforeDelete = branchCondToActivityRepository.findAll().size();
 
         // Delete the branchCondToActivity
-        restBranchCondToActivityMockMvc.perform(delete("/api/branch-cond-to-activities/{id}", branchCondToActivity.getId())
+        restBranchConCondToActivityMockMvc.perform(delete("/api/branch-cond-to-activities/{id}", branchCondToActivity.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<BranchCondToActivity> branchCondToActivityList = branchCondToActivityRepository.findAll();
+        List<BranchConCondToActivity> branchCondToActivityList = branchCondToActivityRepository.findAll();
         assertThat(branchCondToActivityList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test
     @Transactional
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(BranchCondToActivity.class);
-        BranchCondToActivity branchCondToActivity1 = new BranchCondToActivity();
+        TestUtil.equalsVerifier(BranchConCondToActivity.class);
+        BranchConCondToActivity branchCondToActivity1 = new BranchConCondToActivity();
         branchCondToActivity1.setId(1L);
-        BranchCondToActivity branchCondToActivity2 = new BranchCondToActivity();
+        BranchConCondToActivity branchCondToActivity2 = new BranchConCondToActivity();
         branchCondToActivity2.setId(branchCondToActivity1.getId());
         assertThat(branchCondToActivity1).isEqualTo(branchCondToActivity2);
         branchCondToActivity2.setId(2L);
@@ -257,10 +257,10 @@ public class BranchCondToActivityResourceIT {
     @Test
     @Transactional
     public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(BranchCondToActivityDTO.class);
-        BranchCondToActivityDTO branchCondToActivityDTO1 = new BranchCondToActivityDTO();
+        TestUtil.equalsVerifier(BranchConCondToActivityDTO.class);
+        BranchConCondToActivityDTO branchCondToActivityDTO1 = new BranchConCondToActivityDTO();
         branchCondToActivityDTO1.setId(1L);
-        BranchCondToActivityDTO branchCondToActivityDTO2 = new BranchCondToActivityDTO();
+        BranchConCondToActivityDTO branchCondToActivityDTO2 = new BranchConCondToActivityDTO();
         assertThat(branchCondToActivityDTO1).isNotEqualTo(branchCondToActivityDTO2);
         branchCondToActivityDTO2.setId(branchCondToActivityDTO1.getId());
         assertThat(branchCondToActivityDTO1).isEqualTo(branchCondToActivityDTO2);

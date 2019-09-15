@@ -24,44 +24,44 @@ public class BranchConCondToMultipleConService {
 
     private final Logger log = LoggerFactory.getLogger(BranchConCondToMultipleConService.class);
 
-    private final BranchConCondToMultipleConRepository branchCondToMultipleConRepository;
+    private final BranchConCondToMultipleConRepository branchConCondToMultipleConRepository;
 
-    private final BranchConCondToMultipleConMapper branchCondToMultipleConMapper;
+    private final BranchConCondToMultipleConMapper branchConCondToMultipleConMapper;
 
-    public BranchConCondToMultipleConService(BranchConCondToMultipleConRepository branchCondToMultipleConRepository, BranchConCondToMultipleConMapper branchCondToMultipleConMapper) {
-        this.branchCondToMultipleConRepository = branchCondToMultipleConRepository;
-        this.branchCondToMultipleConMapper = branchCondToMultipleConMapper;
+    public BranchConCondToMultipleConService(BranchConCondToMultipleConRepository branchConCondToMultipleConRepository, BranchConCondToMultipleConMapper branchConCondToMultipleConMapper) {
+        this.branchConCondToMultipleConRepository = branchConCondToMultipleConRepository;
+        this.branchConCondToMultipleConMapper = branchConCondToMultipleConMapper;
     }
 
     /**
-     * Save a branchCondToMultipleCon.
+     * Save a branchConCondToMultipleCon.
      *
-     * @param branchCondToMultipleConDTO the entity to save.
+     * @param branchConCondToMultipleConDTO the entity to save.
      * @return the persisted entity.
      */
-    public BranchConCondToMultipleConDTO save(BranchConCondToMultipleConDTO branchCondToMultipleConDTO) {
-        log.debug("Request to save BranchConCondToMultipleCon : {}", branchCondToMultipleConDTO);
-        BranchConCondToMultipleCon branchCondToMultipleCon = branchCondToMultipleConMapper.toEntity(branchCondToMultipleConDTO);
-        branchCondToMultipleCon = branchCondToMultipleConRepository.save(branchCondToMultipleCon);
-        return branchCondToMultipleConMapper.toDto(branchCondToMultipleCon);
+    public BranchConCondToMultipleConDTO save(BranchConCondToMultipleConDTO branchConCondToMultipleConDTO) {
+        log.debug("Request to save BranchConCondToMultipleCon : {}", branchConCondToMultipleConDTO);
+        BranchConCondToMultipleCon branchConCondToMultipleCon = branchConCondToMultipleConMapper.toEntity(branchConCondToMultipleConDTO);
+        branchConCondToMultipleCon = branchConCondToMultipleConRepository.save(branchConCondToMultipleCon);
+        return branchConCondToMultipleConMapper.toDto(branchConCondToMultipleCon);
     }
 
     /**
-     * Get all the branchCondToMultipleCons.
+     * Get all the branchConCondToMultipleCons.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public List<BranchConCondToMultipleConDTO> findAll() {
         log.debug("Request to get all BranchConCondToMultipleCons");
-        return branchCondToMultipleConRepository.findAll().stream()
-            .map(branchCondToMultipleConMapper::toDto)
+        return branchConCondToMultipleConRepository.findAll().stream()
+            .map(branchConCondToMultipleConMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
     /**
-     * Get one branchCondToMultipleCon by id.
+     * Get one branchConCondToMultipleCon by id.
      *
      * @param id the id of the entity.
      * @return the entity.
@@ -69,17 +69,17 @@ public class BranchConCondToMultipleConService {
     @Transactional(readOnly = true)
     public Optional<BranchConCondToMultipleConDTO> findOne(Long id) {
         log.debug("Request to get BranchConCondToMultipleCon : {}", id);
-        return branchCondToMultipleConRepository.findById(id)
-            .map(branchCondToMultipleConMapper::toDto);
+        return branchConCondToMultipleConRepository.findById(id)
+            .map(branchConCondToMultipleConMapper::toDto);
     }
 
     /**
-     * Delete the branchCondToMultipleCon by id.
+     * Delete the branchConCondToMultipleCon by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete BranchConCondToMultipleCon : {}", id);
-        branchCondToMultipleConRepository.deleteById(id);
+        branchConCondToMultipleConRepository.deleteById(id);
     }
 }

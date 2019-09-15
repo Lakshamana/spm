@@ -368,13 +368,19 @@ public class CacheConfiguration {
             createCache(cm, br.ufpa.labes.spm.domain.Plugin.class.getName() + ".users");
             createCache(cm, br.ufpa.labes.spm.domain.Automatic.class.getName());
             createCache(cm, br.ufpa.labes.spm.domain.Automatic.class.getName() + ".theParameters");
-            createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theBranchCondToActivities");
-            createCache(cm, br.ufpa.labes.spm.domain.MultipleCon.class.getName() + ".theBranchCondToMultipleCons");
+            createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theBranchConCondToActivities");
+            createCache(cm, br.ufpa.labes.spm.domain.MultipleCon.class.getName() + ".theBranchConCondToMultipleCons");
             createCache(cm, br.ufpa.labes.spm.domain.BranchConCond.class.getName());
-            createCache(cm, br.ufpa.labes.spm.domain.BranchConCond.class.getName() + ".theBranchCondToActivities");
-            createCache(cm, br.ufpa.labes.spm.domain.BranchConCond.class.getName() + ".theBranchCondToMultipleCons");
-            createCache(cm, br.ufpa.labes.spm.domain.BranchCondToActivity.class.getName());
-            createCache(cm, br.ufpa.labes.spm.domain.BranchCondToMultipleCon.class.getName());
+            createCache(cm, br.ufpa.labes.spm.domain.BranchConCond.class.getName() + ".theBranchConCondToActivities");
+            createCache(cm, br.ufpa.labes.spm.domain.BranchConCond.class.getName() + ".theBranchConCondToMultipleCons");
+            createCache(cm, br.ufpa.labes.spm.domain.BranchConCondToActivity.class.getName());
+            createCache(cm, br.ufpa.labes.spm.domain.BranchConCondToMultipleCon.class.getName());
+            createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theBranchConCondToActivities");
+            createCache(cm, br.ufpa.labes.spm.domain.MultipleCon.class.getName() + ".theBranchConCondToMultipleCons");
+            createCache(cm, br.ufpa.labes.spm.domain.BranchConCond.class.getName() + ".theBranchConCondToActivities");
+            createCache(cm, br.ufpa.labes.spm.domain.BranchConCond.class.getName() + ".theBranchConCondToMultipleCons");
+            createCache(cm, br.ufpa.labes.spm.domain.BranchConCondToActivity.class.getName());
+            createCache(cm, br.ufpa.labes.spm.domain.BranchConCondToMultipleCon.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

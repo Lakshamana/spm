@@ -45,9 +45,9 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "branchCondToMultipleCon",
+            "otherEntityName": "branchConCondToMultipleCon",
             "otherEntityRelationshipName": "theMultipleCon",
-            "relationshipName": "theBranchCondToMultipleCon"
+            "relationshipName": "theBranchConCondToMultipleCon"
         },
         {
             "relationshipType": "many-to-many",

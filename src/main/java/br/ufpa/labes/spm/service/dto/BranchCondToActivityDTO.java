@@ -3,9 +3,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A DTO for the {@link br.ufpa.labes.spm.domain.BranchCondToActivity} entity.
+ * A DTO for the {@link br.ufpa.labes.spm.domain.BranchConCondToActivity} entity.
  */
-public class BranchCondToActivityDTO implements Serializable {
+public class BranchConCondToActivityDTO implements Serializable {
 
     private Long id;
 
@@ -47,7 +47,7 @@ public class BranchCondToActivityDTO implements Serializable {
             return false;
         }
 
-        BranchCondToActivityDTO branchCondToActivityDTO = (BranchCondToActivityDTO) o;
+        BranchConCondToActivityDTO branchCondToActivityDTO = (BranchConCondToActivityDTO) o;
         if (branchCondToActivityDTO.getId() == null || getId() == null) {
             return false;
         }
@@ -61,7 +61,7 @@ public class BranchCondToActivityDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "BranchCondToActivityDTO{" +
+        return "BranchConCondToActivityDTO{" +
             "id=" + getId() +
             ", theActivity=" + getTheActivityId() +
             ", theBranchConCond=" + getTheBranchConCondId() +

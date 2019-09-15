@@ -3,7 +3,7 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.TagStats;
 import br.ufpa.labes.spm.repository.TagStatRepository;
-import br.ufpa.labes.spm.service.TagStatService;
+import br.ufpa.labes.spm.service.TagStatsService;
 import br.ufpa.labes.spm.service.dto.TagStatDTO;
 import br.ufpa.labes.spm.service.mapper.TagStatMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
@@ -49,7 +49,7 @@ public class TagStatResourceIT {
     private TagStatMapper tagStatMapper;
 
     @Autowired
-    private TagStatService tagStatService;
+    private TagStatsService tagStatsService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -73,7 +73,7 @@ public class TagStatResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TagStatResource tagStatResource = new TagStatResource(tagStatService);
+        final TagStatResource tagStatResource = new TagStatResource(tagStatsService);
         this.restTagStatMockMvc = MockMvcBuilders.standaloneSetup(tagStatResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

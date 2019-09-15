@@ -3,14 +3,14 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A DTO for the {@link br.ufpa.labes.spm.domain.BranchConCondToMultipleCon} entity.
+ * A DTO for the {@link br.ufpa.labes.spm.domain.BranchConCondToActivity} entity.
  */
-public class BranchConCondToMultipleConDTO implements Serializable {
+public class BranchConCondToActivityDTO implements Serializable {
 
     private Long id;
 
 
-    private Long theMultipleConId;
+    private Long theActivityId;
 
     private Long theBranchConCondId;
 
@@ -22,12 +22,12 @@ public class BranchConCondToMultipleConDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getTheMultipleConId() {
-        return theMultipleConId;
+    public Long getTheActivityId() {
+        return theActivityId;
     }
 
-    public void setTheMultipleConId(Long multipleConId) {
-        this.theMultipleConId = multipleConId;
+    public void setTheActivityId(Long activityId) {
+        this.theActivityId = activityId;
     }
 
     public Long getTheBranchConCondId() {
@@ -47,11 +47,11 @@ public class BranchConCondToMultipleConDTO implements Serializable {
             return false;
         }
 
-        BranchConCondToMultipleConDTO branchCondToMultipleConDTO = (BranchConCondToMultipleConDTO) o;
-        if (branchCondToMultipleConDTO.getId() == null || getId() == null) {
+        BranchConCondToActivityDTO branchConCondToActivityDTO = (BranchConCondToActivityDTO) o;
+        if (branchConCondToActivityDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), branchCondToMultipleConDTO.getId());
+        return Objects.equals(getId(), branchConCondToActivityDTO.getId());
     }
 
     @Override
@@ -61,9 +61,9 @@ public class BranchConCondToMultipleConDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "BranchConCondToMultipleConDTO{" +
+        return "BranchConCondToActivityDTO{" +
             "id=" + getId() +
-            ", theMultipleCon=" + getTheMultipleConId() +
+            ", theActivity=" + getTheActivityId() +
             ", theBranchConCond=" + getTheBranchConCondId() +
             "}";
     }

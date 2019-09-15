@@ -8,12 +8,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * A BranchConCondToActivity.
+ * A BranchConCondToMultipleCon.
  */
 @Entity
-@Table(name = "branch_cond_to_activity")
+@Table(name = "b_con_cond_to_m_con_cond")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class BranchConCondToActivity implements Serializable {
+public class BranchConCondToMultipleCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,11 +22,11 @@ public class BranchConCondToActivity implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("theBranchConCondToActivities")
-    private Activity theActivity;
+    @JsonIgnoreProperties("theBranchConCondToMultipleCons")
+    private MultipleCon theMultipleCon;
 
     @ManyToOne
-    @JsonIgnoreProperties("theBranchConCondToActivities")
+    @JsonIgnoreProperties("theBranchConCondToMultipleCons")
     private BranchConCond theBranchConCond;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -38,24 +38,24 @@ public class BranchConCondToActivity implements Serializable {
         this.id = id;
     }
 
-    public Activity getTheActivity() {
-        return theActivity;
+    public MultipleCon getTheMultipleCon() {
+        return theMultipleCon;
     }
 
-    public BranchConCondToActivity theActivity(Activity activity) {
-        this.theActivity = activity;
+    public BranchConCondToMultipleCon theMultipleCon(MultipleCon multipleCon) {
+        this.theMultipleCon = multipleCon;
         return this;
     }
 
-    public void setTheActivity(Activity activity) {
-        this.theActivity = activity;
+    public void setTheMultipleCon(MultipleCon multipleCon) {
+        this.theMultipleCon = multipleCon;
     }
 
     public BranchConCond getTheBranchConCond() {
         return theBranchConCond;
     }
 
-    public BranchConCondToActivity theBranchConCond(BranchConCond branchConCond) {
+    public BranchConCondToMultipleCon theBranchConCond(BranchConCond branchConCond) {
         this.theBranchConCond = branchConCond;
         return this;
     }
@@ -70,10 +70,10 @@ public class BranchConCondToActivity implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof BranchConCondToActivity)) {
+        if (!(o instanceof BranchConCondToMultipleCon)) {
             return false;
         }
-        return id != null && id.equals(((BranchConCondToActivity) o).id);
+        return id != null && id.equals(((BranchConCondToMultipleCon) o).id);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class BranchConCondToActivity implements Serializable {
 
     @Override
     public String toString() {
-        return "BranchConCondToActivity{" +
+        return "BranchConCondToMultipleCon{" +
             "id=" + getId() +
             "}";
     }

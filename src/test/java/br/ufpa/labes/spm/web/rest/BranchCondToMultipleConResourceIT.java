@@ -1,11 +1,11 @@
 package br.ufpa.labes.spm.web.rest;
 
 import br.ufpa.labes.spm.SpmApp;
-import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
-import br.ufpa.labes.spm.repository.BranchCondToMultipleConRepository;
-import br.ufpa.labes.spm.service.BranchCondToMultipleConService;
-import br.ufpa.labes.spm.service.dto.BranchCondToMultipleConDTO;
-import br.ufpa.labes.spm.service.mapper.BranchCondToMultipleConMapper;
+import br.ufpa.labes.spm.domain.BranchConCondToMultipleCon;
+import br.ufpa.labes.spm.repository.BranchConCondToMultipleConRepository;
+import br.ufpa.labes.spm.service.BranchConCondToMultipleConService;
+import br.ufpa.labes.spm.service.dto.BranchConCondToMultipleConDTO;
+import br.ufpa.labes.spm.service.mapper.BranchConCondToMultipleConMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,20 +32,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link BranchCondToMultipleConResource} REST controller.
+ * Integration tests for the {@link BranchConCondToMultipleConResource} REST controller.
  */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
-public class BranchCondToMultipleConResourceIT {
+public class BranchConCondToMultipleConResourceIT {
 
     @Autowired
-    private BranchCondToMultipleConRepository branchCondToMultipleConRepository;
+    private BranchConCondToMultipleConRepository branchCondToMultipleConRepository;
 
     @Autowired
-    private BranchCondToMultipleConMapper branchCondToMultipleConMapper;
+    private BranchConCondToMultipleConMapper branchCondToMultipleConMapper;
 
     @Autowired
-    private BranchCondToMultipleConService branchCondToMultipleConService;
+    private BranchConCondToMultipleConService branchCondToMultipleConService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -62,15 +62,15 @@ public class BranchCondToMultipleConResourceIT {
     @Autowired
     private Validator validator;
 
-    private MockMvc restBranchCondToMultipleConMockMvc;
+    private MockMvc restBranchConCondToMultipleConMockMvc;
 
-    private BranchCondToMultipleCon branchCondToMultipleCon;
+    private BranchConCondToMultipleCon branchCondToMultipleCon;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final BranchCondToMultipleConResource branchCondToMultipleConResource = new BranchCondToMultipleConResource(branchCondToMultipleConService);
-        this.restBranchCondToMultipleConMockMvc = MockMvcBuilders.standaloneSetup(branchCondToMultipleConResource)
+        final BranchConCondToMultipleConResource branchCondToMultipleConResource = new BranchConCondToMultipleConResource(branchCondToMultipleConService);
+        this.restBranchConCondToMultipleConMockMvc = MockMvcBuilders.standaloneSetup(branchCondToMultipleConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
@@ -84,8 +84,8 @@ public class BranchCondToMultipleConResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static BranchCondToMultipleCon createEntity(EntityManager em) {
-        BranchCondToMultipleCon branchCondToMultipleCon = new BranchCondToMultipleCon();
+    public static BranchConCondToMultipleCon createEntity(EntityManager em) {
+        BranchConCondToMultipleCon branchCondToMultipleCon = new BranchConCondToMultipleCon();
         return branchCondToMultipleCon;
     }
     /**
@@ -94,8 +94,8 @@ public class BranchCondToMultipleConResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static BranchCondToMultipleCon createUpdatedEntity(EntityManager em) {
-        BranchCondToMultipleCon branchCondToMultipleCon = new BranchCondToMultipleCon();
+    public static BranchConCondToMultipleCon createUpdatedEntity(EntityManager em) {
+        BranchConCondToMultipleCon branchCondToMultipleCon = new BranchConCondToMultipleCon();
         return branchCondToMultipleCon;
     }
 
@@ -106,64 +106,64 @@ public class BranchCondToMultipleConResourceIT {
 
     @Test
     @Transactional
-    public void createBranchCondToMultipleCon() throws Exception {
+    public void createBranchConCondToMultipleCon() throws Exception {
         int databaseSizeBeforeCreate = branchCondToMultipleConRepository.findAll().size();
 
-        // Create the BranchCondToMultipleCon
-        BranchCondToMultipleConDTO branchCondToMultipleConDTO = branchCondToMultipleConMapper.toDto(branchCondToMultipleCon);
-        restBranchCondToMultipleConMockMvc.perform(post("/api/branch-cond-to-multiple-cons")
+        // Create the BranchConCondToMultipleCon
+        BranchConCondToMultipleConDTO branchCondToMultipleConDTO = branchCondToMultipleConMapper.toDto(branchCondToMultipleCon);
+        restBranchConCondToMultipleConMockMvc.perform(post("/api/branch-cond-to-multiple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(branchCondToMultipleConDTO)))
             .andExpect(status().isCreated());
 
-        // Validate the BranchCondToMultipleCon in the database
-        List<BranchCondToMultipleCon> branchCondToMultipleConList = branchCondToMultipleConRepository.findAll();
+        // Validate the BranchConCondToMultipleCon in the database
+        List<BranchConCondToMultipleCon> branchCondToMultipleConList = branchCondToMultipleConRepository.findAll();
         assertThat(branchCondToMultipleConList).hasSize(databaseSizeBeforeCreate + 1);
-        BranchCondToMultipleCon testBranchCondToMultipleCon = branchCondToMultipleConList.get(branchCondToMultipleConList.size() - 1);
+        BranchConCondToMultipleCon testBranchConCondToMultipleCon = branchCondToMultipleConList.get(branchCondToMultipleConList.size() - 1);
     }
 
     @Test
     @Transactional
-    public void createBranchCondToMultipleConWithExistingId() throws Exception {
+    public void createBranchConCondToMultipleConWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = branchCondToMultipleConRepository.findAll().size();
 
-        // Create the BranchCondToMultipleCon with an existing ID
+        // Create the BranchConCondToMultipleCon with an existing ID
         branchCondToMultipleCon.setId(1L);
-        BranchCondToMultipleConDTO branchCondToMultipleConDTO = branchCondToMultipleConMapper.toDto(branchCondToMultipleCon);
+        BranchConCondToMultipleConDTO branchCondToMultipleConDTO = branchCondToMultipleConMapper.toDto(branchCondToMultipleCon);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restBranchCondToMultipleConMockMvc.perform(post("/api/branch-cond-to-multiple-cons")
+        restBranchConCondToMultipleConMockMvc.perform(post("/api/branch-cond-to-multiple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(branchCondToMultipleConDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the BranchCondToMultipleCon in the database
-        List<BranchCondToMultipleCon> branchCondToMultipleConList = branchCondToMultipleConRepository.findAll();
+        // Validate the BranchConCondToMultipleCon in the database
+        List<BranchConCondToMultipleCon> branchCondToMultipleConList = branchCondToMultipleConRepository.findAll();
         assertThat(branchCondToMultipleConList).hasSize(databaseSizeBeforeCreate);
     }
 
 
     @Test
     @Transactional
-    public void getAllBranchCondToMultipleCons() throws Exception {
+    public void getAllBranchConCondToMultipleCons() throws Exception {
         // Initialize the database
         branchCondToMultipleConRepository.saveAndFlush(branchCondToMultipleCon);
 
         // Get all the branchCondToMultipleConList
-        restBranchCondToMultipleConMockMvc.perform(get("/api/branch-cond-to-multiple-cons?sort=id,desc"))
+        restBranchConCondToMultipleConMockMvc.perform(get("/api/branch-cond-to-multiple-cons?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(branchCondToMultipleCon.getId().intValue())));
     }
-    
+
     @Test
     @Transactional
-    public void getBranchCondToMultipleCon() throws Exception {
+    public void getBranchConCondToMultipleCon() throws Exception {
         // Initialize the database
         branchCondToMultipleConRepository.saveAndFlush(branchCondToMultipleCon);
 
         // Get the branchCondToMultipleCon
-        restBranchCondToMultipleConMockMvc.perform(get("/api/branch-cond-to-multiple-cons/{id}", branchCondToMultipleCon.getId()))
+        restBranchConCondToMultipleConMockMvc.perform(get("/api/branch-cond-to-multiple-cons/{id}", branchCondToMultipleCon.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(branchCondToMultipleCon.getId().intValue()));
@@ -171,81 +171,81 @@ public class BranchCondToMultipleConResourceIT {
 
     @Test
     @Transactional
-    public void getNonExistingBranchCondToMultipleCon() throws Exception {
+    public void getNonExistingBranchConCondToMultipleCon() throws Exception {
         // Get the branchCondToMultipleCon
-        restBranchCondToMultipleConMockMvc.perform(get("/api/branch-cond-to-multiple-cons/{id}", Long.MAX_VALUE))
+        restBranchConCondToMultipleConMockMvc.perform(get("/api/branch-cond-to-multiple-cons/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
-    public void updateBranchCondToMultipleCon() throws Exception {
+    public void updateBranchConCondToMultipleCon() throws Exception {
         // Initialize the database
         branchCondToMultipleConRepository.saveAndFlush(branchCondToMultipleCon);
 
         int databaseSizeBeforeUpdate = branchCondToMultipleConRepository.findAll().size();
 
         // Update the branchCondToMultipleCon
-        BranchCondToMultipleCon updatedBranchCondToMultipleCon = branchCondToMultipleConRepository.findById(branchCondToMultipleCon.getId()).get();
-        // Disconnect from session so that the updates on updatedBranchCondToMultipleCon are not directly saved in db
-        em.detach(updatedBranchCondToMultipleCon);
-        BranchCondToMultipleConDTO branchCondToMultipleConDTO = branchCondToMultipleConMapper.toDto(updatedBranchCondToMultipleCon);
+        BranchConCondToMultipleCon updatedBranchConCondToMultipleCon = branchCondToMultipleConRepository.findById(branchCondToMultipleCon.getId()).get();
+        // Disconnect from session so that the updates on updatedBranchConCondToMultipleCon are not directly saved in db
+        em.detach(updatedBranchConCondToMultipleCon);
+        BranchConCondToMultipleConDTO branchCondToMultipleConDTO = branchCondToMultipleConMapper.toDto(updatedBranchConCondToMultipleCon);
 
-        restBranchCondToMultipleConMockMvc.perform(put("/api/branch-cond-to-multiple-cons")
+        restBranchConCondToMultipleConMockMvc.perform(put("/api/branch-cond-to-multiple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(branchCondToMultipleConDTO)))
             .andExpect(status().isOk());
 
-        // Validate the BranchCondToMultipleCon in the database
-        List<BranchCondToMultipleCon> branchCondToMultipleConList = branchCondToMultipleConRepository.findAll();
+        // Validate the BranchConCondToMultipleCon in the database
+        List<BranchConCondToMultipleCon> branchCondToMultipleConList = branchCondToMultipleConRepository.findAll();
         assertThat(branchCondToMultipleConList).hasSize(databaseSizeBeforeUpdate);
-        BranchCondToMultipleCon testBranchCondToMultipleCon = branchCondToMultipleConList.get(branchCondToMultipleConList.size() - 1);
+        BranchConCondToMultipleCon testBranchConCondToMultipleCon = branchCondToMultipleConList.get(branchCondToMultipleConList.size() - 1);
     }
 
     @Test
     @Transactional
-    public void updateNonExistingBranchCondToMultipleCon() throws Exception {
+    public void updateNonExistingBranchConCondToMultipleCon() throws Exception {
         int databaseSizeBeforeUpdate = branchCondToMultipleConRepository.findAll().size();
 
-        // Create the BranchCondToMultipleCon
-        BranchCondToMultipleConDTO branchCondToMultipleConDTO = branchCondToMultipleConMapper.toDto(branchCondToMultipleCon);
+        // Create the BranchConCondToMultipleCon
+        BranchConCondToMultipleConDTO branchCondToMultipleConDTO = branchCondToMultipleConMapper.toDto(branchCondToMultipleCon);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restBranchCondToMultipleConMockMvc.perform(put("/api/branch-cond-to-multiple-cons")
+        restBranchConCondToMultipleConMockMvc.perform(put("/api/branch-cond-to-multiple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(branchCondToMultipleConDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the BranchCondToMultipleCon in the database
-        List<BranchCondToMultipleCon> branchCondToMultipleConList = branchCondToMultipleConRepository.findAll();
+        // Validate the BranchConCondToMultipleCon in the database
+        List<BranchConCondToMultipleCon> branchCondToMultipleConList = branchCondToMultipleConRepository.findAll();
         assertThat(branchCondToMultipleConList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
-    public void deleteBranchCondToMultipleCon() throws Exception {
+    public void deleteBranchConCondToMultipleCon() throws Exception {
         // Initialize the database
         branchCondToMultipleConRepository.saveAndFlush(branchCondToMultipleCon);
 
         int databaseSizeBeforeDelete = branchCondToMultipleConRepository.findAll().size();
 
         // Delete the branchCondToMultipleCon
-        restBranchCondToMultipleConMockMvc.perform(delete("/api/branch-cond-to-multiple-cons/{id}", branchCondToMultipleCon.getId())
+        restBranchConCondToMultipleConMockMvc.perform(delete("/api/branch-cond-to-multiple-cons/{id}", branchCondToMultipleCon.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<BranchCondToMultipleCon> branchCondToMultipleConList = branchCondToMultipleConRepository.findAll();
+        List<BranchConCondToMultipleCon> branchCondToMultipleConList = branchCondToMultipleConRepository.findAll();
         assertThat(branchCondToMultipleConList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test
     @Transactional
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(BranchCondToMultipleCon.class);
-        BranchCondToMultipleCon branchCondToMultipleCon1 = new BranchCondToMultipleCon();
+        TestUtil.equalsVerifier(BranchConCondToMultipleCon.class);
+        BranchConCondToMultipleCon branchCondToMultipleCon1 = new BranchConCondToMultipleCon();
         branchCondToMultipleCon1.setId(1L);
-        BranchCondToMultipleCon branchCondToMultipleCon2 = new BranchCondToMultipleCon();
+        BranchConCondToMultipleCon branchCondToMultipleCon2 = new BranchConCondToMultipleCon();
         branchCondToMultipleCon2.setId(branchCondToMultipleCon1.getId());
         assertThat(branchCondToMultipleCon1).isEqualTo(branchCondToMultipleCon2);
         branchCondToMultipleCon2.setId(2L);
@@ -257,10 +257,10 @@ public class BranchCondToMultipleConResourceIT {
     @Test
     @Transactional
     public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(BranchCondToMultipleConDTO.class);
-        BranchCondToMultipleConDTO branchCondToMultipleConDTO1 = new BranchCondToMultipleConDTO();
+        TestUtil.equalsVerifier(BranchConCondToMultipleConDTO.class);
+        BranchConCondToMultipleConDTO branchCondToMultipleConDTO1 = new BranchConCondToMultipleConDTO();
         branchCondToMultipleConDTO1.setId(1L);
-        BranchCondToMultipleConDTO branchCondToMultipleConDTO2 = new BranchCondToMultipleConDTO();
+        BranchConCondToMultipleConDTO branchCondToMultipleConDTO2 = new BranchConCondToMultipleConDTO();
         assertThat(branchCondToMultipleConDTO1).isNotEqualTo(branchCondToMultipleConDTO2);
         branchCondToMultipleConDTO2.setId(branchCondToMultipleConDTO1.getId());
         assertThat(branchCondToMultipleConDTO1).isEqualTo(branchCondToMultipleConDTO2);

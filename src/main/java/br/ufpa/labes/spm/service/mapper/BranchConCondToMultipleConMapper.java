@@ -13,18 +13,18 @@ public interface BranchConCondToMultipleConMapper extends EntityMapper<BranchCon
 
     @Mapping(source = "theMultipleCon.id", target = "theMultipleConId")
     @Mapping(source = "theBranchConCond.id", target = "theBranchConCondId")
-    BranchConCondToMultipleConDTO toDto(BranchConCondToMultipleCon branchCondToMultipleCon);
+    BranchConCondToMultipleConDTO toDto(BranchConCondToMultipleCon branchConCondToMultipleCon);
 
     @Mapping(source = "theMultipleConId", target = "theMultipleCon")
     @Mapping(source = "theBranchConCondId", target = "theBranchConCond")
-    BranchConCondToMultipleCon toEntity(BranchConCondToMultipleConDTO branchCondToMultipleConDTO);
+    BranchConCondToMultipleCon toEntity(BranchConCondToMultipleConDTO branchConCondToMultipleConDTO);
 
     default BranchConCondToMultipleCon fromId(Long id) {
         if (id == null) {
             return null;
         }
-        BranchConCondToMultipleCon branchCondToMultipleCon = new BranchConCondToMultipleCon();
-        branchCondToMultipleCon.setId(id);
-        return branchCondToMultipleCon;
+        BranchConCondToMultipleCon branchConCondToMultipleCon = new BranchConCondToMultipleCon();
+        branchConCondToMultipleCon.setId(id);
+        return branchConCondToMultipleCon;
     }
 }

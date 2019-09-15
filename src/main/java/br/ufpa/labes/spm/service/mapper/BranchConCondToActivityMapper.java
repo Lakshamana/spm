@@ -13,18 +13,18 @@ public interface BranchConCondToActivityMapper extends EntityMapper<BranchConCon
 
     @Mapping(source = "theActivity.id", target = "theActivityId")
     @Mapping(source = "theBranchConCond.id", target = "theBranchConCondId")
-    BranchConCondToActivityDTO toDto(BranchConCondToActivity branchCondToActivity);
+    BranchConCondToActivityDTO toDto(BranchConCondToActivity branchConCondToActivity);
 
     @Mapping(source = "theActivityId", target = "theActivity")
     @Mapping(source = "theBranchConCondId", target = "theBranchConCond")
-    BranchConCondToActivity toEntity(BranchConCondToActivityDTO branchCondToActivityDTO);
+    BranchConCondToActivity toEntity(BranchConCondToActivityDTO branchConCondToActivityDTO);
 
     default BranchConCondToActivity fromId(Long id) {
         if (id == null) {
             return null;
         }
-        BranchConCondToActivity branchCondToActivity = new BranchConCondToActivity();
-        branchCondToActivity.setId(id);
-        return branchCondToActivity;
+        BranchConCondToActivity branchConCondToActivity = new BranchConCondToActivity();
+        branchConCondToActivity.setId(id);
+        return branchConCondToActivity;
     }
 }

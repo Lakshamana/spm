@@ -24,44 +24,44 @@ public class BranchConCondToActivityService {
 
     private final Logger log = LoggerFactory.getLogger(BranchConCondToActivityService.class);
 
-    private final BranchConCondToActivityRepository branchCondToActivityRepository;
+    private final BranchConCondToActivityRepository branchConCondToActivityRepository;
 
-    private final BranchConCondToActivityMapper branchCondToActivityMapper;
+    private final BranchConCondToActivityMapper branchConCondToActivityMapper;
 
-    public BranchConCondToActivityService(BranchConCondToActivityRepository branchCondToActivityRepository, BranchConCondToActivityMapper branchCondToActivityMapper) {
-        this.branchCondToActivityRepository = branchCondToActivityRepository;
-        this.branchCondToActivityMapper = branchCondToActivityMapper;
+    public BranchConCondToActivityService(BranchConCondToActivityRepository branchConCondToActivityRepository, BranchConCondToActivityMapper branchConCondToActivityMapper) {
+        this.branchConCondToActivityRepository = branchConCondToActivityRepository;
+        this.branchConCondToActivityMapper = branchConCondToActivityMapper;
     }
 
     /**
-     * Save a branchCondToActivity.
+     * Save a branchConCondToActivity.
      *
-     * @param branchCondToActivityDTO the entity to save.
+     * @param branchConCondToActivityDTO the entity to save.
      * @return the persisted entity.
      */
-    public BranchConCondToActivityDTO save(BranchConCondToActivityDTO branchCondToActivityDTO) {
-        log.debug("Request to save BranchConCondToActivity : {}", branchCondToActivityDTO);
-        BranchConCondToActivity branchCondToActivity = branchCondToActivityMapper.toEntity(branchCondToActivityDTO);
-        branchCondToActivity = branchCondToActivityRepository.save(branchCondToActivity);
-        return branchCondToActivityMapper.toDto(branchCondToActivity);
+    public BranchConCondToActivityDTO save(BranchConCondToActivityDTO branchConCondToActivityDTO) {
+        log.debug("Request to save BranchConCondToActivity : {}", branchConCondToActivityDTO);
+        BranchConCondToActivity branchConCondToActivity = branchConCondToActivityMapper.toEntity(branchConCondToActivityDTO);
+        branchConCondToActivity = branchConCondToActivityRepository.save(branchConCondToActivity);
+        return branchConCondToActivityMapper.toDto(branchConCondToActivity);
     }
 
     /**
-     * Get all the branchCondToActivities.
+     * Get all the branchConCondToActivities.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public List<BranchConCondToActivityDTO> findAll() {
         log.debug("Request to get all BranchConCondToActivities");
-        return branchCondToActivityRepository.findAll().stream()
-            .map(branchCondToActivityMapper::toDto)
+        return branchConCondToActivityRepository.findAll().stream()
+            .map(branchConCondToActivityMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
     /**
-     * Get one branchCondToActivity by id.
+     * Get one branchConCondToActivity by id.
      *
      * @param id the id of the entity.
      * @return the entity.
@@ -69,17 +69,17 @@ public class BranchConCondToActivityService {
     @Transactional(readOnly = true)
     public Optional<BranchConCondToActivityDTO> findOne(Long id) {
         log.debug("Request to get BranchConCondToActivity : {}", id);
-        return branchCondToActivityRepository.findById(id)
-            .map(branchCondToActivityMapper::toDto);
+        return branchConCondToActivityRepository.findById(id)
+            .map(branchConCondToActivityMapper::toDto);
     }
 
     /**
-     * Delete the branchCondToActivity by id.
+     * Delete the branchConCondToActivity by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete BranchConCondToActivity : {}", id);
-        branchCondToActivityRepository.deleteById(id);
+        branchConCondToActivityRepository.deleteById(id);
     }
 }

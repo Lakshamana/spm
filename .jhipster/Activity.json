@@ -130,9 +130,9 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "branchCondToActivity",
+            "otherEntityName": "branchConCondToActivity",
             "otherEntityRelationshipName": "theActivity",
-            "relationshipName": "theBranchCondToActivity"
+            "relationshipName": "theBranchConCondToActivity"
         },
         {
             "relationshipType": "one-to-many",

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.BranchCondToActivityService;
+import br.ufpa.labes.spm.service.BranchConCondToActivityService;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.BranchCondToActivityDTO;
+import br.ufpa.labes.spm.service.dto.BranchConCondToActivityDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -19,22 +19,22 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing {@link br.ufpa.labes.spm.domain.BranchCondToActivity}.
+ * REST controller for managing {@link br.ufpa.labes.spm.domain.BranchConCondToActivity}.
  */
 @RestController
 @RequestMapping("/api")
-public class BranchCondToActivityResource {
+public class BranchConCondToActivityResource {
 
-    private final Logger log = LoggerFactory.getLogger(BranchCondToActivityResource.class);
+    private final Logger log = LoggerFactory.getLogger(BranchConCondToActivityResource.class);
 
     private static final String ENTITY_NAME = "branchCondToActivity";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final BranchCondToActivityService branchCondToActivityService;
+    private final BranchConCondToActivityService branchCondToActivityService;
 
-    public BranchCondToActivityResource(BranchCondToActivityService branchCondToActivityService) {
+    public BranchConCondToActivityResource(BranchConCondToActivityService branchCondToActivityService) {
         this.branchCondToActivityService = branchCondToActivityService;
     }
 
@@ -46,12 +46,12 @@ public class BranchCondToActivityResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/branch-cond-to-activities")
-    public ResponseEntity<BranchCondToActivityDTO> createBranchCondToActivity(@RequestBody BranchCondToActivityDTO branchCondToActivityDTO) throws URISyntaxException {
-        log.debug("REST request to save BranchCondToActivity : {}", branchCondToActivityDTO);
+    public ResponseEntity<BranchConCondToActivityDTO> createBranchConCondToActivity(@RequestBody BranchConCondToActivityDTO branchCondToActivityDTO) throws URISyntaxException {
+        log.debug("REST request to save BranchConCondToActivity : {}", branchCondToActivityDTO);
         if (branchCondToActivityDTO.getId() != null) {
             throw new BadRequestAlertException("A new branchCondToActivity cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        BranchCondToActivityDTO result = branchCondToActivityService.save(branchCondToActivityDTO);
+        BranchConCondToActivityDTO result = branchCondToActivityService.save(branchCondToActivityDTO);
         return ResponseEntity.created(new URI("/api/branch-cond-to-activities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -67,12 +67,12 @@ public class BranchCondToActivityResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/branch-cond-to-activities")
-    public ResponseEntity<BranchCondToActivityDTO> updateBranchCondToActivity(@RequestBody BranchCondToActivityDTO branchCondToActivityDTO) throws URISyntaxException {
-        log.debug("REST request to update BranchCondToActivity : {}", branchCondToActivityDTO);
+    public ResponseEntity<BranchConCondToActivityDTO> updateBranchConCondToActivity(@RequestBody BranchConCondToActivityDTO branchCondToActivityDTO) throws URISyntaxException {
+        log.debug("REST request to update BranchConCondToActivity : {}", branchCondToActivityDTO);
         if (branchCondToActivityDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        BranchCondToActivityDTO result = branchCondToActivityService.save(branchCondToActivityDTO);
+        BranchConCondToActivityDTO result = branchCondToActivityService.save(branchCondToActivityDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, branchCondToActivityDTO.getId().toString()))
             .body(result);
@@ -85,8 +85,8 @@ public class BranchCondToActivityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of branchCondToActivities in body.
      */
     @GetMapping("/branch-cond-to-activities")
-    public List<BranchCondToActivityDTO> getAllBranchCondToActivities() {
-        log.debug("REST request to get all BranchCondToActivities");
+    public List<BranchConCondToActivityDTO> getAllBranchConCondToActivities() {
+        log.debug("REST request to get all BranchConCondToActivities");
         return branchCondToActivityService.findAll();
     }
 
@@ -97,9 +97,9 @@ public class BranchCondToActivityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the branchCondToActivityDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/branch-cond-to-activities/{id}")
-    public ResponseEntity<BranchCondToActivityDTO> getBranchCondToActivity(@PathVariable Long id) {
-        log.debug("REST request to get BranchCondToActivity : {}", id);
-        Optional<BranchCondToActivityDTO> branchCondToActivityDTO = branchCondToActivityService.findOne(id);
+    public ResponseEntity<BranchConCondToActivityDTO> getBranchConCondToActivity(@PathVariable Long id) {
+        log.debug("REST request to get BranchConCondToActivity : {}", id);
+        Optional<BranchConCondToActivityDTO> branchCondToActivityDTO = branchCondToActivityService.findOne(id);
         return ResponseUtil.wrapOrNotFound(branchCondToActivityDTO);
     }
 
@@ -110,8 +110,8 @@ public class BranchCondToActivityResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/branch-cond-to-activities/{id}")
-    public ResponseEntity<Void> deleteBranchCondToActivity(@PathVariable Long id) {
-        log.debug("REST request to delete BranchCondToActivity : {}", id);
+    public ResponseEntity<Void> deleteBranchConCondToActivity(@PathVariable Long id) {
+        log.debug("REST request to delete BranchConCondToActivity : {}", id);
         branchCondToActivityService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }

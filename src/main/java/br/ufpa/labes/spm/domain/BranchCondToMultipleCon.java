@@ -8,12 +8,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * A BranchCondToMultipleCon.
+ * A BranchConCondToMultipleCon.
  */
 @Entity
 @Table(name = "branch_cond_to_multiple_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class BranchCondToMultipleCon implements Serializable {
+public class BranchConCondToMultipleCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,11 +22,11 @@ public class BranchCondToMultipleCon implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("theBranchCondToMultipleCons")
+    @JsonIgnoreProperties("theBranchConCondToMultipleCons")
     private MultipleCon theMultipleCon;
 
     @ManyToOne
-    @JsonIgnoreProperties("theBranchCondToMultipleCons")
+    @JsonIgnoreProperties("theBranchConCondToMultipleCons")
     private BranchConCond theBranchConCond;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -42,7 +42,7 @@ public class BranchCondToMultipleCon implements Serializable {
         return theMultipleCon;
     }
 
-    public BranchCondToMultipleCon theMultipleCon(MultipleCon multipleCon) {
+    public BranchConCondToMultipleCon theMultipleCon(MultipleCon multipleCon) {
         this.theMultipleCon = multipleCon;
         return this;
     }
@@ -55,7 +55,7 @@ public class BranchCondToMultipleCon implements Serializable {
         return theBranchConCond;
     }
 
-    public BranchCondToMultipleCon theBranchConCond(BranchConCond branchConCond) {
+    public BranchConCondToMultipleCon theBranchConCond(BranchConCond branchConCond) {
         this.theBranchConCond = branchConCond;
         return this;
     }
@@ -70,10 +70,10 @@ public class BranchCondToMultipleCon implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof BranchCondToMultipleCon)) {
+        if (!(o instanceof BranchConCondToMultipleCon)) {
             return false;
         }
-        return id != null && id.equals(((BranchCondToMultipleCon) o).id);
+        return id != null && id.equals(((BranchConCondToMultipleCon) o).id);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class BranchCondToMultipleCon implements Serializable {
 
     @Override
     public String toString() {
-        return "BranchCondToMultipleCon{" +
+        return "BranchConCondToMultipleCon{" +
             "id=" + getId() +
             "}";
     }

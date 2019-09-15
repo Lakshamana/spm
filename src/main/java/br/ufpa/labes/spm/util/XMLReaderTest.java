@@ -35,116 +35,102 @@ import org.jdom.filter.AbstractFilter;
 import org.jdom.filter.ElementFilter;
 import org.jdom.input.SAXBuilder;
 import org.qrconsult.spm.exceptions.WebapseeException;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.activities.Decomposed;
-import org.qrconsult.spm.model.activities.Plain;
-import org.qrconsult.spm.model.agent.Ability;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.agent.AgentAffinityAgent;
-import org.qrconsult.spm.model.agent.AgentHasAbility;
-import org.qrconsult.spm.model.agent.AgentPlaysRole;
-import org.qrconsult.spm.model.agent.Group;
-import org.qrconsult.spm.model.agent.Role;
-import org.qrconsult.spm.model.agent.RoleNeedsAbility;
-import org.qrconsult.spm.model.artifacts.Artifact;
-import org.qrconsult.spm.model.artifacts.ArtifactTask;
-import org.qrconsult.spm.model.connections.ArtifactCon;
-import org.qrconsult.spm.model.connections.BranchAND;
-import org.qrconsult.spm.model.connections.BranchCond;
-import org.qrconsult.spm.model.connections.BranchCondToActivity;
-import org.qrconsult.spm.model.connections.BranchCondToMultipleCon;
-import org.qrconsult.spm.model.connections.Connection;
-import org.qrconsult.spm.model.connections.Dependency;
-import org.qrconsult.spm.model.connections.Feedback;
-import org.qrconsult.spm.model.connections.Join;
-import org.qrconsult.spm.model.connections.MultipleCon;
-import org.qrconsult.spm.model.connections.Sequence;
-import org.qrconsult.spm.model.log.AgendaEvent;
-import org.qrconsult.spm.model.log.CatalogEvents;
-import org.qrconsult.spm.model.log.ConnectionEvent;
-import org.qrconsult.spm.model.log.GlobalActivityEvent;
-import org.qrconsult.spm.model.log.Log;
-import org.qrconsult.spm.model.log.ModelingActivityEvent;
-import org.qrconsult.spm.model.log.ProcessEvent;
-import org.qrconsult.spm.model.log.ProcessModelEvent;
-import org.qrconsult.spm.model.log.ResourceEvent;
-import org.qrconsult.spm.model.organizationPolicies.Company;
-import org.qrconsult.spm.model.organizationPolicies.Project;
-import org.qrconsult.spm.model.people.Organization;
-import org.qrconsult.spm.model.plainActivities.ArtifactParam;
-import org.qrconsult.spm.model.plainActivities.Automatic;
-import org.qrconsult.spm.model.plainActivities.EnactionDescription;
-import org.qrconsult.spm.model.plainActivities.InvolvedArtifacts;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.model.plainActivities.PrimitiveParam;
-import org.qrconsult.spm.model.plainActivities.ReqAgent;
-import org.qrconsult.spm.model.plainActivities.ReqAgentRequiresAbility;
-import org.qrconsult.spm.model.plainActivities.ReqGroup;
-import org.qrconsult.spm.model.plainActivities.RequiredResource;
-import org.qrconsult.spm.model.policies.staticPolicies.PolAssociation;
-import org.qrconsult.spm.model.policies.staticPolicies.PolCondition;
-import org.qrconsult.spm.model.policies.staticPolicies.PolConnection;
-import org.qrconsult.spm.model.policies.staticPolicies.PolExpression;
-import org.qrconsult.spm.model.policies.staticPolicies.PolInterface;
-import org.qrconsult.spm.model.policies.staticPolicies.PolMethodOperator;
-import org.qrconsult.spm.model.policies.staticPolicies.PolObjValue;
-import org.qrconsult.spm.model.policies.staticPolicies.PolObject;
-import org.qrconsult.spm.model.policies.staticPolicies.PolObjectInterface;
-import org.qrconsult.spm.model.policies.staticPolicies.PolOperand;
-import org.qrconsult.spm.model.policies.staticPolicies.PolOperator;
-import org.qrconsult.spm.model.policies.staticPolicies.PolRelation;
-import org.qrconsult.spm.model.policies.staticPolicies.PolRequiredOperand;
-import org.qrconsult.spm.model.policies.staticPolicies.PolReservedWordOperator;
-import org.qrconsult.spm.model.processKnowledge.ActivityEstimation;
-import org.qrconsult.spm.model.processKnowledge.ActivityMetric;
-import org.qrconsult.spm.model.processKnowledge.AgentEstimation;
-import org.qrconsult.spm.model.processKnowledge.AgentMetric;
-import org.qrconsult.spm.model.processKnowledge.ArtifactEstimation;
-import org.qrconsult.spm.model.processKnowledge.ArtifactMetric;
-import org.qrconsult.spm.model.processKnowledge.GroupEstimation;
-import org.qrconsult.spm.model.processKnowledge.GroupMetric;
-import org.qrconsult.spm.model.processKnowledge.MetricDefinition;
-import org.qrconsult.spm.model.processKnowledge.OrganizationEstimation;
-import org.qrconsult.spm.model.processKnowledge.OrganizationMetric;
-import org.qrconsult.spm.model.processKnowledge.ProcessEstimation;
-import org.qrconsult.spm.model.processKnowledge.ProcessMetric;
-import org.qrconsult.spm.model.processKnowledge.ResourceEstimation;
-import org.qrconsult.spm.model.processKnowledge.ResourceMetric;
-import org.qrconsult.spm.model.processModelGraphical.GraphicCoordinate;
-import org.qrconsult.spm.model.processModelGraphical.WebAPSEEObject;
-import org.qrconsult.spm.model.processModels.ProcessModel;
-import org.qrconsult.spm.model.processModels.Template;
-import org.qrconsult.spm.model.resources.Consumable;
-import org.qrconsult.spm.model.resources.Exclusive;
-import org.qrconsult.spm.model.resources.Resource;
-import org.qrconsult.spm.model.resources.Shareable;
-import org.qrconsult.spm.model.taskagenda.ProcessAgenda;
-import org.qrconsult.spm.model.taskagenda.Task;
-import org.qrconsult.spm.model.taskagenda.TaskAgenda;
-import org.qrconsult.spm.model.tools.ClassMethodCall;
-import org.qrconsult.spm.model.tools.PrimitiveType;
-import org.qrconsult.spm.model.tools.Script;
-import org.qrconsult.spm.model.tools.Subroutine;
-import org.qrconsult.spm.model.tools.ToolDefinition;
-import org.qrconsult.spm.model.tools.ToolParameters;
-import org.qrconsult.spm.model.types.AbilityType;
-import org.qrconsult.spm.model.types.ActivityType;
-import org.qrconsult.spm.model.types.ArtifactType;
-import org.qrconsult.spm.model.types.EventType;
-import org.qrconsult.spm.model.types.GroupType;
-import org.qrconsult.spm.model.types.MetricType;
-import org.qrconsult.spm.model.types.PolicyType;
-import org.qrconsult.spm.model.types.ResourceType;
-import org.qrconsult.spm.model.types.RoleType;
-import org.qrconsult.spm.model.types.ToolType;
-import org.qrconsult.spm.model.types.Type;
-import org.qrconsult.spm.model.organizationPolicies.System;
-import org.qrconsult.spm.model.processModels.Process;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.domain.Ability;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.AgentAffinityAgent;
+import br.ufpa.labes.spm.domain.AgentHasAbility;
+import br.ufpa.labes.spm.domain.AgentPlaysRole;
+import br.ufpa.labes.spm.domain.WorkGroup;
+import br.ufpa.labes.spm.domain.Role;
+import br.ufpa.labes.spm.domain.RoleNeedsAbility;
+import br.ufpa.labes.spm.domain.Artifact;
+import br.ufpa.labes.spm.domain.ArtifactTask;
+import br.ufpa.labes.spm.domain.ArtifactCon;
+import br.ufpa.labes.spm.domain.BranchANDCon;
+import br.ufpa.labes.spm.domain.BranchConCond;
+import br.ufpa.labes.spm.domain.BranchConCondToActivity;
+import br.ufpa.labes.spm.domain.BranchConCondToMultipleCon;
+import br.ufpa.labes.spm.domain.Connection;
+import br.ufpa.labes.spm.domain.Dependency;
+import br.ufpa.labes.spm.domain.Feedback;
+import br.ufpa.labes.spm.domain.JoinCon;
+import br.ufpa.labes.spm.domain.MultipleCon;
+import br.ufpa.labes.spm.domain.Sequence;
+import br.ufpa.labes.spm.domain.AgendaEvent;
+import br.ufpa.labes.spm.domain.CatalogEvents;
+import br.ufpa.labes.spm.domain.ConnectionEvent;
+import br.ufpa.labes.spm.domain.GlobalActivityEvent;
+import br.ufpa.labes.spm.domain.Log;
+import br.ufpa.labes.spm.domain.ModelingActivityEvent;
+import br.ufpa.labes.spm.domain.ProcessEvent;
+import br.ufpa.labes.spm.domain.ProcessModelEvent;
+import br.ufpa.labes.spm.domain.ResourceEvent;
+import br.ufpa.labes.spm.domain.Company;
+import br.ufpa.labes.spm.domain.Project;
+import br.ufpa.labes.spm.domain.Organization;
+import br.ufpa.labes.spm.domain.ArtifactParam;
+import br.ufpa.labes.spm.domain.Automatic;
+import br.ufpa.labes.spm.domain.EnactionDescription;
+import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.domain.PrimitiveParam;
+import br.ufpa.labes.spm.domain.ReqAgent;
+import br.ufpa.labes.spm.domain.ReqAgentRequiresAbility;
+import br.ufpa.labes.spm.domain.ReqWorkGroup;
+import br.ufpa.labes.spm.domain.RequiredResource;
+import br.ufpa.labes.spm.domain.ActivityEstimation;
+import br.ufpa.labes.spm.domain.ActivityMetric;
+import br.ufpa.labes.spm.domain.AgentEstimation;
+import br.ufpa.labes.spm.domain.AgentMetric;
+import br.ufpa.labes.spm.domain.ArtifactEstimation;
+import br.ufpa.labes.spm.domain.ArtifactMetric;
+import br.ufpa.labes.spm.domain.WorkGroupEstimation;
+import br.ufpa.labes.spm.domain.WorkGroupMetric;
+import br.ufpa.labes.spm.domain.MetricDefinition;
+import br.ufpa.labes.spm.domain.OrganizationEstimation;
+import br.ufpa.labes.spm.domain.OrganizationMetric;
+import br.ufpa.labes.spm.domain.ProcessEstimation;
+import br.ufpa.labes.spm.domain.ProcessMetric;
+import br.ufpa.labes.spm.domain.ResourceEstimation;
+import br.ufpa.labes.spm.domain.ResourceMetric;
+import br.ufpa.labes.spm.domain.GraphicCoordinate;
+import br.ufpa.labes.spm.domain.WebAPSEEObject;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.domain.Template;
+import br.ufpa.labes.spm.domain.Consumable;
+import br.ufpa.labes.spm.domain.Exclusive;
+import br.ufpa.labes.spm.domain.Resource;
+import br.ufpa.labes.spm.domain.Shareable;
+import br.ufpa.labes.spm.domain.ProcessAgenda;
+import br.ufpa.labes.spm.domain.Task;
+import br.ufpa.labes.spm.domain.TaskAgenda;
+import br.ufpa.labes.spm.domain.ClassMethodCall;
+import br.ufpa.labes.spm.domain.PrimitiveType;
+import br.ufpa.labes.spm.domain.Script;
+import br.ufpa.labes.spm.domain.Subroutine;
+import br.ufpa.labes.spm.domain.ToolDefinition;
+import br.ufpa.labes.spm.domain.ToolParameters;
+import br.ufpa.labes.spm.domain.AbilityType;
+import br.ufpa.labes.spm.domain.ActivityType;
+import br.ufpa.labes.spm.domain.ArtifactType;
+import br.ufpa.labes.spm.domain.EventType;
+import br.ufpa.labes.spm.domain.WorkGroupType;
+import br.ufpa.labes.spm.domain.MetricType;
+import br.ufpa.labes.spm.domain.PolicyType;
+import br.ufpa.labes.spm.domain.ResourceType;
+import br.ufpa.labes.spm.domain.RoleType;
+import br.ufpa.labes.spm.domain.ToolType;
+import br.ufpa.labes.spm.domain.Type;
+import br.ufpa.labes.spm.domain.System;
+import br.ufpa.labes.spm.domain.Process;
 
 public class XMLReaderTest {
 
 	/*
-	 * Type (and subclasses), Ability, Agent, TaskAgenda, Group, Role,
+	 * Type (and subclasses), Ability, Agent, TaskAgenda, WorkGroup, Role,
 	 * Artifact, Project, Organization, System, MetricDefinition,
 	 * Resource (and subclasses), ToolDefinition,
 	 * Subroutine (and classes), ToolParameters, PrimitiveType
@@ -162,7 +148,7 @@ public class XMLReaderTest {
 
 	/*
 	 * AgentAffinityAgent, AgentHasAbility, AgentPlaysRole, RoleNeedsAbility,
-	 * ArtifactTask, BranchCondToActivity, BranchCondToMultipleCon,
+	 * ArtifactTask, BranchConCondToActivity, BranchConCondToMultipleCon,
 	 * ReqAgentRequiresAbility
 	 */
 	private Hashtable<String,Object> associatives; // Associative objects that must be in the resulting XML file <CanonicalClassName_Oid, Object Reference>
@@ -274,7 +260,7 @@ public class XMLReaderTest {
 		ElementFilter activityTypeFilter = new ElementFilter(ActivityType.class.getSimpleName());
 		ElementFilter artifactTypeFilter = new ElementFilter(ArtifactType.class.getSimpleName());
 		ElementFilter eventTypeFilter = new ElementFilter(EventType.class.getSimpleName());
-		ElementFilter groupTypeFilter = new ElementFilter(GroupType.class.getSimpleName());
+		ElementFilter WorkGroupTypeFilter = new ElementFilter(WorkGroupType.class.getSimpleName());
 		ElementFilter metricTypeFilter = new ElementFilter(MetricType.class.getSimpleName());
 		ElementFilter policyTypeFilter = new ElementFilter(PolicyType.class.getSimpleName());
 		ElementFilter resourceTypeFilter = new ElementFilter(ResourceType.class.getSimpleName());
@@ -284,7 +270,7 @@ public class XMLReaderTest {
 		AbstractFilter typeFilter = ((AbstractFilter) abilityTypeFilter.or(activityTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(artifactTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(eventTypeFilter));
-		typeFilter = ((AbstractFilter) typeFilter.or(groupTypeFilter));
+		typeFilter = ((AbstractFilter) typeFilter.or(WorkGroupTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(metricTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(policyTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(resourceTypeFilter));
@@ -446,22 +432,22 @@ public class XMLReaderTest {
 		}
 	}
 
-	private void loadGroup(Element organizational) {
-		List<Element> groups = organizational.getChildren(Group.class.getSimpleName());
-		Iterator<Element> iter = groups.iterator();
+	private void loadWorkGroup(Element organizational) {
+		List<Element> WorkGroups = organizational.getChildren(WorkGroup.class.getSimpleName());
+		Iterator<Element> iter = WorkGroups.iterator();
 		while (iter.hasNext()) {
 			Element element = (Element) iter.next();
-			Group group = (Group) this.buildOrgObject(element);
-			if(group == null) continue;
+			WorkGroup WorkGroup = (WorkGroup) this.buildOrgObject(element);
+			if(WorkGroup == null) continue;
 			// Setting type...
-			String typeKey = element.getChild("TheGroupType").getAttributeValue("REF");
-			group.insertIntoTheGroupType((GroupType) this.organizational.get(typeKey));
+			String typeKey = element.getChild("TheWorkGroupType").getAttributeValue("REF");
+			WorkGroup.insertIntoTheWorkGroupType((WorkGroupType) this.organizational.get(typeKey));
 
-			// Setting super group...
-			Element superElm = element.getChild("SuperGroup");
+			// Setting super WorkGroup...
+			Element superElm = element.getChild("SuperWorkGroup");
 			if(superElm != null){
 				String superKey = superElm.getAttributeValue("REF");
-				group.insertIntoSuperGroup((Group) this.organizational.get(superKey));
+				WorkGroup.insertIntoSuperWorkGroup((WorkGroup) this.organizational.get(superKey));
 			}
 
 			// Setting agents...
@@ -472,11 +458,11 @@ public class XMLReaderTest {
 				while (iterItens.hasNext()) {
 					Element agentElm = (Element) iterItens.next();
 					String agentKey = agentElm.getValue();
-					group.insertIntoTheAgent((Agent) this.organizational.get(agentKey));
+					WorkGroup.insertIntoTheAgent((Agent) this.organizational.get(agentKey));
 				}
 			}
 
-			this.organizational.put(element.getAttributeValue("KEY"), group);
+			this.organizational.put(element.getAttributeValue("KEY"), WorkGroup);
 		}
 	}
 
@@ -611,7 +597,7 @@ public class XMLReaderTest {
 	 */
 	private void loadOrgAssociatives(Element associatives) {
 		/*
-		 * ArtifactTask, BranchCondToActivity, BranchCondToMultipleCon,
+		 * ArtifactTask, BranchConCondToActivity, BranchConCondToMultipleCon,
 		 * ReqAgentRequiresAbility
 		 */
 		List<Element> aaas = associatives.getChildren(AgentAffinityAgent.class.getSimpleName());
@@ -946,9 +932,9 @@ public class XMLReaderTest {
 	private void loadRequiredPeople(Element processComponents, Element organizational){
 
 		ElementFilter reqAgentFilter = new ElementFilter(ReqAgent.class.getSimpleName());
-		ElementFilter reqGroupFilter = new ElementFilter(ReqGroup.class.getSimpleName());
+		ElementFilter reqWorkGroupFilter = new ElementFilter(ReqWorkGroup.class.getSimpleName());
 
-		AbstractFilter requiredPeopleFilter = ((AbstractFilter) reqAgentFilter.or(reqGroupFilter));
+		AbstractFilter requiredPeopleFilter = ((AbstractFilter) reqAgentFilter.or(reqWorkGroupFilter));
 
 		Iterator<Element> iter = processComponents.getDescendants(requiredPeopleFilter);
 		while (iter.hasNext()) {
@@ -977,27 +963,27 @@ public class XMLReaderTest {
 
 				this.processComponents.put(requiredPeopleElm.getAttributeValue("KEY"), reqAgent);
 			}
-			else{ //tagName.equals(ReqGroup.class.getSimpleName()
+			else{ //tagName.equals(ReqWorkGroup.class.getSimpleName()
 
-				ReqGroup reqGroup = new ReqGroup();
+				ReqWorkGroup reqWorkGroup = new ReqWorkGroup();
 
-				Element groupTypeElm = requiredPeopleElm.getChild("TheGroupType");
-				if(groupTypeElm == null) continue; // Inconsistency handle
-				String groupTypeKey = groupTypeElm.getAttributeValue("REF");
-				reqGroup.insertIntoTheGroupType((GroupType) this.organizational.get(groupTypeKey));
+				Element WorkGroupTypeElm = requiredPeopleElm.getChild("TheWorkGroupType");
+				if(WorkGroupTypeElm == null) continue; // Inconsistency handle
+				String WorkGroupTypeKey = WorkGroupTypeElm.getAttributeValue("REF");
+				reqWorkGroup.insertIntoTheWorkGroupType((WorkGroupType) this.organizational.get(WorkGroupTypeKey));
 
 				String normalKey = requiredPeopleElm.getChild("TheNormal").getAttributeValue("REF");
-				reqGroup.insertIntoTheNormal((Normal) this.processComponents.get(normalKey));
+				reqWorkGroup.insertIntoTheNormal((Normal) this.processComponents.get(normalKey));
 
-				Element groupElm = requiredPeopleElm.getChild("TheGroup");
-				if(groupElm != null){
-					String groupKey = groupElm.getAttributeValue("REF");
-					reqGroup.insertIntoTheGroup((Group) this.organizational.get(groupKey));
+				Element WorkGroupElm = requiredPeopleElm.getChild("TheWorkGroup");
+				if(WorkGroupElm != null){
+					String WorkGroupKey = WorkGroupElm.getAttributeValue("REF");
+					reqWorkGroup.insertIntoTheWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
 				}
 
-				this.persistObject(reqGroup, null);
+				this.persistObject(reqWorkGroup, null);
 
-				this.processComponents.put(requiredPeopleElm.getAttributeValue("KEY"), reqGroup);
+				this.processComponents.put(requiredPeopleElm.getAttributeValue("KEY"), reqWorkGroup);
 			}
 		}
 	}
@@ -1076,15 +1062,15 @@ public class XMLReaderTest {
 		ElementFilter artifactConFilter = new ElementFilter(ArtifactCon.class.getSimpleName());
 		ElementFilter sequenceFilter = new ElementFilter(Sequence.class.getSimpleName());
 		ElementFilter feedbackFilter = new ElementFilter(Feedback.class.getSimpleName());
-		ElementFilter branchANDFilter = new ElementFilter(BranchAND.class.getSimpleName());
-		ElementFilter branchCondFilter = new ElementFilter(BranchCond.class.getSimpleName());
-		ElementFilter joinFilter = new ElementFilter(Join.class.getSimpleName());
+		ElementFilter branchANDConFilter = new ElementFilter(BranchANDCon.class.getSimpleName());
+		ElementFilter branchConCondFilter = new ElementFilter(BranchConCond.class.getSimpleName());
+		ElementFilter joinConFilter = new ElementFilter(JoinCon.class.getSimpleName());
 
 		AbstractFilter connectionFilter = ((AbstractFilter) artifactConFilter.or(sequenceFilter));
 		connectionFilter = ((AbstractFilter) connectionFilter.or(feedbackFilter));
-		connectionFilter = ((AbstractFilter) connectionFilter.or(branchANDFilter));
-		connectionFilter = ((AbstractFilter) connectionFilter.or(branchCondFilter));
-		connectionFilter = ((AbstractFilter) connectionFilter.or(joinFilter));
+		connectionFilter = ((AbstractFilter) connectionFilter.or(branchANDConFilter));
+		connectionFilter = ((AbstractFilter) connectionFilter.or(branchConCondFilter));
+		connectionFilter = ((AbstractFilter) connectionFilter.or(joinConFilter));
 
 		Iterator<Element> iter = processComponents.getDescendants(connectionFilter);
 		while (iter.hasNext()) {
@@ -1168,13 +1154,13 @@ public class XMLReaderTest {
 				feedback = (Feedback) this.persistObject(feedback, null);
 				this.processComponents.put(key, feedback);
 			}
-			else if(connection instanceof BranchAND){
-				BranchAND branchAND = (BranchAND) connection;
+			else if(connection instanceof BranchANDCon){
+				BranchANDCon branchAND = (BranchANDCon) connection;
 
 				Element fromActivityElm = connectionElm.getChild("FromActivity");
 				if(fromActivityElm != null){
 					String fromRef = fromActivityElm.getAttributeValue("REF");
-					branchAND.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchANDCon.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				Element toActivities = connectionElm.getChild("ToActivity");
@@ -1184,17 +1170,17 @@ public class XMLReaderTest {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						branchAND.insertIntoToActivity((Activity) this.processComponents.get(itemRef));
+						branchANDCon.insertIntoToActivity((Activity) this.processComponents.get(itemRef));
 					}
 				}
 
 				// Not needed! It'll be settled by the artifact connection
-				// branchAND.insertIntoFromArtifactCon(null);
+				// branchANDCon.insertIntoFromArtifactCon(null);
 
 				Element fromMultipleCon = connectionElm.getChild("FromMultipleConnection");
 				if(fromMultipleCon != null){
 					String fromRef = fromMultipleCon.getAttributeValue("REF");
-					branchAND.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchANDCon.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				Element toMultipleCons = connectionElm.getChild("ToMultipleCon");
@@ -1204,42 +1190,42 @@ public class XMLReaderTest {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						branchAND.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(itemRef));
+						branchANDCon.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(itemRef));
 					}
 				}
 
-				branchAND = (BranchAND) this.persistObject(branchAND, null);
-				this.processComponents.put(key, branchAND);
+				branchANDCon = (BranchAND) this.persistObject(branchANDCon, null);
+				this.processComponents.put(key, branchANDCon);
 			}
-			else if(connection instanceof BranchCond){
-				BranchCond branchCond = (BranchCond) connection;
+			else if(connection instanceof BranchConCond){
+				BranchConCond branchConCond = (BranchConCond) connection;
 
 				Element fromActivityElm = connectionElm.getChild("FromActivity");
 				if(fromActivityElm != null){
 					String fromRef = fromActivityElm.getAttributeValue("REF");
-					branchCond.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchConCond.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				// Not needed! It'll be settled by the associative class
-				//branchCond.insertIntoTheBranchCondToActivity(null);
+				//branchConCond.insertIntoTheBranchConCondToActivity(null);
 
 				// Not needed! It'll be settled by the artifact connection
-				// branchCond.insertIntoFromArtifactCon(null);
+				// branchConCond.insertIntoFromArtifactCon(null);
 
 				Element fromMultipleCon = connectionElm.getChild("FromMultipleConnection");
 				if(fromMultipleCon != null){
 					String fromRef = fromMultipleCon.getAttributeValue("REF");
-					branchCond.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchConCond.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				// Not needed! It'll be settled by the associative class
-				// branchCond.insertIntoTheBranchCondToMultipleCon(null);
+				// branchConCond.insertIntoTheBranchConCondToMultipleCon(null);
 
-				branchCond = (BranchCond) this.persistObject(branchCond, null);
-				this.processComponents.put(key, branchCond);
+				branchConCond = (BranchConCond) this.persistObject(branchConCond, null);
+				this.processComponents.put(key, branchConCond);
 			}
-			else if(connection instanceof Join){
-				Join join = (Join) connection;
+			else if(connection instanceof JoinCon){
+				JoinCon join = (JoinCon) connection;
 
 				Element fromActivities = connectionElm.getChild("FromActivity");
 				if(fromActivities != null){
@@ -1248,18 +1234,18 @@ public class XMLReaderTest {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						join.insertIntoFromActivity((Activity) this.processComponents.get(itemRef));
+						joinCon.insertIntoFromActivity((Activity) this.processComponents.get(itemRef));
 					}
 				}
 
 				Element toActivityElm = connectionElm.getChild("ToActivity");
 				if(toActivityElm != null){
 					String toRef = toActivityElm.getAttributeValue("REF");
-					join.insertIntoToActivity((Activity) this.processComponents.get(toRef));
+					joinCon.insertIntoToActivity((Activity) this.processComponents.get(toRef));
 				}
 
 				// Not needed! It'll be settled by the artifact connection
-				// join.insertIntoFromArtifactCon(null);
+				// joinCon.insertIntoFromArtifactCon(null);
 
 				Element fromMultipleCons = connectionElm.getChild("FromMultipleCon");
 				if(fromMultipleCons != null){
@@ -1268,18 +1254,18 @@ public class XMLReaderTest {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						join.insertIntoFromMultipleCon((MultipleCon) this.processComponents.get(itemRef));
+						joinCon.insertIntoFromMultipleCon((MultipleCon) this.processComponents.get(itemRef));
 					}
 				}
 
 				Element toMultipleConElm = connectionElm.getChild("ToMultipleCon");
 				if(toMultipleConElm != null){
 					String toRef = toMultipleConElm.getAttributeValue("REF");
-					join.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(toRef));
+					joinCon.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(toRef));
 				}
 
-				join = (Join) this.persistObject(join, null);
-				this.processComponents.put(key, join);
+				joinCon = (Join) this.persistObject(joinCon, null);
+				this.processComponents.put(key, joinCon);
 			}
 		}
 
@@ -1655,14 +1641,14 @@ public class XMLReaderTest {
 		ElementFilter activityEstFilter = new ElementFilter(ActivityEstimation.class.getSimpleName());
 		ElementFilter agentEstFilter = new ElementFilter(AgentEstimation.class.getSimpleName());
 		ElementFilter artifactEstFilter = new ElementFilter(ArtifactEstimation.class.getSimpleName());
-		ElementFilter groupEstFilter = new ElementFilter(GroupEstimation.class.getSimpleName());
+		ElementFilter WorkGroupEstFilter = new ElementFilter(WorkGroupEstimation.class.getSimpleName());
 		ElementFilter organizationEstFilter = new ElementFilter(OrganizationEstimation.class.getSimpleName());
 		ElementFilter processEstFilter = new ElementFilter(ProcessEstimation.class.getSimpleName());
 		ElementFilter resourceEstFilter = new ElementFilter(ResourceEstimation.class.getSimpleName());
 
 		AbstractFilter estimationFilter = ((AbstractFilter) activityEstFilter.or(agentEstFilter));
 		estimationFilter = ((AbstractFilter) estimationFilter.or(artifactEstFilter));
-		estimationFilter = ((AbstractFilter) estimationFilter.or(groupEstFilter));
+		estimationFilter = ((AbstractFilter) estimationFilter.or(WorkGroupEstFilter));
 		estimationFilter = ((AbstractFilter) estimationFilter.or(organizationEstFilter));
 		estimationFilter = ((AbstractFilter) estimationFilter.or(processEstFilter));
 		estimationFilter = ((AbstractFilter) estimationFilter.or(resourceEstFilter));
@@ -1671,14 +1657,14 @@ public class XMLReaderTest {
 		ElementFilter activityMetFilter = new ElementFilter(ActivityMetric.class.getSimpleName());
 		ElementFilter agentMetFilter = new ElementFilter(AgentMetric.class.getSimpleName());
 		ElementFilter artifactMetFilter = new ElementFilter(ArtifactMetric.class.getSimpleName());
-		ElementFilter groupMetFilter = new ElementFilter(GroupMetric.class.getSimpleName());
+		ElementFilter WorkGroupMetFilter = new ElementFilter(WorkGroupMetric.class.getSimpleName());
 		ElementFilter organizationMetFilter = new ElementFilter(OrganizationMetric.class.getSimpleName());
 		ElementFilter processMetFilter = new ElementFilter(ProcessMetric.class.getSimpleName());
 		ElementFilter resourceMetFilter = new ElementFilter(ResourceMetric.class.getSimpleName());
 
 		AbstractFilter metricFilter = ((AbstractFilter) activityMetFilter.or(agentMetFilter));
 		metricFilter = ((AbstractFilter) metricFilter.or(artifactMetFilter));
-		metricFilter = ((AbstractFilter) metricFilter.or(groupMetFilter));
+		metricFilter = ((AbstractFilter) metricFilter.or(WorkGroupMetFilter));
 		metricFilter = ((AbstractFilter) metricFilter.or(organizationMetFilter));
 		metricFilter = ((AbstractFilter) metricFilter.or(processMetFilter));
 		metricFilter = ((AbstractFilter) metricFilter.or(resourceMetFilter));
@@ -1735,13 +1721,13 @@ public class XMLReaderTest {
 
 				this.processComponents.put(key, est);
 			}
-			else if(estElm.getQualifiedName().equals(GroupEstimation.class.getSimpleName())){
-				GroupEstimation est = new GroupEstimation();
+			else if(estElm.getQualifiedName().equals(WorkGroupEstimation.class.getSimpleName())){
+				WorkGroupEstimation est = new WorkGroupEstimation();
 				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
 				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
 
-				String groupKey = estElm.getChild("Group").getAttributeValue("REF");
-				est.insertIntoGroup((Group) this.organizational.get(groupKey));
+				String WorkGroupKey = estElm.getChild("WorkGroup").getAttributeValue("REF");
+				est.insertIntoWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
 
 				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
 				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
@@ -1856,15 +1842,15 @@ public class XMLReaderTest {
 
 				this.processComponents.put(key, met);
 			}
-			else if(metElm.getQualifiedName().equals(GroupMetric.class.getSimpleName())){
-				GroupMetric met = new GroupMetric();
+			else if(metElm.getQualifiedName().equals(WorkGroupMetric.class.getSimpleName())){
+				WorkGroupMetric met = new WorkGroupMetric();
 				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
 				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
 				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
 				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
 
-				String groupKey = metElm.getChild("Group").getAttributeValue("REF");
-				met.insertIntoGroup((Group) this.organizational.get(groupKey));
+				String WorkGroupKey = metElm.getChild("WorkGroup").getAttributeValue("REF");
+				met.insertIntoWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
 
 				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
 				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
@@ -2302,63 +2288,63 @@ public class XMLReaderTest {
 			}
 		}
 
-		List<Element> bctas = associatives.getChildren(BranchCondToActivity.class.getSimpleName());
+		List<Element> bctas = associatives.getChildren(BranchConCondToActivity.class.getSimpleName());
 		Iterator<Element> iterbctas = bctas.iterator();
 		while (iterbctas.hasNext()) {
 			Element bctaElm = (Element) iterbctas.next();
 
 			String key = bctaElm.getAttributeValue("KEY");
 
-			Element branchCondElm = bctaElm.getChild("TheBranchCond");
-			String branchCondKey = branchCondElm.getAttributeValue("REF");
+			Element branchConCondElm = bctaElm.getChild("TheBranchConCond");
+			String branchConCondKey = branchConCondElm.getAttributeValue("REF");
 
-			BranchCond branchCond = (BranchCond) this.processComponents.get(branchCondKey);
+			BranchConCond branchConCond = (BranchConCond) this.processComponents.get(branchConCondKey);
 
 			Element actElm = bctaElm.getChild("TheActivity");
 			String actKey = actElm.getAttributeValue("REF");
 
 			Activity activity = (Activity) this.processComponents.get(actKey);
 
-			if(!this.isAssociativeExists(BranchCondToActivity.class, branchCond, activity)){
+			if(!this.isAssociativeExists(BranchConCondToActivity.class, branchConCond, activity)){
 
-				BranchCondToActivity bcta = new BranchCondToActivity();
-				bcta.insertIntoTheBranchCond(branchCond);
+				BranchConCondToActivity bcta = new BranchConCondToActivity();
+				bcta.insertIntoTheBranchConCond(branchConCond);
 				bcta.insertIntoTheActivity(activity);
 
 				this.processComponents.put(bctaElm.getChild("TheCondition").getAttributeValue("REF"), bcta.getTheCondition());
 
-				bcta = (BranchCondToActivity) this.persistObject(bcta, null);
+				bcta = (BranchConCondToActivity) this.persistObject(bcta, null);
 
 				this.associatives.put(key, bcta);
 			}
 		}
 
-		List<Element> bctms = associatives.getChildren(BranchCondToMultipleCon.class.getSimpleName());
+		List<Element> bctms = associatives.getChildren(BranchConCondToMultipleCon.class.getSimpleName());
 		Iterator<Element> iterbctms = bctas.iterator();
 		while (iterbctms.hasNext()) {
 			Element bctmElm = (Element) iterbctms.next();
 
 			String key = bctmElm.getAttributeValue("KEY");
 
-			Element branchCondElm = bctmElm.getChild("TheBranchCond");
-			String branchCondKey = branchCondElm.getAttributeValue("REF");
+			Element branchConCondElm = bctmElm.getChild("TheBranchConCond");
+			String branchConCondKey = branchConCondElm.getAttributeValue("REF");
 
-			BranchCond branchCond = (BranchCond) this.processComponents.get(branchCondKey);
+			BranchConCond branchConCond = (BranchConCond) this.processComponents.get(branchConCondKey);
 
 			Element mcElm = bctmElm.getChild("TheMultipleCon");
 			String mcKey = mcElm.getAttributeValue("REF");
 
 			MultipleCon multipleCon = (MultipleCon) this.processComponents.get(mcKey);
 
-			if(!this.isAssociativeExists(BranchCondToMultipleCon.class, branchCond, multipleCon)){
+			if(!this.isAssociativeExists(BranchConCondToMultipleCon.class, branchConCond, multipleCon)){
 
-				BranchCondToMultipleCon bctm = new BranchCondToMultipleCon();
-				bctm.insertIntoTheBranchCond(branchCond);
+				BranchConCondToMultipleCon bctm = new BranchConCondToMultipleCon();
+				bctm.insertIntoTheBranchConCond(branchConCond);
 				bctm.insertIntoTheMultipleCon(multipleCon);
 
 				this.processComponents.put(bctmElm.getChild("TheCondition").getAttributeValue("REF"), bctm.getTheCondition());
 
-				bctm = (BranchCondToMultipleCon) this.persistObject(bctm, null);
+				bctm = (BranchConCondToMultipleCon) this.persistObject(bctm, null);
 
 				this.associatives.put(key, bctm);
 			}
@@ -2669,8 +2655,8 @@ public class XMLReaderTest {
 				if (content.getParentElement().getParentElement() != null) {
 
 					if (((Element) content.getParent().getParent()).getQualifiedName().equals("SEQUENCENODE")
-						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("BRANCHNODE")
-						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("JOINNODE")
+						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("BRANCHConNODE")
+						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("JOINConNODE")
 						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("ARTIFACTCONNODE")) {
 
 						if(((Element) content.getParent()).getQualifiedName().equals("IDENT")){
@@ -2817,10 +2803,10 @@ public class XMLReaderTest {
 			hql += "obj.theRole.ident = '"+ ((Role)from).getIdent() + "' AND obj.theAbility.ident = '"+ ((Ability)to).getIdent() + "'";
 		else if(classe.equals(ArtifactTask.class))
 			hql += "obj.theArtifact.ident = '"+ ((Artifact)from).getIdent() + "' AND obj.theTask.theNormal.ident = '"+ ((Task)to).getTheNormal().getIdent() + "'";
-		else if(classe.equals(BranchCondToActivity.class))
-			hql += "obj.theBranchCond.ident = '"+ ((BranchCond)from).getIdent() + "' AND obj.theActivity.ident = '"+ ((Activity)to).getIdent() + "'";
-		else if(classe.equals(BranchCondToMultipleCon.class))
-			hql += "obj.theBranchCond.ident = '"+ ((BranchCond)from).getIdent() + "' AND obj.theMultipleCon.ident = '"+ ((MultipleCon)to).getIdent() + "'";
+		else if(classe.equals(BranchConCondToActivity.class))
+			hql += "obj.theBranchConCond.ident = '"+ ((BranchConCond)from).getIdent() + "' AND obj.theActivity.ident = '"+ ((Activity)to).getIdent() + "'";
+		else if(classe.equals(BranchConCondToMultipleCon.class))
+			hql += "obj.theBranchConCond.ident = '"+ ((BranchConCond)from).getIdent() + "' AND obj.theMultipleCon.ident = '"+ ((MultipleCon)to).getIdent() + "'";
 		else if(classe.equals(ReqAgentRequiresAbility.class))
 			hql += "obj.theReqAgent.theNormal.ident = '"+ ((ReqAgent)from).getTheNormal().getIdent() +"' " +
 					"AND obj.theReqAgent.theRole.ident = '"+ ((ReqAgent)from).getTheRole().getIdent() +"' " +

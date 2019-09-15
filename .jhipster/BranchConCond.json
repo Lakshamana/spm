@@ -9,15 +9,15 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "branchCondToActivity",
+            "otherEntityName": "branchConCondToActivity",
             "otherEntityRelationshipName": "theBranchConCond",
-            "relationshipName": "theBranchCondToActivity"
+            "relationshipName": "theBranchConCondToActivity"
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "branchCondToMultipleCon",
+            "otherEntityName": "branchConCondToMultipleCon",
             "otherEntityRelationshipName": "theBranchConCond",
-            "relationshipName": "theBranchCondToMultipleCon"
+            "relationshipName": "theBranchConCondToMultipleCon"
         }
     ],
     "changelogDate": "20190915031851",

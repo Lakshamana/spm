@@ -11,7 +11,7 @@ import java.io.Serializable;
  * A BranchConCondToActivity.
  */
 @Entity
-@Table(name = "branch_cond_to_activity")
+@Table(name = "branch_con_cond_to_activity")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class BranchConCondToActivity implements Serializable {
 

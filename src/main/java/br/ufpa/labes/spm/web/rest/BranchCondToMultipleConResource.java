@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.BranchCondToMultipleConService;
+import br.ufpa.labes.spm.service.BranchConCondToMultipleConService;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.BranchCondToMultipleConDTO;
+import br.ufpa.labes.spm.service.dto.BranchConCondToMultipleConDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -19,22 +19,22 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing {@link br.ufpa.labes.spm.domain.BranchCondToMultipleCon}.
+ * REST controller for managing {@link br.ufpa.labes.spm.domain.BranchConCondToMultipleCon}.
  */
 @RestController
 @RequestMapping("/api")
-public class BranchCondToMultipleConResource {
+public class BranchConCondToMultipleConResource {
 
-    private final Logger log = LoggerFactory.getLogger(BranchCondToMultipleConResource.class);
+    private final Logger log = LoggerFactory.getLogger(BranchConCondToMultipleConResource.class);
 
     private static final String ENTITY_NAME = "branchCondToMultipleCon";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final BranchCondToMultipleConService branchCondToMultipleConService;
+    private final BranchConCondToMultipleConService branchCondToMultipleConService;
 
-    public BranchCondToMultipleConResource(BranchCondToMultipleConService branchCondToMultipleConService) {
+    public BranchConCondToMultipleConResource(BranchConCondToMultipleConService branchCondToMultipleConService) {
         this.branchCondToMultipleConService = branchCondToMultipleConService;
     }
 
@@ -46,12 +46,12 @@ public class BranchCondToMultipleConResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/branch-cond-to-multiple-cons")
-    public ResponseEntity<BranchCondToMultipleConDTO> createBranchCondToMultipleCon(@RequestBody BranchCondToMultipleConDTO branchCondToMultipleConDTO) throws URISyntaxException {
-        log.debug("REST request to save BranchCondToMultipleCon : {}", branchCondToMultipleConDTO);
+    public ResponseEntity<BranchConCondToMultipleConDTO> createBranchConCondToMultipleCon(@RequestBody BranchConCondToMultipleConDTO branchCondToMultipleConDTO) throws URISyntaxException {
+        log.debug("REST request to save BranchConCondToMultipleCon : {}", branchCondToMultipleConDTO);
         if (branchCondToMultipleConDTO.getId() != null) {
             throw new BadRequestAlertException("A new branchCondToMultipleCon cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        BranchCondToMultipleConDTO result = branchCondToMultipleConService.save(branchCondToMultipleConDTO);
+        BranchConCondToMultipleConDTO result = branchCondToMultipleConService.save(branchCondToMultipleConDTO);
         return ResponseEntity.created(new URI("/api/branch-cond-to-multiple-cons/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -67,12 +67,12 @@ public class BranchCondToMultipleConResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/branch-cond-to-multiple-cons")
-    public ResponseEntity<BranchCondToMultipleConDTO> updateBranchCondToMultipleCon(@RequestBody BranchCondToMultipleConDTO branchCondToMultipleConDTO) throws URISyntaxException {
-        log.debug("REST request to update BranchCondToMultipleCon : {}", branchCondToMultipleConDTO);
+    public ResponseEntity<BranchConCondToMultipleConDTO> updateBranchConCondToMultipleCon(@RequestBody BranchConCondToMultipleConDTO branchCondToMultipleConDTO) throws URISyntaxException {
+        log.debug("REST request to update BranchConCondToMultipleCon : {}", branchCondToMultipleConDTO);
         if (branchCondToMultipleConDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        BranchCondToMultipleConDTO result = branchCondToMultipleConService.save(branchCondToMultipleConDTO);
+        BranchConCondToMultipleConDTO result = branchCondToMultipleConService.save(branchCondToMultipleConDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, branchCondToMultipleConDTO.getId().toString()))
             .body(result);
@@ -85,8 +85,8 @@ public class BranchCondToMultipleConResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of branchCondToMultipleCons in body.
      */
     @GetMapping("/branch-cond-to-multiple-cons")
-    public List<BranchCondToMultipleConDTO> getAllBranchCondToMultipleCons() {
-        log.debug("REST request to get all BranchCondToMultipleCons");
+    public List<BranchConCondToMultipleConDTO> getAllBranchConCondToMultipleCons() {
+        log.debug("REST request to get all BranchConCondToMultipleCons");
         return branchCondToMultipleConService.findAll();
     }
 
@@ -97,9 +97,9 @@ public class BranchCondToMultipleConResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the branchCondToMultipleConDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/branch-cond-to-multiple-cons/{id}")
-    public ResponseEntity<BranchCondToMultipleConDTO> getBranchCondToMultipleCon(@PathVariable Long id) {
-        log.debug("REST request to get BranchCondToMultipleCon : {}", id);
-        Optional<BranchCondToMultipleConDTO> branchCondToMultipleConDTO = branchCondToMultipleConService.findOne(id);
+    public ResponseEntity<BranchConCondToMultipleConDTO> getBranchConCondToMultipleCon(@PathVariable Long id) {
+        log.debug("REST request to get BranchConCondToMultipleCon : {}", id);
+        Optional<BranchConCondToMultipleConDTO> branchCondToMultipleConDTO = branchCondToMultipleConService.findOne(id);
         return ResponseUtil.wrapOrNotFound(branchCondToMultipleConDTO);
     }
 
@@ -110,8 +110,8 @@ public class BranchCondToMultipleConResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/branch-cond-to-multiple-cons/{id}")
-    public ResponseEntity<Void> deleteBranchCondToMultipleCon(@PathVariable Long id) {
-        log.debug("REST request to delete BranchCondToMultipleCon : {}", id);
+    public ResponseEntity<Void> deleteBranchConCondToMultipleCon(@PathVariable Long id) {
+        log.debug("REST request to delete BranchConCondToMultipleCon : {}", id);
         branchCondToMultipleConService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
