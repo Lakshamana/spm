@@ -3,16 +3,16 @@ package br.ufpa.labes.spm.repository.impl.agent;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IConfiDAO;
-import br.ufpa.labes.spm.domain.Configuration;
+import br.ufpa.labes.spm.domain.SpmConfiguration;
 
-public class ConfiDAO extends BaseDAO<Configuration, String> implements IConfiDAO {
+public class ConfiDAO extends BaseDAO<SpmConfiguration, String> implements IConfiDAO {
 
-	protected ConfiDAO(Class<Configuration> businessClass) {
+	protected ConfiDAO(Class<SpmConfiguration> businessClass) {
 		super(businessClass);
 	}
 
 	public ConfiDAO() {
-		super(Configuration.class);
+		super(SpmConfiguration.class);
 	}
 
 	}

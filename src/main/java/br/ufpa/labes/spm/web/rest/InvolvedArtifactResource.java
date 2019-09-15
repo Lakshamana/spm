@@ -86,7 +86,7 @@ public class InvolvedArtifactResource {
      */
     @GetMapping("/involved-artifacts")
     public List<InvolvedArtifactDTO> getAllInvolvedArtifacts() {
-        log.debug("REST request to get all InvolvedArtifacts");
+        log.debug("REST request to get all InvolvedArtifact");
         return involvedArtifactService.findAll();
     }
 

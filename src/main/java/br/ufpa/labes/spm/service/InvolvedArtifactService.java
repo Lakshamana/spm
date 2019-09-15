@@ -53,7 +53,7 @@ public class InvolvedArtifactService {
      */
     @Transactional(readOnly = true)
     public List<InvolvedArtifactDTO> findAll() {
-        log.debug("Request to get all InvolvedArtifacts");
+        log.debug("Request to get all InvolvedArtifact");
         return involvedArtifactRepository.findAll().stream()
             .map(involvedArtifactMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));

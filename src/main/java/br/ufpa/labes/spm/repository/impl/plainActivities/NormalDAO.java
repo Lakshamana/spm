@@ -9,12 +9,12 @@ import javax.persistence.Query;
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.INormalDAO;
 import br.ufpa.labes.spm.domain.Agent;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.Artifact;
-import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.InvolvedArtifact;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.ReqAgent;
-import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 import br.ufpa.labes.spm.domain.RequiredResource;
 
@@ -52,12 +52,12 @@ public class NormalDAO extends BaseDAO<Normal, Integer> implements INormalDAO {
 
 				if (agent != null)
 					agents.add(reqAgent.getTheAgent().getName());
-			} else if (reqPeople instanceof ReqGroup) {
-				ReqGroup reqGroup = (ReqGroup) reqPeople;
-				Group group = reqGroup.getTheGroup();
+			} else if (reqPeople instanceof ReqWorkGroup) {
+				ReqWorkGroup ReqWorkGroup = (ReqWorkGroup) reqPeople;
+				WorkGroup group = ReqWorkGroup.getTheGroup();
 
 				if (group != null)
-					agents.add(reqGroup.getTheGroup().getName() + " (Group)");
+					agents.add(ReqWorkGroup.getTheGroup().getName() + " (WorkGroup)");
 			}
 		}
 
@@ -92,7 +92,7 @@ public class NormalDAO extends BaseDAO<Normal, Integer> implements INormalDAO {
 	public String[] getInputArtifactsIdentsForNormal(String normalIdent) {
 		getPersistenceContext().getTransaction().begin();
 
-		String hql = " from " + InvolvedArtifacts.class.getName()
+		String hql = " from " + InvolvedArtifact.class.getName()
 				+ " as involvedArtifact where (involvedArtifact.inInvolvedArtifacts.ident=:normalID) ";
 
 		Query query = getPersistenceContext().createQuery(hql);
@@ -101,12 +101,12 @@ public class NormalDAO extends BaseDAO<Normal, Integer> implements INormalDAO {
 
 		List result = query.getResultList();
 
-		Iterator<InvolvedArtifacts> resultIterator = result.iterator();
+		Iterator<InvolvedArtifact> resultIterator = result.iterator();
 
 		ArrayList<String> inputArtifacts = new ArrayList<String>();
 
 		while (resultIterator.hasNext()) {
-			InvolvedArtifacts involvedArtifact = resultIterator.next();
+			InvolvedArtifact involvedArtifact = resultIterator.next();
 			Artifact theArtifact = involvedArtifact.getTheArtifact();
 
 			if (theArtifact != null)
@@ -126,7 +126,7 @@ public class NormalDAO extends BaseDAO<Normal, Integer> implements INormalDAO {
 
 		getPersistenceContext().getTransaction().begin();
 
-		String hql = " from " + InvolvedArtifacts.class.getName()
+		String hql = " from " + InvolvedArtifact.class.getName()
 				+ " as involvedArtifact where (involvedArtifact.outInvolvedArtifacts.ident=:normalID) ";
 
 		Query query = getPersistenceContext().createQuery(hql);
@@ -134,12 +134,12 @@ public class NormalDAO extends BaseDAO<Normal, Integer> implements INormalDAO {
 		query.setParameter("normalID", normalIdent);
 
 		List result = query.getResultList();
-		Iterator<InvolvedArtifacts> resultIterator = result.iterator();
+		Iterator<InvolvedArtifact> resultIterator = result.iterator();
 
 		ArrayList<Artifact> outputArtifacts = new ArrayList<Artifact>();
 
 		while (resultIterator.hasNext()) {
-			InvolvedArtifacts involvedArtifact = resultIterator.next();
+			InvolvedArtifact involvedArtifact = resultIterator.next();
 			if (involvedArtifact.getTheArtifact() != null) {
 				outputArtifacts.add(involvedArtifact.getTheArtifact());
 			}
@@ -157,7 +157,7 @@ public class NormalDAO extends BaseDAO<Normal, Integer> implements INormalDAO {
 
 		getPersistenceContext().getTransaction().begin();
 
-		String hql = " from " + InvolvedArtifacts.class.getName()
+		String hql = " from " + InvolvedArtifact.class.getName()
 				+ " as involvedArtifact where (involvedArtifact.outInvolvedArtifacts.ident=:normalID) ";
 
 		Query query = getPersistenceContext().createQuery(hql);
@@ -166,12 +166,12 @@ public class NormalDAO extends BaseDAO<Normal, Integer> implements INormalDAO {
 
 		List result = query.getResultList();
 
-		Iterator<InvolvedArtifacts> resultIterator = result.iterator();
+		Iterator<InvolvedArtifact> resultIterator = result.iterator();
 
 		ArrayList<String> outputArtifacts = new ArrayList<String>();
 
 		while (resultIterator.hasNext()) {
-			InvolvedArtifacts involvedArtifact = resultIterator.next();
+			InvolvedArtifact involvedArtifact = resultIterator.next();
 			if (involvedArtifact.getTheArtifact() != null) {
 				outputArtifacts.add(involvedArtifact.getTheArtifact().getIdent());
 			}

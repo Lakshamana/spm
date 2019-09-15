@@ -25,7 +25,7 @@ public class ProcessAgendaDAO extends BaseDAO<ProcessAgenda, Integer> implements
 	// TODO: HAVE TO FINISH THE INTEGRATION TO MESSAGE SERVICES
 
 	public Task addTask(ProcessAgenda pAgenda, Normal actNorm) {
-//		pAgenda = this.retrieve(pAgenda.getOid());
+//		pAgenda = this.retrieve(pAgenda.getId());
 
 		Collection tasks = pAgenda.getTheTask();
 		Iterator iter = tasks.iterator();
@@ -57,7 +57,7 @@ public class ProcessAgendaDAO extends BaseDAO<ProcessAgenda, Integer> implements
 			// e1.printStackTrace();
 
 			// Notify the agente of the task!!
-			String message = "<MESSAGE>" + "<NOTIFY>" + "<OID>" + task.getOid() + "</OID>" + "<TYPE>ADD</TYPE>" + "<CLASS>"
+			String message = "<MESSAGE>" + "<NOTIFY>" + "<OID>" + task.getId() + "</OID>" + "<TYPE>ADD</TYPE>" + "<CLASS>"
 					+ task.getClass().getName() + "</CLASS>" + "<BY>APSEE_Manager</BY>" + "</NOTIFY>" + "</MESSAGE>";
 
 			/*

@@ -198,7 +198,7 @@ public abstract class BaseDAO<T, PK> implements IBaseDAO<T, PK> {
 		Method method = null;
 		String oid = "";
 		try {
-			method = t.getClass().getMethod("getOid", new Class<?>[0]);
+			method = t.getClass().getMethod("getId", new Class<?>[0]);
 			oid = method.invoke(t, new Object[0]).toString();
 			oid = oid.concat(" " + oldIdent);
 		} catch (NoSuchMethodException e) {
@@ -219,7 +219,7 @@ public abstract class BaseDAO<T, PK> implements IBaseDAO<T, PK> {
 
 	public static void main(String[] args) {
 		Agent a = new Agent();
-		a.setOid(336);
+		a.setId(336);
 		AgentDAO agentDAO = new AgentDAO();
 		System.out.println(
 				agentDAO.generateIdent("Template - Plano de Gerência de Documentos e Plano de Comunicação", a));

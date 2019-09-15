@@ -30,16 +30,16 @@ import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.Plain;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.Role;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.AgendaEvent;
 import br.ufpa.labes.spm.domain.Company;
 import br.ufpa.labes.spm.domain.Project;
-import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.InvolvedArtifact;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.ReqAgent;
-import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 import br.ufpa.labes.spm.domain.RequiredResource;
 import br.ufpa.labes.spm.domain.ActivityEstimation;
@@ -309,11 +309,11 @@ public class ReportDAO implements IReportDAO{
 
 	@Override
 	public List<Object[]> getAgentsByGroupReportData() {
-		String hql = "from " + Group.class.getName() + " as group " +
+		String hql = "from " + WorkGroup.class.getName() + " as group " +
 				"order by group.name";
 		Query query = this.getPersistenceContext().createQuery(hql);
 
-		List<Group> groups = query.getResultList();
+		List<WorkGroup> groups = query.getResultList();
 
 		List<Object[]> result = new ArrayList<Object[]>();
 
@@ -321,7 +321,7 @@ public class ReportDAO implements IReportDAO{
 			return result;
 		}
 
-		for ( Group group : groups ) {
+		for ( WorkGroup group : groups ) {
 			if ( group == null )
 				continue;
 
@@ -751,7 +751,7 @@ public class ReportDAO implements IReportDAO{
 
 	@Override
 	public List<Object[]> getActivitiesByAgentsReportData(String agentIdent , Date beginDate, Date endDate , String role , boolean allStates) {
-		String reqGroupHql = "select reqGroup.oid from " + ReqGroup.class.getName() + " as reqGroup join reqGroup.theGroup.theAgent as agent where agent.ident= :agentIdent";
+		String ReqWorkGroupHql = "select ReqWorkGroup.oid from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup join ReqWorkGroup.theGroup.theAgent as agent where agent.ident= :agentIdent";
 
 		String reqAgentHql = "select reqAgent.oid from " + ReqAgent.class.getName() + " as reqAgent where reqAgent.theAgent.ident = :agentIdent";
 		System.out.println();
@@ -762,7 +762,7 @@ public class ReportDAO implements IReportDAO{
 						"task.theNormal.theEnactionDescription.actualBegin, task.theNormal.plannedBegin " +
 						"from " + Task.class.getName() + " as task join task.theNormal.theRequiredPeople as reqPeople " +
 						"where reqPeople.theNormal.ident = task.theNormal.ident " + "and task.theProcessAgenda.theTaskAgenda.theAgent.isActive is true " +
-						(agentIdent != null ? "and task.theProcessAgenda.theTaskAgenda.theAgent.ident= :agentIdent and (reqPeople.oid in (" + reqGroupHql + ") or reqPeople.oid in (" + reqAgentHql + ")) " : " ") +
+						(agentIdent != null ? "and task.theProcessAgenda.theTaskAgenda.theAgent.ident= :agentIdent and (reqPeople.oid in (" + ReqWorkGroupHql + ") or reqPeople.oid in (" + reqAgentHql + ")) " : " ") +
 						(beginDate!=null ? "and task.theNormal.plannedBegin >= :beginDate " : " ") +
 						(endDate!=null ? "and task.theNormal.plannedEnd <= :endDate " : " ") +
 						(!allStates ? "and (task.theNormal.theEnactionDescription.state like :active or task.theNormal.theEnactionDescription.state like :ready or task.theNormal.theEnactionDescription.state like :waiting) " : " ") +
@@ -800,13 +800,13 @@ public class ReportDAO implements IReportDAO{
 			entry[ 1 ] = result[ 1 ] != null ? result[ 1 ] : "";
 
 			if (result[2] != null) {
-				if (result[2] instanceof ReqGroup) {
+				if (result[2] instanceof ReqWorkGroup) {
 					if(role!=null)
 						continue;
 
-					ReqGroup reqGroup = (ReqGroup)result[2];
+					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)result[2];
 
-					Group group = reqGroup.getTheGroup();
+					WorkGroup group = ReqWorkGroup.getTheGroup();
 
 					entry[2] = group != null ? group.getIdent() : "";
 				}
@@ -950,12 +950,12 @@ public class ReportDAO implements IReportDAO{
 			Collection<RequiredPeople> reqPeople = normal.getTheRequiredPeople();
 
 			for ( RequiredPeople requiredPeople : reqPeople ) {
-				if ( requiredPeople instanceof ReqGroup ){
-					ReqGroup reqGroup = (ReqGroup)requiredPeople;
-					if(reqGroup.getTheGroup() == null)
+				if ( requiredPeople instanceof ReqWorkGroup ){
+					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)requiredPeople;
+					if(ReqWorkGroup.getTheGroup() == null)
 						continue;
 
-					for ( Agent agent : (Collection<Agent>)reqGroup.getTheGroup().getTheAgent() ) {
+					for ( Agent agent : (Collection<Agent>)ReqWorkGroup.getTheGroup().getTheAgent() ) {
 						if ( agent == null )
 							continue;
 
@@ -1326,7 +1326,7 @@ public class ReportDAO implements IReportDAO{
 				agents = agentQuery.getResultList();
 
 				String inputArtifactQueryString = "select involvedArtifact.theArtifact.ident " +
-													"from " + InvolvedArtifacts.class.getName() + " as involvedArtifact " +
+													"from " + InvolvedArtifact.class.getName() + " as involvedArtifact " +
 													"where involvedArtifact.inInvolvedArtifacts.ident = :normalIdent " +
 													"order by involvedArtifact.theArtifact.ident";
 
@@ -1336,7 +1336,7 @@ public class ReportDAO implements IReportDAO{
 				inputArtifacts = inputArtifactQuery.getResultList();
 
 				String outputArtifactQueryString = "select involvedArtifact.theArtifact.ident " +
-									"from " + InvolvedArtifacts.class.getName() + " as involvedArtifact " +
+									"from " + InvolvedArtifact.class.getName() + " as involvedArtifact " +
 									"where involvedArtifact.outInvolvedArtifacts.ident = :normalIdent " +
 									"order by involvedArtifact.theArtifact.ident";
 
@@ -1402,7 +1402,7 @@ public class ReportDAO implements IReportDAO{
 	@Override
 	public List<Object[]> getHumanResourcesPlanData(String processIdent) {
 
-		String reqGroupHql = "select reqGroup from " + ReqGroup.class.getName() + " as reqGroup join reqGroup.theGroup.theAgent as agent " +
+		String ReqWorkGroupHql = "select ReqWorkGroup from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup join ReqWorkGroup.theGroup.theAgent as agent " +
 								"where agent.ident = task.theProcessAgenda.theTaskAgenda.theAgent.ident";
 
 		String reqAgentHql = "select reqAgent from " + ReqAgent.class.getName() + " as reqAgent " +
@@ -1415,7 +1415,7 @@ public class ReportDAO implements IReportDAO{
 								"join task.theNormal.theRequiredPeople as reqPeople " +
 								"where task.theNormal.ident like :processIdent " +
 								"and task.theNormal.ident.isVersion is null " +
-								"and (reqPeople in (" + reqGroupHql + ") or reqPeople in (" + reqAgentHql + ")) " +
+								"and (reqPeople in (" + ReqWorkGroupHql + ") or reqPeople in (" + reqAgentHql + ")) " +
 								"order by task.theNormal.ident";
 
 		Query query = this.getPersistenceContext().createQuery( queryString );
@@ -1455,10 +1455,10 @@ public class ReportDAO implements IReportDAO{
 			Object[] agentEntry = new Object[3];
 
 			if (activity[2] != null) {
-				if (activity[2] instanceof ReqGroup) {
-					ReqGroup reqGroup = (ReqGroup)activity[2];
+				if (activity[2] instanceof ReqWorkGroup) {
+					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)activity[2];
 
-					agentEntry[0] = reqGroup.getTheGroup().getName();
+					agentEntry[0] = ReqWorkGroup.getTheGroup().getName();
 				}
 				else {
 					ReqAgent reqAgent = (ReqAgent)activity[2];
@@ -1762,9 +1762,9 @@ public class ReportDAO implements IReportDAO{
 					for (Object people : normal.getTheRequiredPeople()) {
 						if (people instanceof ReqAgent)
 							numAgents++;
-						else if (people instanceof ReqGroup) {
-							ReqGroup reqGroup = (ReqGroup)people;
-							numAgents += reqGroup.getTheGroup().getTheAgent().size();
+						else if (people instanceof ReqWorkGroup) {
+							ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)people;
+							numAgents += ReqWorkGroup.getTheGroup().getTheAgent().size();
 						}
 					}
 

@@ -9,7 +9,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredPeopleDAO;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.ReqAgent;
-import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 
 public class RequiredPeopleDAO extends BaseDAO<RequiredPeople, Integer> implements IRequiredPeopleDAO{
@@ -40,10 +40,10 @@ public class RequiredPeopleDAO extends BaseDAO<RequiredPeople, Integer> implemen
 					if(reqAgent.getTheAgent()!=null)
 						toReturn.add( reqAgent.getTheAgent().getEMail() );
 				}
-				else if ( people instanceof ReqGroup ) {
-					ReqGroup reqGroup = (ReqGroup)people;
+				else if ( people instanceof ReqWorkGroup ) {
+					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)people;
 
-					Collection<Agent> agents = (Collection<Agent>) reqGroup.getTheGroup().getTheAgent();
+					Collection<Agent> agents = (Collection<Agent>) ReqWorkGroup.getTheGroup().getTheAgent();
 
 					for ( Agent agent : agents ) {
 						toReturn.add( agent.getEMail() );

@@ -3,16 +3,16 @@ package br.ufpa.labes.spm.repository.impl.agent;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IGroupDAO;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 
-public class GroupDAO  extends BaseDAO<Group, String> implements IGroupDAO{
+public class GroupDAO  extends BaseDAO<WorkGroup, String> implements IGroupDAO{
 
-	protected GroupDAO(Class<Group> businessClass) {
+	protected GroupDAO(Class<WorkGroup> businessClass) {
 		super(businessClass);
 	}
 
 	public GroupDAO() {
-		super(Group.class);
+		super(WorkGroup.class);
 	}
 
 }

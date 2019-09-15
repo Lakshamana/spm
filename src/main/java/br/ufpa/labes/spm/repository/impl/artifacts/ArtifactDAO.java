@@ -11,7 +11,7 @@ import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
 import org.qrconsult.spm.dtos.agenda.SimpleArtifactDescriptorDTO;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactCon;
-import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.InvolvedArtifact;
 
 public class ArtifactDAO extends BaseDAO<Artifact, String> implements IArtifactDAO{
 
@@ -50,16 +50,16 @@ public class ArtifactDAO extends BaseDAO<Artifact, String> implements IArtifactD
 	@Override
 	public SimpleArtifactDescriptorDTO[] getInputArtifactsForNormal(String normalIdent) {
 
-		String hql = " from " + InvolvedArtifacts.class.getName() + " as involvedArtifact where (involvedArtifact.inInvolvedArtifacts.ident=:normalID) ";
+		String hql = " from " + InvolvedArtifact.class.getName() + " as involvedArtifact where (involvedArtifact.inInvolvedArtifacts.ident=:normalID) ";
 		Query query = this.getPersistenceContext().createQuery(hql);
 
 		query.setParameter( "normalID", normalIdent );
 
-		List<InvolvedArtifacts> result = query.getResultList();
+		List<InvolvedArtifact> result = query.getResultList();
 
 		ArrayList<Artifact> inputArtifacts = new ArrayList<Artifact>();
 
-		for (InvolvedArtifacts involvedArtifact : result) {
+		for (InvolvedArtifact involvedArtifact : result) {
 			if (involvedArtifact.getTheArtifact() != null)
 				inputArtifacts.add( involvedArtifact.getTheArtifact() );
 		}
@@ -89,18 +89,18 @@ public class ArtifactDAO extends BaseDAO<Artifact, String> implements IArtifactD
 
 	@Override
 	public SimpleArtifactDescriptorDTO[] getOutputArtifactsForNormal(String normalIdent) {
-		String hql = " from " + InvolvedArtifacts.class.getName() + " as involvedArtifact where (involvedArtifact.outInvolvedArtifacts.ident=:normalID) ";
+		String hql = " from " + InvolvedArtifact.class.getName() + " as involvedArtifact where (involvedArtifact.outInvolvedArtifacts.ident=:normalID) ";
 
 		Query query = this.getPersistenceContext().createQuery( hql );
 
 		query.setParameter( "normalID", normalIdent );
 
-		List<InvolvedArtifacts> result = query.getResultList();
-		Iterator<InvolvedArtifacts> resultIterator = result.iterator();
+		List<InvolvedArtifact> result = query.getResultList();
+		Iterator<InvolvedArtifact> resultIterator = result.iterator();
 
 		ArrayList<Artifact> outputArtifacts = new ArrayList<Artifact>();
 
-		for (InvolvedArtifacts involvedArtifact : result) {
+		for (InvolvedArtifact involvedArtifact : result) {
 			if(involvedArtifact.getTheArtifact()!=null)
 				outputArtifacts.add( involvedArtifact.getTheArtifact() );
 		}

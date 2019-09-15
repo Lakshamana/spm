@@ -20,7 +20,7 @@ public class ConnectionDAO extends BaseDAO<Connection, String> implements IConne
 
 
 		super.save(conn);
-		String ident = conn.getIdent()+"."+conn.getOid();
+		String ident = conn.getIdent()+"."+conn.getId();
 		conn.setIdent(ident);
 		this.update(conn);
 		return conn;
