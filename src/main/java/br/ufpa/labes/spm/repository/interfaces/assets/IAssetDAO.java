@@ -6,7 +6,7 @@ import java.util.List;
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.domain.Asset;
 import br.ufpa.labes.spm.domain.AssetRelationship;
-import org.qrconsult.spm.vo.AssetCatalog;
+// import org.qrconsult.spm.vo.AssetCatalog;
 
 
 public interface IAssetDAO extends IBaseDAO<Asset, String> {
@@ -18,6 +18,5 @@ public interface IAssetDAO extends IBaseDAO<Asset, String> {
 	 */
 
 	//Cat�logo de ativos
-	public AssetCatalog retrieveAssetForCatalog(AssetCatalog catalog);
-
+	// public AssetCatalog retrieveAssetForCatalog(AssetCatalog catalog);
 }

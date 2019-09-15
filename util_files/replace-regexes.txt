@@ -4,6 +4,8 @@
 
 * A cada novo padrão encontrado, adicioná-lo ao final do arquivo:
 
+let SPMROOT = pasta raiz do projeto SPM
+
 - De Decomposed subtipo de Activity para objeto de Activity:
   search: `(\().*\([ ]*(Decomposed)[ ]*\) ([\w]*).*(\))\.`
   replaceby: `$3.getThe$2Sub().`
@@ -39,6 +41,11 @@
 - Renomear entidade PlainActivity para Plain:
   search: `([Pp]lain)([_])*([Aa]ctivity)`
   replaceby: `$1`
+
+- Renomear Join ou Branch para (Join ou Branch)Con:
+  search: `(Join|Branch)(AND)*([^Con]*)`
+  replaceby: `$1$2Con$3`
+  in: $SPMROOT/src/main/java/br/ufpa/labes/spm/repository/**/*.java
 
 *** Comandos BASH úteis:
 * Obter de maneira rápida as entidades de serviços:

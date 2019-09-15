@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.TagStatService;
+import br.ufpa.labes.spm.service.TagStatsService;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.TagStatDTO;
+import br.ufpa.labes.spm.service.dto.TagStatsDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class TagStatResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final TagStatService tagStatService;
+    private final TagStatsService tagStatsService;
 
-    public TagStatResource(TagStatService tagStatService) {
-        this.tagStatService = tagStatService;
+    public TagStatResource(TagStatsService tagStatsService) {
+        this.tagStatsService = tagStatsService;
     }
 
     /**
      * {@code POST  /tag-stats} : Create a new tagStat.
      *
-     * @param tagStatDTO the tagStatDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new tagStatDTO, or with status {@code 400 (Bad Request)} if the tagStat has already an ID.
+     * @param tagStatsDTO the tagStatsDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new tagStatsDTO, or with status {@code 400 (Bad Request)} if the tagStat has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/tag-stats")
-    public ResponseEntity<TagStatDTO> createTagStat(@RequestBody TagStatDTO tagStatDTO) throws URISyntaxException {
-        log.debug("REST request to save TagStats : {}", tagStatDTO);
-        if (tagStatDTO.getId() != null) {
+    public ResponseEntity<TagStatsDTO> createTagStat(@RequestBody TagStatsDTO tagStatsDTO) throws URISyntaxException {
+        log.debug("REST request to save TagStats : {}", tagStatsDTO);
+        if (tagStatsDTO.getId() != null) {
             throw new BadRequestAlertException("A new tagStat cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        TagStatDTO result = tagStatService.save(tagStatDTO);
+        TagStatsDTO result = tagStatsService.save(tagStatsDTO);
         return ResponseEntity.created(new URI("/api/tag-stats/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class TagStatResource {
     /**
      * {@code PUT  /tag-stats} : Updates an existing tagStat.
      *
-     * @param tagStatDTO the tagStatDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated tagStatDTO,
-     * or with status {@code 400 (Bad Request)} if the tagStatDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the tagStatDTO couldn't be updated.
+     * @param tagStatsDTO the tagStatsDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated tagStatsDTO,
+     * or with status {@code 400 (Bad Request)} if the tagStatsDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the tagStatsDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/tag-stats")
-    public ResponseEntity<TagStatDTO> updateTagStat(@RequestBody TagStatDTO tagStatDTO) throws URISyntaxException {
-        log.debug("REST request to update TagStats : {}", tagStatDTO);
-        if (tagStatDTO.getId() == null) {
+    public ResponseEntity<TagStatsDTO> updateTagStat(@RequestBody TagStatsDTO tagStatsDTO) throws URISyntaxException {
+        log.debug("REST request to update TagStats : {}", tagStatsDTO);
+        if (tagStatsDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        TagStatDTO result = tagStatService.save(tagStatDTO);
+        TagStatsDTO result = tagStatsService.save(tagStatsDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, tagStatDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, tagStatsDTO.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class TagStatResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tagStats in body.
      */
     @GetMapping("/tag-stats")
-    public List<TagStatDTO> getAllTagStats() {
+    public List<TagStatsDTO> getAllTagStats() {
         log.debug("REST request to get all TagStats");
-        return tagStatService.findAll();
+        return tagStatsService.findAll();
     }
 
     /**
      * {@code GET  /tag-stats/:id} : get the "id" tagStat.
      *
-     * @param id the id of the tagStatDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the tagStatDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the tagStatsDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the tagStatsDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/tag-stats/{id}")
-    public ResponseEntity<TagStatDTO> getTagStat(@PathVariable Long id) {
+    public ResponseEntity<TagStatsDTO> getTagStat(@PathVariable Long id) {
         log.debug("REST request to get TagStats : {}", id);
-        Optional<TagStatDTO> tagStatDTO = tagStatService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(tagStatDTO);
+        Optional<TagStatsDTO> tagStatsDTO = tagStatsService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(tagStatsDTO);
     }
 
     /**
      * {@code DELETE  /tag-stats/:id} : delete the "id" tagStat.
      *
-     * @param id the id of the tagStatDTO to delete.
+     * @param id the id of the tagStatsDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/tag-stats/{id}")
     public ResponseEntity<Void> deleteTagStat(@PathVariable Long id) {
         log.debug("REST request to delete TagStats : {}", id);
-        tagStatService.delete(id);
+        tagStatsService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

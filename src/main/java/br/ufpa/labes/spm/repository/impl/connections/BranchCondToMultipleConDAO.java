@@ -2,17 +2,17 @@ package br.ufpa.labes.spm.repository.impl.connections;
 
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
-import br.ufpa.labes.spm.repository.interfaces.connections.IBranchCondToMultipleConDAO;
-import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchConCondToMultipleConDAO;
+import br.ufpa.labes.spm.domain.BranchConCondToMultipleCon;
 
-public class BranchCondToMultipleConDAO extends BaseDAO<BranchCondToMultipleCon, Integer> implements IBranchCondToMultipleConDAO{
+public class BranchConCondToMultipleConDAO extends BaseDAO<BranchConCondToMultipleCon, Integer> implements IBranchConCondToMultipleConDAO{
 
-	protected BranchCondToMultipleConDAO(Class<BranchCondToMultipleCon> businessClass) {
+	protected BranchConCondToMultipleConDAO(Class<BranchConCondToMultipleCon> businessClass) {
 		super(businessClass);
 	}
 
-	public BranchCondToMultipleConDAO() {
-		super(BranchCondToMultipleCon.class);
+	public BranchConCondToMultipleConDAO() {
+		super(BranchConCondToMultipleCon.class);
 	}
 
 

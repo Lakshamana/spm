@@ -114,7 +114,7 @@ public class ReportDAO implements IReportDAO{
 		String tasksHql = "select task.theNormal.ident, pAgenda.theTaskAgenda.theAgent.ident, " +
 							"pAgenda.theTaskAgenda.theAgent.name, task.localState, task.workingHours " +
 							"from " + ProcessAgenda.class.getName() + " as pAgenda " +
-							"join pAgenda.theTask as task " +
+							"joinCon pAgenda.theTask as task " +
 							"where task.theNormal.ident like '" + processIdent + ".%' " +
 							"order by task.theNormal.ident, pAgenda.theTaskAgenda.theAgent.name";
 
@@ -751,7 +751,7 @@ public class ReportDAO implements IReportDAO{
 
 	@Override
 	public List<Object[]> getActivitiesByAgentsReportData(String agentIdent , Date beginDate, Date endDate , String role , boolean allStates) {
-		String ReqWorkGroupHql = "select ReqWorkGroup.oid from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup join ReqWorkGroup.theGroup.theAgent as agent where agent.ident= :agentIdent";
+		String ReqWorkGroupHql = "select ReqWorkGroup.oid from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup joinCon ReqWorkGroup.theGroup.theAgent as agent where agent.ident= :agentIdent";
 
 		String reqAgentHql = "select reqAgent.oid from " + ReqAgent.class.getName() + " as reqAgent where reqAgent.theAgent.ident = :agentIdent";
 		System.out.println();
@@ -760,7 +760,7 @@ public class ReportDAO implements IReportDAO{
 						"task.theProcessAgenda.theProcess.ident, task.theNormal.ident, task.theNormal.name, task.localState, " +
 						"task.theNormal.theEnactionDescription.actualEnd, task.theNormal.plannedEnd, " +
 						"task.theNormal.theEnactionDescription.actualBegin, task.theNormal.plannedBegin " +
-						"from " + Task.class.getName() + " as task join task.theNormal.theRequiredPeople as reqPeople " +
+						"from " + Task.class.getName() + " as task joinCon task.theNormal.theRequiredPeople as reqPeople " +
 						"where reqPeople.theNormal.ident = task.theNormal.ident " + "and task.theProcessAgenda.theTaskAgenda.theAgent.isActive is true " +
 						(agentIdent != null ? "and task.theProcessAgenda.theTaskAgenda.theAgent.ident= :agentIdent and (reqPeople.oid in (" + ReqWorkGroupHql + ") or reqPeople.oid in (" + reqAgentHql + ")) " : " ") +
 						(beginDate!=null ? "and task.theNormal.plannedBegin >= :beginDate " : " ") +
@@ -1402,7 +1402,7 @@ public class ReportDAO implements IReportDAO{
 	@Override
 	public List<Object[]> getHumanResourcesPlanData(String processIdent) {
 
-		String ReqWorkGroupHql = "select ReqWorkGroup from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup join ReqWorkGroup.theGroup.theAgent as agent " +
+		String ReqWorkGroupHql = "select ReqWorkGroup from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup joinCon ReqWorkGroup.theGroup.theAgent as agent " +
 								"where agent.ident = task.theProcessAgenda.theTaskAgenda.theAgent.ident";
 
 		String reqAgentHql = "select reqAgent from " + ReqAgent.class.getName() + " as reqAgent " +
@@ -1412,7 +1412,7 @@ public class ReportDAO implements IReportDAO{
 									"reqPeople, task.theProcessAgenda.theTaskAgenda.theAgent.ident, " +
 									"task.theProcessAgenda.theTaskAgenda.theAgent.name, task.workingHours " +
 								"from " + Task.class.getName() + " as task " +
-								"join task.theNormal.theRequiredPeople as reqPeople " +
+								"joinCon task.theNormal.theRequiredPeople as reqPeople " +
 								"where task.theNormal.ident like :processIdent " +
 								"and task.theNormal.ident.isVersion is null " +
 								"and (reqPeople in (" + ReqWorkGroupHql + ") or reqPeople in (" + reqAgentHql + ")) " +

@@ -2,17 +2,17 @@ package br.ufpa.labes.spm.repository.impl.connections;
 
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
-import br.ufpa.labes.spm.repository.interfaces.connections.IBranchCondDAO;
-import br.ufpa.labes.spm.domain.BranchCond;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchConCondDAO;
+import br.ufpa.labes.spm.domain.BranchConCond;
 
-public class BranchCondDAO extends BaseDAO<BranchCond, String> implements IBranchCondDAO{
+public class BranchConCondDAO extends BaseDAO<BranchConCond, String> implements IBranchConCondDAO{
 
-	protected BranchCondDAO(Class<BranchCond> businessClass) {
+	protected BranchConCondDAO(Class<BranchConCond> businessClass) {
 		super(businessClass);
 	}
 
-	public BranchCondDAO() {
-		super(BranchCond.class);
+	public BranchConCondDAO() {
+		super(BranchConCond.class);
 	}
 
 }

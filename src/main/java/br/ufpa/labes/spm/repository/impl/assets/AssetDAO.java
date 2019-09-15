@@ -8,7 +8,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.assets.IAssetDAO;
 import br.ufpa.labes.spm.domain.Asset;
 import br.ufpa.labes.spm.domain.AssetRelationship;
-import org.qrconsult.spm.vo.AssetCatalog;
+// import org.qrconsult.spm.vo.AssetCatalog;
 
 
 public class AssetDAO extends BaseDAO<Asset, String> implements IAssetDAO {
@@ -29,10 +29,9 @@ public class AssetDAO extends BaseDAO<Asset, String> implements IAssetDAO {
 		return query.getResultList();
 	}
 
-	@Override
-	public AssetCatalog retrieveAssetForCatalog(AssetCatalog catalog) {
-
-		return null;
-	}
+	// @Override
+	// public AssetCatalog retrieveAssetForCatalog(AssetCatalog catalog) {
+	// 	return null;
+	// }
 
 }

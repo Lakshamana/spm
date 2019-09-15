@@ -2,17 +2,17 @@ package br.ufpa.labes.spm.repository.impl.connections;
 
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
-import br.ufpa.labes.spm.repository.interfaces.connections.IBranchCondToActivityDAO;
-import br.ufpa.labes.spm.domain.BranchCondToActivity;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchConCondToActivityDAO;
+import br.ufpa.labes.spm.domain.BranchConCondToActivity;
 
-public class BranchCondToActivityDAO extends BaseDAO<BranchCondToActivity, Integer> implements IBranchCondToActivityDAO{
+public class BranchConCondToActivityDAO extends BaseDAO<BranchConCondToActivity, Integer> implements IBranchConCondToActivityDAO{
 
-	protected BranchCondToActivityDAO(Class<BranchCondToActivity> businessClass) {
+	protected BranchConCondToActivityDAO(Class<BranchConCondToActivity> businessClass) {
 		super(businessClass);
 	}
 
-	public BranchCondToActivityDAO() {
-		super(BranchCondToActivity.class);
+	public BranchConCondToActivityDAO() {
+		super(BranchConCondToActivity.class);
 	}
 
 

@@ -2,8 +2,8 @@ package br.ufpa.labes.spm.repository.interfaces.connections;
 
 
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
-import br.ufpa.labes.spm.domain.BranchAND;
+import br.ufpa.labes.spm.domain.BranchANDCon;
 
-public interface IBranchANDDAO extends IBaseDAO<BranchAND, String>{
+public interface IBranchANDConDAO extends IBaseDAO<BranchANDCon, String>{
 
 }
