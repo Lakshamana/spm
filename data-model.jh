@@ -399,6 +399,19 @@ entity BranchCon {} //extends MultipleCon
 
 entity BranchANDCon {} //extends BranchCon
 
+entity BranchConCond {
+  kindBranch String
+}
+
+entity BranchCondToActivity {}
+
+entity BranchCondToMultipleCon {}
+
+relationship OneToMany {
+  BranchConCond{theBranchCondToActivity} to BranchCondToActivity{theBranchConCond},
+  BranchConCond{theBranchCondToMultipleCon} to BranchCondToMultipleCon{theBranchConCond}
+}
+
 relationship ManyToOne {
     ArtifactCon{theArtifact} to Artifact{theArtifactCon},
     ArtifactCon{theArtifactType} to ArtifactType{theArtifactCon}
@@ -409,6 +422,10 @@ relationship ManyToOne {
     MultipleCon{theDependency} to Dependency{theMultipleCon},
 
     BranchCon{fromMultipleCon} to MultipleCon{toBranchCon},
+
+    BranchCondToActivity{theActivity} to Activity{theBranchCondToActivity},
+
+    BranchCondToMultipleCon{theMultipleCon} to MultipleCon{theBranchCondToMultipleCon},
 
     Sequence{theDependency} to Dependency{theSequence}
 }

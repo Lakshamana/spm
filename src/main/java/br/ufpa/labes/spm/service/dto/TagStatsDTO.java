@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.TagStats} entity.
  */
-public class TagStatDTO implements Serializable {
+public class TagStatsDTO implements Serializable {
 
     private Long id;
 
@@ -57,11 +57,11 @@ public class TagStatDTO implements Serializable {
             return false;
         }
 
-        TagStatDTO tagStatDTO = (TagStatDTO) o;
-        if (tagStatDTO.getId() == null || getId() == null) {
+        TagStatsDTO tagStatsDTO = (TagStatsDTO) o;
+        if (tagStatsDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), tagStatDTO.getId());
+        return Objects.equals(getId(), tagStatsDTO.getId());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class TagStatDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "TagStatDTO{" +
+        return "TagStatsDTO{" +
             "id=" + getId() +
             ", count=" + getCount() +
             ", tag=" + getTagId() +

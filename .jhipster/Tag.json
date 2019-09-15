@@ -9,7 +9,7 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "tagStat",
+            "otherEntityName": "tagStats",
             "otherEntityRelationshipName": "tag",
             "relationshipName": "theTagStat"
         }

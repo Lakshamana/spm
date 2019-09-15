@@ -44,6 +44,12 @@
             "relationshipName": "toBranchCon"
         },
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "branchCondToMultipleCon",
+            "otherEntityRelationshipName": "theMultipleCon",
+            "relationshipName": "theBranchCondToMultipleCon"
+        },
+        {
             "relationshipType": "many-to-many",
             "otherEntityName": "artifactCon",
             "otherEntityRelationshipName": "toMultipleCon",

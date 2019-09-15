@@ -22,6 +22,8 @@ public interface MultipleConMapper extends EntityMapper<MultipleConDTO, Multiple
     @Mapping(target = "theConnectionSuper", ignore = true)
     @Mapping(target = "toBranchCons", ignore = true)
     @Mapping(target = "removeToBranchCon", ignore = true)
+    @Mapping(target = "theBranchCondToMultipleCons", ignore = true)
+    @Mapping(target = "removeTheBranchCondToMultipleCon", ignore = true)
     @Mapping(target = "theArtifactCons", ignore = true)
     @Mapping(target = "removeTheArtifactCon", ignore = true)
     @Mapping(target = "fromMultipleCons", ignore = true)

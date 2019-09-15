@@ -8,12 +8,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * A TagStats.
+ * A BranchCondToMultipleCon.
  */
 @Entity
-@Table(name = "tag_stats")
+@Table(name = "branch_cond_to_multiple_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class TagStats implements Serializable {
+public class BranchCondToMultipleCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,16 +21,13 @@ public class TagStats implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "count")
-    private Long count;
+    @ManyToOne
+    @JsonIgnoreProperties("theBranchCondToMultipleCons")
+    private MultipleCon theMultipleCon;
 
     @ManyToOne
-    @JsonIgnoreProperties("theTagStats")
-    private Tag tag;
-
-    @ManyToOne
-    @JsonIgnoreProperties("tagStats")
-    private Asset theAsset;
+    @JsonIgnoreProperties("theBranchCondToMultipleCons")
+    private BranchConCond theBranchConCond;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -41,43 +38,30 @@ public class TagStats implements Serializable {
         this.id = id;
     }
 
-    public Long getCount() {
-        return count;
+    public MultipleCon getTheMultipleCon() {
+        return theMultipleCon;
     }
 
-    public TagStats count(Long count) {
-        this.count = count;
+    public BranchCondToMultipleCon theMultipleCon(MultipleCon multipleCon) {
+        this.theMultipleCon = multipleCon;
         return this;
     }
 
-    public void setCount(Long count) {
-        this.count = count;
+    public void setTheMultipleCon(MultipleCon multipleCon) {
+        this.theMultipleCon = multipleCon;
     }
 
-    public Tag getTag() {
-        return tag;
+    public BranchConCond getTheBranchConCond() {
+        return theBranchConCond;
     }
 
-    public TagStats tag(Tag tag) {
-        this.tag = tag;
+    public BranchCondToMultipleCon theBranchConCond(BranchConCond branchConCond) {
+        this.theBranchConCond = branchConCond;
         return this;
     }
 
-    public void setTag(Tag tag) {
-        this.tag = tag;
-    }
-
-    public Asset getTheAsset() {
-        return theAsset;
-    }
-
-    public TagStats theAsset(Asset asset) {
-        this.theAsset = asset;
-        return this;
-    }
-
-    public void setTheAsset(Asset asset) {
-        this.theAsset = asset;
+    public void setTheBranchConCond(BranchConCond branchConCond) {
+        this.theBranchConCond = branchConCond;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -86,10 +70,10 @@ public class TagStats implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof TagStats)) {
+        if (!(o instanceof BranchCondToMultipleCon)) {
             return false;
         }
-        return id != null && id.equals(((TagStats) o).id);
+        return id != null && id.equals(((BranchCondToMultipleCon) o).id);
     }
 
     @Override
@@ -99,9 +83,8 @@ public class TagStats implements Serializable {
 
     @Override
     public String toString() {
-        return "TagStats{" +
+        return "BranchCondToMultipleCon{" +
             "id=" + getId() +
-            ", count=" + getCount() +
             "}";
     }
 }

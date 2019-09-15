@@ -1,0 +1,32 @@
+{
+    "name": "BranchConCond",
+    "fields": [
+        {
+            "fieldName": "kindBranch",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "branchCondToActivity",
+            "otherEntityRelationshipName": "theBranchConCond",
+            "relationshipName": "theBranchCondToActivity"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "branchCondToMultipleCon",
+            "otherEntityRelationshipName": "theBranchConCond",
+            "relationshipName": "theBranchCondToMultipleCon"
+        }
+    ],
+    "changelogDate": "20190915031851",
+    "entityTableName": "branch_con_cond",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

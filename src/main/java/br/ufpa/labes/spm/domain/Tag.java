@@ -60,15 +60,15 @@ public class Tag implements Serializable {
         return this;
     }
 
-    public Tag addTheTagStat(TagStats tagStat) {
-        this.theTagStats.add(tagStat);
-        tagStat.setTag(this);
+    public Tag addTheTagStat(TagStats tagStats) {
+        this.theTagStats.add(tagStats);
+        tagStats.setTag(this);
         return this;
     }
 
-    public Tag removeTheTagStat(TagStats tagStat) {
-        this.theTagStats.remove(tagStat);
-        tagStat.setTag(null);
+    public Tag removeTheTagStat(TagStats tagStats) {
+        this.theTagStats.remove(tagStats);
+        tagStats.setTag(null);
         return this;
     }
 

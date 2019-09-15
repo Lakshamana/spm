@@ -111,6 +111,10 @@ public class Activity implements Serializable {
 
     @OneToMany(mappedBy = "theActivity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<BranchCondToActivity> theBranchCondToActivities = new HashSet<>();
+
+    @OneToMany(mappedBy = "theActivity")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ActivityInstantiated> theActivityInstantiateds = new HashSet<>();
 
     @OneToMany(mappedBy = "theActivity")
@@ -515,6 +519,31 @@ public class Activity implements Serializable {
 
     public void setTheProcessModel(ProcessModel processModel) {
         this.theProcessModel = processModel;
+    }
+
+    public Set<BranchCondToActivity> getTheBranchCondToActivities() {
+        return theBranchCondToActivities;
+    }
+
+    public Activity theBranchCondToActivities(Set<BranchCondToActivity> branchCondToActivities) {
+        this.theBranchCondToActivities = branchCondToActivities;
+        return this;
+    }
+
+    public Activity addTheBranchCondToActivity(BranchCondToActivity branchCondToActivity) {
+        this.theBranchCondToActivities.add(branchCondToActivity);
+        branchCondToActivity.setTheActivity(this);
+        return this;
+    }
+
+    public Activity removeTheBranchCondToActivity(BranchCondToActivity branchCondToActivity) {
+        this.theBranchCondToActivities.remove(branchCondToActivity);
+        branchCondToActivity.setTheActivity(null);
+        return this;
+    }
+
+    public void setTheBranchCondToActivities(Set<BranchCondToActivity> branchCondToActivities) {
+        this.theBranchCondToActivities = branchCondToActivities;
     }
 
     public Set<ActivityInstantiated> getTheActivityInstantiateds() {

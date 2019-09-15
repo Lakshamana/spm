@@ -64,7 +64,7 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "tagStat",
+            "otherEntityName": "tagStats",
             "otherEntityRelationshipName": "theAsset",
             "relationshipName": "tagStats"
         },

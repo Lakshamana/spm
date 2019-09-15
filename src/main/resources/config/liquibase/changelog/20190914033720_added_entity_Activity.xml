@@ -57,7 +57,7 @@
         </createTable>
 
         <addPrimaryKey columnNames="activity_id, to_join_con_id" tableName="activity_to_join_con"/>
-
+        
         <createTable tableName="activity_to_branchandcon">
             <column name="to_branchandcon_id" type="bigint">
                 <constraints nullable="false"/>
@@ -68,7 +68,7 @@
         </createTable>
 
         <addPrimaryKey columnNames="activity_id, to_branchandcon_id" tableName="activity_to_branchandcon"/>
-
+        
         <createTable tableName="activity_from_artifact_con">
             <column name="from_artifact_con_id" type="bigint">
                 <constraints nullable="false"/>
@@ -79,7 +79,7 @@
         </createTable>
 
         <addPrimaryKey columnNames="activity_id, from_artifact_con_id" tableName="activity_from_artifact_con"/>
-
+        
         <createTable tableName="activity_to_artifact_con">
             <column name="to_artifact_con_id" type="bigint">
                 <constraints nullable="false"/>
@@ -90,7 +90,7 @@
         </createTable>
 
         <addPrimaryKey columnNames="activity_id, to_artifact_con_id" tableName="activity_to_artifact_con"/>
-
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

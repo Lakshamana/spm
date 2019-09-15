@@ -312,15 +312,15 @@ public class Asset implements Serializable {
         return this;
     }
 
-    public Asset addTagStats(TagStats tagStat) {
-        this.tagStats.add(tagStat);
-        tagStat.setTheAsset(this);
+    public Asset addTagStats(TagStats tagStats) {
+        this.tagStats.add(tagStats);
+        tagStats.setTheAsset(this);
         return this;
     }
 
-    public Asset removeTagStats(TagStats tagStat) {
-        this.tagStats.remove(tagStat);
-        tagStat.setTheAsset(null);
+    public Asset removeTagStats(TagStats tagStats) {
+        this.tagStats.remove(tagStats);
+        tagStats.setTheAsset(null);
         return this;
     }
 

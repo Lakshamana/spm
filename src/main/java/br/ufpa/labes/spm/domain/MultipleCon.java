@@ -47,6 +47,10 @@ public class MultipleCon implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<BranchCon> toBranchCons = new HashSet<>();
 
+    @OneToMany(mappedBy = "theMultipleCon")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<BranchCondToMultipleCon> theBranchCondToMultipleCons = new HashSet<>();
+
     @ManyToMany(mappedBy = "toMultipleCons")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
@@ -159,6 +163,31 @@ public class MultipleCon implements Serializable {
 
     public void setToBranchCons(Set<BranchCon> branchCons) {
         this.toBranchCons = branchCons;
+    }
+
+    public Set<BranchCondToMultipleCon> getTheBranchCondToMultipleCons() {
+        return theBranchCondToMultipleCons;
+    }
+
+    public MultipleCon theBranchCondToMultipleCons(Set<BranchCondToMultipleCon> branchCondToMultipleCons) {
+        this.theBranchCondToMultipleCons = branchCondToMultipleCons;
+        return this;
+    }
+
+    public MultipleCon addTheBranchCondToMultipleCon(BranchCondToMultipleCon branchCondToMultipleCon) {
+        this.theBranchCondToMultipleCons.add(branchCondToMultipleCon);
+        branchCondToMultipleCon.setTheMultipleCon(this);
+        return this;
+    }
+
+    public MultipleCon removeTheBranchCondToMultipleCon(BranchCondToMultipleCon branchCondToMultipleCon) {
+        this.theBranchCondToMultipleCons.remove(branchCondToMultipleCon);
+        branchCondToMultipleCon.setTheMultipleCon(null);
+        return this;
+    }
+
+    public void setTheBranchCondToMultipleCons(Set<BranchCondToMultipleCon> branchCondToMultipleCons) {
+        this.theBranchCondToMultipleCons = branchCondToMultipleCons;
     }
 
     public Set<ArtifactCon> getTheArtifactCons() {

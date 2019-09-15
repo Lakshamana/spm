@@ -43,6 +43,8 @@ public interface ActivityMapper extends EntityMapper<ActivityDTO, Activity> {
     @Mapping(target = "removeToArtifactCon", ignore = true)
     @Mapping(source = "theAncestorActitvityId", target = "theAncestorActitvity")
     @Mapping(source = "theProcessModelId", target = "theProcessModel")
+    @Mapping(target = "theBranchCondToActivities", ignore = true)
+    @Mapping(target = "removeTheBranchCondToActivity", ignore = true)
     @Mapping(target = "theActivityInstantiateds", ignore = true)
     @Mapping(target = "removeTheActivityInstantiated", ignore = true)
     @Mapping(target = "theActivityMetrics", ignore = true)

@@ -7,7 +7,7 @@
         Added the constraints for entity Activity.
     -->
     <changeSet id="20190914033720-2" author="jhipster">
-
+        
         <addForeignKeyConstraint baseColumnNames="the_plain_sub_id"
                                  baseTableName="activity"
                                  constraintName="fk_activity_the_plain_sub_id"
@@ -37,7 +37,7 @@
                                  constraintName="fk_activity_to_join_con_to_join_con_id"
                                  referencedColumnNames="id"
                                  referencedTableName="join_con"/>
-
+        
         <addForeignKeyConstraint baseColumnNames="activity_id"
                                  baseTableName="activity_to_branchandcon"
                                  constraintName="fk_activity_to_branchandcon_activity_id"
@@ -49,7 +49,7 @@
                                  constraintName="fk_activity_to_branchandcon_to_branchandcon_id"
                                  referencedColumnNames="id"
                                  referencedTableName="branch_and_con"/>
-
+        
         <addForeignKeyConstraint baseColumnNames="activity_id"
                                  baseTableName="activity_from_artifact_con"
                                  constraintName="fk_activity_from_artifact_con_activity_id"
@@ -61,7 +61,7 @@
                                  constraintName="fk_activity_from_artifact_con_from_artifact_con_id"
                                  referencedColumnNames="id"
                                  referencedTableName="artifact_con"/>
-
+        
         <addForeignKeyConstraint baseColumnNames="activity_id"
                                  baseTableName="activity_to_artifact_con"
                                  constraintName="fk_activity_to_artifact_con_activity_id"
@@ -73,7 +73,7 @@
                                  constraintName="fk_activity_to_artifact_con_to_artifact_con_id"
                                  referencedColumnNames="id"
                                  referencedTableName="artifact_con"/>
-
+        
         <addForeignKeyConstraint baseColumnNames="the_ancestor_actitvity_id"
                                  baseTableName="activity"
                                  constraintName="fk_activity_the_ancestor_actitvity_id"

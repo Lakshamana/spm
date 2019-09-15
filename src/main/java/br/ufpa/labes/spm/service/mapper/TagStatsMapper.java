@@ -1,30 +1,30 @@
 package br.ufpa.labes.spm.service.mapper;
 
 import br.ufpa.labes.spm.domain.*;
-import br.ufpa.labes.spm.service.dto.TagStatDTO;
+import br.ufpa.labes.spm.service.dto.TagStatsDTO;
 
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity {@link TagStats} and its DTO {@link TagStatDTO}.
+ * Mapper for the entity {@link TagStats} and its DTO {@link TagStatsDTO}.
  */
 @Mapper(componentModel = "spring", uses = {TagMapper.class, AssetMapper.class})
-public interface TagStatMapper extends EntityMapper<TagStatDTO, TagStats> {
+public interface TagStatsMapper extends EntityMapper<TagStatsDTO, TagStats> {
 
     @Mapping(source = "tag.id", target = "tagId")
     @Mapping(source = "theAsset.id", target = "theAssetId")
-    TagStatDTO toDto(TagStats tagStat);
+    TagStatsDTO toDto(TagStats tagStats);
 
     @Mapping(source = "tagId", target = "tag")
     @Mapping(source = "theAssetId", target = "theAsset")
-    TagStats toEntity(TagStatDTO tagStatDTO);
+    TagStats toEntity(TagStatsDTO tagStatsDTO);
 
     default TagStats fromId(Long id) {
         if (id == null) {
             return null;
         }
-        TagStats tagStat = new TagStats();
-        tagStat.setId(id);
-        return tagStat;
+        TagStats tagStats = new TagStats();
+        tagStats.setId(id);
+        return tagStats;
     }
 }
