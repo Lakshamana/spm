@@ -1,6 +1,6 @@
 package br.ufpa.labes.spm.service;
 
-import br.ufpa.labes.spm.domain.TagStat;
+import br.ufpa.labes.spm.domain.TagStats;
 import br.ufpa.labes.spm.repository.TagStatRepository;
 import br.ufpa.labes.spm.service.dto.TagStatDTO;
 import br.ufpa.labes.spm.service.mapper.TagStatMapper;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Service Implementation for managing {@link TagStat}.
+ * Service Implementation for managing {@link TagStats}.
  */
 @Service
 @Transactional
@@ -40,8 +40,8 @@ public class TagStatService {
      * @return the persisted entity.
      */
     public TagStatDTO save(TagStatDTO tagStatDTO) {
-        log.debug("Request to save TagStat : {}", tagStatDTO);
-        TagStat tagStat = tagStatMapper.toEntity(tagStatDTO);
+        log.debug("Request to save TagStats : {}", tagStatDTO);
+        TagStats tagStat = tagStatMapper.toEntity(tagStatDTO);
         tagStat = tagStatRepository.save(tagStat);
         return tagStatMapper.toDto(tagStat);
     }
@@ -68,7 +68,7 @@ public class TagStatService {
      */
     @Transactional(readOnly = true)
     public Optional<TagStatDTO> findOne(Long id) {
-        log.debug("Request to get TagStat : {}", id);
+        log.debug("Request to get TagStats : {}", id);
         return tagStatRepository.findById(id)
             .map(tagStatMapper::toDto);
     }
@@ -79,7 +79,7 @@ public class TagStatService {
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete TagStat : {}", id);
+        log.debug("Request to delete TagStats : {}", id);
         tagStatRepository.deleteById(id);
     }
 }

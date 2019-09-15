@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing {@link br.ufpa.labes.spm.domain.TagStat}.
+ * REST controller for managing {@link br.ufpa.labes.spm.domain.TagStats}.
  */
 @RestController
 @RequestMapping("/api")
@@ -47,7 +47,7 @@ public class TagStatResource {
      */
     @PostMapping("/tag-stats")
     public ResponseEntity<TagStatDTO> createTagStat(@RequestBody TagStatDTO tagStatDTO) throws URISyntaxException {
-        log.debug("REST request to save TagStat : {}", tagStatDTO);
+        log.debug("REST request to save TagStats : {}", tagStatDTO);
         if (tagStatDTO.getId() != null) {
             throw new BadRequestAlertException("A new tagStat cannot already have an ID", ENTITY_NAME, "idexists");
         }
@@ -68,7 +68,7 @@ public class TagStatResource {
      */
     @PutMapping("/tag-stats")
     public ResponseEntity<TagStatDTO> updateTagStat(@RequestBody TagStatDTO tagStatDTO) throws URISyntaxException {
-        log.debug("REST request to update TagStat : {}", tagStatDTO);
+        log.debug("REST request to update TagStats : {}", tagStatDTO);
         if (tagStatDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -98,7 +98,7 @@ public class TagStatResource {
      */
     @GetMapping("/tag-stats/{id}")
     public ResponseEntity<TagStatDTO> getTagStat(@PathVariable Long id) {
-        log.debug("REST request to get TagStat : {}", id);
+        log.debug("REST request to get TagStats : {}", id);
         Optional<TagStatDTO> tagStatDTO = tagStatService.findOne(id);
         return ResponseUtil.wrapOrNotFound(tagStatDTO);
     }
@@ -111,7 +111,7 @@ public class TagStatResource {
      */
     @DeleteMapping("/tag-stats/{id}")
     public ResponseEntity<Void> deleteTagStat(@PathVariable Long id) {
-        log.debug("REST request to delete TagStat : {}", id);
+        log.debug("REST request to delete TagStats : {}", id);
         tagStatService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }

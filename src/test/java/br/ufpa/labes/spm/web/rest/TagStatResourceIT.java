@@ -1,7 +1,7 @@
 package br.ufpa.labes.spm.web.rest;
 
 import br.ufpa.labes.spm.SpmApp;
-import br.ufpa.labes.spm.domain.TagStat;
+import br.ufpa.labes.spm.domain.TagStats;
 import br.ufpa.labes.spm.repository.TagStatRepository;
 import br.ufpa.labes.spm.service.TagStatService;
 import br.ufpa.labes.spm.service.dto.TagStatDTO;
@@ -68,7 +68,7 @@ public class TagStatResourceIT {
 
     private MockMvc restTagStatMockMvc;
 
-    private TagStat tagStat;
+    private TagStats tagStat;
 
     @BeforeEach
     public void setup() {
@@ -88,8 +88,8 @@ public class TagStatResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static TagStat createEntity(EntityManager em) {
-        TagStat tagStat = new TagStat()
+    public static TagStats createEntity(EntityManager em) {
+        TagStats tagStat = new TagStats()
             .count(DEFAULT_COUNT);
         return tagStat;
     }
@@ -99,8 +99,8 @@ public class TagStatResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static TagStat createUpdatedEntity(EntityManager em) {
-        TagStat tagStat = new TagStat()
+    public static TagStats createUpdatedEntity(EntityManager em) {
+        TagStats tagStat = new TagStats()
             .count(UPDATED_COUNT);
         return tagStat;
     }
@@ -115,17 +115,17 @@ public class TagStatResourceIT {
     public void createTagStat() throws Exception {
         int databaseSizeBeforeCreate = tagStatRepository.findAll().size();
 
-        // Create the TagStat
+        // Create the TagStats
         TagStatDTO tagStatDTO = tagStatMapper.toDto(tagStat);
         restTagStatMockMvc.perform(post("/api/tag-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(tagStatDTO)))
             .andExpect(status().isCreated());
 
-        // Validate the TagStat in the database
-        List<TagStat> tagStatList = tagStatRepository.findAll();
+        // Validate the TagStats in the database
+        List<TagStats> tagStatList = tagStatRepository.findAll();
         assertThat(tagStatList).hasSize(databaseSizeBeforeCreate + 1);
-        TagStat testTagStat = tagStatList.get(tagStatList.size() - 1);
+        TagStats testTagStat = tagStatList.get(tagStatList.size() - 1);
         assertThat(testTagStat.getCount()).isEqualTo(DEFAULT_COUNT);
     }
 
@@ -134,7 +134,7 @@ public class TagStatResourceIT {
     public void createTagStatWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = tagStatRepository.findAll().size();
 
-        // Create the TagStat with an existing ID
+        // Create the TagStats with an existing ID
         tagStat.setId(1L);
         TagStatDTO tagStatDTO = tagStatMapper.toDto(tagStat);
 
@@ -144,8 +144,8 @@ public class TagStatResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(tagStatDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the TagStat in the database
-        List<TagStat> tagStatList = tagStatRepository.findAll();
+        // Validate the TagStats in the database
+        List<TagStats> tagStatList = tagStatRepository.findAll();
         assertThat(tagStatList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -163,7 +163,7 @@ public class TagStatResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(tagStat.getId().intValue())))
             .andExpect(jsonPath("$.[*].count").value(hasItem(DEFAULT_COUNT.intValue())));
     }
-    
+
     @Test
     @Transactional
     public void getTagStat() throws Exception {
@@ -195,7 +195,7 @@ public class TagStatResourceIT {
         int databaseSizeBeforeUpdate = tagStatRepository.findAll().size();
 
         // Update the tagStat
-        TagStat updatedTagStat = tagStatRepository.findById(tagStat.getId()).get();
+        TagStats updatedTagStat = tagStatRepository.findById(tagStat.getId()).get();
         // Disconnect from session so that the updates on updatedTagStat are not directly saved in db
         em.detach(updatedTagStat);
         updatedTagStat
@@ -207,10 +207,10 @@ public class TagStatResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(tagStatDTO)))
             .andExpect(status().isOk());
 
-        // Validate the TagStat in the database
-        List<TagStat> tagStatList = tagStatRepository.findAll();
+        // Validate the TagStats in the database
+        List<TagStats> tagStatList = tagStatRepository.findAll();
         assertThat(tagStatList).hasSize(databaseSizeBeforeUpdate);
-        TagStat testTagStat = tagStatList.get(tagStatList.size() - 1);
+        TagStats testTagStat = tagStatList.get(tagStatList.size() - 1);
         assertThat(testTagStat.getCount()).isEqualTo(UPDATED_COUNT);
     }
 
@@ -219,7 +219,7 @@ public class TagStatResourceIT {
     public void updateNonExistingTagStat() throws Exception {
         int databaseSizeBeforeUpdate = tagStatRepository.findAll().size();
 
-        // Create the TagStat
+        // Create the TagStats
         TagStatDTO tagStatDTO = tagStatMapper.toDto(tagStat);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
@@ -228,8 +228,8 @@ public class TagStatResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(tagStatDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the TagStat in the database
-        List<TagStat> tagStatList = tagStatRepository.findAll();
+        // Validate the TagStats in the database
+        List<TagStats> tagStatList = tagStatRepository.findAll();
         assertThat(tagStatList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -247,17 +247,17 @@ public class TagStatResourceIT {
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<TagStat> tagStatList = tagStatRepository.findAll();
+        List<TagStats> tagStatList = tagStatRepository.findAll();
         assertThat(tagStatList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test
     @Transactional
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(TagStat.class);
-        TagStat tagStat1 = new TagStat();
+        TestUtil.equalsVerifier(TagStats.class);
+        TagStats tagStat1 = new TagStats();
         tagStat1.setId(1L);
-        TagStat tagStat2 = new TagStat();
+        TagStats tagStat2 = new TagStats();
         tagStat2.setId(tagStat1.getId());
         assertThat(tagStat1).isEqualTo(tagStat2);
         tagStat2.setId(2L);

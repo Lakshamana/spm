@@ -27,7 +27,7 @@ public class Tag implements Serializable {
 
     @OneToMany(mappedBy = "tag")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<TagStat> theTagStats = new HashSet<>();
+    private Set<TagStats> theTagStats = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -51,28 +51,28 @@ public class Tag implements Serializable {
         this.ident = ident;
     }
 
-    public Set<TagStat> getTheTagStats() {
+    public Set<TagStats> getTheTagStats() {
         return theTagStats;
     }
 
-    public Tag theTagStats(Set<TagStat> tagStats) {
+    public Tag theTagStats(Set<TagStats> tagStats) {
         this.theTagStats = tagStats;
         return this;
     }
 
-    public Tag addTheTagStat(TagStat tagStat) {
+    public Tag addTheTagStat(TagStats tagStat) {
         this.theTagStats.add(tagStat);
         tagStat.setTag(this);
         return this;
     }
 
-    public Tag removeTheTagStat(TagStat tagStat) {
+    public Tag removeTheTagStat(TagStats tagStat) {
         this.theTagStats.remove(tagStat);
         tagStat.setTag(null);
         return this;
     }
 
-    public void setTheTagStats(Set<TagStat> tagStats) {
+    public void setTheTagStats(Set<TagStats> tagStats) {
         this.theTagStats = tagStats;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove

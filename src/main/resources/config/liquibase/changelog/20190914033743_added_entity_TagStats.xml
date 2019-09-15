@@ -9,7 +9,7 @@
     <property name="autoIncrement" value="true"/>
 
     <!--
-        Added the entity TagStat.
+        Added the entity TagStats.
     -->
     <changeSet id="20190914033743-1" author="jhipster">
         <createTable tableName="tag_stat">

@@ -1,5 +1,5 @@
 {
-    "name": "TagStat",
+    "name": "TagStats",
     "fields": [
         {
             "fieldName": "count",

@@ -8,12 +8,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * A TagStat.
+ * A TagStats.
  */
 @Entity
 @Table(name = "tag_stat")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class TagStat implements Serializable {
+public class TagStats implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ public class TagStat implements Serializable {
         return count;
     }
 
-    public TagStat count(Long count) {
+    public TagStats count(Long count) {
         this.count = count;
         return this;
     }
@@ -58,7 +58,7 @@ public class TagStat implements Serializable {
         return tag;
     }
 
-    public TagStat tag(Tag tag) {
+    public TagStats tag(Tag tag) {
         this.tag = tag;
         return this;
     }
@@ -71,7 +71,7 @@ public class TagStat implements Serializable {
         return theAsset;
     }
 
-    public TagStat theAsset(Asset asset) {
+    public TagStats theAsset(Asset asset) {
         this.theAsset = asset;
         return this;
     }
@@ -86,10 +86,10 @@ public class TagStat implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof TagStat)) {
+        if (!(o instanceof TagStats)) {
             return false;
         }
-        return id != null && id.equals(((TagStat) o).id);
+        return id != null && id.equals(((TagStats) o).id);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class TagStat implements Serializable {
 
     @Override
     public String toString() {
-        return "TagStat{" +
+        return "TagStats{" +
             "id=" + getId() +
             ", count=" + getCount() +
             "}";

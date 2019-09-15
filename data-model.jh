@@ -292,7 +292,7 @@ entity Tag {
     ident String
 }
 
-entity TagStat {
+entity TagStats {
     count Long
 }
 
@@ -308,12 +308,12 @@ relationship ManyToOne {
     Message{sender} to Author{sentMessages},
     Message{recipient} to Author{receivedMessages},
 
-    TagStat{tag} to Tag{theTagStat}
+    TagStats{tag} to Tag{theTagStat}
 }
 
 relationship OneToMany {
     Asset{authorStats} to AuthorStat{theAsset},
-    Asset{tagStats} to TagStat{theAsset},
+    Asset{tagStats} to TagStats{theAsset},
     Asset{lessonsLearned} to LessonLearned{theAsset},
     Asset{relatedAssets} to AssetRelationship{theAsset},
     Asset{relatedByAssets} to AssetRelationship{relatedAsset},

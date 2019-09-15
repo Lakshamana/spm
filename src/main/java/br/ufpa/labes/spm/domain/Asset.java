@@ -70,7 +70,7 @@ public class Asset implements Serializable {
 
     @OneToMany(mappedBy = "theAsset")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<TagStat> tagStats = new HashSet<>();
+    private Set<TagStats> tagStats = new HashSet<>();
 
     @OneToMany(mappedBy = "theAsset")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -303,28 +303,28 @@ public class Asset implements Serializable {
         this.authorStats = authorStats;
     }
 
-    public Set<TagStat> getTagStats() {
+    public Set<TagStats> getTagStats() {
         return tagStats;
     }
 
-    public Asset tagStats(Set<TagStat> tagStats) {
+    public Asset tagStats(Set<TagStats> tagStats) {
         this.tagStats = tagStats;
         return this;
     }
 
-    public Asset addTagStats(TagStat tagStat) {
+    public Asset addTagStats(TagStats tagStat) {
         this.tagStats.add(tagStat);
         tagStat.setTheAsset(this);
         return this;
     }
 
-    public Asset removeTagStats(TagStat tagStat) {
+    public Asset removeTagStats(TagStats tagStat) {
         this.tagStats.remove(tagStat);
         tagStat.setTheAsset(null);
         return this;
     }
 
-    public void setTagStats(Set<TagStat> tagStats) {
+    public void setTagStats(Set<TagStats> tagStats) {
         this.tagStats = tagStats;
     }
 

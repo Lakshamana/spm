@@ -138,7 +138,7 @@ public class CacheConfiguration {
             createCache(cm, br.ufpa.labes.spm.domain.RelationshipKind.class.getName() + ".theAssetRelationships");
             createCache(cm, br.ufpa.labes.spm.domain.Tag.class.getName());
             createCache(cm, br.ufpa.labes.spm.domain.Tag.class.getName() + ".theTagStats");
-            createCache(cm, br.ufpa.labes.spm.domain.TagStat.class.getName());
+            createCache(cm, br.ufpa.labes.spm.domain.TagStats.class.getName());
             createCache(cm, br.ufpa.labes.spm.domain.CalendarDay.class.getName());
             createCache(cm, br.ufpa.labes.spm.domain.Calendar.class.getName());
             createCache(cm, br.ufpa.labes.spm.domain.Calendar.class.getName() + ".notWorkingDays");

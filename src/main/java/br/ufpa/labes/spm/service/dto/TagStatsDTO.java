@@ -3,7 +3,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A DTO for the {@link br.ufpa.labes.spm.domain.TagStat} entity.
+ * A DTO for the {@link br.ufpa.labes.spm.domain.TagStats} entity.
  */
 public class TagStatDTO implements Serializable {
 

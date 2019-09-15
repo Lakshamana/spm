@@ -1,15 +1,15 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.domain.TagStat;
+import br.ufpa.labes.spm.domain.TagStats;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 
 /**
- * Spring Data  repository for the TagStat entity.
+ * Spring Data  repository for the TagStats entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface TagStatRepository extends JpaRepository<TagStat, Long> {
+public interface TagStatRepository extends JpaRepository<TagStats, Long> {
 
 }
