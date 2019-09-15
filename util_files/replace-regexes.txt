@@ -4,29 +4,41 @@
 
 * A cada novo padrão encontrado, adicioná-lo ao final do arquivo:
 
-- De subtipos de Activity por Objetos de Activity:
-  search: (\().*\([ ]*(Normal|Decomposed)[ ]*\) ([\w]*).*(\))\.
-  replaceby: $3.getThe$2Sub().
+- De Decomposed subtipo de Activity para objeto de Activity:
+  search: `(\().*\([ ]*(Decomposed)[ ]*\) ([\w]*).*(\))\.`
+  replaceby: `$3.getThe$2Sub().`
+
+- De Normal subtipo de Activity para objeto transitivo de Activity:
+  search: `(\().*\([ ]*(Normal)[ ]*\) ([\w]*).*(\))\.`
+  replaceby: `$3.getThePlainSub().getThe$2Sub().`
+
+- De teste Decomposed instanceof Activity:
+  search: `([ ])*\([ ]*(.*) instanceof Decomposed[ ]*\)[ ]*\{`
+  replaceby: `$1 ($2.getTheDecomposedSub()) {`
+
+- De casting de Activity para Normal:
+  search: `(.*=[ ]*)\([ ]*(Normal)[ ]*\) ([\w]*).*;`
+  replaceby: ``
 
 - De pacotes de modelos SPM por objetos domain JHipster (modelos):
-  search: (package|import) org\.qrconsult\.spm\.model\.(.*)\.(.*);
-  replaceby: br.ufpa.labes.spm.domain.$2;
+  search: `(package|import) org\.qrconsult\.spm\.model\.(.*)\.(.*);`
+  replaceby: `br.ufpa.labes.spm.domain.$2;`
 
 - De pacotes DAO por pacotes DAO JHipster SPM:
-  search: (package|import) org\.qrconsult\.spm\.dataAccess\.(.*)\.(.*);
-  replaceby: $1 br.ufpa.labes.spm.repository.$2.$3;
+  search: `(package|import) org\.qrconsult\.spm\.dataAccess\.(.*)\.(.*);`
+  replaceby: `$1 br.ufpa.labes.spm.repository.$2.$3;`
 
 - De pacotes globais DAO SPM por globais DAO JHipster SPM:
-  search: package org\.qrconsult\.spm\.dataAccess\.(.*);
-  replaceby: package br.ufpa.labes.spm.repository.$1;
+  search: `package org\.qrconsult\.spm\.dataAccess\.(.*);`
+  replaceby: `package br.ufpa.labes.spm.repository.$1;`
 
 - Remover anotações EJB e Stateless no mesmo arquivo:
-  search: .*(Stateless|EJB).*\n
-  replaceby: ''
+  search: `.*(Stateless|EJB).*\n`
+  replaceby: ``
 
 - Renomear entidade PlainActivity para Plain:
-  search: ([Pp]lain)([_])*([Aa]ctivity)
-  replaceby: $1
+  search: `([Pp]lain)([_])*([Aa]ctivity)`
+  replaceby: `$1`
 
 *** Comandos BASH úteis:
 * Obter de maneira rápida as entidades de serviços:

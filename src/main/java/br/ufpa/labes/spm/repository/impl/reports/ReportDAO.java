@@ -579,7 +579,7 @@ public class ReportDAO implements IReportDAO{
 
 		for (Activity act : acts) {
 			if (act instanceof Decomposed)
-				build(((Decomposed) act).getTheReferedProcessModel());
+				buildact.getTheDecomposedSub().getTheReferedProcessModel());
 		}
 	}*/
 
@@ -592,27 +592,27 @@ public class ReportDAO implements IReportDAO{
 			String ident1 = a1.getIdent();
 			String ident2 = a2.getIdent();
 
-			if(a1 instanceof Normal){
-				plannedBegin1 = ( (Normal) a1).getPlannedBegin();
-				plannedEnd1 =   ( (Normal) a1).getPlannedEnd();
-			}else if(a1 instanceof Decomposed){
+			if (a1.getThePlainSub().getTheNormalSub() != null) {
+				plannedBegin1 = a1.getThePlainSub().getTheNormalSub().getPlannedBegin();
+				plannedEnd1 =   a1.getThePlainSub().getTheNormalSub().getPlannedEnd();
+			}else if (a1.getTheDecomposedSub()) {
 				plannedBegin1 = getFirstPlannedBeginFromProcessModel(
-    				           ( (Decomposed) a1).getTheReferedProcessModel()
+    				           a1.getTheDecomposedSub().getTheReferedProcessModel()
     				           );
 				plannedEnd1 =   getLatestPlannedEndFromProcessModel(
-    				           ( (Decomposed) a1).getTheReferedProcessModel()
+    				           a1.getTheDecomposedSub().getTheReferedProcessModel()
     				           );
 			}
 
-			if(a2 instanceof Normal){
-				plannedBegin2 = ( (Normal) a2).getPlannedBegin();
-				plannedEnd2 =   ( (Normal) a2).getPlannedEnd();
-			}else if(a2 instanceof Decomposed){
+			if (a2.getThePlainSub().getTheNormalSub() != null) {
+				plannedBegin2 = a2.getThePlainSub().getTheNormalSub().getPlannedBegin();
+				plannedEnd2 =   a2.getThePlainSub().getTheNormalSub().getPlannedEnd();
+			}else if (a2.getTheDecomposedSub()) {
 				plannedBegin2 = getFirstPlannedBeginFromProcessModel(
-    				           ( (Decomposed) a2).getTheReferedProcessModel()
+    				           a2.getTheDecomposedSub().getTheReferedProcessModel()
     				           );
 				plannedEnd2 =   getLatestPlannedEndFromProcessModel(
-						( (Decomposed) a2).getTheReferedProcessModel()
+						a2.getTheDecomposedSub().getTheReferedProcessModel()
     				           );
 			}
 
@@ -647,12 +647,12 @@ public class ReportDAO implements IReportDAO{
 
 				Date planBegin = null;
 
-				if(act instanceof Normal){
-					Normal normalAct = (Normal) act;
+				if (act.getThePlainSub().getTheNormalSub() != null) {
+					Normal normalAct = act.getThePlainSub().getTheNormalSub();
 
 					planBegin = normalAct.getPlannedBegin();
 
-				}else if(act instanceof Decomposed){
+				}else if (act.getTheDecomposedSub()) {
 					Decomposed decAct = (Decomposed)act;
 
 					planBegin =
@@ -699,12 +699,12 @@ public class ReportDAO implements IReportDAO{
 
 					Date planEnd = null;
 
-					if(act instanceof Normal){
-						Normal normalAct = (Normal) act;
+					if (act.getThePlainSub().getTheNormalSub() != null) {
+						Normal normalAct = act.getThePlainSub().getTheNormalSub();
 
 						planEnd = normalAct.getPlannedEnd();
 
-					}else if(act instanceof Decomposed){
+					}else if (act.getTheDecomposedSub()) {
 						Decomposed decAct = (Decomposed)act;
 
 						planEnd =
@@ -1274,8 +1274,8 @@ public class ReportDAO implements IReportDAO{
 		for(Activity act: listOfActs){
 			listOfActsExpanded.add(act);
 
-			if(act instanceof Decomposed){
-				Decomposed decAct = (Decomposed) act;
+			if (act.getTheDecomposedSub()) {
+				Decomposed decAct = act.getTheDecomposedSub();
 				ProcessModel decPModel = decAct.getTheReferedProcessModel();
 
 				List listOfActsFromDecomposed =
