@@ -13,6 +13,5 @@ public class ActivityDAO extends BaseDAO<Activity, String> implements IActivityD
 
 	public ActivityDAO() {
 		super(Activity.class);
-	}
-
+  }
 }

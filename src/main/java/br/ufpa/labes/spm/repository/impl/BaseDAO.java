@@ -19,13 +19,13 @@ import org.qrconsult.spm.annotations.EnumCriteriaType;
 import br.ufpa.labes.spm.repository.impl.agent.AgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.domain.Agent;
-import org.qrconsult.spm.util.PagingContext;
-import org.qrconsult.spm.util.SortCriteria;
-import org.qrconsult.spm.util.ident.ConversorDeIdent;
-import org.qrconsult.spm.util.ident.SemCaracteresEspeciais;
-import org.qrconsult.spm.util.ident.TrocaEspacoPorPonto;
+import br.ufpa.labes.spm.util.PagingContext;
+import br.ufpa.labes.spm.util.SortCriteria;
+import br.ufpa.labes.spm.util.ident.ConversorDeIdent;
+import br.ufpa.labes.spm.util.ident.SemCaracteresEspeciais;
+import br.ufpa.labes.spm.util.ident.TrocaEspacoPorPonto;
 
-public abstract class BaseDAO<T, PK> implements IBaseDAO<T, PK> {
+public class BaseDAO<T, PK> implements IBaseDAO<T, PK> {
 
 	@PersistenceContext(unitName = "SPMPU")
 	private EntityManager em;
@@ -48,15 +48,17 @@ public abstract class BaseDAO<T, PK> implements IBaseDAO<T, PK> {
 		return object;
 	}
 
+  @Override
 	public List<T> retrieveByCriteria(T searchCriteria) {
 		return retrieveByCriteria(searchCriteria, null, null);
 	}
 
+  @Override
 	public List<T> retrieveByCriteria(T searchCriteria, SortCriteria sortCriteria) {
 		return retrieveByCriteria(searchCriteria, sortCriteria, null);
 	}
 
-	@SuppressWarnings("unchecked")
+  @Override
 	public List<T> retrieveByCriteria(T searchCriteria, SortCriteria sortCriteria, PagingContext paging) {
 		ArrayList<Field> criteria = new ArrayList<Field>();
 		Field[] fields = this.getBusinessClass().getDeclaredFields();
@@ -167,6 +169,7 @@ public abstract class BaseDAO<T, PK> implements IBaseDAO<T, PK> {
 		return em;
 	}
 
+  @Override
 	public T retrieveBySecondaryKey(String ident) {
 		Query query = this.getPersistenceContext()
 				.createQuery("FROM " + businessClass.getName() + " as obj WHERE obj.ident = :ident");

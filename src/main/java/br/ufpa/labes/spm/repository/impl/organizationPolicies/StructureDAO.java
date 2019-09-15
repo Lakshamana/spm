@@ -3,7 +3,7 @@ package br.ufpa.labes.spm.repository.impl.organizationPolicies;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IStructureDAO;
-import br.ufpa.labes.spm.domain.Repository;
+import br.ufpa.labes.spm.domain.VCSRepository;
 import br.ufpa.labes.spm.domain.Structure;
 
 public class StructureDAO extends BaseDAO<Structure, String> implements IStructureDAO{

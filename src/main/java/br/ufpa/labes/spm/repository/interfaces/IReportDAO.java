@@ -6,12 +6,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.qrconsult.spm.util.PagingContext;
-import org.qrconsult.spm.util.SortCriteria;
+import br.ufpa.labes.spm.util.PagingContext;
+import br.ufpa.labes.spm.util.SortCriteria;
 
 public interface IReportDAO{
 	public EntityManager getPersistenceContext();
-	
+
 	public List<Object[]> getAgentsReportData(Date date);
 	public List<Object[]> getActivitiesByProcessReportData(String processIdent);
 	public List<Object[]> getAgentsByRoleReportData();

@@ -10,7 +10,7 @@ import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
 import org.qrconsult.spm.dtos.dashboard.Time;
 import br.ufpa.labes.spm.domain.AgendaEvent;
 import br.ufpa.labes.spm.domain.Task;
-import org.qrconsult.spm.util.ServicesUtil;
+import br.ufpa.labes.spm.util.ServicesUtil;
 
 
 public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO{

@@ -4,21 +4,21 @@ import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IRepositoryDAO;
-import br.ufpa.labes.spm.domain.Repository;
+import br.ufpa.labes.spm.domain.VCSRepository;
 import br.ufpa.labes.spm.domain.Structure;
 
-public class RepositoryDAO extends BaseDAO<Repository, String> implements IRepositoryDAO {
-	protected RepositoryDAO(Class<Repository> businessClass) {
+public class RepositoryDAO extends BaseDAO<VCSRepository, String> implements IRepositoryDAO {
+	protected RepositoryDAO(Class<VCSRepository> businessClass) {
 		super(businessClass);
 	}
 
 	public RepositoryDAO() {
-		super(Repository.class);
+		super(VCSRepository.class);
 	}
 
 	@Override
 	public Structure getTheStructure(String ident) {
-		String hql = " select DISTINCT repository.theStructure from " + Repository.class.getName() +
+		String hql = " select DISTINCT repository.theStructure from " + VCSRepository.class.getName() +
 				" as repository where repository.ident = :ident";
 
 		Query query = this.getPersistenceContext().createQuery( hql );
