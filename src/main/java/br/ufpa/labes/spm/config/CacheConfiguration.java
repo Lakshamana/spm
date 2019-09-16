@@ -381,6 +381,7 @@ public class CacheConfiguration {
             createCache(cm, br.ufpa.labes.spm.domain.BranchConCond.class.getName() + ".theBranchConCondToMultipleCons");
             createCache(cm, br.ufpa.labes.spm.domain.BranchConCondToActivity.class.getName());
             createCache(cm, br.ufpa.labes.spm.domain.BranchConCondToMultipleCon.class.getName());
+            createCache(cm, br.ufpa.labes.spm.domain.VCSRepository.class.getName() + ".theArtifacts");
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -27,11 +27,10 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "many-to-one",
+            "relationshipType": "one-to-many",
             "otherEntityName": "artifact",
             "otherEntityRelationshipName": "theVCSRepository",
-            "relationshipName": "theArtifact",
-            "otherEntityField": "id"
+            "relationshipName": "theArtifact"
         }
     ],
     "changelogDate": "20190914033815",

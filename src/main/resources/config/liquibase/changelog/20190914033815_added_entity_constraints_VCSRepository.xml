@@ -14,11 +14,5 @@
                                  referencedColumnNames="id"
                                  referencedTableName="structure"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_artifact_id"
-                                 baseTableName="vcs_repository"
-                                 constraintName="fk_vcs_repository_the_artifact_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="artifact"/>
-
     </changeSet>
 </databaseChangeLog>

@@ -20,6 +20,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="artifact"/>
 
+        <addForeignKeyConstraint baseColumnNames="thevcsrepository_id"
+                                 baseTableName="artifact"
+                                 constraintName="fk_artifact_thevcsrepository_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="vcs_repository"/>
+
         <addForeignKeyConstraint baseColumnNames="the_project_id"
                                  baseTableName="artifact"
                                  constraintName="fk_artifact_the_project_id"

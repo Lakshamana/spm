@@ -67,10 +67,6 @@ public class Artifact implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ArtifactEstimation> theArtifactEstimations = new HashSet<>();
 
-    @OneToMany(mappedBy = "theArtifact")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<VCSRepository> theVCSRepositories = new HashSet<>();
-
     @ManyToOne
     @JsonIgnoreProperties("theArtifacts")
     private ArtifactType theArtifactType;
@@ -78,6 +74,10 @@ public class Artifact implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("possesses")
     private Artifact derivedFrom;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theArtifacts")
+    private VCSRepository theVCSRepository;
 
     @ManyToOne
     @JsonIgnoreProperties("finalArtifacts")
@@ -333,31 +333,6 @@ public class Artifact implements Serializable {
         this.theArtifactEstimations = artifactEstimations;
     }
 
-    public Set<VCSRepository> getTheVCSRepositories() {
-        return theVCSRepositories;
-    }
-
-    public Artifact theVCSRepositories(Set<VCSRepository> vCSRepositories) {
-        this.theVCSRepositories = vCSRepositories;
-        return this;
-    }
-
-    public Artifact addTheVCSRepository(VCSRepository vCSRepository) {
-        this.theVCSRepositories.add(vCSRepository);
-        vCSRepository.setTheArtifact(this);
-        return this;
-    }
-
-    public Artifact removeTheVCSRepository(VCSRepository vCSRepository) {
-        this.theVCSRepositories.remove(vCSRepository);
-        vCSRepository.setTheArtifact(null);
-        return this;
-    }
-
-    public void setTheVCSRepositories(Set<VCSRepository> vCSRepositories) {
-        this.theVCSRepositories = vCSRepositories;
-    }
-
     public ArtifactType getTheArtifactType() {
         return theArtifactType;
     }
@@ -382,6 +357,19 @@ public class Artifact implements Serializable {
 
     public void setDerivedFrom(Artifact artifact) {
         this.derivedFrom = artifact;
+    }
+
+    public VCSRepository getTheVCSRepository() {
+        return theVCSRepository;
+    }
+
+    public Artifact theVCSRepository(VCSRepository vCSRepository) {
+        this.theVCSRepository = vCSRepository;
+        return this;
+    }
+
+    public void setTheVCSRepository(VCSRepository vCSRepository) {
+        this.theVCSRepository = vCSRepository;
     }
 
     public Project getTheProject() {

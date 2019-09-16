@@ -66,12 +66,6 @@
             "relationshipName": "theArtifactEstimation"
         },
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "vCSRepository",
-            "otherEntityRelationshipName": "theArtifact",
-            "relationshipName": "theVCSRepository"
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "artifactType",
             "otherEntityRelationshipName": "theArtifact",
@@ -83,6 +77,13 @@
             "otherEntityName": "artifact",
             "otherEntityRelationshipName": "possess",
             "relationshipName": "derivedFrom",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "vCSRepository",
+            "otherEntityRelationshipName": "theArtifact",
+            "relationshipName": "theVCSRepository",
             "otherEntityField": "id"
         },
         {

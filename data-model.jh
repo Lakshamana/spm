@@ -218,6 +218,7 @@ entity ArtifactTask {
 relationship ManyToOne {
     Artifact{theArtifactType} to ArtifactType{theArtifact}
     Artifact{derivedFrom} to Artifact{possess},
+    Artifact{theVCSRepository} to VCSRepository{theArtifact},
 
     ArtifactTask{theArtifact} to Artifact{theArtifactTasks},
     ArtifactTask{theTask} to Task{theArtifactTasks}
@@ -228,8 +229,7 @@ relationship OneToMany {
     Artifact{theArtifactParams} to ArtifactParam{theArtifact},
     Artifact{theAutomatic} to Automatic{theArtifact},
     Artifact{theArtifactMetric} to ArtifactMetric{theArtifact},
-    Artifact{theArtifactEstimation} to ArtifactEstimation{theArtifact},
-    Artifact{theVCSRepository} to VCSRepository{theArtifact}
+    Artifact{theArtifactEstimation} to ArtifactEstimation{theArtifact}
 }
 
 //package assets -------------------------------------------

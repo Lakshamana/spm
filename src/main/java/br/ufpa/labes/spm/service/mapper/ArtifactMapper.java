@@ -8,11 +8,12 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Artifact} and its DTO {@link ArtifactDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ArtifactTypeMapper.class, ProjectMapper.class})
+@Mapper(componentModel = "spring", uses = {ArtifactTypeMapper.class, VCSRepositoryMapper.class, ProjectMapper.class})
 public interface ArtifactMapper extends EntityMapper<ArtifactDTO, Artifact> {
 
     @Mapping(source = "theArtifactType.id", target = "theArtifactTypeId")
     @Mapping(source = "derivedFrom.id", target = "derivedFromId")
+    @Mapping(source = "theVCSRepository.id", target = "theVCSRepositoryId")
     @Mapping(source = "theProject.id", target = "theProjectId")
     ArtifactDTO toDto(Artifact artifact);
 
@@ -26,10 +27,9 @@ public interface ArtifactMapper extends EntityMapper<ArtifactDTO, Artifact> {
     @Mapping(target = "removeTheArtifactMetric", ignore = true)
     @Mapping(target = "theArtifactEstimations", ignore = true)
     @Mapping(target = "removeTheArtifactEstimation", ignore = true)
-    @Mapping(target = "theVCSRepositories", ignore = true)
-    @Mapping(target = "removeTheVCSRepository", ignore = true)
     @Mapping(source = "theArtifactTypeId", target = "theArtifactType")
     @Mapping(source = "derivedFromId", target = "derivedFrom")
+    @Mapping(source = "theVCSRepositoryId", target = "theVCSRepository")
     @Mapping(source = "theProjectId", target = "theProject")
     @Mapping(target = "possesses", ignore = true)
     @Mapping(target = "removePossess", ignore = true)

@@ -6,6 +6,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A VCSRepository.
@@ -37,9 +39,9 @@ public class VCSRepository implements Serializable {
     @JsonIgnoreProperties("theVCSRepositories")
     private Structure theStructure;
 
-    @ManyToOne
-    @JsonIgnoreProperties("theVCSRepositories")
-    private Artifact theArtifact;
+    @OneToMany(mappedBy = "theVCSRepository")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Artifact> theArtifacts = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -115,17 +117,29 @@ public class VCSRepository implements Serializable {
         this.theStructure = structure;
     }
 
-    public Artifact getTheArtifact() {
-        return theArtifact;
+    public Set<Artifact> getTheArtifacts() {
+        return theArtifacts;
     }
 
-    public VCSRepository theArtifact(Artifact artifact) {
-        this.theArtifact = artifact;
+    public VCSRepository theArtifacts(Set<Artifact> artifacts) {
+        this.theArtifacts = artifacts;
         return this;
     }
 
-    public void setTheArtifact(Artifact artifact) {
-        this.theArtifact = artifact;
+    public VCSRepository addTheArtifact(Artifact artifact) {
+        this.theArtifacts.add(artifact);
+        artifact.setTheVCSRepository(this);
+        return this;
+    }
+
+    public VCSRepository removeTheArtifact(Artifact artifact) {
+        this.theArtifacts.remove(artifact);
+        artifact.setTheVCSRepository(null);
+        return this;
+    }
+
+    public void setTheArtifacts(Set<Artifact> artifacts) {
+        this.theArtifacts = artifacts;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

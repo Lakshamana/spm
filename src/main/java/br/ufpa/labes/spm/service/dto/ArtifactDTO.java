@@ -30,6 +30,8 @@ public class ArtifactDTO implements Serializable {
 
     private Long derivedFromId;
 
+    private Long theVCSRepositoryId;
+
     private Long theProjectId;
 
     public Long getId() {
@@ -120,6 +122,14 @@ public class ArtifactDTO implements Serializable {
         this.derivedFromId = artifactId;
     }
 
+    public Long getTheVCSRepositoryId() {
+        return theVCSRepositoryId;
+    }
+
+    public void setTheVCSRepositoryId(Long vCSRepositoryId) {
+        this.theVCSRepositoryId = vCSRepositoryId;
+    }
+
     public Long getTheProjectId() {
         return theProjectId;
     }
@@ -163,6 +173,7 @@ public class ArtifactDTO implements Serializable {
             ", isActive='" + isIsActive() + "'" +
             ", theArtifactType=" + getTheArtifactTypeId() +
             ", derivedFrom=" + getDerivedFromId() +
+            ", theVCSRepository=" + getTheVCSRepositoryId() +
             ", theProject=" + getTheProjectId() +
             "}";
     }

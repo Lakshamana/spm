@@ -20,8 +20,6 @@ public class VCSRepositoryDTO implements Serializable {
 
     private Long theStructureId;
 
-    private Long theArtifactId;
-
     public Long getId() {
         return id;
     }
@@ -70,14 +68,6 @@ public class VCSRepositoryDTO implements Serializable {
         this.theStructureId = structureId;
     }
 
-    public Long getTheArtifactId() {
-        return theArtifactId;
-    }
-
-    public void setTheArtifactId(Long artifactId) {
-        this.theArtifactId = artifactId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -108,7 +98,6 @@ public class VCSRepositoryDTO implements Serializable {
             ", server='" + getServer() + "'" +
             ", repositoryPath='" + getRepositoryPath() + "'" +
             ", theStructure=" + getTheStructureId() +
-            ", theArtifact=" + getTheArtifactId() +
             "}";
     }
 }
