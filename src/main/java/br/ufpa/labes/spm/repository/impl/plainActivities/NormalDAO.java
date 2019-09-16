@@ -54,10 +54,10 @@ public class NormalDAO extends BaseDAO<Normal, Integer> implements INormalDAO {
 					agents.add(reqAgent.getTheAgent().getName());
 			} else if (reqPeople instanceof ReqWorkGroup) {
 				ReqWorkGroup ReqWorkGroup = (ReqWorkGroup) reqPeople;
-				WorkGroup group = ReqWorkGroup.getTheGroup();
+				WorkGroup group = ReqWorkGroup.getTheWorkGroup();
 
 				if (group != null)
-					agents.add(ReqWorkGroup.getTheGroup().getName() + " (WorkGroup)");
+					agents.add(ReqWorkGroup.getTheWorkGroup().getName() + " (WorkGroup)");
 			}
 		}
 

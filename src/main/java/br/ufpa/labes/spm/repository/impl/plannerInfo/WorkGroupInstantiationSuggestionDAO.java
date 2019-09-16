@@ -2,16 +2,16 @@ package br.ufpa.labes.spm.repository.impl.plannerInfo;
 
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
-import br.ufpa.labes.spm.repository.interfaces.plannerInfo.IGroupInstantiationSuggestionDAO;
+import br.ufpa.labes.spm.repository.interfaces.plannerInfo.IWorkGroupInstantiationSuggestionDAO;
 import br.ufpa.labes.spm.domain.WorkGroupInstSug;
 
-public class GroupInstantiationSuggestionDAO extends BaseDAO<WorkGroupInstSug, Integer> implements IGroupInstantiationSuggestionDAO{
+public class GroupInstantiationSuggestionDAO extends BaseDAO<WorkGroupInstSug, Integer> implements IWorkGroupInstantiationSuggestionDAO{
 
-	protected GroupInstantiationSuggestionDAO(Class<WorkGroupInstSug> businessClass) {
+	protected WorkGroupInstantiationSuggestionDAO(Class<WorkGroupInstSug> businessClass) {
 		super(businessClass);
 	}
 
-	public GroupInstantiationSuggestionDAO() {
+	public WorkGroupInstantiationSuggestionDAO() {
 		super(WorkGroupInstSug.class);
 	}
 

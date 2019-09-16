@@ -43,7 +43,7 @@ public class RequiredPeopleDAO extends BaseDAO<RequiredPeople, Integer> implemen
 				else if ( people instanceof ReqWorkGroup ) {
 					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)people;
 
-					Collection<Agent> agents = (Collection<Agent>) ReqWorkGroup.getTheGroup().getTheAgent();
+					Collection<Agent> agents = (Collection<Agent>) ReqWorkGroup.getTheWorkGroup().getTheAgent();
 
 					for ( Agent agent : agents ) {
 						toReturn.add( agent.getEMail() );

@@ -184,7 +184,7 @@ public class ReportDAO implements IReportDAO{
 			toReturn.add( entry );
 		}
 
-		Collections.sort(toReturn, new OrderByPlannedBeginGroupedByActivity(processIdent) {
+		Collections.sort(toReturn, new OrderByPlannedBeginWorkGroupedByActivity(processIdent) {
 			public int compare(Object o1, Object o2) {
 				Object[] os1 = (Object[])o1, os2 = (Object[])o2;
 
@@ -308,25 +308,25 @@ public class ReportDAO implements IReportDAO{
 	}
 
 	@Override
-	public List<Object[]> getAgentsByGroupReportData() {
-		String hql = "from " + WorkGroup.class.getName() + " as group " +
-				"order by group.name";
+	public List<Object[]> getAgentsByWorkGroupReportData() {
+		String hql = "from " + WorkGroup.class.getName() + " as Workgroup " +
+				"order by Workgroup.name";
 		Query query = this.getPersistenceContext().createQuery(hql);
 
-		List<WorkGroup> groups = query.getResultList();
+		List<WorkGroup> Workgroups = query.getResultList();
 
 		List<Object[]> result = new ArrayList<Object[]>();
 
-		if ( groups == null || groups.isEmpty() ) {
+		if ( groups == null || Workgroups.isEmpty() ) {
 			return result;
 		}
 
-		for ( WorkGroup group : groups ) {
-			if ( group == null )
+		for ( WorkGroup group : Workgroups ) {
+			if ( Workgroup == null )
 				continue;
 
 			List<Agent> agents = new ArrayList<Agent>();
-			agents.addAll( group.getTheAgent() );
+			agents.addAll( Workgroup.getTheAgent() );
 
 			Collections.sort( agents, new Comparator<Agent>() {
 
@@ -340,7 +340,7 @@ public class ReportDAO implements IReportDAO{
 				if(agent.isActive()){
 					Object[] entry = new Object[ 2 ];
 
-					entry[ 0 ] = group.getName();
+					entry[ 0 ] = Workgroup.getName();
 					entry[ 1 ] = agent.getName();
 
 					result.add( entry );
@@ -461,12 +461,12 @@ public class ReportDAO implements IReportDAO{
 		return em;
 	}
 
-	private class OrderByPlannedBeginGroupedByActivity implements Comparator<Object> {
+	private class OrderByPlannedBeginWorkGroupedByActivity implements Comparator<Object> {
 
 		public String process;
 		public HashMap<String, Activity> actMap = new HashMap<String, Activity>();
 
-		public OrderByPlannedBeginGroupedByActivity(String process) {
+		public OrderByPlannedBeginWorkGroupedByActivity(String process) {
 			this.process = process;
 
 			String queryStr = "from " + Activity.class.getName() + " as act where act.ident like :ident";
@@ -751,7 +751,7 @@ public class ReportDAO implements IReportDAO{
 
 	@Override
 	public List<Object[]> getActivitiesByAgentsReportData(String agentIdent , Date beginDate, Date endDate , String role , boolean allStates) {
-		String ReqWorkGroupHql = "select ReqWorkGroup.oid from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup joinCon ReqWorkGroup.theGroup.theAgent as agent where agent.ident= :agentIdent";
+		String ReqWorkGroupHql = "select ReqWorkGroup.oid from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup joinCon ReqWorkGroup.theWorkGroup.theAgent as agent where agent.ident= :agentIdent";
 
 		String reqAgentHql = "select reqAgent.oid from " + ReqAgent.class.getName() + " as reqAgent where reqAgent.theAgent.ident = :agentIdent";
 		System.out.println();
@@ -806,9 +806,9 @@ public class ReportDAO implements IReportDAO{
 
 					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)result[2];
 
-					WorkGroup group = ReqWorkGroup.getTheGroup();
+					WorkGroup group = ReqWorkGroup.getTheWorkGroup();
 
-					entry[2] = group != null ? group.getIdent() : "";
+					entry[2] = group != null ? Workgroup.getIdent() : "";
 				}
 				else {
 					ReqAgent reqAgent = (ReqAgent)result[2];
@@ -935,7 +935,7 @@ public class ReportDAO implements IReportDAO{
 		if ( normals == null || normals.isEmpty() )
 			return result;
 
-		Collections.sort(normals, new OrderByPlannedBeginGroupedByActivity(processIdent));
+		Collections.sort(normals, new OrderByPlannedBeginWorkGroupedByActivity(processIdent));
 
 		for ( Normal normal : normals ) {
 			if ( normal == null )
@@ -952,10 +952,10 @@ public class ReportDAO implements IReportDAO{
 			for ( RequiredPeople requiredPeople : reqPeople ) {
 				if ( requiredPeople instanceof ReqWorkGroup ){
 					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)requiredPeople;
-					if(ReqWorkGroup.getTheGroup() == null)
+					if(ReqWorkGroup.getTheWorkGroup() == null)
 						continue;
 
-					for ( Agent agent : (Collection<Agent>)ReqWorkGroup.getTheGroup().getTheAgent() ) {
+					for ( Agent agent : (Collection<Agent>)ReqWorkGroup.getTheWorkGroup().getTheAgent() ) {
 						if ( agent == null )
 							continue;
 
@@ -1402,7 +1402,7 @@ public class ReportDAO implements IReportDAO{
 	@Override
 	public List<Object[]> getHumanResourcesPlanData(String processIdent) {
 
-		String ReqWorkGroupHql = "select ReqWorkGroup from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup joinCon ReqWorkGroup.theGroup.theAgent as agent " +
+		String ReqWorkGroupHql = "select ReqWorkGroup from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup joinCon ReqWorkGroup.theWorkGroup.theAgent as agent " +
 								"where agent.ident = task.theProcessAgenda.theTaskAgenda.theAgent.ident";
 
 		String reqAgentHql = "select reqAgent from " + ReqAgent.class.getName() + " as reqAgent " +
@@ -1458,7 +1458,7 @@ public class ReportDAO implements IReportDAO{
 				if (activity[2] instanceof ReqWorkGroup) {
 					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)activity[2];
 
-					agentEntry[0] = ReqWorkGroup.getTheGroup().getName();
+					agentEntry[0] = ReqWorkGroup.getTheWorkGroup().getName();
 				}
 				else {
 					ReqAgent reqAgent = (ReqAgent)activity[2];
@@ -1483,7 +1483,7 @@ public class ReportDAO implements IReportDAO{
 
 		result.addAll(resultMap.values());
 
-		Collections.sort(result, new OrderByPlannedBeginGroupedByActivity(processIdent) {
+		Collections.sort(result, new OrderByPlannedBeginWorkGroupedByActivity(processIdent) {
 			public int compare(Object o1, Object o2) {
 				Object[] os1 = (Object[])o1, os2 = (Object[])o2;
 
@@ -1764,7 +1764,7 @@ public class ReportDAO implements IReportDAO{
 							numAgents++;
 						else if (people instanceof ReqWorkGroup) {
 							ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)people;
-							numAgents += ReqWorkGroup.getTheGroup().getTheAgent().size();
+							numAgents += ReqWorkGroup.getTheWorkGroup().getTheAgent().size();
 						}
 					}
 

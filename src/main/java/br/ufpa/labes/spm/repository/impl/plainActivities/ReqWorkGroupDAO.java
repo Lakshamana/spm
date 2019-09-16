@@ -18,25 +18,25 @@ public class ReqWorkGroupDAO extends BaseDAO<ReqWorkGroup, Integer> implements I
 		super(ReqWorkGroup.class);
 	}
 
-	public ReqWorkGroup findReqWorkGroupFromProcessModel(String groupIdent, String groupTypeIdent, String normalIdent) {
+	public ReqWorkGroup findReqWorkGroupFromProcessModel(String groupIdent, String WorkgroupTypeIdent, String normalIdent) {
 		List<ReqWorkGroup> retorno = null;
 
 		if (groupIdent != null && !groupIdent.equals("")) {
 
 			String hql = "SELECT ReqWorkGroup FROM " + ReqWorkGroup.class.getName()
-					+ " AS ReqWorkGroup WHERE ReqWorkGroup.theGroup.ident=:groupIdent AND ReqWorkGroup.theGroupType.ident=:groupTypeIdent AND ReqWorkGroup.theNormal.ident=:normalIdent";
+					+ " AS ReqWorkGroup WHERE ReqWorkGroup.theGroup.ident=:groupIdent AND ReqWorkGroup.theGroupType.ident=:WorkgroupTypeIdent AND ReqWorkGroup.theNormal.ident=:normalIdent";
 			Query query = getPersistenceContext().createQuery(hql);
 			query.setParameter("groupIdent", groupIdent);
-			query.setParameter("groupTypeIdent", groupTypeIdent);
+			query.setParameter("groupTypeIdent", WorkgroupTypeIdent);
 			query.setParameter("normalIdent", normalIdent);
 
 			retorno = (List<ReqWorkGroup>) query.getResultList();
 		} else {
 
 			String hql = "SELECT ReqWorkGroup FROM " + ReqWorkGroup.class.getName()
-					+ " AS ReqWorkGroup WHERE ReqWorkGroup.theGroupType.ident=:groupTypeIdent AND ReqWorkGroup.theNormal.ident=:normalIdent";
+					+ " AS ReqWorkGroup WHERE ReqWorkGroup.theGroupType.ident=:WorkgroupTypeIdent AND ReqWorkGroup.theNormal.ident=:normalIdent";
 			Query query = getPersistenceContext().createQuery(hql);
-			query.setParameter("groupTypeIdent", groupTypeIdent);
+			query.setParameter("groupTypeIdent", WorkgroupTypeIdent);
 			query.setParameter("normalIdent", normalIdent);
 
 			retorno = (List<ReqWorkGroup>) query.getResultList();

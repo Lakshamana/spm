@@ -7,5 +7,5 @@ import br.ufpa.labes.spm.domain.ReqWorkGroup;
 
 public interface IReqWorkGroupDAO extends IBaseDAO<ReqWorkGroup, Integer>{
 
-	public ReqWorkGroup findReqWorkGroupFromProcessModel(String groupIdent, String groupTypeIdent, String normalIdent);
+	public ReqWorkGroup findReqWorkGroupFromProcessModel(String groupIdent, String WorkgroupTypeIdent, String normalIdent);
 }

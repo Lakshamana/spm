@@ -15,7 +15,7 @@ public interface IReportDAO{
 	public List<Object[]> getAgentsReportData(Date date);
 	public List<Object[]> getActivitiesByProcessReportData(String processIdent);
 	public List<Object[]> getAgentsByRoleReportData();
-	public List<Object[]> getAgentsByGroupReportData();
+	public List<Object[]> getAgentsByWorkGroupReportData();
 	public List<Object[]> getProjectArtifactsReportData(String projectIdent);
 	public List<Object[]> getActivitiesByAgentsReportData(String agentIdent , Date beginDate, Date endDate , String role , boolean allStates);
 	public List<Object[]> getCostDeviationReportData(String processIdent);
