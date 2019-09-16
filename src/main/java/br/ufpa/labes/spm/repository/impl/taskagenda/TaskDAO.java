@@ -7,7 +7,7 @@ import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
-import org.qrconsult.spm.dtos.dashboard.Time;
+import br.ufpa.labes.spm.service.dto.Time;
 import br.ufpa.labes.spm.domain.AgendaEvent;
 import br.ufpa.labes.spm.domain.Task;
 import br.ufpa.labes.spm.util.ServicesUtil;

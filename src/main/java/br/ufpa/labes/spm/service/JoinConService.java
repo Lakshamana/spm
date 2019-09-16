@@ -70,14 +70,14 @@ public class JoinConService {
     public Page<JoinConDTO> findAllWithEagerRelationships(Pageable pageable) {
         return joinConRepository.findAllWithEagerRelationships(pageable).map(joinConMapper::toDto);
     }
-    
+
 
 
     /**
     *  Get all the joinCons where TheMultipleConSuper is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<JoinConDTO> findAllWhereTheMultipleConSuperIsNull() {
         log.debug("Request to get all joinCons where TheMultipleConSuper is null");
         return StreamSupport

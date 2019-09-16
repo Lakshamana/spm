@@ -4,8 +4,8 @@ import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.TagStats;
 import br.ufpa.labes.spm.repository.TagStatRepository;
 import br.ufpa.labes.spm.service.TagStatsService;
-import br.ufpa.labes.spm.service.dto.TagStatDTO;
-import br.ufpa.labes.spm.service.mapper.TagStatMapper;
+import br.ufpa.labes.spm.service.dto.TagStatsDTO;
+import br.ufpa.labes.spm.service.mapper.TagStatsMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +46,7 @@ public class TagStatResourceIT {
     private TagStatRepository tagStatRepository;
 
     @Autowired
-    private TagStatMapper tagStatMapper;
+    private TagStatsMapper tagStatsMapper;
 
     @Autowired
     private TagStatsService tagStatsService;
@@ -116,10 +116,10 @@ public class TagStatResourceIT {
         int databaseSizeBeforeCreate = tagStatRepository.findAll().size();
 
         // Create the TagStats
-        TagStatDTO tagStatDTO = tagStatMapper.toDto(tagStat);
+        TagStatsDTO tagStatsDTO = tagStatsMapper.toDto(tagStat);
         restTagStatMockMvc.perform(post("/api/tag-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(tagStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(tagStatsDTO)))
             .andExpect(status().isCreated());
 
         // Validate the TagStats in the database
@@ -136,12 +136,12 @@ public class TagStatResourceIT {
 
         // Create the TagStats with an existing ID
         tagStat.setId(1L);
-        TagStatDTO tagStatDTO = tagStatMapper.toDto(tagStat);
+        TagStatsDTO tagStatsDTO = tagStatsMapper.toDto(tagStat);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restTagStatMockMvc.perform(post("/api/tag-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(tagStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(tagStatsDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the TagStats in the database
@@ -200,11 +200,11 @@ public class TagStatResourceIT {
         em.detach(updatedTagStat);
         updatedTagStat
             .count(UPDATED_COUNT);
-        TagStatDTO tagStatDTO = tagStatMapper.toDto(updatedTagStat);
+        TagStatsDTO tagStatsDTO = tagStatsMapper.toDto(updatedTagStat);
 
         restTagStatMockMvc.perform(put("/api/tag-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(tagStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(tagStatsDTO)))
             .andExpect(status().isOk());
 
         // Validate the TagStats in the database
@@ -220,12 +220,12 @@ public class TagStatResourceIT {
         int databaseSizeBeforeUpdate = tagStatRepository.findAll().size();
 
         // Create the TagStats
-        TagStatDTO tagStatDTO = tagStatMapper.toDto(tagStat);
+        TagStatsDTO tagStatsDTO = tagStatsMapper.toDto(tagStat);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTagStatMockMvc.perform(put("/api/tag-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(tagStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(tagStatsDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the TagStats in the database
@@ -269,23 +269,23 @@ public class TagStatResourceIT {
     @Test
     @Transactional
     public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(TagStatDTO.class);
-        TagStatDTO tagStatDTO1 = new TagStatDTO();
-        tagStatDTO1.setId(1L);
-        TagStatDTO tagStatDTO2 = new TagStatDTO();
-        assertThat(tagStatDTO1).isNotEqualTo(tagStatDTO2);
-        tagStatDTO2.setId(tagStatDTO1.getId());
-        assertThat(tagStatDTO1).isEqualTo(tagStatDTO2);
-        tagStatDTO2.setId(2L);
-        assertThat(tagStatDTO1).isNotEqualTo(tagStatDTO2);
-        tagStatDTO1.setId(null);
-        assertThat(tagStatDTO1).isNotEqualTo(tagStatDTO2);
+        TestUtil.equalsVerifier(TagStatsDTO.class);
+        TagStatsDTO tagStatsDTO1 = new TagStatsDTO();
+        tagStatsDTO1.setId(1L);
+        TagStatsDTO tagStatsDTO2 = new TagStatsDTO();
+        assertThat(tagStatsDTO1).isNotEqualTo(tagStatsDTO2);
+        tagStatsDTO2.setId(tagStatsDTO1.getId());
+        assertThat(tagStatsDTO1).isEqualTo(tagStatsDTO2);
+        tagStatsDTO2.setId(2L);
+        assertThat(tagStatsDTO1).isNotEqualTo(tagStatsDTO2);
+        tagStatsDTO1.setId(null);
+        assertThat(tagStatsDTO1).isNotEqualTo(tagStatsDTO2);
     }
 
     @Test
     @Transactional
     public void testEntityFromId() {
-        assertThat(tagStatMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(tagStatMapper.fromId(null)).isNull();
+        assertThat(tagStatsMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(tagStatsMapper.fromId(null)).isNull();
     }
 }

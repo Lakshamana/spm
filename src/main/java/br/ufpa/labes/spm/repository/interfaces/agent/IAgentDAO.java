@@ -2,7 +2,7 @@ package br.ufpa.labes.spm.repository.interfaces.agent;
 
 
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
-import org.qrconsult.spm.dtos.formAgent.AgentDTO;
+import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.domain.Agent;
 
 public interface IAgentDAO extends IBaseDAO<Agent, Integer>{

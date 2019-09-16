@@ -4,7 +4,7 @@ import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
-import org.qrconsult.spm.dtos.formAgent.AgentDTO;
+import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.domain.Agent;
 
 public class AgentDAO extends BaseDAO<Agent, Integer> implements IAgentDAO {

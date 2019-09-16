@@ -8,7 +8,7 @@ import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
-import org.qrconsult.spm.dtos.agenda.SimpleArtifactDescriptorDTO;
+import br.ufpa.labes.spm.service.dto.SimpleArtifactDescriptorDTO;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactCon;
 import br.ufpa.labes.spm.domain.InvolvedArtifact;
