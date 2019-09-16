@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "work_group_metric")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class WorkGroupMetric implements Serializable {
+public class WorkGroupMetric extends Metric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

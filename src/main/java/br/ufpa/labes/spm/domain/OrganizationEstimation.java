@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "organization_estimation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class OrganizationEstimation implements Serializable {
+public class OrganizationEstimation extends Estimation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

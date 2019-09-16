@@ -1,4 +1,8 @@
 package br.ufpa.labes.spm.domain;
+
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -17,7 +21,8 @@ import br.ufpa.labes.spm.domain.enumeration.PlainStatus;
 @Entity
 @Table(name = "plain")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Plain implements Serializable {
+@Inheritance(strategy=InheritanceType.JOINED)
+public class Plain extends Activity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

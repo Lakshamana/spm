@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "artifact_estimation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ArtifactEstimation implements Serializable {
+public class ArtifactEstimation extends Estimation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "decomposed")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Decomposed implements Serializable {
+public class Decomposed extends Activity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

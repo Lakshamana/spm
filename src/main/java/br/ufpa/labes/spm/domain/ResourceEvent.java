@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "resource_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ResourceEvent implements Serializable {
+public class ResourceEvent extends Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

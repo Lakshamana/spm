@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "work_group_estimation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class WorkGroupEstimation implements Serializable {
+public class WorkGroupEstimation extends Estimation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

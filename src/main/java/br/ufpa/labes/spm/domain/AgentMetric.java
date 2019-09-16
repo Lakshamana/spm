@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "agent_metric")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class AgentMetric implements Serializable {
+public class AgentMetric extends Metric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "organization")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Organization implements Serializable {
+public class Organization extends Author implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

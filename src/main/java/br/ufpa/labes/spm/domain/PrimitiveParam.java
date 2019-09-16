@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "primitive_param")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class PrimitiveParam implements Serializable {
+public class PrimitiveParam extends Parameter implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

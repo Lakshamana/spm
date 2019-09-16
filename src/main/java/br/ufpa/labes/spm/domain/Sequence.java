@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "sequence")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Sequence implements Serializable {
+public class Sequence extends SimpleCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

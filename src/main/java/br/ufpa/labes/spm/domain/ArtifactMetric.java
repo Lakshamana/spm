@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "artifact_metric")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ArtifactMetric implements Serializable {
+public class ArtifactMetric extends Metric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

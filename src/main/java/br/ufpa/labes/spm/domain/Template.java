@@ -18,7 +18,7 @@ import br.ufpa.labes.spm.domain.enumeration.TemplateStatus;
 @Entity
 @Table(name = "template")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Template implements Serializable {
+public class Template extends Process implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

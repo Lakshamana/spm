@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "connection_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ConnectionType implements Serializable {
+public class ConnectionType extends Type implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
