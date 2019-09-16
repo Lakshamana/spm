@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for file in `find . -regextype posix-extended -regex '.*(Join|Branch)(AND)*([^(Con)]*)(.*)DAO.java'`; do
+for file in `find . -regextype posix-extended -regex '.*/([I]*)([^(Work)]*)(Group)(.*)DAO.java'`; do
   echo $file
-  replace=`echo $file | sed -r 's/(.*)(Join|Branch)(AND)*([^(Con)]*)(.*)DAO.java/\1\2\3Con\5DAO.java/'`
+  replace=`echo $file | sed -r 's/(.*)\/([I]*)([^(Work)]*)(Group)(.*)DAO.java/\1\/\2\3Work\4\5DAO.java/'`
   mv $file $replace
 done
 

@@ -11,7 +11,7 @@ public class ParameterDAO extends BaseDAO<Parameter, Integer> implements IParame
 	}
 
 	public ParameterDAO() {
-		super(Parameters.class);
+		super(Parameter.class);
 	}
 
 
