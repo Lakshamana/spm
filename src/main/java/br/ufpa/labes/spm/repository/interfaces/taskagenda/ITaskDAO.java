@@ -2,7 +2,7 @@ package br.ufpa.labes.spm.repository.interfaces.taskagenda;
 
 
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
-import br.ufpa.labes.spm.service.dto.Time;
+import br.ufpa.labes.spm.service.dto.dashboard.Time;
 import br.ufpa.labes.spm.domain.Task;
 
 public interface ITaskDAO extends IBaseDAO<Task, Integer> {
