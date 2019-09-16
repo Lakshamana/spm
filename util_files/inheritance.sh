@@ -7,6 +7,17 @@ model_path='src/main/java/br/ufpa/labes/spm/domain'
 cd $model_path
 
 for c in $classes; do
+
+  if [[ $c == 'Branch' ]]; then
+    c='BranchCon'
+  elif [[ $c == 'Join' ]]; then
+    c='JoinCon'
+  elif [[ $c == 'PeopleInstantiationSuggestion' ]]; then
+    c='PeopleInstSug'
+  elif [[ $c == 'Parameters' ]]; then
+   c='Parameter'
+  fi
+
   class_path="$c.java"
 
   # Add @Inheritance hibernate annotation
