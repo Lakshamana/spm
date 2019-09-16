@@ -5,9 +5,9 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.tools.IToolParameterDAO;
 import br.ufpa.labes.spm.domain.ToolParameter;
 
-public class ToolParametersDAO extends BaseDAO<ToolParameters, Integer> implements IToolParameterDAO{
+public class ToolParameterDAO extends BaseDAO<ToolParameter, Integer> implements IToolParameterDAO{
 
-	protected ToolParametersDAO(Class<ToolParameter> businessClass) {
+	protected ToolParameterDAO(Class<ToolParameter> businessClass) {
 		super(businessClass);
 	}
 

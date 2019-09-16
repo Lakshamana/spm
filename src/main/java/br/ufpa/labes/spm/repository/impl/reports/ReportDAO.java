@@ -27,6 +27,7 @@ import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
 import org.qrconsult.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.domain.DevelopingSystem;
 import br.ufpa.labes.spm.domain.Plain;
 import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.domain.Agent;
@@ -372,7 +373,7 @@ public class ReportDAO implements IReportDAO{
 
 				entry[ 0 ] = project.getName();
 
-				br.ufpa.labes.spm.domain.getTheSystem();
+				DevelopingSystem system = project.getTheSystem();
 
 				if ( system != null )
 					entry[ 1 ] = project.getTheSystem().getName();
@@ -1132,7 +1133,7 @@ public class ReportDAO implements IReportDAO{
 
 	@Override
 	public List<Object[]> getScheduleData(String processIdent) {
-		br.ufpa.labes.spm.domain.retrieveBySecondaryKey( processIdent );
+		Process process = processDAO.retrieveBySecondaryKey( processIdent );
 		ProcessModel model = process.getTheProcessModel();
 
 		List<Activity> activities = getActivitiesFromPModelOrderedByPlannedBegin( processIdent, model );
@@ -1290,8 +1291,7 @@ public class ReportDAO implements IReportDAO{
 
 	@Override
 	public List<Object[]> getDocumentManagementPlanData(String processIdent) {
-
-		br.ufpa.labes.spm.domain.retrieveBySecondaryKey( processIdent );
+    Process process = processDAO.retrieveBySecondaryKey( processIdent );
 		ProcessModel model = process.getTheProcessModel();
 
 		List<Activity> activities = getActivitiesFromPModelOrderedByPlannedBegin( processIdent, model );
