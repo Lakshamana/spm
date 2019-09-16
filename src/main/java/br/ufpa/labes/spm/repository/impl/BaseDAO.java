@@ -14,8 +14,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.qrconsult.spm.annotations.Criteria;
-import org.qrconsult.spm.annotations.EnumCriteriaType;
+import br.ufpa.labes.spm.annotations.Criteria;
+import br.ufpa.labes.spm.annotations.EnumCriteriaType;
 import br.ufpa.labes.spm.repository.impl.agent.AgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.domain.Agent;

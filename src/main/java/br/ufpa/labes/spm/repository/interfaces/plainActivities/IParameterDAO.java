@@ -1,10 +1,8 @@
 package br.ufpa.labes.spm.repository.interfaces.plainActivities;
 
-
-
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
-import br.ufpa.labes.spm.domain.Parameters;
+import br.ufpa.labes.spm.domain.Parameter;
 
-public interface IParametersDAO extends IBaseDAO<Parameters, Integer>{
+public interface IParameterDAO extends IBaseDAO<Parameter, Integer>{
 
 }

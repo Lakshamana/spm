@@ -3,8 +3,8 @@ package br.ufpa.labes.spm.repository.interfaces.log;
 
 
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
-import br.ufpa.labes.spm.domain.CatalogEvents;
+import br.ufpa.labes.spm.domain.CatalogEvent;
 
-public interface ICatalogEventsDAO extends IBaseDAO<CatalogEvents, Integer>{
+public interface ICatalogEventDAO extends IBaseDAO<CatalogEvent, Integer>{
 
 }

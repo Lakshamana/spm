@@ -10,7 +10,7 @@ import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.Process;
-import org.qrconsult.spm.services.interfaces.commonData.SimpleActivityQueryResult;
+import br.ufpa.labes.spm.service.util.SimpleActivityQueryResult;
 
 public class ProcessDAO extends BaseDAO<Process, String> implements IProcessDAO {
 
