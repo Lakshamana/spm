@@ -447,7 +447,7 @@ relationship OneToOne {
 relationship ManyToMany {
     ArtifactCon{toMultipleCon} to MultipleCon{theArtifactCon},
 
-    BranchANDCon{toMultipleCon} to MultipleCon{fromMultipleCon},
+    BranchANDCon{toMultipleCon} to MultipleCon{theBranchAND},
 
     JoinCon{fromMultipleCon} to MultipleCon{theJoinCon}
 }
@@ -754,6 +754,8 @@ entity AgentWorkingLoad {
 }
 
 entity InstantiationSuggestion {}
+
+entity ResourceInstSug {} //extends InstantiationSuggestion
 
 entity PeopleInstSug {} //extends InstantiationSuggestion
 
