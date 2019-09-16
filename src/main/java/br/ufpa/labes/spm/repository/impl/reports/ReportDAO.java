@@ -24,7 +24,7 @@ import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.IReportDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
-import org.qrconsult.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.DevelopingSystem;

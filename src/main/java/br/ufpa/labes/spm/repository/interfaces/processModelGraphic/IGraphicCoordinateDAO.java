@@ -4,7 +4,7 @@ import java.util.Collection;
 
 
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
-import org.qrconsult.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
 
 public interface IGraphicCoordinateDAO extends IBaseDAO<GraphicCoordinate,String>{

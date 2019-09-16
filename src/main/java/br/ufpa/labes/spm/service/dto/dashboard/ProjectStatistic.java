@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.qrconsult.spm.dtos.formProject.ProjectDTO;
+import br.ufpa.labes.spm.service.dto.ProjectDTO;
 
 @SuppressWarnings("serial")
 @XmlRootElement(name="projectStatistic")

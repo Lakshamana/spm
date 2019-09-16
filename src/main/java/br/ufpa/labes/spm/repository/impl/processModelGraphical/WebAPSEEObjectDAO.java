@@ -6,18 +6,18 @@ import java.util.List;
 import javax.persistence.Query;
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IWebAPSEEObjectDAO;
-import org.qrconsult.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
 import br.ufpa.labes.spm.domain.WebAPSEEObject;
 
-public class WebAPSEEObjectDAO extends BaseDAO<org.qrconsult.spm.model.processModelGraphical.WebAPSEEObject, String>
+public class WebAPSEEObjectDAO extends BaseDAO<WebAPSEEObject, String>
 		implements IWebAPSEEObjectDAO {
 
 	public WebAPSEEObjectDAO() {
-		super(br.ufpa.labes.spm.domain.class);
+		super(WebAPSEEObject.class);
 	}
 
-	protected WebAPSEEObjectDAO(Class<org.qrconsult.spm.model.processModelGraphical.WebAPSEEObject> businessClass) {
+	protected WebAPSEEObjectDAO(Class<WebAPSEEObject> businessClass) {
 		super(businessClass);
 	}
 
