@@ -28,6 +28,7 @@ import org.qrconsult.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
 import br.ufpa.labes.spm.domain.WorkGroup;
@@ -309,24 +310,24 @@ public class ReportDAO implements IReportDAO{
 
 	@Override
 	public List<Object[]> getAgentsByWorkGroupReportData() {
-		String hql = "from " + WorkGroup.class.getName() + " as Workgroup " +
-				"order by Workgroup.name";
+		String hql = "from " + WorkGroup.class.getName() + " as group " +
+				"order by group.name";
 		Query query = this.getPersistenceContext().createQuery(hql);
 
-		List<WorkGroup> Workgroups = query.getResultList();
+		List<WorkGroup> groups = query.getResultList();
 
 		List<Object[]> result = new ArrayList<Object[]>();
 
-		if ( groups == null || Workgroups.isEmpty() ) {
+		if ( groups == null || groups.isEmpty() ) {
 			return result;
 		}
 
-		for ( WorkGroup group : Workgroups ) {
-			if ( Workgroup == null )
+		for ( WorkGroup group : groups ) {
+			if ( group == null )
 				continue;
 
 			List<Agent> agents = new ArrayList<Agent>();
-			agents.addAll( Workgroup.getTheAgent() );
+			agents.addAll( group.getTheAgent() );
 
 			Collections.sort( agents, new Comparator<Agent>() {
 
@@ -340,7 +341,7 @@ public class ReportDAO implements IReportDAO{
 				if(agent.isActive()){
 					Object[] entry = new Object[ 2 ];
 
-					entry[ 0 ] = Workgroup.getName();
+					entry[ 0 ] = group.getName();
 					entry[ 1 ] = agent.getName();
 
 					result.add( entry );
@@ -591,27 +592,27 @@ public class ReportDAO implements IReportDAO{
 			String ident1 = a1.getIdent();
 			String ident2 = a2.getIdent();
 
-			if (a1.getThePlainSub().getTheNormalSub() != null) {
-				plannedBegin1 = a1.getThePlainSub().getTheNormalSub().getPlannedBegin();
-				plannedEnd1 =   a1.getThePlainSub().getTheNormalSub().getPlannedEnd();
-			}else if (a1.getTheDecomposedSub()) {
+			if(a1 instanceof Normal){
+				plannedBegin1 = ( (Normal) a1).getPlannedBegin();
+				plannedEnd1 =   ( (Normal) a1).getPlannedEnd();
+			}else if(a1 instanceof Decomposed){
 				plannedBegin1 = getFirstPlannedBeginFromProcessModel(
-    				           a1.getTheDecomposedSub().getTheReferedProcessModel()
+    				           ( (Decomposed) a1).getTheReferedProcessModel()
     				           );
 				plannedEnd1 =   getLatestPlannedEndFromProcessModel(
-    				           a1.getTheDecomposedSub().getTheReferedProcessModel()
+    				           ( (Decomposed) a1).getTheReferedProcessModel()
     				           );
 			}
 
-			if (a2.getThePlainSub().getTheNormalSub() != null) {
-				plannedBegin2 = a2.getThePlainSub().getTheNormalSub().getPlannedBegin();
-				plannedEnd2 =   a2.getThePlainSub().getTheNormalSub().getPlannedEnd();
-			}else if (a2.getTheDecomposedSub()) {
+			if(a2 instanceof Normal){
+				plannedBegin2 = ( (Normal) a2).getPlannedBegin();
+				plannedEnd2 =   ( (Normal) a2).getPlannedEnd();
+			}else if(a2 instanceof Decomposed){
 				plannedBegin2 = getFirstPlannedBeginFromProcessModel(
-    				           a2.getTheDecomposedSub().getTheReferedProcessModel()
+    				           ( (Decomposed) a2).getTheReferedProcessModel()
     				           );
 				plannedEnd2 =   getLatestPlannedEndFromProcessModel(
-						a2.getTheDecomposedSub().getTheReferedProcessModel()
+						( (Decomposed) a2).getTheReferedProcessModel()
     				           );
 			}
 
@@ -646,12 +647,12 @@ public class ReportDAO implements IReportDAO{
 
 				Date planBegin = null;
 
-				if (act.getThePlainSub().getTheNormalSub() != null) {
-					Normal normalAct = act.getThePlainSub().getTheNormalSub();
+				if(act instanceof Normal){
+					Normal normalAct = (Normal) act;
 
 					planBegin = normalAct.getPlannedBegin();
 
-				}else if (act.getTheDecomposedSub()) {
+				}else if(act instanceof Decomposed){
 					Decomposed decAct = (Decomposed)act;
 
 					planBegin =
@@ -777,7 +778,7 @@ public class ReportDAO implements IReportDAO{
 		if(endDate!=null)
 			query.setParameter( "endDate", endDate );
 		if(!allStates){
-			query.setParameter("active", Plain.ACTIVE);
+			query.setParameter("active", Plain);
 			query.setParameter("ready", Plain.READY);
 			query.setParameter("waiting", Plain.WAITING);
 		}
@@ -808,7 +809,7 @@ public class ReportDAO implements IReportDAO{
 
 					WorkGroup group = ReqWorkGroup.getTheWorkGroup();
 
-					entry[2] = group != null ? Workgroup.getIdent() : "";
+					entry[2] = group != null ? group.getIdent() : "";
 				}
 				else {
 					ReqAgent reqAgent = (ReqAgent)result[2];
@@ -1273,8 +1274,8 @@ public class ReportDAO implements IReportDAO{
 		for(Activity act: listOfActs){
 			listOfActsExpanded.add(act);
 
-			if (act.getTheDecomposedSub()) {
-				Decomposed decAct = act.getTheDecomposedSub();
+      if(act instanceof Decomposed){
+				Decomposed decAct = (Decomposed) act;
 				ProcessModel decPModel = decAct.getTheReferedProcessModel();
 
 				List listOfActsFromDecomposed =
@@ -1630,7 +1631,7 @@ public class ReportDAO implements IReportDAO{
 
 	@Override
 	public List<Object[]> getWorkBreakdownStructureData(String processIdent) {
-		br.ufpa.labes.spm.domain.retrieveBySecondaryKey( processIdent );
+		Process process = processDAO.retrieveBySecondaryKey( processIdent );
 		ProcessModel model = process.getTheProcessModel();
 
 		List<Activity> activities = getActivitiesFromPModelOrderedByPlannedBegin( processIdent, model );

@@ -247,7 +247,7 @@ public class Agent implements Serializable {
         this.tipoUser = tipoUser;
     }
 
-    public Boolean isIsActive() {
+    public Boolean isActive() {
         return isActive;
     }
 
