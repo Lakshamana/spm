@@ -2,13 +2,10 @@ package br.ufpa.labes.spm.exceptions;
 
 public class SPMInfraException extends SPMException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+  /** */
+  private static final long serialVersionUID = 1L;
 
-	public SPMInfraException(Throwable t) {
-		super(t);
-	}
-
+  public SPMInfraException(Throwable t) {
+    super(t);
+  }
 }

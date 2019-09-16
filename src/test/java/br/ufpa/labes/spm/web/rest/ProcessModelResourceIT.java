@@ -32,270 +32,271 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import br.ufpa.labes.spm.domain.enumeration.ProcessModelStatus;
-/**
- * Integration tests for the {@link ProcessModelResource} REST controller.
- */
+/** Integration tests for the {@link ProcessModelResource} REST controller. */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class ProcessModelResourceIT {
 
-    private static final String DEFAULT_REQUIREMENTS = "AAAAAAAAAA";
-    private static final String UPDATED_REQUIREMENTS = "BBBBBBBBBB";
+  private static final String DEFAULT_REQUIREMENTS = "AAAAAAAAAA";
+  private static final String UPDATED_REQUIREMENTS = "BBBBBBBBBB";
 
-    private static final ProcessModelStatus DEFAULT_PM_STATUS = ProcessModelStatus.REQUIREMENTS;
-    private static final ProcessModelStatus UPDATED_PM_STATUS = ProcessModelStatus.ABSTRACT;
+  private static final ProcessModelStatus DEFAULT_PM_STATUS = ProcessModelStatus.REQUIREMENTS;
+  private static final ProcessModelStatus UPDATED_PM_STATUS = ProcessModelStatus.ABSTRACT;
 
-    @Autowired
-    private ProcessModelRepository processModelRepository;
+  @Autowired private ProcessModelRepository processModelRepository;
 
-    @Autowired
-    private ProcessModelMapper processModelMapper;
+  @Autowired private ProcessModelMapper processModelMapper;
 
-    @Autowired
-    private ProcessModelService processModelService;
+  @Autowired private ProcessModelService processModelService;
 
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
+  @Autowired private ExceptionTranslator exceptionTranslator;
 
-    @Autowired
-    private EntityManager em;
+  @Autowired private EntityManager em;
 
-    @Autowired
-    private Validator validator;
+  @Autowired private Validator validator;
 
-    private MockMvc restProcessModelMockMvc;
+  private MockMvc restProcessModelMockMvc;
 
-    private ProcessModel processModel;
+  private ProcessModel processModel;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final ProcessModelResource processModelResource = new ProcessModelResource(processModelService);
-        this.restProcessModelMockMvc = MockMvcBuilders.standaloneSetup(processModelResource)
+  @BeforeEach
+  public void setup() {
+    MockitoAnnotations.initMocks(this);
+    final ProcessModelResource processModelResource = new ProcessModelResource(processModelService);
+    this.restProcessModelMockMvc =
+        MockMvcBuilders.standaloneSetup(processModelResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
+            .setValidator(validator)
+            .build();
+  }
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static ProcessModel createEntity(EntityManager em) {
-        ProcessModel processModel = new ProcessModel()
-            .requirements(DEFAULT_REQUIREMENTS)
-            .pmStatus(DEFAULT_PM_STATUS);
-        return processModel;
-    }
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static ProcessModel createUpdatedEntity(EntityManager em) {
-        ProcessModel processModel = new ProcessModel()
-            .requirements(UPDATED_REQUIREMENTS)
-            .pmStatus(UPDATED_PM_STATUS);
-        return processModel;
-    }
+  /**
+   * Create an entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static ProcessModel createEntity(EntityManager em) {
+    ProcessModel processModel =
+        new ProcessModel().requirements(DEFAULT_REQUIREMENTS).pmStatus(DEFAULT_PM_STATUS);
+    return processModel;
+  }
+  /**
+   * Create an updated entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static ProcessModel createUpdatedEntity(EntityManager em) {
+    ProcessModel processModel =
+        new ProcessModel().requirements(UPDATED_REQUIREMENTS).pmStatus(UPDATED_PM_STATUS);
+    return processModel;
+  }
 
-    @BeforeEach
-    public void initTest() {
-        processModel = createEntity(em);
-    }
+  @BeforeEach
+  public void initTest() {
+    processModel = createEntity(em);
+  }
 
-    @Test
-    @Transactional
-    public void createProcessModel() throws Exception {
-        int databaseSizeBeforeCreate = processModelRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createProcessModel() throws Exception {
+    int databaseSizeBeforeCreate = processModelRepository.findAll().size();
 
-        // Create the ProcessModel
-        ProcessModelDTO processModelDTO = processModelMapper.toDto(processModel);
-        restProcessModelMockMvc.perform(post("/api/process-models")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
-            .andExpect(status().isCreated());
+    // Create the ProcessModel
+    ProcessModelDTO processModelDTO = processModelMapper.toDto(processModel);
+    restProcessModelMockMvc
+        .perform(
+            post("/api/process-models")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
+        .andExpect(status().isCreated());
 
-        // Validate the ProcessModel in the database
-        List<ProcessModel> processModelList = processModelRepository.findAll();
-        assertThat(processModelList).hasSize(databaseSizeBeforeCreate + 1);
-        ProcessModel testProcessModel = processModelList.get(processModelList.size() - 1);
-        assertThat(testProcessModel.getRequirements()).isEqualTo(DEFAULT_REQUIREMENTS);
-        assertThat(testProcessModel.getPmStatus()).isEqualTo(DEFAULT_PM_STATUS);
-    }
+    // Validate the ProcessModel in the database
+    List<ProcessModel> processModelList = processModelRepository.findAll();
+    assertThat(processModelList).hasSize(databaseSizeBeforeCreate + 1);
+    ProcessModel testProcessModel = processModelList.get(processModelList.size() - 1);
+    assertThat(testProcessModel.getRequirements()).isEqualTo(DEFAULT_REQUIREMENTS);
+    assertThat(testProcessModel.getPmStatus()).isEqualTo(DEFAULT_PM_STATUS);
+  }
 
-    @Test
-    @Transactional
-    public void createProcessModelWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = processModelRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createProcessModelWithExistingId() throws Exception {
+    int databaseSizeBeforeCreate = processModelRepository.findAll().size();
 
-        // Create the ProcessModel with an existing ID
-        processModel.setId(1L);
-        ProcessModelDTO processModelDTO = processModelMapper.toDto(processModel);
+    // Create the ProcessModel with an existing ID
+    processModel.setId(1L);
+    ProcessModelDTO processModelDTO = processModelMapper.toDto(processModel);
 
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restProcessModelMockMvc.perform(post("/api/process-models")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
-            .andExpect(status().isBadRequest());
+    // An entity with an existing ID cannot be created, so this API call must fail
+    restProcessModelMockMvc
+        .perform(
+            post("/api/process-models")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the ProcessModel in the database
-        List<ProcessModel> processModelList = processModelRepository.findAll();
-        assertThat(processModelList).hasSize(databaseSizeBeforeCreate);
-    }
+    // Validate the ProcessModel in the database
+    List<ProcessModel> processModelList = processModelRepository.findAll();
+    assertThat(processModelList).hasSize(databaseSizeBeforeCreate);
+  }
 
+  @Test
+  @Transactional
+  public void getAllProcessModels() throws Exception {
+    // Initialize the database
+    processModelRepository.saveAndFlush(processModel);
 
-    @Test
-    @Transactional
-    public void getAllProcessModels() throws Exception {
-        // Initialize the database
-        processModelRepository.saveAndFlush(processModel);
+    // Get all the processModelList
+    restProcessModelMockMvc
+        .perform(get("/api/process-models?sort=id,desc"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.[*].id").value(hasItem(processModel.getId().intValue())))
+        .andExpect(jsonPath("$.[*].requirements").value(hasItem(DEFAULT_REQUIREMENTS.toString())))
+        .andExpect(jsonPath("$.[*].pmStatus").value(hasItem(DEFAULT_PM_STATUS.toString())));
+  }
 
-        // Get all the processModelList
-        restProcessModelMockMvc.perform(get("/api/process-models?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(processModel.getId().intValue())))
-            .andExpect(jsonPath("$.[*].requirements").value(hasItem(DEFAULT_REQUIREMENTS.toString())))
-            .andExpect(jsonPath("$.[*].pmStatus").value(hasItem(DEFAULT_PM_STATUS.toString())));
-    }
-    
-    @Test
-    @Transactional
-    public void getProcessModel() throws Exception {
-        // Initialize the database
-        processModelRepository.saveAndFlush(processModel);
+  @Test
+  @Transactional
+  public void getProcessModel() throws Exception {
+    // Initialize the database
+    processModelRepository.saveAndFlush(processModel);
 
-        // Get the processModel
-        restProcessModelMockMvc.perform(get("/api/process-models/{id}", processModel.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(processModel.getId().intValue()))
-            .andExpect(jsonPath("$.requirements").value(DEFAULT_REQUIREMENTS.toString()))
-            .andExpect(jsonPath("$.pmStatus").value(DEFAULT_PM_STATUS.toString()));
-    }
+    // Get the processModel
+    restProcessModelMockMvc
+        .perform(get("/api/process-models/{id}", processModel.getId()))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.id").value(processModel.getId().intValue()))
+        .andExpect(jsonPath("$.requirements").value(DEFAULT_REQUIREMENTS.toString()))
+        .andExpect(jsonPath("$.pmStatus").value(DEFAULT_PM_STATUS.toString()));
+  }
 
-    @Test
-    @Transactional
-    public void getNonExistingProcessModel() throws Exception {
-        // Get the processModel
-        restProcessModelMockMvc.perform(get("/api/process-models/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
-    }
+  @Test
+  @Transactional
+  public void getNonExistingProcessModel() throws Exception {
+    // Get the processModel
+    restProcessModelMockMvc
+        .perform(get("/api/process-models/{id}", Long.MAX_VALUE))
+        .andExpect(status().isNotFound());
+  }
 
-    @Test
-    @Transactional
-    public void updateProcessModel() throws Exception {
-        // Initialize the database
-        processModelRepository.saveAndFlush(processModel);
+  @Test
+  @Transactional
+  public void updateProcessModel() throws Exception {
+    // Initialize the database
+    processModelRepository.saveAndFlush(processModel);
 
-        int databaseSizeBeforeUpdate = processModelRepository.findAll().size();
+    int databaseSizeBeforeUpdate = processModelRepository.findAll().size();
 
-        // Update the processModel
-        ProcessModel updatedProcessModel = processModelRepository.findById(processModel.getId()).get();
-        // Disconnect from session so that the updates on updatedProcessModel are not directly saved in db
-        em.detach(updatedProcessModel);
-        updatedProcessModel
-            .requirements(UPDATED_REQUIREMENTS)
-            .pmStatus(UPDATED_PM_STATUS);
-        ProcessModelDTO processModelDTO = processModelMapper.toDto(updatedProcessModel);
+    // Update the processModel
+    ProcessModel updatedProcessModel = processModelRepository.findById(processModel.getId()).get();
+    // Disconnect from session so that the updates on updatedProcessModel are not directly saved in
+    // db
+    em.detach(updatedProcessModel);
+    updatedProcessModel.requirements(UPDATED_REQUIREMENTS).pmStatus(UPDATED_PM_STATUS);
+    ProcessModelDTO processModelDTO = processModelMapper.toDto(updatedProcessModel);
 
-        restProcessModelMockMvc.perform(put("/api/process-models")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
-            .andExpect(status().isOk());
+    restProcessModelMockMvc
+        .perform(
+            put("/api/process-models")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
+        .andExpect(status().isOk());
 
-        // Validate the ProcessModel in the database
-        List<ProcessModel> processModelList = processModelRepository.findAll();
-        assertThat(processModelList).hasSize(databaseSizeBeforeUpdate);
-        ProcessModel testProcessModel = processModelList.get(processModelList.size() - 1);
-        assertThat(testProcessModel.getRequirements()).isEqualTo(UPDATED_REQUIREMENTS);
-        assertThat(testProcessModel.getPmStatus()).isEqualTo(UPDATED_PM_STATUS);
-    }
+    // Validate the ProcessModel in the database
+    List<ProcessModel> processModelList = processModelRepository.findAll();
+    assertThat(processModelList).hasSize(databaseSizeBeforeUpdate);
+    ProcessModel testProcessModel = processModelList.get(processModelList.size() - 1);
+    assertThat(testProcessModel.getRequirements()).isEqualTo(UPDATED_REQUIREMENTS);
+    assertThat(testProcessModel.getPmStatus()).isEqualTo(UPDATED_PM_STATUS);
+  }
 
-    @Test
-    @Transactional
-    public void updateNonExistingProcessModel() throws Exception {
-        int databaseSizeBeforeUpdate = processModelRepository.findAll().size();
+  @Test
+  @Transactional
+  public void updateNonExistingProcessModel() throws Exception {
+    int databaseSizeBeforeUpdate = processModelRepository.findAll().size();
 
-        // Create the ProcessModel
-        ProcessModelDTO processModelDTO = processModelMapper.toDto(processModel);
+    // Create the ProcessModel
+    ProcessModelDTO processModelDTO = processModelMapper.toDto(processModel);
 
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restProcessModelMockMvc.perform(put("/api/process-models")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
-            .andExpect(status().isBadRequest());
+    // If the entity doesn't have an ID, it will throw BadRequestAlertException
+    restProcessModelMockMvc
+        .perform(
+            put("/api/process-models")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the ProcessModel in the database
-        List<ProcessModel> processModelList = processModelRepository.findAll();
-        assertThat(processModelList).hasSize(databaseSizeBeforeUpdate);
-    }
+    // Validate the ProcessModel in the database
+    List<ProcessModel> processModelList = processModelRepository.findAll();
+    assertThat(processModelList).hasSize(databaseSizeBeforeUpdate);
+  }
 
-    @Test
-    @Transactional
-    public void deleteProcessModel() throws Exception {
-        // Initialize the database
-        processModelRepository.saveAndFlush(processModel);
+  @Test
+  @Transactional
+  public void deleteProcessModel() throws Exception {
+    // Initialize the database
+    processModelRepository.saveAndFlush(processModel);
 
-        int databaseSizeBeforeDelete = processModelRepository.findAll().size();
+    int databaseSizeBeforeDelete = processModelRepository.findAll().size();
 
-        // Delete the processModel
-        restProcessModelMockMvc.perform(delete("/api/process-models/{id}", processModel.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
+    // Delete the processModel
+    restProcessModelMockMvc
+        .perform(
+            delete("/api/process-models/{id}", processModel.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+        .andExpect(status().isNoContent());
 
-        // Validate the database contains one less item
-        List<ProcessModel> processModelList = processModelRepository.findAll();
-        assertThat(processModelList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    // Validate the database contains one less item
+    List<ProcessModel> processModelList = processModelRepository.findAll();
+    assertThat(processModelList).hasSize(databaseSizeBeforeDelete - 1);
+  }
 
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProcessModel.class);
-        ProcessModel processModel1 = new ProcessModel();
-        processModel1.setId(1L);
-        ProcessModel processModel2 = new ProcessModel();
-        processModel2.setId(processModel1.getId());
-        assertThat(processModel1).isEqualTo(processModel2);
-        processModel2.setId(2L);
-        assertThat(processModel1).isNotEqualTo(processModel2);
-        processModel1.setId(null);
-        assertThat(processModel1).isNotEqualTo(processModel2);
-    }
+  @Test
+  @Transactional
+  public void equalsVerifier() throws Exception {
+    TestUtil.equalsVerifier(ProcessModel.class);
+    ProcessModel processModel1 = new ProcessModel();
+    processModel1.setId(1L);
+    ProcessModel processModel2 = new ProcessModel();
+    processModel2.setId(processModel1.getId());
+    assertThat(processModel1).isEqualTo(processModel2);
+    processModel2.setId(2L);
+    assertThat(processModel1).isNotEqualTo(processModel2);
+    processModel1.setId(null);
+    assertThat(processModel1).isNotEqualTo(processModel2);
+  }
 
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProcessModelDTO.class);
-        ProcessModelDTO processModelDTO1 = new ProcessModelDTO();
-        processModelDTO1.setId(1L);
-        ProcessModelDTO processModelDTO2 = new ProcessModelDTO();
-        assertThat(processModelDTO1).isNotEqualTo(processModelDTO2);
-        processModelDTO2.setId(processModelDTO1.getId());
-        assertThat(processModelDTO1).isEqualTo(processModelDTO2);
-        processModelDTO2.setId(2L);
-        assertThat(processModelDTO1).isNotEqualTo(processModelDTO2);
-        processModelDTO1.setId(null);
-        assertThat(processModelDTO1).isNotEqualTo(processModelDTO2);
-    }
+  @Test
+  @Transactional
+  public void dtoEqualsVerifier() throws Exception {
+    TestUtil.equalsVerifier(ProcessModelDTO.class);
+    ProcessModelDTO processModelDTO1 = new ProcessModelDTO();
+    processModelDTO1.setId(1L);
+    ProcessModelDTO processModelDTO2 = new ProcessModelDTO();
+    assertThat(processModelDTO1).isNotEqualTo(processModelDTO2);
+    processModelDTO2.setId(processModelDTO1.getId());
+    assertThat(processModelDTO1).isEqualTo(processModelDTO2);
+    processModelDTO2.setId(2L);
+    assertThat(processModelDTO1).isNotEqualTo(processModelDTO2);
+    processModelDTO1.setId(null);
+    assertThat(processModelDTO1).isNotEqualTo(processModelDTO2);
+  }
 
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(processModelMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(processModelMapper.fromId(null)).isNull();
-    }
+  @Test
+  @Transactional
+  public void testEntityFromId() {
+    assertThat(processModelMapper.fromId(42L).getId()).isEqualTo(42);
+    assertThat(processModelMapper.fromId(null)).isNull();
+  }
 }

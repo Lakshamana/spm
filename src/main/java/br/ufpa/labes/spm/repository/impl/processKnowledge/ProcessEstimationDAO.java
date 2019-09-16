@@ -9,42 +9,47 @@ import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IProcessEstimati
 import br.ufpa.labes.spm.domain.ActivityEstimation;
 import br.ufpa.labes.spm.domain.ProcessEstimation;
 
-public class ProcessEstimationDAO extends BaseDAO<ProcessEstimation, Integer> implements IProcessEstimationDAO{
+public class ProcessEstimationDAO extends BaseDAO<ProcessEstimation, Integer>
+    implements IProcessEstimationDAO {
 
-	private static final String ACTIVITY_METRIC_DEFINITION_NAME = "Activity Effort";
+  private static final String ACTIVITY_METRIC_DEFINITION_NAME = "Activity Effort";
 
-	protected ProcessEstimationDAO(Class<ProcessEstimation> businessClass) {
-		super(businessClass);
-	}
+  protected ProcessEstimationDAO(Class<ProcessEstimation> businessClass) {
+    super(businessClass);
+  }
 
-	public ProcessEstimationDAO() {
-		super(ProcessEstimation.class);
-	}
+  public ProcessEstimationDAO() {
+    super(ProcessEstimation.class);
+  }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public float getHoursEstimationForProject(String projectIdent) {
+  @Override
+  @SuppressWarnings("unchecked")
+  public float getHoursEstimationForProject(String projectIdent) {
 
-		String queryString = "from " + ActivityEstimation.class.getName()
-				+ " as e where e.activity.ident like '" + projectIdent + "%'"
-				+ " and e.metricDefinition.name = '"
-				+ ACTIVITY_METRIC_DEFINITION_NAME + "'";
+    String queryString =
+        "from "
+            + ActivityEstimation.class.getName()
+            + " as e where e.activity.ident like '"
+            + projectIdent
+            + "%'"
+            + " and e.metricDefinition.name = '"
+            + ACTIVITY_METRIC_DEFINITION_NAME
+            + "'";
 
-		Query query = getPersistenceContext().createQuery(queryString);
+    Query query = getPersistenceContext().createQuery(queryString);
 
-		List<ActivityEstimation> estimations = query.getResultList();
+    List<ActivityEstimation> estimations = query.getResultList();
 
-		float total = 0.0f;
+    float total = 0.0f;
 
-		if (estimations == null || estimations.isEmpty()) {
-			return total;
-		} else {
-			for(ActivityEstimation estimation : estimations) {
-				total += estimation.getValue();
-			}
-		}
+    if (estimations == null || estimations.isEmpty()) {
+      return total;
+    } else {
+      for (ActivityEstimation estimation : estimations) {
+        total += estimation.getValue();
+      }
+    }
 
-		return total;
-	}
-
+    return total;
+  }
 }

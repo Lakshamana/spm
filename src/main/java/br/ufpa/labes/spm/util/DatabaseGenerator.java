@@ -6,16 +6,12 @@ import javax.persistence.Persistence;
 
 public class DatabaseGenerator {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+  /** @param args */
+  public static void main(String[] args) {
 
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("SPMPU");
-		EntityManager em = emf.createEntityManager();
-		em.close();
-		emf.close();
-
-	}
-
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("SPMPU");
+    EntityManager em = emf.createEntityManager();
+    em.close();
+    emf.close();
+  }
 }

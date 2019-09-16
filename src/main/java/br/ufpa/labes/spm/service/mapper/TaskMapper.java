@@ -5,36 +5,36 @@ import br.ufpa.labes.spm.service.dto.TaskDTO;
 
 import org.mapstruct.*;
 
-/**
- * Mapper for the entity {@link Task} and its DTO {@link TaskDTO}.
- */
-@Mapper(componentModel = "spring", uses = {ProcessAgendaMapper.class, AgentMapper.class, NormalMapper.class})
+/** Mapper for the entity {@link Task} and its DTO {@link TaskDTO}. */
+@Mapper(
+    componentModel = "spring",
+    uses = {ProcessAgendaMapper.class, AgentMapper.class, NormalMapper.class})
 public interface TaskMapper extends EntityMapper<TaskDTO, Task> {
 
-    @Mapping(source = "theProcessAgenda.id", target = "theProcessAgendaId")
-    @Mapping(source = "delegatedFrom.id", target = "delegatedFromId")
-    @Mapping(source = "delegatedTo.id", target = "delegatedToId")
-    @Mapping(source = "theNormal.id", target = "theNormalId")
-    TaskDTO toDto(Task task);
+  @Mapping(source = "theProcessAgenda.id", target = "theProcessAgendaId")
+  @Mapping(source = "delegatedFrom.id", target = "delegatedFromId")
+  @Mapping(source = "delegatedTo.id", target = "delegatedToId")
+  @Mapping(source = "theNormal.id", target = "theNormalId")
+  TaskDTO toDto(Task task);
 
-    @Mapping(source = "theProcessAgendaId", target = "theProcessAgenda")
-    @Mapping(source = "delegatedFromId", target = "delegatedFrom")
-    @Mapping(source = "delegatedToId", target = "delegatedTo")
-    @Mapping(source = "theNormalId", target = "theNormal")
-    @Mapping(target = "theArtifactTasks", ignore = true)
-    @Mapping(target = "removeTheArtifactTasks", ignore = true)
-    @Mapping(target = "theAgendaEvents", ignore = true)
-    @Mapping(target = "removeTheAgendaEvent", ignore = true)
-    @Mapping(target = "theOcurrences", ignore = true)
-    @Mapping(target = "removeTheOcurrence", ignore = true)
-    Task toEntity(TaskDTO taskDTO);
+  @Mapping(source = "theProcessAgendaId", target = "theProcessAgenda")
+  @Mapping(source = "delegatedFromId", target = "delegatedFrom")
+  @Mapping(source = "delegatedToId", target = "delegatedTo")
+  @Mapping(source = "theNormalId", target = "theNormal")
+  @Mapping(target = "theArtifactTasks", ignore = true)
+  @Mapping(target = "removeTheArtifactTasks", ignore = true)
+  @Mapping(target = "theAgendaEvents", ignore = true)
+  @Mapping(target = "removeTheAgendaEvent", ignore = true)
+  @Mapping(target = "theOcurrences", ignore = true)
+  @Mapping(target = "removeTheOcurrence", ignore = true)
+  Task toEntity(TaskDTO taskDTO);
 
-    default Task fromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        Task task = new Task();
-        task.setId(id);
-        return task;
+  default Task fromId(Long id) {
+    if (id == null) {
+      return null;
     }
+    Task task = new Task();
+    task.setId(id);
+    return task;
+  }
 }

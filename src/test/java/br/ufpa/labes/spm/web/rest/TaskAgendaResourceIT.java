@@ -31,249 +31,253 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Integration tests for the {@link TaskAgendaResource} REST controller.
- */
+/** Integration tests for the {@link TaskAgendaResource} REST controller. */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class TaskAgendaResourceIT {
 
-    @Autowired
-    private TaskAgendaRepository taskAgendaRepository;
+  @Autowired private TaskAgendaRepository taskAgendaRepository;
 
-    @Autowired
-    private TaskAgendaMapper taskAgendaMapper;
+  @Autowired private TaskAgendaMapper taskAgendaMapper;
 
-    @Autowired
-    private TaskAgendaService taskAgendaService;
+  @Autowired private TaskAgendaService taskAgendaService;
 
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
+  @Autowired private ExceptionTranslator exceptionTranslator;
 
-    @Autowired
-    private EntityManager em;
+  @Autowired private EntityManager em;
 
-    @Autowired
-    private Validator validator;
+  @Autowired private Validator validator;
 
-    private MockMvc restTaskAgendaMockMvc;
+  private MockMvc restTaskAgendaMockMvc;
 
-    private TaskAgenda taskAgenda;
+  private TaskAgenda taskAgenda;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final TaskAgendaResource taskAgendaResource = new TaskAgendaResource(taskAgendaService);
-        this.restTaskAgendaMockMvc = MockMvcBuilders.standaloneSetup(taskAgendaResource)
+  @BeforeEach
+  public void setup() {
+    MockitoAnnotations.initMocks(this);
+    final TaskAgendaResource taskAgendaResource = new TaskAgendaResource(taskAgendaService);
+    this.restTaskAgendaMockMvc =
+        MockMvcBuilders.standaloneSetup(taskAgendaResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
+            .setValidator(validator)
+            .build();
+  }
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static TaskAgenda createEntity(EntityManager em) {
-        TaskAgenda taskAgenda = new TaskAgenda();
-        return taskAgenda;
-    }
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static TaskAgenda createUpdatedEntity(EntityManager em) {
-        TaskAgenda taskAgenda = new TaskAgenda();
-        return taskAgenda;
-    }
+  /**
+   * Create an entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static TaskAgenda createEntity(EntityManager em) {
+    TaskAgenda taskAgenda = new TaskAgenda();
+    return taskAgenda;
+  }
+  /**
+   * Create an updated entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static TaskAgenda createUpdatedEntity(EntityManager em) {
+    TaskAgenda taskAgenda = new TaskAgenda();
+    return taskAgenda;
+  }
 
-    @BeforeEach
-    public void initTest() {
-        taskAgenda = createEntity(em);
-    }
+  @BeforeEach
+  public void initTest() {
+    taskAgenda = createEntity(em);
+  }
 
-    @Test
-    @Transactional
-    public void createTaskAgenda() throws Exception {
-        int databaseSizeBeforeCreate = taskAgendaRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createTaskAgenda() throws Exception {
+    int databaseSizeBeforeCreate = taskAgendaRepository.findAll().size();
 
-        // Create the TaskAgenda
-        TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(taskAgenda);
-        restTaskAgendaMockMvc.perform(post("/api/task-agenda")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
-            .andExpect(status().isCreated());
+    // Create the TaskAgenda
+    TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(taskAgenda);
+    restTaskAgendaMockMvc
+        .perform(
+            post("/api/task-agenda")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
+        .andExpect(status().isCreated());
 
-        // Validate the TaskAgenda in the database
-        List<TaskAgenda> taskAgendaList = taskAgendaRepository.findAll();
-        assertThat(taskAgendaList).hasSize(databaseSizeBeforeCreate + 1);
-        TaskAgenda testTaskAgenda = taskAgendaList.get(taskAgendaList.size() - 1);
-    }
+    // Validate the TaskAgenda in the database
+    List<TaskAgenda> taskAgendaList = taskAgendaRepository.findAll();
+    assertThat(taskAgendaList).hasSize(databaseSizeBeforeCreate + 1);
+    TaskAgenda testTaskAgenda = taskAgendaList.get(taskAgendaList.size() - 1);
+  }
 
-    @Test
-    @Transactional
-    public void createTaskAgendaWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = taskAgendaRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createTaskAgendaWithExistingId() throws Exception {
+    int databaseSizeBeforeCreate = taskAgendaRepository.findAll().size();
 
-        // Create the TaskAgenda with an existing ID
-        taskAgenda.setId(1L);
-        TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(taskAgenda);
+    // Create the TaskAgenda with an existing ID
+    taskAgenda.setId(1L);
+    TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(taskAgenda);
 
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restTaskAgendaMockMvc.perform(post("/api/task-agenda")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
-            .andExpect(status().isBadRequest());
+    // An entity with an existing ID cannot be created, so this API call must fail
+    restTaskAgendaMockMvc
+        .perform(
+            post("/api/task-agenda")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the TaskAgenda in the database
-        List<TaskAgenda> taskAgendaList = taskAgendaRepository.findAll();
-        assertThat(taskAgendaList).hasSize(databaseSizeBeforeCreate);
-    }
+    // Validate the TaskAgenda in the database
+    List<TaskAgenda> taskAgendaList = taskAgendaRepository.findAll();
+    assertThat(taskAgendaList).hasSize(databaseSizeBeforeCreate);
+  }
 
+  @Test
+  @Transactional
+  public void getAllTaskAgenda() throws Exception {
+    // Initialize the database
+    taskAgendaRepository.saveAndFlush(taskAgenda);
 
-    @Test
-    @Transactional
-    public void getAllTaskAgenda() throws Exception {
-        // Initialize the database
-        taskAgendaRepository.saveAndFlush(taskAgenda);
+    // Get all the taskAgendaList
+    restTaskAgendaMockMvc
+        .perform(get("/api/task-agenda?sort=id,desc"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.[*].id").value(hasItem(taskAgenda.getId().intValue())));
+  }
 
-        // Get all the taskAgendaList
-        restTaskAgendaMockMvc.perform(get("/api/task-agenda?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(taskAgenda.getId().intValue())));
-    }
-    
-    @Test
-    @Transactional
-    public void getTaskAgenda() throws Exception {
-        // Initialize the database
-        taskAgendaRepository.saveAndFlush(taskAgenda);
+  @Test
+  @Transactional
+  public void getTaskAgenda() throws Exception {
+    // Initialize the database
+    taskAgendaRepository.saveAndFlush(taskAgenda);
 
-        // Get the taskAgenda
-        restTaskAgendaMockMvc.perform(get("/api/task-agenda/{id}", taskAgenda.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(taskAgenda.getId().intValue()));
-    }
+    // Get the taskAgenda
+    restTaskAgendaMockMvc
+        .perform(get("/api/task-agenda/{id}", taskAgenda.getId()))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.id").value(taskAgenda.getId().intValue()));
+  }
 
-    @Test
-    @Transactional
-    public void getNonExistingTaskAgenda() throws Exception {
-        // Get the taskAgenda
-        restTaskAgendaMockMvc.perform(get("/api/task-agenda/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
-    }
+  @Test
+  @Transactional
+  public void getNonExistingTaskAgenda() throws Exception {
+    // Get the taskAgenda
+    restTaskAgendaMockMvc
+        .perform(get("/api/task-agenda/{id}", Long.MAX_VALUE))
+        .andExpect(status().isNotFound());
+  }
 
-    @Test
-    @Transactional
-    public void updateTaskAgenda() throws Exception {
-        // Initialize the database
-        taskAgendaRepository.saveAndFlush(taskAgenda);
+  @Test
+  @Transactional
+  public void updateTaskAgenda() throws Exception {
+    // Initialize the database
+    taskAgendaRepository.saveAndFlush(taskAgenda);
 
-        int databaseSizeBeforeUpdate = taskAgendaRepository.findAll().size();
+    int databaseSizeBeforeUpdate = taskAgendaRepository.findAll().size();
 
-        // Update the taskAgenda
-        TaskAgenda updatedTaskAgenda = taskAgendaRepository.findById(taskAgenda.getId()).get();
-        // Disconnect from session so that the updates on updatedTaskAgenda are not directly saved in db
-        em.detach(updatedTaskAgenda);
-        TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(updatedTaskAgenda);
+    // Update the taskAgenda
+    TaskAgenda updatedTaskAgenda = taskAgendaRepository.findById(taskAgenda.getId()).get();
+    // Disconnect from session so that the updates on updatedTaskAgenda are not directly saved in db
+    em.detach(updatedTaskAgenda);
+    TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(updatedTaskAgenda);
 
-        restTaskAgendaMockMvc.perform(put("/api/task-agenda")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
-            .andExpect(status().isOk());
+    restTaskAgendaMockMvc
+        .perform(
+            put("/api/task-agenda")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
+        .andExpect(status().isOk());
 
-        // Validate the TaskAgenda in the database
-        List<TaskAgenda> taskAgendaList = taskAgendaRepository.findAll();
-        assertThat(taskAgendaList).hasSize(databaseSizeBeforeUpdate);
-        TaskAgenda testTaskAgenda = taskAgendaList.get(taskAgendaList.size() - 1);
-    }
+    // Validate the TaskAgenda in the database
+    List<TaskAgenda> taskAgendaList = taskAgendaRepository.findAll();
+    assertThat(taskAgendaList).hasSize(databaseSizeBeforeUpdate);
+    TaskAgenda testTaskAgenda = taskAgendaList.get(taskAgendaList.size() - 1);
+  }
 
-    @Test
-    @Transactional
-    public void updateNonExistingTaskAgenda() throws Exception {
-        int databaseSizeBeforeUpdate = taskAgendaRepository.findAll().size();
+  @Test
+  @Transactional
+  public void updateNonExistingTaskAgenda() throws Exception {
+    int databaseSizeBeforeUpdate = taskAgendaRepository.findAll().size();
 
-        // Create the TaskAgenda
-        TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(taskAgenda);
+    // Create the TaskAgenda
+    TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(taskAgenda);
 
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restTaskAgendaMockMvc.perform(put("/api/task-agenda")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
-            .andExpect(status().isBadRequest());
+    // If the entity doesn't have an ID, it will throw BadRequestAlertException
+    restTaskAgendaMockMvc
+        .perform(
+            put("/api/task-agenda")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the TaskAgenda in the database
-        List<TaskAgenda> taskAgendaList = taskAgendaRepository.findAll();
-        assertThat(taskAgendaList).hasSize(databaseSizeBeforeUpdate);
-    }
+    // Validate the TaskAgenda in the database
+    List<TaskAgenda> taskAgendaList = taskAgendaRepository.findAll();
+    assertThat(taskAgendaList).hasSize(databaseSizeBeforeUpdate);
+  }
 
-    @Test
-    @Transactional
-    public void deleteTaskAgenda() throws Exception {
-        // Initialize the database
-        taskAgendaRepository.saveAndFlush(taskAgenda);
+  @Test
+  @Transactional
+  public void deleteTaskAgenda() throws Exception {
+    // Initialize the database
+    taskAgendaRepository.saveAndFlush(taskAgenda);
 
-        int databaseSizeBeforeDelete = taskAgendaRepository.findAll().size();
+    int databaseSizeBeforeDelete = taskAgendaRepository.findAll().size();
 
-        // Delete the taskAgenda
-        restTaskAgendaMockMvc.perform(delete("/api/task-agenda/{id}", taskAgenda.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
+    // Delete the taskAgenda
+    restTaskAgendaMockMvc
+        .perform(
+            delete("/api/task-agenda/{id}", taskAgenda.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+        .andExpect(status().isNoContent());
 
-        // Validate the database contains one less item
-        List<TaskAgenda> taskAgendaList = taskAgendaRepository.findAll();
-        assertThat(taskAgendaList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    // Validate the database contains one less item
+    List<TaskAgenda> taskAgendaList = taskAgendaRepository.findAll();
+    assertThat(taskAgendaList).hasSize(databaseSizeBeforeDelete - 1);
+  }
 
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(TaskAgenda.class);
-        TaskAgenda taskAgenda1 = new TaskAgenda();
-        taskAgenda1.setId(1L);
-        TaskAgenda taskAgenda2 = new TaskAgenda();
-        taskAgenda2.setId(taskAgenda1.getId());
-        assertThat(taskAgenda1).isEqualTo(taskAgenda2);
-        taskAgenda2.setId(2L);
-        assertThat(taskAgenda1).isNotEqualTo(taskAgenda2);
-        taskAgenda1.setId(null);
-        assertThat(taskAgenda1).isNotEqualTo(taskAgenda2);
-    }
+  @Test
+  @Transactional
+  public void equalsVerifier() throws Exception {
+    TestUtil.equalsVerifier(TaskAgenda.class);
+    TaskAgenda taskAgenda1 = new TaskAgenda();
+    taskAgenda1.setId(1L);
+    TaskAgenda taskAgenda2 = new TaskAgenda();
+    taskAgenda2.setId(taskAgenda1.getId());
+    assertThat(taskAgenda1).isEqualTo(taskAgenda2);
+    taskAgenda2.setId(2L);
+    assertThat(taskAgenda1).isNotEqualTo(taskAgenda2);
+    taskAgenda1.setId(null);
+    assertThat(taskAgenda1).isNotEqualTo(taskAgenda2);
+  }
 
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(TaskAgendaDTO.class);
-        TaskAgendaDTO taskAgendaDTO1 = new TaskAgendaDTO();
-        taskAgendaDTO1.setId(1L);
-        TaskAgendaDTO taskAgendaDTO2 = new TaskAgendaDTO();
-        assertThat(taskAgendaDTO1).isNotEqualTo(taskAgendaDTO2);
-        taskAgendaDTO2.setId(taskAgendaDTO1.getId());
-        assertThat(taskAgendaDTO1).isEqualTo(taskAgendaDTO2);
-        taskAgendaDTO2.setId(2L);
-        assertThat(taskAgendaDTO1).isNotEqualTo(taskAgendaDTO2);
-        taskAgendaDTO1.setId(null);
-        assertThat(taskAgendaDTO1).isNotEqualTo(taskAgendaDTO2);
-    }
+  @Test
+  @Transactional
+  public void dtoEqualsVerifier() throws Exception {
+    TestUtil.equalsVerifier(TaskAgendaDTO.class);
+    TaskAgendaDTO taskAgendaDTO1 = new TaskAgendaDTO();
+    taskAgendaDTO1.setId(1L);
+    TaskAgendaDTO taskAgendaDTO2 = new TaskAgendaDTO();
+    assertThat(taskAgendaDTO1).isNotEqualTo(taskAgendaDTO2);
+    taskAgendaDTO2.setId(taskAgendaDTO1.getId());
+    assertThat(taskAgendaDTO1).isEqualTo(taskAgendaDTO2);
+    taskAgendaDTO2.setId(2L);
+    assertThat(taskAgendaDTO1).isNotEqualTo(taskAgendaDTO2);
+    taskAgendaDTO1.setId(null);
+    assertThat(taskAgendaDTO1).isNotEqualTo(taskAgendaDTO2);
+  }
 
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(taskAgendaMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(taskAgendaMapper.fromId(null)).isNull();
-    }
+  @Test
+  @Transactional
+  public void testEntityFromId() {
+    assertThat(taskAgendaMapper.fromId(42L).getId()).isEqualTo(42);
+    assertThat(taskAgendaMapper.fromId(null)).isNull();
+  }
 }

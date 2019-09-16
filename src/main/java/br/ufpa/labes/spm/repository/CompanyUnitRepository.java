@@ -4,12 +4,7 @@ import br.ufpa.labes.spm.domain.CompanyUnit;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-
-/**
- * Spring Data  repository for the CompanyUnit entity.
- */
+/** Spring Data repository for the CompanyUnit entity. */
 @SuppressWarnings("unused")
 @Repository
-public interface CompanyUnitRepository extends JpaRepository<CompanyUnit, Long> {
-
-}
+public interface CompanyUnitRepository extends JpaRepository<CompanyUnit, Long> {}

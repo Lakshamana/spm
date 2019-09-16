@@ -16,86 +16,83 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * Service Implementation for managing {@link ConnectionType}.
- */
+/** Service Implementation for managing {@link ConnectionType}. */
 @Service
 @Transactional
 public class ConnectionTypeService {
 
-    private final Logger log = LoggerFactory.getLogger(ConnectionTypeService.class);
+  private final Logger log = LoggerFactory.getLogger(ConnectionTypeService.class);
 
-    private final ConnectionTypeRepository connectionTypeRepository;
+  private final ConnectionTypeRepository connectionTypeRepository;
 
-    private final ConnectionTypeMapper connectionTypeMapper;
+  private final ConnectionTypeMapper connectionTypeMapper;
 
-    public ConnectionTypeService(ConnectionTypeRepository connectionTypeRepository, ConnectionTypeMapper connectionTypeMapper) {
-        this.connectionTypeRepository = connectionTypeRepository;
-        this.connectionTypeMapper = connectionTypeMapper;
-    }
+  public ConnectionTypeService(
+      ConnectionTypeRepository connectionTypeRepository,
+      ConnectionTypeMapper connectionTypeMapper) {
+    this.connectionTypeRepository = connectionTypeRepository;
+    this.connectionTypeMapper = connectionTypeMapper;
+  }
 
-    /**
-     * Save a connectionType.
-     *
-     * @param connectionTypeDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public ConnectionTypeDTO save(ConnectionTypeDTO connectionTypeDTO) {
-        log.debug("Request to save ConnectionType : {}", connectionTypeDTO);
-        ConnectionType connectionType = connectionTypeMapper.toEntity(connectionTypeDTO);
-        connectionType = connectionTypeRepository.save(connectionType);
-        return connectionTypeMapper.toDto(connectionType);
-    }
+  /**
+   * Save a connectionType.
+   *
+   * @param connectionTypeDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public ConnectionTypeDTO save(ConnectionTypeDTO connectionTypeDTO) {
+    log.debug("Request to save ConnectionType : {}", connectionTypeDTO);
+    ConnectionType connectionType = connectionTypeMapper.toEntity(connectionTypeDTO);
+    connectionType = connectionTypeRepository.save(connectionType);
+    return connectionTypeMapper.toDto(connectionType);
+  }
 
-    /**
-     * Get all the connectionTypes.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<ConnectionTypeDTO> findAll() {
-        log.debug("Request to get all ConnectionTypes");
-        return connectionTypeRepository.findAll().stream()
-            .map(connectionTypeMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the connectionTypes.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<ConnectionTypeDTO> findAll() {
+    log.debug("Request to get all ConnectionTypes");
+    return connectionTypeRepository.findAll().stream()
+        .map(connectionTypeMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get all the connectionTypes where TheTypeSuper is {@code null}.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<ConnectionTypeDTO> findAllWhereTheTypeSuperIsNull() {
+    log.debug("Request to get all connectionTypes where TheTypeSuper is null");
+    return StreamSupport.stream(connectionTypeRepository.findAll().spliterator(), false)
+        .filter(connectionType -> connectionType.getTheTypeSuper() == null)
+        .map(connectionTypeMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one connectionType by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<ConnectionTypeDTO> findOne(Long id) {
+    log.debug("Request to get ConnectionType : {}", id);
+    return connectionTypeRepository.findById(id).map(connectionTypeMapper::toDto);
+  }
 
-    /**
-    *  Get all the connectionTypes where TheTypeSuper is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true) 
-    public List<ConnectionTypeDTO> findAllWhereTheTypeSuperIsNull() {
-        log.debug("Request to get all connectionTypes where TheTypeSuper is null");
-        return StreamSupport
-            .stream(connectionTypeRepository.findAll().spliterator(), false)
-            .filter(connectionType -> connectionType.getTheTypeSuper() == null)
-            .map(connectionTypeMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     * Get one connectionType by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<ConnectionTypeDTO> findOne(Long id) {
-        log.debug("Request to get ConnectionType : {}", id);
-        return connectionTypeRepository.findById(id)
-            .map(connectionTypeMapper::toDto);
-    }
-
-    /**
-     * Delete the connectionType by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete ConnectionType : {}", id);
-        connectionTypeRepository.deleteById(id);
-    }
+  /**
+   * Delete the connectionType by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete ConnectionType : {}", id);
+    connectionTypeRepository.deleteById(id);
+  }
 }

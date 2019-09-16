@@ -16,86 +16,81 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * Service Implementation for managing {@link ToolType}.
- */
+/** Service Implementation for managing {@link ToolType}. */
 @Service
 @Transactional
 public class ToolTypeService {
 
-    private final Logger log = LoggerFactory.getLogger(ToolTypeService.class);
+  private final Logger log = LoggerFactory.getLogger(ToolTypeService.class);
 
-    private final ToolTypeRepository toolTypeRepository;
+  private final ToolTypeRepository toolTypeRepository;
 
-    private final ToolTypeMapper toolTypeMapper;
+  private final ToolTypeMapper toolTypeMapper;
 
-    public ToolTypeService(ToolTypeRepository toolTypeRepository, ToolTypeMapper toolTypeMapper) {
-        this.toolTypeRepository = toolTypeRepository;
-        this.toolTypeMapper = toolTypeMapper;
-    }
+  public ToolTypeService(ToolTypeRepository toolTypeRepository, ToolTypeMapper toolTypeMapper) {
+    this.toolTypeRepository = toolTypeRepository;
+    this.toolTypeMapper = toolTypeMapper;
+  }
 
-    /**
-     * Save a toolType.
-     *
-     * @param toolTypeDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public ToolTypeDTO save(ToolTypeDTO toolTypeDTO) {
-        log.debug("Request to save ToolType : {}", toolTypeDTO);
-        ToolType toolType = toolTypeMapper.toEntity(toolTypeDTO);
-        toolType = toolTypeRepository.save(toolType);
-        return toolTypeMapper.toDto(toolType);
-    }
+  /**
+   * Save a toolType.
+   *
+   * @param toolTypeDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public ToolTypeDTO save(ToolTypeDTO toolTypeDTO) {
+    log.debug("Request to save ToolType : {}", toolTypeDTO);
+    ToolType toolType = toolTypeMapper.toEntity(toolTypeDTO);
+    toolType = toolTypeRepository.save(toolType);
+    return toolTypeMapper.toDto(toolType);
+  }
 
-    /**
-     * Get all the toolTypes.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<ToolTypeDTO> findAll() {
-        log.debug("Request to get all ToolTypes");
-        return toolTypeRepository.findAll().stream()
-            .map(toolTypeMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the toolTypes.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<ToolTypeDTO> findAll() {
+    log.debug("Request to get all ToolTypes");
+    return toolTypeRepository.findAll().stream()
+        .map(toolTypeMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get all the toolTypes where TheTypeSuper is {@code null}.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<ToolTypeDTO> findAllWhereTheTypeSuperIsNull() {
+    log.debug("Request to get all toolTypes where TheTypeSuper is null");
+    return StreamSupport.stream(toolTypeRepository.findAll().spliterator(), false)
+        .filter(toolType -> toolType.getTheTypeSuper() == null)
+        .map(toolTypeMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one toolType by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<ToolTypeDTO> findOne(Long id) {
+    log.debug("Request to get ToolType : {}", id);
+    return toolTypeRepository.findById(id).map(toolTypeMapper::toDto);
+  }
 
-    /**
-    *  Get all the toolTypes where TheTypeSuper is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true) 
-    public List<ToolTypeDTO> findAllWhereTheTypeSuperIsNull() {
-        log.debug("Request to get all toolTypes where TheTypeSuper is null");
-        return StreamSupport
-            .stream(toolTypeRepository.findAll().spliterator(), false)
-            .filter(toolType -> toolType.getTheTypeSuper() == null)
-            .map(toolTypeMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     * Get one toolType by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<ToolTypeDTO> findOne(Long id) {
-        log.debug("Request to get ToolType : {}", id);
-        return toolTypeRepository.findById(id)
-            .map(toolTypeMapper::toDto);
-    }
-
-    /**
-     * Delete the toolType by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete ToolType : {}", id);
-        toolTypeRepository.deleteById(id);
-    }
+  /**
+   * Delete the toolType by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete ToolType : {}", id);
+    toolTypeRepository.deleteById(id);
+  }
 }

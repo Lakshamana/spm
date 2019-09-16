@@ -1,4 +1,2 @@
-/**
- * Spring Framework configuration files.
- */
+/** Spring Framework configuration files. */
 package br.ufpa.labes.spm.config;

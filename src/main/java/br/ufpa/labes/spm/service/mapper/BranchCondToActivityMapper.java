@@ -6,25 +6,29 @@ import br.ufpa.labes.spm.service.dto.BranchConCondToActivityDTO;
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity {@link BranchConCondToActivity} and its DTO {@link BranchConCondToActivityDTO}.
+ * Mapper for the entity {@link BranchConCondToActivity} and its DTO {@link
+ * BranchConCondToActivityDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ActivityMapper.class, BranchConCondMapper.class})
-public interface BranchConCondToActivityMapper extends EntityMapper<BranchConCondToActivityDTO, BranchConCondToActivity> {
+@Mapper(
+    componentModel = "spring",
+    uses = {ActivityMapper.class, BranchConCondMapper.class})
+public interface BranchConCondToActivityMapper
+    extends EntityMapper<BranchConCondToActivityDTO, BranchConCondToActivity> {
 
-    @Mapping(source = "theActivity.id", target = "theActivityId")
-    @Mapping(source = "theBranchConCond.id", target = "theBranchConCondId")
-    BranchConCondToActivityDTO toDto(BranchConCondToActivity branchCondToActivity);
+  @Mapping(source = "theActivity.id", target = "theActivityId")
+  @Mapping(source = "theBranchConCond.id", target = "theBranchConCondId")
+  BranchConCondToActivityDTO toDto(BranchConCondToActivity branchCondToActivity);
 
-    @Mapping(source = "theActivityId", target = "theActivity")
-    @Mapping(source = "theBranchConCondId", target = "theBranchConCond")
-    BranchConCondToActivity toEntity(BranchConCondToActivityDTO branchCondToActivityDTO);
+  @Mapping(source = "theActivityId", target = "theActivity")
+  @Mapping(source = "theBranchConCondId", target = "theBranchConCond")
+  BranchConCondToActivity toEntity(BranchConCondToActivityDTO branchCondToActivityDTO);
 
-    default BranchConCondToActivity fromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        BranchConCondToActivity branchCondToActivity = new BranchConCondToActivity();
-        branchCondToActivity.setId(id);
-        return branchCondToActivity;
+  default BranchConCondToActivity fromId(Long id) {
+    if (id == null) {
+      return null;
     }
+    BranchConCondToActivity branchCondToActivity = new BranchConCondToActivity();
+    branchCondToActivity.setId(id);
+    return branchCondToActivity;
+  }
 }

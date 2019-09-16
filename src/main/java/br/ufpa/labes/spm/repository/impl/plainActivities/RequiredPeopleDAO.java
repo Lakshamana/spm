@@ -12,49 +12,49 @@ import br.ufpa.labes.spm.domain.ReqAgent;
 import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 
-public class RequiredPeopleDAO extends BaseDAO<RequiredPeople, Integer> implements IRequiredPeopleDAO{
+public class RequiredPeopleDAO extends BaseDAO<RequiredPeople, Integer>
+    implements IRequiredPeopleDAO {
 
-	protected RequiredPeopleDAO(Class<RequiredPeople> businessClass) {
-		super(businessClass);
-	}
+  protected RequiredPeopleDAO(Class<RequiredPeople> businessClass) {
+    super(businessClass);
+  }
 
-	public RequiredPeopleDAO() {
-		super(RequiredPeople.class);
-	}
+  public RequiredPeopleDAO() {
+    super(RequiredPeople.class);
+  }
 
-	public Collection<String> getReqPeopleEmails( String normalIdent ) {
-			getPersistenceContext().getTransaction().begin();
+  public Collection<String> getReqPeopleEmails(String normalIdent) {
+    getPersistenceContext().getTransaction().begin();
 
-			String hql = "from " + RequiredPeople.class.getName() + " as reqPeople where reqPeople.theNormal.ident = :normalIdent";
+    String hql =
+        "from "
+            + RequiredPeople.class.getName()
+            + " as reqPeople where reqPeople.theNormal.ident = :normalIdent";
 
-			Query query = getPersistenceContext().createQuery( hql );
-			query.setParameter( "normalIdent", normalIdent );
+    Query query = getPersistenceContext().createQuery(hql);
+    query.setParameter("normalIdent", normalIdent);
 
-			Collection<String> toReturn = new HashSet<String>();
+    Collection<String> toReturn = new HashSet<String>();
 
-			Collection<RequiredPeople> reqPeopleList = query.getResultList();
+    Collection<RequiredPeople> reqPeopleList = query.getResultList();
 
-			for ( RequiredPeople people : reqPeopleList ) {
-				if ( people instanceof ReqAgent ) {
-					ReqAgent reqAgent = (ReqAgent)people;
-					if(reqAgent.getTheAgent()!=null)
-						toReturn.add( reqAgent.getTheAgent().getEMail() );
-				}
-				else if ( people instanceof ReqWorkGroup ) {
-					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)people;
+    for (RequiredPeople people : reqPeopleList) {
+      if (people instanceof ReqAgent) {
+        ReqAgent reqAgent = (ReqAgent) people;
+        if (reqAgent.getTheAgent() != null) toReturn.add(reqAgent.getTheAgent().getEMail());
+      } else if (people instanceof ReqWorkGroup) {
+        ReqWorkGroup ReqWorkGroup = (ReqWorkGroup) people;
 
-					Collection<Agent> agents = (Collection<Agent>) ReqWorkGroup.getTheWorkGroup().getTheAgent();
+        Collection<Agent> agents = (Collection<Agent>) ReqWorkGroup.getTheWorkGroup().getTheAgent();
 
-					for ( Agent agent : agents ) {
-						toReturn.add( agent.getEMail() );
-					}
-				}
-			}
+        for (Agent agent : agents) {
+          toReturn.add(agent.getEMail());
+        }
+      }
+    }
 
-			getPersistenceContext().getTransaction().commit();
-			getPersistenceContext().close();
-			return toReturn;
-	}
-
-
+    getPersistenceContext().getTransaction().commit();
+    getPersistenceContext().close();
+    return toReturn;
+  }
 }

@@ -6,9 +6,11 @@ import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.Task;
 
 public interface IArtifactManagementDAO {
-	EntityManager getPersistenceContext();
+  EntityManager getPersistenceContext();
 
-	Task getAgentTask(String agentIdent, String normalIdent);
-	Object[] getArtifactsIdentsFromProcessModelWithoutTemplates(String oldProcessIdent);
-	Artifact[] getArtifactsFromProcessModelWithPathNotEmpty(String processIdent);
+  Task getAgentTask(String agentIdent, String normalIdent);
+
+  Object[] getArtifactsIdentsFromProcessModelWithoutTemplates(String oldProcessIdent);
+
+  Artifact[] getArtifactsFromProcessModelWithPathNotEmpty(String processIdent);
 }

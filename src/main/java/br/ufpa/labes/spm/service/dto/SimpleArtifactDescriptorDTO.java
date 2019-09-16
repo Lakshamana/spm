@@ -3,77 +3,87 @@ package org.qrconsult.spm.dtos.agenda;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class SimpleArtifactDescriptorDTO implements Serializable{
-	private String artifactIdent;
-	private String artifactName;
-	private String artifactRemoteVersion;
-	private String artifactLocalVersion;
-	private String artifactFileName;
-	private String repositoryIdent;
-	
-	public SimpleArtifactDescriptorDTO(){}
-	
-	public SimpleArtifactDescriptorDTO( String artifactIdent, String artifactName, String artifactVersion, String fileName, String repositoryIdent)	{
-		this.artifactIdent = artifactIdent;
-		this.artifactName = artifactName;
-		this.artifactRemoteVersion = artifactVersion;
-		this.setArtifactFileName(fileName);
-		this.setRepositoryIdent(repositoryIdent);
-	}
+public class SimpleArtifactDescriptorDTO implements Serializable {
+  private String artifactIdent;
+  private String artifactName;
+  private String artifactRemoteVersion;
+  private String artifactLocalVersion;
+  private String artifactFileName;
+  private String repositoryIdent;
 
-	public String getArtifactIdent() {
-		return artifactIdent;
-	}
+  public SimpleArtifactDescriptorDTO() {}
 
-	public void setArtifactIdent(String artifactIdent) {
-		this.artifactIdent = artifactIdent;
-	}
+  public SimpleArtifactDescriptorDTO(
+      String artifactIdent,
+      String artifactName,
+      String artifactVersion,
+      String fileName,
+      String repositoryIdent) {
+    this.artifactIdent = artifactIdent;
+    this.artifactName = artifactName;
+    this.artifactRemoteVersion = artifactVersion;
+    this.setArtifactFileName(fileName);
+    this.setRepositoryIdent(repositoryIdent);
+  }
 
-	public String getArtifactName() {
-		return artifactName;
-	}
+  public String getArtifactIdent() {
+    return artifactIdent;
+  }
 
-	public void setArtifactName(String artifactName) {
-		this.artifactName = artifactName;
-	}
+  public void setArtifactIdent(String artifactIdent) {
+    this.artifactIdent = artifactIdent;
+  }
 
-	public String getArtifactRemoteVersion() {
-		return artifactRemoteVersion;
-	}
+  public String getArtifactName() {
+    return artifactName;
+  }
 
-	public void setArtifactRemoteVersion(String artifactRemoteVersion) {
-		this.artifactRemoteVersion = artifactRemoteVersion;
-	}
+  public void setArtifactName(String artifactName) {
+    this.artifactName = artifactName;
+  }
 
-	public String getArtifactLocalVersion() {
-		return artifactLocalVersion;
-	}
+  public String getArtifactRemoteVersion() {
+    return artifactRemoteVersion;
+  }
 
-	public void setArtifactLocalVersion(String artifactLocalVersion) {
-		this.artifactLocalVersion = artifactLocalVersion;
-	}
+  public void setArtifactRemoteVersion(String artifactRemoteVersion) {
+    this.artifactRemoteVersion = artifactRemoteVersion;
+  }
 
-	@Override
-	public String toString() {
-		return "SimpleArtifactDescriptorDTO [artifactIdent=" + artifactIdent
-				+ ", artifactName=" + artifactName + ", artifactRemoteVersion="
-				+ artifactRemoteVersion + ", artifactLocalVersion="
-				+ artifactLocalVersion + "]";
-	}
+  public String getArtifactLocalVersion() {
+    return artifactLocalVersion;
+  }
 
-	public String getArtifactFileName() {
-		return artifactFileName;
-	}
+  public void setArtifactLocalVersion(String artifactLocalVersion) {
+    this.artifactLocalVersion = artifactLocalVersion;
+  }
 
-	public void setArtifactFileName(String artifactFileName) {
-		this.artifactFileName = artifactFileName;
-	}
+  @Override
+  public String toString() {
+    return "SimpleArtifactDescriptorDTO [artifactIdent="
+        + artifactIdent
+        + ", artifactName="
+        + artifactName
+        + ", artifactRemoteVersion="
+        + artifactRemoteVersion
+        + ", artifactLocalVersion="
+        + artifactLocalVersion
+        + "]";
+  }
 
-	public String getRepositoryIdent() {
-		return repositoryIdent;
-	}
+  public String getArtifactFileName() {
+    return artifactFileName;
+  }
 
-	public void setRepositoryIdent(String repositoryIdent) {
-		this.repositoryIdent = repositoryIdent;
-	}
+  public void setArtifactFileName(String artifactFileName) {
+    this.artifactFileName = artifactFileName;
+  }
+
+  public String getRepositoryIdent() {
+    return repositoryIdent;
+  }
+
+  public void setRepositoryIdent(String repositoryIdent) {
+    this.repositoryIdent = repositoryIdent;
+  }
 }

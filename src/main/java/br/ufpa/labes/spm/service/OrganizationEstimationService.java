@@ -16,86 +16,84 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * Service Implementation for managing {@link OrganizationEstimation}.
- */
+/** Service Implementation for managing {@link OrganizationEstimation}. */
 @Service
 @Transactional
 public class OrganizationEstimationService {
 
-    private final Logger log = LoggerFactory.getLogger(OrganizationEstimationService.class);
+  private final Logger log = LoggerFactory.getLogger(OrganizationEstimationService.class);
 
-    private final OrganizationEstimationRepository organizationEstimationRepository;
+  private final OrganizationEstimationRepository organizationEstimationRepository;
 
-    private final OrganizationEstimationMapper organizationEstimationMapper;
+  private final OrganizationEstimationMapper organizationEstimationMapper;
 
-    public OrganizationEstimationService(OrganizationEstimationRepository organizationEstimationRepository, OrganizationEstimationMapper organizationEstimationMapper) {
-        this.organizationEstimationRepository = organizationEstimationRepository;
-        this.organizationEstimationMapper = organizationEstimationMapper;
-    }
+  public OrganizationEstimationService(
+      OrganizationEstimationRepository organizationEstimationRepository,
+      OrganizationEstimationMapper organizationEstimationMapper) {
+    this.organizationEstimationRepository = organizationEstimationRepository;
+    this.organizationEstimationMapper = organizationEstimationMapper;
+  }
 
-    /**
-     * Save a organizationEstimation.
-     *
-     * @param organizationEstimationDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public OrganizationEstimationDTO save(OrganizationEstimationDTO organizationEstimationDTO) {
-        log.debug("Request to save OrganizationEstimation : {}", organizationEstimationDTO);
-        OrganizationEstimation organizationEstimation = organizationEstimationMapper.toEntity(organizationEstimationDTO);
-        organizationEstimation = organizationEstimationRepository.save(organizationEstimation);
-        return organizationEstimationMapper.toDto(organizationEstimation);
-    }
+  /**
+   * Save a organizationEstimation.
+   *
+   * @param organizationEstimationDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public OrganizationEstimationDTO save(OrganizationEstimationDTO organizationEstimationDTO) {
+    log.debug("Request to save OrganizationEstimation : {}", organizationEstimationDTO);
+    OrganizationEstimation organizationEstimation =
+        organizationEstimationMapper.toEntity(organizationEstimationDTO);
+    organizationEstimation = organizationEstimationRepository.save(organizationEstimation);
+    return organizationEstimationMapper.toDto(organizationEstimation);
+  }
 
-    /**
-     * Get all the organizationEstimations.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<OrganizationEstimationDTO> findAll() {
-        log.debug("Request to get all OrganizationEstimations");
-        return organizationEstimationRepository.findAll().stream()
-            .map(organizationEstimationMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the organizationEstimations.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<OrganizationEstimationDTO> findAll() {
+    log.debug("Request to get all OrganizationEstimations");
+    return organizationEstimationRepository.findAll().stream()
+        .map(organizationEstimationMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get all the organizationEstimations where TheEstimationSuper is {@code null}.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<OrganizationEstimationDTO> findAllWhereTheEstimationSuperIsNull() {
+    log.debug("Request to get all organizationEstimations where TheEstimationSuper is null");
+    return StreamSupport.stream(organizationEstimationRepository.findAll().spliterator(), false)
+        .filter(organizationEstimation -> organizationEstimation.getTheEstimationSuper() == null)
+        .map(organizationEstimationMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one organizationEstimation by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<OrganizationEstimationDTO> findOne(Long id) {
+    log.debug("Request to get OrganizationEstimation : {}", id);
+    return organizationEstimationRepository.findById(id).map(organizationEstimationMapper::toDto);
+  }
 
-    /**
-    *  Get all the organizationEstimations where TheEstimationSuper is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true) 
-    public List<OrganizationEstimationDTO> findAllWhereTheEstimationSuperIsNull() {
-        log.debug("Request to get all organizationEstimations where TheEstimationSuper is null");
-        return StreamSupport
-            .stream(organizationEstimationRepository.findAll().spliterator(), false)
-            .filter(organizationEstimation -> organizationEstimation.getTheEstimationSuper() == null)
-            .map(organizationEstimationMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     * Get one organizationEstimation by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<OrganizationEstimationDTO> findOne(Long id) {
-        log.debug("Request to get OrganizationEstimation : {}", id);
-        return organizationEstimationRepository.findById(id)
-            .map(organizationEstimationMapper::toDto);
-    }
-
-    /**
-     * Delete the organizationEstimation by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete OrganizationEstimation : {}", id);
-        organizationEstimationRepository.deleteById(id);
-    }
+  /**
+   * Delete the organizationEstimation by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete OrganizationEstimation : {}", id);
+    organizationEstimationRepository.deleteById(id);
+  }
 }

@@ -1,18 +1,16 @@
 package br.ufpa.labes.spm.repository.impl.email;
 
-
 import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.email.IEmailDAO;
 import br.ufpa.labes.spm.domain.Email;
 
 public class EmailDAO extends BaseDAO<Email, String> implements IEmailDAO {
 
-	protected EmailDAO(Class<Email> businessClass) {
-		super(businessClass);
-	}
+  protected EmailDAO(Class<Email> businessClass) {
+    super(businessClass);
+  }
 
-	public EmailDAO() {
-		super(Email.class);
-	}
-
+  public EmailDAO() {
+    super(Email.class);
+  }
 }

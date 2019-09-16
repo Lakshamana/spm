@@ -4,12 +4,7 @@ import br.ufpa.labes.spm.domain.SpmLog;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-
-/**
- * Spring Data  repository for the SpmLog entity.
- */
+/** Spring Data repository for the SpmLog entity. */
 @SuppressWarnings("unused")
 @Repository
-public interface SpmLogRepository extends JpaRepository<SpmLog, Long> {
-
-}
+public interface SpmLogRepository extends JpaRepository<SpmLog, Long> {}

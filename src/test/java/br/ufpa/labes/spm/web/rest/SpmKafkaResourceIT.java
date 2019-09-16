@@ -18,22 +18,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = SpmApp.class)
 public class SpmKafkaResourceIT {
 
-    @Autowired
-    private SpmKafkaProducer kafkaProducer;
+  @Autowired private SpmKafkaProducer kafkaProducer;
 
-    private MockMvc restMockMvc;
+  private MockMvc restMockMvc;
 
-    @BeforeEach
-    public void setup() {
-        SpmKafkaResource kafkaResource = new SpmKafkaResource(kafkaProducer);
+  @BeforeEach
+  public void setup() {
+    SpmKafkaResource kafkaResource = new SpmKafkaResource(kafkaProducer);
 
-        this.restMockMvc = MockMvcBuilders.standaloneSetup(kafkaResource)
-            .build();
-    }
+    this.restMockMvc = MockMvcBuilders.standaloneSetup(kafkaResource).build();
+  }
 
-    @Test
-    public void sendMessageToKafkaTopic() throws Exception {
-        restMockMvc.perform(post("/api/spm-kafka/publish?message=yolo"))
-            .andExpect(status().isOk());
-    }
+  @Test
+  public void sendMessageToKafkaTopic() throws Exception {
+    restMockMvc.perform(post("/api/spm-kafka/publish?message=yolo")).andExpect(status().isOk());
+  }
 }

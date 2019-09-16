@@ -6,14 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Spring Data  repository for the Credential entity.
- */
+/** Spring Data repository for the Credential entity. */
 @SuppressWarnings("unused")
 @Repository
 public interface CredentialRepository extends JpaRepository<Credential, Long> {
 
-    @Query("select credential from Credential credential where credential.user.login = ?#{principal.username}")
-    List<Credential> findByUserIsCurrentUser();
-
+  @Query(
+      "select credential from Credential credential where credential.user.login = ?#{principal.username}")
+  List<Credential> findByUserIsCurrentUser();
 }

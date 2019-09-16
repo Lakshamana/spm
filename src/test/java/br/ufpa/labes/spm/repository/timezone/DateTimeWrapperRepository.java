@@ -3,10 +3,6 @@ package br.ufpa.labes.spm.repository.timezone;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * Spring Data JPA repository for the {@link DateTimeWrapper} entity.
- */
+/** Spring Data JPA repository for the {@link DateTimeWrapper} entity. */
 @Repository
-public interface DateTimeWrapperRepository extends JpaRepository<DateTimeWrapper, Long> {
-
-}
+public interface DateTimeWrapperRepository extends JpaRepository<DateTimeWrapper, Long> {}

@@ -13,117 +13,134 @@ import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactCon;
 import br.ufpa.labes.spm.domain.InvolvedArtifact;
 
-public class ArtifactDAO extends BaseDAO<Artifact, String> implements IArtifactDAO{
+public class ArtifactDAO extends BaseDAO<Artifact, String> implements IArtifactDAO {
 
-	protected ArtifactDAO(Class<Artifact> businessClass) {
-		super(businessClass);
-	}
+  protected ArtifactDAO(Class<Artifact> businessClass) {
+    super(businessClass);
+  }
 
-	public ArtifactDAO() {
-		super(Artifact.class);
-	}
+  public ArtifactDAO() {
+    super(Artifact.class);
+  }
 
+  @Override
+  public Object[] getArtifactsIdentsFromProcessModelWithoutTemplates(String ident) {
+    String hql =
+        " select DISTINCT theArtifact.ident from "
+            + ArtifactCon.class.getName()
+            + " as artfCon where (artfCon.ident like '"
+            + ident
+            + ".%')"
+            + " and (artfCon.theArtifact.isTemplate = 'false')";
 
-	@Override
-	public Object[] getArtifactsIdentsFromProcessModelWithoutTemplates( String ident ) {
-		String hql = " select DISTINCT theArtifact.ident from " + ArtifactCon.class.getName() +
-				" as artfCon where (artfCon.ident like '"+ident+".%')"+" and (artfCon.theArtifact.isTemplate = 'false')";
+    Query query = this.getPersistenceContext().createQuery(hql);
 
-		Query query = this.getPersistenceContext().createQuery( hql );
+    List result = query.getResultList();
+    int size = result.size();
+    System.out.println("templates lista: " + result);
+    return result.toArray();
+  }
 
-		List result = query.getResultList();
-		int size = result.size();
-		System.out.println("templates lista: "+result);
-		return result.toArray();
-	}
+  @Override
+  public Artifact getByName(String name) {
+    String hql =
+        " select DISTINCT artifact from "
+            + Artifact.class.getName()
+            + " as artifact where artifact.name =:name";
 
-	@Override
-	public Artifact getByName(String name) {
-		String hql = " select DISTINCT artifact from " + Artifact.class.getName() +
-				" as artifact where artifact.name =:name";
+    Query query = this.getPersistenceContext().createQuery(hql);
+    query.setParameter("name", name);
+    return (Artifact) query.getSingleResult();
+  }
 
-		Query query = this.getPersistenceContext().createQuery( hql );
-		query.setParameter("name", name);
-		return (Artifact) query.getSingleResult();
-	}
+  @Override
+  public SimpleArtifactDescriptorDTO[] getInputArtifactsForNormal(String normalIdent) {
 
-	@Override
-	public SimpleArtifactDescriptorDTO[] getInputArtifactsForNormal(String normalIdent) {
+    String hql =
+        " from "
+            + InvolvedArtifact.class.getName()
+            + " as involvedArtifact where (involvedArtifact.inInvolvedArtifacts.ident=:normalID) ";
+    Query query = this.getPersistenceContext().createQuery(hql);
 
-		String hql = " from " + InvolvedArtifact.class.getName() + " as involvedArtifact where (involvedArtifact.inInvolvedArtifacts.ident=:normalID) ";
-		Query query = this.getPersistenceContext().createQuery(hql);
+    query.setParameter("normalID", normalIdent);
 
-		query.setParameter( "normalID", normalIdent );
+    List<InvolvedArtifact> result = query.getResultList();
 
-		List<InvolvedArtifact> result = query.getResultList();
+    ArrayList<Artifact> inputArtifacts = new ArrayList<Artifact>();
 
-		ArrayList<Artifact> inputArtifacts = new ArrayList<Artifact>();
+    for (InvolvedArtifact involvedArtifact : result) {
+      if (involvedArtifact.getTheArtifact() != null)
+        inputArtifacts.add(involvedArtifact.getTheArtifact());
+    }
 
-		for (InvolvedArtifact involvedArtifact : result) {
-			if (involvedArtifact.getTheArtifact() != null)
-				inputArtifacts.add( involvedArtifact.getTheArtifact() );
-		}
+    Artifact[] inputArtifactsArray = new Artifact[inputArtifacts.size()];
+    inputArtifactsArray = inputArtifacts.toArray(inputArtifactsArray);
 
+    SimpleArtifactDescriptorDTO[] artifactDescriptors =
+        new SimpleArtifactDescriptorDTO[inputArtifactsArray.length];
 
-		Artifact[] inputArtifactsArray = new Artifact[ inputArtifacts.size() ];
-		inputArtifactsArray = inputArtifacts.toArray( inputArtifactsArray );
+    for (int i = 0; i < inputArtifactsArray.length; i++) {
+      if (inputArtifactsArray[i] != null) {
+        String artifactIdent = inputArtifactsArray[i].getIdent();
+        String artifactName = inputArtifactsArray[i].getName();
+        String latestVersion = inputArtifactsArray[i].getLatestVersion();
+        String fileName = inputArtifactsArray[i].getFileName();
+        String repositoryIdent = null;
+        if (inputArtifactsArray[i].getTheVCSRepository() != null)
+          repositoryIdent = inputArtifactsArray[i].getTheVCSRepository().getIdent();
 
-		SimpleArtifactDescriptorDTO[] artifactDescriptors = new SimpleArtifactDescriptorDTO[inputArtifactsArray.length];
+        artifactDescriptors[i] =
+            new SimpleArtifactDescriptorDTO(
+                artifactIdent, artifactName, latestVersion, fileName, repositoryIdent);
+      }
+    }
+    System.out.println("no dao: " + artifactDescriptors.length);
+    return artifactDescriptors;
+  }
 
-		for (int i = 0; i < inputArtifactsArray.length; i++) {
-			if (inputArtifactsArray[i] != null) {
-				String artifactIdent = inputArtifactsArray[i].getIdent();
-				String artifactName = inputArtifactsArray[i].getName();
-				String latestVersion = inputArtifactsArray[i].getLatestVersion();
-				String fileName = inputArtifactsArray[i].getFileName();
-				String repositoryIdent=null;
-				if (inputArtifactsArray[i].getTheVCSRepository() != null)
-					repositoryIdent = inputArtifactsArray[i].getTheVCSRepository().getIdent();
+  @Override
+  public SimpleArtifactDescriptorDTO[] getOutputArtifactsForNormal(String normalIdent) {
+    String hql =
+        " from "
+            + InvolvedArtifact.class.getName()
+            + " as involvedArtifact where (involvedArtifact.outInvolvedArtifacts.ident=:normalID) ";
 
-				artifactDescriptors[i] = new SimpleArtifactDescriptorDTO(artifactIdent, artifactName, latestVersion, fileName, repositoryIdent);
-			}
-		}
-		System.out.println("no dao: " + artifactDescriptors.length);
-		return artifactDescriptors;
-	}
+    Query query = this.getPersistenceContext().createQuery(hql);
 
-	@Override
-	public SimpleArtifactDescriptorDTO[] getOutputArtifactsForNormal(String normalIdent) {
-		String hql = " from " + InvolvedArtifact.class.getName() + " as involvedArtifact where (involvedArtifact.outInvolvedArtifacts.ident=:normalID) ";
+    query.setParameter("normalID", normalIdent);
 
-		Query query = this.getPersistenceContext().createQuery( hql );
+    List<InvolvedArtifact> result = query.getResultList();
+    Iterator<InvolvedArtifact> resultIterator = result.iterator();
 
-		query.setParameter( "normalID", normalIdent );
+    ArrayList<Artifact> outputArtifacts = new ArrayList<Artifact>();
 
-		List<InvolvedArtifact> result = query.getResultList();
-		Iterator<InvolvedArtifact> resultIterator = result.iterator();
+    for (InvolvedArtifact involvedArtifact : result) {
+      if (involvedArtifact.getTheArtifact() != null)
+        outputArtifacts.add(involvedArtifact.getTheArtifact());
+    }
 
-		ArrayList<Artifact> outputArtifacts = new ArrayList<Artifact>();
+    Artifact[] outputArtifactsArray = new Artifact[outputArtifacts.size()];
+    outputArtifactsArray = outputArtifacts.toArray(outputArtifactsArray);
 
-		for (InvolvedArtifact involvedArtifact : result) {
-			if(involvedArtifact.getTheArtifact()!=null)
-				outputArtifacts.add( involvedArtifact.getTheArtifact() );
-		}
+    SimpleArtifactDescriptorDTO[] artifactDescriptors =
+        new SimpleArtifactDescriptorDTO[outputArtifactsArray.length];
 
-		Artifact[] outputArtifactsArray = new Artifact[ outputArtifacts.size() ];
-		outputArtifactsArray = outputArtifacts.toArray( outputArtifactsArray );
+    for (int i = 0; i < outputArtifactsArray.length; i++) {
+      if (outputArtifactsArray[i] != null) {
+        String artifactIdent = outputArtifactsArray[i].getIdent();
+        String artifactName = outputArtifactsArray[i].getName();
+        String latestVersion = outputArtifactsArray[i].getLatestVersion();
+        String fileName = outputArtifactsArray[i].getFileName();
 
-		SimpleArtifactDescriptorDTO[] artifactDescriptors = new SimpleArtifactDescriptorDTO[outputArtifactsArray.length];
+        String repositoryIdent = null;
+        if (outputArtifactsArray[i].getTheVCSRepository() != null)
+          repositoryIdent = outputArtifactsArray[i].getTheVCSRepository().getIdent();
 
-		for (int i = 0; i < outputArtifactsArray.length; i++) {
-			if (outputArtifactsArray[i] != null) {
-				String artifactIdent = outputArtifactsArray[i].getIdent();
-				String artifactName = outputArtifactsArray[i].getName();
-				String latestVersion = outputArtifactsArray[i].getLatestVersion();
-				String fileName = outputArtifactsArray[i].getFileName();
-
-				String repositoryIdent=null;
-				if (outputArtifactsArray[i].getTheVCSRepository() != null)
-					repositoryIdent = outputArtifactsArray[i].getTheVCSRepository().getIdent();
-
-				artifactDescriptors[i] = new SimpleArtifactDescriptorDTO(artifactIdent, artifactName, latestVersion, fileName, repositoryIdent);
-			}
-		}
-		return artifactDescriptors;
-	}
+        artifactDescriptors[i] =
+            new SimpleArtifactDescriptorDTO(
+                artifactIdent, artifactName, latestVersion, fileName, repositoryIdent);
+      }
+    }
+    return artifactDescriptors;
+  }
 }

@@ -20,170 +20,173 @@ import br.ufpa.labes.spm.domain.RequiredResource;
 
 public class NormalDAO extends BaseDAO<Normal, Integer> implements INormalDAO {
 
-	protected NormalDAO(Class<Normal> businessClass) {
-		super(businessClass);
-	}
+  protected NormalDAO(Class<Normal> businessClass) {
+    super(businessClass);
+  }
 
-	public NormalDAO() {
-		super(Normal.class);
-	}
+  public NormalDAO() {
+    super(Normal.class);
+  }
 
-	public String[] getInvolvedAgentsForNormal(String normalIdent) {
+  public String[] getInvolvedAgentsForNormal(String normalIdent) {
 
-		getPersistenceContext().getTransaction().begin();
+    getPersistenceContext().getTransaction().begin();
 
-		String hql = " from " + RequiredPeople.class.getName() + " as reqPeople where (reqPeople.theNormal.ident=:normalID) ";
+    String hql =
+        " from "
+            + RequiredPeople.class.getName()
+            + " as reqPeople where (reqPeople.theNormal.ident=:normalID) ";
 
-		Query query = getPersistenceContext().createQuery(hql);
+    Query query = getPersistenceContext().createQuery(hql);
 
-		query.setParameter("normalID", normalIdent);
+    query.setParameter("normalID", normalIdent);
 
-		List result = query.getResultList();
-		Iterator<RequiredPeople> resultIterator = result.iterator();
+    List result = query.getResultList();
+    Iterator<RequiredPeople> resultIterator = result.iterator();
 
-		ArrayList<String> agents = new ArrayList<String>();
+    ArrayList<String> agents = new ArrayList<String>();
 
-		while (resultIterator.hasNext()) {
-			RequiredPeople reqPeople = resultIterator.next();
+    while (resultIterator.hasNext()) {
+      RequiredPeople reqPeople = resultIterator.next();
 
-			if (reqPeople instanceof ReqAgent) {
-				ReqAgent reqAgent = (ReqAgent) reqPeople;
-				Agent agent = reqAgent.getTheAgent();
+      if (reqPeople instanceof ReqAgent) {
+        ReqAgent reqAgent = (ReqAgent) reqPeople;
+        Agent agent = reqAgent.getTheAgent();
 
-				if (agent != null)
-					agents.add(reqAgent.getTheAgent().getName());
-			} else if (reqPeople instanceof ReqWorkGroup) {
-				ReqWorkGroup ReqWorkGroup = (ReqWorkGroup) reqPeople;
-				WorkGroup group = ReqWorkGroup.getTheWorkGroup();
+        if (agent != null) agents.add(reqAgent.getTheAgent().getName());
+      } else if (reqPeople instanceof ReqWorkGroup) {
+        ReqWorkGroup ReqWorkGroup = (ReqWorkGroup) reqPeople;
+        WorkGroup group = ReqWorkGroup.getTheWorkGroup();
 
-				if (group != null)
-					agents.add(ReqWorkGroup.getTheWorkGroup().getName() + " (WorkGroup)");
-			}
-		}
+        if (group != null) agents.add(ReqWorkGroup.getTheWorkGroup().getName() + " (WorkGroup)");
+      }
+    }
 
-		String[] agentsArray = new String[agents.size()];
-		agentsArray = agents.toArray(agentsArray);
+    String[] agentsArray = new String[agents.size()];
+    agentsArray = agents.toArray(agentsArray);
 
-		getPersistenceContext().getTransaction().commit();
+    getPersistenceContext().getTransaction().commit();
 
-		return agentsArray;
+    return agentsArray;
+  }
 
-	}
+  public String[] getRequiredResourcesForNormal(String normalIdent) {
 
-	public String[] getRequiredResourcesForNormal(String normalIdent) {
+    getPersistenceContext().getTransaction().begin();
 
-		getPersistenceContext().getTransaction().begin();
+    String hql =
+        "select reqResource.theResource.ident from "
+            + RequiredResource.class.getName()
+            + " as reqResource where (reqResource.theNormal.ident=:normalID) ";
 
-		String hql = "select reqResource.theResource.ident from " + RequiredResource.class.getName()
-				+ " as reqResource where (reqResource.theNormal.ident=:normalID) ";
+    Query query = getPersistenceContext().createQuery(hql);
 
-		Query query = getPersistenceContext().createQuery(hql);
+    query.setParameter("normalID", normalIdent);
 
-		query.setParameter("normalID", normalIdent);
+    List result = query.getResultList();
 
-		List result = query.getResultList();
+    getPersistenceContext().getTransaction().commit();
 
-		getPersistenceContext().getTransaction().commit();
+    return (String[]) result.toArray(new String[result.size()]);
+  }
 
-		return (String[]) result.toArray(new String[result.size()]);
+  public String[] getInputArtifactsIdentsForNormal(String normalIdent) {
+    getPersistenceContext().getTransaction().begin();
 
-	}
+    String hql =
+        " from "
+            + InvolvedArtifact.class.getName()
+            + " as involvedArtifact where (involvedArtifact.inInvolvedArtifacts.ident=:normalID) ";
 
-	public String[] getInputArtifactsIdentsForNormal(String normalIdent) {
-		getPersistenceContext().getTransaction().begin();
+    Query query = getPersistenceContext().createQuery(hql);
 
-		String hql = " from " + InvolvedArtifact.class.getName()
-				+ " as involvedArtifact where (involvedArtifact.inInvolvedArtifacts.ident=:normalID) ";
+    query.setParameter("normalID", normalIdent);
 
-		Query query = getPersistenceContext().createQuery(hql);
+    List result = query.getResultList();
 
-		query.setParameter("normalID", normalIdent);
+    Iterator<InvolvedArtifact> resultIterator = result.iterator();
 
-		List result = query.getResultList();
+    ArrayList<String> inputArtifacts = new ArrayList<String>();
 
-		Iterator<InvolvedArtifact> resultIterator = result.iterator();
+    while (resultIterator.hasNext()) {
+      InvolvedArtifact involvedArtifact = resultIterator.next();
+      Artifact theArtifact = involvedArtifact.getTheArtifact();
 
-		ArrayList<String> inputArtifacts = new ArrayList<String>();
+      if (theArtifact != null) inputArtifacts.add(theArtifact.getIdent());
+    }
 
-		while (resultIterator.hasNext()) {
-			InvolvedArtifact involvedArtifact = resultIterator.next();
-			Artifact theArtifact = involvedArtifact.getTheArtifact();
+    String[] inputArtifactsArray = new String[inputArtifacts.size()];
+    inputArtifactsArray = inputArtifacts.toArray(inputArtifactsArray);
 
-			if (theArtifact != null)
-				inputArtifacts.add(theArtifact.getIdent());
-		}
+    getPersistenceContext().getTransaction().commit();
 
-		String[] inputArtifactsArray = new String[inputArtifacts.size()];
-		inputArtifactsArray = inputArtifacts.toArray(inputArtifactsArray);
+    return inputArtifactsArray;
+  }
 
-		getPersistenceContext().getTransaction().commit();
+  public Artifact[] getOutputArtifactsForNormal(String normalIdent) {
 
-		return inputArtifactsArray;
+    getPersistenceContext().getTransaction().begin();
 
-	}
+    String hql =
+        " from "
+            + InvolvedArtifact.class.getName()
+            + " as involvedArtifact where (involvedArtifact.outInvolvedArtifacts.ident=:normalID) ";
 
-	public Artifact[] getOutputArtifactsForNormal(String normalIdent) {
+    Query query = getPersistenceContext().createQuery(hql);
 
-		getPersistenceContext().getTransaction().begin();
+    query.setParameter("normalID", normalIdent);
 
-		String hql = " from " + InvolvedArtifact.class.getName()
-				+ " as involvedArtifact where (involvedArtifact.outInvolvedArtifacts.ident=:normalID) ";
+    List result = query.getResultList();
+    Iterator<InvolvedArtifact> resultIterator = result.iterator();
 
-		Query query = getPersistenceContext().createQuery(hql);
+    ArrayList<Artifact> outputArtifacts = new ArrayList<Artifact>();
 
-		query.setParameter("normalID", normalIdent);
+    while (resultIterator.hasNext()) {
+      InvolvedArtifact involvedArtifact = resultIterator.next();
+      if (involvedArtifact.getTheArtifact() != null) {
+        outputArtifacts.add(involvedArtifact.getTheArtifact());
+      }
+    }
 
-		List result = query.getResultList();
-		Iterator<InvolvedArtifact> resultIterator = result.iterator();
+    Artifact[] outputArtifactsArray = new Artifact[outputArtifacts.size()];
+    outputArtifactsArray = outputArtifacts.toArray(outputArtifactsArray);
 
-		ArrayList<Artifact> outputArtifacts = new ArrayList<Artifact>();
+    getPersistenceContext().getTransaction().commit();
 
-		while (resultIterator.hasNext()) {
-			InvolvedArtifact involvedArtifact = resultIterator.next();
-			if (involvedArtifact.getTheArtifact() != null) {
-				outputArtifacts.add(involvedArtifact.getTheArtifact());
-			}
-		}
+    return outputArtifactsArray;
+  }
 
-		Artifact[] outputArtifactsArray = new Artifact[outputArtifacts.size()];
-		outputArtifactsArray = outputArtifacts.toArray(outputArtifactsArray);
+  public String[] getOutputArtifactsIdentsForNormal(String normalIdent) {
 
-		getPersistenceContext().getTransaction().commit();
+    getPersistenceContext().getTransaction().begin();
 
-		return outputArtifactsArray;
-	}
+    String hql =
+        " from "
+            + InvolvedArtifact.class.getName()
+            + " as involvedArtifact where (involvedArtifact.outInvolvedArtifacts.ident=:normalID) ";
 
-	public String[] getOutputArtifactsIdentsForNormal(String normalIdent) {
+    Query query = getPersistenceContext().createQuery(hql);
 
-		getPersistenceContext().getTransaction().begin();
+    query.setParameter("normalID", normalIdent);
 
-		String hql = " from " + InvolvedArtifact.class.getName()
-				+ " as involvedArtifact where (involvedArtifact.outInvolvedArtifacts.ident=:normalID) ";
+    List result = query.getResultList();
 
-		Query query = getPersistenceContext().createQuery(hql);
+    Iterator<InvolvedArtifact> resultIterator = result.iterator();
 
-		query.setParameter("normalID", normalIdent);
+    ArrayList<String> outputArtifacts = new ArrayList<String>();
 
-		List result = query.getResultList();
+    while (resultIterator.hasNext()) {
+      InvolvedArtifact involvedArtifact = resultIterator.next();
+      if (involvedArtifact.getTheArtifact() != null) {
+        outputArtifacts.add(involvedArtifact.getTheArtifact().getIdent());
+      }
+    }
 
-		Iterator<InvolvedArtifact> resultIterator = result.iterator();
+    String[] outputArtifactsArray = new String[outputArtifacts.size()];
+    outputArtifactsArray = outputArtifacts.toArray(outputArtifactsArray);
 
-		ArrayList<String> outputArtifacts = new ArrayList<String>();
+    getPersistenceContext().getTransaction().commit();
 
-		while (resultIterator.hasNext()) {
-			InvolvedArtifact involvedArtifact = resultIterator.next();
-			if (involvedArtifact.getTheArtifact() != null) {
-				outputArtifacts.add(involvedArtifact.getTheArtifact().getIdent());
-			}
-		}
-
-		String[] outputArtifactsArray = new String[outputArtifacts.size()];
-		outputArtifactsArray = outputArtifacts.toArray(outputArtifactsArray);
-
-		getPersistenceContext().getTransaction().commit();
-
-		return outputArtifactsArray;
-
-	}
-
+    return outputArtifactsArray;
+  }
 }

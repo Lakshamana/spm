@@ -31,249 +31,253 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Integration tests for the {@link AutomaticResource} REST controller.
- */
+/** Integration tests for the {@link AutomaticResource} REST controller. */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class AutomaticResourceIT {
 
-    @Autowired
-    private AutomaticRepository automaticRepository;
+  @Autowired private AutomaticRepository automaticRepository;
 
-    @Autowired
-    private AutomaticMapper automaticMapper;
+  @Autowired private AutomaticMapper automaticMapper;
 
-    @Autowired
-    private AutomaticService automaticService;
+  @Autowired private AutomaticService automaticService;
 
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
+  @Autowired private ExceptionTranslator exceptionTranslator;
 
-    @Autowired
-    private EntityManager em;
+  @Autowired private EntityManager em;
 
-    @Autowired
-    private Validator validator;
+  @Autowired private Validator validator;
 
-    private MockMvc restAutomaticMockMvc;
+  private MockMvc restAutomaticMockMvc;
 
-    private Automatic automatic;
+  private Automatic automatic;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final AutomaticResource automaticResource = new AutomaticResource(automaticService);
-        this.restAutomaticMockMvc = MockMvcBuilders.standaloneSetup(automaticResource)
+  @BeforeEach
+  public void setup() {
+    MockitoAnnotations.initMocks(this);
+    final AutomaticResource automaticResource = new AutomaticResource(automaticService);
+    this.restAutomaticMockMvc =
+        MockMvcBuilders.standaloneSetup(automaticResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
+            .setValidator(validator)
+            .build();
+  }
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Automatic createEntity(EntityManager em) {
-        Automatic automatic = new Automatic();
-        return automatic;
-    }
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Automatic createUpdatedEntity(EntityManager em) {
-        Automatic automatic = new Automatic();
-        return automatic;
-    }
+  /**
+   * Create an entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static Automatic createEntity(EntityManager em) {
+    Automatic automatic = new Automatic();
+    return automatic;
+  }
+  /**
+   * Create an updated entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static Automatic createUpdatedEntity(EntityManager em) {
+    Automatic automatic = new Automatic();
+    return automatic;
+  }
 
-    @BeforeEach
-    public void initTest() {
-        automatic = createEntity(em);
-    }
+  @BeforeEach
+  public void initTest() {
+    automatic = createEntity(em);
+  }
 
-    @Test
-    @Transactional
-    public void createAutomatic() throws Exception {
-        int databaseSizeBeforeCreate = automaticRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createAutomatic() throws Exception {
+    int databaseSizeBeforeCreate = automaticRepository.findAll().size();
 
-        // Create the Automatic
-        AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
-        restAutomaticMockMvc.perform(post("/api/automatics")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
-            .andExpect(status().isCreated());
+    // Create the Automatic
+    AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
+    restAutomaticMockMvc
+        .perform(
+            post("/api/automatics")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
+        .andExpect(status().isCreated());
 
-        // Validate the Automatic in the database
-        List<Automatic> automaticList = automaticRepository.findAll();
-        assertThat(automaticList).hasSize(databaseSizeBeforeCreate + 1);
-        Automatic testAutomatic = automaticList.get(automaticList.size() - 1);
-    }
+    // Validate the Automatic in the database
+    List<Automatic> automaticList = automaticRepository.findAll();
+    assertThat(automaticList).hasSize(databaseSizeBeforeCreate + 1);
+    Automatic testAutomatic = automaticList.get(automaticList.size() - 1);
+  }
 
-    @Test
-    @Transactional
-    public void createAutomaticWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = automaticRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createAutomaticWithExistingId() throws Exception {
+    int databaseSizeBeforeCreate = automaticRepository.findAll().size();
 
-        // Create the Automatic with an existing ID
-        automatic.setId(1L);
-        AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
+    // Create the Automatic with an existing ID
+    automatic.setId(1L);
+    AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
 
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restAutomaticMockMvc.perform(post("/api/automatics")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
-            .andExpect(status().isBadRequest());
+    // An entity with an existing ID cannot be created, so this API call must fail
+    restAutomaticMockMvc
+        .perform(
+            post("/api/automatics")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the Automatic in the database
-        List<Automatic> automaticList = automaticRepository.findAll();
-        assertThat(automaticList).hasSize(databaseSizeBeforeCreate);
-    }
+    // Validate the Automatic in the database
+    List<Automatic> automaticList = automaticRepository.findAll();
+    assertThat(automaticList).hasSize(databaseSizeBeforeCreate);
+  }
 
+  @Test
+  @Transactional
+  public void getAllAutomatics() throws Exception {
+    // Initialize the database
+    automaticRepository.saveAndFlush(automatic);
 
-    @Test
-    @Transactional
-    public void getAllAutomatics() throws Exception {
-        // Initialize the database
-        automaticRepository.saveAndFlush(automatic);
+    // Get all the automaticList
+    restAutomaticMockMvc
+        .perform(get("/api/automatics?sort=id,desc"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.[*].id").value(hasItem(automatic.getId().intValue())));
+  }
 
-        // Get all the automaticList
-        restAutomaticMockMvc.perform(get("/api/automatics?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(automatic.getId().intValue())));
-    }
-    
-    @Test
-    @Transactional
-    public void getAutomatic() throws Exception {
-        // Initialize the database
-        automaticRepository.saveAndFlush(automatic);
+  @Test
+  @Transactional
+  public void getAutomatic() throws Exception {
+    // Initialize the database
+    automaticRepository.saveAndFlush(automatic);
 
-        // Get the automatic
-        restAutomaticMockMvc.perform(get("/api/automatics/{id}", automatic.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(automatic.getId().intValue()));
-    }
+    // Get the automatic
+    restAutomaticMockMvc
+        .perform(get("/api/automatics/{id}", automatic.getId()))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.id").value(automatic.getId().intValue()));
+  }
 
-    @Test
-    @Transactional
-    public void getNonExistingAutomatic() throws Exception {
-        // Get the automatic
-        restAutomaticMockMvc.perform(get("/api/automatics/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
-    }
+  @Test
+  @Transactional
+  public void getNonExistingAutomatic() throws Exception {
+    // Get the automatic
+    restAutomaticMockMvc
+        .perform(get("/api/automatics/{id}", Long.MAX_VALUE))
+        .andExpect(status().isNotFound());
+  }
 
-    @Test
-    @Transactional
-    public void updateAutomatic() throws Exception {
-        // Initialize the database
-        automaticRepository.saveAndFlush(automatic);
+  @Test
+  @Transactional
+  public void updateAutomatic() throws Exception {
+    // Initialize the database
+    automaticRepository.saveAndFlush(automatic);
 
-        int databaseSizeBeforeUpdate = automaticRepository.findAll().size();
+    int databaseSizeBeforeUpdate = automaticRepository.findAll().size();
 
-        // Update the automatic
-        Automatic updatedAutomatic = automaticRepository.findById(automatic.getId()).get();
-        // Disconnect from session so that the updates on updatedAutomatic are not directly saved in db
-        em.detach(updatedAutomatic);
-        AutomaticDTO automaticDTO = automaticMapper.toDto(updatedAutomatic);
+    // Update the automatic
+    Automatic updatedAutomatic = automaticRepository.findById(automatic.getId()).get();
+    // Disconnect from session so that the updates on updatedAutomatic are not directly saved in db
+    em.detach(updatedAutomatic);
+    AutomaticDTO automaticDTO = automaticMapper.toDto(updatedAutomatic);
 
-        restAutomaticMockMvc.perform(put("/api/automatics")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
-            .andExpect(status().isOk());
+    restAutomaticMockMvc
+        .perform(
+            put("/api/automatics")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
+        .andExpect(status().isOk());
 
-        // Validate the Automatic in the database
-        List<Automatic> automaticList = automaticRepository.findAll();
-        assertThat(automaticList).hasSize(databaseSizeBeforeUpdate);
-        Automatic testAutomatic = automaticList.get(automaticList.size() - 1);
-    }
+    // Validate the Automatic in the database
+    List<Automatic> automaticList = automaticRepository.findAll();
+    assertThat(automaticList).hasSize(databaseSizeBeforeUpdate);
+    Automatic testAutomatic = automaticList.get(automaticList.size() - 1);
+  }
 
-    @Test
-    @Transactional
-    public void updateNonExistingAutomatic() throws Exception {
-        int databaseSizeBeforeUpdate = automaticRepository.findAll().size();
+  @Test
+  @Transactional
+  public void updateNonExistingAutomatic() throws Exception {
+    int databaseSizeBeforeUpdate = automaticRepository.findAll().size();
 
-        // Create the Automatic
-        AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
+    // Create the Automatic
+    AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
 
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restAutomaticMockMvc.perform(put("/api/automatics")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
-            .andExpect(status().isBadRequest());
+    // If the entity doesn't have an ID, it will throw BadRequestAlertException
+    restAutomaticMockMvc
+        .perform(
+            put("/api/automatics")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the Automatic in the database
-        List<Automatic> automaticList = automaticRepository.findAll();
-        assertThat(automaticList).hasSize(databaseSizeBeforeUpdate);
-    }
+    // Validate the Automatic in the database
+    List<Automatic> automaticList = automaticRepository.findAll();
+    assertThat(automaticList).hasSize(databaseSizeBeforeUpdate);
+  }
 
-    @Test
-    @Transactional
-    public void deleteAutomatic() throws Exception {
-        // Initialize the database
-        automaticRepository.saveAndFlush(automatic);
+  @Test
+  @Transactional
+  public void deleteAutomatic() throws Exception {
+    // Initialize the database
+    automaticRepository.saveAndFlush(automatic);
 
-        int databaseSizeBeforeDelete = automaticRepository.findAll().size();
+    int databaseSizeBeforeDelete = automaticRepository.findAll().size();
 
-        // Delete the automatic
-        restAutomaticMockMvc.perform(delete("/api/automatics/{id}", automatic.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
+    // Delete the automatic
+    restAutomaticMockMvc
+        .perform(
+            delete("/api/automatics/{id}", automatic.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+        .andExpect(status().isNoContent());
 
-        // Validate the database contains one less item
-        List<Automatic> automaticList = automaticRepository.findAll();
-        assertThat(automaticList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    // Validate the database contains one less item
+    List<Automatic> automaticList = automaticRepository.findAll();
+    assertThat(automaticList).hasSize(databaseSizeBeforeDelete - 1);
+  }
 
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Automatic.class);
-        Automatic automatic1 = new Automatic();
-        automatic1.setId(1L);
-        Automatic automatic2 = new Automatic();
-        automatic2.setId(automatic1.getId());
-        assertThat(automatic1).isEqualTo(automatic2);
-        automatic2.setId(2L);
-        assertThat(automatic1).isNotEqualTo(automatic2);
-        automatic1.setId(null);
-        assertThat(automatic1).isNotEqualTo(automatic2);
-    }
+  @Test
+  @Transactional
+  public void equalsVerifier() throws Exception {
+    TestUtil.equalsVerifier(Automatic.class);
+    Automatic automatic1 = new Automatic();
+    automatic1.setId(1L);
+    Automatic automatic2 = new Automatic();
+    automatic2.setId(automatic1.getId());
+    assertThat(automatic1).isEqualTo(automatic2);
+    automatic2.setId(2L);
+    assertThat(automatic1).isNotEqualTo(automatic2);
+    automatic1.setId(null);
+    assertThat(automatic1).isNotEqualTo(automatic2);
+  }
 
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AutomaticDTO.class);
-        AutomaticDTO automaticDTO1 = new AutomaticDTO();
-        automaticDTO1.setId(1L);
-        AutomaticDTO automaticDTO2 = new AutomaticDTO();
-        assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
-        automaticDTO2.setId(automaticDTO1.getId());
-        assertThat(automaticDTO1).isEqualTo(automaticDTO2);
-        automaticDTO2.setId(2L);
-        assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
-        automaticDTO1.setId(null);
-        assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
-    }
+  @Test
+  @Transactional
+  public void dtoEqualsVerifier() throws Exception {
+    TestUtil.equalsVerifier(AutomaticDTO.class);
+    AutomaticDTO automaticDTO1 = new AutomaticDTO();
+    automaticDTO1.setId(1L);
+    AutomaticDTO automaticDTO2 = new AutomaticDTO();
+    assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
+    automaticDTO2.setId(automaticDTO1.getId());
+    assertThat(automaticDTO1).isEqualTo(automaticDTO2);
+    automaticDTO2.setId(2L);
+    assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
+    automaticDTO1.setId(null);
+    assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
+  }
 
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(automaticMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(automaticMapper.fromId(null)).isNull();
-    }
+  @Test
+  @Transactional
+  public void testEntityFromId() {
+    assertThat(automaticMapper.fromId(42L).getId()).isEqualTo(42);
+    assertThat(automaticMapper.fromId(null)).isNull();
+  }
 }

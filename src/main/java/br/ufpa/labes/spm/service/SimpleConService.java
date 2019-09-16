@@ -16,86 +16,82 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * Service Implementation for managing {@link SimpleCon}.
- */
+/** Service Implementation for managing {@link SimpleCon}. */
 @Service
 @Transactional
 public class SimpleConService {
 
-    private final Logger log = LoggerFactory.getLogger(SimpleConService.class);
+  private final Logger log = LoggerFactory.getLogger(SimpleConService.class);
 
-    private final SimpleConRepository simpleConRepository;
+  private final SimpleConRepository simpleConRepository;
 
-    private final SimpleConMapper simpleConMapper;
+  private final SimpleConMapper simpleConMapper;
 
-    public SimpleConService(SimpleConRepository simpleConRepository, SimpleConMapper simpleConMapper) {
-        this.simpleConRepository = simpleConRepository;
-        this.simpleConMapper = simpleConMapper;
-    }
+  public SimpleConService(
+      SimpleConRepository simpleConRepository, SimpleConMapper simpleConMapper) {
+    this.simpleConRepository = simpleConRepository;
+    this.simpleConMapper = simpleConMapper;
+  }
 
-    /**
-     * Save a simpleCon.
-     *
-     * @param simpleConDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public SimpleConDTO save(SimpleConDTO simpleConDTO) {
-        log.debug("Request to save SimpleCon : {}", simpleConDTO);
-        SimpleCon simpleCon = simpleConMapper.toEntity(simpleConDTO);
-        simpleCon = simpleConRepository.save(simpleCon);
-        return simpleConMapper.toDto(simpleCon);
-    }
+  /**
+   * Save a simpleCon.
+   *
+   * @param simpleConDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public SimpleConDTO save(SimpleConDTO simpleConDTO) {
+    log.debug("Request to save SimpleCon : {}", simpleConDTO);
+    SimpleCon simpleCon = simpleConMapper.toEntity(simpleConDTO);
+    simpleCon = simpleConRepository.save(simpleCon);
+    return simpleConMapper.toDto(simpleCon);
+  }
 
-    /**
-     * Get all the simpleCons.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<SimpleConDTO> findAll() {
-        log.debug("Request to get all SimpleCons");
-        return simpleConRepository.findAll().stream()
-            .map(simpleConMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the simpleCons.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<SimpleConDTO> findAll() {
+    log.debug("Request to get all SimpleCons");
+    return simpleConRepository.findAll().stream()
+        .map(simpleConMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get all the simpleCons where TheConnectionSuper is {@code null}.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<SimpleConDTO> findAllWhereTheConnectionSuperIsNull() {
+    log.debug("Request to get all simpleCons where TheConnectionSuper is null");
+    return StreamSupport.stream(simpleConRepository.findAll().spliterator(), false)
+        .filter(simpleCon -> simpleCon.getTheConnectionSuper() == null)
+        .map(simpleConMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one simpleCon by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<SimpleConDTO> findOne(Long id) {
+    log.debug("Request to get SimpleCon : {}", id);
+    return simpleConRepository.findById(id).map(simpleConMapper::toDto);
+  }
 
-    /**
-    *  Get all the simpleCons where TheConnectionSuper is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true) 
-    public List<SimpleConDTO> findAllWhereTheConnectionSuperIsNull() {
-        log.debug("Request to get all simpleCons where TheConnectionSuper is null");
-        return StreamSupport
-            .stream(simpleConRepository.findAll().spliterator(), false)
-            .filter(simpleCon -> simpleCon.getTheConnectionSuper() == null)
-            .map(simpleConMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     * Get one simpleCon by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<SimpleConDTO> findOne(Long id) {
-        log.debug("Request to get SimpleCon : {}", id);
-        return simpleConRepository.findById(id)
-            .map(simpleConMapper::toDto);
-    }
-
-    /**
-     * Delete the simpleCon by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete SimpleCon : {}", id);
-        simpleConRepository.deleteById(id);
-    }
+  /**
+   * Delete the simpleCon by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete SimpleCon : {}", id);
+    simpleConRepository.deleteById(id);
+  }
 }

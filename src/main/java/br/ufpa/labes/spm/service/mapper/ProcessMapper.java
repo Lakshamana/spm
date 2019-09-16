@@ -5,43 +5,48 @@ import br.ufpa.labes.spm.service.dto.ProcessDTO;
 
 import org.mapstruct.*;
 
-/**
- * Mapper for the entity {@link Process} and its DTO {@link ProcessDTO}.
- */
-@Mapper(componentModel = "spring", uses = {ProcessModelMapper.class, TemplateMapper.class, ActivityTypeMapper.class, EmailConfigurationMapper.class})
+/** Mapper for the entity {@link Process} and its DTO {@link ProcessDTO}. */
+@Mapper(
+    componentModel = "spring",
+    uses = {
+      ProcessModelMapper.class,
+      TemplateMapper.class,
+      ActivityTypeMapper.class,
+      EmailConfigurationMapper.class
+    })
 public interface ProcessMapper extends EntityMapper<ProcessDTO, Process> {
 
-    @Mapping(source = "theProcessModel.id", target = "theProcessModelId")
-    @Mapping(source = "theTemplateSub.id", target = "theTemplateSubId")
-    @Mapping(source = "theActivityType.id", target = "theActivityTypeId")
-    @Mapping(source = "theEmailConfiguration.id", target = "theEmailConfigurationId")
-    ProcessDTO toDto(Process process);
+  @Mapping(source = "theProcessModel.id", target = "theProcessModelId")
+  @Mapping(source = "theTemplateSub.id", target = "theTemplateSubId")
+  @Mapping(source = "theActivityType.id", target = "theActivityTypeId")
+  @Mapping(source = "theEmailConfiguration.id", target = "theEmailConfigurationId")
+  ProcessDTO toDto(Process process);
 
-    @Mapping(source = "theProcessModelId", target = "theProcessModel")
-    @Mapping(source = "theTemplateSubId", target = "theTemplateSub")
-    @Mapping(target = "theProcessAgendas", ignore = true)
-    @Mapping(target = "removeTheProcessAgendas", ignore = true)
-    @Mapping(source = "theActivityTypeId", target = "theActivityType")
-    @Mapping(target = "theLog", ignore = true)
-    @Mapping(source = "theEmailConfigurationId", target = "theEmailConfiguration")
-    @Mapping(target = "theProcessEvents", ignore = true)
-    @Mapping(target = "removeTheProcessEvent", ignore = true)
-    @Mapping(target = "theProjects", ignore = true)
-    @Mapping(target = "removeTheProject", ignore = true)
-    @Mapping(target = "theProcessMetrics", ignore = true)
-    @Mapping(target = "removeTheProcessMetric", ignore = true)
-    @Mapping(target = "theProcessEstimations", ignore = true)
-    @Mapping(target = "removeTheProcessEstimation", ignore = true)
-    @Mapping(target = "theAgents", ignore = true)
-    @Mapping(target = "removeTheAgent", ignore = true)
-    Process toEntity(ProcessDTO processDTO);
+  @Mapping(source = "theProcessModelId", target = "theProcessModel")
+  @Mapping(source = "theTemplateSubId", target = "theTemplateSub")
+  @Mapping(target = "theProcessAgendas", ignore = true)
+  @Mapping(target = "removeTheProcessAgendas", ignore = true)
+  @Mapping(source = "theActivityTypeId", target = "theActivityType")
+  @Mapping(target = "theLog", ignore = true)
+  @Mapping(source = "theEmailConfigurationId", target = "theEmailConfiguration")
+  @Mapping(target = "theProcessEvents", ignore = true)
+  @Mapping(target = "removeTheProcessEvent", ignore = true)
+  @Mapping(target = "theProjects", ignore = true)
+  @Mapping(target = "removeTheProject", ignore = true)
+  @Mapping(target = "theProcessMetrics", ignore = true)
+  @Mapping(target = "removeTheProcessMetric", ignore = true)
+  @Mapping(target = "theProcessEstimations", ignore = true)
+  @Mapping(target = "removeTheProcessEstimation", ignore = true)
+  @Mapping(target = "theAgents", ignore = true)
+  @Mapping(target = "removeTheAgent", ignore = true)
+  Process toEntity(ProcessDTO processDTO);
 
-    default Process fromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        Process process = new Process();
-        process.setId(id);
-        return process;
+  default Process fromId(Long id) {
+    if (id == null) {
+      return null;
     }
+    Process process = new Process();
+    process.setId(id);
+    return process;
+  }
 }

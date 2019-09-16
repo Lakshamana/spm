@@ -12,163 +12,163 @@ import br.ufpa.labes.spm.domain.AgendaEvent;
 import br.ufpa.labes.spm.domain.Task;
 import br.ufpa.labes.spm.util.ServicesUtil;
 
+public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO {
 
-public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO{
+  protected TaskDAO(Class<Task> businessClass) {
+    super(businessClass);
+  }
 
-	protected TaskDAO(Class<Task> businessClass) {
-		super(businessClass);
-	}
+  public TaskDAO() {
+    super(Task.class);
+  }
 
-	public TaskDAO() {
-		super(Task.class);
-	}
+  @Override
+  public float getWorkingHoursForTask(String normalIdent, String agentIdent) {
+    AgendaEvent[] event = this.getAgendaEventsForTask(normalIdent, agentIdent);
 
-	@Override
-	public float getWorkingHoursForTask( String normalIdent, String agentIdent ) {
-		AgendaEvent[] event = this.getAgendaEventsForTask( normalIdent, agentIdent );
+    if (event == null) return 0.0f;
 
-		if ( event == null )
-			return 0.0f;
+    float totalElapsedTime = 0.0f;
 
-		float totalElapsedTime = 0.0f;
+    boolean isCounting = false;
 
-		boolean isCounting = false;
+    long startTimeMillis = -1;
+    long endTimeMillis = -1;
+    long elapsedTime = -1;
 
-		long startTimeMillis = -1;
-		long endTimeMillis = -1;
-		long elapsedTime = -1;
+    for (int i = 0; i < event.length; i++) {
+      if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
+        isCounting = true;
 
-		for (int i = 0; i < event.length; i++) {
-			if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
-				isCounting = true;
+        startTimeMillis = event[i].getWhen().getTime();
+      } else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
+          || event[i].getTheCatalogEvents().getDescription().equals("ToPaused")
+          || event[i].getTheCatalogEvents().getDescription().equals("ToFailed")) {
+        isCounting = false;
 
-				startTimeMillis = event[i].getWhen().getTime();
-			} else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
-					|| event[i].getTheCatalogEvents().getDescription().equals("ToPaused")
-					|| event[i].getTheCatalogEvents().getDescription().equals("ToFailed")) {
-				isCounting = false;
+        if (startTimeMillis != -1) {
+          endTimeMillis = event[i].getWhen().getTime();
 
-				if (startTimeMillis != -1) {
-					endTimeMillis = event[i].getWhen().getTime();
+          elapsedTime = endTimeMillis - startTimeMillis;
 
-					elapsedTime = endTimeMillis - startTimeMillis;
+          totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
+        }
+      }
+      //			System.out.println("Normal: " + normalIdent + " --> contando: " + isCounting);
+    }
 
-					totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
-				}
-			}
-//			System.out.println("Normal: " + normalIdent + " --> contando: " + isCounting);
-		}
+    if (isCounting) {
+      Date date = new Date();
 
-		if (isCounting) {
-			Date date = new Date();
+      endTimeMillis = date.getTime();
 
-			endTimeMillis = date.getTime();
+      elapsedTime = endTimeMillis - startTimeMillis;
 
-			elapsedTime = endTimeMillis - startTimeMillis;
+      totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
+    }
 
-			totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
-		}
+    //		System.out.println("Normal: " + normalIdent + " --> tempo: " + totalElapsedTime);
+    return totalElapsedTime;
+  }
 
-//		System.out.println("Normal: " + normalIdent + " --> tempo: " + totalElapsedTime);
-		return totalElapsedTime;
-	}
+  @Override
+  public Time getWorkingHoursForTask2(String normalIdent, String agentIdent) {
+    //		System.out.println("----------------------------------------------------");
+    //		System.out.println(normalIdent);
+    AgendaEvent[] event = this.getAgendaEventsForTask(normalIdent, agentIdent);
 
-	@Override
-	public Time getWorkingHoursForTask2( String normalIdent, String agentIdent ) {
-//		System.out.println("----------------------------------------------------");
-//		System.out.println(normalIdent);
-		AgendaEvent[] event = this.getAgendaEventsForTask( normalIdent, agentIdent );
+    Time horaInicial = new Time(0, 0);
+    Date startDate = null;
+    Date endDate = null;
 
-		Time horaInicial = new Time(0, 0);
-		Date startDate = null;
-		Date endDate = null;
+    if (event == null) {
+      return horaInicial;
+    }
 
-		if ( event == null ) {
-			return horaInicial;
-		}
+    int segundos = 0;
+    //		hours = totalSecs / 3600;
+    //		minutes = (totalSecs % 3600) / 60;
 
-		int segundos = 0;
-//		hours = totalSecs / 3600;
-//		minutes = (totalSecs % 3600) / 60;
+    boolean isCounting = false;
 
-		boolean isCounting = false;
+    long startTimeMillis = -1;
+    long endTimeMillis = -1;
+    long elapsedTime = -1;
 
-		long startTimeMillis = -1;
-		long endTimeMillis = -1;
-		long elapsedTime = -1;
+    for (int i = (event.length - 1); i >= 0; i--) {
+      if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
+        isCounting = true;
 
-		for (int i = (event.length - 1); i >= 0 ; i--) {
-			if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
-				isCounting = true;
+        startTimeMillis = event[i].getWhen().getTime();
+        startDate = event[i].getWhen();
+        //				System.out.println("--------> Start: " + event[i].getWhen());
+      } else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
+          || event[i].getTheCatalogEvents().getDescription().equals("ToPaused")
+          || event[i].getTheCatalogEvents().getDescription().equals("ToFailed")) {
+        isCounting = false;
+        //				System.out.println("Event: " + event[i].getTheCatalogEvents().getDescription());
 
-				startTimeMillis = event[i].getWhen().getTime();
-				startDate = event[i].getWhen();
-//				System.out.println("--------> Start: " + event[i].getWhen());
-			} else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
-					|| event[i].getTheCatalogEvents().getDescription().equals("ToPaused")
-					|| event[i].getTheCatalogEvents().getDescription().equals("ToFailed")) {
-				isCounting = false;
-//				System.out.println("Event: " + event[i].getTheCatalogEvents().getDescription());
+        if (startTimeMillis != -1) {
+          endTimeMillis = event[i].getWhen().getTime();
+          endDate = event[i].getWhen();
 
+          elapsedTime = endTimeMillis - startTimeMillis;
 
-				if (startTimeMillis != -1) {
-					endTimeMillis = event[i].getWhen().getTime();
-					endDate = event[i].getWhen();
+          segundos += ServicesUtil.segundosEntre(startDate, endDate);
 
-					elapsedTime = endTimeMillis - startTimeMillis;
+          //					System.out.println("--------> End: " + event[i].getWhen());
+          //					System.out.println("--------> Segundos: " + segundos + "; Horas:" + (segundos /
+          // 3600) + "; Minutos: " + ((segundos % 3600) / 60));
+          //					totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
+        }
+      }
+      //			System.out.println("Normal: " + normalIdent + " --> contando: " + isCounting);
+    }
 
+    if (isCounting) {
+      Date date = new Date();
+      endTimeMillis = date.getTime();
+      elapsedTime = endTimeMillis - startTimeMillis;
 
-					segundos += ServicesUtil.segundosEntre(startDate, endDate);
+      segundos += ServicesUtil.segundosEntre(startDate, new Date());
+      //			System.out.println("--------> No End: " + new Date());
+      //			System.out.println("--------> Segundos: " + segundos + "; Horas:" + (segundos / 3600) +
+      // "; Minutos: " + ((segundos % 3600) / 60));
+      //			totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
+    }
 
-//					System.out.println("--------> End: " + event[i].getWhen());
-//					System.out.println("--------> Segundos: " + segundos + "; Horas:" + (segundos / 3600) + "; Minutos: " + ((segundos % 3600) / 60));
-//					totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
-				}
-			}
-//			System.out.println("Normal: " + normalIdent + " --> contando: " + isCounting);
-		}
+    //		System.out.println("----------------------------------------------------");
+    int minutos = ServicesUtil.minutosEmSegundos(segundos);
+    int horas = ServicesUtil.horasEmSegundos(segundos);
+    return new Time(horas, minutos);
+  }
 
-		if (isCounting) {
-			Date date = new Date();
-			endTimeMillis = date.getTime();
-			elapsedTime = endTimeMillis - startTimeMillis;
+  public AgendaEvent[] getAgendaEventsForTask(String normalIdent, String agentIdent) {
+    String hql =
+        "from "
+            + AgendaEvent.class.getName()
+            + " event "
+            + "where ( event.theTask.theProcessAgenda.theTaskAgenda.theAgent.ident=:agentID ) "
+            + "and ( event.theTask.theNormal.ident=:normalID ) order by event.oid";
 
-			segundos += ServicesUtil.segundosEntre(startDate, new Date());
-//			System.out.println("--------> No End: " + new Date());
-//			System.out.println("--------> Segundos: " + segundos + "; Horas:" + (segundos / 3600) + "; Minutos: " + ((segundos % 3600) / 60));
-//			totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
-		}
+    Query query = this.getPersistenceContext().createQuery(hql);
 
-//		System.out.println("----------------------------------------------------");
-		int minutos = ServicesUtil.minutosEmSegundos(segundos);
-		int horas = ServicesUtil.horasEmSegundos(segundos);
-		return new Time(horas, minutos);
-	}
+    query.setParameter("agentID", agentIdent);
+    query.setParameter("normalID", normalIdent);
 
-	public AgendaEvent[] getAgendaEventsForTask( String normalIdent, String agentIdent ) {
-		String hql = "from " +
-						AgendaEvent.class.getName() + " event " +
-						"where ( event.theTask.theProcessAgenda.theTaskAgenda.theAgent.ident=:agentID ) " +
-						"and ( event.theTask.theNormal.ident=:normalID ) order by event.oid";
+    List<AgendaEvent> list = query.getResultList();
 
-		Query query = this.getPersistenceContext().createQuery( hql );
+    AgendaEvent[] result = new AgendaEvent[list.size()];
 
-		query.setParameter( "agentID", agentIdent );
-		query.setParameter( "normalID", normalIdent );
+    result = list.toArray(result);
 
-		List<AgendaEvent> list = query.getResultList();
+    return result;
+  }
 
-		AgendaEvent[] result = new AgendaEvent[ list.size() ];
-
-		result = list.toArray( result );
-
-		return result;
-	}
-
-	private int corrigirTempo(int tempo) {
-		if(tempo < 0) {
-			tempo = (-1) * tempo;
-		}
-		return tempo;
-	}
+  private int corrigirTempo(int tempo) {
+    if (tempo < 0) {
+      tempo = (-1) * tempo;
+    }
+    return tempo;
+  }
 }

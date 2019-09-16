@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/spm-kafka")
 public class SpmKafkaResource {
 
-    private final Logger log = LoggerFactory.getLogger(SpmKafkaResource.class);
+  private final Logger log = LoggerFactory.getLogger(SpmKafkaResource.class);
 
-    private SpmKafkaProducer kafkaProducer;
+  private SpmKafkaProducer kafkaProducer;
 
-    public SpmKafkaResource(SpmKafkaProducer kafkaProducer) {
-        this.kafkaProducer = kafkaProducer;
-    }
+  public SpmKafkaResource(SpmKafkaProducer kafkaProducer) {
+    this.kafkaProducer = kafkaProducer;
+  }
 
-    @PostMapping(value = "/publish")
-    public void sendMessageToKafkaTopic(@RequestParam("message") String message) {
-        log.debug("REST request to send to Kafka topic the message : {}", message);
-        this.kafkaProducer.sendMessage(message);
-    }
+  @PostMapping(value = "/publish")
+  public void sendMessageToKafkaTopic(@RequestParam("message") String message) {
+    log.debug("REST request to send to Kafka topic the message : {}", message);
+    this.kafkaProducer.sendMessage(message);
+  }
 }

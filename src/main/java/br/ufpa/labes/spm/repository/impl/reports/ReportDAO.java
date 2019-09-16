@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.persistence.EntityManager;
@@ -700,12 +701,12 @@ public class ReportDAO implements IReportDAO{
 
 					Date planEnd = null;
 
-					if (act.getThePlainSub().getTheNormalSub() != null) {
-						Normal normalAct = act.getThePlainSub().getTheNormalSub();
+					if(act instanceof Normal){
+						Normal normalAct = (Normal) act;
 
 						planEnd = normalAct.getPlannedEnd();
 
-					}else if (act.getTheDecomposedSub()) {
+					}else if(act instanceof Decomposed){
 						Decomposed decAct = (Decomposed)act;
 
 						planEnd =
@@ -779,7 +780,7 @@ public class ReportDAO implements IReportDAO{
 		if(endDate!=null)
 			query.setParameter( "endDate", endDate );
 		if(!allStates){
-			query.setParameter("active", Plain);
+			query.setParameter("active", Plain.);
 			query.setParameter("ready", Plain.READY);
 			query.setParameter("waiting", Plain.WAITING);
 		}
@@ -957,7 +958,7 @@ public class ReportDAO implements IReportDAO{
 					if(ReqWorkGroup.getTheWorkGroup() == null)
 						continue;
 
-					for ( Agent agent : (Collection<Agent>)ReqWorkGroup.getTheWorkGroup().getTheAgent() ) {
+					for ( Agent agent : (Set<Agent>)ReqWorkGroup.getTheWorkGroup().getTheAgents() ) {
 						if ( agent == null )
 							continue;
 

@@ -1,4 +1,2 @@
-/**
- * Service layer beans.
- */
+/** Service layer beans. */
 package br.ufpa.labes.spm.service;

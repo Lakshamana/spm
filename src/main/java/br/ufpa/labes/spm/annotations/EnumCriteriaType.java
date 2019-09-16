@@ -1,18 +1,16 @@
 package br.ufpa.labes.spm.annotations;
 
 public enum EnumCriteriaType {
+  EQUALS("="),
+  LIKE("like");
 
-	EQUALS("="),
-	LIKE("like");
+  private String formattedText;
 
-	private String formattedText;
+  private EnumCriteriaType(String formattedText) {
+    this.formattedText = formattedText;
+  }
 
-	private EnumCriteriaType(String formattedText) {
-		this.formattedText = formattedText;
-	}
-
-	public String getFormattedText() {
-		return formattedText;
-	}
-
+  public String getFormattedText() {
+    return formattedText;
+  }
 }

@@ -13,151 +13,150 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * A InstantiationSuggestion.
- */
+/** A InstantiationSuggestion. */
 @Entity
 @Table(name = "instantiation_suggestion")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class InstantiationSuggestion implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private PeopleInstSug thePeopleInstSugSub;
+  @OneToOne
+  @JoinColumn(unique = true)
+  private PeopleInstSug thePeopleInstSugSub;
 
-    @ManyToOne
-    @JsonIgnoreProperties("theInstSugs")
-    private ActivityInstantiated theActivityInstantiated;
+  @ManyToOne
+  @JsonIgnoreProperties("theInstSugs")
+  private ActivityInstantiated theActivityInstantiated;
 
-    @ManyToOne
-    @JsonIgnoreProperties("instSugToResources")
-    private Resource chosenResource;
+  @ManyToOne
+  @JsonIgnoreProperties("instSugToResources")
+  private Resource chosenResource;
 
-    @ManyToOne
-    @JsonIgnoreProperties("instSugToTypes")
-    private Type requiredResourceType;
+  @ManyToOne
+  @JsonIgnoreProperties("instSugToTypes")
+  private Type requiredResourceType;
 
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "instantiation_suggestion_sug_rsrc",
-               joinColumns = @JoinColumn(name = "instantiation_suggestion_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "sug_rsrc_id", referencedColumnName = "id"))
-    private Set<Resource> sugRsrcs = new HashSet<>();
+  @ManyToMany
+  @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+  @JoinTable(
+      name = "instantiation_suggestion_sug_rsrc",
+      joinColumns = @JoinColumn(name = "instantiation_suggestion_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "sug_rsrc_id", referencedColumnName = "id"))
+  private Set<Resource> sugRsrcs = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public Long getId() {
-        return id;
+  // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public PeopleInstSug getThePeopleInstSugSub() {
+    return thePeopleInstSugSub;
+  }
+
+  public InstantiationSuggestion thePeopleInstSugSub(PeopleInstSug peopleInstSug) {
+    this.thePeopleInstSugSub = peopleInstSug;
+    return this;
+  }
+
+  public void setThePeopleInstSugSub(PeopleInstSug peopleInstSug) {
+    this.thePeopleInstSugSub = peopleInstSug;
+  }
+
+  public ActivityInstantiated getTheActivityInstantiated() {
+    return theActivityInstantiated;
+  }
+
+  public InstantiationSuggestion theActivityInstantiated(
+      ActivityInstantiated activityInstantiated) {
+    this.theActivityInstantiated = activityInstantiated;
+    return this;
+  }
+
+  public void setTheActivityInstantiated(ActivityInstantiated activityInstantiated) {
+    this.theActivityInstantiated = activityInstantiated;
+  }
+
+  public Resource getChosenResource() {
+    return chosenResource;
+  }
+
+  public InstantiationSuggestion chosenResource(Resource resource) {
+    this.chosenResource = resource;
+    return this;
+  }
+
+  public void setChosenResource(Resource resource) {
+    this.chosenResource = resource;
+  }
+
+  public Type getRequiredResourceType() {
+    return requiredResourceType;
+  }
+
+  public InstantiationSuggestion requiredResourceType(Type type) {
+    this.requiredResourceType = type;
+    return this;
+  }
+
+  public void setRequiredResourceType(Type type) {
+    this.requiredResourceType = type;
+  }
+
+  public Set<Resource> getSugRsrcs() {
+    return sugRsrcs;
+  }
+
+  public InstantiationSuggestion sugRsrcs(Set<Resource> resources) {
+    this.sugRsrcs = resources;
+    return this;
+  }
+
+  public InstantiationSuggestion addSugRsrc(Resource resource) {
+    this.sugRsrcs.add(resource);
+    resource.getInstSuggestions().add(this);
+    return this;
+  }
+
+  public InstantiationSuggestion removeSugRsrc(Resource resource) {
+    this.sugRsrcs.remove(resource);
+    resource.getInstSuggestions().remove(this);
+    return this;
+  }
+
+  public void setSugRsrcs(Set<Resource> resources) {
+    this.sugRsrcs = resources;
+  }
+  // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not
+  // remove
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    if (!(o instanceof InstantiationSuggestion)) {
+      return false;
     }
+    return id != null && id.equals(((InstantiationSuggestion) o).id);
+  }
 
-    public PeopleInstSug getThePeopleInstSugSub() {
-        return thePeopleInstSugSub;
-    }
+  @Override
+  public int hashCode() {
+    return 31;
+  }
 
-    public InstantiationSuggestion thePeopleInstSugSub(PeopleInstSug peopleInstSug) {
-        this.thePeopleInstSugSub = peopleInstSug;
-        return this;
-    }
-
-    public void setThePeopleInstSugSub(PeopleInstSug peopleInstSug) {
-        this.thePeopleInstSugSub = peopleInstSug;
-    }
-
-    public ActivityInstantiated getTheActivityInstantiated() {
-        return theActivityInstantiated;
-    }
-
-    public InstantiationSuggestion theActivityInstantiated(ActivityInstantiated activityInstantiated) {
-        this.theActivityInstantiated = activityInstantiated;
-        return this;
-    }
-
-    public void setTheActivityInstantiated(ActivityInstantiated activityInstantiated) {
-        this.theActivityInstantiated = activityInstantiated;
-    }
-
-    public Resource getChosenResource() {
-        return chosenResource;
-    }
-
-    public InstantiationSuggestion chosenResource(Resource resource) {
-        this.chosenResource = resource;
-        return this;
-    }
-
-    public void setChosenResource(Resource resource) {
-        this.chosenResource = resource;
-    }
-
-    public Type getRequiredResourceType() {
-        return requiredResourceType;
-    }
-
-    public InstantiationSuggestion requiredResourceType(Type type) {
-        this.requiredResourceType = type;
-        return this;
-    }
-
-    public void setRequiredResourceType(Type type) {
-        this.requiredResourceType = type;
-    }
-
-    public Set<Resource> getSugRsrcs() {
-        return sugRsrcs;
-    }
-
-    public InstantiationSuggestion sugRsrcs(Set<Resource> resources) {
-        this.sugRsrcs = resources;
-        return this;
-    }
-
-    public InstantiationSuggestion addSugRsrc(Resource resource) {
-        this.sugRsrcs.add(resource);
-        resource.getInstSuggestions().add(this);
-        return this;
-    }
-
-    public InstantiationSuggestion removeSugRsrc(Resource resource) {
-        this.sugRsrcs.remove(resource);
-        resource.getInstSuggestions().remove(this);
-        return this;
-    }
-
-    public void setSugRsrcs(Set<Resource> resources) {
-        this.sugRsrcs = resources;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof InstantiationSuggestion)) {
-            return false;
-        }
-        return id != null && id.equals(((InstantiationSuggestion) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
-
-    @Override
-    public String toString() {
-        return "InstantiationSuggestion{" +
-            "id=" + getId() +
-            "}";
-    }
+  @Override
+  public String toString() {
+    return "InstantiationSuggestion{" + "id=" + getId() + "}";
+  }
 }

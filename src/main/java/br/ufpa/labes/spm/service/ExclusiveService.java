@@ -16,86 +16,82 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * Service Implementation for managing {@link Exclusive}.
- */
+/** Service Implementation for managing {@link Exclusive}. */
 @Service
 @Transactional
 public class ExclusiveService {
 
-    private final Logger log = LoggerFactory.getLogger(ExclusiveService.class);
+  private final Logger log = LoggerFactory.getLogger(ExclusiveService.class);
 
-    private final ExclusiveRepository exclusiveRepository;
+  private final ExclusiveRepository exclusiveRepository;
 
-    private final ExclusiveMapper exclusiveMapper;
+  private final ExclusiveMapper exclusiveMapper;
 
-    public ExclusiveService(ExclusiveRepository exclusiveRepository, ExclusiveMapper exclusiveMapper) {
-        this.exclusiveRepository = exclusiveRepository;
-        this.exclusiveMapper = exclusiveMapper;
-    }
+  public ExclusiveService(
+      ExclusiveRepository exclusiveRepository, ExclusiveMapper exclusiveMapper) {
+    this.exclusiveRepository = exclusiveRepository;
+    this.exclusiveMapper = exclusiveMapper;
+  }
 
-    /**
-     * Save a exclusive.
-     *
-     * @param exclusiveDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public ExclusiveDTO save(ExclusiveDTO exclusiveDTO) {
-        log.debug("Request to save Exclusive : {}", exclusiveDTO);
-        Exclusive exclusive = exclusiveMapper.toEntity(exclusiveDTO);
-        exclusive = exclusiveRepository.save(exclusive);
-        return exclusiveMapper.toDto(exclusive);
-    }
+  /**
+   * Save a exclusive.
+   *
+   * @param exclusiveDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public ExclusiveDTO save(ExclusiveDTO exclusiveDTO) {
+    log.debug("Request to save Exclusive : {}", exclusiveDTO);
+    Exclusive exclusive = exclusiveMapper.toEntity(exclusiveDTO);
+    exclusive = exclusiveRepository.save(exclusive);
+    return exclusiveMapper.toDto(exclusive);
+  }
 
-    /**
-     * Get all the exclusives.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<ExclusiveDTO> findAll() {
-        log.debug("Request to get all Exclusives");
-        return exclusiveRepository.findAll().stream()
-            .map(exclusiveMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the exclusives.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<ExclusiveDTO> findAll() {
+    log.debug("Request to get all Exclusives");
+    return exclusiveRepository.findAll().stream()
+        .map(exclusiveMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get all the exclusives where TheResourceSuper is {@code null}.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<ExclusiveDTO> findAllWhereTheResourceSuperIsNull() {
+    log.debug("Request to get all exclusives where TheResourceSuper is null");
+    return StreamSupport.stream(exclusiveRepository.findAll().spliterator(), false)
+        .filter(exclusive -> exclusive.getTheResourceSuper() == null)
+        .map(exclusiveMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one exclusive by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<ExclusiveDTO> findOne(Long id) {
+    log.debug("Request to get Exclusive : {}", id);
+    return exclusiveRepository.findById(id).map(exclusiveMapper::toDto);
+  }
 
-    /**
-    *  Get all the exclusives where TheResourceSuper is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true) 
-    public List<ExclusiveDTO> findAllWhereTheResourceSuperIsNull() {
-        log.debug("Request to get all exclusives where TheResourceSuper is null");
-        return StreamSupport
-            .stream(exclusiveRepository.findAll().spliterator(), false)
-            .filter(exclusive -> exclusive.getTheResourceSuper() == null)
-            .map(exclusiveMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     * Get one exclusive by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<ExclusiveDTO> findOne(Long id) {
-        log.debug("Request to get Exclusive : {}", id);
-        return exclusiveRepository.findById(id)
-            .map(exclusiveMapper::toDto);
-    }
-
-    /**
-     * Delete the exclusive by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete Exclusive : {}", id);
-        exclusiveRepository.deleteById(id);
-    }
+  /**
+   * Delete the exclusive by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete Exclusive : {}", id);
+    exclusiveRepository.deleteById(id);
+  }
 }

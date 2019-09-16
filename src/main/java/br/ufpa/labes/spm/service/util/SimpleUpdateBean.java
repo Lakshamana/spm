@@ -1,38 +1,39 @@
 package br.ufpa.labes.spm.service.util;
+
 import java.io.Serializable;
 
-public class SimpleUpdateBean  implements Serializable {
+public class SimpleUpdateBean implements Serializable {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-	private Object oldValue = null;
-	private Object newValue = null;
+  /** */
+  private static final long serialVersionUID = 1L;
 
-	public Object getOldValue() {
-		return oldValue;
-	}
+  private Object oldValue = null;
+  private Object newValue = null;
 
-	public void setOldValue(Object oldValue) {
-		this.oldValue = oldValue;
-	}
+  public Object getOldValue() {
+    return oldValue;
+  }
 
-	public Object getNewValue() {
-		return newValue;
-	}
+  public void setOldValue(Object oldValue) {
+    this.oldValue = oldValue;
+  }
 
-	public void setNewValue(Object newValue) {
-		this.newValue = newValue;
-	}
+  public Object getNewValue() {
+    return newValue;
+  }
 
-	public boolean equals( Object obj ) {
-		if ( obj instanceof SimpleUpdateBean ) {
-			SimpleUpdateBean bean = (SimpleUpdateBean)obj;
+  public void setNewValue(Object newValue) {
+    this.newValue = newValue;
+  }
 
-			return bean.getOldValue().equals( this.getOldValue()) && bean.getNewValue().equals(this.getNewValue());
-		}
+  public boolean equals(Object obj) {
+    if (obj instanceof SimpleUpdateBean) {
+      SimpleUpdateBean bean = (SimpleUpdateBean) obj;
 
-		return false;
-	}
+      return bean.getOldValue().equals(this.getOldValue())
+          && bean.getNewValue().equals(this.getNewValue());
+    }
+
+    return false;
+  }
 }
