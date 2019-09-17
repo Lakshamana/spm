@@ -20,7 +20,6 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -32,280 +31,289 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Integration tests for the {@link ClassMethodCallResource} REST controller.
- */
+/** Integration tests for the {@link ClassMethodCallResource} REST controller. */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class ClassMethodCallResourceIT {
 
-    private static final String DEFAULT_CLASS_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_CLASS_NAME = "BBBBBBBBBB";
+  private static final String DEFAULT_CLASS_NAME = "AAAAAAAAAA";
+  private static final String UPDATED_CLASS_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_METHOD_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_METHOD_NAME = "BBBBBBBBBB";
+  private static final String DEFAULT_METHOD_NAME = "AAAAAAAAAA";
+  private static final String UPDATED_METHOD_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+  private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+  private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    @Autowired
-    private ClassMethodCallRepository classMethodCallRepository;
+  @Autowired private ClassMethodCallRepository classMethodCallRepository;
 
-    @Autowired
-    private ClassMethodCallMapper classMethodCallMapper;
+  @Autowired private ClassMethodCallMapper classMethodCallMapper;
 
-    @Autowired
-    private ClassMethodCallService classMethodCallService;
+  @Autowired private ClassMethodCallService classMethodCallService;
 
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
+  @Autowired private ExceptionTranslator exceptionTranslator;
 
-    @Autowired
-    private EntityManager em;
+  @Autowired private EntityManager em;
 
-    @Autowired
-    private Validator validator;
+  @Autowired private Validator validator;
 
-    private MockMvc restClassMethodCallMockMvc;
+  private MockMvc restClassMethodCallMockMvc;
 
-    private ClassMethodCall classMethodCall;
+  private ClassMethodCall classMethodCall;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final ClassMethodCallResource classMethodCallResource = new ClassMethodCallResource(classMethodCallService);
-        this.restClassMethodCallMockMvc = MockMvcBuilders.standaloneSetup(classMethodCallResource)
+  @BeforeEach
+  public void setup() {
+    MockitoAnnotations.initMocks(this);
+    final ClassMethodCallResource classMethodCallResource =
+        new ClassMethodCallResource(classMethodCallService);
+    this.restClassMethodCallMockMvc =
+        MockMvcBuilders.standaloneSetup(classMethodCallResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
+            .setValidator(validator)
+            .build();
+  }
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static ClassMethodCall createEntity(EntityManager em) {
-        ClassMethodCall classMethodCall = new ClassMethodCall()
+  /**
+   * Create an entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static ClassMethodCall createEntity(EntityManager em) {
+    ClassMethodCall classMethodCall =
+        new ClassMethodCall()
             .className(DEFAULT_CLASS_NAME)
             .methodName(DEFAULT_METHOD_NAME)
             .description(DEFAULT_DESCRIPTION);
-        return classMethodCall;
-    }
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static ClassMethodCall createUpdatedEntity(EntityManager em) {
-        ClassMethodCall classMethodCall = new ClassMethodCall()
+    return classMethodCall;
+  }
+  /**
+   * Create an updated entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static ClassMethodCall createUpdatedEntity(EntityManager em) {
+    ClassMethodCall classMethodCall =
+        new ClassMethodCall()
             .className(UPDATED_CLASS_NAME)
             .methodName(UPDATED_METHOD_NAME)
             .description(UPDATED_DESCRIPTION);
-        return classMethodCall;
-    }
+    return classMethodCall;
+  }
 
-    @BeforeEach
-    public void initTest() {
-        classMethodCall = createEntity(em);
-    }
+  @BeforeEach
+  public void initTest() {
+    classMethodCall = createEntity(em);
+  }
 
-    @Test
-    @Transactional
-    public void createClassMethodCall() throws Exception {
-        int databaseSizeBeforeCreate = classMethodCallRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createClassMethodCall() throws Exception {
+    int databaseSizeBeforeCreate = classMethodCallRepository.findAll().size();
 
-        // Create the ClassMethodCall
-        ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(classMethodCall);
-        restClassMethodCallMockMvc.perform(post("/api/class-method-calls")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
-            .andExpect(status().isCreated());
+    // Create the ClassMethodCall
+    ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(classMethodCall);
+    restClassMethodCallMockMvc
+        .perform(
+            post("/api/class-method-calls")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
+        .andExpect(status().isCreated());
 
-        // Validate the ClassMethodCall in the database
-        List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
-        assertThat(classMethodCallList).hasSize(databaseSizeBeforeCreate + 1);
-        ClassMethodCall testClassMethodCall = classMethodCallList.get(classMethodCallList.size() - 1);
-        assertThat(testClassMethodCall.getClassName()).isEqualTo(DEFAULT_CLASS_NAME);
-        assertThat(testClassMethodCall.getMethodName()).isEqualTo(DEFAULT_METHOD_NAME);
-        assertThat(testClassMethodCall.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-    }
+    // Validate the ClassMethodCall in the database
+    List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
+    assertThat(classMethodCallList).hasSize(databaseSizeBeforeCreate + 1);
+    ClassMethodCall testClassMethodCall = classMethodCallList.get(classMethodCallList.size() - 1);
+    assertThat(testClassMethodCall.getClassName()).isEqualTo(DEFAULT_CLASS_NAME);
+    assertThat(testClassMethodCall.getMethodName()).isEqualTo(DEFAULT_METHOD_NAME);
+    assertThat(testClassMethodCall.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+  }
 
-    @Test
-    @Transactional
-    public void createClassMethodCallWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = classMethodCallRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createClassMethodCallWithExistingId() throws Exception {
+    int databaseSizeBeforeCreate = classMethodCallRepository.findAll().size();
 
-        // Create the ClassMethodCall with an existing ID
-        classMethodCall.setId(1L);
-        ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(classMethodCall);
+    // Create the ClassMethodCall with an existing ID
+    classMethodCall.setId(1L);
+    ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(classMethodCall);
 
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restClassMethodCallMockMvc.perform(post("/api/class-method-calls")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
-            .andExpect(status().isBadRequest());
+    // An entity with an existing ID cannot be created, so this API call must fail
+    restClassMethodCallMockMvc
+        .perform(
+            post("/api/class-method-calls")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the ClassMethodCall in the database
-        List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
-        assertThat(classMethodCallList).hasSize(databaseSizeBeforeCreate);
-    }
+    // Validate the ClassMethodCall in the database
+    List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
+    assertThat(classMethodCallList).hasSize(databaseSizeBeforeCreate);
+  }
 
+  @Test
+  @Transactional
+  public void getAllClassMethodCalls() throws Exception {
+    // Initialize the database
+    classMethodCallRepository.saveAndFlush(classMethodCall);
 
-    @Test
-    @Transactional
-    public void getAllClassMethodCalls() throws Exception {
-        // Initialize the database
-        classMethodCallRepository.saveAndFlush(classMethodCall);
+    // Get all the classMethodCallList
+    restClassMethodCallMockMvc
+        .perform(get("/api/class-method-calls?sort=id,desc"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.[*].id").value(hasItem(classMethodCall.getId().intValue())))
+        .andExpect(jsonPath("$.[*].className").value(hasItem(DEFAULT_CLASS_NAME.toString())))
+        .andExpect(jsonPath("$.[*].methodName").value(hasItem(DEFAULT_METHOD_NAME.toString())))
+        .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
+  }
 
-        // Get all the classMethodCallList
-        restClassMethodCallMockMvc.perform(get("/api/class-method-calls?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(classMethodCall.getId().intValue())))
-            .andExpect(jsonPath("$.[*].className").value(hasItem(DEFAULT_CLASS_NAME.toString())))
-            .andExpect(jsonPath("$.[*].methodName").value(hasItem(DEFAULT_METHOD_NAME.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
-    }
-    
-    @Test
-    @Transactional
-    public void getClassMethodCall() throws Exception {
-        // Initialize the database
-        classMethodCallRepository.saveAndFlush(classMethodCall);
+  @Test
+  @Transactional
+  public void getClassMethodCall() throws Exception {
+    // Initialize the database
+    classMethodCallRepository.saveAndFlush(classMethodCall);
 
-        // Get the classMethodCall
-        restClassMethodCallMockMvc.perform(get("/api/class-method-calls/{id}", classMethodCall.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(classMethodCall.getId().intValue()))
-            .andExpect(jsonPath("$.className").value(DEFAULT_CLASS_NAME.toString()))
-            .andExpect(jsonPath("$.methodName").value(DEFAULT_METHOD_NAME.toString()))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
-    }
+    // Get the classMethodCall
+    restClassMethodCallMockMvc
+        .perform(get("/api/class-method-calls/{id}", classMethodCall.getId()))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.id").value(classMethodCall.getId().intValue()))
+        .andExpect(jsonPath("$.className").value(DEFAULT_CLASS_NAME.toString()))
+        .andExpect(jsonPath("$.methodName").value(DEFAULT_METHOD_NAME.toString()))
+        .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
+  }
 
-    @Test
-    @Transactional
-    public void getNonExistingClassMethodCall() throws Exception {
-        // Get the classMethodCall
-        restClassMethodCallMockMvc.perform(get("/api/class-method-calls/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
-    }
+  @Test
+  @Transactional
+  public void getNonExistingClassMethodCall() throws Exception {
+    // Get the classMethodCall
+    restClassMethodCallMockMvc
+        .perform(get("/api/class-method-calls/{id}", Long.MAX_VALUE))
+        .andExpect(status().isNotFound());
+  }
 
-    @Test
-    @Transactional
-    public void updateClassMethodCall() throws Exception {
-        // Initialize the database
-        classMethodCallRepository.saveAndFlush(classMethodCall);
+  @Test
+  @Transactional
+  public void updateClassMethodCall() throws Exception {
+    // Initialize the database
+    classMethodCallRepository.saveAndFlush(classMethodCall);
 
-        int databaseSizeBeforeUpdate = classMethodCallRepository.findAll().size();
+    int databaseSizeBeforeUpdate = classMethodCallRepository.findAll().size();
 
-        // Update the classMethodCall
-        ClassMethodCall updatedClassMethodCall = classMethodCallRepository.findById(classMethodCall.getId()).get();
-        // Disconnect from session so that the updates on updatedClassMethodCall are not directly saved in db
-        em.detach(updatedClassMethodCall);
-        updatedClassMethodCall
-            .className(UPDATED_CLASS_NAME)
-            .methodName(UPDATED_METHOD_NAME)
-            .description(UPDATED_DESCRIPTION);
-        ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(updatedClassMethodCall);
+    // Update the classMethodCall
+    ClassMethodCall updatedClassMethodCall =
+        classMethodCallRepository.findById(classMethodCall.getId()).get();
+    // Disconnect from session so that the updates on updatedClassMethodCall are not directly saved
+    // in db
+    em.detach(updatedClassMethodCall);
+    updatedClassMethodCall
+        .className(UPDATED_CLASS_NAME)
+        .methodName(UPDATED_METHOD_NAME)
+        .description(UPDATED_DESCRIPTION);
+    ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(updatedClassMethodCall);
 
-        restClassMethodCallMockMvc.perform(put("/api/class-method-calls")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
-            .andExpect(status().isOk());
+    restClassMethodCallMockMvc
+        .perform(
+            put("/api/class-method-calls")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
+        .andExpect(status().isOk());
 
-        // Validate the ClassMethodCall in the database
-        List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
-        assertThat(classMethodCallList).hasSize(databaseSizeBeforeUpdate);
-        ClassMethodCall testClassMethodCall = classMethodCallList.get(classMethodCallList.size() - 1);
-        assertThat(testClassMethodCall.getClassName()).isEqualTo(UPDATED_CLASS_NAME);
-        assertThat(testClassMethodCall.getMethodName()).isEqualTo(UPDATED_METHOD_NAME);
-        assertThat(testClassMethodCall.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-    }
+    // Validate the ClassMethodCall in the database
+    List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
+    assertThat(classMethodCallList).hasSize(databaseSizeBeforeUpdate);
+    ClassMethodCall testClassMethodCall = classMethodCallList.get(classMethodCallList.size() - 1);
+    assertThat(testClassMethodCall.getClassName()).isEqualTo(UPDATED_CLASS_NAME);
+    assertThat(testClassMethodCall.getMethodName()).isEqualTo(UPDATED_METHOD_NAME);
+    assertThat(testClassMethodCall.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+  }
 
-    @Test
-    @Transactional
-    public void updateNonExistingClassMethodCall() throws Exception {
-        int databaseSizeBeforeUpdate = classMethodCallRepository.findAll().size();
+  @Test
+  @Transactional
+  public void updateNonExistingClassMethodCall() throws Exception {
+    int databaseSizeBeforeUpdate = classMethodCallRepository.findAll().size();
 
-        // Create the ClassMethodCall
-        ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(classMethodCall);
+    // Create the ClassMethodCall
+    ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(classMethodCall);
 
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restClassMethodCallMockMvc.perform(put("/api/class-method-calls")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
-            .andExpect(status().isBadRequest());
+    // If the entity doesn't have an ID, it will throw BadRequestAlertException
+    restClassMethodCallMockMvc
+        .perform(
+            put("/api/class-method-calls")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the ClassMethodCall in the database
-        List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
-        assertThat(classMethodCallList).hasSize(databaseSizeBeforeUpdate);
-    }
+    // Validate the ClassMethodCall in the database
+    List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
+    assertThat(classMethodCallList).hasSize(databaseSizeBeforeUpdate);
+  }
 
-    @Test
-    @Transactional
-    public void deleteClassMethodCall() throws Exception {
-        // Initialize the database
-        classMethodCallRepository.saveAndFlush(classMethodCall);
+  @Test
+  @Transactional
+  public void deleteClassMethodCall() throws Exception {
+    // Initialize the database
+    classMethodCallRepository.saveAndFlush(classMethodCall);
 
-        int databaseSizeBeforeDelete = classMethodCallRepository.findAll().size();
+    int databaseSizeBeforeDelete = classMethodCallRepository.findAll().size();
 
-        // Delete the classMethodCall
-        restClassMethodCallMockMvc.perform(delete("/api/class-method-calls/{id}", classMethodCall.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
+    // Delete the classMethodCall
+    restClassMethodCallMockMvc
+        .perform(
+            delete("/api/class-method-calls/{id}", classMethodCall.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+        .andExpect(status().isNoContent());
 
-        // Validate the database contains one less item
-        List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
-        assertThat(classMethodCallList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    // Validate the database contains one less item
+    List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
+    assertThat(classMethodCallList).hasSize(databaseSizeBeforeDelete - 1);
+  }
 
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ClassMethodCall.class);
-        ClassMethodCall classMethodCall1 = new ClassMethodCall();
-        classMethodCall1.setId(1L);
-        ClassMethodCall classMethodCall2 = new ClassMethodCall();
-        classMethodCall2.setId(classMethodCall1.getId());
-        assertThat(classMethodCall1).isEqualTo(classMethodCall2);
-        classMethodCall2.setId(2L);
-        assertThat(classMethodCall1).isNotEqualTo(classMethodCall2);
-        classMethodCall1.setId(null);
-        assertThat(classMethodCall1).isNotEqualTo(classMethodCall2);
-    }
+  @Test
+  @Transactional
+  public void equalsVerifier() throws Exception {
+    TestUtil.equalsVerifier(ClassMethodCall.class);
+    ClassMethodCall classMethodCall1 = new ClassMethodCall();
+    classMethodCall1.setId(1L);
+    ClassMethodCall classMethodCall2 = new ClassMethodCall();
+    classMethodCall2.setId(classMethodCall1.getId());
+    assertThat(classMethodCall1).isEqualTo(classMethodCall2);
+    classMethodCall2.setId(2L);
+    assertThat(classMethodCall1).isNotEqualTo(classMethodCall2);
+    classMethodCall1.setId(null);
+    assertThat(classMethodCall1).isNotEqualTo(classMethodCall2);
+  }
 
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ClassMethodCallDTO.class);
-        ClassMethodCallDTO classMethodCallDTO1 = new ClassMethodCallDTO();
-        classMethodCallDTO1.setId(1L);
-        ClassMethodCallDTO classMethodCallDTO2 = new ClassMethodCallDTO();
-        assertThat(classMethodCallDTO1).isNotEqualTo(classMethodCallDTO2);
-        classMethodCallDTO2.setId(classMethodCallDTO1.getId());
-        assertThat(classMethodCallDTO1).isEqualTo(classMethodCallDTO2);
-        classMethodCallDTO2.setId(2L);
-        assertThat(classMethodCallDTO1).isNotEqualTo(classMethodCallDTO2);
-        classMethodCallDTO1.setId(null);
-        assertThat(classMethodCallDTO1).isNotEqualTo(classMethodCallDTO2);
-    }
+  @Test
+  @Transactional
+  public void dtoEqualsVerifier() throws Exception {
+    TestUtil.equalsVerifier(ClassMethodCallDTO.class);
+    ClassMethodCallDTO classMethodCallDTO1 = new ClassMethodCallDTO();
+    classMethodCallDTO1.setId(1L);
+    ClassMethodCallDTO classMethodCallDTO2 = new ClassMethodCallDTO();
+    assertThat(classMethodCallDTO1).isNotEqualTo(classMethodCallDTO2);
+    classMethodCallDTO2.setId(classMethodCallDTO1.getId());
+    assertThat(classMethodCallDTO1).isEqualTo(classMethodCallDTO2);
+    classMethodCallDTO2.setId(2L);
+    assertThat(classMethodCallDTO1).isNotEqualTo(classMethodCallDTO2);
+    classMethodCallDTO1.setId(null);
+    assertThat(classMethodCallDTO1).isNotEqualTo(classMethodCallDTO2);
+  }
 
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(classMethodCallMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(classMethodCallMapper.fromId(null)).isNull();
-    }
+  @Test
+  @Transactional
+  public void testEntityFromId() {
+    assertThat(classMethodCallMapper.fromId(42L).getId()).isEqualTo(42);
+    assertThat(classMethodCallMapper.fromId(null)).isNull();
+  }
 }

@@ -15,71 +15,68 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Service Implementation for managing {@link MultipleCon}.
- */
+/** Service Implementation for managing {@link MultipleCon}. */
 @Service
 @Transactional
 public class MultipleConService {
 
-    private final Logger log = LoggerFactory.getLogger(MultipleConService.class);
+  private final Logger log = LoggerFactory.getLogger(MultipleConService.class);
 
-    private final MultipleConRepository multipleConRepository;
+  private final MultipleConRepository multipleConRepository;
 
-    private final MultipleConMapper multipleConMapper;
+  private final MultipleConMapper multipleConMapper;
 
-    public MultipleConService(MultipleConRepository multipleConRepository, MultipleConMapper multipleConMapper) {
-        this.multipleConRepository = multipleConRepository;
-        this.multipleConMapper = multipleConMapper;
-    }
+  public MultipleConService(
+      MultipleConRepository multipleConRepository, MultipleConMapper multipleConMapper) {
+    this.multipleConRepository = multipleConRepository;
+    this.multipleConMapper = multipleConMapper;
+  }
 
-    /**
-     * Save a multipleCon.
-     *
-     * @param multipleConDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public MultipleConDTO save(MultipleConDTO multipleConDTO) {
-        log.debug("Request to save MultipleCon : {}", multipleConDTO);
-        MultipleCon multipleCon = multipleConMapper.toEntity(multipleConDTO);
-        multipleCon = multipleConRepository.save(multipleCon);
-        return multipleConMapper.toDto(multipleCon);
-    }
+  /**
+   * Save a multipleCon.
+   *
+   * @param multipleConDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public MultipleConDTO save(MultipleConDTO multipleConDTO) {
+    log.debug("Request to save MultipleCon : {}", multipleConDTO);
+    MultipleCon multipleCon = multipleConMapper.toEntity(multipleConDTO);
+    multipleCon = multipleConRepository.save(multipleCon);
+    return multipleConMapper.toDto(multipleCon);
+  }
 
-    /**
-     * Get all the multipleCons.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<MultipleConDTO> findAll() {
-        log.debug("Request to get all MultipleCons");
-        return multipleConRepository.findAll().stream()
-            .map(multipleConMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the multipleCons.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<MultipleConDTO> findAll() {
+    log.debug("Request to get all MultipleCons");
+    return multipleConRepository.findAll().stream()
+        .map(multipleConMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one multipleCon by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<MultipleConDTO> findOne(Long id) {
+    log.debug("Request to get MultipleCon : {}", id);
+    return multipleConRepository.findById(id).map(multipleConMapper::toDto);
+  }
 
-    /**
-     * Get one multipleCon by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<MultipleConDTO> findOne(Long id) {
-        log.debug("Request to get MultipleCon : {}", id);
-        return multipleConRepository.findById(id)
-            .map(multipleConMapper::toDto);
-    }
-
-    /**
-     * Delete the multipleCon by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete MultipleCon : {}", id);
-        multipleConRepository.deleteById(id);
-    }
+  /**
+   * Delete the multipleCon by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete MultipleCon : {}", id);
+    multipleConRepository.deleteById(id);
+  }
 }

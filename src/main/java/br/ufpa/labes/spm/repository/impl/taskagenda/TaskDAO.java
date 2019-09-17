@@ -128,7 +128,8 @@ public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO {
       endTimeMillis = LocalDate.now().toEpochDay();
       elapsedTime = endTimeMillis - startTimeMillis;
 
-      segundos += ServicesUtil.segundosEntre(Date.valueOf(startDate), Date.valueOf(LocalDate.now()));
+      segundos +=
+          ServicesUtil.segundosEntre(Date.valueOf(startDate), Date.valueOf(LocalDate.now()));
       //			System.out.println("--------> No End: " + LocalDate.now());
       //			System.out.println("--------> Segundos: " + segundos + "; Horas:" + (segundos / 3600) +
       // "; Minutos: " + ((segundos % 3600) / 60));

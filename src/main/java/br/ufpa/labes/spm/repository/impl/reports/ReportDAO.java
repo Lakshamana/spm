@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.repository.impl.reports;
 
 import java.sql.Date;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,8 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import br.ufpa.labes.spm.repository.impl.processModels.ProcessDAO;
-import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.IReportDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
@@ -59,1777 +56,1838 @@ import br.ufpa.labes.spm.domain.ProcessAgenda;
 import br.ufpa.labes.spm.domain.Task;
 import br.ufpa.labes.spm.service.impl.CriticalPathMethod;
 
-public class ReportDAO implements IReportDAO{
-
-	private static final String ACTIVITY_METRIC_DEFINITION_NAME = "Activity Effort";
-
-	@PersistenceContext(unitName = "SPMPU")
-	private EntityManager em;
-
-	IProjectDAO dao;
+public class ReportDAO implements IReportDAO {
+
+  private static final String ACTIVITY_METRIC_DEFINITION_NAME = "Activity Effort";
+
+  @PersistenceContext(unitName = "SPMPU")
+  private EntityManager em;
+
+  IProjectDAO dao;
+
+  IProcessDAO processDAO;
+
+  @Override
+  public List<Object[]> getAgentsReportData(LocalDate atDate) {
+    String queryString =
+        "from "
+            + Agent.class.getName()
+            + " as agent "
+            + "where agent.isActive is true order by agent.name";
+
+    Query query = this.getPersistenceContext().createQuery(queryString);
+
+    List<Agent> agents = query.getResultList();
+    System.out.println(agents);
+    List<Object[]> result = new ArrayList<Object[]>();
+
+    if (agents == null || agents.isEmpty()) return result;
+
+    for (Agent agent : agents) {
+      Object[] entry = new Object[4];
+
+      entry[0] = agent.getIdent();
+      entry[1] = agent.getName();
+      entry[2] = new Double(agent.getCostHour());
+
+      if (atDate != null) {
+        entry[3] = new Integer(getAgentWorkloadAt(agent.getIdent(), atDate));
+      } else {
+        entry[3] = Integer.valueOf(getAgentWorkLoad(agent.getIdent()));
+        entry[3] = 0;
+      }
+
+      result.add(entry);
+    }
+    return result;
+  }
+
+  public List<Object[]> getActivitiesByProcessReportData(String processIdent) {
+    String activitiesHql =
+        "select normal.ident, normal.name, "
+            + "normal.theEnactionDescription.state, "
+            + "normal.plannedBegin, normal.plannedEnd, "
+            + "normal.theEnactionDescription.actualBegin, "
+            + "normal.theEnactionDescription.actualEnd "
+            + "from "
+            + Normal.class.getName()
+            + " as normal "
+            + "where normal.ident like '"
+            + processIdent
+            + ".%' "
+            + "and normal.isVersion is null "
+            + "order by normal.ident";
+
+    String tasksHql =
+        "select task.theNormal.ident, pAgenda.theTaskAgenda.theAgent.ident, "
+            + "pAgenda.theTaskAgenda.theAgent.name, task.localState, task.workingHours "
+            + "from "
+            + ProcessAgenda.class.getName()
+            + " as pAgenda "
+            + "joinCon pAgenda.theTask as task "
+            + "where task.theNormal.ident like '"
+            + processIdent
+            + ".%' "
+            + "order by task.theNormal.ident, pAgenda.theTaskAgenda.theAgent.name";
+
+    Query query = this.getPersistenceContext().createQuery(activitiesHql);
+    List<Object[]> normals = query.getResultList();
+
+    query = this.getPersistenceContext().createQuery(tasksHql);
+    List<Object[]> tasks = query.getResultList();
+
+    if (tasks == null || tasks.isEmpty()) {
+      String reqPeopleHql =
+          "select rp.theNormal.ident, rp.theAgent.ident, rp.theAgent.name "
+              + "from "
+              + ReqAgent.class.getName()
+              + " as rp "
+              + "where rp.theNormal.ident like '"
+              + processIdent
+              + ".%' "
+              + "order by rp.theNormal.ident, rp.theAgent.ident";
+
+      query = this.getPersistenceContext().createQuery(reqPeopleHql);
+
+      tasks = query.getResultList();
+    }
+
+    List<Object[]> toReturn = new ArrayList<Object[]>();
+    if (normals == null || normals.isEmpty()) {
+      return toReturn;
+    }
+
+    Object[] currentTask = null;
 
-	IProcessDAO processDAO;
-
-	@Override
-	public List<Object[]> getAgentsReportData(LocalDate atDate) {
-		String queryString = "from " + Agent.class.getName() + " as agent " +
-				 "where agent.isActive is true order by agent.name";
-
-		Query query = this.getPersistenceContext().createQuery(queryString);
-
-		List<Agent> agents = query.getResultList();
-		System.out.println(agents);
-		List<Object[]> result = new ArrayList<Object[]>();
-
-		if (agents == null || agents.isEmpty() )
-			return result;
+    if (!tasks.isEmpty()) currentTask = tasks.remove(0);
 
-		for ( Agent agent : agents ) {
-			Object[] entry = new Object[ 4 ];
+    for (Object[] result : normals) {
+      if (result == null) continue;
 
-			entry[0] = agent.getIdent();
-			entry[1] = agent.getName();
-			entry[2] = new Double(agent.getCostHour());
+      Object[] entry = new Object[10];
 
-			if (atDate != null){
-				entry[3] = new Integer(getAgentWorkloadAt(agent.getIdent(), atDate));
-			}
-			else {
-				entry[ 3 ] = Integer.valueOf(getAgentWorkLoad( agent.getIdent()));
-				entry[3] = 0;
-			}
+      entry[0] = result[0];
+      entry[1] = result[1];
+      entry[2] = result[2];
+      entry[3] = result[3];
+      entry[4] = result[4];
+      entry[5] = result[5];
+      entry[6] = result[6];
+      entry[7] = this.getActivityHourEstimation((String) entry[0]);
+      entry[8] = 0.0;
 
-			result.add( entry );
-		}
-		return result;
-	}
+      List<Object[]> tasksToAdd = new ArrayList<Object[]>();
 
-	public List<Object[]> getActivitiesByProcessReportData( String processIdent ) {
-		String activitiesHql = "select normal.ident, normal.name, " +
-						"normal.theEnactionDescription.state, " +
-						"normal.plannedBegin, normal.plannedEnd, " +
-						"normal.theEnactionDescription.actualBegin, " +
-						"normal.theEnactionDescription.actualEnd " +
-						"from " + Normal.class.getName() + " as normal " +
-						"where normal.ident like '" + processIdent + ".%' " +
-						"and normal.isVersion is null " +
-						"order by normal.ident";
+      while (currentTask != null && currentTask[0].equals(entry[0])) {
+        try {
+          if ((Float) currentTask[4] == 0) {
+            currentTask[4] =
+                (Float) getWorkingHoursForTask((String) currentTask[0], (String) currentTask[1]);
+          }
 
-		String tasksHql = "select task.theNormal.ident, pAgenda.theTaskAgenda.theAgent.ident, " +
-							"pAgenda.theTaskAgenda.theAgent.name, task.localState, task.workingHours " +
-							"from " + ProcessAgenda.class.getName() + " as pAgenda " +
-							"joinCon pAgenda.theTask as task " +
-							"where task.theNormal.ident like '" + processIdent + ".%' " +
-							"order by task.theNormal.ident, pAgenda.theTaskAgenda.theAgent.name";
+          entry[8] = (Double) entry[8] + new Double((Float) currentTask[4]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+        }
 
-		Query query = this.getPersistenceContext().createQuery(activitiesHql);
-		List<Object[]> normals = query.getResultList();
+        tasksToAdd.add(currentTask);
 
-		query = this.getPersistenceContext().createQuery( tasksHql );
-		List<Object[]> tasks = query.getResultList();
+        if (!tasks.isEmpty()) currentTask = tasks.remove(0);
+        else currentTask = null;
+      }
 
-		if (tasks == null || tasks.isEmpty()) {
-			String reqPeopleHql = "select rp.theNormal.ident, rp.theAgent.ident, rp.theAgent.name " +
-									"from " + ReqAgent.class.getName() + " as rp " +
-									"where rp.theNormal.ident like '" + processIdent + ".%' " +
-									"order by rp.theNormal.ident, rp.theAgent.ident";
+      entry[9] = tasksToAdd;
 
-			query = this.getPersistenceContext().createQuery(reqPeopleHql);
+      toReturn.add(entry);
+    }
 
-			tasks = query.getResultList();
-		}
+    Collections.sort(
+        toReturn,
+        new OrderByPlannedBeginWorkGroupedByActivity(processIdent) {
+          public int compare(Object o1, Object o2) {
+            Object[] os1 = (Object[]) o1, os2 = (Object[]) o2;
 
-		List<Object[]> toReturn = new ArrayList<Object[]>();
-			if ( normals == null || normals.isEmpty() ) {
-			return toReturn;
-		}
+            Activity a1 = null;
+            Activity a2 = null;
+            a1 = (Activity) actMap.get((String) os1[0]);
+            a2 = (Activity) actMap.get((String) os2[0]);
 
-		Object[] currentTask = null;
+            return super.compare(a1, a2);
+          }
+        });
 
-		if ( !tasks.isEmpty() )
-			currentTask = tasks.remove( 0 );
+    return toReturn;
+  }
 
-		for ( Object[] result : normals ) {
-			if ( result == null )
-				continue;
+  public float getWorkingHoursForTask(String normalIdent, String agentIdent) {
+    AgendaEvent[] event = this.getAgendaEventsForTask(normalIdent, agentIdent);
 
-			Object[] entry = new Object[ 10 ];
+    if (event == null) return 0.0f;
 
-			entry[ 0 ] = result[ 0 ];
-			entry[ 1 ] = result[ 1 ];
-			entry[ 2 ] = result[ 2 ];
-			entry[ 3 ] = result[ 3 ];
-			entry[ 4 ] = result[ 4 ];
-			entry[ 5 ] = result[ 5 ];
-			entry[ 6 ] = result[ 6 ];
-			entry[ 7 ] = this.getActivityHourEstimation((String)entry[0]);
-			entry[ 8 ] = 0.0;
+    float totalElapsedTime = 0.0f;
 
-			List<Object[]> tasksToAdd = new ArrayList<Object[]>();
+    boolean isCounting = false;
 
-			while ( currentTask != null && currentTask[ 0 ].equals( entry[ 0 ] ) ) {
-				try {
-					if ( (Float)currentTask[ 4 ] == 0 ) {
-						currentTask[ 4 ] = (Float) getWorkingHoursForTask( (String)currentTask[ 0 ], (String)currentTask[ 1 ] );
-					}
+    long startTimeMillis = -1;
+    long endTimeMillis = -1;
+    long elapsedTime = -1;
 
-					entry[ 8 ] = (Double)entry[ 8 ] + new Double( (Float)currentTask[ 4 ] );
-				} catch (ArrayIndexOutOfBoundsException e) { }
+    for (int i = 0; i < event.length; i++) {
+      if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
+        isCounting = true;
 
-				tasksToAdd.add( currentTask );
+        startTimeMillis = event[i].getWhen().toEpochDay();
+      } else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
+          || event[i].getTheCatalogEvents().getDescription().equals("ToPaused")
+          || event[i].getTheCatalogEvents().getDescription().equals("ToFailed")) {
+        isCounting = false;
 
-				if ( !tasks.isEmpty() )
-					currentTask = tasks.remove( 0 );
-				else currentTask = null;
-			}
+        if (startTimeMillis != -1) {
+          endTimeMillis = event[i].getWhen().toEpochDay();
 
-			entry[ 9 ] = tasksToAdd;
+          elapsedTime = endTimeMillis - startTimeMillis;
 
-			toReturn.add( entry );
-		}
+          totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
+        }
+      }
+    }
 
-		Collections.sort(toReturn, new OrderByPlannedBeginWorkGroupedByActivity(processIdent) {
-			public int compare(Object o1, Object o2) {
-				Object[] os1 = (Object[])o1, os2 = (Object[])o2;
+    if (isCounting) {
+      LocalDate date = LocalDate.now();
 
-				Activity a1 = null;
-				Activity a2 = null;
-					a1 = (Activity) actMap.get((String)os1[0]);
-				a2 = (Activity) actMap.get((String)os2[0]);
+      endTimeMillis = date.toEpochDay();
 
-				return super.compare(a1, a2);
-			}
-		});
+      elapsedTime = endTimeMillis - startTimeMillis;
 
+      totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
+    }
 
-		return toReturn;
-	}
+    return totalElapsedTime;
+  }
 
-	public float getWorkingHoursForTask( String normalIdent, String agentIdent )
-	{
-		AgendaEvent[] event = this.getAgendaEventsForTask( normalIdent, agentIdent );
+  public AgendaEvent[] getAgendaEventsForTask(String normalIdent, String agentIdent) {
+    String hql =
+        "from "
+            + AgendaEvent.class.getName()
+            + " event "
+            + "where ( event.theTask.theProcessAgenda.theTaskAgenda.theAgent.ident=:agentID ) "
+            + "and ( event.theTask.theNormal.ident=:normalID ) order by event.oid";
 
-		if ( event == null )
-			return 0.0f;
+    Query query = this.getPersistenceContext().createQuery(hql);
 
-		float totalElapsedTime = 0.0f;
+    query.setParameter("agentID", agentIdent);
+    query.setParameter("normalID", normalIdent);
 
-		boolean isCounting = false;
+    List<AgendaEvent> list = query.getResultList();
 
-		long startTimeMillis = -1;
-		long endTimeMillis = -1;
-		long elapsedTime = -1;
+    AgendaEvent[] result = new AgendaEvent[list.size()];
 
-		for (int i = 0; i < event.length; i++) {
-			if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
-				isCounting = true;
+    result = list.toArray(result);
 
-				startTimeMillis = event[i].getWhen().toEpochDay();
-			} else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
-					|| event[i].getTheCatalogEvents().getDescription().equals("ToPaused")
-					|| event[i].getTheCatalogEvents().getDescription().equals("ToFailed")) {
-				isCounting = false;
+    return result;
+  }
 
-				if (startTimeMillis != -1) {
-					endTimeMillis = event[i].getWhen().toEpochDay();
+  public List<Object[]> getAgentsByRoleReportData() {
+    String hql =
+        "from "
+            + AgentPlaysRole.class.getName()
+            + " as agentPlaysRole "
+            + "order by agentPlaysRole.theRole.name, agentPlaysRole.theAgent.name";
 
-					elapsedTime = endTimeMillis - startTimeMillis;
+    Query query = this.getPersistenceContext().createQuery(hql);
 
-					totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
-				}
-			}
-		}
+    List<AgentPlaysRole> agentsPlaysRoles = query.getResultList();
 
-		if (isCounting) {
-			LocalDate date = LocalDate.now();
+    List<Object[]> result = new ArrayList<Object[]>();
+    System.out.println(result);
+    if (agentsPlaysRoles == null || agentsPlaysRoles.isEmpty()) {
+      return result;
+    }
 
-			endTimeMillis = date.toEpochDay();
+    for (AgentPlaysRole agentPlaysRole : agentsPlaysRoles) {
+      if (agentPlaysRole == null) continue;
 
-			elapsedTime = endTimeMillis - startTimeMillis;
+      Object[] entry = new Object[3];
 
-			totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));
-		}
+      Agent agent = agentPlaysRole.getTheAgent();
+      Role role = agentPlaysRole.getTheRole();
 
-		return totalElapsedTime;
-	}
+      if (agent == null || role == null) continue;
 
-	public AgendaEvent[] getAgendaEventsForTask( String normalIdent, String agentIdent )
-	{
-			String hql = "from " +
-							AgendaEvent.class.getName() + " event " +
-							"where ( event.theTask.theProcessAgenda.theTaskAgenda.theAgent.ident=:agentID ) " +
-							"and ( event.theTask.theNormal.ident=:normalID ) order by event.oid";
+      if (agent.isActive()) {
+        entry[0] = role.getName();
+        entry[1] = agent.getName();
+        entry[2] = agentPlaysRole.getSinceDate();
 
-			Query query = this.getPersistenceContext().createQuery( hql );
+        result.add(entry);
+      }
+    }
+    return result;
+  }
 
-			query.setParameter( "agentID", agentIdent );
-			query.setParameter( "normalID", normalIdent );
+  @Override
+  public List<Object[]> getAgentsByWorkGroupReportData() {
+    String hql = "from " + WorkGroup.class.getName() + " as group " + "order by group.name";
+    Query query = this.getPersistenceContext().createQuery(hql);
 
-			List<AgendaEvent> list = query.getResultList();
+    List<WorkGroup> groups = query.getResultList();
 
-			AgendaEvent[] result = new AgendaEvent[ list.size() ];
+    List<Object[]> result = new ArrayList<Object[]>();
 
-			result = list.toArray( result );
+    if (groups == null || groups.isEmpty()) {
+      return result;
+    }
 
-			return result;
-	}
+    for (WorkGroup group : groups) {
+      if (group == null) continue;
 
-	public List<Object[]> getAgentsByRoleReportData() {
-		String hql = "from " + AgentPlaysRole.class.getName() + " as agentPlaysRole " +
-						"order by agentPlaysRole.theRole.name, agentPlaysRole.theAgent.name";
+      List<Agent> agents = new ArrayList<Agent>();
+      agents.addAll(group.getTheAgents());
 
-		Query query = this.getPersistenceContext().createQuery( hql );
+      Collections.sort(
+          agents,
+          new Comparator<Agent>() {
 
-		List<AgentPlaysRole> agentsPlaysRoles = query.getResultList();
+            public int compare(Agent o1, Agent o2) {
+              return o1.getIdent().compareToIgnoreCase(o2.getIdent());
+            }
+          });
 
-		List<Object[]> result = new ArrayList<Object[]>();
-		System.out.println(result);
-		if ( agentsPlaysRoles == null || agentsPlaysRoles.isEmpty() ) {
-			return result;
-		}
+      for (Agent agent : agents) {
+        if (agent.isActive()) {
+          Object[] entry = new Object[2];
 
-		for ( AgentPlaysRole agentPlaysRole : agentsPlaysRoles ) {
-			if ( agentPlaysRole == null )
-				continue;
+          entry[0] = group.getName();
+          entry[1] = agent.getName();
 
-			Object[] entry = new Object[ 3 ];
+          result.add(entry);
+        }
+      }
+    }
+    return result;
+  }
 
-			Agent agent = agentPlaysRole.getTheAgent();
-			Role role = agentPlaysRole.getTheRole();
+  @Override
+  public List<Object[]> getProjectArtifactsReportData(String projectIdent) {
+    List<Project> projects = new ArrayList<Project>();
 
-			if ( agent == null || role == null )
-				continue;
+    List<Object[]> result = new ArrayList<Object[]>();
 
-			if(agent.isActive()){
-				entry[ 0 ] = role.getName();
-				entry[ 1 ] = agent.getName();
-				entry[ 2 ] = agentPlaysRole.getSinceDate();
+    if (projectIdent != null) projects.add((Project) dao.retrieveBySecondaryKey(projectIdent));
+    else projects.addAll(dao.findAll());
 
-				result.add( entry );
-			}
-		}
-		return result;
-	}
+    if (projects.isEmpty()) return result;
 
-	@Override
-	public List<Object[]> getAgentsByWorkGroupReportData() {
-		String hql = "from " + WorkGroup.class.getName() + " as group " +
-				"order by group.name";
-		Query query = this.getPersistenceContext().createQuery(hql);
+    for (Project project : projects) {
 
-		List<WorkGroup> groups = query.getResultList();
+      Collection<Artifact> artifacts = project.getFinalArtifacts();
+      for (Artifact artifact : artifacts) {
+        Object[] entry = new Object[4];
 
-		List<Object[]> result = new ArrayList<Object[]>();
+        entry[0] = project.getName();
 
-		if ( groups == null || groups.isEmpty() ) {
-			return result;
-		}
+        DevelopingSystem system = project.getTheSystem();
 
-		for ( WorkGroup group : groups ) {
-			if ( group == null )
-				continue;
+        if (system != null) entry[1] = project.getTheSystem().getName();
+        else entry[1] = "";
 
-			List<Agent> agents = new ArrayList<Agent>();
-			agents.addAll(group.getTheAgents());
+        entry[2] = artifact.getIdent();
+        entry[3] = artifact.getTheArtifactType().getIdent();
+        result.add(entry);
+      }
+    }
 
-			Collections.sort( agents, new Comparator<Agent>() {
+    Collections.sort(
+        result,
+        new Comparator<Object[]>() {
+          public int compare(Object[] o1, Object[] o2) {
+            int result = o1[0].toString().compareToIgnoreCase(o2[0].toString());
 
-				public int compare(Agent o1, Agent o2) {
-					return o1.getIdent().compareToIgnoreCase( o2.getIdent() );
-				}
+            if (result == 0) return o1[1].toString().compareToIgnoreCase(o2[1].toString());
 
-			});
+            if (result == 0) return o1[2].toString().compareToIgnoreCase(o2[2].toString());
 
-			for ( Agent agent : agents ) {
-				if(agent.isActive()){
-					Object[] entry = new Object[ 2 ];
+            return result;
+          }
+        });
 
-					entry[ 0 ] = group.getName();
-					entry[ 1 ] = agent.getName();
+    return result;
+  }
 
-					result.add( entry );
-				}
-			}
-		}
-		return result;
-	}
+  public int getAgentWorkloadAt(String agentIdent, LocalDate atDate) {
 
-	@Override
-	public List<Object[]> getProjectArtifactsReportData(String projectIdent) {
-		List<Project> projects = new ArrayList<Project>();
+    String queryString =
+        "from "
+            + ReqAgent.class.getName()
+            + " as reqAgent "
+            + "where reqAgent.theAgent.ident = :agentIdent";
 
-		List<Object[]> result = new ArrayList<Object[]>();
+    Query query = this.getPersistenceContext().createQuery(queryString);
+    query.setParameter("agentIdent", agentIdent);
 
-		if ( projectIdent != null )
-			projects.add( (Project) dao.retrieveBySecondaryKey( projectIdent ) );
-		else projects.addAll( dao.findAll() );
+    List<ReqAgent> reqAgents = query.getResultList();
 
-		if ( projects.isEmpty() )
-			return result;
+    int workload = 0;
 
-		for ( Project project : projects ) {
+    if (reqAgents == null || reqAgents.isEmpty()) return workload;
 
-			Collection<Artifact> artifacts = project.getFinalArtifacts();
-			for ( Artifact artifact : artifacts ) {
-				Object[] entry = new Object[ 4 ];
+    for (ReqAgent reqAgent : reqAgents) {
+      if (reqAgent == null) continue;
 
-				entry[ 0 ] = project.getName();
+      Normal normal = reqAgent.getTheNormal();
 
-				DevelopingSystem system = project.getTheSystem();
+      if (normal == null) continue;
 
-				if ( system != null )
-					entry[ 1 ] = project.getTheSystem().getName();
-				else entry[ 1 ] = "";
+      LocalDate plannedBegin = normal.getPlannedBegin();
+      LocalDate plannedEnd = normal.getPlannedEnd();
 
-				entry[ 2 ] = artifact.getIdent();
-				entry[ 3 ] = artifact.getTheArtifactType().getIdent();
-				result.add( entry );
-			}
-		}
+      if (plannedBegin != null && atDate.compareTo(plannedBegin) >= 0) {
+        if (plannedEnd != null && atDate.compareTo(plannedEnd) <= 0) {
+          workload++;
+        }
+      }
+    }
 
+    return workload;
+  }
 
-		Collections.sort(result, new Comparator<Object[]>() {
-			public int compare(Object[] o1, Object[] o2) {
-				int result = o1[0].toString().compareToIgnoreCase(o2[0].toString());
+  private double getActivityHourEstimation(String actIdent) {
+    String queryString =
+        "from "
+            + ActivityEstimation.class.getName()
+            + " as e where e.activity.ident = '"
+            + actIdent
+            + "'"
+            + " and e.metricDefinition.name = '"
+            + ACTIVITY_METRIC_DEFINITION_NAME
+            + "'";
 
-				if (result == 0)
-					return o1[1].toString().compareToIgnoreCase(o2[1].toString());
+    Query query = this.getPersistenceContext().createQuery(queryString);
 
-				if (result == 0)
-					return o1[2].toString().compareToIgnoreCase(o2[2].toString());
+    List<ActivityEstimation> estimations = query.getResultList();
 
-				return result;
-			}
-		});
+    if (estimations == null || estimations.isEmpty()) return 0.0;
 
-		return result;
-	}
+    ActivityEstimation lastEstimation = estimations.get(estimations.size() - 1);
 
-	public int getAgentWorkloadAt( String agentIdent, LocalDate atDate ) {
+    return lastEstimation.getValue();
+  }
 
-		String queryString = "from " + ReqAgent.class.getName() + " as reqAgent " +
-								 "where reqAgent.theAgent.ident = :agentIdent";
+  @Override
+  public EntityManager getPersistenceContext() {
+    return em;
+  }
 
-		Query query = this.getPersistenceContext().createQuery(queryString);
-		query.setParameter( "agentIdent", agentIdent );
+  private class OrderByPlannedBeginWorkGroupedByActivity implements Comparator<Object> {
 
-		List<ReqAgent> reqAgents = query.getResultList();
+    public String process;
+    public HashMap<String, Activity> actMap = new HashMap<String, Activity>();
 
-		int workload = 0;
+    public OrderByPlannedBeginWorkGroupedByActivity(String process) {
+      this.process = process;
 
-		if ( reqAgents == null || reqAgents.isEmpty() )
-			return workload;
+      String queryStr = "from " + Activity.class.getName() + " as act where act.ident like :ident";
 
-		for ( ReqAgent reqAgent : reqAgents ) {
-			if ( reqAgent == null )
-				continue;
+      Query query = getPersistenceContext().createQuery(queryStr);
+      query.setParameter("ident", process + ".%");
 
-			Normal normal = reqAgent.getTheNormal();
+      List<Activity> acts = query.getResultList();
 
-			if ( normal == null )
-				continue;
+      actMap = new HashMap<String, Activity>();
 
-			LocalDate plannedBegin = normal.getPlannedBegin();
-			LocalDate plannedEnd = normal.getPlannedEnd();
+      for (Activity act : acts) {
+        actMap.put(act.getIdent(), act);
+      }
+    }
 
-			if ( plannedBegin != null && atDate.compareTo( plannedBegin ) >= 0 ){
-				if ( plannedEnd != null && atDate.compareTo( plannedEnd ) <= 0 ){
-					workload++;
-				}
-			}
-		}
+    public int compare(Object o1, Object o2) {
+      Activity a1 = (Activity) o1, a2 = (Activity) o2;
 
-		return workload;
-	}
+      String ident1 = a1.getIdent(), ident2 = a2.getIdent();
 
-	private double getActivityHourEstimation(String actIdent){
-		String queryString = "from " + ActivityEstimation.class.getName() +
-				" as e where e.activity.ident = '" + actIdent + "'" +
-				" and e.metricDefinition.name = '" + ACTIVITY_METRIC_DEFINITION_NAME + "'";
+      if (ident1.equals(ident2)) return 0;
 
-		Query query = this.getPersistenceContext().createQuery(queryString);
+      // a.b.c < a.b.c.d
+      if (ident1.contains(ident2)) return 1;
+      else if (ident2.contains(ident1)) return -1;
 
-		List<ActivityEstimation> estimations = query.getResultList();
+      // if ident1 == "a.b.c.d" && ident2 == "a.e"
+      // then { ident1 == "a.b"; ident2 = "a.e" }
+      String[] tokens1 = ident1.split("\\.");
+      String[] tokens2 = ident2.split("\\.");
 
-		if ( estimations == null || estimations.isEmpty() )
-			return 0.0;
+      ident1 = "";
+      ident2 = "";
 
-		ActivityEstimation lastEstimation = estimations.get( estimations.size() - 1 );
+      int i = 0;
 
-		return lastEstimation.getValue();
-	}
+      while (tokens1[i].equals(tokens2[i])) {
+        ident1 += tokens1[i] + ".";
+        ident2 += tokens2[i] + ".";
 
+        i++;
+      }
 
-	@Override
-	public EntityManager getPersistenceContext() {
-		return em;
-	}
+      ident1 += tokens1[i];
+      ident2 += tokens2[i];
 
-	private class OrderByPlannedBeginWorkGroupedByActivity implements Comparator<Object> {
+      // retrieve the activities if necessary
+      if (!ident1.equals(a1.getIdent())) {
+        a1 = (Activity) actMap.get(ident1);
+      }
 
-		public String process;
-		public HashMap<String, Activity> actMap = new HashMap<String, Activity>();
+      if (!ident2.equals(a2.getIdent())) {
+        a2 = (Activity) actMap.get(ident2);
+      }
 
-		public OrderByPlannedBeginWorkGroupedByActivity(String process) {
-			this.process = process;
+      // compare by planned begin
+      OrderByPlannedBegin order = new OrderByPlannedBegin(process);
 
-			String queryStr = "from " + Activity.class.getName() + " as act where act.ident like :ident";
+      return order.compare(a1, a2);
+    }
+  }
 
-			Query query = getPersistenceContext().createQuery(queryStr);
-			query.setParameter("ident", process + ".%");
+  private class OrderByPlannedBegin implements Comparator<Activity> {
 
-			List<Activity> acts = query.getResultList();
+    public HashMap<String, Collection<Activity>> actMap =
+        new HashMap<String, Collection<Activity>>();
 
-			actMap = new HashMap<String, Activity>();
+    public OrderByPlannedBegin(String process) { // create cache of activities
+      /*try {
+      	ProcessDAO pDao = new ProcessDAO();
+      	processModels.classes.Process p = (Process) pDao.findBySecondaryKey(process);
 
-			for (Activity act : acts) {
-				actMap.put(act.getIdent(), act);
-			}
-		}
+      	build(p.getTheProcessModel());
+      } catch (DAOException e) {
+      	e.printStackTrace();
+      }*/
 
-		public int compare(Object o1, Object o2) {
-			Activity a1 = (Activity)o1, a2 = (Activity)o2;
+      String queryStr =
+          "from "
+              + Activity.class.getName()
+              + " as act where act.ident like :ident and act.isVersion is null";
 
-			String ident1 = a1.getIdent(),
-					ident2 = a2.getIdent();
+      Query query = getPersistenceContext().createQuery(queryStr);
+      query.setParameter("ident", process + ".%");
 
-			if (ident1.equals(ident2))
-				return 0;
+      List<Activity> acts = query.getResultList();
 
-			// a.b.c < a.b.c.d
-			if (ident1.contains(ident2))
-				return 1;
-			else if (ident2.contains(ident1))
-				return -1;
+      actMap = new HashMap<String, Collection<Activity>>();
 
-			// if ident1 == "a.b.c.d" && ident2 == "a.e"
-			// then { ident1 == "a.b"; ident2 = "a.e" }
-			String[] tokens1 = ident1.split("\\.");
-			String[] tokens2 = ident2.split("\\.");
+      for (Activity act : acts) {
+        String pModelIdent = act.getIdent().substring(0, act.getIdent().lastIndexOf("."));
 
-			ident1 = "";
-			ident2 = "";
+        Collection<Activity> pModelActs = actMap.get(pModelIdent);
 
-			int i = 0;
+        if (pModelActs == null) {
+          pModelActs = new ArrayList<Activity>();
+          actMap.put(pModelIdent, pModelActs);
+        }
 
-			while(tokens1[i].equals(tokens2[i])) {
-				ident1 += tokens1[i] + ".";
-				ident2 += tokens2[i] + ".";
+        pModelActs.add(act);
+      }
+    }
 
-				i++;
-			}
+    /*private void build(ProcessModel model) {
+    	Collection<Activity> acts = model.getTheActivity();
 
-			ident1 += tokens1[i];
-			ident2 += tokens2[i];
+    	actMap.put("model", acts);
 
-			// retrieve the activities if necessary
-			if (!ident1.equals(a1.getIdent())) {
-				a1 = (Activity) actMap.get(ident1);
-			}
+    	for (Activity act : acts) {
+    		if (act instanceof Decomposed)
+    			buildact.getTheDecomposedSub().getTheReferedProcessModel());
+    	}
+    }*/
 
-			if (!ident2.equals(a2.getIdent())) {
-				a2 = (Activity) actMap.get(ident2);
-			}
+    public int compare(Activity a1, Activity a2) {
+      LocalDate plannedBegin1 = null, plannedEnd1 = null, plannedBegin2 = null, plannedEnd2 = null;
 
-			// compare by planned begin
-			OrderByPlannedBegin order = new OrderByPlannedBegin(process);
+      String ident1 = a1.getIdent();
+      String ident2 = a2.getIdent();
 
-			return order.compare(a1, a2);
-		}
-	}
+      if (a1 instanceof Normal) {
+        plannedBegin1 = ((Normal) a1).getPlannedBegin();
+        plannedEnd1 = ((Normal) a1).getPlannedEnd();
+      } else if (a1 instanceof Decomposed) {
+        plannedBegin1 =
+            getFirstPlannedBeginFromProcessModel(((Decomposed) a1).getTheReferedProcessModel());
+        plannedEnd1 =
+            getLatestPlannedEndFromProcessModel(((Decomposed) a1).getTheReferedProcessModel());
+      }
 
-	private class OrderByPlannedBegin implements Comparator<Activity> {
+      if (a2 instanceof Normal) {
+        plannedBegin2 = ((Normal) a2).getPlannedBegin();
+        plannedEnd2 = ((Normal) a2).getPlannedEnd();
+      } else if (a2 instanceof Decomposed) {
+        plannedBegin2 =
+            getFirstPlannedBeginFromProcessModel(((Decomposed) a2).getTheReferedProcessModel());
+        plannedEnd2 =
+            getLatestPlannedEndFromProcessModel(((Decomposed) a2).getTheReferedProcessModel());
+      }
 
-		public HashMap<String, Collection<Activity>> actMap = new HashMap<String, Collection<Activity>>();
+      if (plannedBegin1 == null) return -1;
 
-		public OrderByPlannedBegin (String process) { // create cache of activities
-		/*try {
-			ProcessDAO pDao = new ProcessDAO();
-			processModels.classes.Process p = (Process) pDao.findBySecondaryKey(process);
+      if (plannedBegin2 == null) return 1;
 
-			build(p.getTheProcessModel());
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}*/
+      if (plannedBegin1.compareTo(plannedBegin2) != 0) {
 
-			String queryStr = "from " + Activity.class.getName() + " as act where act.ident like :ident and act.isVersion is null";
+        return plannedBegin1.compareTo(plannedBegin2);
 
-			Query query = getPersistenceContext().createQuery(queryStr);
-			query.setParameter("ident", process + ".%");
+      } else if (plannedEnd1.compareTo(plannedEnd2) != 0) return plannedEnd1.compareTo(plannedEnd2);
 
-			List<Activity> acts = query.getResultList();
+      return ident1.compareTo(ident2);
+    }
 
-			actMap = new HashMap<String, Collection<Activity>>();
+    public LocalDate getFirstPlannedBeginFromProcessModel(ProcessModel pModel) {
+      Collection actsFromPModel =
+          actMap.get(
+              (pModel.getTheProcess() != null
+                  ? pModel.getTheProcess().getIdent()
+                  : pModel.getTheDecomposed().getIdent()));
 
-			for (Activity act : acts) {
-				String pModelIdent = act.getIdent().substring(0, act.getIdent().lastIndexOf("."));
+      if (actsFromPModel == null) return null;
 
-				Collection<Activity> pModelActs = actMap.get(pModelIdent);
+      LocalDate firstBeginFromPModel = null;
 
-				if (pModelActs == null) {
-					pModelActs = new ArrayList<Activity>();
-					actMap.put(pModelIdent, pModelActs);
-				}
+      for (Object obj : actsFromPModel) {
+        if (obj == null) continue;
 
-				pModelActs.add(act);
-			}
-		}
+        Activity act = (Activity) obj;
 
-		/*private void build(ProcessModel model) {
-		Collection<Activity> acts = model.getTheActivity();
+        LocalDate planBegin = null;
 
-		actMap.put("model", acts);
+        if (act instanceof Normal) {
+          Normal normalAct = (Normal) act;
 
-		for (Activity act : acts) {
-			if (act instanceof Decomposed)
-				buildact.getTheDecomposedSub().getTheReferedProcessModel());
-		}
-	}*/
+          planBegin = normalAct.getPlannedBegin();
 
-		public int compare(Activity a1, Activity a2) {
-			LocalDate plannedBegin1,
-			plannedEnd1,
-    	    plannedBegin2,
-    	    plannedEnd2;
+        } else if (act instanceof Decomposed) {
+          Decomposed decAct = (Decomposed) act;
 
-			String ident1 = a1.getIdent();
-			String ident2 = a2.getIdent();
+          planBegin = getFirstPlannedBeginFromProcessModel(decAct.getTheReferedProcessModel());
+        }
 
-			if(a1 instanceof Normal){
-				plannedBegin1 = ( (Normal) a1).getPlannedBegin();
-				plannedEnd1 =   ( (Normal) a1).getPlannedEnd();
-			}else if(a1 instanceof Decomposed){
-				plannedBegin1 = getFirstPlannedBeginFromProcessModel(
-    				           ( (Decomposed) a1).getTheReferedProcessModel()
-    				           );
-				plannedEnd1 =   getLatestPlannedEndFromProcessModel(
-    				           ( (Decomposed) a1).getTheReferedProcessModel()
-    				           );
-			}
+        if (firstBeginFromPModel == null) {
+          firstBeginFromPModel = planBegin;
+        } else if (isAfter(firstBeginFromPModel, planBegin)) {
+          firstBeginFromPModel = planBegin;
+        }
+      }
 
-			if(a2 instanceof Normal){
-				plannedBegin2 = ( (Normal) a2).getPlannedBegin();
-				plannedEnd2 =   ( (Normal) a2).getPlannedEnd();
-			}else if(a2 instanceof Decomposed){
-				plannedBegin2 = getFirstPlannedBeginFromProcessModel(
-    				           ( (Decomposed) a2).getTheReferedProcessModel()
-    				           );
-				plannedEnd2 =   getLatestPlannedEndFromProcessModel(
-						( (Decomposed) a2).getTheReferedProcessModel()
-    				           );
-			}
+      return firstBeginFromPModel;
+    }
 
-			if ( plannedBegin1 == null )
-				return -1;
+    private boolean isAfter(LocalDate date1, LocalDate date2) {
+      if (date1 == null) {
+        return false;
+      } else {
+        if (date2 == null) {
+          return true;
+        } else {
+          if (date1.toEpochDay() > date2.toEpochDay()) {
+            return true;
+          }
+          return false;
+        }
+      }
+    }
 
-			if ( plannedBegin2 == null )
-				return 1;
+    public LocalDate getLatestPlannedEndFromProcessModel(ProcessModel pModel) {
+      Collection actsFromPModel =
+          actMap.get(
+              (pModel.getTheProcess() != null
+                  ? pModel.getTheProcess().getIdent()
+                  : pModel.getTheDecomposed().getIdent()));
 
-			if(plannedBegin1.compareTo(plannedBegin2) != 0){
+      LocalDate lastFinishFromPModel = null;
 
-				return plannedBegin1.compareTo(plannedBegin2);
+      if (actsFromPModel != null) {
+        for (Object obj : actsFromPModel) {
+          if (obj == null) continue;
 
-			}else if(plannedEnd1.compareTo(plannedEnd2) != 0)
+          Activity act = (Activity) obj;
 
-				return plannedEnd1.compareTo(plannedEnd2);
+          LocalDate planEnd = null;
 
-			return ident1.compareTo(ident2);
-		}
+          if (act instanceof Normal) {
+            Normal normalAct = (Normal) act;
 
-		public LocalDate getFirstPlannedBeginFromProcessModel(ProcessModel pModel){
-			Collection actsFromPModel = actMap.get((pModel.getTheProcess() != null ? pModel.getTheProcess().getIdent() : pModel.getTheDecomposed().getIdent()));
+            planEnd = normalAct.getPlannedEnd();
 
-			if (actsFromPModel == null) return null;
+          } else if (act instanceof Decomposed) {
+            Decomposed decAct = (Decomposed) act;
 
-			LocalDate firstBeginFromPModel = null;
+            planEnd = getLatestPlannedEndFromProcessModel(decAct.getTheReferedProcessModel());
+          }
 
-			for(Object obj : actsFromPModel){
-				if(obj == null) continue;
+          if (lastFinishFromPModel == null) {
+            lastFinishFromPModel = planEnd;
+          } else if (isAfter(planEnd, lastFinishFromPModel)) {
+            lastFinishFromPModel = planEnd;
+          }
+        }
+      }
 
-				Activity act = (Activity)obj;
+      return lastFinishFromPModel;
+    }
+  }
 
-				LocalDate planBegin = null;
+  public String getAgentWorkLoad(String agIdent) {
+    String hql_task =
+        " select count(task) "
+            + " from "
+            + Task.class.getName()
+            + " as task "
+            + "where "
+            + "(task.localState = :stateReady or task.localState = :stateActive "
+            + "or task.localState = :stateWaiting or task.localState = :statePaused) and task.theProcessAgenda.theTaskAgenda.theAgent.ident=:agIdent";
 
-				if(act instanceof Normal){
-					Normal normalAct = (Normal) act;
+    Query query = this.getPersistenceContext().createQuery(hql_task);
 
-					planBegin = normalAct.getPlannedBegin();
+    query.setParameter("agIdent", agIdent);
 
-				}else if(act instanceof Decomposed){
-					Decomposed decAct = (Decomposed)act;
+    query.setParameter("stateReady", "Ready");
+    query.setParameter("stateActive", "Active");
+    query.setParameter("stateWaiting", "Active");
+    query.setParameter("statePaused", "Paused");
 
-					planBegin =
-							getFirstPlannedBeginFromProcessModel(decAct.getTheReferedProcessModel());
-				}
+    Collection result = query.getResultList();
 
-				if(firstBeginFromPModel == null){
-					firstBeginFromPModel = planBegin;
-				}else if(isAfter(firstBeginFromPModel, planBegin)){
-					firstBeginFromPModel = planBegin;
-				}
-			}
+    /** convert value to string result */
+    Iterator ite = result.iterator();
+    Object obj = ite.next();
 
-			return firstBeginFromPModel;
-		}
+    return String.valueOf(obj);
+  }
 
-		private boolean isAfter(LocalDate date1, LocalDate date2){
-			if(date1 == null){
-				return false;
-			}
-			else {
-				if(date2 == null){
-					return true;
-				}
-				else{
-					if(date1.toEpochDay() > date2.toEpochDay()){
-						return true;
-					}
-					return false;
-				}
-			}
-		}
+  @Override
+  public List<Object[]> getActivitiesByAgentsReportData(
+      String agentIdent, LocalDate beginDate, LocalDate endDate, String role, boolean allStates) {
+    String ReqWorkGroupHql =
+        "select ReqWorkGroup.oid from "
+            + ReqWorkGroup.class.getName()
+            + " as ReqWorkGroup joinCon ReqWorkGroup.theWorkGroup.theAgent as agent where agent.ident= :agentIdent";
 
-		public LocalDate getLatestPlannedEndFromProcessModel(ProcessModel pModel){
-			Collection actsFromPModel = actMap.get((pModel.getTheProcess() != null ? pModel.getTheProcess().getIdent() : pModel.getTheDecomposed().getIdent()));
+    String reqAgentHql =
+        "select reqAgent.oid from "
+            + ReqAgent.class.getName()
+            + " as reqAgent where reqAgent.theAgent.ident = :agentIdent";
+    System.out.println();
+    String hql =
+        "select task.theProcessAgenda.theTaskAgenda.theAgent.ident, task.theProcessAgenda.theTaskAgenda.theAgent.name, "
+            + "reqPeople, task.theProcessAgenda.theTaskAgenda.theAgent.costHour, "
+            + "task.theProcessAgenda.theProcess.ident, task.theNormal.ident, task.theNormal.name, task.localState, "
+            + "task.theNormal.theEnactionDescription.actualEnd, task.theNormal.plannedEnd, "
+            + "task.theNormal.theEnactionDescription.actualBegin, task.theNormal.plannedBegin "
+            + "from "
+            + Task.class.getName()
+            + " as task joinCon task.theNormal.theRequiredPeople as reqPeople "
+            + "where reqPeople.theNormal.ident = task.theNormal.ident "
+            + "and task.theProcessAgenda.theTaskAgenda.theAgent.isActive is true "
+            + (agentIdent != null
+                ? "and task.theProcessAgenda.theTaskAgenda.theAgent.ident= :agentIdent and (reqPeople.oid in ("
+                    + ReqWorkGroupHql
+                    + ") or reqPeople.oid in ("
+                    + reqAgentHql
+                    + ")) "
+                : " ")
+            + (beginDate != null ? "and task.theNormal.plannedBegin >= :beginDate " : " ")
+            + (endDate != null ? "and task.theNormal.plannedEnd <= :endDate " : " ")
+            + (!allStates
+                ? "and (task.theNormal.theEnactionDescription.state like :active or task.theNormal.theEnactionDescription.state like :ready or task.theNormal.theEnactionDescription.state like :waiting) "
+                : " ")
+            + "order by task.theProcessAgenda.theTaskAgenda.theAgent.name, task.theProcessAgenda.theProcess.ident, task.theNormal.name";
 
-			LocalDate lastFinishFromPModel = null;
+    Query query = this.getPersistenceContext().createQuery(hql);
 
-			if(actsFromPModel != null){
-				for(Object obj: actsFromPModel){
-					if(obj == null) continue;
+    if (agentIdent != null) query.setParameter("agentIdent", agentIdent);
+    if (beginDate != null) query.setParameter("beginDate", beginDate);
+    if (endDate != null) query.setParameter("endDate", endDate);
+    if (!allStates) {
+      query.setParameter("active", Plain.ACTIVE);
+      query.setParameter("ready", Plain.READY);
+      query.setParameter("waiting", Plain.WAITING);
+    }
 
-					Activity act = (Activity)obj;
+    List<Object[]> tasks = query.getResultList();
+    System.out.println(tasks);
+    List<Object[]> toReturn = new ArrayList<Object[]>();
 
-					LocalDate planEnd = null;
+    if (tasks == null || tasks.isEmpty()) {
+      return toReturn;
+    }
 
-					if(act instanceof Normal){
-						Normal normalAct = (Normal) act;
+    for (Object[] result : tasks) {
+      if (result == null) continue;
 
-						planEnd = normalAct.getPlannedEnd();
+      Object[] entry = new Object[13];
 
-					}else if(act instanceof Decomposed){
-						Decomposed decAct = (Decomposed)act;
+      entry[0] = result[0] != null ? result[0] : "";
+      entry[1] = result[1] != null ? result[1] : "";
 
-						planEnd =
-								getLatestPlannedEndFromProcessModel(decAct.getTheReferedProcessModel());
-					}
+      if (result[2] != null) {
+        if (result[2] instanceof ReqWorkGroup) {
+          if (role != null) continue;
 
-					if(lastFinishFromPModel == null){
-						lastFinishFromPModel = planEnd;
-					}else if(isAfter(planEnd, lastFinishFromPModel)){
-						lastFinishFromPModel = planEnd;
-					}
-				}
-			}
+          ReqWorkGroup ReqWorkGroup = (ReqWorkGroup) result[2];
 
-			return lastFinishFromPModel;
-		}
-	}
+          WorkGroup group = ReqWorkGroup.getTheWorkGroup();
 
-	public String getAgentWorkLoad(String agIdent) {
-		String hql_task = " select count(task) "
-			+ " from "
-			+ Task.class.getName()
-			+ " as task "
-			+ "where "
-			+ "(task.localState = :stateReady or task.localState = :stateActive "
-			+ "or task.localState = :stateWaiting or task.localState = :statePaused) and task.theProcessAgenda.theTaskAgenda.theAgent.ident=:agIdent";
+          entry[2] = group != null ? group.getIdent() : "";
+        } else {
+          ReqAgent reqAgent = (ReqAgent) result[2];
 
-		Query query = this.getPersistenceContext().createQuery(hql_task);
+          String roleIdent = reqAgent.getTheRole().getIdent();
+          if (role != null && !role.equals(roleIdent)) continue;
 
-		query.setParameter("agIdent", agIdent);
+          entry[2] = roleIdent;
+        }
+      } else entry[2] = "";
 
-		query.setParameter("stateReady", "Ready");
-		query.setParameter("stateActive", "Active");
-		query.setParameter("stateWaiting", "Active");
-		query.setParameter("statePaused", "Paused");
+      entry[3] = new Double((Float) (result[3] != null ? result[3] : 0.0));
 
-		Collection result = query.getResultList();
+      entry[4] = getAgentWorkLoad((String) result[0]);
 
-		/**convert value to string result*/
-		Iterator ite = result.iterator();
-		Object obj = ite.next();
+      String actIdent = (String) result[5];
 
-		return String.valueOf(obj);
-	}
+      entry[5] = result[4] != null ? result[4] : "";
+      entry[6] = result[6] != null ? result[6] : "";
 
-	@Override
-	public List<Object[]> getActivitiesByAgentsReportData(String agentIdent , LocalDate beginDate, LocalDate endDate , String role , boolean allStates) {
-		String ReqWorkGroupHql = "select ReqWorkGroup.oid from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup joinCon ReqWorkGroup.theWorkGroup.theAgent as agent where agent.ident= :agentIdent";
+      StringTokenizer tokenizer = new StringTokenizer(actIdent, ".");
 
-		String reqAgentHql = "select reqAgent.oid from " + ReqAgent.class.getName() + " as reqAgent where reqAgent.theAgent.ident = :agentIdent";
-		System.out.println();
-		String hql = "select task.theProcessAgenda.theTaskAgenda.theAgent.ident, task.theProcessAgenda.theTaskAgenda.theAgent.name, " +
-						"reqPeople, task.theProcessAgenda.theTaskAgenda.theAgent.costHour, " +
-						"task.theProcessAgenda.theProcess.ident, task.theNormal.ident, task.theNormal.name, task.localState, " +
-						"task.theNormal.theEnactionDescription.actualEnd, task.theNormal.plannedEnd, " +
-						"task.theNormal.theEnactionDescription.actualBegin, task.theNormal.plannedBegin " +
-						"from " + Task.class.getName() + " as task joinCon task.theNormal.theRequiredPeople as reqPeople " +
-						"where reqPeople.theNormal.ident = task.theNormal.ident " + "and task.theProcessAgenda.theTaskAgenda.theAgent.isActive is true " +
-						(agentIdent != null ? "and task.theProcessAgenda.theTaskAgenda.theAgent.ident= :agentIdent and (reqPeople.oid in (" + ReqWorkGroupHql + ") or reqPeople.oid in (" + reqAgentHql + ")) " : " ") +
-						(beginDate!=null ? "and task.theNormal.plannedBegin >= :beginDate " : " ") +
-						(endDate!=null ? "and task.theNormal.plannedEnd <= :endDate " : " ") +
-						(!allStates ? "and (task.theNormal.theEnactionDescription.state like :active or task.theNormal.theEnactionDescription.state like :ready or task.theNormal.theEnactionDescription.state like :waiting) " : " ") +
-						"order by task.theProcessAgenda.theTaskAgenda.theAgent.name, task.theProcessAgenda.theProcess.ident, task.theNormal.name";
+      tokenizer.nextToken();
+      while (tokenizer.hasMoreTokens()) {
+        entry[6] = "    " + entry[6];
+        tokenizer.nextToken();
+      }
 
-		Query query = this.getPersistenceContext().createQuery(hql);
+      entry[7] = result[7] != null ? result[7] : "";
 
-		if ( agentIdent != null )
-			query.setParameter( "agentIdent", agentIdent );
-		if(beginDate!=null)
-			query.setParameter( "beginDate", beginDate );
-		if(endDate!=null)
-			query.setParameter( "endDate", endDate );
-		if(!allStates){
-			query.setParameter("active", Plain.ACTIVE);
-			query.setParameter("ready", Plain.READY);
-			query.setParameter("waiting", Plain.WAITING);
-		}
+      DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
-		List<Object[]> tasks = query.getResultList();
-		System.out.println(tasks);
-		List<Object[]> toReturn = new ArrayList<Object[]>();
+      if (result[8] != null && result[9] != null) {
+        Calendar actualEnd = Calendar.getInstance();
+        actualEnd.setTime(Date.valueOf((LocalDate) result[8]));
 
-		if ( tasks == null || tasks.isEmpty() ) {
-			return toReturn;
-		}
+        Calendar plannedEnd = Calendar.getInstance();
+        plannedEnd.setTime(Date.valueOf((LocalDate) result[9]));
 
-		for ( Object[] result : tasks ) {
-			if ( result == null )
-				continue;
+        actualEnd.set(Calendar.HOUR, 0);
+        actualEnd.set(Calendar.MINUTE, 0);
+        actualEnd.set(Calendar.SECOND, 0);
+        actualEnd.set(Calendar.AM_PM, Calendar.AM);
 
-			Object[] entry = new Object[ 13 ];
+        plannedEnd.set(Calendar.HOUR, 0);
+        plannedEnd.set(Calendar.MINUTE, 0);
+        plannedEnd.set(Calendar.SECOND, 0);
+        plannedEnd.set(Calendar.AM_PM, Calendar.AM);
 
-			entry[ 0 ] = result[ 0 ] != null ? result[ 0 ] : "";
-			entry[ 1 ] = result[ 1 ] != null ? result[ 1 ] : "";
+        long delayInMillis = actualEnd.getTimeInMillis() - plannedEnd.getTimeInMillis();
+        int delayInDays = (int) ((double) delayInMillis / (1000 * 60 * 60 * 24));
 
-			if (result[2] != null) {
-				if (result[2] instanceof ReqWorkGroup) {
-					if(role!=null)
-						continue;
+        entry[8] = delayInDays;
+        LocalDate actualEndDate = LocalDate.ofEpochDay(actualEnd.getTime().getTime());
+        entry[9] = formatter.format(actualEndDate);
+      } else {
+        entry[8] = 0;
+        entry[9] = "";
+      }
 
-					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)result[2];
+      if (result[9] != null) {
+        Calendar plannedEnd = Calendar.getInstance();
+        plannedEnd.setTime(Date.valueOf((LocalDate) result[9]));
 
-					WorkGroup group = ReqWorkGroup.getTheWorkGroup();
+        plannedEnd.set(Calendar.HOUR, 0);
+        plannedEnd.set(Calendar.MINUTE, 0);
+        plannedEnd.set(Calendar.SECOND, 0);
+        plannedEnd.set(Calendar.AM_PM, Calendar.AM);
 
-					entry[2] = group != null ? group.getIdent() : "";
-				}
-				else {
-					ReqAgent reqAgent = (ReqAgent)result[2];
+        LocalDate plannedEndDate = LocalDate.ofEpochDay(plannedEnd.getTime().getTime());
+        entry[10] = formatter.format(plannedEndDate);
+      } else entry[10] = "";
 
-					String roleIdent = reqAgent.getTheRole().getIdent();
-					if(role!=null && !role.equals(roleIdent))
-						continue;
+      if (result[10] != null) {
+        Calendar actualBegin = Calendar.getInstance();
 
-					entry[2] = roleIdent;
-				}
-			}
-			else entry[2] = "";
+        actualBegin.setTime(Date.valueOf((LocalDate) result[10]));
 
-			entry[ 3 ] = new Double( (Float)( result[ 3 ] != null ? result[ 3 ] : 0.0 ) );
+        actualBegin.set(Calendar.HOUR, 0);
+        actualBegin.set(Calendar.MINUTE, 0);
+        actualBegin.set(Calendar.SECOND, 0);
+        actualBegin.set(Calendar.AM_PM, Calendar.AM);
 
-			entry[ 4 ] = getAgentWorkLoad( (String)result[ 0 ] );
+        LocalDate actualBeginDate = LocalDate.ofEpochDay(actualBegin.getTime().getTime());
+        entry[11] = formatter.format(actualBeginDate);
+      } else entry[11] = "";
 
-			String actIdent = (String)result[ 5 ];
+      if (result[11] != null) {
+        Calendar plannedBegin = Calendar.getInstance();
 
-			entry[ 5 ] = result[ 4 ] != null ? result[ 4 ] : "";
-			entry[ 6 ] = result[ 6 ] != null ? result[ 6 ] : "";
+        plannedBegin.setTime(Date.valueOf((LocalDate) result[11]));
 
-			StringTokenizer tokenizer = new StringTokenizer( actIdent, "." );
+        plannedBegin.set(Calendar.HOUR, 0);
+        plannedBegin.set(Calendar.MINUTE, 0);
+        plannedBegin.set(Calendar.SECOND, 0);
+        plannedBegin.set(Calendar.AM_PM, Calendar.AM);
 
-			tokenizer.nextToken();
-			while( tokenizer.hasMoreTokens() )
-			{
-				entry[ 6 ] = "    " + entry[ 6 ];
-				tokenizer.nextToken();
-			}
+        LocalDate plannedBeginDate = LocalDate.ofEpochDay(plannedBegin.getTime().getTime());
+        entry[12] = formatter.format(plannedBeginDate);
+      } else entry[12] = "";
 
-			entry[ 7 ] = result[ 7 ] != null ? result[ 7 ] : "";
+      toReturn.add(entry);
+    }
 
-			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    return null;
+  }
 
-			if ( result[ 8 ] != null && result[ 9 ] != null) {
-				Calendar actualEnd = Calendar.getInstance();
-				actualEnd.setTime(Date.valueOf((LocalDate)result[ 8 ] ));
+  @Override
+  public List<Object[]> getCostDeviationReportData(String processIdent) {
+    String queryString =
+        "from "
+            + Normal.class.getName()
+            + " as normal "
+            + "where normal.ident like '"
+            + processIdent
+            + ".%' "
+            + "order by normal.ident";
 
-				Calendar plannedEnd = Calendar.getInstance();
-				plannedEnd.setTime(Date.valueOf((LocalDate)result[ 9 ] ));
+    Query query = this.getPersistenceContext().createQuery(queryString);
 
-				actualEnd.set( Calendar.HOUR, 0 );
-				actualEnd.set( Calendar.MINUTE, 0 );
-				actualEnd.set( Calendar.SECOND, 0 );
-				actualEnd.set( Calendar.AM_PM, Calendar.AM );
+    List<Normal> normals = query.getResultList();
+    List<Object[]> result = new ArrayList<Object[]>();
 
-				plannedEnd.set( Calendar.HOUR, 0 );
-				plannedEnd.set( Calendar.MINUTE, 0 );
-				plannedEnd.set( Calendar.SECOND, 0 );
-				plannedEnd.set( Calendar.AM_PM, Calendar.AM );
+    if (normals == null || normals.isEmpty()) return result;
 
-				long delayInMillis = actualEnd.getTimeInMillis() - plannedEnd.getTimeInMillis();
-				int delayInDays = (int)( (double)delayInMillis / ( 1000 * 60 * 60 * 24 ) );
+    Collections.sort(normals, new OrderByPlannedBeginWorkGroupedByActivity(processIdent));
 
-				entry[ 8 ] = delayInDays;
-				LocalDate actualEndDate = LocalDate.ofEpochDay(actualEnd.getTime().getTime());
-				entry[ 9 ] = formatter.format(actualEndDate);
-			}
-			else {
-				entry[ 8 ] = 0;
-				entry[ 9 ] = "";
-			}
+    for (Normal normal : normals) {
+      if (normal == null) continue;
 
-			if(result[ 9 ] != null){
-				Calendar plannedEnd = Calendar.getInstance();
-				plannedEnd.setTime(Date.valueOf((LocalDate)result[ 9 ]));
+      Object[] entry = new Object[4];
 
-				plannedEnd.set( Calendar.HOUR, 0 );
-				plannedEnd.set( Calendar.MINUTE, 0 );
-				plannedEnd.set( Calendar.SECOND, 0 );
-				plannedEnd.set( Calendar.AM_PM, Calendar.AM );
+      double estimatedHours = getActivityHourEstimation(normal.getIdent());
+      double estimatedCost = 0;
+      double realCost = 0;
 
-				LocalDate plannedEndDate = LocalDate.ofEpochDay(plannedEnd.getTime().getTime());
-				entry[10] = formatter.format(plannedEndDate);
-			}else entry[10] = "";
+      Collection<RequiredPeople> reqPeople = normal.getTheRequiredPeople();
 
-			if(result[10]!=null){
-				Calendar actualBegin = Calendar.getInstance();
+      for (RequiredPeople requiredPeople : reqPeople) {
+        if (requiredPeople instanceof ReqWorkGroup) {
+          ReqWorkGroup ReqWorkGroup = (ReqWorkGroup) requiredPeople;
+          if (ReqWorkGroup.getTheWorkGroup() == null) continue;
 
-				actualBegin.setTime(Date.valueOf((LocalDate)result[ 10 ]) );
+          for (Agent agent : (Set<Agent>) ReqWorkGroup.getTheWorkGroup().getTheAgents()) {
+            if (agent == null) continue;
 
-				actualBegin.set( Calendar.HOUR, 0 );
-				actualBegin.set( Calendar.MINUTE, 0 );
-				actualBegin.set( Calendar.SECOND, 0 );
-				actualBegin.set( Calendar.AM_PM, Calendar.AM );
+            estimatedCost += agent.getCostHour() * estimatedHours;
+            realCost +=
+                agent.getCostHour() * getWorkingHoursForTask(normal.getIdent(), agent.getIdent());
+          }
+        } else if (requiredPeople instanceof ReqAgent) {
+          Agent agent = ((ReqAgent) requiredPeople).getTheAgent();
 
-				LocalDate actualBeginDate = LocalDate.ofEpochDay(actualBegin.getTime().getTime());
-				entry[11] = formatter.format(actualBeginDate);
-			}else entry[11] = "";
+          if (agent == null) continue;
 
-			if(result[11]!=null){
-				Calendar plannedBegin = Calendar.getInstance();
+          estimatedCost += agent.getCostHour() * estimatedHours;
+          realCost +=
+              agent.getCostHour() * getWorkingHoursForTask(normal.getIdent(), agent.getIdent());
+        }
+      }
 
-				plannedBegin.setTime(Date.valueOf((LocalDate)result[ 11 ] ));
+      entry[0] = processIdent;
+      entry[1] = normal.getName();
 
-				plannedBegin.set( Calendar.HOUR, 0 );
-				plannedBegin.set( Calendar.MINUTE, 0 );
-				plannedBegin.set( Calendar.SECOND, 0 );
-				plannedBegin.set( Calendar.AM_PM, Calendar.AM );
+      StringTokenizer tokenizer = new StringTokenizer(normal.getIdent(), ".");
 
-				LocalDate plannedBeginDate = LocalDate.ofEpochDay(plannedBegin.getTime().getTime());
-				entry[12] = formatter.format(plannedBeginDate);
-			}else entry[12] = "";
+      tokenizer.nextToken();
+      while (tokenizer.hasMoreTokens()) {
+        entry[1] = "    " + entry[1];
+        tokenizer.nextToken();
+      }
 
-			toReturn.add( entry );
-		}
+      entry[2] = realCost;
+      entry[3] = estimatedCost;
 
+      result.add(entry);
+    }
+    return result;
+  }
 
-		return null;
-	}
+  @Override
+  public List<Object[]> getResourceStatesReportData() {
+    String queryString =
+        "from " + Resource.class.getName() + " as resource order by resource.ident";
+    Query query = this.getPersistenceContext().createQuery(queryString);
 
-	@Override
-	public List<Object[]> getCostDeviationReportData(String processIdent) {
-		String queryString = "from " + Normal.class.getName() + " as normal " +
-				"where normal.ident like '" + processIdent + ".%' " +
-				"order by normal.ident";
+    List<Resource> resources = query.getResultList();
+    List<Object[]> result = new ArrayList<Object[]>();
 
-		Query query = this.getPersistenceContext().createQuery(queryString);
+    if (resources == null || resources.isEmpty()) return result;
 
-		List<Normal> normals = query.getResultList();
-		List<Object[]> result = new ArrayList<Object[]>();
+    for (Resource resource : resources) {
+      if (resource == null) continue;
 
-		if ( normals == null || normals.isEmpty() )
-			return result;
+      Object[] entry = new Object[6];
 
-		Collections.sort(normals, new OrderByPlannedBeginWorkGroupedByActivity(processIdent));
+      entry[0] = resource.getIdent();
+      entry[1] = resource.getTheResourceType().getIdent();
 
-		for ( Normal normal : normals ) {
-			if ( normal == null )
-				continue;
+      if (resource instanceof Consumable) {
+        Consumable consumable = (Consumable) resource;
 
-			Object[] entry = new Object[ 4 ];
+        entry[2] = "Consumable";
+        entry[3] = new Double(consumable.getCost());
+        entry[4] = consumable.getUnit();
+        entry[5] = consumable.getConsumableStatus().name();
+      } else if (resource instanceof Exclusive) {
+        Exclusive exclusive = (Exclusive) resource;
 
-			double estimatedHours = getActivityHourEstimation( normal.getIdent());
-			double estimatedCost = 0;
-			double realCost = 0;
+        entry[2] = "Exclusive";
+        entry[3] = new Double(exclusive.getCost());
+        entry[4] = exclusive.getUnitOfCost();
+        entry[5] = exclusive.getExclusiveStatus().name();
+      } else if (resource instanceof Shareable) {
+        Shareable shareable = (Shareable) resource;
 
-			Collection<RequiredPeople> reqPeople = normal.getTheRequiredPeople();
+        entry[2] = "Shareable";
+        entry[3] = new Double(shareable.getCost());
+        entry[4] = shareable.getUnitOfCost();
+        entry[5] = shareable.getShareableStatus().name();
+      }
 
-			for ( RequiredPeople requiredPeople : reqPeople ) {
-				if ( requiredPeople instanceof ReqWorkGroup ){
-					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)requiredPeople;
-					if(ReqWorkGroup.getTheWorkGroup() == null)
-						continue;
+      result.add(entry);
+    }
 
-					for ( Agent agent : (Set<Agent>)ReqWorkGroup.getTheWorkGroup().getTheAgents() ) {
-						if ( agent == null )
-							continue;
+    return result;
+  }
 
-						estimatedCost += agent.getCostHour() * estimatedHours;
-						realCost += agent.getCostHour() * getWorkingHoursForTask( normal.getIdent(), agent.getIdent() );
-					}
-				}
-				else if ( requiredPeople instanceof ReqAgent ){
-					Agent agent = ( (ReqAgent)requiredPeople ).getTheAgent();
+  // @Override
+  // public List<Object[]> getKnowledgeItensReportData(LocalDate initialDate,	LocalDate finalDate) {
+  // 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+  // 	String di = format.format(initialDate);
+  // 	try {
+  // 		initialDate = format.parse(di);
+  // 	} catch (ParseException e) {
+  // 		e.printStackTrace();
+  // 	}
+  // 	String queryString = "select item.ident, item.date, item.status, item.theAgent.ident,
+  // item.theAgent.name from " + KnowledgeItem.class.getName() + " as item " +
+  // 						 "where item.date >= :initialDate AND item.date <= :finalDate order by item.ident";
 
-					if ( agent == null )
-						continue;
+  // 	Query query = this.getPersistenceContext().createQuery( queryString );
+  // 	query.setParameter("initialDate", initialDate);
+  // 	query.setParameter("finalDate", finalDate);
 
-					estimatedCost += agent.getCostHour() * estimatedHours;
-					realCost += agent.getCostHour() * getWorkingHoursForTask( normal.getIdent(), agent.getIdent() );
-				}
-			}
+  // 	List<Object[]> result = query.getResultList();
 
-			entry[ 0 ] = processIdent;
-			entry[ 1 ] = normal.getName();
+  // 	return result;
+  // }
 
-			StringTokenizer tokenizer = new StringTokenizer( normal.getIdent(), "." );
+  @Override
+  public List<Object[]> getAgentMetricsReportData(String agentId) {
+    String queryString =
+        "select metric.agent.ident, metric.agent.name, metric.metricDefinition.name, "
+            + "metric.value, metric.unit, metric.periodBegin, metric.periodEnd "
+            + "from "
+            + AgentMetric.class.getName()
+            + " as metric where metric.agent.isActive is true "
+            + (agentId != null ? "and metric.agent.ident = :agentId " : "")
+            + "order by metric.agent.name";
 
-			tokenizer.nextToken();
-			while( tokenizer.hasMoreTokens() ){
-				entry[ 1 ] = "    " + entry[ 1 ];
-				tokenizer.nextToken();
-			}
+    Query query = this.getPersistenceContext().createQuery(queryString);
 
-			entry[ 2 ] = realCost;
-			entry[ 3 ] = estimatedCost;
+    if (agentId != null) query.setParameter("agentId", agentId);
 
-			result.add( entry );
-		}
-		return result;
-	}
+    List<Object[]> metrics = query.getResultList();
 
-	@Override
-	public List<Object[]> getResourceStatesReportData() {
-		String queryString = "from " + Resource.class.getName() + " as resource order by resource.ident";
-		Query query = this.getPersistenceContext().createQuery( queryString );
+    if (metrics == null || metrics.isEmpty()) return new ArrayList<Object[]>();
 
-		List<Resource> resources = query.getResultList();
-		List<Object[]> result = new ArrayList<Object[]>();
+    return metrics;
+  }
 
-		if ( resources == null || resources.isEmpty() )
-			return result;
+  @Override
+  public List<Object[]> getArtifactMetricsReportData(String artifactIdent) {
+    String queryString =
+        "select metric.artifact.ident, metric.artifact.theArtifactType.ident, "
+            + "metric.metricDefinition.name, metric.value, metric.unit, "
+            + "metric.periodBegin, metric.periodEnd "
+            + "from "
+            + ArtifactMetric.class.getName()
+            + " as metric "
+            + (artifactIdent != null ? "where metric.artifact.ident = :artifactIdent " : "")
+            + "order by metric.artifact.ident";
 
-		for ( Resource resource : resources ) {
-			if ( resource == null )
-				continue;
+    Query query = this.getPersistenceContext().createQuery(queryString);
 
-			Object[] entry = new Object[ 6 ];
+    if (artifactIdent != null) query.setParameter("artifactIdent", artifactIdent);
 
-			entry[ 0 ] = resource.getIdent();
-			entry[ 1 ] = resource.getTheResourceType().getIdent();
+    List<Object[]> metrics = query.getResultList();
 
-			if ( resource instanceof Consumable ) {
-				Consumable consumable = (Consumable)resource;
+    if (metrics == null || metrics.isEmpty()) return new ArrayList<Object[]>();
+    return metrics;
+  }
 
-				entry[ 2 ] = "Consumable";
-				entry[ 3 ] = new Double( consumable.getCost() );
-				entry[ 4 ] = consumable.getUnit();
-        entry[ 5 ] = consumable.getConsumableStatus().name();
-			}
-			else if ( resource instanceof Exclusive ) {
-				Exclusive exclusive = (Exclusive)resource;
+  @Override
+  public List<Object[]> getResourceMetricsReportData(String resourceIdent) {
+    String queryString =
+        "select metric.resource.ident, metric.resource.theResourceType.ident, "
+            + "metric.metricDefinition.name, metric.value, metric.unit, "
+            + "metric.periodBegin, metric.periodEnd "
+            + "from "
+            + ResourceMetric.class.getName()
+            + " as metric "
+            + (resourceIdent != null ? "where metric.resource.ident = :resourceIdent " : "")
+            + "order by metric.resource.ident";
 
-				entry[ 2 ] = "Exclusive";
-				entry[ 3 ] = new Double( exclusive.getCost() );
-				entry[ 4 ] = exclusive.getUnitOfCost();
-				entry[ 5 ] = exclusive.getExclusiveStatus().name();
-			}
-			else if ( resource instanceof Shareable ) {
-				Shareable shareable = (Shareable)resource;
+    Query query = this.getPersistenceContext().createQuery(queryString);
 
-				entry[ 2 ] = "Shareable";
-				entry[ 3 ] = new Double( shareable.getCost() );
-				entry[ 4 ] = shareable.getUnitOfCost();
-				entry[ 5 ] = shareable.getShareableStatus().name();
-			}
+    if (resourceIdent != null) query.setParameter("resourceIdent", resourceIdent);
 
-			result.add( entry );
-		}
+    List<Object[]> metrics = query.getResultList();
 
-		return result;
-	}
+    if (metrics == null || metrics.isEmpty()) return new ArrayList<Object[]>();
 
-	// @Override
-	// public List<Object[]> getKnowledgeItensReportData(LocalDate initialDate,	LocalDate finalDate) {
-	// 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-	// 	String di = format.format(initialDate);
-	// 	try {
-	// 		initialDate = format.parse(di);
-	// 	} catch (ParseException e) {
-	// 		e.printStackTrace();
-	// 	}
-	// 	String queryString = "select item.ident, item.date, item.status, item.theAgent.ident, item.theAgent.name from " + KnowledgeItem.class.getName() + " as item " +
-	// 						 "where item.date >= :initialDate AND item.date <= :finalDate order by item.ident";
+    return metrics;
+  }
 
-	// 	Query query = this.getPersistenceContext().createQuery( queryString );
-	// 	query.setParameter("initialDate", initialDate);
-	// 	query.setParameter("finalDate", finalDate);
+  @Override
+  public List<Object[]> getScheduleData(String processIdent) {
+    Process process = processDAO.retrieveBySecondaryKey(processIdent);
+    ProcessModel model = process.getTheProcessModel();
 
-	// 	List<Object[]> result = query.getResultList();
+    List<Activity> activities = getActivitiesFromPModelOrderedByPlannedBegin(processIdent, model);
 
-	// 	return result;
-	// }
+    List<Object[]> resultList = new ArrayList<Object[]>();
 
-	@Override
-	public List<Object[]> getAgentMetricsReportData(String agentId) {
-		String queryString = "select metric.agent.ident, metric.agent.name, metric.metricDefinition.name, " +
-							"metric.value, metric.unit, metric.periodBegin, metric.periodEnd " +
-							"from " + AgentMetric.class.getName() + " as metric where metric.agent.isActive is true " +
-							( agentId != null ? "and metric.agent.ident = :agentId " : "" ) +
-							"order by metric.agent.name";
+    if (activities == null || activities.isEmpty()) {
+      return resultList;
+    }
 
-		Query query = this.getPersistenceContext().createQuery( queryString );
+    CriticalPathMethod criticalPath = new CriticalPathMethod();
+    List<String> criticalPathActs;
+    try {
 
-		if ( agentId != null )
-			query.setParameter( "agentId", agentId );
+      criticalPathActs = criticalPath.getCriticalPath(processIdent, processDAO);
+      if (criticalPathActs == null) criticalPathActs = new ArrayList<String>();
 
-		List<Object[]> metrics = query.getResultList();
+      for (Activity activity : activities) {
+        if (activity == null) continue;
 
-		if ( metrics == null || metrics.isEmpty() )
-			return new ArrayList<Object[]>();
+        Object[] actEntry = new Object[10];
 
-		return metrics;
-	}
+        actEntry[0] = processIdent;
+        actEntry[1] = activity.getIdent();
+        actEntry[2] = activity.getName();
 
-	@Override
-	public List<Object[]> getArtifactMetricsReportData(String artifactIdent) {
-		String queryString = "select metric.artifact.ident, metric.artifact.theArtifactType.ident, " +
-				"metric.metricDefinition.name, metric.value, metric.unit, " +
-				"metric.periodBegin, metric.periodEnd " +
-				"from " + ArtifactMetric.class.getName() + " as metric " +
-				( artifactIdent != null ? "where metric.artifact.ident = :artifactIdent " : "" ) +
-				"order by metric.artifact.ident";
+        if (criticalPathActs.contains(activity.getIdent())) actEntry[2] = "*" + actEntry[2];
 
-		Query query = this.getPersistenceContext().createQuery( queryString );
+        StringTokenizer tokenizer = new StringTokenizer(activity.getIdent(), ".");
 
-		if ( artifactIdent != null )
-			query.setParameter( "artifactIdent", artifactIdent );
+        tokenizer.nextToken();
+        while (tokenizer.hasMoreTokens()) {
+          actEntry[2] = "    " + actEntry[2];
+          tokenizer.nextToken();
+        }
 
-		List<Object[]> metrics = query.getResultList();
+        if (activity instanceof Normal) {
+          Normal normal = (Normal) activity;
 
-		if ( metrics == null || metrics.isEmpty() )
-			return new ArrayList<Object[]>();
-		return metrics;
-	}
+          actEntry[3] = normal.getTheEnactionDescription().getThePlain().getPlainStatus().name();
 
-	@Override
-	public List<Object[]> getResourceMetricsReportData(String resourceIdent) {
-		String queryString = "select metric.resource.ident, metric.resource.theResourceType.ident, " +
-				"metric.metricDefinition.name, metric.value, metric.unit, " +
-			 	"metric.periodBegin, metric.periodEnd " +
-			 	"from " + ResourceMetric.class.getName() + " as metric " +
-			 	( resourceIdent != null ? "where metric.resource.ident = :resourceIdent " : "" ) +
-			 	"order by metric.resource.ident";
+          actEntry[4] = normal.getPlannedBegin();
 
-		Query query = this.getPersistenceContext().createQuery( queryString );
+          actEntry[5] = normal.getPlannedEnd();
 
-		if ( resourceIdent != null )
-			query.setParameter( "resourceIdent", resourceIdent );
+          actEntry[6] = getActivityHourEstimation(activity.getIdent());
 
-		List<Object[]> metrics = query.getResultList();
+          actEntry[7] = normal.getTheEnactionDescription().getActualBegin();
 
-		if ( metrics == null || metrics.isEmpty() )
-			return new ArrayList<Object[]>();
+          actEntry[8] = normal.getTheEnactionDescription().getActualEnd();
 
-		return metrics;
-	}
+          if (actEntry[3].equals(Plain.ACTIVE)
+              || actEntry[3].equals(Plain.PAUSED)
+              || actEntry[3].equals(Plain.FAILED)
+              || actEntry[3].equals(Plain.FINISHED)) {
+            actEntry[9] = getWorkedHoursForActivity(activity.getIdent());
+          } else actEntry[9] = 0.0;
+        } else if (activity instanceof Decomposed) {
+          Decomposed decomposed = (Decomposed) activity;
 
-	@Override
-	public List<Object[]> getScheduleData(String processIdent) {
-		Process process = processDAO.retrieveBySecondaryKey( processIdent );
-		ProcessModel model = process.getTheProcessModel();
+          actEntry[2] = actEntry[2] + "<D>";
 
-		List<Activity> activities = getActivitiesFromPModelOrderedByPlannedBegin( processIdent, model );
+          actEntry[3] = decomposed.getTheReferedProcessModel().getPmStatus();
 
-		List<Object[]> resultList = new ArrayList<Object[]>();
+          actEntry[6] = 0.0;
 
-		if ( activities == null || activities.isEmpty() ) {
-			return resultList;
-		}
+          actEntry[9] = 0.0;
+        }
 
-		CriticalPathMethod criticalPath = new CriticalPathMethod();
-		List<String> criticalPathActs;
-		try {
+        resultList.add(actEntry);
+      }
+    } catch (DAOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return resultList;
+  }
 
-			criticalPathActs = criticalPath.getCriticalPath( processIdent, processDAO );
-			if ( criticalPathActs == null )
-				criticalPathActs = new ArrayList<String>();
+  private double getWorkedHoursForActivity(String actIdent) {
+    String queryString =
+        "from " + Task.class.getName() + " as t where t.theNormal.ident = '" + actIdent + "'";
 
-			for ( Activity activity : activities )
-			{
-				if ( activity == null )
-					continue;
+    Query query = this.getPersistenceContext().createQuery(queryString);
 
-				Object[] actEntry = new Object[ 10 ];
+    List<Task> tasks = query.getResultList();
 
-				actEntry[ 0 ] = processIdent;
-				actEntry[ 1 ] = activity.getIdent();
-				actEntry[ 2 ] = activity.getName();
+    if (tasks == null || tasks.isEmpty()) return 0.0;
 
-				if ( criticalPathActs.contains( activity.getIdent() ) )
-					actEntry[ 2 ] = "*" + actEntry[ 2 ];
+    double workedHours = 0.0;
+    int taskCount = 0;
 
-				StringTokenizer tokenizer = new StringTokenizer( activity.getIdent(), "." );
+    for (Task task : tasks) {
+      if (task != null) taskCount++;
+      else continue;
 
-				tokenizer.nextToken();
-				while( tokenizer.hasMoreTokens() )
-				{
-					actEntry[ 2 ] = "    " + actEntry[ 2 ];
-					tokenizer.nextToken();
-				}
+      if (task.getWorkingHours() != 0.0) {
+        workedHours += task.getWorkingHours();
+      } else {
+        String agentIdent = task.getTheProcessAgenda().getTheTaskAgenda().getTheAgent().getIdent();
 
-				if ( activity instanceof Normal )
-				{
-					Normal normal = (Normal)activity;
+        workedHours += getWorkingHoursForTask(actIdent, agentIdent);
+      }
+    }
 
-					actEntry[ 3 ] = normal.getTheEnactionDescription().getThePlain().getPlainStatus().name();
+    return workedHours;
+  }
 
-					actEntry[ 4 ] = normal.getPlannedBegin();
+  private List<Activity> getActivitiesFromPModelOrderedByPlannedBegin(
+      String process, ProcessModel pModel) {
+    Set<Activity> acts = pModel.getTheActivities();
 
-					actEntry[ 5 ] = normal.getPlannedEnd();
+    List<Activity> listOfActs = new LinkedList<Activity>();
 
-					actEntry[ 6 ] = getActivityHourEstimation( activity.getIdent());
+    for (Object obj : acts) {
+      if (obj == null) continue;
 
-					actEntry[ 7 ] = normal.getTheEnactionDescription().getActualBegin();
+      Activity act = (Activity) obj;
 
-					actEntry[ 8 ] = normal.getTheEnactionDescription().getActualEnd();
+      listOfActs.add(act);
+    }
 
-					if ( actEntry[ 3 ].equals( Plain.ACTIVE ) ||
-							actEntry[ 3 ].equals( Plain.PAUSED ) ||
-							actEntry[ 3 ].equals( Plain.FAILED ) ||
-							actEntry[ 3 ].equals( Plain.FINISHED ) ) {
-						actEntry[ 9 ] = getWorkedHoursForActivity( activity.getIdent());
-					}
-					else actEntry[ 9 ] = 0.0;
-				}
-				else if ( activity instanceof Decomposed )
-				{
-					Decomposed decomposed = (Decomposed)activity;
+    Collections.sort(listOfActs, new OrderByPlannedBegin(process));
 
-					actEntry[ 2 ] = actEntry[ 2 ] + "<D>";
+    List<Activity> listOfActsExpanded = new LinkedList<Activity>();
+    for (Activity act : listOfActs) {
+      listOfActsExpanded.add(act);
 
-					actEntry[ 3 ] = decomposed.getTheReferedProcessModel().getPmState();
+      if (act instanceof Decomposed) {
+        Decomposed decAct = (Decomposed) act;
+        ProcessModel decPModel = decAct.getTheReferedProcessModel();
 
-					actEntry[ 6 ] = 0.0;
+        List listOfActsFromDecomposed =
+            this.getActivitiesFromPModelOrderedByPlannedBegin(process, decPModel);
 
-					actEntry[ 9 ] = 0.0;
-				}
+        listOfActsExpanded.addAll(listOfActsFromDecomposed);
+      }
+    }
 
-				resultList.add( actEntry );
-			}
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return resultList;
-	}
+    return listOfActsExpanded;
+  }
 
-	private double getWorkedHoursForActivity( String actIdent) {
-		String queryString = "from " + Task.class.getName() + " as t where t.theNormal.ident = '" + actIdent + "'";
+  @Override
+  public List<Object[]> getDocumentManagementPlanData(String processIdent) {
+    Process process = processDAO.retrieveBySecondaryKey(processIdent);
+    ProcessModel model = process.getTheProcessModel();
 
-		Query query = this.getPersistenceContext().createQuery( queryString );
+    List<Activity> activities = getActivitiesFromPModelOrderedByPlannedBegin(processIdent, model);
 
-		List<Task> tasks = query.getResultList();
+    List<Object[]> result = new ArrayList<Object[]>();
 
-		if ( tasks == null || tasks.isEmpty() )
-			return 0.0;
+    if (activities == null || activities.isEmpty()) return result;
 
-		double workedHours = 0.0;
-		int taskCount = 0;
+    for (Activity activity : activities) {
+      String activityIdent = activity.getIdent();
 
-		for ( Task task : tasks ) {
-			if ( task != null )
-				taskCount++;
-			else continue;
+      List<String> agents = null;
+      List<String> inputArtifacts = null;
+      List<String> outputArtifacts = null;
 
-			if ( task.getWorkingHours() != 0.0 )
-			{
-				workedHours += task.getWorkingHours();
-			}
-			else
-			{
-				String agentIdent = task.getTheProcessAgenda().getTheTaskAgenda().getTheAgent().getIdent();
+      if (activity instanceof Decomposed) {
+        agents = new ArrayList<String>();
+        inputArtifacts = new ArrayList<String>();
+        outputArtifacts = new ArrayList<String>();
+      } else {
+        String agentQueryString =
+            "select reqAgent.theAgent.name "
+                + "from "
+                + ReqAgent.class.getName()
+                + " as reqAgent "
+                + "where reqAgent.theNormal.ident = :normalIdent "
+                + "order by reqAgent.theAgent.name";
 
-				workedHours += getWorkingHoursForTask( actIdent, agentIdent );
-			}
-		}
+        Query agentQuery = this.getPersistenceContext().createQuery(agentQueryString);
+        agentQuery.setParameter("normalIdent", activityIdent);
 
-		return workedHours;
-	}
+        agents = agentQuery.getResultList();
 
+        String inputArtifactQueryString =
+            "select involvedArtifact.theArtifact.ident "
+                + "from "
+                + InvolvedArtifact.class.getName()
+                + " as involvedArtifact "
+                + "where involvedArtifact.inInvolvedArtifacts.ident = :normalIdent "
+                + "order by involvedArtifact.theArtifact.ident";
 
-	private List<Activity> getActivitiesFromPModelOrderedByPlannedBegin(String process, ProcessModel pModel) {
-		Set<Activity> acts = pModel.getTheActivities();
+        Query inputArtifactQuery =
+            this.getPersistenceContext().createQuery(inputArtifactQueryString);
+        inputArtifactQuery.setParameter("normalIdent", activityIdent);
 
-		List<Activity> listOfActs = new LinkedList<Activity>();
+        inputArtifacts = inputArtifactQuery.getResultList();
 
-		for( Object obj: acts ) {
-			if ( obj == null )
-				continue;
+        String outputArtifactQueryString =
+            "select involvedArtifact.theArtifact.ident "
+                + "from "
+                + InvolvedArtifact.class.getName()
+                + " as involvedArtifact "
+                + "where involvedArtifact.outInvolvedArtifacts.ident = :normalIdent "
+                + "order by involvedArtifact.theArtifact.ident";
 
-			Activity act = (Activity)obj;
+        Query outputArtifactQuery =
+            this.getPersistenceContext().createQuery(outputArtifactQueryString);
+        outputArtifactQuery.setParameter("normalIdent", activityIdent);
 
-			listOfActs.add(act);
-		}
+        outputArtifacts = outputArtifactQuery.getResultList();
+      }
 
-		Collections.sort( listOfActs, new OrderByPlannedBegin(process) );
+      Object[] entry = new Object[7];
 
-		List<Activity> listOfActsExpanded = new LinkedList<Activity>();
-		for(Activity act: listOfActs){
-			listOfActsExpanded.add(act);
+      entry[0] = processIdent;
+      entry[1] = activity.getName();
 
-      if(act instanceof Decomposed){
-				Decomposed decAct = (Decomposed) act;
-				ProcessModel decPModel = decAct.getTheReferedProcessModel();
+      if (activity instanceof Decomposed) entry[1] = entry[1] + "<D>";
 
-				List listOfActsFromDecomposed =
-					this.getActivitiesFromPModelOrderedByPlannedBegin(process, decPModel);
+      StringTokenizer tokenizer = new StringTokenizer(activity.getIdent(), ".");
 
-				listOfActsExpanded.addAll(listOfActsFromDecomposed);
-			}
-		}
+      tokenizer.nextToken();
+      while (tokenizer.hasMoreTokens()) {
+        entry[1] = "    " + entry[1];
+        tokenizer.nextToken();
+      }
 
-		return listOfActsExpanded;
-	}
+      if (activity instanceof Normal) {
+        Normal normal = (Normal) activity;
 
-	@Override
-	public List<Object[]> getDocumentManagementPlanData(String processIdent) {
-    Process process = processDAO.retrieveBySecondaryKey( processIdent );
-		ProcessModel model = process.getTheProcessModel();
+        entry[2] = normal.getPlannedBegin();
+        entry[3] = normal.getPlannedEnd();
+      }
 
-		List<Activity> activities = getActivitiesFromPModelOrderedByPlannedBegin( processIdent, model );
+      entry[4] = (!agents.isEmpty() ? agents.get(0) : null);
+      entry[5] = (!inputArtifacts.isEmpty() ? inputArtifacts.get(0) : null);
+      entry[6] = (!outputArtifacts.isEmpty() ? outputArtifacts.get(0) : null);
 
-		List<Object[]> result = new ArrayList<Object[]>();
+      result.add(entry);
 
-		if ( activities == null || activities.isEmpty() )
-			return result;
+      int counter = 1;
 
-		for ( Activity activity : activities ) {
-			String activityIdent = activity.getIdent();
+      while (counter < agents.size()
+          || counter < inputArtifacts.size()
+          || counter < outputArtifacts.size()) {
+        entry = new Object[7];
 
-			List<String> agents = null;
-			List<String> inputArtifacts = null;
-			List<String> outputArtifacts = null;
+        entry[0] = processIdent;
+        entry[1] = "";
+        entry[2] = null;
+        entry[3] = null;
+        entry[4] = (counter < agents.size() ? agents.get(counter) : null);
+        entry[5] = (counter < inputArtifacts.size() ? inputArtifacts.get(counter) : null);
+        entry[6] = (counter < outputArtifacts.size() ? outputArtifacts.get(counter) : null);
 
-			if ( activity instanceof Decomposed )
-			{
-				agents = new ArrayList<String>();
-				inputArtifacts = new ArrayList<String>();
-				outputArtifacts = new ArrayList<String>();
-			}
-			else
-			{
-				String agentQueryString = "select reqAgent.theAgent.name " +
-											"from " + ReqAgent.class.getName() + " as reqAgent " +
-											"where reqAgent.theNormal.ident = :normalIdent " +
-											"order by reqAgent.theAgent.name";
+        result.add(entry);
 
-				Query agentQuery = this.getPersistenceContext().createQuery( agentQueryString );
-				agentQuery.setParameter( "normalIdent", activityIdent );
+        counter++;
+      }
+    }
 
-				agents = agentQuery.getResultList();
+    return result;
+  }
 
-				String inputArtifactQueryString = "select involvedArtifact.theArtifact.ident " +
-													"from " + InvolvedArtifact.class.getName() + " as involvedArtifact " +
-													"where involvedArtifact.inInvolvedArtifacts.ident = :normalIdent " +
-													"order by involvedArtifact.theArtifact.ident";
+  @Override
+  public List<Object[]> getHumanResourcesPlanData(String processIdent) {
 
-				Query inputArtifactQuery = this.getPersistenceContext().createQuery( inputArtifactQueryString );
-				inputArtifactQuery.setParameter( "normalIdent", activityIdent );
+    String ReqWorkGroupHql =
+        "select ReqWorkGroup from "
+            + ReqWorkGroup.class.getName()
+            + " as ReqWorkGroup joinCon ReqWorkGroup.theWorkGroup.theAgent as agent "
+            + "where agent.ident = task.theProcessAgenda.theTaskAgenda.theAgent.ident";
 
-				inputArtifacts = inputArtifactQuery.getResultList();
+    String reqAgentHql =
+        "select reqAgent from "
+            + ReqAgent.class.getName()
+            + " as reqAgent "
+            + "where reqAgent.theAgent.ident = task.theProcessAgenda.theTaskAgenda.theAgent.ident";
 
-				String outputArtifactQueryString = "select involvedArtifact.theArtifact.ident " +
-									"from " + InvolvedArtifact.class.getName() + " as involvedArtifact " +
-									"where involvedArtifact.outInvolvedArtifacts.ident = :normalIdent " +
-									"order by involvedArtifact.theArtifact.ident";
+    String queryString =
+        "select task.theNormal.ident, task.theNormal.name, "
+            + "reqPeople, task.theProcessAgenda.theTaskAgenda.theAgent.ident, "
+            + "task.theProcessAgenda.theTaskAgenda.theAgent.name, task.workingHours "
+            + "from "
+            + Task.class.getName()
+            + " as task "
+            + "joinCon task.theNormal.theRequiredPeople as reqPeople "
+            + "where task.theNormal.ident like :processIdent "
+            + "and task.theNormal.ident.isVersion is null "
+            + "and (reqPeople in ("
+            + ReqWorkGroupHql
+            + ") or reqPeople in ("
+            + reqAgentHql
+            + ")) "
+            + "order by task.theNormal.ident";
 
-				Query outputArtifactQuery = this.getPersistenceContext().createQuery( outputArtifactQueryString );
-				outputArtifactQuery.setParameter( "normalIdent", activityIdent );
+    Query query = this.getPersistenceContext().createQuery(queryString);
+    query.setParameter("processIdent", processIdent + ".%");
 
-				outputArtifacts = outputArtifactQuery.getResultList();
-			}
+    List<Object[]> activities = query.getResultList();
+    List<Object[]> result = new ArrayList<Object[]>();
 
-			Object[] entry = new Object[ 7 ];
+    if (activities == null || activities.isEmpty()) return result;
 
-			entry[ 0 ] = processIdent;
-			entry[ 1 ] = activity.getName();
+    HashMap<String, Object[]> resultMap = new HashMap<String, Object[]>();
 
-			if ( activity instanceof Decomposed )
-				entry[ 1 ] = entry[ 1 ] + "<D>";
+    for (Object[] activity : activities) {
+      Object[] entry = resultMap.get((String) activity[0]);
 
-			StringTokenizer tokenizer = new StringTokenizer( activity.getIdent(), "." );
+      if (entry == null) {
+        entry = new Object[3];
 
-			tokenizer.nextToken();
-			while( tokenizer.hasMoreTokens() )
-			{
-				entry[ 1 ] = "    " + entry[ 1 ];
-				tokenizer.nextToken();
-			}
+        entry[0] = (String) activity[0];
+        entry[1] = (String) activity[1];
 
-			if ( activity instanceof Normal )
-			{
-				Normal normal = (Normal)activity;
+        StringTokenizer tokenizer = new StringTokenizer((String) activity[0], ".");
+        tokenizer.nextToken();
 
-				entry[ 2 ] = normal.getPlannedBegin();
-				entry[ 3 ] = normal.getPlannedEnd();
-			}
+        while (tokenizer.hasMoreTokens()) {
+          entry[1] = "    " + entry[1];
+          tokenizer.nextToken();
+        }
 
-			entry[ 4 ] = ( !agents.isEmpty() ? agents.get( 0 ) : null );
-			entry[ 5 ] = ( !inputArtifacts.isEmpty() ? inputArtifacts.get( 0 ) : null );
-			entry[ 6 ] = ( !outputArtifacts.isEmpty() ? outputArtifacts.get( 0 ) : null );
+        entry[2] = new ArrayList<Object[]>();
 
-			result.add( entry );
+        resultMap.put((String) activity[0], entry);
+      }
 
-			int counter = 1;
+      Object[] agentEntry = new Object[3];
 
-			while( counter < agents.size() || counter < inputArtifacts.size() || counter < outputArtifacts.size() ) {
-				entry = new Object[ 7 ];
+      if (activity[2] != null) {
+        if (activity[2] instanceof ReqWorkGroup) {
+          ReqWorkGroup ReqWorkGroup = (ReqWorkGroup) activity[2];
 
-				entry[ 0 ] = processIdent;
-				entry[ 1 ] = "";
-				entry[ 2 ] = null;
-				entry[ 3 ] = null;
-				entry[ 4 ] = ( counter < agents.size() ? agents.get( counter ) : null );
-				entry[ 5 ] = ( counter < inputArtifacts.size() ? inputArtifacts.get( counter ) : null );
-				entry[ 6 ] = ( counter < outputArtifacts.size() ? outputArtifacts.get( counter ) : null );
+          agentEntry[0] = ReqWorkGroup.getTheWorkGroup().getName();
+        } else {
+          ReqAgent reqAgent = (ReqAgent) activity[2];
 
-				result.add( entry );
+          agentEntry[0] = reqAgent.getTheRole().getName();
+        }
+      } else {
+        agentEntry[0] = "";
+      }
 
-				counter++;
-			}
-		}
+      agentEntry[1] = activity[4];
 
-		return result;
-	}
+      agentEntry[2] = new Double((Float) activity[5]);
 
-	@Override
-	public List<Object[]> getHumanResourcesPlanData(String processIdent) {
+      if (((Double) agentEntry[2]) == 0) {
+        agentEntry[2] =
+            new Double((Float) getWorkingHoursForTask((String) activity[0], (String) activity[3]));
+      }
 
-		String ReqWorkGroupHql = "select ReqWorkGroup from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup joinCon ReqWorkGroup.theWorkGroup.theAgent as agent " +
-								"where agent.ident = task.theProcessAgenda.theTaskAgenda.theAgent.ident";
+      ((ArrayList<Object[]>) entry[2]).add(agentEntry);
+    }
 
-		String reqAgentHql = "select reqAgent from " + ReqAgent.class.getName() + " as reqAgent " +
-								"where reqAgent.theAgent.ident = task.theProcessAgenda.theTaskAgenda.theAgent.ident";
+    result.addAll(resultMap.values());
 
-		String queryString = "select task.theNormal.ident, task.theNormal.name, " +
-									"reqPeople, task.theProcessAgenda.theTaskAgenda.theAgent.ident, " +
-									"task.theProcessAgenda.theTaskAgenda.theAgent.name, task.workingHours " +
-								"from " + Task.class.getName() + " as task " +
-								"joinCon task.theNormal.theRequiredPeople as reqPeople " +
-								"where task.theNormal.ident like :processIdent " +
-								"and task.theNormal.ident.isVersion is null " +
-								"and (reqPeople in (" + ReqWorkGroupHql + ") or reqPeople in (" + reqAgentHql + ")) " +
-								"order by task.theNormal.ident";
+    Collections.sort(
+        result,
+        new OrderByPlannedBeginWorkGroupedByActivity(processIdent) {
+          public int compare(Object o1, Object o2) {
+            Object[] os1 = (Object[]) o1, os2 = (Object[]) o2;
 
-		Query query = this.getPersistenceContext().createQuery( queryString );
-		query.setParameter("processIdent", processIdent + ".%");
+            Activity a1 = null;
+            Activity a2 = null;
 
-		List<Object[]> activities = query.getResultList();
-		List<Object[]> result = new ArrayList<Object[]>();
+            a1 = (Activity) actMap.get((String) os1[0]);
+            a2 = (Activity) actMap.get((String) os2[0]);
 
-		if ( activities == null || activities.isEmpty() )
-			return result;
+            System.out.println("A1: " + a1);
+            System.out.println("A2: " + a2);
 
-		HashMap<String, Object[]> resultMap = new HashMap<String, Object[]>();
+            return super.compare(a1, a2);
+          }
+        });
 
-		for ( Object[] activity : activities ) {
-			Object[] entry = resultMap.get((String)activity[0]);
+    return result;
+  }
 
-			if (entry == null) {
-				entry = new Object[3];
+  public List<Object[]> getAllocableActivitiesData(String processIdent) {
+    String allocableActivitiesQueryString =
+        "from "
+            + Normal.class.getName()
+            + " as normal "
+            + "where normal.autoAllocable is true and size(normal.theRequiredPeople) = 0 "
+            + "and normal.ident like '"
+            + processIdent
+            + ".%' "
+            + "and normal.isVersion is null "
+            + "order by normal.ident";
 
-				entry[ 0 ] = (String)activity[ 0 ];
-				entry[ 1 ] = (String)activity[ 1 ];
+    Query allocableActivitiesQuery =
+        this.getPersistenceContext().createQuery(allocableActivitiesQueryString);
 
-				StringTokenizer tokenizer = new StringTokenizer( (String)activity[ 0 ], "." );
-				tokenizer.nextToken();
+    List<Normal> allocableActivities = allocableActivitiesQuery.getResultList();
+    List<Object[]> activities = new ArrayList<Object[]>();
 
-				while( tokenizer.hasMoreTokens() )
-				{
-					entry[ 1 ] = "    " + entry[ 1 ];
-					tokenizer.nextToken();
-				}
+    for (Normal allocableActivity : allocableActivities) {
+      Object[] entry = new Object[3];
 
-				entry[2] = new ArrayList<Object[]>();
+      entry[0] = allocableActivity.getIdent();
+      entry[1] = allocableActivity.getName();
 
-				resultMap.put((String)activity[0], entry);
-			}
+      entry[2] = this.getActivityHourEstimation((String) entry[0]);
 
-			Object[] agentEntry = new Object[3];
+      activities.add(entry);
+    }
 
-			if (activity[2] != null) {
-				if (activity[2] instanceof ReqWorkGroup) {
-					ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)activity[2];
+    return activities;
+  }
 
-					agentEntry[0] = ReqWorkGroup.getTheWorkGroup().getName();
-				}
-				else {
-					ReqAgent reqAgent = (ReqAgent)activity[2];
+  @Override
+  public List<Object[]> getResourcesPlanData(String processIdent) {
+    String exclusiveQueryString =
+        "select exclusive.name, exclusive.description, "
+            + "reqResource.theNormal.plannedBegin, reqResource.theNormal.plannedEnd "
+            + "from "
+            + RequiredResource.class.getName()
+            + " as reqResource, "
+            + Exclusive.class.getName()
+            + " as exclusive "
+            + "where reqResource.theNormal.ident like '"
+            + processIdent
+            + ".%' "
+            + "and reqResource.theResource.ident = exclusive.ident "
+            + "order by exclusive.name";
 
-					agentEntry[0] = reqAgent.getTheRole().getName();
-				}
-			}
-			else {
-				agentEntry[0] = "";
-			}
+    Query exclusiveQuery = this.getPersistenceContext().createQuery(exclusiveQueryString);
 
-			agentEntry[ 1 ] = activity[ 4 ];
+    List<Object[]> exclusives = exclusiveQuery.getResultList();
 
-			agentEntry[ 2 ] = new Double( (Float)activity[ 5 ] );
+    String consumableQueryString =
+        "select consumable.name, consumable.description, "
+            + "reqResource.theNormal.plannedBegin, reqResource.theNormal.plannedEnd "
+            + "from "
+            + RequiredResource.class.getName()
+            + " as reqResource, "
+            + Consumable.class.getName()
+            + " as consumable "
+            + "where reqResource.theNormal.ident like '"
+            + processIdent
+            + ".%' "
+            + "and reqResource.theResource.ident = consumable.ident "
+            + "order by consumable.name";
 
-			if ( ( (Double)agentEntry[ 2 ] ) == 0 ) {
-				agentEntry[ 2 ] = new Double( (Float) getWorkingHoursForTask( (String)activity[ 0 ], (String)activity[ 3 ] ) );
-			}
+    Query consumableQuery = this.getPersistenceContext().createQuery(consumableQueryString);
 
-			((ArrayList<Object[]>)entry[2]).add( agentEntry );
-		}
+    List<Object[]> consumables = consumableQuery.getResultList();
 
-		result.addAll(resultMap.values());
+    String shareableQueryString =
+        "select shareable.name, shareable.description, "
+            + "reqResource.theNormal.plannedBegin, reqResource.theNormal.plannedEnd "
+            + "from "
+            + RequiredResource.class.getName()
+            + " as reqResource, "
+            + Shareable.class.getName()
+            + " as shareable "
+            + "where reqResource.theNormal.ident like '"
+            + processIdent
+            + ".%' "
+            + "and reqResource.theResource.ident = shareable.ident "
+            + "order by shareable.name";
 
-		Collections.sort(result, new OrderByPlannedBeginWorkGroupedByActivity(processIdent) {
-			public int compare(Object o1, Object o2) {
-				Object[] os1 = (Object[])o1, os2 = (Object[])o2;
+    Query shareableQuery = this.getPersistenceContext().createQuery(shareableQueryString);
 
-				Activity a1 = null;
-				Activity a2 = null;
+    List<Object[]> shareables = shareableQuery.getResultList();
 
-				a1 = (Activity) actMap.get((String)os1[0]);
-				a2 = (Activity) actMap.get((String)os2[0]);
+    if (exclusives == null) exclusives = new ArrayList<Object[]>();
 
-				System.out.println("A1: " + a1);
-				System.out.println("A2: " + a2);
+    if (consumables == null) consumables = new ArrayList<Object[]>();
 
-				return super.compare(a1, a2);
-			}
-		});
+    if (shareables == null) shareables = new ArrayList<Object[]>();
 
-		return result;
-	}
+    List<Object[]> result = new ArrayList<Object[]>();
 
-	public List<Object[]> getAllocableActivitiesData(String processIdent) {
-		String allocableActivitiesQueryString = "from " + Normal.class.getName() + " as normal " +
-													"where normal.autoAllocable is true and size(normal.theRequiredPeople) = 0 " +
-													"and normal.ident like '" + processIdent + ".%' " +
-													"and normal.isVersion is null " +
-													"order by normal.ident";
+    Object[] entry = new Object[4];
 
-		Query allocableActivitiesQuery = this.getPersistenceContext().createQuery(allocableActivitiesQueryString);
+    entry[0] = processIdent;
+    entry[1] = exclusives;
+    entry[2] = consumables;
+    entry[3] = shareables;
 
-		List<Normal> allocableActivities = allocableActivitiesQuery.getResultList();
-		List<Object[]> activities = new ArrayList<Object[]>();
+    result.add(entry);
 
-		for (Normal allocableActivity:allocableActivities) {
-			Object[] entry = new Object[3];
+    return result;
+  }
 
-			entry[0] = allocableActivity.getIdent();
-			entry[1] = allocableActivity.getName();
+  @Override
+  public List<Object[]> getProjectsBySystemReportData(String systemIdent) {
+    String queryString =
+        "from "
+            + Project.class.getName()
+            + " as project "
+            + "where project.theSystem is not null "
+            + (systemIdent != null ? "and project.theSystem.ident = :systemIdent " : "")
+            + "order by project.theSystem.ident, project.ident";
 
-			entry[2] = this.getActivityHourEstimation((String)entry[0]);
+    Query query = this.getPersistenceContext().createQuery(queryString);
 
-			activities.add(entry);
-		}
+    if (systemIdent != null) query.setParameter("systemIdent", systemIdent);
 
-		return activities;
-	}
+    List<Project> projects = query.getResultList();
+    List<Object[]> result = new ArrayList<Object[]>();
 
-	@Override
-	public List<Object[]> getResourcesPlanData(String processIdent) {
-		String exclusiveQueryString = "select exclusive.name, exclusive.description, " +
-												"reqResource.theNormal.plannedBegin, reqResource.theNormal.plannedEnd " +
-										"from " + RequiredResource.class.getName() + " as reqResource, " +
-													Exclusive.class.getName() + " as exclusive " +
-										"where reqResource.theNormal.ident like '" + processIdent + ".%' " +
-											"and reqResource.theResource.ident = exclusive.ident " +
-										"order by exclusive.name";
+    if (projects == null || projects.isEmpty()) return result;
 
-		Query exclusiveQuery = this.getPersistenceContext().createQuery( exclusiveQueryString );
+    for (Project project : projects) {
+      if (project == null) continue;
 
-		List<Object[]> exclusives = exclusiveQuery.getResultList();
+      Company organization = project.getTheSystem().getTheOrganization();
 
-		String consumableQueryString = "select consumable.name, consumable.description, " +
-												"reqResource.theNormal.plannedBegin, reqResource.theNormal.plannedEnd " +
-										"from " + RequiredResource.class.getName() + " as reqResource, " +
-													Consumable.class.getName() + " as consumable " +
-										"where reqResource.theNormal.ident like '" + processIdent + ".%' " +
-											"and reqResource.theResource.ident = consumable.ident " +
-										"order by consumable.name";
+      Object[] entry = new Object[5];
 
-		Query consumableQuery = this.getPersistenceContext().createQuery( consumableQueryString );
+      entry[0] = project.getTheSystem().getIdent();
+      entry[1] = (organization != null ? organization.getIdent() : "");
+      entry[2] = project.getIdent();
+      entry[3] = project.getBeginDate();
+      entry[4] = project.getEndDate();
 
-		List<Object[]> consumables = consumableQuery.getResultList();
+      result.add(entry);
+    }
 
-		String shareableQueryString = "select shareable.name, shareable.description, " +
-											"reqResource.theNormal.plannedBegin, reqResource.theNormal.plannedEnd " +
-										"from " + RequiredResource.class.getName() + " as reqResource, " +
-													Shareable.class.getName() + " as shareable " +
-										"where reqResource.theNormal.ident like '" + processIdent + ".%' " +
-											"and reqResource.theResource.ident = shareable.ident " +
-										"order by shareable.name";
+    return result;
+  }
 
-		Query shareableQuery = this.getPersistenceContext().createQuery( shareableQueryString );
+  @Override
+  public List<Object[]> getWorkBreakdownStructureData(String processIdent) {
+    Process process = processDAO.retrieveBySecondaryKey(processIdent);
+    ProcessModel model = process.getTheProcessModel();
 
-		List<Object[]> shareables = shareableQuery.getResultList();
+    List<Activity> activities = getActivitiesFromPModelOrderedByPlannedBegin(processIdent, model);
 
-		if ( exclusives == null )
-			exclusives = new ArrayList<Object[]>();
+    List<Object[]> result = new ArrayList<Object[]>();
 
-		if ( consumables == null )
-			consumables = new ArrayList<Object[]>();
+    if (activities == null || activities.isEmpty()) return result;
 
-		if ( shareables == null )
-			shareables = new ArrayList<Object[]>();
+    for (Activity activity : activities) {
+      if (activity == null) continue;
 
-		List<Object[]> result = new ArrayList<Object[]>();
+      Object[] entry = new Object[2];
 
-		Object[] entry = new Object[ 4 ];
+      entry[0] = processIdent;
+      entry[1] = activity.getName() + (activity instanceof Decomposed ? " <D>" : "");
 
-		entry[ 0 ] = processIdent;
-		entry[ 1 ] = exclusives;
-		entry[ 2 ] = consumables;
-		entry[ 3 ] = shareables;
+      StringTokenizer tokenizer = new StringTokenizer(activity.getIdent(), ".");
 
-		result.add( entry );
+      tokenizer.nextToken();
+      while (tokenizer.hasMoreTokens()) {
+        entry[1] = "    " + entry[1];
+        tokenizer.nextToken();
+      }
 
-		return result;
-	}
+      result.add(entry);
+    }
 
-	@Override
-	public List<Object[]> getProjectsBySystemReportData(String systemIdent) {
-		String queryString = "from " + Project.class.getName() + " as project " +
-				 "where project.theSystem is not null " +
-				 ( systemIdent != null ? "and project.theSystem.ident = :systemIdent " : "" ) +
-				 "order by project.theSystem.ident, project.ident";
+    return result;
+  }
 
-		Query query = this.getPersistenceContext().createQuery( queryString );
+  @Override
+  public List<Object[]> getResourcesCostPlanData(String processIdent) {
+    String exclusiveQueryString =
+        "select exclusive.name, exclusive.description, exclusive.cost "
+            + "from "
+            + RequiredResource.class.getName()
+            + " as reqResource, "
+            + Exclusive.class.getName()
+            + " as exclusive "
+            + "where reqResource.theNormal.ident like '"
+            + processIdent
+            + ".%' "
+            + "and reqResource.theResource.ident = exclusive.ident "
+            + "order by exclusive.name";
 
-		if ( systemIdent != null )
-			query.setParameter( "systemIdent", systemIdent );
+    Query exclusiveQuery = this.getPersistenceContext().createQuery(exclusiveQueryString);
 
-		List<Project> projects = query.getResultList();
-		List<Object[]> result = new ArrayList<Object[]>();
+    List<Object[]> exclusives = exclusiveQuery.getResultList();
 
-		if ( projects == null || projects.isEmpty() )
-			return result;
+    String consumableQueryString =
+        "select consumable.name, consumable.description, "
+            + "reqResource.amountNeeded, consumable.cost "
+            + "from "
+            + RequiredResource.class.getName()
+            + " as reqResource, "
+            + Consumable.class.getName()
+            + " as consumable "
+            + "where reqResource.theNormal.ident like '"
+            + processIdent
+            + ".%' "
+            + "and reqResource.theResource.ident = consumable.ident "
+            + "order by consumable.name";
 
-		for ( Project project : projects ) {
-			if ( project == null )
-				continue;
+    Query consumableQuery = this.getPersistenceContext().createQuery(consumableQueryString);
 
-			Company organization = project.getTheSystem().getTheOrganization();
+    List<Object[]> consumables = consumableQuery.getResultList();
 
-			Object[] entry = new Object[ 5 ];
+    String shareableQueryString =
+        "select shareable.name, shareable.description, "
+            + "reqResource.theNormal.plannedBegin, reqResource.theNormal.plannedEnd "
+            + "from "
+            + RequiredResource.class.getName()
+            + " as reqResource, "
+            + Shareable.class.getName()
+            + " as shareable "
+            + "where reqResource.theNormal.ident like '"
+            + processIdent
+            + ".%' "
+            + "and reqResource.theResource.ident = shareable.ident "
+            + "order by shareable.name";
 
-			entry[ 0 ] = project.getTheSystem().getIdent();
-			entry[ 1 ] = ( organization != null ? organization.getIdent() : "" );
-			entry[ 2 ] = project.getIdent();
-			entry[ 3 ] = project.getBeginDate();
-			entry[ 4 ] = project.getEndDate();
+    Query shareableQuery = this.getPersistenceContext().createQuery(shareableQueryString);
 
-			result.add( entry );
-		}
+    List<Object[]> shareables = shareableQuery.getResultList();
 
-		return result;
-	}
+    String tasksQueryString =
+        "from "
+            + Task.class.getName()
+            + " as task "
+            + "where task.theNormal.ident like '"
+            + processIdent
+            + ".%'";
 
-	@Override
-	public List<Object[]> getWorkBreakdownStructureData(String processIdent) {
-		Process process = processDAO.retrieveBySecondaryKey( processIdent );
-		ProcessModel model = process.getTheProcessModel();
+    Query tasksQuery = this.getPersistenceContext().createQuery(tasksQueryString);
 
-		List<Activity> activities = getActivitiesFromPModelOrderedByPlannedBegin( processIdent, model );
+    List<Task> tasks = tasksQuery.getResultList();
 
-		List<Object[]> result = new ArrayList<Object[]>();
+    String allocableActivitiesQueryString =
+        "from "
+            + Normal.class.getName()
+            + " as normal "
+            + "where normal.autoAllocable is true and size(normal.theRequiredPeople) = 0 "
+            + "and normal.ident like '"
+            + processIdent
+            + ".%' "
+            + "and normal.isVersion is null "
+            + "order by normal.ident";
 
-		if ( activities == null || activities.isEmpty() )
-			return result;
+    Query allocableActivitiesQuery =
+        this.getPersistenceContext().createQuery(allocableActivitiesQueryString);
 
-		for ( Activity activity : activities ) {
-			if ( activity == null )
-				continue;
+    List<Normal> allocableActivities = allocableActivitiesQuery.getResultList();
 
-			Object[] entry = new Object[ 2 ];
+    if (exclusives == null) exclusives = new ArrayList<Object[]>();
 
-			entry[ 0 ] = processIdent;
-			entry[ 1 ] = activity.getName() + ( activity instanceof Decomposed ? " <D>" : "" );
+    if (consumables == null) consumables = new ArrayList<Object[]>();
 
-			StringTokenizer tokenizer = new StringTokenizer( activity.getIdent(), "." );
+    if (shareables == null) shareables = new ArrayList<Object[]>();
 
-			tokenizer.nextToken();
-			while( tokenizer.hasMoreTokens() )
-			{
-				entry[ 1 ] = "    " + entry[ 1 ];
-				tokenizer.nextToken();
-			}
+    List<Object[]> humans = new ArrayList<Object[]>();
+    List<Object[]> activities = new ArrayList<Object[]>();
 
-			result.add( entry );
-		}
+    for (Normal allocableActivity : allocableActivities) {
+      Object[] entry = new Object[3];
 
-		return result;
-	}
+      entry[0] = allocableActivity.getIdent();
+      entry[1] = allocableActivity.getName();
 
-	@Override
-	public List<Object[]> getResourcesCostPlanData(String processIdent) {
-		String exclusiveQueryString = "select exclusive.name, exclusive.description, exclusive.cost " +
-										"from " + RequiredResource.class.getName() + " as reqResource, " +
-													Exclusive.class.getName() + " as exclusive " +
-										"where reqResource.theNormal.ident like '" + processIdent + ".%' " +
-											"and reqResource.theResource.ident = exclusive.ident " +
-										"order by exclusive.name";
+      entry[2] = this.getActivityHourEstimation((String) entry[0]);
 
-		Query exclusiveQuery = this.getPersistenceContext().createQuery( exclusiveQueryString );
+      activities.add(entry);
+    }
 
-		List<Object[]> exclusives = exclusiveQuery.getResultList();
+    if (tasks != null) {
+      HashMap<String, Object[]> humansHash = new HashMap<String, Object[]>();
+      HashMap<String, Integer> numAgentsPerNormal = new HashMap<String, Integer>();
 
-		String consumableQueryString = "select consumable.name, consumable.description, " +
-												"reqResource.amountNeeded, consumable.cost " +
-										"from " + RequiredResource.class.getName() + " as reqResource, " +
-													Consumable.class.getName() + " as consumable " +
-										"where reqResource.theNormal.ident like '" + processIdent + ".%' " +
-											"and reqResource.theResource.ident = consumable.ident " +
-										"order by consumable.name";
+      for (Task currentTask : tasks) {
+        if (currentTask == null) continue;
 
-		Query consumableQuery = this.getPersistenceContext().createQuery( consumableQueryString );
+        Normal normal = currentTask.getTheNormal();
+        Agent agent = currentTask.getTheProcessAgenda().getTheTaskAgenda().getTheAgent();
 
-		List<Object[]> consumables = consumableQuery.getResultList();
+        // Count number of agents working in the normal
+        Integer numAgents = numAgentsPerNormal.get(normal.getIdent());
 
-		String shareableQueryString = "select shareable.name, shareable.description, " +
-											"reqResource.theNormal.plannedBegin, reqResource.theNormal.plannedEnd " +
-										"from " + RequiredResource.class.getName() + " as reqResource, " +
-													Shareable.class.getName() + " as shareable " +
-										"where reqResource.theNormal.ident like '" + processIdent + ".%' " +
-											"and reqResource.theResource.ident = shareable.ident " +
-										"order by shareable.name";
+        if (numAgents == null) {
+          numAgents = 0;
 
-		Query shareableQuery = this.getPersistenceContext().createQuery( shareableQueryString );
+          for (Object people : normal.getTheRequiredPeople()) {
+            if (people instanceof ReqAgent) numAgents++;
+            else if (people instanceof ReqWorkGroup) {
+              ReqWorkGroup ReqWorkGroup = (ReqWorkGroup) people;
+              numAgents += ReqWorkGroup.getTheWorkGroup().getTheAgents().size();
+            }
+          }
 
-		List<Object[]> shareables = shareableQuery.getResultList();
+          numAgentsPerNormal.put(normal.getIdent(), numAgents);
+        }
+        //
 
-		String tasksQueryString = "from " + Task.class.getName() + " as task " +
-									"where task.theNormal.ident like '" + processIdent + ".%'";
+        if (normal == null || agent == null) continue;
 
-		Query tasksQuery = this.getPersistenceContext().createQuery( tasksQueryString );
+        double workingHours = currentTask.getWorkingHours();
 
-		List<Task> tasks = tasksQuery.getResultList();
+        if (workingHours == 0) {
+          workingHours = getWorkingHoursForTask(normal.getIdent(), agent.getIdent());
+        }
 
-		String allocableActivitiesQueryString = "from " + Normal.class.getName() + " as normal " +
-												"where normal.autoAllocable is true and size(normal.theRequiredPeople) = 0 " +
-												"and normal.ident like '" + processIdent + ".%' " +
-												"and normal.isVersion is null " +
-												"order by normal.ident";
+        if (humansHash.get(agent.getIdent()) == null) {
+          Object[] entry = new Object[4];
 
-		Query allocableActivitiesQuery = this.getPersistenceContext().createQuery(allocableActivitiesQueryString);
+          entry[0] = agent.getName();
+          entry[1] = new Double(agent.getCostHour());
+          entry[2] = new Double(workingHours);
+          entry[3] = this.getActivityHourEstimation(normal.getIdent()) / numAgents;
 
-		List<Normal> allocableActivities = allocableActivitiesQuery.getResultList();
+          humansHash.put(agent.getIdent(), entry);
+        } else {
+          Object[] entry = humansHash.get(agent.getIdent());
 
-		if ( exclusives == null )
-			exclusives = new ArrayList<Object[]>();
+          entry[2] = (Double) entry[2] + workingHours;
 
-		if ( consumables == null )
-			consumables = new ArrayList<Object[]>();
+          double hourEstimation = this.getActivityHourEstimation(normal.getIdent());
+          entry[3] = (Double) entry[3] + hourEstimation / numAgents;
+        }
+      }
 
-		if ( shareables == null )
-			shareables = new ArrayList<Object[]>();
+      humans.addAll(humansHash.values());
 
-		List<Object[]> humans = new ArrayList<Object[]>();
-		List<Object[]> activities = new ArrayList<Object[]>();
+      Collections.sort(
+          humans,
+          new Comparator<Object[]>() {
 
-		for (Normal allocableActivity:allocableActivities) {
-			Object[] entry = new Object[3];
+            public int compare(Object[] o1, Object[] o2) {
+              return o1[0].toString().compareToIgnoreCase(o2.toString());
+            }
+          });
+    }
 
-			entry[0] = allocableActivity.getIdent();
-			entry[1] = allocableActivity.getName();
+    List<Object[]> result = new ArrayList<Object[]>();
 
-			entry[2] = this.getActivityHourEstimation((String)entry[0]);
+    Object[] entry = new Object[6];
 
-			activities.add(entry);
-		}
+    entry[0] = processIdent;
+    entry[1] = exclusives;
+    entry[2] = consumables;
+    entry[3] = shareables;
+    entry[4] = humans;
+    entry[5] = activities;
 
-		if ( tasks != null )
-		{
-			HashMap<String, Object[]> humansHash = new HashMap<String, Object[]>();
-			HashMap<String, Integer> numAgentsPerNormal = new HashMap<String, Integer>();
+    result.add(entry);
 
-			for (Task currentTask : tasks ) {
-				if ( currentTask == null )
-					continue;
-
-				Normal normal = currentTask.getTheNormal();
-				Agent agent = currentTask.getTheProcessAgenda().getTheTaskAgenda().getTheAgent();
-
-				// Count number of agents working in the normal
-				Integer numAgents = numAgentsPerNormal.get(normal.getIdent());
-
-				if (numAgents == null) {
-					numAgents = 0;
-
-					for (Object people : normal.getTheRequiredPeople()) {
-						if (people instanceof ReqAgent)
-							numAgents++;
-						else if (people instanceof ReqWorkGroup) {
-							ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)people;
-							numAgents += ReqWorkGroup.getTheWorkGroup().getTheAgents().size();
-						}
-					}
-
-					numAgentsPerNormal.put(normal.getIdent(), numAgents);
-				}
-				//
-
-				if ( normal == null || agent == null )
-					continue;
-
-				double workingHours = currentTask.getWorkingHours();
-
-				if (workingHours == 0) {
-					workingHours = getWorkingHoursForTask(normal.getIdent(), agent.getIdent());
-				}
-
-				if ( humansHash.get( agent.getIdent() ) == null )
-				{
-					Object[] entry = new Object[ 4 ];
-
-					entry[ 0 ] = agent.getName();
-					entry[ 1 ] = new Double( agent.getCostHour() );
-					entry[ 2 ] = new Double( workingHours );
-					entry[ 3 ] = this.getActivityHourEstimation( normal.getIdent()) / numAgents;
-
-					humansHash.put( agent.getIdent(), entry );
-				}
-				else
-				{
-					Object[] entry = humansHash.get( agent.getIdent() );
-
-					entry[ 2 ] = (Double)entry[ 2 ] + workingHours;
-
-					double hourEstimation = this.getActivityHourEstimation( normal.getIdent());
-					entry[ 3 ] = (Double)entry[ 3 ] + hourEstimation / numAgents;
-				}
-			}
-
-			humans.addAll( humansHash.values() );
-
-			Collections.sort(humans, new Comparator<Object[]>() {
-
-				public int compare(Object[] o1, Object[] o2) {
-					return o1[0].toString().compareToIgnoreCase(o2.toString());
-				}
-
-			});
-		}
-
-		List<Object[]> result = new ArrayList<Object[]>();
-
-		Object[] entry = new Object[ 6 ];
-
-		entry[ 0 ] = processIdent;
-		entry[ 1 ] = exclusives;
-		entry[ 2 ] = consumables;
-		entry[ 3 ] = shareables;
-		entry[ 4 ] = humans;
-		entry[ 5 ] = activities;
-
-		result.add( entry );
-
-		return result;
-	}
+    return result;
+  }
 }

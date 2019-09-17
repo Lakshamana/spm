@@ -17,80 +17,83 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Service Implementation for managing {@link InstantiationSuggestion}.
- */
+/** Service Implementation for managing {@link InstantiationSuggestion}. */
 @Service
 @Transactional
 public class InstantiationSuggestionService {
 
-    private final Logger log = LoggerFactory.getLogger(InstantiationSuggestionService.class);
+  private final Logger log = LoggerFactory.getLogger(InstantiationSuggestionService.class);
 
-    private final InstantiationSuggestionRepository instantiationSuggestionRepository;
+  private final InstantiationSuggestionRepository instantiationSuggestionRepository;
 
-    private final InstantiationSuggestionMapper instantiationSuggestionMapper;
+  private final InstantiationSuggestionMapper instantiationSuggestionMapper;
 
-    public InstantiationSuggestionService(InstantiationSuggestionRepository instantiationSuggestionRepository, InstantiationSuggestionMapper instantiationSuggestionMapper) {
-        this.instantiationSuggestionRepository = instantiationSuggestionRepository;
-        this.instantiationSuggestionMapper = instantiationSuggestionMapper;
-    }
+  public InstantiationSuggestionService(
+      InstantiationSuggestionRepository instantiationSuggestionRepository,
+      InstantiationSuggestionMapper instantiationSuggestionMapper) {
+    this.instantiationSuggestionRepository = instantiationSuggestionRepository;
+    this.instantiationSuggestionMapper = instantiationSuggestionMapper;
+  }
 
-    /**
-     * Save a instantiationSuggestion.
-     *
-     * @param instantiationSuggestionDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public InstantiationSuggestionDTO save(InstantiationSuggestionDTO instantiationSuggestionDTO) {
-        log.debug("Request to save InstantiationSuggestion : {}", instantiationSuggestionDTO);
-        InstantiationSuggestion instantiationSuggestion = instantiationSuggestionMapper.toEntity(instantiationSuggestionDTO);
-        instantiationSuggestion = instantiationSuggestionRepository.save(instantiationSuggestion);
-        return instantiationSuggestionMapper.toDto(instantiationSuggestion);
-    }
+  /**
+   * Save a instantiationSuggestion.
+   *
+   * @param instantiationSuggestionDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public InstantiationSuggestionDTO save(InstantiationSuggestionDTO instantiationSuggestionDTO) {
+    log.debug("Request to save InstantiationSuggestion : {}", instantiationSuggestionDTO);
+    InstantiationSuggestion instantiationSuggestion =
+        instantiationSuggestionMapper.toEntity(instantiationSuggestionDTO);
+    instantiationSuggestion = instantiationSuggestionRepository.save(instantiationSuggestion);
+    return instantiationSuggestionMapper.toDto(instantiationSuggestion);
+  }
 
-    /**
-     * Get all the instantiationSuggestions.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<InstantiationSuggestionDTO> findAll() {
-        log.debug("Request to get all InstantiationSuggestions");
-        return instantiationSuggestionRepository.findAllWithEagerRelationships().stream()
-            .map(instantiationSuggestionMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the instantiationSuggestions.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<InstantiationSuggestionDTO> findAll() {
+    log.debug("Request to get all InstantiationSuggestions");
+    return instantiationSuggestionRepository.findAllWithEagerRelationships().stream()
+        .map(instantiationSuggestionMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
-    /**
-     * Get all the instantiationSuggestions with eager load of many-to-many relationships.
-     *
-     * @return the list of entities.
-     */
-    public Page<InstantiationSuggestionDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return instantiationSuggestionRepository.findAllWithEagerRelationships(pageable).map(instantiationSuggestionMapper::toDto);
-    }
-    
+  /**
+   * Get all the instantiationSuggestions with eager load of many-to-many relationships.
+   *
+   * @return the list of entities.
+   */
+  public Page<InstantiationSuggestionDTO> findAllWithEagerRelationships(Pageable pageable) {
+    return instantiationSuggestionRepository
+        .findAllWithEagerRelationships(pageable)
+        .map(instantiationSuggestionMapper::toDto);
+  }
 
-    /**
-     * Get one instantiationSuggestion by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<InstantiationSuggestionDTO> findOne(Long id) {
-        log.debug("Request to get InstantiationSuggestion : {}", id);
-        return instantiationSuggestionRepository.findOneWithEagerRelationships(id)
-            .map(instantiationSuggestionMapper::toDto);
-    }
+  /**
+   * Get one instantiationSuggestion by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<InstantiationSuggestionDTO> findOne(Long id) {
+    log.debug("Request to get InstantiationSuggestion : {}", id);
+    return instantiationSuggestionRepository
+        .findOneWithEagerRelationships(id)
+        .map(instantiationSuggestionMapper::toDto);
+  }
 
-    /**
-     * Delete the instantiationSuggestion by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete InstantiationSuggestion : {}", id);
-        instantiationSuggestionRepository.deleteById(id);
-    }
+  /**
+   * Delete the instantiationSuggestion by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete InstantiationSuggestion : {}", id);
+    instantiationSuggestionRepository.deleteById(id);
+  }
 }

@@ -16,86 +16,81 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * Service Implementation for managing {@link Normal}.
- */
+/** Service Implementation for managing {@link Normal}. */
 @Service
 @Transactional
 public class NormalService {
 
-    private final Logger log = LoggerFactory.getLogger(NormalService.class);
+  private final Logger log = LoggerFactory.getLogger(NormalService.class);
 
-    private final NormalRepository normalRepository;
+  private final NormalRepository normalRepository;
 
-    private final NormalMapper normalMapper;
+  private final NormalMapper normalMapper;
 
-    public NormalService(NormalRepository normalRepository, NormalMapper normalMapper) {
-        this.normalRepository = normalRepository;
-        this.normalMapper = normalMapper;
-    }
+  public NormalService(NormalRepository normalRepository, NormalMapper normalMapper) {
+    this.normalRepository = normalRepository;
+    this.normalMapper = normalMapper;
+  }
 
-    /**
-     * Save a normal.
-     *
-     * @param normalDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public NormalDTO save(NormalDTO normalDTO) {
-        log.debug("Request to save Normal : {}", normalDTO);
-        Normal normal = normalMapper.toEntity(normalDTO);
-        normal = normalRepository.save(normal);
-        return normalMapper.toDto(normal);
-    }
+  /**
+   * Save a normal.
+   *
+   * @param normalDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public NormalDTO save(NormalDTO normalDTO) {
+    log.debug("Request to save Normal : {}", normalDTO);
+    Normal normal = normalMapper.toEntity(normalDTO);
+    normal = normalRepository.save(normal);
+    return normalMapper.toDto(normal);
+  }
 
-    /**
-     * Get all the normals.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<NormalDTO> findAll() {
-        log.debug("Request to get all Normals");
-        return normalRepository.findAll().stream()
-            .map(normalMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the normals.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<NormalDTO> findAll() {
+    log.debug("Request to get all Normals");
+    return normalRepository.findAll().stream()
+        .map(normalMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get all the normals where TheResourceEvent is {@code null}.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<NormalDTO> findAllWhereTheResourceEventIsNull() {
+    log.debug("Request to get all normals where TheResourceEvent is null");
+    return StreamSupport.stream(normalRepository.findAll().spliterator(), false)
+        .filter(normal -> normal.getTheResourceEvent() == null)
+        .map(normalMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one normal by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<NormalDTO> findOne(Long id) {
+    log.debug("Request to get Normal : {}", id);
+    return normalRepository.findById(id).map(normalMapper::toDto);
+  }
 
-    /**
-    *  Get all the normals where TheResourceEvent is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true) 
-    public List<NormalDTO> findAllWhereTheResourceEventIsNull() {
-        log.debug("Request to get all normals where TheResourceEvent is null");
-        return StreamSupport
-            .stream(normalRepository.findAll().spliterator(), false)
-            .filter(normal -> normal.getTheResourceEvent() == null)
-            .map(normalMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     * Get one normal by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<NormalDTO> findOne(Long id) {
-        log.debug("Request to get Normal : {}", id);
-        return normalRepository.findById(id)
-            .map(normalMapper::toDto);
-    }
-
-    /**
-     * Delete the normal by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete Normal : {}", id);
-        normalRepository.deleteById(id);
-    }
+  /**
+   * Delete the normal by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete Normal : {}", id);
+    normalRepository.deleteById(id);
+  }
 }

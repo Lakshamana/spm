@@ -17,80 +17,76 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Service Implementation for managing {@link JoinCon}.
- */
+/** Service Implementation for managing {@link JoinCon}. */
 @Service
 @Transactional
 public class JoinConService {
 
-    private final Logger log = LoggerFactory.getLogger(JoinConService.class);
+  private final Logger log = LoggerFactory.getLogger(JoinConService.class);
 
-    private final JoinConRepository joinConRepository;
+  private final JoinConRepository joinConRepository;
 
-    private final JoinConMapper joinConMapper;
+  private final JoinConMapper joinConMapper;
 
-    public JoinConService(JoinConRepository joinConRepository, JoinConMapper joinConMapper) {
-        this.joinConRepository = joinConRepository;
-        this.joinConMapper = joinConMapper;
-    }
+  public JoinConService(JoinConRepository joinConRepository, JoinConMapper joinConMapper) {
+    this.joinConRepository = joinConRepository;
+    this.joinConMapper = joinConMapper;
+  }
 
-    /**
-     * Save a joinCon.
-     *
-     * @param joinConDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public JoinConDTO save(JoinConDTO joinConDTO) {
-        log.debug("Request to save JoinCon : {}", joinConDTO);
-        JoinCon joinCon = joinConMapper.toEntity(joinConDTO);
-        joinCon = joinConRepository.save(joinCon);
-        return joinConMapper.toDto(joinCon);
-    }
+  /**
+   * Save a joinCon.
+   *
+   * @param joinConDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public JoinConDTO save(JoinConDTO joinConDTO) {
+    log.debug("Request to save JoinCon : {}", joinConDTO);
+    JoinCon joinCon = joinConMapper.toEntity(joinConDTO);
+    joinCon = joinConRepository.save(joinCon);
+    return joinConMapper.toDto(joinCon);
+  }
 
-    /**
-     * Get all the joinCons.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<JoinConDTO> findAll() {
-        log.debug("Request to get all JoinCons");
-        return joinConRepository.findAllWithEagerRelationships().stream()
-            .map(joinConMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the joinCons.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<JoinConDTO> findAll() {
+    log.debug("Request to get all JoinCons");
+    return joinConRepository.findAllWithEagerRelationships().stream()
+        .map(joinConMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
-    /**
-     * Get all the joinCons with eager load of many-to-many relationships.
-     *
-     * @return the list of entities.
-     */
-    public Page<JoinConDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return joinConRepository.findAllWithEagerRelationships(pageable).map(joinConMapper::toDto);
-    }
-    
+  /**
+   * Get all the joinCons with eager load of many-to-many relationships.
+   *
+   * @return the list of entities.
+   */
+  public Page<JoinConDTO> findAllWithEagerRelationships(Pageable pageable) {
+    return joinConRepository.findAllWithEagerRelationships(pageable).map(joinConMapper::toDto);
+  }
 
-    /**
-     * Get one joinCon by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<JoinConDTO> findOne(Long id) {
-        log.debug("Request to get JoinCon : {}", id);
-        return joinConRepository.findOneWithEagerRelationships(id)
-            .map(joinConMapper::toDto);
-    }
+  /**
+   * Get one joinCon by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<JoinConDTO> findOne(Long id) {
+    log.debug("Request to get JoinCon : {}", id);
+    return joinConRepository.findOneWithEagerRelationships(id).map(joinConMapper::toDto);
+  }
 
-    /**
-     * Delete the joinCon by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete JoinCon : {}", id);
-        joinConRepository.deleteById(id);
-    }
+  /**
+   * Delete the joinCon by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete JoinCon : {}", id);
+    joinConRepository.deleteById(id);
+  }
 }

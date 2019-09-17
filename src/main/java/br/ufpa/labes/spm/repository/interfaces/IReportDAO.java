@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-
 public interface IReportDAO {
   public EntityManager getPersistenceContext();
 
@@ -20,7 +19,7 @@ public interface IReportDAO {
   public List<Object[]> getProjectArtifactsReportData(String projectIdent);
 
   public List<Object[]> getActivitiesByAgentsReportData(
-    String agentIdent , LocalDate beginDate, LocalDate endDate , String role , boolean allStates);
+      String agentIdent, LocalDate beginDate, LocalDate endDate, String role, boolean allStates);
 
   public List<Object[]> getCostDeviationReportData(String processIdent);
 

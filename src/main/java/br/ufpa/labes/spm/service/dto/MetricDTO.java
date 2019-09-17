@@ -1,115 +1,123 @@
 package br.ufpa.labes.spm.service.dto;
+
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Metric} entity.
- */
+/** A DTO for the {@link br.ufpa.labes.spm.domain.Metric} entity. */
 public class MetricDTO implements Serializable {
 
-    private Long id;
+  private Long id;
 
-    private Float value;
+  private Float value;
 
-    private String unit;
+  private String unit;
 
-    private LocalDate periodBegin;
+  private LocalDate periodBegin;
 
-    private LocalDate periodEnd;
+  private LocalDate periodEnd;
 
+  private Long theMetricDefinitionId;
 
-    private Long theMetricDefinitionId;
+  private Long theActivityId;
 
-    private Long theActivityId;
+  public Long getId() {
+    return id;
+  }
 
-    public Long getId() {
-        return id;
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Float getValue() {
+    return value;
+  }
+
+  public void setValue(Float value) {
+    this.value = value;
+  }
+
+  public String getUnit() {
+    return unit;
+  }
+
+  public void setUnit(String unit) {
+    this.unit = unit;
+  }
+
+  public LocalDate getPeriodBegin() {
+    return periodBegin;
+  }
+
+  public void setPeriodBegin(LocalDate periodBegin) {
+    this.periodBegin = periodBegin;
+  }
+
+  public LocalDate getPeriodEnd() {
+    return periodEnd;
+  }
+
+  public void setPeriodEnd(LocalDate periodEnd) {
+    this.periodEnd = periodEnd;
+  }
+
+  public Long getTheMetricDefinitionId() {
+    return theMetricDefinitionId;
+  }
+
+  public void setTheMetricDefinitionId(Long metricDefinitionId) {
+    this.theMetricDefinitionId = metricDefinitionId;
+  }
+
+  public Long getTheActivityId() {
+    return theActivityId;
+  }
+
+  public void setTheActivityId(Long activityId) {
+    this.theActivityId = activityId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    MetricDTO metricDTO = (MetricDTO) o;
+    if (metricDTO.getId() == null || getId() == null) {
+      return false;
     }
+    return Objects.equals(getId(), metricDTO.getId());
+  }
 
-    public Float getValue() {
-        return value;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getId());
+  }
 
-    public void setValue(Float value) {
-        this.value = value;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public LocalDate getPeriodBegin() {
-        return periodBegin;
-    }
-
-    public void setPeriodBegin(LocalDate periodBegin) {
-        this.periodBegin = periodBegin;
-    }
-
-    public LocalDate getPeriodEnd() {
-        return periodEnd;
-    }
-
-    public void setPeriodEnd(LocalDate periodEnd) {
-        this.periodEnd = periodEnd;
-    }
-
-    public Long getTheMetricDefinitionId() {
-        return theMetricDefinitionId;
-    }
-
-    public void setTheMetricDefinitionId(Long metricDefinitionId) {
-        this.theMetricDefinitionId = metricDefinitionId;
-    }
-
-    public Long getTheActivityId() {
-        return theActivityId;
-    }
-
-    public void setTheActivityId(Long activityId) {
-        this.theActivityId = activityId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        MetricDTO metricDTO = (MetricDTO) o;
-        if (metricDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), metricDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "MetricDTO{" +
-            "id=" + getId() +
-            ", value=" + getValue() +
-            ", unit='" + getUnit() + "'" +
-            ", periodBegin='" + getPeriodBegin() + "'" +
-            ", periodEnd='" + getPeriodEnd() + "'" +
-            ", theMetricDefinition=" + getTheMetricDefinitionId() +
-            ", theActivity=" + getTheActivityId() +
-            "}";
-    }
+  @Override
+  public String toString() {
+    return "MetricDTO{"
+        + "id="
+        + getId()
+        + ", value="
+        + getValue()
+        + ", unit='"
+        + getUnit()
+        + "'"
+        + ", periodBegin='"
+        + getPeriodBegin()
+        + "'"
+        + ", periodEnd='"
+        + getPeriodEnd()
+        + "'"
+        + ", theMetricDefinition="
+        + getTheMetricDefinitionId()
+        + ", theActivity="
+        + getTheActivityId()
+        + "}";
+  }
 }
