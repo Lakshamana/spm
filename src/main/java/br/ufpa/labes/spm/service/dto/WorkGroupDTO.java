@@ -53,7 +53,7 @@ public class WorkGroupDTO implements Serializable {
     this.description = description;
   }
 
-  public Boolean isIsActive() {
+  public Boolean isActive() {
     return isActive;
   }
 
@@ -113,7 +113,7 @@ public class WorkGroupDTO implements Serializable {
         + getDescription()
         + "'"
         + ", isActive='"
-        + isIsActive()
+        + isActive()
         + "'"
         + ", theWorkGroupType="
         + getTheWorkGroupTypeId()

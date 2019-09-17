@@ -1,4 +1,4 @@
-package org.qrconsult.spm.util.ident;
+package br.ufpa.labes.spm.util.ident;
 
 public class ConversorDeIdent {
 

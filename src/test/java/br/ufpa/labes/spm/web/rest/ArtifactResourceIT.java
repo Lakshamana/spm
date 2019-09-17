@@ -163,7 +163,7 @@ public class ArtifactResourceIT {
     assertThat(testArtifact.getFileName()).isEqualTo(DEFAULT_FILE_NAME);
     assertThat(testArtifact.getLatestVersion()).isEqualTo(DEFAULT_LATEST_VERSION);
     assertThat(testArtifact.isIsTemplate()).isEqualTo(DEFAULT_IS_TEMPLATE);
-    assertThat(testArtifact.isIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+    assertThat(testArtifact.isActive()).isEqualTo(DEFAULT_IS_ACTIVE);
   }
 
   @Test
@@ -283,7 +283,7 @@ public class ArtifactResourceIT {
     assertThat(testArtifact.getFileName()).isEqualTo(UPDATED_FILE_NAME);
     assertThat(testArtifact.getLatestVersion()).isEqualTo(UPDATED_LATEST_VERSION);
     assertThat(testArtifact.isIsTemplate()).isEqualTo(UPDATED_IS_TEMPLATE);
-    assertThat(testArtifact.isIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+    assertThat(testArtifact.isActive()).isEqualTo(UPDATED_IS_ACTIVE);
   }
 
   @Test

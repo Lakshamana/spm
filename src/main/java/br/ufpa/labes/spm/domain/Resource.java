@@ -205,7 +205,7 @@ public class Resource implements Serializable {
     this.cost = cost;
   }
 
-  public Boolean isIsActive() {
+  public Boolean isActive() {
     return isActive;
   }
 
@@ -526,7 +526,7 @@ public class Resource implements Serializable {
         + ", cost="
         + getCost()
         + ", isActive='"
-        + isIsActive()
+        + isActive()
         + "'"
         + "}";
   }

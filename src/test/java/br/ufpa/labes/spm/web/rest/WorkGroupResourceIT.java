@@ -139,7 +139,7 @@ public class WorkGroupResourceIT {
     assertThat(testWorkGroup.getIdent()).isEqualTo(DEFAULT_IDENT);
     assertThat(testWorkGroup.getName()).isEqualTo(DEFAULT_NAME);
     assertThat(testWorkGroup.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-    assertThat(testWorkGroup.isIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+    assertThat(testWorkGroup.isActive()).isEqualTo(DEFAULT_IS_ACTIVE);
   }
 
   @Test
@@ -242,7 +242,7 @@ public class WorkGroupResourceIT {
     assertThat(testWorkGroup.getIdent()).isEqualTo(UPDATED_IDENT);
     assertThat(testWorkGroup.getName()).isEqualTo(UPDATED_NAME);
     assertThat(testWorkGroup.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-    assertThat(testWorkGroup.isIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+    assertThat(testWorkGroup.isActive()).isEqualTo(UPDATED_IS_ACTIVE);
   }
 
   @Test

@@ -96,7 +96,7 @@ public class ArtifactDTO implements Serializable {
     this.isTemplate = isTemplate;
   }
 
-  public Boolean isIsActive() {
+  public Boolean isActive() {
     return isActive;
   }
 
@@ -184,7 +184,7 @@ public class ArtifactDTO implements Serializable {
         + isIsTemplate()
         + "'"
         + ", isActive='"
-        + isIsActive()
+        + isActive()
         + "'"
         + ", theArtifactType="
         + getTheArtifactTypeId()

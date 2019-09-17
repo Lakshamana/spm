@@ -182,7 +182,7 @@ public class AgentResourceIT {
     assertThat(testAgent.getCostHour()).isEqualTo(DEFAULT_COST_HOUR);
     assertThat(testAgent.getPasswordHash()).isEqualTo(DEFAULT_PASSWORD_HASH);
     assertThat(testAgent.getTipoUser()).isEqualTo(DEFAULT_TIPO_USER);
-    assertThat(testAgent.isIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+    assertThat(testAgent.isActive()).isEqualTo(DEFAULT_IS_ACTIVE);
     assertThat(testAgent.isOnline()).isEqualTo(DEFAULT_ONLINE);
     assertThat(testAgent.getPhotoURL()).isEqualTo(DEFAULT_PHOTO_URL);
     assertThat(testAgent.getUpload()).isEqualTo(DEFAULT_UPLOAD);
@@ -346,7 +346,7 @@ public class AgentResourceIT {
     assertThat(testAgent.getCostHour()).isEqualTo(UPDATED_COST_HOUR);
     assertThat(testAgent.getPasswordHash()).isEqualTo(UPDATED_PASSWORD_HASH);
     assertThat(testAgent.getTipoUser()).isEqualTo(UPDATED_TIPO_USER);
-    assertThat(testAgent.isIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+    assertThat(testAgent.isActive()).isEqualTo(UPDATED_IS_ACTIVE);
     assertThat(testAgent.isOnline()).isEqualTo(UPDATED_ONLINE);
     assertThat(testAgent.getPhotoURL()).isEqualTo(UPDATED_PHOTO_URL);
     assertThat(testAgent.getUpload()).isEqualTo(UPDATED_UPLOAD);

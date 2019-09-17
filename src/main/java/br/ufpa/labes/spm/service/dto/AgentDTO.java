@@ -100,7 +100,7 @@ public class AgentDTO implements Serializable {
     this.tipoUser = tipoUser;
   }
 
-  public Boolean isIsActive() {
+  public Boolean isActive() {
     return isActive;
   }
 
@@ -231,7 +231,7 @@ public class AgentDTO implements Serializable {
         + ", tipoUser="
         + getTipoUser()
         + ", isActive='"
-        + isIsActive()
+        + isActive()
         + "'"
         + ", online='"
         + isOnline()

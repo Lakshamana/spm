@@ -165,7 +165,7 @@ public class ResourceResourceIT {
     assertThat(testResource.getMtbfUnitTime()).isEqualTo(DEFAULT_MTBF_UNIT_TIME);
     assertThat(testResource.getCurrency()).isEqualTo(DEFAULT_CURRENCY);
     assertThat(testResource.getCost()).isEqualTo(DEFAULT_COST);
-    assertThat(testResource.isIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+    assertThat(testResource.isActive()).isEqualTo(DEFAULT_IS_ACTIVE);
   }
 
   @Test
@@ -284,7 +284,7 @@ public class ResourceResourceIT {
     assertThat(testResource.getMtbfUnitTime()).isEqualTo(UPDATED_MTBF_UNIT_TIME);
     assertThat(testResource.getCurrency()).isEqualTo(UPDATED_CURRENCY);
     assertThat(testResource.getCost()).isEqualTo(UPDATED_COST);
-    assertThat(testResource.isIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+    assertThat(testResource.isActive()).isEqualTo(UPDATED_IS_ACTIVE);
   }
 
   @Test

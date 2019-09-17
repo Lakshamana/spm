@@ -99,7 +99,7 @@ public class ResourceDTO implements Serializable {
     this.cost = cost;
   }
 
-  public Boolean isIsActive() {
+  public Boolean isActive() {
     return isActive;
   }
 
@@ -193,7 +193,7 @@ public class ResourceDTO implements Serializable {
         + ", cost="
         + getCost()
         + ", isActive='"
-        + isIsActive()
+        + isActive()
         + "'"
         + ", theConsumableSub="
         + getTheConsumableSubId()
