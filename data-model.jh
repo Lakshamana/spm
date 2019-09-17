@@ -41,9 +41,6 @@ relationship ManyToMany {
 }
 
 relationship OneToOne {
-    Activity{thePlainSub} to Plain{theActivitySuper},
-    Activity{theDecomposedSub} to Decomposed{theActivitySuper},
-
     Plain{theEnactionDescription} to EnactionDescription{thePlain},
 
     Decomposed{theReferedProcessModel} to ProcessModel{theDecomposed}
@@ -432,20 +429,6 @@ relationship ManyToOne {
     Sequence{theDependency} to Dependency{theSequence}
 }
 
-relationship OneToOne {
-    Connection{theMultipleConSub} to MultipleCon{theConnectionSuper},
-    Connection{theSimpleConSub} to SimpleCon{theConnectionSuper},
-    Connection{theArtifactConSub} to ArtifactCon{theConnectionSuper},
-
-    SimpleCon{theFeedbackSub} to Feedback{theSimpleConSuper},
-    SimpleCon{theSequenceSub} to Sequence{theSimpleConSuper},
-
-    MultipleCon{theJoinConSub} to JoinCon{theMultipleConSuper},
-    MultipleCon{theBranchConSub} to BranchCon{theMultipleConSuper},
-
-    BranchCon{theBranchANDConSub} to BranchANDCon{theBranchConSuper}
-}
-
 relationship ManyToMany {
     ArtifactCon{toMultipleCon} to MultipleCon{theArtifactCon},
 
@@ -542,16 +525,7 @@ relationship ManyToMany {
 relationship OneToOne {
     SpmLog{theProcess} to Process{theLog},
 
-    ResourceEvent{theNormal} to Normal{theResourceEvent},
-
-    Event{theAgendaEventSub} to AgendaEvent{theEventSuper},
-    Event{theCatalogEventSub} to CatalogEvent{theEventSuper},
-    Event{theConnectionEventSub} to ConnectionEvent{theEventSuper},
-    Event{theGlobalActivityEventSub} to GlobalActivityEvent{theEventSuper},
-    Event{theModelingActivityEventSub} to ModelingActivityEvent{theEventSuper},
-    Event{theProcessEventSub} to ProcessEvent{theEventSuper},
-    Event{theProcessModelEventSub} to ProcessModelEvent{theEventSuper},
-    Event{theResourceEventSub} to ResourceEvent{theEventSuper}
+    ResourceEvent{theNormal} to Normal{theResourceEvent}
 }
 
 //package organizationPolicies -------------------------------------------
@@ -655,9 +629,7 @@ relationship ManyToMany {
 }
 
 relationship OneToOne {
-    Author{user} to User{theAuthor},
-    Author{theOrganizationSub} to Organization{theAuthorSuper},
-    Author{thePersonSub} to Person{theAuthorSuper}
+    Author{user} to User{theAuthor}
 }
 
 //package plainActivities -------------------------------------------
@@ -730,16 +702,7 @@ relationship OneToMany {
 }
 
 relationship OneToOne {
-    Plain{theAutomaticSub} to Automatic{thePlainSuper},
-    Plain{theNormalSub} to Normal{thePlainSuper},
-
-    Automatic{theSubroutine} to Subroutine{theAutomatic},
-
-    Parameter{theArtifactParameterSub} to ArtifactParam{theParameterSuper},
-    Parameter{thePrimitiveParamSub} to PrimitiveParam{theParameterSuper},
-
-    RequiredPeople{theReqWorkGroupSub} to ReqWorkGroup{theRequiredPeopleSuper},
-    RequiredPeople{theReqAgentSub} to ReqAgent{theRequiredPeopleSuper}
+    Automatic{theSubroutine} to Subroutine{theAutomatic}
 }
 
 //package plannerInfo -------------------------------------------
@@ -799,13 +762,6 @@ relationship ManyToOne {
 relationship ManyToMany {
     WorkGroupInstSug{sugWorkGroup} to WorkGroup{theWorkGroupInstSug},
     InstantiationSuggestion{sugRsrc} to Resource{instSuggestions}
-}
-
-relationship OneToOne {
-    InstantiationSuggestion{thePeopleInstSugSub} to PeopleInstSug{theInstSugSuper},
-
-    PeopleInstSug{theAgentInstSug} to AgentInstSug{thePeopleInstSugSuper},
-    PeopleInstSug{theWorkGroupInstSug} to WorkGroupInstSug{thePeopleInstSugSuper}
 }
 
 //package processKnowledge -------------------------------------------
@@ -892,24 +848,6 @@ relationship ManyToOne {
 
 relationship OneToMany {
     MetricDefinition{units} to MetricDefinitionUnit{theMetricDefinition}
-}
-
-relationship OneToOne {
-    Metric{theActivityMetricSub} to ActivityMetric{theMetricSuper},
-    Metric{theAgentMetricSub} to AgentMetric{theMetricSuper},
-    Metric{theArtifactMetricSub} to ArtifactMetric{theMetricSuper},
-    Metric{theWorkGroupMetricSub} to WorkGroupMetric{theMetricSuper},
-    Metric{theOrganizationMetricSub} to OrganizationMetric{theMetricSuper},
-    Metric{theProcessMetricSub} to ProcessMetric{theMetricSuper},
-    Metric{theResourceMetricSub} to ResourceMetric{theMetricSuper},
-
-    Estimation{theActivityEstimationSub} to ActivityEstimation{theEstimationSuper},
-    Estimation{theAgentEstimationSub} to AgentEstimation{theEstimationSuper},
-    Estimation{theArtifactEstimationSub} to ArtifactEstimation{theEstimationSuper},
-    Estimation{theWorkGroupEstimationSub} to WorkGroupEstimation{theEstimationSuper},
-    Estimation{theOrganizationEstimationSub} to OrganizationEstimation{theEstimationSuper},
-    Estimation{theProcessEstimationSub} to ProcessEstimation{theEstimationSuper},
-    Estimation{theResourceEstimationSub} to ResourceEstimation{theEstimationSuper}
 }
 
 //package processModelGraphical -------------------------------------------
@@ -1006,8 +944,7 @@ relationship OneToMany {
 }
 
 relationship OneToOne {
-    Process{theProcessModel} to ProcessModel{theProcess},
-    Process{theTemplateSub} to Template{theProcessSuper}
+    Process{theProcessModel} to ProcessModel{theProcess}
 }
 
 //package resources -------------------------------------------
@@ -1071,12 +1008,6 @@ relationship ManyToOne {
     Resource{belongsTo} to Resource{theResource},
 
     Resource{theResourceType} to ResourceType{theResource}
-}
-
-relationship OneToOne {
-    Resource{theConsumableSub} to Consumable{theResourceSuper},
-    Resource{theExclusiveSub} to Exclusive{theResourceSuper},
-    Resource{theShareableSub} to Shareable{theResourceSuper}
 }
 
 //package security -------------------------------------------
@@ -1189,11 +1120,6 @@ relationship ManyToMany {
     ToolDefinition{theArtifactTypes} to Type{theToolDefinitionToArtifactType}
 }
 
-relationship OneToOne {
-    Subroutine{theClassMethodCallSub} to ClassMethodCall{theSubroutineSuper},
-    Subroutine{theScriptSub} to Script{theSubroutineSuper}
-}
-
 //package types -------------------------------------------
 
 entity Type {
@@ -1224,19 +1150,6 @@ entity ToolType {} //extends Type
 
 relationship ManyToOne {
     Type{superType} to Type{subType}
-}
-
-relationship OneToOne {
-    Type{theAbilityTypeSub} to AbilityType{theTypeSuper},
-    Type{theActivityTypeSub} to ActivityType{theTypeSuper},
-    Type{theArtifactTypeSub} to ArtifactType{theTypeSuper},
-    Type{theConnectionTypeSub} to ConnectionType{theTypeSuper},
-    Type{theEventTypeSub} to EventType{theTypeSuper},
-    Type{theWorkGroupTypeSub} to WorkGroupType{theTypeSuper},
-    Type{theMetricTypeSub} to MetricType{theTypeSuper},
-    Type{theResourceTypeSub} to ResourceType{theTypeSuper},
-    Type{theRoleTypeSub} to RoleType{theTypeSuper},
-    Type{theToolTypeSub} to ToolType{theTypeSuper}
 }
 
 //package plugins -------------------------------------------

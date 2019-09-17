@@ -6,6 +6,10 @@
 
 let SPMROOT = pasta raiz do projeto SPM
 
+- Remover ponteiros one-to-one de data-model.jh:
+  search: `(.*)\{the(.*)Sub\} to (.*)\{the(.*)Super\}([,])*`
+  replaceby: ``
+
 - De Decomposed subtipo de Activity para objeto de Activity:
   search: `(\().*\([ ]*(Decomposed)[ ]*\) ([\w]*).*(\))\.`
   replaceby: `$3.getThe$2Sub().`
