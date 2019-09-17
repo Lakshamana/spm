@@ -31,7 +31,6 @@ import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.DevelopingSystem;
 import br.ufpa.labes.spm.domain.Plain;
-import br.ufpa.labes.spm.domain.Plain_;
 import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
@@ -782,9 +781,9 @@ public class ReportDAO implements IReportDAO{
 		if(endDate!=null)
 			query.setParameter( "endDate", endDate );
 		if(!allStates){
-			query.setParameter("active", Plain_.ACTIVE);
-			query.setParameter("ready", Plain_.READY);
-			query.setParameter("waiting", Plain_.WAITING);
+			query.setParameter("active", Plain.ACTIVE);
+			query.setParameter("ready", Plain.READY);
+			query.setParameter("waiting", Plain.WAITING);
 		}
 
 		List<Object[]> tasks = query.getResultList();
@@ -1194,10 +1193,10 @@ public class ReportDAO implements IReportDAO{
 
 					actEntry[ 8 ] = normal.getTheEnactionDescription().getActualEnd();
 
-					if ( actEntry[ 3 ].equals( Plain_.ACTIVE ) ||
-							actEntry[ 3 ].equals( Plain_.PAUSED ) ||
-							actEntry[ 3 ].equals( Plain_.FAILED ) ||
-							actEntry[ 3 ].equals( Plain_.FINISHED ) ) {
+					if ( actEntry[ 3 ].equals( Plain.ACTIVE ) ||
+							actEntry[ 3 ].equals( Plain.PAUSED ) ||
+							actEntry[ 3 ].equals( Plain.FAILED ) ||
+							actEntry[ 3 ].equals( Plain.FINISHED ) ) {
 						actEntry[ 9 ] = getWorkedHoursForActivity( activity.getIdent());
 					}
 					else actEntry[ 9 ] = 0.0;

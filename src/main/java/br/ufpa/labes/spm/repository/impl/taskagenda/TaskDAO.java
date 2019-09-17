@@ -1,6 +1,7 @@
 package br.ufpa.labes.spm.repository.impl.taskagenda;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -40,14 +41,14 @@ public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO {
       if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
         isCounting = true;
 
-        startTimeMillis = event[i].getWhen().getTime();
+        startTimeMillis = event[i].getWhen().toEpochDay();
       } else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
           || event[i].getTheCatalogEvents().getDescription().equals("ToPaused")
           || event[i].getTheCatalogEvents().getDescription().equals("ToFailed")) {
         isCounting = false;
 
         if (startTimeMillis != -1) {
-          endTimeMillis = event[i].getWhen().getTime();
+          endTimeMillis = event[i].getWhen().toEpochDay();
 
           elapsedTime = endTimeMillis - startTimeMillis;
 
@@ -58,9 +59,7 @@ public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO {
     }
 
     if (isCounting) {
-      Date date = new Date();
-
-      endTimeMillis = date.getTime();
+      endTimeMillis = LocalDate.now().toEpochDay();
 
       elapsedTime = endTimeMillis - startTimeMillis;
 
@@ -78,8 +77,8 @@ public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO {
     AgendaEvent[] event = this.getAgendaEventsForTask(normalIdent, agentIdent);
 
     Time horaInicial = new Time(0, 0);
-    Date startDate = null;
-    Date endDate = null;
+    LocalDate startDate = null;
+    LocalDate endDate = null;
 
     if (event == null) {
       return horaInicial;
@@ -99,7 +98,7 @@ public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO {
       if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
         isCounting = true;
 
-        startTimeMillis = event[i].getWhen().getTime();
+        startTimeMillis = event[i].getWhen().toEpochDay();
         startDate = event[i].getWhen();
         //				System.out.println("--------> Start: " + event[i].getWhen());
       } else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
@@ -109,12 +108,12 @@ public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO {
         //				System.out.println("Event: " + event[i].getTheCatalogEvents().getDescription());
 
         if (startTimeMillis != -1) {
-          endTimeMillis = event[i].getWhen().getTime();
+          endTimeMillis = event[i].getWhen().toEpochDay();
           endDate = event[i].getWhen();
 
           elapsedTime = endTimeMillis - startTimeMillis;
 
-          segundos += ServicesUtil.segundosEntre(startDate, endDate);
+          segundos += ServicesUtil.segundosEntre(Date.valueOf(startDate), Date.valueOf(endDate));
 
           //					System.out.println("--------> End: " + event[i].getWhen());
           //					System.out.println("--------> Segundos: " + segundos + "; Horas:" + (segundos /
@@ -126,12 +125,11 @@ public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO {
     }
 
     if (isCounting) {
-      Date date = new Date();
-      endTimeMillis = date.getTime();
+      endTimeMillis = LocalDate.now().toEpochDay();
       elapsedTime = endTimeMillis - startTimeMillis;
 
-      segundos += ServicesUtil.segundosEntre(startDate, new Date());
-      //			System.out.println("--------> No End: " + new Date());
+      segundos += ServicesUtil.segundosEntre(Date.valueOf(startDate), Date.valueOf(LocalDate.now()));
+      //			System.out.println("--------> No End: " + LocalDate.now());
       //			System.out.println("--------> Segundos: " + segundos + "; Horas:" + (segundos / 3600) +
       // "; Minutos: " + ((segundos % 3600) / 60));
       //			totalElapsedTime += ((float) elapsedTime / (1000 * 60 * 60));

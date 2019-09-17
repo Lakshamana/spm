@@ -27,7 +27,7 @@ public class ProcessAgendaDAO extends BaseDAO<ProcessAgenda, Integer> implements
   public Task addTask(ProcessAgenda pAgenda, Normal actNorm) {
     //		pAgenda = this.retrieve(pAgenda.getId());
 
-    Collection tasks = pAgenda.getTheTask();
+    Collection tasks = pAgenda.getTheTasks();
     Iterator iter = tasks.iterator();
     boolean has = false;
     Task returnTask = null;
@@ -47,7 +47,7 @@ public class ProcessAgendaDAO extends BaseDAO<ProcessAgenda, Integer> implements
       task.setTheNormal(actNorm);
       actNorm.getTheTasks().add(task);
       task.setTheProcessAgenda(pAgenda);
-      pAgenda.getTheTask().add(task);
+      pAgenda.getTheTasks().add(task);
 
       task = (Task) taskDAO.save(task);
 

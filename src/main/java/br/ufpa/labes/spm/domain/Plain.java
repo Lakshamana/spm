@@ -24,6 +24,10 @@ public class Plain extends Activity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  public static final transient String WAITING = "Waiting", READY = "Ready",
+			FAILED = "Failed", CANCELED = "Canceled", ACTIVE = "Active",
+			PAUSED = "Paused", FINISHED = "Finished";
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
