@@ -23,13 +23,6 @@
             "relationshipName": "sugWorkGroup",
             "otherEntityField": "id",
             "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "peopleInstSug",
-            "otherEntityRelationshipName": "theWorkGroupInstSug",
-            "relationshipName": "thePeopleInstSugSuper",
-            "ownerSide": false
         }
     ],
     "changelogDate": "20190914033839",

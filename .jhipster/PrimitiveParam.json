@@ -1,15 +1,7 @@
 {
     "name": "PrimitiveParam",
     "fields": [],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "parameter",
-            "otherEntityRelationshipName": "thePrimitiveParamSub",
-            "relationshipName": "theParameterSuper",
-            "ownerSide": false
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20190914033827",
     "entityTableName": "primitive_param",
     "dto": "mapstruct",

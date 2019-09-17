@@ -4,10 +4,11 @@
     "relationships": [
         {
             "relationshipType": "one-to-one",
-            "otherEntityName": "activity",
-            "otherEntityRelationshipName": "theDecomposedSub",
-            "relationshipName": "theActivitySuper",
-            "ownerSide": false
+            "otherEntityName": "processModel",
+            "otherEntityRelationshipName": "theDecomposed",
+            "relationshipName": "theReferedProcessModel",
+            "otherEntityField": "id",
+            "ownerSide": true
         }
     ],
     "changelogDate": "20190914033721",

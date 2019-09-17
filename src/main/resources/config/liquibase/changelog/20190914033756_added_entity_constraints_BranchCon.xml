@@ -8,12 +8,6 @@
     -->
     <changeSet id="20190914033756-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_branchandcon_sub_id"
-                                 baseTableName="branch_con"
-                                 constraintName="fk_branch_con_the_branchandcon_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="branch_and_con"/>
-
         <addForeignKeyConstraint baseColumnNames="from_multiple_con_id"
                                  baseTableName="branch_con"
                                  constraintName="fk_branch_con_from_multiple_con_id"

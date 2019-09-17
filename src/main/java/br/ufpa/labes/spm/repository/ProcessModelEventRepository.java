@@ -4,7 +4,12 @@ import br.ufpa.labes.spm.domain.ProcessModelEvent;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-/** Spring Data repository for the ProcessModelEvent entity. */
+
+/**
+ * Spring Data  repository for the ProcessModelEvent entity.
+ */
 @SuppressWarnings("unused")
 @Repository
-public interface ProcessModelEventRepository extends JpaRepository<ProcessModelEvent, Long> {}
+public interface ProcessModelEventRepository extends JpaRepository<ProcessModelEvent, Long> {
+
+}

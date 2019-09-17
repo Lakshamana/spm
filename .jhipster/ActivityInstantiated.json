@@ -4,6 +4,13 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "instantiationPolicyLog",
+            "otherEntityRelationshipName": "theActivityInstantiated",
+            "relationshipName": "theInstantiationPolicyLog",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "activity",
             "otherEntityRelationshipName": "theActivityInstantiated",
             "relationshipName": "theActivity",

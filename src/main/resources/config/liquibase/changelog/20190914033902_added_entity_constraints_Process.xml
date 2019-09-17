@@ -14,12 +14,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="process_model"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_template_sub_id"
-                                 baseTableName="process"
-                                 constraintName="fk_process_the_template_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="template"/>
-
         <addForeignKeyConstraint baseColumnNames="the_activity_type_id"
                                  baseTableName="process"
                                  constraintName="fk_process_the_activity_type_id"

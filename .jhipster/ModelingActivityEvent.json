@@ -3,13 +3,6 @@
     "fields": [],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "event",
-            "otherEntityRelationshipName": "theModelingActivityEventSub",
-            "relationshipName": "theEventSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "catalogEvent",
             "otherEntityRelationshipName": "theModelingActivityEvent",

@@ -18,13 +18,6 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "event",
-            "otherEntityRelationshipName": "theResourceEventSub",
-            "relationshipName": "theEventSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "catalogEvent",
             "otherEntityRelationshipName": "theResourceEvent",

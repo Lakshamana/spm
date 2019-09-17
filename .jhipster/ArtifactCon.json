@@ -25,13 +25,6 @@
             "ownerSide": true
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "connection",
-            "otherEntityRelationshipName": "theArtifactConSub",
-            "relationshipName": "theConnectionSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "many-to-many",
             "otherEntityName": "activity",
             "otherEntityRelationshipName": "fromArtifactCon",

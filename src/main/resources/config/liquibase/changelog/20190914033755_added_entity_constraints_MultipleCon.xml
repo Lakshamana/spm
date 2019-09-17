@@ -8,18 +8,6 @@
     -->
     <changeSet id="20190914033755-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_join_con_sub_id"
-                                 baseTableName="multiple_con"
-                                 constraintName="fk_multiple_con_the_join_con_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="join_con"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_branch_con_sub_id"
-                                 baseTableName="multiple_con"
-                                 constraintName="fk_multiple_con_the_branch_con_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="branch_con"/>
-
         <addForeignKeyConstraint baseColumnNames="the_dependency_id"
                                  baseTableName="multiple_con"
                                  constraintName="fk_multiple_con_the_dependency_id"

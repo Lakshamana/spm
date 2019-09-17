@@ -19,15 +19,7 @@
             "fieldType": "Float"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "resource",
-            "otherEntityRelationshipName": "theConsumableSub",
-            "relationshipName": "theResourceSuper",
-            "ownerSide": false
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20190914033905",
     "entityTableName": "consumable",
     "dto": "mapstruct",

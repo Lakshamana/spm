@@ -31,261 +31,260 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Integration tests for the {@link SubroutineResource} REST controller. */
+/**
+ * Integration tests for the {@link SubroutineResource} REST controller.
+ */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class SubroutineResourceIT {
 
-  private static final String DEFAULT_IDENT = "AAAAAAAAAA";
-  private static final String UPDATED_IDENT = "BBBBBBBBBB";
+    private static final String DEFAULT_IDENT = "AAAAAAAAAA";
+    private static final String UPDATED_IDENT = "BBBBBBBBBB";
 
-  @Autowired private SubroutineRepository subroutineRepository;
+    @Autowired
+    private SubroutineRepository subroutineRepository;
 
-  @Autowired private SubroutineMapper subroutineMapper;
+    @Autowired
+    private SubroutineMapper subroutineMapper;
 
-  @Autowired private SubroutineService subroutineService;
+    @Autowired
+    private SubroutineService subroutineService;
 
-  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-  @Autowired private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
-  @Autowired private EntityManager em;
+    @Autowired
+    private EntityManager em;
 
-  @Autowired private Validator validator;
+    @Autowired
+    private Validator validator;
 
-  private MockMvc restSubroutineMockMvc;
+    private MockMvc restSubroutineMockMvc;
 
-  private Subroutine subroutine;
+    private Subroutine subroutine;
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final SubroutineResource subroutineResource = new SubroutineResource(subroutineService);
-    this.restSubroutineMockMvc =
-        MockMvcBuilders.standaloneSetup(subroutineResource)
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final SubroutineResource subroutineResource = new SubroutineResource(subroutineService);
+        this.restSubroutineMockMvc = MockMvcBuilders.standaloneSetup(subroutineResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator)
-            .build();
-  }
+            .setValidator(validator).build();
+    }
 
-  /**
-   * Create an entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static Subroutine createEntity(EntityManager em) {
-    Subroutine subroutine = new Subroutine().ident(DEFAULT_IDENT);
-    return subroutine;
-  }
-  /**
-   * Create an updated entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static Subroutine createUpdatedEntity(EntityManager em) {
-    Subroutine subroutine = new Subroutine().ident(UPDATED_IDENT);
-    return subroutine;
-  }
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Subroutine createEntity(EntityManager em) {
+        Subroutine subroutine = new Subroutine()
+            .ident(DEFAULT_IDENT);
+        return subroutine;
+    }
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Subroutine createUpdatedEntity(EntityManager em) {
+        Subroutine subroutine = new Subroutine()
+            .ident(UPDATED_IDENT);
+        return subroutine;
+    }
 
-  @BeforeEach
-  public void initTest() {
-    subroutine = createEntity(em);
-  }
+    @BeforeEach
+    public void initTest() {
+        subroutine = createEntity(em);
+    }
 
-  @Test
-  @Transactional
-  public void createSubroutine() throws Exception {
-    int databaseSizeBeforeCreate = subroutineRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createSubroutine() throws Exception {
+        int databaseSizeBeforeCreate = subroutineRepository.findAll().size();
 
-    // Create the Subroutine
-    SubroutineDTO subroutineDTO = subroutineMapper.toDto(subroutine);
-    restSubroutineMockMvc
-        .perform(
-            post("/api/subroutines")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
-        .andExpect(status().isCreated());
+        // Create the Subroutine
+        SubroutineDTO subroutineDTO = subroutineMapper.toDto(subroutine);
+        restSubroutineMockMvc.perform(post("/api/subroutines")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
+            .andExpect(status().isCreated());
 
-    // Validate the Subroutine in the database
-    List<Subroutine> subroutineList = subroutineRepository.findAll();
-    assertThat(subroutineList).hasSize(databaseSizeBeforeCreate + 1);
-    Subroutine testSubroutine = subroutineList.get(subroutineList.size() - 1);
-    assertThat(testSubroutine.getIdent()).isEqualTo(DEFAULT_IDENT);
-  }
+        // Validate the Subroutine in the database
+        List<Subroutine> subroutineList = subroutineRepository.findAll();
+        assertThat(subroutineList).hasSize(databaseSizeBeforeCreate + 1);
+        Subroutine testSubroutine = subroutineList.get(subroutineList.size() - 1);
+        assertThat(testSubroutine.getIdent()).isEqualTo(DEFAULT_IDENT);
+    }
 
-  @Test
-  @Transactional
-  public void createSubroutineWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = subroutineRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createSubroutineWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = subroutineRepository.findAll().size();
 
-    // Create the Subroutine with an existing ID
-    subroutine.setId(1L);
-    SubroutineDTO subroutineDTO = subroutineMapper.toDto(subroutine);
+        // Create the Subroutine with an existing ID
+        subroutine.setId(1L);
+        SubroutineDTO subroutineDTO = subroutineMapper.toDto(subroutine);
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restSubroutineMockMvc
-        .perform(
-            post("/api/subroutines")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
-        .andExpect(status().isBadRequest());
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restSubroutineMockMvc.perform(post("/api/subroutines")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the Subroutine in the database
-    List<Subroutine> subroutineList = subroutineRepository.findAll();
-    assertThat(subroutineList).hasSize(databaseSizeBeforeCreate);
-  }
+        // Validate the Subroutine in the database
+        List<Subroutine> subroutineList = subroutineRepository.findAll();
+        assertThat(subroutineList).hasSize(databaseSizeBeforeCreate);
+    }
 
-  @Test
-  @Transactional
-  public void getAllSubroutines() throws Exception {
-    // Initialize the database
-    subroutineRepository.saveAndFlush(subroutine);
 
-    // Get all the subroutineList
-    restSubroutineMockMvc
-        .perform(get("/api/subroutines?sort=id,desc"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.[*].id").value(hasItem(subroutine.getId().intValue())))
-        .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())));
-  }
+    @Test
+    @Transactional
+    public void getAllSubroutines() throws Exception {
+        // Initialize the database
+        subroutineRepository.saveAndFlush(subroutine);
 
-  @Test
-  @Transactional
-  public void getSubroutine() throws Exception {
-    // Initialize the database
-    subroutineRepository.saveAndFlush(subroutine);
+        // Get all the subroutineList
+        restSubroutineMockMvc.perform(get("/api/subroutines?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(subroutine.getId().intValue())))
+            .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())));
+    }
+    
+    @Test
+    @Transactional
+    public void getSubroutine() throws Exception {
+        // Initialize the database
+        subroutineRepository.saveAndFlush(subroutine);
 
-    // Get the subroutine
-    restSubroutineMockMvc
-        .perform(get("/api/subroutines/{id}", subroutine.getId()))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.id").value(subroutine.getId().intValue()))
-        .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()));
-  }
+        // Get the subroutine
+        restSubroutineMockMvc.perform(get("/api/subroutines/{id}", subroutine.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(subroutine.getId().intValue()))
+            .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()));
+    }
 
-  @Test
-  @Transactional
-  public void getNonExistingSubroutine() throws Exception {
-    // Get the subroutine
-    restSubroutineMockMvc
-        .perform(get("/api/subroutines/{id}", Long.MAX_VALUE))
-        .andExpect(status().isNotFound());
-  }
+    @Test
+    @Transactional
+    public void getNonExistingSubroutine() throws Exception {
+        // Get the subroutine
+        restSubroutineMockMvc.perform(get("/api/subroutines/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void updateSubroutine() throws Exception {
-    // Initialize the database
-    subroutineRepository.saveAndFlush(subroutine);
+    @Test
+    @Transactional
+    public void updateSubroutine() throws Exception {
+        // Initialize the database
+        subroutineRepository.saveAndFlush(subroutine);
 
-    int databaseSizeBeforeUpdate = subroutineRepository.findAll().size();
+        int databaseSizeBeforeUpdate = subroutineRepository.findAll().size();
 
-    // Update the subroutine
-    Subroutine updatedSubroutine = subroutineRepository.findById(subroutine.getId()).get();
-    // Disconnect from session so that the updates on updatedSubroutine are not directly saved in db
-    em.detach(updatedSubroutine);
-    updatedSubroutine.ident(UPDATED_IDENT);
-    SubroutineDTO subroutineDTO = subroutineMapper.toDto(updatedSubroutine);
+        // Update the subroutine
+        Subroutine updatedSubroutine = subroutineRepository.findById(subroutine.getId()).get();
+        // Disconnect from session so that the updates on updatedSubroutine are not directly saved in db
+        em.detach(updatedSubroutine);
+        updatedSubroutine
+            .ident(UPDATED_IDENT);
+        SubroutineDTO subroutineDTO = subroutineMapper.toDto(updatedSubroutine);
 
-    restSubroutineMockMvc
-        .perform(
-            put("/api/subroutines")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
-        .andExpect(status().isOk());
+        restSubroutineMockMvc.perform(put("/api/subroutines")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
+            .andExpect(status().isOk());
 
-    // Validate the Subroutine in the database
-    List<Subroutine> subroutineList = subroutineRepository.findAll();
-    assertThat(subroutineList).hasSize(databaseSizeBeforeUpdate);
-    Subroutine testSubroutine = subroutineList.get(subroutineList.size() - 1);
-    assertThat(testSubroutine.getIdent()).isEqualTo(UPDATED_IDENT);
-  }
+        // Validate the Subroutine in the database
+        List<Subroutine> subroutineList = subroutineRepository.findAll();
+        assertThat(subroutineList).hasSize(databaseSizeBeforeUpdate);
+        Subroutine testSubroutine = subroutineList.get(subroutineList.size() - 1);
+        assertThat(testSubroutine.getIdent()).isEqualTo(UPDATED_IDENT);
+    }
 
-  @Test
-  @Transactional
-  public void updateNonExistingSubroutine() throws Exception {
-    int databaseSizeBeforeUpdate = subroutineRepository.findAll().size();
+    @Test
+    @Transactional
+    public void updateNonExistingSubroutine() throws Exception {
+        int databaseSizeBeforeUpdate = subroutineRepository.findAll().size();
 
-    // Create the Subroutine
-    SubroutineDTO subroutineDTO = subroutineMapper.toDto(subroutine);
+        // Create the Subroutine
+        SubroutineDTO subroutineDTO = subroutineMapper.toDto(subroutine);
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restSubroutineMockMvc
-        .perform(
-            put("/api/subroutines")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
-        .andExpect(status().isBadRequest());
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restSubroutineMockMvc.perform(put("/api/subroutines")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the Subroutine in the database
-    List<Subroutine> subroutineList = subroutineRepository.findAll();
-    assertThat(subroutineList).hasSize(databaseSizeBeforeUpdate);
-  }
+        // Validate the Subroutine in the database
+        List<Subroutine> subroutineList = subroutineRepository.findAll();
+        assertThat(subroutineList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-  @Test
-  @Transactional
-  public void deleteSubroutine() throws Exception {
-    // Initialize the database
-    subroutineRepository.saveAndFlush(subroutine);
+    @Test
+    @Transactional
+    public void deleteSubroutine() throws Exception {
+        // Initialize the database
+        subroutineRepository.saveAndFlush(subroutine);
 
-    int databaseSizeBeforeDelete = subroutineRepository.findAll().size();
+        int databaseSizeBeforeDelete = subroutineRepository.findAll().size();
 
-    // Delete the subroutine
-    restSubroutineMockMvc
-        .perform(
-            delete("/api/subroutines/{id}", subroutine.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-        .andExpect(status().isNoContent());
+        // Delete the subroutine
+        restSubroutineMockMvc.perform(delete("/api/subroutines/{id}", subroutine.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNoContent());
 
-    // Validate the database contains one less item
-    List<Subroutine> subroutineList = subroutineRepository.findAll();
-    assertThat(subroutineList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+        // Validate the database contains one less item
+        List<Subroutine> subroutineList = subroutineRepository.findAll();
+        assertThat(subroutineList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 
-  @Test
-  @Transactional
-  public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(Subroutine.class);
-    Subroutine subroutine1 = new Subroutine();
-    subroutine1.setId(1L);
-    Subroutine subroutine2 = new Subroutine();
-    subroutine2.setId(subroutine1.getId());
-    assertThat(subroutine1).isEqualTo(subroutine2);
-    subroutine2.setId(2L);
-    assertThat(subroutine1).isNotEqualTo(subroutine2);
-    subroutine1.setId(null);
-    assertThat(subroutine1).isNotEqualTo(subroutine2);
-  }
+    @Test
+    @Transactional
+    public void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(Subroutine.class);
+        Subroutine subroutine1 = new Subroutine();
+        subroutine1.setId(1L);
+        Subroutine subroutine2 = new Subroutine();
+        subroutine2.setId(subroutine1.getId());
+        assertThat(subroutine1).isEqualTo(subroutine2);
+        subroutine2.setId(2L);
+        assertThat(subroutine1).isNotEqualTo(subroutine2);
+        subroutine1.setId(null);
+        assertThat(subroutine1).isNotEqualTo(subroutine2);
+    }
 
-  @Test
-  @Transactional
-  public void dtoEqualsVerifier() throws Exception {
-    TestUtil.equalsVerifier(SubroutineDTO.class);
-    SubroutineDTO subroutineDTO1 = new SubroutineDTO();
-    subroutineDTO1.setId(1L);
-    SubroutineDTO subroutineDTO2 = new SubroutineDTO();
-    assertThat(subroutineDTO1).isNotEqualTo(subroutineDTO2);
-    subroutineDTO2.setId(subroutineDTO1.getId());
-    assertThat(subroutineDTO1).isEqualTo(subroutineDTO2);
-    subroutineDTO2.setId(2L);
-    assertThat(subroutineDTO1).isNotEqualTo(subroutineDTO2);
-    subroutineDTO1.setId(null);
-    assertThat(subroutineDTO1).isNotEqualTo(subroutineDTO2);
-  }
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(SubroutineDTO.class);
+        SubroutineDTO subroutineDTO1 = new SubroutineDTO();
+        subroutineDTO1.setId(1L);
+        SubroutineDTO subroutineDTO2 = new SubroutineDTO();
+        assertThat(subroutineDTO1).isNotEqualTo(subroutineDTO2);
+        subroutineDTO2.setId(subroutineDTO1.getId());
+        assertThat(subroutineDTO1).isEqualTo(subroutineDTO2);
+        subroutineDTO2.setId(2L);
+        assertThat(subroutineDTO1).isNotEqualTo(subroutineDTO2);
+        subroutineDTO1.setId(null);
+        assertThat(subroutineDTO1).isNotEqualTo(subroutineDTO2);
+    }
 
-  @Test
-  @Transactional
-  public void testEntityFromId() {
-    assertThat(subroutineMapper.fromId(42L).getId()).isEqualTo(42);
-    assertThat(subroutineMapper.fromId(null)).isNull();
-  }
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(subroutineMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(subroutineMapper.fromId(null)).isNull();
+    }
 }

@@ -19,11 +19,7 @@
             <column name="description" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-            <column name="the_artifact_parameter_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_parameter_the_artifact_parameter_sub_id" />
-            </column>            <column name="the_primitive_param_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_parameter_the_primitive_param_sub_id" />
-            </column>
+
             <column name="the_automatic_id" type="bigint">
                 <constraints nullable="true" />
             </column>

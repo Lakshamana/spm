@@ -26,33 +26,10 @@
             "ownerSide": true
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "automatic",
-            "otherEntityRelationshipName": "thePlainSuper",
-            "relationshipName": "theAutomaticSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "normal",
-            "otherEntityRelationshipName": "thePlainSuper",
-            "relationshipName": "theNormalSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "event",
             "otherEntityRelationshipName": "thePlain",
             "relationshipName": "theGlobalActivityEvent"
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "activity",
-            "otherEntityRelationshipName": "thePlainSub",
-            "relationshipName": "theActivitySuper",
-            "ownerSide": false
         },
         {
             "relationshipType": "one-to-many",

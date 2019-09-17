@@ -14,84 +14,72 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-/** Service Implementation for managing {@link CatalogEvent}. */
+/**
+ * Service Implementation for managing {@link CatalogEvent}.
+ */
 @Service
 @Transactional
 public class CatalogEventService {
 
-  private final Logger log = LoggerFactory.getLogger(CatalogEventService.class);
+    private final Logger log = LoggerFactory.getLogger(CatalogEventService.class);
 
-  private final CatalogEventRepository catalogEventRepository;
+    private final CatalogEventRepository catalogEventRepository;
 
-  private final CatalogEventMapper catalogEventMapper;
+    private final CatalogEventMapper catalogEventMapper;
 
-  public CatalogEventService(
-      CatalogEventRepository catalogEventRepository, CatalogEventMapper catalogEventMapper) {
-    this.catalogEventRepository = catalogEventRepository;
-    this.catalogEventMapper = catalogEventMapper;
-  }
+    public CatalogEventService(CatalogEventRepository catalogEventRepository, CatalogEventMapper catalogEventMapper) {
+        this.catalogEventRepository = catalogEventRepository;
+        this.catalogEventMapper = catalogEventMapper;
+    }
 
-  /**
-   * Save a catalogEvent.
-   *
-   * @param catalogEventDTO the entity to save.
-   * @return the persisted entity.
-   */
-  public CatalogEventDTO save(CatalogEventDTO catalogEventDTO) {
-    log.debug("Request to save CatalogEvent : {}", catalogEventDTO);
-    CatalogEvent catalogEvent = catalogEventMapper.toEntity(catalogEventDTO);
-    catalogEvent = catalogEventRepository.save(catalogEvent);
-    return catalogEventMapper.toDto(catalogEvent);
-  }
+    /**
+     * Save a catalogEvent.
+     *
+     * @param catalogEventDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public CatalogEventDTO save(CatalogEventDTO catalogEventDTO) {
+        log.debug("Request to save CatalogEvent : {}", catalogEventDTO);
+        CatalogEvent catalogEvent = catalogEventMapper.toEntity(catalogEventDTO);
+        catalogEvent = catalogEventRepository.save(catalogEvent);
+        return catalogEventMapper.toDto(catalogEvent);
+    }
 
-  /**
-   * Get all the catalogEvents.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<CatalogEventDTO> findAll() {
-    log.debug("Request to get all CatalogEvents");
-    return catalogEventRepository.findAll().stream()
-        .map(catalogEventMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
+    /**
+     * Get all the catalogEvents.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<CatalogEventDTO> findAll() {
+        log.debug("Request to get all CatalogEvents");
+        return catalogEventRepository.findAll().stream()
+            .map(catalogEventMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
-  /**
-   * Get all the catalogEvents where TheEventSuper is {@code null}.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<CatalogEventDTO> findAllWhereTheEventSuperIsNull() {
-    log.debug("Request to get all catalogEvents where TheEventSuper is null");
-    return StreamSupport.stream(catalogEventRepository.findAll().spliterator(), false)
-        .filter(catalogEvent -> catalogEvent.getTheEventSuper() == null)
-        .map(catalogEventMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
 
-  /**
-   * Get one catalogEvent by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Transactional(readOnly = true)
-  public Optional<CatalogEventDTO> findOne(Long id) {
-    log.debug("Request to get CatalogEvent : {}", id);
-    return catalogEventRepository.findById(id).map(catalogEventMapper::toDto);
-  }
+    /**
+     * Get one catalogEvent by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<CatalogEventDTO> findOne(Long id) {
+        log.debug("Request to get CatalogEvent : {}", id);
+        return catalogEventRepository.findById(id)
+            .map(catalogEventMapper::toDto);
+    }
 
-  /**
-   * Delete the catalogEvent by id.
-   *
-   * @param id the id of the entity.
-   */
-  public void delete(Long id) {
-    log.debug("Request to delete CatalogEvent : {}", id);
-    catalogEventRepository.deleteById(id);
-  }
+    /**
+     * Delete the catalogEvent by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+        log.debug("Request to delete CatalogEvent : {}", id);
+        catalogEventRepository.deleteById(id);
+    }
 }

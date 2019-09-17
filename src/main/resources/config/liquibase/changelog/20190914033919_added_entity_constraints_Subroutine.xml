@@ -8,18 +8,6 @@
     -->
     <changeSet id="20190914033919-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_class_method_call_sub_id"
-                                 baseTableName="subroutine"
-                                 constraintName="fk_subroutine_the_class_method_call_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="class_method_call"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_script_sub_id"
-                                 baseTableName="subroutine"
-                                 constraintName="fk_subroutine_the_script_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="script"/>
-
         <addForeignKeyConstraint baseColumnNames="the_artifact_type_id"
                                  baseTableName="subroutine"
                                  constraintName="fk_subroutine_the_artifact_type_id"

@@ -13,13 +13,6 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "resource",
-            "otherEntityRelationshipName": "theExclusiveSub",
-            "relationshipName": "theResourceSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "reservation",
             "otherEntityRelationshipName": "theExclusive",

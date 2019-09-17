@@ -155,6 +155,8 @@
     <include file="config/liquibase/changelog/20190915031853_added_entity_BranchCondToMultipleCon.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190915215223_added_entity_BranchConCondToActivity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190915215224_added_entity_BranchConCondToMultipleCon.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190917161812_added_entity_InstantiationPolicyLog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190917161813_added_entity_ResourceInstSug.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20190914033720_added_entity_constraints_Activity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033722_added_entity_constraints_Plain.xml" relativeToChangelogFile="false"/>
@@ -258,5 +260,6 @@
     <include file="config/liquibase/changelog/20190915031853_added_entity_constraints_BranchCondToMultipleCon.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190915215223_added_entity_constraints_BranchConCondToActivity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190915215224_added_entity_constraints_BranchConCondToMultipleCon.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033721_added_entity_constraints_Decomposed.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

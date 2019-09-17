@@ -7,55 +7,7 @@
         Added the constraints for entity Event.
     -->
     <changeSet id="20190914033802-2" author="jhipster">
-
-        <addForeignKeyConstraint baseColumnNames="the_agenda_event_sub_id"
-                                 baseTableName="event"
-                                 constraintName="fk_event_the_agenda_event_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="agenda_event"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_catalog_event_sub_id"
-                                 baseTableName="event"
-                                 constraintName="fk_event_the_catalog_event_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="catalog_event"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_connection_event_sub_id"
-                                 baseTableName="event"
-                                 constraintName="fk_event_the_connection_event_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="connection_event"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_global_activity_event_sub_id"
-                                 baseTableName="event"
-                                 constraintName="fk_event_the_global_activity_event_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="global_activity_event"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_modeling_activity_event_sub_id"
-                                 baseTableName="event"
-                                 constraintName="fk_event_the_modeling_activity_event_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="modeling_activity_event"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_process_event_sub_id"
-                                 baseTableName="event"
-                                 constraintName="fk_event_the_process_event_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="process_event"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_process_model_event_sub_id"
-                                 baseTableName="event"
-                                 constraintName="fk_event_the_process_model_event_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="process_model_event"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_resource_event_sub_id"
-                                 baseTableName="event"
-                                 constraintName="fk_event_the_resource_event_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="resource_event"/>
-
+        
         <addForeignKeyConstraint baseColumnNames="the_catalog_events_id"
                                  baseTableName="event"
                                  constraintName="fk_event_the_catalog_events_id"

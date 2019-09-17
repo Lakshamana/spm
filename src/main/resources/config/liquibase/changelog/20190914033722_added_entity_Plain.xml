@@ -29,10 +29,6 @@
             </column>
             <column name="the_enaction_description_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_plain_the_enaction_description_id" />
-            </column>            <column name="the_automatic_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_plain_the_automatic_sub_id" />
-            </column>            <column name="the_normal_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_plain_the_normal_sub_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>

@@ -8,13 +8,6 @@
             "otherEntityRelationshipName": "theProcessEstimation",
             "relationshipName": "theProcess",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "estimation",
-            "otherEntityRelationshipName": "theProcessEstimationSub",
-            "relationshipName": "theEstimationSuper",
-            "ownerSide": false
         }
     ],
     "changelogDate": "20190914033847",

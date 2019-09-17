@@ -8,12 +8,6 @@
     -->
     <changeSet id="20190914033836-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_people_inst_sug_sub_id"
-                                 baseTableName="instantiation_suggestion"
-                                 constraintName="fk_instantiation_suggestion_the_people_inst_sug_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="people_inst_sug"/>
-
         <addForeignKeyConstraint baseColumnNames="the_activity_instantiated_id"
                                  baseTableName="instantiation_suggestion"
                                  constraintName="fk_instantiation_suggestion_the_activity_instantiated_id"

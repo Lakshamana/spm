@@ -27,23 +27,7 @@
             <column name="is_created_by_apsee" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="the_agenda_event_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_event_the_agenda_event_sub_id" />
-            </column>            <column name="the_catalog_event_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_event_the_catalog_event_sub_id" />
-            </column>            <column name="the_connection_event_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_event_the_connection_event_sub_id" />
-            </column>            <column name="the_global_activity_event_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_event_the_global_activity_event_sub_id" />
-            </column>            <column name="the_modeling_activity_event_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_event_the_modeling_activity_event_sub_id" />
-            </column>            <column name="the_process_event_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_event_the_process_event_sub_id" />
-            </column>            <column name="the_process_model_event_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_event_the_process_model_event_sub_id" />
-            </column>            <column name="the_resource_event_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_event_the_resource_event_sub_id" />
-            </column>
+
             <column name="the_catalog_events_id" type="bigint">
                 <constraints nullable="true" />
             </column>

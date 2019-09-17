@@ -8,18 +8,6 @@
     -->
     <changeSet id="20190914033720-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_plain_sub_id"
-                                 baseTableName="activity"
-                                 constraintName="fk_activity_the_plain_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="plain"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_decomposed_sub_id"
-                                 baseTableName="activity"
-                                 constraintName="fk_activity_the_decomposed_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="decomposed"/>
-
         <addForeignKeyConstraint baseColumnNames="the_activity_type_id"
                                  baseTableName="activity"
                                  constraintName="fk_activity_the_activity_type_id"

@@ -8,13 +8,6 @@
             "otherEntityRelationshipName": "theResourceEstimation",
             "relationshipName": "theResource",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "estimation",
-            "otherEntityRelationshipName": "theResourceEstimationSub",
-            "relationshipName": "theEstimationSuper",
-            "ownerSide": false
         }
     ],
     "changelogDate": "20190914033848",

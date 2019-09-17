@@ -8,30 +8,6 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "multipleCon",
-            "otherEntityRelationshipName": "theConnectionSuper",
-            "relationshipName": "theMultipleConSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "simpleCon",
-            "otherEntityRelationshipName": "theConnectionSuper",
-            "relationshipName": "theSimpleConSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "artifactCon",
-            "otherEntityRelationshipName": "theConnectionSuper",
-            "relationshipName": "theArtifactConSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "processModel",
             "otherEntityRelationshipName": "theConnection",

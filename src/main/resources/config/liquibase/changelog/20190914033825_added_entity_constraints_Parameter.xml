@@ -8,18 +8,6 @@
     -->
     <changeSet id="20190914033825-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_artifact_parameter_sub_id"
-                                 baseTableName="parameter"
-                                 constraintName="fk_parameter_the_artifact_parameter_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="artifact_param"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_primitive_param_sub_id"
-                                 baseTableName="parameter"
-                                 constraintName="fk_parameter_the_primitive_param_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="primitive_param"/>
-
         <addForeignKeyConstraint baseColumnNames="the_automatic_id"
                                  baseTableName="parameter"
                                  constraintName="fk_parameter_the_automatic_id"

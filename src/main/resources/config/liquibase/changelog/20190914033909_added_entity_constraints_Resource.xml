@@ -8,24 +8,6 @@
     -->
     <changeSet id="20190914033909-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_consumable_sub_id"
-                                 baseTableName="resource"
-                                 constraintName="fk_resource_the_consumable_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="consumable"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_exclusive_sub_id"
-                                 baseTableName="resource"
-                                 constraintName="fk_resource_the_exclusive_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="exclusive"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_shareable_sub_id"
-                                 baseTableName="resource"
-                                 constraintName="fk_resource_the_shareable_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="shareable"/>
-
         <addForeignKeyConstraint baseColumnNames="belongs_to_id"
                                  baseTableName="resource"
                                  constraintName="fk_resource_belongs_to_id"

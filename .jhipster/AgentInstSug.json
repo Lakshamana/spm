@@ -15,13 +15,6 @@
             "otherEntityRelationshipName": "theAgentInstSug",
             "relationshipName": "chosenAgent",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "peopleInstSug",
-            "otherEntityRelationshipName": "theAgentInstSug",
-            "relationshipName": "thePeopleInstSugSuper",
-            "ownerSide": false
         }
     ],
     "changelogDate": "20190914033838",

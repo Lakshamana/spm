@@ -56,13 +56,6 @@
             "ownerSide": false
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "plain",
-            "otherEntityRelationshipName": "theNormalSub",
-            "relationshipName": "thePlainSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "involvedArtifact",
             "otherEntityRelationshipName": "inInvolvedArtifacts",

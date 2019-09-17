@@ -8,18 +8,6 @@
     -->
     <changeSet id="20190914033829-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_req_work_group_sub_id"
-                                 baseTableName="required_people"
-                                 constraintName="fk_required_people_the_req_work_group_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="req_work_group"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_req_agent_sub_id"
-                                 baseTableName="required_people"
-                                 constraintName="fk_required_people_the_req_agent_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="req_agent"/>
-
         <addForeignKeyConstraint baseColumnNames="the_normal_id"
                                  baseTableName="required_people"
                                  constraintName="fk_required_people_the_normal_id"

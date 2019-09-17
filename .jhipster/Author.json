@@ -44,22 +44,6 @@
             "ownerSide": true
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "organization",
-            "otherEntityRelationshipName": "theAuthorSuper",
-            "relationshipName": "theOrganizationSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "person",
-            "otherEntityRelationshipName": "theAuthorSuper",
-            "relationshipName": "thePersonSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "many-to-many",
             "otherEntityName": "author",
             "otherEntityRelationshipName": "theAuthor",

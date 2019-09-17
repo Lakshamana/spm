@@ -19,13 +19,7 @@
             <column name="ident" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="the_multiple_con_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_connection_the_multiple_con_sub_id" />
-            </column>            <column name="the_simple_con_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_connection_the_simple_con_sub_id" />
-            </column>            <column name="the_artifact_con_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_connection_the_artifact_con_sub_id" />
-            </column>
+
             <column name="the_process_model_id" type="bigint">
                 <constraints nullable="true" />
             </column>

@@ -3,13 +3,6 @@
     "fields": [],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "type",
-            "otherEntityRelationshipName": "theActivityTypeSub",
-            "relationshipName": "theTypeSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "activity",
             "otherEntityRelationshipName": "theActivityType",

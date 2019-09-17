@@ -10,21 +10,20 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/** Spring Data repository for the WorkGroupInstSug entity. */
+/**
+ * Spring Data  repository for the WorkGroupInstSug entity.
+ */
 @Repository
 public interface WorkGroupInstSugRepository extends JpaRepository<WorkGroupInstSug, Long> {
 
-  @Query(
-      value =
-          "select distinct workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.sugWorkGroups",
-      countQuery = "select count(distinct workGroupInstSug) from WorkGroupInstSug workGroupInstSug")
-  Page<WorkGroupInstSug> findAllWithEagerRelationships(Pageable pageable);
+    @Query(value = "select distinct workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.sugWorkGroups",
+        countQuery = "select count(distinct workGroupInstSug) from WorkGroupInstSug workGroupInstSug")
+    Page<WorkGroupInstSug> findAllWithEagerRelationships(Pageable pageable);
 
-  @Query(
-      "select distinct workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.sugWorkGroups")
-  List<WorkGroupInstSug> findAllWithEagerRelationships();
+    @Query("select distinct workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.sugWorkGroups")
+    List<WorkGroupInstSug> findAllWithEagerRelationships();
 
-  @Query(
-      "select workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.sugWorkGroups where workGroupInstSug.id =:id")
-  Optional<WorkGroupInstSug> findOneWithEagerRelationships(@Param("id") Long id);
+    @Query("select workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.sugWorkGroups where workGroupInstSug.id =:id")
+    Optional<WorkGroupInstSug> findOneWithEagerRelationships(@Param("id") Long id);
+
 }

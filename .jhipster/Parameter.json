@@ -9,22 +9,6 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "artifactParam",
-            "otherEntityRelationshipName": "theParameterSuper",
-            "relationshipName": "theArtifactParameterSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "primitiveParam",
-            "otherEntityRelationshipName": "theParameterSuper",
-            "relationshipName": "thePrimitiveParamSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "automatic",
             "otherEntityRelationshipName": "theParameters",

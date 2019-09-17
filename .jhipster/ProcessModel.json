@@ -20,6 +20,13 @@
         },
         {
             "relationshipType": "one-to-one",
+            "otherEntityName": "decomposed",
+            "otherEntityRelationshipName": "theReferedProcessModel",
+            "relationshipName": "theDecomposed",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-one",
             "otherEntityName": "process",
             "otherEntityRelationshipName": "theProcessModel",
             "relationshipName": "theProcess",

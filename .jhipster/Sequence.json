@@ -8,13 +8,6 @@
             "otherEntityRelationshipName": "theSequence",
             "relationshipName": "theDependency",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "simpleCon",
-            "otherEntityRelationshipName": "theSequenceSub",
-            "relationshipName": "theSimpleConSuper",
-            "ownerSide": false
         }
     ],
     "changelogDate": "20190914033751",

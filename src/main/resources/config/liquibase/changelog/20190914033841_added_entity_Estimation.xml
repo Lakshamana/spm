@@ -23,21 +23,7 @@
             <column name="unit" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="the_activity_estimation_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_estimation_the_activity_estimation_sub_id" />
-            </column>            <column name="the_agent_estimation_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_estimation_the_agent_estimation_sub_id" />
-            </column>            <column name="the_artifact_estimation_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_estimation_the_artifact_estimation_sub_id" />
-            </column>            <column name="the_work_group_estimation_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_estimation_the_work_group_estimation_sub_id" />
-            </column>            <column name="the_organization_estimation_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_estimation_the_organization_estimation_sub_id" />
-            </column>            <column name="the_process_estimation_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_estimation_the_process_estimation_sub_id" />
-            </column>            <column name="the_resource_estimation_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_estimation_the_resource_estimation_sub_id" />
-            </column>
+
             <column name="the_metric_definition_id" type="bigint">
                 <constraints nullable="true" />
             </column>

@@ -31,252 +31,249 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Integration tests for the {@link FeedbackResource} REST controller. */
+/**
+ * Integration tests for the {@link FeedbackResource} REST controller.
+ */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class FeedbackResourceIT {
 
-  @Autowired private FeedbackRepository feedbackRepository;
+    @Autowired
+    private FeedbackRepository feedbackRepository;
 
-  @Autowired private FeedbackMapper feedbackMapper;
+    @Autowired
+    private FeedbackMapper feedbackMapper;
 
-  @Autowired private FeedbackService feedbackService;
+    @Autowired
+    private FeedbackService feedbackService;
 
-  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-  @Autowired private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
-  @Autowired private EntityManager em;
+    @Autowired
+    private EntityManager em;
 
-  @Autowired private Validator validator;
+    @Autowired
+    private Validator validator;
 
-  private MockMvc restFeedbackMockMvc;
+    private MockMvc restFeedbackMockMvc;
 
-  private Feedback feedback;
+    private Feedback feedback;
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final FeedbackResource feedbackResource = new FeedbackResource(feedbackService);
-    this.restFeedbackMockMvc =
-        MockMvcBuilders.standaloneSetup(feedbackResource)
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final FeedbackResource feedbackResource = new FeedbackResource(feedbackService);
+        this.restFeedbackMockMvc = MockMvcBuilders.standaloneSetup(feedbackResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator)
-            .build();
-  }
+            .setValidator(validator).build();
+    }
 
-  /**
-   * Create an entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static Feedback createEntity(EntityManager em) {
-    Feedback feedback = new Feedback();
-    return feedback;
-  }
-  /**
-   * Create an updated entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static Feedback createUpdatedEntity(EntityManager em) {
-    Feedback feedback = new Feedback();
-    return feedback;
-  }
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Feedback createEntity(EntityManager em) {
+        Feedback feedback = new Feedback();
+        return feedback;
+    }
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Feedback createUpdatedEntity(EntityManager em) {
+        Feedback feedback = new Feedback();
+        return feedback;
+    }
 
-  @BeforeEach
-  public void initTest() {
-    feedback = createEntity(em);
-  }
+    @BeforeEach
+    public void initTest() {
+        feedback = createEntity(em);
+    }
 
-  @Test
-  @Transactional
-  public void createFeedback() throws Exception {
-    int databaseSizeBeforeCreate = feedbackRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createFeedback() throws Exception {
+        int databaseSizeBeforeCreate = feedbackRepository.findAll().size();
 
-    // Create the Feedback
-    FeedbackDTO feedbackDTO = feedbackMapper.toDto(feedback);
-    restFeedbackMockMvc
-        .perform(
-            post("/api/feedbacks")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(feedbackDTO)))
-        .andExpect(status().isCreated());
+        // Create the Feedback
+        FeedbackDTO feedbackDTO = feedbackMapper.toDto(feedback);
+        restFeedbackMockMvc.perform(post("/api/feedbacks")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(feedbackDTO)))
+            .andExpect(status().isCreated());
 
-    // Validate the Feedback in the database
-    List<Feedback> feedbackList = feedbackRepository.findAll();
-    assertThat(feedbackList).hasSize(databaseSizeBeforeCreate + 1);
-    Feedback testFeedback = feedbackList.get(feedbackList.size() - 1);
-  }
+        // Validate the Feedback in the database
+        List<Feedback> feedbackList = feedbackRepository.findAll();
+        assertThat(feedbackList).hasSize(databaseSizeBeforeCreate + 1);
+        Feedback testFeedback = feedbackList.get(feedbackList.size() - 1);
+    }
 
-  @Test
-  @Transactional
-  public void createFeedbackWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = feedbackRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createFeedbackWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = feedbackRepository.findAll().size();
 
-    // Create the Feedback with an existing ID
-    feedback.setId(1L);
-    FeedbackDTO feedbackDTO = feedbackMapper.toDto(feedback);
+        // Create the Feedback with an existing ID
+        feedback.setId(1L);
+        FeedbackDTO feedbackDTO = feedbackMapper.toDto(feedback);
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restFeedbackMockMvc
-        .perform(
-            post("/api/feedbacks")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(feedbackDTO)))
-        .andExpect(status().isBadRequest());
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restFeedbackMockMvc.perform(post("/api/feedbacks")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(feedbackDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the Feedback in the database
-    List<Feedback> feedbackList = feedbackRepository.findAll();
-    assertThat(feedbackList).hasSize(databaseSizeBeforeCreate);
-  }
+        // Validate the Feedback in the database
+        List<Feedback> feedbackList = feedbackRepository.findAll();
+        assertThat(feedbackList).hasSize(databaseSizeBeforeCreate);
+    }
 
-  @Test
-  @Transactional
-  public void getAllFeedbacks() throws Exception {
-    // Initialize the database
-    feedbackRepository.saveAndFlush(feedback);
 
-    // Get all the feedbackList
-    restFeedbackMockMvc
-        .perform(get("/api/feedbacks?sort=id,desc"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.[*].id").value(hasItem(feedback.getId().intValue())));
-  }
+    @Test
+    @Transactional
+    public void getAllFeedbacks() throws Exception {
+        // Initialize the database
+        feedbackRepository.saveAndFlush(feedback);
 
-  @Test
-  @Transactional
-  public void getFeedback() throws Exception {
-    // Initialize the database
-    feedbackRepository.saveAndFlush(feedback);
+        // Get all the feedbackList
+        restFeedbackMockMvc.perform(get("/api/feedbacks?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(feedback.getId().intValue())));
+    }
+    
+    @Test
+    @Transactional
+    public void getFeedback() throws Exception {
+        // Initialize the database
+        feedbackRepository.saveAndFlush(feedback);
 
-    // Get the feedback
-    restFeedbackMockMvc
-        .perform(get("/api/feedbacks/{id}", feedback.getId()))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.id").value(feedback.getId().intValue()));
-  }
+        // Get the feedback
+        restFeedbackMockMvc.perform(get("/api/feedbacks/{id}", feedback.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(feedback.getId().intValue()));
+    }
 
-  @Test
-  @Transactional
-  public void getNonExistingFeedback() throws Exception {
-    // Get the feedback
-    restFeedbackMockMvc
-        .perform(get("/api/feedbacks/{id}", Long.MAX_VALUE))
-        .andExpect(status().isNotFound());
-  }
+    @Test
+    @Transactional
+    public void getNonExistingFeedback() throws Exception {
+        // Get the feedback
+        restFeedbackMockMvc.perform(get("/api/feedbacks/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void updateFeedback() throws Exception {
-    // Initialize the database
-    feedbackRepository.saveAndFlush(feedback);
+    @Test
+    @Transactional
+    public void updateFeedback() throws Exception {
+        // Initialize the database
+        feedbackRepository.saveAndFlush(feedback);
 
-    int databaseSizeBeforeUpdate = feedbackRepository.findAll().size();
+        int databaseSizeBeforeUpdate = feedbackRepository.findAll().size();
 
-    // Update the feedback
-    Feedback updatedFeedback = feedbackRepository.findById(feedback.getId()).get();
-    // Disconnect from session so that the updates on updatedFeedback are not directly saved in db
-    em.detach(updatedFeedback);
-    FeedbackDTO feedbackDTO = feedbackMapper.toDto(updatedFeedback);
+        // Update the feedback
+        Feedback updatedFeedback = feedbackRepository.findById(feedback.getId()).get();
+        // Disconnect from session so that the updates on updatedFeedback are not directly saved in db
+        em.detach(updatedFeedback);
+        FeedbackDTO feedbackDTO = feedbackMapper.toDto(updatedFeedback);
 
-    restFeedbackMockMvc
-        .perform(
-            put("/api/feedbacks")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(feedbackDTO)))
-        .andExpect(status().isOk());
+        restFeedbackMockMvc.perform(put("/api/feedbacks")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(feedbackDTO)))
+            .andExpect(status().isOk());
 
-    // Validate the Feedback in the database
-    List<Feedback> feedbackList = feedbackRepository.findAll();
-    assertThat(feedbackList).hasSize(databaseSizeBeforeUpdate);
-    Feedback testFeedback = feedbackList.get(feedbackList.size() - 1);
-  }
+        // Validate the Feedback in the database
+        List<Feedback> feedbackList = feedbackRepository.findAll();
+        assertThat(feedbackList).hasSize(databaseSizeBeforeUpdate);
+        Feedback testFeedback = feedbackList.get(feedbackList.size() - 1);
+    }
 
-  @Test
-  @Transactional
-  public void updateNonExistingFeedback() throws Exception {
-    int databaseSizeBeforeUpdate = feedbackRepository.findAll().size();
+    @Test
+    @Transactional
+    public void updateNonExistingFeedback() throws Exception {
+        int databaseSizeBeforeUpdate = feedbackRepository.findAll().size();
 
-    // Create the Feedback
-    FeedbackDTO feedbackDTO = feedbackMapper.toDto(feedback);
+        // Create the Feedback
+        FeedbackDTO feedbackDTO = feedbackMapper.toDto(feedback);
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restFeedbackMockMvc
-        .perform(
-            put("/api/feedbacks")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(feedbackDTO)))
-        .andExpect(status().isBadRequest());
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restFeedbackMockMvc.perform(put("/api/feedbacks")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(feedbackDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the Feedback in the database
-    List<Feedback> feedbackList = feedbackRepository.findAll();
-    assertThat(feedbackList).hasSize(databaseSizeBeforeUpdate);
-  }
+        // Validate the Feedback in the database
+        List<Feedback> feedbackList = feedbackRepository.findAll();
+        assertThat(feedbackList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-  @Test
-  @Transactional
-  public void deleteFeedback() throws Exception {
-    // Initialize the database
-    feedbackRepository.saveAndFlush(feedback);
+    @Test
+    @Transactional
+    public void deleteFeedback() throws Exception {
+        // Initialize the database
+        feedbackRepository.saveAndFlush(feedback);
 
-    int databaseSizeBeforeDelete = feedbackRepository.findAll().size();
+        int databaseSizeBeforeDelete = feedbackRepository.findAll().size();
 
-    // Delete the feedback
-    restFeedbackMockMvc
-        .perform(
-            delete("/api/feedbacks/{id}", feedback.getId()).accept(TestUtil.APPLICATION_JSON_UTF8))
-        .andExpect(status().isNoContent());
+        // Delete the feedback
+        restFeedbackMockMvc.perform(delete("/api/feedbacks/{id}", feedback.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNoContent());
 
-    // Validate the database contains one less item
-    List<Feedback> feedbackList = feedbackRepository.findAll();
-    assertThat(feedbackList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+        // Validate the database contains one less item
+        List<Feedback> feedbackList = feedbackRepository.findAll();
+        assertThat(feedbackList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 
-  @Test
-  @Transactional
-  public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(Feedback.class);
-    Feedback feedback1 = new Feedback();
-    feedback1.setId(1L);
-    Feedback feedback2 = new Feedback();
-    feedback2.setId(feedback1.getId());
-    assertThat(feedback1).isEqualTo(feedback2);
-    feedback2.setId(2L);
-    assertThat(feedback1).isNotEqualTo(feedback2);
-    feedback1.setId(null);
-    assertThat(feedback1).isNotEqualTo(feedback2);
-  }
+    @Test
+    @Transactional
+    public void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(Feedback.class);
+        Feedback feedback1 = new Feedback();
+        feedback1.setId(1L);
+        Feedback feedback2 = new Feedback();
+        feedback2.setId(feedback1.getId());
+        assertThat(feedback1).isEqualTo(feedback2);
+        feedback2.setId(2L);
+        assertThat(feedback1).isNotEqualTo(feedback2);
+        feedback1.setId(null);
+        assertThat(feedback1).isNotEqualTo(feedback2);
+    }
 
-  @Test
-  @Transactional
-  public void dtoEqualsVerifier() throws Exception {
-    TestUtil.equalsVerifier(FeedbackDTO.class);
-    FeedbackDTO feedbackDTO1 = new FeedbackDTO();
-    feedbackDTO1.setId(1L);
-    FeedbackDTO feedbackDTO2 = new FeedbackDTO();
-    assertThat(feedbackDTO1).isNotEqualTo(feedbackDTO2);
-    feedbackDTO2.setId(feedbackDTO1.getId());
-    assertThat(feedbackDTO1).isEqualTo(feedbackDTO2);
-    feedbackDTO2.setId(2L);
-    assertThat(feedbackDTO1).isNotEqualTo(feedbackDTO2);
-    feedbackDTO1.setId(null);
-    assertThat(feedbackDTO1).isNotEqualTo(feedbackDTO2);
-  }
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(FeedbackDTO.class);
+        FeedbackDTO feedbackDTO1 = new FeedbackDTO();
+        feedbackDTO1.setId(1L);
+        FeedbackDTO feedbackDTO2 = new FeedbackDTO();
+        assertThat(feedbackDTO1).isNotEqualTo(feedbackDTO2);
+        feedbackDTO2.setId(feedbackDTO1.getId());
+        assertThat(feedbackDTO1).isEqualTo(feedbackDTO2);
+        feedbackDTO2.setId(2L);
+        assertThat(feedbackDTO1).isNotEqualTo(feedbackDTO2);
+        feedbackDTO1.setId(null);
+        assertThat(feedbackDTO1).isNotEqualTo(feedbackDTO2);
+    }
 
-  @Test
-  @Transactional
-  public void testEntityFromId() {
-    assertThat(feedbackMapper.fromId(42L).getId()).isEqualTo(42);
-    assertThat(feedbackMapper.fromId(null)).isNull();
-  }
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(feedbackMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(feedbackMapper.fromId(null)).isNull();
+    }
 }

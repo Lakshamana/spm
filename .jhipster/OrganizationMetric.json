@@ -10,13 +10,6 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "metric",
-            "otherEntityRelationshipName": "theOrganizationMetricSub",
-            "relationshipName": "theMetricSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "company",
             "otherEntityRelationshipName": "organizationMetric",

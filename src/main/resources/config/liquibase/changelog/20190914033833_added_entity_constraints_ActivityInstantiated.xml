@@ -8,6 +8,12 @@
     -->
     <changeSet id="20190914033833-2" author="jhipster">
         
+        <addForeignKeyConstraint baseColumnNames="the_instantiation_policy_log_id"
+                                 baseTableName="activity_instantiated"
+                                 constraintName="fk_activity_instantiated_the_instantiation_policy_log_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="instantiation_policy_log"/>
+
         <addForeignKeyConstraint baseColumnNames="the_activity_id"
                                  baseTableName="activity_instantiated"
                                  constraintName="fk_activity_instantiated_the_activity_id"

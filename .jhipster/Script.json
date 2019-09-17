@@ -11,15 +11,7 @@
             "fieldTypeBlobContent": "text"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "subroutine",
-            "otherEntityRelationshipName": "theScriptSub",
-            "relationshipName": "theSubroutineSuper",
-            "ownerSide": false
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20190914033918",
     "entityTableName": "script",
     "dto": "mapstruct",

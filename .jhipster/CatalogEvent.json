@@ -72,13 +72,6 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "event",
-            "otherEntityRelationshipName": "theCatalogEventSub",
-            "relationshipName": "theEventSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "event",
             "otherEntityRelationshipName": "theCatalogEvents",

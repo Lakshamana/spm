@@ -3,29 +3,6 @@
     "fields": [],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "agentInstSug",
-            "otherEntityRelationshipName": "thePeopleInstSugSuper",
-            "relationshipName": "theAgentInstSug",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "workGroupInstSug",
-            "otherEntityRelationshipName": "thePeopleInstSugSuper",
-            "relationshipName": "theWorkGroupInstSug",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "instantiationSuggestion",
-            "otherEntityRelationshipName": "thePeopleInstSugSub",
-            "relationshipName": "theInstSugSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "agentInstSuggestionToAgent",
             "otherEntityRelationshipName": "theInstAgSug",

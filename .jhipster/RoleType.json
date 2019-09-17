@@ -3,13 +3,6 @@
     "fields": [],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "type",
-            "otherEntityRelationshipName": "theRoleTypeSub",
-            "relationshipName": "theTypeSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "role",
             "otherEntityRelationshipName": "theRoleType",

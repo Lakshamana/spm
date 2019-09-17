@@ -1,0 +1,14 @@
+{
+    "name": "ResourceInstSug",
+    "fields": [],
+    "relationships": [],
+    "changelogDate": "20190917161813",
+    "entityTableName": "resource_inst_sug",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

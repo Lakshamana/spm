@@ -19,11 +19,7 @@
             <column name="ident" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="the_class_method_call_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_subroutine_the_class_method_call_sub_id" />
-            </column>            <column name="the_script_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_subroutine_the_script_sub_id" />
-            </column>
+
             <column name="the_artifact_type_id" type="bigint">
                 <constraints nullable="true" />
             </column>

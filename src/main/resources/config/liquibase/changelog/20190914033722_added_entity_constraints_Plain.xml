@@ -14,17 +14,5 @@
                                  referencedColumnNames="id"
                                  referencedTableName="enaction_description"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_automatic_sub_id"
-                                 baseTableName="plain"
-                                 constraintName="fk_plain_the_automatic_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="automatic"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_normal_sub_id"
-                                 baseTableName="plain"
-                                 constraintName="fk_plain_the_normal_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="normal"/>
-
     </changeSet>
 </databaseChangeLog>

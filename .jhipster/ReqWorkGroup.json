@@ -10,13 +10,6 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "requiredPeople",
-            "otherEntityRelationshipName": "theReqWorkGroupSub",
-            "relationshipName": "theRequiredPeopleSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "workGroup",
             "otherEntityRelationshipName": "theReqWorkGroup",

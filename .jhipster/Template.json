@@ -22,13 +22,6 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "process",
-            "otherEntityRelationshipName": "theTemplateSub",
-            "relationshipName": "theProcessSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "description",
             "otherEntityRelationshipName": "theTemplateOldVersion",

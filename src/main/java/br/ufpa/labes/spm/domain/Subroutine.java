@@ -14,161 +14,131 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-/** A Subroutine. */
+/**
+ * A Subroutine.
+ */
 @Entity
 @Table(name = "subroutine")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Subroutine implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(name = "ident")
-  private String ident;
+    @Column(name = "ident")
+    private String ident;
 
-  @OneToOne
-  @JoinColumn(unique = true)
-  private ClassMethodCall theClassMethodCallSub;
+    @ManyToOne
+    @JsonIgnoreProperties("theSubroutines")
+    private ArtifactType theArtifactType;
 
-  @OneToOne
-  @JoinColumn(unique = true)
-  private Script theScriptSub;
+    @OneToOne(mappedBy = "theSubroutine")
+    @JsonIgnore
+    private Automatic theAutomatic;
 
-  @ManyToOne
-  @JsonIgnoreProperties("theSubroutines")
-  private ArtifactType theArtifactType;
+    @OneToMany(mappedBy = "theSubroutine")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ToolParameter> theToolParameters = new HashSet<>();
 
-  @OneToOne(mappedBy = "theSubroutine")
-  @JsonIgnore
-  private Automatic theAutomatic;
-
-  @OneToMany(mappedBy = "theSubroutine")
-  @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-  private Set<ToolParameter> theToolParameters = new HashSet<>();
-
-  // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getIdent() {
-    return ident;
-  }
-
-  public Subroutine ident(String ident) {
-    this.ident = ident;
-    return this;
-  }
-
-  public void setIdent(String ident) {
-    this.ident = ident;
-  }
-
-  public ClassMethodCall getTheClassMethodCallSub() {
-    return theClassMethodCallSub;
-  }
-
-  public Subroutine theClassMethodCallSub(ClassMethodCall classMethodCall) {
-    this.theClassMethodCallSub = classMethodCall;
-    return this;
-  }
-
-  public void setTheClassMethodCallSub(ClassMethodCall classMethodCall) {
-    this.theClassMethodCallSub = classMethodCall;
-  }
-
-  public Script getTheScriptSub() {
-    return theScriptSub;
-  }
-
-  public Subroutine theScriptSub(Script script) {
-    this.theScriptSub = script;
-    return this;
-  }
-
-  public void setTheScriptSub(Script script) {
-    this.theScriptSub = script;
-  }
-
-  public ArtifactType getTheArtifactType() {
-    return theArtifactType;
-  }
-
-  public Subroutine theArtifactType(ArtifactType artifactType) {
-    this.theArtifactType = artifactType;
-    return this;
-  }
-
-  public void setTheArtifactType(ArtifactType artifactType) {
-    this.theArtifactType = artifactType;
-  }
-
-  public Automatic getTheAutomatic() {
-    return theAutomatic;
-  }
-
-  public Subroutine theAutomatic(Automatic automatic) {
-    this.theAutomatic = automatic;
-    return this;
-  }
-
-  public void setTheAutomatic(Automatic automatic) {
-    this.theAutomatic = automatic;
-  }
-
-  public Set<ToolParameter> getTheToolParameters() {
-    return theToolParameters;
-  }
-
-  public Subroutine theToolParameters(Set<ToolParameter> toolParameters) {
-    this.theToolParameters = toolParameters;
-    return this;
-  }
-
-  public Subroutine addTheToolParameter(ToolParameter toolParameter) {
-    this.theToolParameters.add(toolParameter);
-    toolParameter.setTheSubroutine(this);
-    return this;
-  }
-
-  public Subroutine removeTheToolParameter(ToolParameter toolParameter) {
-    this.theToolParameters.remove(toolParameter);
-    toolParameter.setTheSubroutine(null);
-    return this;
-  }
-
-  public void setTheToolParameters(Set<ToolParameter> toolParameters) {
-    this.theToolParameters = toolParameters;
-  }
-  // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not
-  // remove
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+        return id;
     }
-    if (!(o instanceof Subroutine)) {
-      return false;
+
+    public void setId(Long id) {
+        this.id = id;
     }
-    return id != null && id.equals(((Subroutine) o).id);
-  }
 
-  @Override
-  public int hashCode() {
-    return 31;
-  }
+    public String getIdent() {
+        return ident;
+    }
 
-  @Override
-  public String toString() {
-    return "Subroutine{" + "id=" + getId() + ", ident='" + getIdent() + "'" + "}";
-  }
+    public Subroutine ident(String ident) {
+        this.ident = ident;
+        return this;
+    }
+
+    public void setIdent(String ident) {
+        this.ident = ident;
+    }
+
+    public ArtifactType getTheArtifactType() {
+        return theArtifactType;
+    }
+
+    public Subroutine theArtifactType(ArtifactType artifactType) {
+        this.theArtifactType = artifactType;
+        return this;
+    }
+
+    public void setTheArtifactType(ArtifactType artifactType) {
+        this.theArtifactType = artifactType;
+    }
+
+    public Automatic getTheAutomatic() {
+        return theAutomatic;
+    }
+
+    public Subroutine theAutomatic(Automatic automatic) {
+        this.theAutomatic = automatic;
+        return this;
+    }
+
+    public void setTheAutomatic(Automatic automatic) {
+        this.theAutomatic = automatic;
+    }
+
+    public Set<ToolParameter> getTheToolParameters() {
+        return theToolParameters;
+    }
+
+    public Subroutine theToolParameters(Set<ToolParameter> toolParameters) {
+        this.theToolParameters = toolParameters;
+        return this;
+    }
+
+    public Subroutine addTheToolParameter(ToolParameter toolParameter) {
+        this.theToolParameters.add(toolParameter);
+        toolParameter.setTheSubroutine(this);
+        return this;
+    }
+
+    public Subroutine removeTheToolParameter(ToolParameter toolParameter) {
+        this.theToolParameters.remove(toolParameter);
+        toolParameter.setTheSubroutine(null);
+        return this;
+    }
+
+    public void setTheToolParameters(Set<ToolParameter> toolParameters) {
+        this.theToolParameters = toolParameters;
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Subroutine)) {
+            return false;
+        }
+        return id != null && id.equals(((Subroutine) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    @Override
+    public String toString() {
+        return "Subroutine{" +
+            "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
+            "}";
+    }
 }

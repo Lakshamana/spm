@@ -31,254 +31,249 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Integration tests for the {@link ActivityTypeResource} REST controller. */
+/**
+ * Integration tests for the {@link ActivityTypeResource} REST controller.
+ */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class ActivityTypeResourceIT {
 
-  @Autowired private ActivityTypeRepository activityTypeRepository;
+    @Autowired
+    private ActivityTypeRepository activityTypeRepository;
 
-  @Autowired private ActivityTypeMapper activityTypeMapper;
+    @Autowired
+    private ActivityTypeMapper activityTypeMapper;
 
-  @Autowired private ActivityTypeService activityTypeService;
+    @Autowired
+    private ActivityTypeService activityTypeService;
 
-  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-  @Autowired private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
-  @Autowired private EntityManager em;
+    @Autowired
+    private EntityManager em;
 
-  @Autowired private Validator validator;
+    @Autowired
+    private Validator validator;
 
-  private MockMvc restActivityTypeMockMvc;
+    private MockMvc restActivityTypeMockMvc;
 
-  private ActivityType activityType;
+    private ActivityType activityType;
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final ActivityTypeResource activityTypeResource = new ActivityTypeResource(activityTypeService);
-    this.restActivityTypeMockMvc =
-        MockMvcBuilders.standaloneSetup(activityTypeResource)
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final ActivityTypeResource activityTypeResource = new ActivityTypeResource(activityTypeService);
+        this.restActivityTypeMockMvc = MockMvcBuilders.standaloneSetup(activityTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator)
-            .build();
-  }
+            .setValidator(validator).build();
+    }
 
-  /**
-   * Create an entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static ActivityType createEntity(EntityManager em) {
-    ActivityType activityType = new ActivityType();
-    return activityType;
-  }
-  /**
-   * Create an updated entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static ActivityType createUpdatedEntity(EntityManager em) {
-    ActivityType activityType = new ActivityType();
-    return activityType;
-  }
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static ActivityType createEntity(EntityManager em) {
+        ActivityType activityType = new ActivityType();
+        return activityType;
+    }
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static ActivityType createUpdatedEntity(EntityManager em) {
+        ActivityType activityType = new ActivityType();
+        return activityType;
+    }
 
-  @BeforeEach
-  public void initTest() {
-    activityType = createEntity(em);
-  }
+    @BeforeEach
+    public void initTest() {
+        activityType = createEntity(em);
+    }
 
-  @Test
-  @Transactional
-  public void createActivityType() throws Exception {
-    int databaseSizeBeforeCreate = activityTypeRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createActivityType() throws Exception {
+        int databaseSizeBeforeCreate = activityTypeRepository.findAll().size();
 
-    // Create the ActivityType
-    ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(activityType);
-    restActivityTypeMockMvc
-        .perform(
-            post("/api/activity-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
-        .andExpect(status().isCreated());
+        // Create the ActivityType
+        ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(activityType);
+        restActivityTypeMockMvc.perform(post("/api/activity-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
+            .andExpect(status().isCreated());
 
-    // Validate the ActivityType in the database
-    List<ActivityType> activityTypeList = activityTypeRepository.findAll();
-    assertThat(activityTypeList).hasSize(databaseSizeBeforeCreate + 1);
-    ActivityType testActivityType = activityTypeList.get(activityTypeList.size() - 1);
-  }
+        // Validate the ActivityType in the database
+        List<ActivityType> activityTypeList = activityTypeRepository.findAll();
+        assertThat(activityTypeList).hasSize(databaseSizeBeforeCreate + 1);
+        ActivityType testActivityType = activityTypeList.get(activityTypeList.size() - 1);
+    }
 
-  @Test
-  @Transactional
-  public void createActivityTypeWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = activityTypeRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createActivityTypeWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = activityTypeRepository.findAll().size();
 
-    // Create the ActivityType with an existing ID
-    activityType.setId(1L);
-    ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(activityType);
+        // Create the ActivityType with an existing ID
+        activityType.setId(1L);
+        ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(activityType);
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restActivityTypeMockMvc
-        .perform(
-            post("/api/activity-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
-        .andExpect(status().isBadRequest());
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restActivityTypeMockMvc.perform(post("/api/activity-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the ActivityType in the database
-    List<ActivityType> activityTypeList = activityTypeRepository.findAll();
-    assertThat(activityTypeList).hasSize(databaseSizeBeforeCreate);
-  }
+        // Validate the ActivityType in the database
+        List<ActivityType> activityTypeList = activityTypeRepository.findAll();
+        assertThat(activityTypeList).hasSize(databaseSizeBeforeCreate);
+    }
 
-  @Test
-  @Transactional
-  public void getAllActivityTypes() throws Exception {
-    // Initialize the database
-    activityTypeRepository.saveAndFlush(activityType);
 
-    // Get all the activityTypeList
-    restActivityTypeMockMvc
-        .perform(get("/api/activity-types?sort=id,desc"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.[*].id").value(hasItem(activityType.getId().intValue())));
-  }
+    @Test
+    @Transactional
+    public void getAllActivityTypes() throws Exception {
+        // Initialize the database
+        activityTypeRepository.saveAndFlush(activityType);
 
-  @Test
-  @Transactional
-  public void getActivityType() throws Exception {
-    // Initialize the database
-    activityTypeRepository.saveAndFlush(activityType);
+        // Get all the activityTypeList
+        restActivityTypeMockMvc.perform(get("/api/activity-types?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(activityType.getId().intValue())));
+    }
+    
+    @Test
+    @Transactional
+    public void getActivityType() throws Exception {
+        // Initialize the database
+        activityTypeRepository.saveAndFlush(activityType);
 
-    // Get the activityType
-    restActivityTypeMockMvc
-        .perform(get("/api/activity-types/{id}", activityType.getId()))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.id").value(activityType.getId().intValue()));
-  }
+        // Get the activityType
+        restActivityTypeMockMvc.perform(get("/api/activity-types/{id}", activityType.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(activityType.getId().intValue()));
+    }
 
-  @Test
-  @Transactional
-  public void getNonExistingActivityType() throws Exception {
-    // Get the activityType
-    restActivityTypeMockMvc
-        .perform(get("/api/activity-types/{id}", Long.MAX_VALUE))
-        .andExpect(status().isNotFound());
-  }
+    @Test
+    @Transactional
+    public void getNonExistingActivityType() throws Exception {
+        // Get the activityType
+        restActivityTypeMockMvc.perform(get("/api/activity-types/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void updateActivityType() throws Exception {
-    // Initialize the database
-    activityTypeRepository.saveAndFlush(activityType);
+    @Test
+    @Transactional
+    public void updateActivityType() throws Exception {
+        // Initialize the database
+        activityTypeRepository.saveAndFlush(activityType);
 
-    int databaseSizeBeforeUpdate = activityTypeRepository.findAll().size();
+        int databaseSizeBeforeUpdate = activityTypeRepository.findAll().size();
 
-    // Update the activityType
-    ActivityType updatedActivityType = activityTypeRepository.findById(activityType.getId()).get();
-    // Disconnect from session so that the updates on updatedActivityType are not directly saved in
-    // db
-    em.detach(updatedActivityType);
-    ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(updatedActivityType);
+        // Update the activityType
+        ActivityType updatedActivityType = activityTypeRepository.findById(activityType.getId()).get();
+        // Disconnect from session so that the updates on updatedActivityType are not directly saved in db
+        em.detach(updatedActivityType);
+        ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(updatedActivityType);
 
-    restActivityTypeMockMvc
-        .perform(
-            put("/api/activity-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
-        .andExpect(status().isOk());
+        restActivityTypeMockMvc.perform(put("/api/activity-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
+            .andExpect(status().isOk());
 
-    // Validate the ActivityType in the database
-    List<ActivityType> activityTypeList = activityTypeRepository.findAll();
-    assertThat(activityTypeList).hasSize(databaseSizeBeforeUpdate);
-    ActivityType testActivityType = activityTypeList.get(activityTypeList.size() - 1);
-  }
+        // Validate the ActivityType in the database
+        List<ActivityType> activityTypeList = activityTypeRepository.findAll();
+        assertThat(activityTypeList).hasSize(databaseSizeBeforeUpdate);
+        ActivityType testActivityType = activityTypeList.get(activityTypeList.size() - 1);
+    }
 
-  @Test
-  @Transactional
-  public void updateNonExistingActivityType() throws Exception {
-    int databaseSizeBeforeUpdate = activityTypeRepository.findAll().size();
+    @Test
+    @Transactional
+    public void updateNonExistingActivityType() throws Exception {
+        int databaseSizeBeforeUpdate = activityTypeRepository.findAll().size();
 
-    // Create the ActivityType
-    ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(activityType);
+        // Create the ActivityType
+        ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(activityType);
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restActivityTypeMockMvc
-        .perform(
-            put("/api/activity-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
-        .andExpect(status().isBadRequest());
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restActivityTypeMockMvc.perform(put("/api/activity-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the ActivityType in the database
-    List<ActivityType> activityTypeList = activityTypeRepository.findAll();
-    assertThat(activityTypeList).hasSize(databaseSizeBeforeUpdate);
-  }
+        // Validate the ActivityType in the database
+        List<ActivityType> activityTypeList = activityTypeRepository.findAll();
+        assertThat(activityTypeList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-  @Test
-  @Transactional
-  public void deleteActivityType() throws Exception {
-    // Initialize the database
-    activityTypeRepository.saveAndFlush(activityType);
+    @Test
+    @Transactional
+    public void deleteActivityType() throws Exception {
+        // Initialize the database
+        activityTypeRepository.saveAndFlush(activityType);
 
-    int databaseSizeBeforeDelete = activityTypeRepository.findAll().size();
+        int databaseSizeBeforeDelete = activityTypeRepository.findAll().size();
 
-    // Delete the activityType
-    restActivityTypeMockMvc
-        .perform(
-            delete("/api/activity-types/{id}", activityType.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-        .andExpect(status().isNoContent());
+        // Delete the activityType
+        restActivityTypeMockMvc.perform(delete("/api/activity-types/{id}", activityType.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNoContent());
 
-    // Validate the database contains one less item
-    List<ActivityType> activityTypeList = activityTypeRepository.findAll();
-    assertThat(activityTypeList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+        // Validate the database contains one less item
+        List<ActivityType> activityTypeList = activityTypeRepository.findAll();
+        assertThat(activityTypeList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 
-  @Test
-  @Transactional
-  public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(ActivityType.class);
-    ActivityType activityType1 = new ActivityType();
-    activityType1.setId(1L);
-    ActivityType activityType2 = new ActivityType();
-    activityType2.setId(activityType1.getId());
-    assertThat(activityType1).isEqualTo(activityType2);
-    activityType2.setId(2L);
-    assertThat(activityType1).isNotEqualTo(activityType2);
-    activityType1.setId(null);
-    assertThat(activityType1).isNotEqualTo(activityType2);
-  }
+    @Test
+    @Transactional
+    public void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(ActivityType.class);
+        ActivityType activityType1 = new ActivityType();
+        activityType1.setId(1L);
+        ActivityType activityType2 = new ActivityType();
+        activityType2.setId(activityType1.getId());
+        assertThat(activityType1).isEqualTo(activityType2);
+        activityType2.setId(2L);
+        assertThat(activityType1).isNotEqualTo(activityType2);
+        activityType1.setId(null);
+        assertThat(activityType1).isNotEqualTo(activityType2);
+    }
 
-  @Test
-  @Transactional
-  public void dtoEqualsVerifier() throws Exception {
-    TestUtil.equalsVerifier(ActivityTypeDTO.class);
-    ActivityTypeDTO activityTypeDTO1 = new ActivityTypeDTO();
-    activityTypeDTO1.setId(1L);
-    ActivityTypeDTO activityTypeDTO2 = new ActivityTypeDTO();
-    assertThat(activityTypeDTO1).isNotEqualTo(activityTypeDTO2);
-    activityTypeDTO2.setId(activityTypeDTO1.getId());
-    assertThat(activityTypeDTO1).isEqualTo(activityTypeDTO2);
-    activityTypeDTO2.setId(2L);
-    assertThat(activityTypeDTO1).isNotEqualTo(activityTypeDTO2);
-    activityTypeDTO1.setId(null);
-    assertThat(activityTypeDTO1).isNotEqualTo(activityTypeDTO2);
-  }
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(ActivityTypeDTO.class);
+        ActivityTypeDTO activityTypeDTO1 = new ActivityTypeDTO();
+        activityTypeDTO1.setId(1L);
+        ActivityTypeDTO activityTypeDTO2 = new ActivityTypeDTO();
+        assertThat(activityTypeDTO1).isNotEqualTo(activityTypeDTO2);
+        activityTypeDTO2.setId(activityTypeDTO1.getId());
+        assertThat(activityTypeDTO1).isEqualTo(activityTypeDTO2);
+        activityTypeDTO2.setId(2L);
+        assertThat(activityTypeDTO1).isNotEqualTo(activityTypeDTO2);
+        activityTypeDTO1.setId(null);
+        assertThat(activityTypeDTO1).isNotEqualTo(activityTypeDTO2);
+    }
 
-  @Test
-  @Transactional
-  public void testEntityFromId() {
-    assertThat(activityTypeMapper.fromId(42L).getId()).isEqualTo(42);
-    assertThat(activityTypeMapper.fromId(null)).isNull();
-  }
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(activityTypeMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(activityTypeMapper.fromId(null)).isNull();
+    }
 }

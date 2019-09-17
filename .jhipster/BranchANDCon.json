@@ -5,17 +5,10 @@
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "multipleCon",
-            "otherEntityRelationshipName": "fromMultipleCon",
+            "otherEntityRelationshipName": "theBranchAND",
             "relationshipName": "toMultipleCon",
             "otherEntityField": "id",
             "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "branchCon",
-            "otherEntityRelationshipName": "theBranchANDConSub",
-            "relationshipName": "theBranchConSuper",
-            "ownerSide": false
         },
         {
             "relationshipType": "many-to-many",

@@ -15,15 +15,7 @@
             "fieldTypeBlobContent": "text"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "subroutine",
-            "otherEntityRelationshipName": "theClassMethodCallSub",
-            "relationshipName": "theSubroutineSuper",
-            "ownerSide": false
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20190914033916",
     "entityTableName": "class_method_call",
     "dto": "mapstruct",

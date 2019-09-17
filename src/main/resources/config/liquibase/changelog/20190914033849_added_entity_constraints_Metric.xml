@@ -8,48 +8,6 @@
     -->
     <changeSet id="20190914033849-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_activity_metric_sub_id"
-                                 baseTableName="metric"
-                                 constraintName="fk_metric_the_activity_metric_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="activity_metric"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_agent_metric_sub_id"
-                                 baseTableName="metric"
-                                 constraintName="fk_metric_the_agent_metric_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="agent_metric"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_artifact_metric_sub_id"
-                                 baseTableName="metric"
-                                 constraintName="fk_metric_the_artifact_metric_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="artifact_metric"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_work_group_metric_sub_id"
-                                 baseTableName="metric"
-                                 constraintName="fk_metric_the_work_group_metric_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="work_group_metric"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_organization_metric_sub_id"
-                                 baseTableName="metric"
-                                 constraintName="fk_metric_the_organization_metric_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="organization_metric"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_process_metric_sub_id"
-                                 baseTableName="metric"
-                                 constraintName="fk_metric_the_process_metric_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="process_metric"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_resource_metric_sub_id"
-                                 baseTableName="metric"
-                                 constraintName="fk_metric_the_resource_metric_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="resource_metric"/>
-
         <addForeignKeyConstraint baseColumnNames="the_metric_definition_id"
                                  baseTableName="metric"
                                  constraintName="fk_metric_the_metric_definition_id"

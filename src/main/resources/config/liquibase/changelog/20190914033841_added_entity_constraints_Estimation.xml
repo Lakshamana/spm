@@ -8,48 +8,6 @@
     -->
     <changeSet id="20190914033841-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_activity_estimation_sub_id"
-                                 baseTableName="estimation"
-                                 constraintName="fk_estimation_the_activity_estimation_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="activity_estimation"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_agent_estimation_sub_id"
-                                 baseTableName="estimation"
-                                 constraintName="fk_estimation_the_agent_estimation_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="agent_estimation"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_artifact_estimation_sub_id"
-                                 baseTableName="estimation"
-                                 constraintName="fk_estimation_the_artifact_estimation_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="artifact_estimation"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_work_group_estimation_sub_id"
-                                 baseTableName="estimation"
-                                 constraintName="fk_estimation_the_work_group_estimation_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="work_group_estimation"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_organization_estimation_sub_id"
-                                 baseTableName="estimation"
-                                 constraintName="fk_estimation_the_organization_estimation_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="organization_estimation"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_process_estimation_sub_id"
-                                 baseTableName="estimation"
-                                 constraintName="fk_estimation_the_process_estimation_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="process_estimation"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_resource_estimation_sub_id"
-                                 baseTableName="estimation"
-                                 constraintName="fk_estimation_the_resource_estimation_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="resource_estimation"/>
-
         <addForeignKeyConstraint baseColumnNames="the_metric_definition_id"
                                  baseTableName="estimation"
                                  constraintName="fk_estimation_the_metric_definition_id"

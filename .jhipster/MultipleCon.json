@@ -8,34 +8,11 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "joinCon",
-            "otherEntityRelationshipName": "theMultipleConSuper",
-            "relationshipName": "theJoinConSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "branchCon",
-            "otherEntityRelationshipName": "theMultipleConSuper",
-            "relationshipName": "theBranchConSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "dependency",
             "otherEntityRelationshipName": "theMultipleCon",
             "relationshipName": "theDependency",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "connection",
-            "otherEntityRelationshipName": "theMultipleConSub",
-            "relationshipName": "theConnectionSuper",
-            "ownerSide": false
         },
         {
             "relationshipType": "one-to-many",
@@ -61,7 +38,7 @@
             "relationshipType": "many-to-many",
             "otherEntityName": "branchANDCon",
             "otherEntityRelationshipName": "toMultipleCon",
-            "relationshipName": "fromMultipleCon",
+            "relationshipName": "theBranchAND",
             "otherEntityField": "id",
             "ownerSide": false
         },

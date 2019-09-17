@@ -3,26 +3,11 @@
     "fields": [],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "branchANDCon",
-            "otherEntityRelationshipName": "theBranchConSuper",
-            "relationshipName": "theBranchANDConSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "multipleCon",
             "otherEntityRelationshipName": "toBranchCon",
             "relationshipName": "fromMultipleCon",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "multipleCon",
-            "otherEntityRelationshipName": "theBranchConSub",
-            "relationshipName": "theMultipleConSuper",
-            "ownerSide": false
         },
         {
             "relationshipType": "many-to-one",

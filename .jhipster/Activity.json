@@ -12,22 +12,6 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "plain",
-            "otherEntityRelationshipName": "theActivitySuper",
-            "relationshipName": "thePlainSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "decomposed",
-            "otherEntityRelationshipName": "theActivitySuper",
-            "relationshipName": "theDecomposedSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "event",
             "otherEntityRelationshipName": "theActivity",

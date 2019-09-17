@@ -8,22 +8,6 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "classMethodCall",
-            "otherEntityRelationshipName": "theSubroutineSuper",
-            "relationshipName": "theClassMethodCallSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "script",
-            "otherEntityRelationshipName": "theSubroutineSuper",
-            "relationshipName": "theScriptSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "artifactType",
             "otherEntityRelationshipName": "theSubroutine",

@@ -8,13 +8,6 @@
             "otherEntityRelationshipName": "theResourceMetric",
             "relationshipName": "theResource",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "metric",
-            "otherEntityRelationshipName": "theResourceMetricSub",
-            "relationshipName": "theMetricSuper",
-            "ownerSide": false
         }
     ],
     "changelogDate": "20190914033856",

@@ -47,13 +47,7 @@
             <column name="is_active" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="the_consumable_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_resource_the_consumable_sub_id" />
-            </column>            <column name="the_exclusive_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_resource_the_exclusive_sub_id" />
-            </column>            <column name="the_shareable_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_resource_the_shareable_sub_id" />
-            </column>
+
             <column name="belongs_to_id" type="bigint">
                 <constraints nullable="true" />
             </column>

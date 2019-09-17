@@ -1,15 +1,7 @@
 {
     "name": "Feedback",
     "fields": [],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "simpleCon",
-            "otherEntityRelationshipName": "theFeedbackSub",
-            "relationshipName": "theSimpleConSuper",
-            "ownerSide": false
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20190914033750",
     "entityTableName": "feedback",
     "dto": "mapstruct",

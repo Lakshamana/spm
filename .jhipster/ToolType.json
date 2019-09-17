@@ -3,13 +3,6 @@
     "fields": [],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "type",
-            "otherEntityRelationshipName": "theToolTypeSub",
-            "relationshipName": "theTypeSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "toolDefinition",
             "otherEntityRelationshipName": "theToolType",

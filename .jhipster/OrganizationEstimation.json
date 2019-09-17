@@ -10,13 +10,6 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "estimation",
-            "otherEntityRelationshipName": "theOrganizationEstimationSub",
-            "relationshipName": "theEstimationSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "company",
             "otherEntityRelationshipName": "theCompanyEstimation",

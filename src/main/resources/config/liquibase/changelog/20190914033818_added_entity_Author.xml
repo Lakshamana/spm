@@ -49,10 +49,6 @@
             </column>
             <column name="user_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_author_user_id" />
-            </column>            <column name="the_organization_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_author_the_organization_sub_id" />
-            </column>            <column name="the_person_sub_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_author_the_person_sub_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>

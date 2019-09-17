@@ -8,13 +8,6 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "author",
-            "otherEntityRelationshipName": "theOrganizationSub",
-            "relationshipName": "theAuthorSuper",
-            "ownerSide": false
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "organizationMetric",
             "otherEntityRelationshipName": "theOrganization",

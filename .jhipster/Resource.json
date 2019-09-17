@@ -37,30 +37,6 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "consumable",
-            "otherEntityRelationshipName": "theResourceSuper",
-            "relationshipName": "theConsumableSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "exclusive",
-            "otherEntityRelationshipName": "theResourceSuper",
-            "relationshipName": "theExclusiveSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "shareable",
-            "otherEntityRelationshipName": "theResourceSuper",
-            "relationshipName": "theShareableSub",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "resource",
             "otherEntityRelationshipName": "theResource",

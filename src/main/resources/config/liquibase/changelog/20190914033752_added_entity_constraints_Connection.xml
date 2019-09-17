@@ -8,24 +8,6 @@
     -->
     <changeSet id="20190914033752-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_multiple_con_sub_id"
-                                 baseTableName="connection"
-                                 constraintName="fk_connection_the_multiple_con_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="multiple_con"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_simple_con_sub_id"
-                                 baseTableName="connection"
-                                 constraintName="fk_connection_the_simple_con_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="simple_con"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_artifact_con_sub_id"
-                                 baseTableName="connection"
-                                 constraintName="fk_connection_the_artifact_con_sub_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="artifact_con"/>
-
         <addForeignKeyConstraint baseColumnNames="the_process_model_id"
                                  baseTableName="connection"
                                  constraintName="fk_connection_the_process_model_id"

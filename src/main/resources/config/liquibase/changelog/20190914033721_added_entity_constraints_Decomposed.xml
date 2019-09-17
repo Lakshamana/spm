@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Decomposed.
+    -->
+    <changeSet id="20190914033721-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_refered_process_model_id"
+                                 baseTableName="decomposed"
+                                 constraintName="fk_decomposed_the_refered_process_model_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="process_model"/>
+
+    </changeSet>
+</databaseChangeLog>
