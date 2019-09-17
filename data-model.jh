@@ -7,8 +7,8 @@ entity Activity {
 enum PlainStatus {
     WAITING, READY, FAILED, CANCELED, ACTIVE, PAUSED, FINISHED
 }
-entity Decomposed {
-}
+
+entity Decomposed {}
 
 entity Plain {
     requirements TextBlob,
@@ -44,7 +44,9 @@ relationship OneToOne {
     Activity{thePlainSub} to Plain{theActivitySuper},
     Activity{theDecomposedSub} to Decomposed{theActivitySuper},
 
-    Plain{theEnactionDescription} to EnactionDescription{thePlain}
+    Plain{theEnactionDescription} to EnactionDescription{thePlain},
+
+    Decomposed{theReferedProcessModel} to ProcessModel{theDecomposed}
 }
 
 //package agent -------------------------------------------

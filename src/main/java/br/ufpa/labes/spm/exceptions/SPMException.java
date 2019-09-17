@@ -1,6 +1,6 @@
 package br.ufpa.labes.spm.exceptions;
 
-import import br.ufpa.labes.spm.domain.LogEntry;;
+import br.ufpa.labes.spm.domain.LogEntry;
 
 public class SPMException extends Exception {
 

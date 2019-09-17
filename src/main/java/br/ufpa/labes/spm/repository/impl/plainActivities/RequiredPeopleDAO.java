@@ -41,14 +41,14 @@ public class RequiredPeopleDAO extends BaseDAO<RequiredPeople, Integer>
     for (RequiredPeople people : reqPeopleList) {
       if (people instanceof ReqAgent) {
         ReqAgent reqAgent = (ReqAgent) people;
-        if (reqAgent.getTheAgent() != null) toReturn.add(reqAgent.getTheAgent().getEMail());
+        if (reqAgent.getTheAgent() != null) toReturn.add(reqAgent.getTheAgent().getEmail());
       } else if (people instanceof ReqWorkGroup) {
         ReqWorkGroup ReqWorkGroup = (ReqWorkGroup) people;
 
-        Collection<Agent> agents = (Collection<Agent>) ReqWorkGroup.getTheWorkGroup().getTheAgent();
+        Collection<Agent> agents = (Collection<Agent>) ReqWorkGroup.getTheWorkGroup().getTheAgents();
 
         for (Agent agent : agents) {
-          toReturn.add(agent.getEMail());
+          toReturn.add(agent.getEmail());
         }
       }
     }

@@ -1,6 +1,6 @@
 package br.ufpa.labes.spm.repository.interfaces;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 public interface IReportDAO {
   public EntityManager getPersistenceContext();
 
-  public List<Object[]> getAgentsReportData(Date date);
+  public List<Object[]> getAgentsReportData(LocalDate date);
 
   public List<Object[]> getActivitiesByProcessReportData(String processIdent);
 
@@ -20,13 +20,13 @@ public interface IReportDAO {
   public List<Object[]> getProjectArtifactsReportData(String projectIdent);
 
   public List<Object[]> getActivitiesByAgentsReportData(
-      String agentIdent, Date beginDate, Date endDate, String role, boolean allStates);
+    String agentIdent , LocalDate beginDate, LocalDate endDate , String role , boolean allStates);
 
   public List<Object[]> getCostDeviationReportData(String processIdent);
 
   public List<Object[]> getResourceStatesReportData();
 
-  public List<Object[]> getKnowledgeItensReportData(Date initialDate, Date finalDate);
+  // public List<Object[]> getKnowledgeItensReportData(Date initialDate, Date finalDate);
 
   public List<Object[]> getAgentMetricsReportData(String agentName);
 

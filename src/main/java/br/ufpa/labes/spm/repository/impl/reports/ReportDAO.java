@@ -1,14 +1,15 @@
 package br.ufpa.labes.spm.repository.impl.reports;
 
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -30,6 +31,7 @@ import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.DevelopingSystem;
 import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.domain.Plain_;
 import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
@@ -70,7 +72,7 @@ public class ReportDAO implements IReportDAO{
 	IProcessDAO processDAO;
 
 	@Override
-	public List<Object[]> getAgentsReportData(Date atDate) {
+	public List<Object[]> getAgentsReportData(LocalDate atDate) {
 		String queryString = "from " + Agent.class.getName() + " as agent " +
 				 "where agent.isActive is true order by agent.name";
 
@@ -223,14 +225,14 @@ public class ReportDAO implements IReportDAO{
 			if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
 				isCounting = true;
 
-				startTimeMillis = event[i].getWhen().getTime();
+				startTimeMillis = event[i].getWhen().toEpochDay();
 			} else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
 					|| event[i].getTheCatalogEvents().getDescription().equals("ToPaused")
 					|| event[i].getTheCatalogEvents().getDescription().equals("ToFailed")) {
 				isCounting = false;
 
 				if (startTimeMillis != -1) {
-					endTimeMillis = event[i].getWhen().getTime();
+					endTimeMillis = event[i].getWhen().toEpochDay();
 
 					elapsedTime = endTimeMillis - startTimeMillis;
 
@@ -240,9 +242,9 @@ public class ReportDAO implements IReportDAO{
 		}
 
 		if (isCounting) {
-			Date date = new Date();
+			LocalDate date = LocalDate.now();
 
-			endTimeMillis = date.getTime();
+			endTimeMillis = date.toEpochDay();
 
 			elapsedTime = endTimeMillis - startTimeMillis;
 
@@ -302,7 +304,7 @@ public class ReportDAO implements IReportDAO{
 			if(agent.isActive()){
 				entry[ 0 ] = role.getName();
 				entry[ 1 ] = agent.getName();
-				entry[ 2 ] = agentPlaysRole.getSince_date();
+				entry[ 2 ] = agentPlaysRole.getSinceDate();
 
 				result.add( entry );
 			}
@@ -329,7 +331,7 @@ public class ReportDAO implements IReportDAO{
 				continue;
 
 			List<Agent> agents = new ArrayList<Agent>();
-			agents.addAll( group.getTheAgent() );
+			agents.addAll(group.getTheAgents());
 
 			Collections.sort( agents, new Comparator<Agent>() {
 
@@ -404,7 +406,7 @@ public class ReportDAO implements IReportDAO{
 		return result;
 	}
 
-	public int getAgentWorkloadAt( String agentIdent, Date atDate ) {
+	public int getAgentWorkloadAt( String agentIdent, LocalDate atDate ) {
 
 		String queryString = "from " + ReqAgent.class.getName() + " as reqAgent " +
 								 "where reqAgent.theAgent.ident = :agentIdent";
@@ -428,8 +430,8 @@ public class ReportDAO implements IReportDAO{
 			if ( normal == null )
 				continue;
 
-			Date plannedBegin = normal.getPlannedBegin();
-			Date plannedEnd = normal.getPlannedEnd();
+			LocalDate plannedBegin = normal.getPlannedBegin();
+			LocalDate plannedEnd = normal.getPlannedEnd();
 
 			if ( plannedBegin != null && atDate.compareTo( plannedBegin ) >= 0 ){
 				if ( plannedEnd != null && atDate.compareTo( plannedEnd ) <= 0 ){
@@ -586,10 +588,10 @@ public class ReportDAO implements IReportDAO{
 	}*/
 
 		public int compare(Activity a1, Activity a2) {
-			Date plannedBegin1 = new Date(),
-			plannedEnd1 = new Date(),
-    	    plannedBegin2 = new Date(),
-    	    plannedEnd2 = new Date();
+			LocalDate plannedBegin1,
+			plannedEnd1,
+    	    plannedBegin2,
+    	    plannedEnd2;
 
 			String ident1 = a1.getIdent();
 			String ident2 = a2.getIdent();
@@ -635,19 +637,19 @@ public class ReportDAO implements IReportDAO{
 			return ident1.compareTo(ident2);
 		}
 
-		public Date getFirstPlannedBeginFromProcessModel(ProcessModel pModel){
+		public LocalDate getFirstPlannedBeginFromProcessModel(ProcessModel pModel){
 			Collection actsFromPModel = actMap.get((pModel.getTheProcess() != null ? pModel.getTheProcess().getIdent() : pModel.getTheDecomposed().getIdent()));
 
 			if (actsFromPModel == null) return null;
 
-			Date firstBeginFromPModel = null;
+			LocalDate firstBeginFromPModel = null;
 
 			for(Object obj : actsFromPModel){
 				if(obj == null) continue;
 
 				Activity act = (Activity)obj;
 
-				Date planBegin = null;
+				LocalDate planBegin = null;
 
 				if(act instanceof Normal){
 					Normal normalAct = (Normal) act;
@@ -671,7 +673,7 @@ public class ReportDAO implements IReportDAO{
 			return firstBeginFromPModel;
 		}
 
-		private boolean isAfter(Date date1, Date date2){
+		private boolean isAfter(LocalDate date1, LocalDate date2){
 			if(date1 == null){
 				return false;
 			}
@@ -680,7 +682,7 @@ public class ReportDAO implements IReportDAO{
 					return true;
 				}
 				else{
-					if(date1.getTime() > date2.getTime()){
+					if(date1.toEpochDay() > date2.toEpochDay()){
 						return true;
 					}
 					return false;
@@ -688,10 +690,10 @@ public class ReportDAO implements IReportDAO{
 			}
 		}
 
-		public Date getLatestPlannedEndFromProcessModel(ProcessModel pModel){
+		public LocalDate getLatestPlannedEndFromProcessModel(ProcessModel pModel){
 			Collection actsFromPModel = actMap.get((pModel.getTheProcess() != null ? pModel.getTheProcess().getIdent() : pModel.getTheDecomposed().getIdent()));
 
-			Date lastFinishFromPModel = null;
+			LocalDate lastFinishFromPModel = null;
 
 			if(actsFromPModel != null){
 				for(Object obj: actsFromPModel){
@@ -699,7 +701,7 @@ public class ReportDAO implements IReportDAO{
 
 					Activity act = (Activity)obj;
 
-					Date planEnd = null;
+					LocalDate planEnd = null;
 
 					if(act instanceof Normal){
 						Normal normalAct = (Normal) act;
@@ -753,7 +755,7 @@ public class ReportDAO implements IReportDAO{
 	}
 
 	@Override
-	public List<Object[]> getActivitiesByAgentsReportData(String agentIdent , Date beginDate, Date endDate , String role , boolean allStates) {
+	public List<Object[]> getActivitiesByAgentsReportData(String agentIdent , LocalDate beginDate, LocalDate endDate , String role , boolean allStates) {
 		String ReqWorkGroupHql = "select ReqWorkGroup.oid from " + ReqWorkGroup.class.getName() + " as ReqWorkGroup joinCon ReqWorkGroup.theWorkGroup.theAgent as agent where agent.ident= :agentIdent";
 
 		String reqAgentHql = "select reqAgent.oid from " + ReqAgent.class.getName() + " as reqAgent where reqAgent.theAgent.ident = :agentIdent";
@@ -780,9 +782,9 @@ public class ReportDAO implements IReportDAO{
 		if(endDate!=null)
 			query.setParameter( "endDate", endDate );
 		if(!allStates){
-			query.setParameter("active", Plain.);
-			query.setParameter("ready", Plain.READY);
-			query.setParameter("waiting", Plain.WAITING);
+			query.setParameter("active", Plain_.ACTIVE);
+			query.setParameter("ready", Plain_.READY);
+			query.setParameter("waiting", Plain_.WAITING);
 		}
 
 		List<Object[]> tasks = query.getResultList();
@@ -849,10 +851,10 @@ public class ReportDAO implements IReportDAO{
 
 			if ( result[ 8 ] != null && result[ 9 ] != null) {
 				Calendar actualEnd = Calendar.getInstance();
-				actualEnd.setTime( (Date)result[ 8 ] );
+				actualEnd.setTime(Date.valueOf((LocalDate)result[ 8 ] ));
 
 				Calendar plannedEnd = Calendar.getInstance();
-				plannedEnd.setTime( (Date)result[ 9 ] );
+				plannedEnd.setTime(Date.valueOf((LocalDate)result[ 9 ] ));
 
 				actualEnd.set( Calendar.HOUR, 0 );
 				actualEnd.set( Calendar.MINUTE, 0 );
@@ -868,7 +870,7 @@ public class ReportDAO implements IReportDAO{
 				int delayInDays = (int)( (double)delayInMillis / ( 1000 * 60 * 60 * 24 ) );
 
 				entry[ 8 ] = delayInDays;
-				Date actualEndDate = actualEnd.getTime();
+				LocalDate actualEndDate = LocalDate.ofEpochDay(actualEnd.getTime().getTime());
 				entry[ 9 ] = formatter.format(actualEndDate);
 			}
 			else {
@@ -878,42 +880,42 @@ public class ReportDAO implements IReportDAO{
 
 			if(result[ 9 ] != null){
 				Calendar plannedEnd = Calendar.getInstance();
-				plannedEnd.setTime( (Date)result[ 9 ] );
+				plannedEnd.setTime(Date.valueOf((LocalDate)result[ 9 ]));
 
 				plannedEnd.set( Calendar.HOUR, 0 );
 				plannedEnd.set( Calendar.MINUTE, 0 );
 				plannedEnd.set( Calendar.SECOND, 0 );
 				plannedEnd.set( Calendar.AM_PM, Calendar.AM );
 
-				Date plannedEndDate = plannedEnd.getTime();
+				LocalDate plannedEndDate = LocalDate.ofEpochDay(plannedEnd.getTime().getTime());
 				entry[10] = formatter.format(plannedEndDate);
 			}else entry[10] = "";
 
 			if(result[10]!=null){
 				Calendar actualBegin = Calendar.getInstance();
 
-				actualBegin.setTime( (Date)result[ 10 ] );
+				actualBegin.setTime(Date.valueOf((LocalDate)result[ 10 ]) );
 
 				actualBegin.set( Calendar.HOUR, 0 );
 				actualBegin.set( Calendar.MINUTE, 0 );
 				actualBegin.set( Calendar.SECOND, 0 );
 				actualBegin.set( Calendar.AM_PM, Calendar.AM );
 
-				Date actualBeginDate = actualBegin.getTime();
+				LocalDate actualBeginDate = LocalDate.ofEpochDay(actualBegin.getTime().getTime());
 				entry[11] = formatter.format(actualBeginDate);
 			}else entry[11] = "";
 
 			if(result[11]!=null){
 				Calendar plannedBegin = Calendar.getInstance();
 
-				plannedBegin.setTime( (Date)result[ 11 ] );
+				plannedBegin.setTime(Date.valueOf((LocalDate)result[ 11 ] ));
 
 				plannedBegin.set( Calendar.HOUR, 0 );
 				plannedBegin.set( Calendar.MINUTE, 0 );
 				plannedBegin.set( Calendar.SECOND, 0 );
 				plannedBegin.set( Calendar.AM_PM, Calendar.AM );
 
-				Date plannedBeginDate = plannedBegin.getTime();
+				LocalDate plannedBeginDate = LocalDate.ofEpochDay(plannedBegin.getTime().getTime());
 				entry[12] = formatter.format(plannedBeginDate);
 			}else entry[12] = "";
 
@@ -1022,7 +1024,7 @@ public class ReportDAO implements IReportDAO{
 				entry[ 2 ] = "Consumable";
 				entry[ 3 ] = new Double( consumable.getCost() );
 				entry[ 4 ] = consumable.getUnit();
-				entry[ 5 ] = consumable.getState();
+        entry[ 5 ] = consumable.getConsumableStatus().name();
 			}
 			else if ( resource instanceof Exclusive ) {
 				Exclusive exclusive = (Exclusive)resource;
@@ -1030,7 +1032,7 @@ public class ReportDAO implements IReportDAO{
 				entry[ 2 ] = "Exclusive";
 				entry[ 3 ] = new Double( exclusive.getCost() );
 				entry[ 4 ] = exclusive.getUnitOfCost();
-				entry[ 5 ] = exclusive.getState();
+				entry[ 5 ] = exclusive.getExclusiveStatus().name();
 			}
 			else if ( resource instanceof Shareable ) {
 				Shareable shareable = (Shareable)resource;
@@ -1038,7 +1040,7 @@ public class ReportDAO implements IReportDAO{
 				entry[ 2 ] = "Shareable";
 				entry[ 3 ] = new Double( shareable.getCost() );
 				entry[ 4 ] = shareable.getUnitOfCost();
-				entry[ 5 ] = shareable.getState();
+				entry[ 5 ] = shareable.getShareableStatus().name();
 			}
 
 			result.add( entry );
@@ -1047,26 +1049,26 @@ public class ReportDAO implements IReportDAO{
 		return result;
 	}
 
-	@Override
-	public List<Object[]> getKnowledgeItensReportData(Date initialDate,	Date finalDate) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-		String di = format.format(initialDate);
-		try {
-			initialDate = format.parse(di);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		String queryString = "select item.ident, item.date, item.status, item.theAgent.ident, item.theAgent.name from " + KnowledgeItem.class.getName() + " as item " +
-							 "where item.date >= :initialDate AND item.date <= :finalDate order by item.ident";
+	// @Override
+	// public List<Object[]> getKnowledgeItensReportData(LocalDate initialDate,	LocalDate finalDate) {
+	// 	SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+	// 	String di = format.format(initialDate);
+	// 	try {
+	// 		initialDate = format.parse(di);
+	// 	} catch (ParseException e) {
+	// 		e.printStackTrace();
+	// 	}
+	// 	String queryString = "select item.ident, item.date, item.status, item.theAgent.ident, item.theAgent.name from " + KnowledgeItem.class.getName() + " as item " +
+	// 						 "where item.date >= :initialDate AND item.date <= :finalDate order by item.ident";
 
-		Query query = this.getPersistenceContext().createQuery( queryString );
-		query.setParameter("initialDate", initialDate);
-		query.setParameter("finalDate", finalDate);
+	// 	Query query = this.getPersistenceContext().createQuery( queryString );
+	// 	query.setParameter("initialDate", initialDate);
+	// 	query.setParameter("finalDate", finalDate);
 
-		List<Object[]> result = query.getResultList();
+	// 	List<Object[]> result = query.getResultList();
 
-		return result;
-	}
+	// 	return result;
+	// }
 
 	@Override
 	public List<Object[]> getAgentMetricsReportData(String agentId) {
@@ -1180,7 +1182,7 @@ public class ReportDAO implements IReportDAO{
 				{
 					Normal normal = (Normal)activity;
 
-					actEntry[ 3 ] = normal.getTheEnactionDescription().getState();
+					actEntry[ 3 ] = normal.getTheEnactionDescription().getThePlain().getPlainStatus().name();
 
 					actEntry[ 4 ] = normal.getPlannedBegin();
 
@@ -1192,10 +1194,10 @@ public class ReportDAO implements IReportDAO{
 
 					actEntry[ 8 ] = normal.getTheEnactionDescription().getActualEnd();
 
-					if ( actEntry[ 3 ].equals( Plain.ACTIVE ) ||
-							actEntry[ 3 ].equals( Plain.PAUSED ) ||
-							actEntry[ 3 ].equals( Plain.FAILED ) ||
-							actEntry[ 3 ].equals( Plain.FINISHED ) ) {
+					if ( actEntry[ 3 ].equals( Plain_.ACTIVE ) ||
+							actEntry[ 3 ].equals( Plain_.PAUSED ) ||
+							actEntry[ 3 ].equals( Plain_.FAILED ) ||
+							actEntry[ 3 ].equals( Plain_.FINISHED ) ) {
 						actEntry[ 9 ] = getWorkedHoursForActivity( activity.getIdent());
 					}
 					else actEntry[ 9 ] = 0.0;
@@ -1257,7 +1259,7 @@ public class ReportDAO implements IReportDAO{
 
 
 	private List<Activity> getActivitiesFromPModelOrderedByPlannedBegin(String process, ProcessModel pModel) {
-		Collection<Activity> acts = pModel.getTheActivity();
+		Set<Activity> acts = pModel.getTheActivities();
 
 		List<Activity> listOfActs = new LinkedList<Activity>();
 
@@ -1621,8 +1623,8 @@ public class ReportDAO implements IReportDAO{
 			entry[ 0 ] = project.getTheSystem().getIdent();
 			entry[ 1 ] = ( organization != null ? organization.getIdent() : "" );
 			entry[ 2 ] = project.getIdent();
-			entry[ 3 ] = project.getBegin_date();
-			entry[ 4 ] = project.getEnd_date();
+			entry[ 3 ] = project.getBeginDate();
+			entry[ 4 ] = project.getEndDate();
 
 			result.add( entry );
 		}
@@ -1766,7 +1768,7 @@ public class ReportDAO implements IReportDAO{
 							numAgents++;
 						else if (people instanceof ReqWorkGroup) {
 							ReqWorkGroup ReqWorkGroup = (ReqWorkGroup)people;
-							numAgents += ReqWorkGroup.getTheWorkGroup().getTheAgent().size();
+							numAgents += ReqWorkGroup.getTheWorkGroup().getTheAgents().size();
 						}
 					}
 

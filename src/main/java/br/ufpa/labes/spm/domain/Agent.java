@@ -883,7 +883,7 @@ public class Agent implements Serializable {
         + ", tipoUser="
         + getTipoUser()
         + ", isActive='"
-        + isIsActive()
+        + isActive()
         + "'"
         + ", online='"
         + isOnline()
