@@ -772,6 +772,7 @@ entity ResourcePossibleUse {
 }
 
 relationship ManyToOne {
+    ActivityInstantiated{theInstantiationPolicyLog} to InstantiationPolicyLog{theActivityInstantiated},
     ActivityInstantiated{theActivity} to Activity{theActivityInstantiated},
 
     AgentInstSug{theRole} to Role{theAgentInstSug},
