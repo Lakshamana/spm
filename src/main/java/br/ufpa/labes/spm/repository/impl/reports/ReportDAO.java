@@ -57,7 +57,7 @@ import br.ufpa.labes.spm.domain.Resource;
 import br.ufpa.labes.spm.domain.Shareable;
 import br.ufpa.labes.spm.domain.ProcessAgenda;
 import br.ufpa.labes.spm.domain.Task;
-import org.qrconsult.spm.services.impl.CriticalPathMethod;
+import br.ufpa.labes.spm.service.impl.CriticalPathMethod;
 
 public class ReportDAO implements IReportDAO{
 

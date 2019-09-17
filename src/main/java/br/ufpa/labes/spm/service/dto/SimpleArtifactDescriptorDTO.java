@@ -1,4 +1,4 @@
-package org.qrconsult.spm.dtos.agenda;
+package br.ufpa.labes.spm.service.dto;
 
 import java.io.Serializable;
 
