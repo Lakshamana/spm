@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.domain.enumeration;
 
-/** The ProcessStatus enumeration. */
+/**
+ * The ProcessStatus enumeration.
+ */
 public enum ProcessStatus {
-  NOT_STARTED,
-  ENACTING,
-  FINISHED
+    NOT_STARTED, ENACTING, FINISHED
 }
