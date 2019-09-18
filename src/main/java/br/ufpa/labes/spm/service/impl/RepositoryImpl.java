@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,49 +17,41 @@ import org.qrconsult.spm.beans.ArtifactMngParamDownload;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.artifacts.IArtifactDAO;
-import org.qrconsult.spm.dataAccess.interfaces.organizationPolicies.INodeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.organizationPolicies.IRepositoryDAO;
-import org.qrconsult.spm.dataAccess.interfaces.organizationPolicies.IStructureDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.INormalDAO;
+import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
+import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.INodeDAO;
+import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IRepositoryDAO;
+import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IStructureDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.INormalDAO;
 import org.qrconsult.spm.dtos.formRepositorios.NodeDTO;
 import org.qrconsult.spm.dtos.formRepositorios.RepositoriesDTO;
 import org.qrconsult.spm.dtos.formRepositorios.RepositoryDTO;
 import org.qrconsult.spm.dtos.formRepositorios.StructureDTO;
-import org.qrconsult.spm.exceptions.WebapseeException;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.artifacts.Artifact;
-import org.qrconsult.spm.model.connections.ArtifactCon;
-import org.qrconsult.spm.model.organizationPolicies.Node;
-import org.qrconsult.spm.model.organizationPolicies.Project;
-import org.qrconsult.spm.model.organizationPolicies.Repository;
-import org.qrconsult.spm.model.organizationPolicies.Structure;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.services.interfaces.RepositoryServices;
+import br.ufpa.labes.spm.exceptions.WebapseeException;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Artifact;
+import br.ufpa.labes.spm.domain.ArtifactCon;
+import br.ufpa.labes.spm.domain.Node;
+import br.ufpa.labes.spm.domain.Project;
+import br.ufpa.labes.spm.domain.Repository;
+import br.ufpa.labes.spm.domain.Structure;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.service.interfaces.RepositoryServices;
 
 @Stateless
 public class RepositoryImpl implements RepositoryServices{
 
 
-	@EJB
 	IRepositoryDAO repositoryDAO;
 
-	@EJB
 	IStructureDAO structureDAO;
 
-	@EJB
 	INodeDAO nodeDAO;
 
-	@EJB
 	INormalDAO normalDAO;
 
-	@EJB
 	IArtifactDAO artifactDAO;
 
-	@EJB
-	ArtifactVersionControlRemoteInterface serviceSVN;
 
-	@EJB
 	ArtifactManagerInterface artifactManager;
 
 	Converter converter = new ConverterImpl();
@@ -87,7 +79,7 @@ public class RepositoryImpl implements RepositoryServices{
 
 					repository.getTheStructure().setRootElement((Node) converter.getEntity(repositoryDTO.getTheStructure().getRootElement(), Node.class));
 					repository.getTheStructure().getRootElement().setChildren(convertNodes(repositoryDTO.getTheStructure().getRootElement().getChildren(), repositoryDTO.getTheStructure().getRootElement()));
-				}	
+				}
 				repository = repositoryDAO.update(repository);
 			}
 			repositoryDTO = (RepositoryDTO) converter.getDTO(repository, RepositoryDTO.class);
@@ -232,7 +224,7 @@ public class RepositoryImpl implements RepositoryServices{
 
 			}else{
 				return null;
-			}		
+			}
 
 		} catch (ImplementationException e) {
 			e.printStackTrace();
@@ -284,7 +276,7 @@ public class RepositoryImpl implements RepositoryServices{
 	private List<NodeDTO> converterNodesDTO(List<Node> nodes,StructureDTO structure,NodeDTO father) throws ImplementationException{
 		List<NodeDTO> nos = new ArrayList<NodeDTO>();
 		Converter converter = new ConverterImpl();
-		for (Node node : nodes) {		
+		for (Node node : nodes) {
 			NodeDTO nodeDTO = (NodeDTO) converter.getDTO(node, NodeDTO.class);
 			nodeDTO.setTheStructureDTO(structure);
 
@@ -298,7 +290,7 @@ public class RepositoryImpl implements RepositoryServices{
 	private List<NodeDTO> converterFilhosDTO(List<Node> nodes,StructureDTO structure,NodeDTO father) throws ImplementationException {
 		List<NodeDTO> nos = new ArrayList<NodeDTO>();
 		Converter converter = new ConverterImpl();
-		for (Node node : nodes) {		
+		for (Node node : nodes) {
 			NodeDTO nodeDTO = (NodeDTO) converter.getDTO(node, NodeDTO.class);
 			nodeDTO.setTheStructureDTO(structure);
 
@@ -371,7 +363,7 @@ public class RepositoryImpl implements RepositoryServices{
 					if(act.equals(normal)){
 						System.out.println("retorna true");
 						return true;
-						
+
 					}
 				}
 			}
@@ -399,7 +391,7 @@ public class RepositoryImpl implements RepositoryServices{
 				+ Repository.class.getName()
 				+ " as repository, "
 				+ Artifact.class.getName()
-				+" as artifact " 
+				+" as artifact "
 				+ " where artifact.ident like '"
 				+ artifactIdent
 				+ "' and artifact.theRepository = repository";
@@ -412,7 +404,7 @@ public class RepositoryImpl implements RepositoryServices{
 		}
 		return null;
 	}
-	
+
 	@Override
 	public RepositoryDTO getRepositoryDTOByArtifact(String artifactIdent){
 		//Get the repository by the artifact repository
@@ -420,7 +412,7 @@ public class RepositoryImpl implements RepositoryServices{
 				+ Repository.class.getName()
 				+ " as repository, "
 				+ Artifact.class.getName()
-				+" as artifact " 
+				+" as artifact "
 				+ " where artifact.ident like '"
 				+ artifactIdent
 				+ "' and artifact.theRepository = repository";
@@ -444,7 +436,7 @@ public class RepositoryImpl implements RepositoryServices{
 				+ Repository.class.getName()
 				+ " as repository, "
 				+ Project.class.getName()
-				+" as project " 
+				+" as project "
 				+ " where project.ident like '"
 				+ projectIdent
 				+ "' and project.theRepository = repository";

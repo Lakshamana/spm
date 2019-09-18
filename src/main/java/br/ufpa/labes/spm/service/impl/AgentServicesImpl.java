@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,20 +14,20 @@ import javax.persistence.TypedQuery;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAbilityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentAffinityAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentHasAbilityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentPlaysRoleDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IConfiDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IGroupDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IRoleDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IRoleNeedsAbilityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processKnowledge.IActivityEstimationDAO;
-import org.qrconsult.spm.dataAccess.interfaces.taskagenda.IProcessAgendaDAO;
-import org.qrconsult.spm.dataAccess.interfaces.taskagenda.ITaskAgendaDAO;
-import org.qrconsult.spm.dataAccess.interfaces.taskagenda.ITaskDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IRoleTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAbilityDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentAffinityAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentHasAbilityDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentPlaysRoleDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IConfiDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IRoleDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IRoleNeedsAbilityDAO;
+import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IActivityEstimationDAO;
+import br.ufpa.labes.spm.repository.interfaces.taskagenda.IProcessAgendaDAO;
+import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskAgendaDAO;
+import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IRoleTypeDAO;
 import org.qrconsult.spm.dtos.agenda.TaskDTO;
 import org.qrconsult.spm.dtos.dashboard.Time;
 import org.qrconsult.spm.dtos.formAbility.AbilityDTO;
@@ -38,20 +38,20 @@ import org.qrconsult.spm.dtos.formAgent.AgentsDTO;
 import org.qrconsult.spm.dtos.formAgent.ConfigurationDTO;
 import org.qrconsult.spm.dtos.formGroup.GroupDTO;
 import org.qrconsult.spm.dtos.formRole.RoleDTO;
-import org.qrconsult.spm.model.agent.Ability;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.agent.AgentAffinityAgent;
-import org.qrconsult.spm.model.agent.AgentHasAbility;
-import org.qrconsult.spm.model.agent.AgentPlaysRole;
-import org.qrconsult.spm.model.agent.Group;
-import org.qrconsult.spm.model.agent.Role;
-import org.qrconsult.spm.model.configuration.Configuration;
-import org.qrconsult.spm.model.organizationPolicies.Project;
-import org.qrconsult.spm.model.processModels.Process;
-import org.qrconsult.spm.model.taskagenda.ProcessAgenda;
-import org.qrconsult.spm.model.taskagenda.Task;
-import org.qrconsult.spm.model.taskagenda.TaskAgenda;
-import org.qrconsult.spm.services.interfaces.AgentServices;
+import br.ufpa.labes.spm.domain.Ability;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.AgentAffinityAgent;
+import br.ufpa.labes.spm.domain.AgentHasAbility;
+import br.ufpa.labes.spm.domain.AgentPlaysRole;
+import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.Role;
+import br.ufpa.labes.spm.domain.Configuration;
+import br.ufpa.labes.spm.domain.Project;
+import br.ufpa.labes.spm.domain.Process;
+import br.ufpa.labes.spm.domain.ProcessAgenda;
+import br.ufpa.labes.spm.domain.Task;
+import br.ufpa.labes.spm.domain.TaskAgenda;
+import br.ufpa.labes.spm.service.interfaces.AgentServices;
 import org.qrconsult.spm.util.Md5;
 
 @Stateless
@@ -60,7 +60,7 @@ public class AgentServicesImpl implements AgentServices {
 	private static final String PROJECT_CLASSNAME = Project.class.getSimpleName();
 
 	private static final String TASK_CLASSNAME = Task.class.getSimpleName();
-	
+
 	private static final String TASKAGENDA_CLASSNAME = TaskAgenda.class.getSimpleName();
 
 	private static final String AGENT_HAS_ABILLITY_CLASSNAME = AgentHasAbility.class.getSimpleName();
@@ -79,47 +79,33 @@ public class AgentServicesImpl implements AgentServices {
 
 	private static final String AGENT_CLASSNAME = Agent.class.getSimpleName();
 
-	@EJB
 	IAgentDAO agentDAO;
 
-	@EJB
 	IAbilityDAO abilityDAO;
 
-	@EJB
 	IRoleDAO roleDAO;
 
-	@EJB
 	IRoleTypeDAO roleTypeDAO;
 
-	@EJB
 	IRoleNeedsAbilityDAO roleNeedsDAO;
 
-	@EJB
 	IAgentPlaysRoleDAO agentPlaysRoleDAO;
 
-	@EJB
 	IAgentHasAbilityDAO agentHasAbilityDAO;
 
-	@EJB
 	IAgentAffinityAgentDAO agentAffinityAgentDAO;
 
-	@EJB
 	IGroupDAO groupDAO;
-	
-	@EJB
+
 	IConfiDAO confiDAO;
-	
-	@EJB
+
 	IProcessAgendaDAO processAgendaDAO;
-	
-	@EJB
+
 	ITaskDAO taskDAO;
-	
-	@EJB
+
 	ITaskAgendaDAO taskAgendaDAO;
-	
-	@EJB
-	IActivityEstimationDAO activityEstimationDAO;	
+
+	IActivityEstimationDAO activityEstimationDAO;
 
 	Converter converter = new ConverterImpl();
 
@@ -197,31 +183,31 @@ public class AgentServicesImpl implements AgentServices {
 		} else {
 			agentDTO.setPassword(Md5.getMd5Digest(agentDTO.getPassword()));
 			agentDTO.setArtifactMngPassword(Md5.getMd5Digest(agentDTO.getArtifactMngPassword()));
-			
+
 			agent = this.convertAgentDTOToAgent(agentDTO);
 			agentDAO.save(agent);
-			
+
 			TaskAgenda theTaskAgenda = new TaskAgenda();
 			agent.setTheTaskAgenda(theTaskAgenda);
 			theTaskAgenda.setTheAgent(agent);
 			taskAgendaDAO.save(theTaskAgenda);
-			
+
 			String newIdent = agentDAO.generateIdent(agent.getName(), agent);
 			agent.setIdent(newIdent);
 			agentDAO.update(agent);
-			
+
 			getPerfilAgentePadrao(agent.getIdent());
-			
+
 			Configuration configuration = new Configuration();
-			configuration.setFiltro("ID,teste,teste");		
+			configuration.setFiltro("ID,teste,teste");
 			configuration.setAgent(agentRetorno);
 			configuration.setIdioma(config.getIdioma());
 			configuration.setSenhaEmRecuperacao(false);
-			
+
 			confiDAO.save(configuration);
 		}
 
-		
+
 		updateAgentDependencies(agent, agentDTO);
 
 		return agentDTO;
@@ -254,10 +240,10 @@ public class AgentServicesImpl implements AgentServices {
 
 		return retorno;
 	}
-	
+
 	@Override
 	public Agent getPerfilAgentePadrao(String ident) {
-		
+
 		query = agentDAO
 				.getPersistenceContext()
 				.createQuery(
@@ -267,11 +253,11 @@ public class AgentServicesImpl implements AgentServices {
 								+ "WHERE agent.ident like :ident");
 
 		query.setParameter("ident", ident);
-	
+
 		agentRetorno = (Agent) query.getSingleResult();
 		return (Agent) query.getSingleResult();
 	}
-	
+
 	private void updateAgent(Agent agent, AgentDTO agentDTO) {
 		agent.setPassword(agentDTO.getPassword());
 		agent.setArtifactMngPassword(agentDTO.getArtifactMngPassword());
@@ -333,7 +319,7 @@ public class AgentServicesImpl implements AgentServices {
 		String hql = "SELECT c FROM " + Configuration.class.getSimpleName() + " AS c WHERE c.agent.ident = :ident";
 		TypedQuery<Configuration> query = confiDAO.getPersistenceContext().createQuery(hql, Configuration.class);
 		query.setParameter("ident", agentIdent);
-		
+
 		hql = "SELECT ta FROM " + TaskAgenda.class.getSimpleName() + " AS ta WHERE ta.theAgent.ident = :ident";
 		TypedQuery<TaskAgenda> query2 = taskAgendaDAO.getPersistenceContext().createQuery(hql, TaskAgenda.class);
 		query2.setParameter("ident", agentIdent);
@@ -349,7 +335,7 @@ public class AgentServicesImpl implements AgentServices {
 				taskAgenda.setTheAgent(null);
 				taskAgendaDAO.delete(taskAgenda);
 			}
-			
+
 			for (AgentHasAbility agentHasAbility : agent
 					.getTheAgentHasAbility()) {
 				agentHasAbility.removeFromTheAbility();
@@ -372,7 +358,7 @@ public class AgentServicesImpl implements AgentServices {
 				agentAffinityAgent.setToAffinity(null);
 				agentAffinityAgentDAO.delete(agentAffinityAgent);
 			}
-			
+
 			for (AgentAffinityAgent agentAffinityAgent : agent
 					.getToAgentAffinity()) {
 				agentAffinityAgent.removeFromToAffinity();
@@ -709,7 +695,7 @@ public class AgentServicesImpl implements AgentServices {
 
 		return agentAffinityAgentDTO;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public AgentAffinityAgent getAffinityByName(String toAffinity,
 			String fromAffinity) {
@@ -788,12 +774,12 @@ public class AgentServicesImpl implements AgentServices {
 		query = agentDAO.getPersistenceContext().createQuery(hql);
 		List<Agent> result = query.getResultList();
 		List<String> idents = new ArrayList<String>();
-		
+
 		for (Agent agent2 : result) {
 			agentsDTO.getAgents().add(convertAgentToAgentDTO(agent2, true));
 			idents.add(agent2.getIdent());
 		}
-		
+
 		agentsDTO.setNameAgents(agentsArray);
 		agentsDTO.setCargoAgents(rolesToAgent);
 		agentsDTO.setAgentIdents(idents);
@@ -846,7 +832,7 @@ public class AgentServicesImpl implements AgentServices {
 				for (Agent agent : result) {
 					agentsDTO.add(convertAgentToAgentDTO(agent, true));
 				}
-				
+
 				return agentsDTO;
 			}
 		}
@@ -971,19 +957,19 @@ public class AgentServicesImpl implements AgentServices {
 
 		return null;
 	}
-	
+
 	@Override
 	public AgentsDTO getAgentsFromProject(Integer theProcessOid) {
 		List<Agent> agentList = getAgentsForProject(theProcessOid);
-		
+
 		AgentsDTO list = convertAgentsToAgentsDTO(agentList, true);
 		return list;
-	}	
-	
+	}
+
 	@Override
 	public AgentsDTO getAgentsFromProject(Integer theProcessOid, boolean lazy) {
 		List<Agent> agentList = getAgentsForProject(theProcessOid);
-		
+
 		AgentsDTO list = convertAgentsToAgentsDTO(agentList, lazy);
 		return list;
 	}
@@ -991,21 +977,21 @@ public class AgentServicesImpl implements AgentServices {
 	@SuppressWarnings("unchecked")
 	private List<Agent> getAgentsForProject(Integer theProjectOid) {
 		String hql_project = "SELECT DISTINCT agent FROM " + AGENT_CLASSNAME + " as agent, " +
-						" "+ TASKAGENDA_CLASSNAME +" as taskagenda," + PROCESS_AGENDA_CLASSNAME + " as processagenda, " 
-						+ PROJECT_CLASSNAME + " as project, " + Process.class.getSimpleName() + " as process " + 
+						" "+ TASKAGENDA_CLASSNAME +" as taskagenda," + PROCESS_AGENDA_CLASSNAME + " as processagenda, "
+						+ PROJECT_CLASSNAME + " as project, " + Process.class.getSimpleName() + " as process " +
 		                     " WHERE taskagenda.oid = processagenda.theTaskAgenda.oid " +
 		                     "AND processagenda.theProcess.oid = process.oid " +
 		                     "AND process.oid = project.processRefered.oid " +
 		                     "AND taskagenda.theAgent.oid = agent.oid " +
 		                     "AND project.oid = :theProject";
-		
+
 		query = agentDAO.getPersistenceContext().createQuery(hql_project);
 		query.setParameter("theProject", theProjectOid);
 		List<Agent> agentList = new ArrayList<Agent>();
 		agentList.addAll(query.getResultList());
 		return agentList;
-	}	
-	
+	}
+
 	@Override
 	public List<TaskDTO> getAgentTasks(String agentIdent, String processIdent) {
 		List<TaskDTO> tasksDTO = new ArrayList<TaskDTO>();
@@ -1031,12 +1017,12 @@ public class AgentServicesImpl implements AgentServices {
 			if(p != null) {
 				agentName = p.getTheTaskAgenda().getTheAgent().getName();
 			}
-			
+
 			float workingHours = taskDAO.getWorkingHoursForTask(task.getTheNormal().getIdent(), agentIdent);
 			Time realWorkingTime = taskDAO.getWorkingHoursForTask2(task.getTheNormal().getIdent(), agentIdent);
 			float estimatedTime = activityEstimationDAO.getHoursEstimationForActivity(task.getTheNormal().getIdent());
 			Time estimatedTaskTime = new Time((int) estimatedTime, (int) ((estimatedTime * 60) % 60));
-            
+
 			TaskDTO t = new TaskDTO(task.getOid(), task.getTheNormal().getName(),
 					task.getLocalState(), task.getBeginDate(),
 					task.getEndDate(), workingHours,
@@ -1090,14 +1076,14 @@ public class AgentServicesImpl implements AgentServices {
 
 		return null;
 	}
-	
+
 	private AgentsDTO convertAgentsToAgentsDTO(List<Agent> agentList, boolean lazy){
 		List<AgentDTO> agente =  new ArrayList<AgentDTO>();
-	
+
 		for (Agent agent : agentList) {
 			agente.add(this.convertAgentToAgentDTO(agent, lazy));
 		}
-		
+
 		return new AgentsDTO(agente);
 	}
 
@@ -1132,7 +1118,7 @@ public class AgentServicesImpl implements AgentServices {
 							agentPlayRole.getTheRole().getIdent());
 				}
 			}
-			
+
 			if(!lazy) {
 				boolean isCostHourPositive = agent.getCostHour()>0;
 				Float custoDoTrabalho = 0.0f;
@@ -1147,14 +1133,14 @@ public class AgentServicesImpl implements AgentServices {
 						for(TaskDTO task : agentDTO.getTasks()) {
 							boolean isEstimatedHourPositive = task.getEstimatedTime().getHour()>0;
 							boolean isWorkedHourPositive = task.getRealWorkingTime().getHour()>0;
-							
+
 							//TODO Falta colocar os MINUTOS
 							if(isCostHourPositive && isEstimatedHourPositive) custoEstimadoDoTrabalho += agentDTO.getCostHour() * task.getEstimatedTime().getHour();
 							if(isCostHourPositive && isWorkedHourPositive) custoDoTrabalho += agentDTO.getCostHour() * task.getRealWorkingTime().getHour();
 						}
 					}
 				}
-				
+
 				agentDTO.setEstimatedWorkingCost(custoEstimadoDoTrabalho);
 				agentDTO.setWorkingCost(custoDoTrabalho);
 			}
@@ -1204,7 +1190,7 @@ public class AgentServicesImpl implements AgentServices {
 
 		query.setParameter("email", email);
 		query.setParameter("password", password);
-	
+
 		try {
 
 			AgentDTO agent = convertAgentToAgentDTO(
@@ -1220,7 +1206,7 @@ public class AgentServicesImpl implements AgentServices {
 
 	@Override
 	public AgentDTO getUserForEmail(String email) {
-		
+
 		System.out.println("caiu aqui no envia email" + email);
 		query = agentDAO.getPersistenceContext().createQuery(
 				"SELECT agent FROM " + AGENT_CLASSNAME + " AS agent "
@@ -1229,10 +1215,10 @@ public class AgentServicesImpl implements AgentServices {
 		query.setParameter("email", email);
 
 		try {
-		
-			
+
+
 			AgentDTO agent = convertAgentToAgentDTO((Agent) query.getSingleResult(), true);
-			
+
 			return agent;
 
 		} catch (NoResultException e) {
@@ -1244,9 +1230,9 @@ public class AgentServicesImpl implements AgentServices {
 	@Override
 	public boolean update(AgentDTO agente) {
 		System.out.println(agente.getPassword());
-								
+
 		agentd = agente;
-		
+
 		agentDAO.update(convertAgentDTOToAgent(agentd));
 		System.out.println(agentd.getPassword());
 		if (agent != null)
@@ -1274,7 +1260,7 @@ public class AgentServicesImpl implements AgentServices {
 		query.setParameter("email", email);
 		try {
 			AgentDTO agent = convertAgentToAgentDTO((Agent) query.getSingleResult(), true);
-			
+
 			return agent;
 		} catch (NoResultException e) {
 			e.printStackTrace();

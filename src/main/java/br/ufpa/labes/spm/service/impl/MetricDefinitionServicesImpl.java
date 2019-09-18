@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,9 +12,9 @@ import javax.persistence.Query;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.processKnowledge.IMetricDefinitionDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IAbilityTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IMetricTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IMetricDefinitionDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IAbilityTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IMetricTypeDAO;
 import org.qrconsult.spm.dtos.formAbility.AbilityDTO;
 import org.qrconsult.spm.dtos.formAgent.AgentDTO;
 import org.qrconsult.spm.dtos.formRole.RoleDTO;
@@ -22,52 +22,50 @@ import org.qrconsult.spm.dtos.formRole.RolesDTO;
 import org.qrconsult.spm.dtos.formTypes.TypesDTO;
 import org.qrconsult.spm.dtos.processKnowledge.MetricDefinitionDTO;
 import org.qrconsult.spm.dtos.processKnowledge.MetricDefinitionsDTO;
-import org.qrconsult.spm.model.agent.Ability;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.agent.AgentPlaysRole;
-import org.qrconsult.spm.model.agent.Role;
-import org.qrconsult.spm.model.agent.RoleNeedsAbility;
-import org.qrconsult.spm.model.processKnowledge.MetricDefinition;
-import org.qrconsult.spm.model.types.AbilityType;
-import org.qrconsult.spm.model.types.MetricType;
-import org.qrconsult.spm.model.types.RoleType;
-import org.qrconsult.spm.model.types.Type;
-import org.qrconsult.spm.services.interfaces.MetricDefinitionServices;
+import br.ufpa.labes.spm.domain.Ability;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.AgentPlaysRole;
+import br.ufpa.labes.spm.domain.Role;
+import br.ufpa.labes.spm.domain.RoleNeedsAbility;
+import br.ufpa.labes.spm.domain.MetricDefinition;
+import br.ufpa.labes.spm.domain.AbilityType;
+import br.ufpa.labes.spm.domain.MetricType;
+import br.ufpa.labes.spm.domain.RoleType;
+import br.ufpa.labes.spm.domain.Type;
+import br.ufpa.labes.spm.service.interfaces.MetricDefinitionServices;
 
 @Stateless
 public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
-	@EJB
 	IMetricTypeDAO metricTypeDAO;
-	
-	@EJB
+
 	IMetricDefinitionDAO metricDefinitionDAO;
-	
-	
+
+
 	public MetricDefinition getMetricDefinitionP(String name) {
 		String hql;
 		Query query;
 		List<MetricDefinition> result = null;
-		
-		
+
+
 		hql = "select ability from "+MetricDefinition.class.getSimpleName()+" as ability where ability.name = :abiname";
 		query = metricDefinitionDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("abiname", name);
-		
+
 		result = query.getResultList();
-		
+
 		if(!result.isEmpty()){
 			MetricDefinition ability = result.get(0);
 			return ability;
 		}else{
 			return null;
 		}
-		
+
 	}
-	
-	
+
+
 	@Override
 	public MetricDefinitionDTO saveMetricDefinition(MetricDefinitionDTO metricDefinitionDTO) {
-		
+
 		System.out.println("MeAqui");
 		Converter converter = new ConverterImpl();
 		try {
@@ -95,15 +93,15 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 						metricDefinitionDTO = (MetricDefinitionDTO) converter.getDTO(metricDefinition, MetricDefinitionDTO.class);
 						metricDefinitionDTO.setMetricType(abiType.getIdent());
 						System.out.println("MeAqui5:"+metricDefinitionDTO.getMetricType());
-					}		
+					}
 				}else{
 					System.out.println("MeAqui6");
 					return null;
 				}
 			}else{
 				return null;
-			}		
-			
+			}
+
 		} catch (ImplementationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -117,10 +115,10 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 		System.out.println("MeAqui6");
 		String hql;
 		Query query;
-		
+
 		hql = "select ident from " +MetricType.class.getSimpleName();
 		query = metricTypeDAO.getPersistenceContext().createQuery(hql);
-		
+
 		List<String> abiTypeList =  new ArrayList<String>();
 		abiTypeList = query.getResultList();
 		String[] list = new String[abiTypeList.size()];
@@ -129,55 +127,55 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 		return list;
 	}
 
-	
+
 	public String[] getMetricDefinitionsTypes(){
 		String hql;
 		Query query;
-		
+
 		hql = "select ident from " +MetricType.class.getSimpleName();
 		query = metricTypeDAO.getPersistenceContext().createQuery(hql);
-		
+
 		List<String> abiTypeList =  new ArrayList<String>();
 		abiTypeList = query.getResultList();
 		String[] list = new String[abiTypeList.size()];
 		abiTypeList.toArray(list);
-		
+
 		for (String string : list) {
 			System.out.println(list);
 		}
-		
+
 		return list;
 	}
-	
+
 	@Override
 	public MetricDefinitionsDTO getMetricDefinitions() {
 		String hql;
 		Query query;
-		
+
 		hql = "select name from "+MetricDefinition.class.getSimpleName();
 		query = metricDefinitionDAO.getPersistenceContext().createQuery(hql);
-		
-		
+
+
 		List<String> roles = new ArrayList<String>();
 		roles = query.getResultList();
 		String[] list = new String[roles.size()];
 		roles.toArray(list);
-		
+
 		String[] list1 = new String[0];
 		list1 = getMetricDefinitionsTypes();
-		
+
 		MetricDefinitionsDTO rolesDTO = new MetricDefinitionsDTO();
 		rolesDTO.setNameMetricsDefinitions(list);
 		rolesDTO.setTypeMetrics(list1);
-		
+
 		/*for (String string : list) {
 			System.out.println("Linda:"+list);
 		}
-		
+
 		for (String string : list1) {
 			System.out.println("Linda:"+list1);
 		}*/
-		
+
 		return rolesDTO;
 	}
 
@@ -186,47 +184,47 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 		String hql;
 		Query query;
 		List<String> resultList = null;
-		
+
 		if(domain != null){
 			hql = "select role.name from " + MetricDefinition.class.getSimpleName() + " as role where role.name like :termo and role.ident = :domain and";
 			query = metricDefinitionDAO.getPersistenceContext().createQuery(hql);
 			query.setParameter("domain", domain);
 			query.setParameter("termo", "%"+ term + "%");
-			resultList = query.getResultList(); 	
+			resultList = query.getResultList();
 		}else{
 			hql = "select role.name from " +MetricDefinition.class.getSimpleName() + " as role where role.name like :termo";
 			query = metricDefinitionDAO.getPersistenceContext().createQuery(hql);
 			query.setParameter("termo", "%"+ term + "%");
-			resultList = query.getResultList(); 	
+			resultList = query.getResultList();
 		}
-		
+
 		MetricDefinitionsDTO rolesDTO = new MetricDefinitionsDTO();
 		String[] names = new String[resultList.size()];
 		resultList.toArray(names);
 		rolesDTO.setNameMetricsDefinitions(names);
-		
-		
-		
+
+
+
     /*System.out.println("Param�tros: " + termoBusca + ", " + domainFilter + ", " + orgFilter);
-		
+
 		String hql;
 		Query query;
 		List<List<Type>> typesLists = new ArrayList<List<Type>>();
 		List<Class<?>> returnedClasses = new ArrayList<Class<?>>();
 		int sizeLists = 0;
-		
+
 		if(domainFilter!=null){
 			Class<?> currentClass = typeClasses.get(domainFilter);
 			hql = "select type from " + currentClass.getName() + " as type where type.ident like :termo and type.userDefined is not :orgFilter";
 			query = typeDAO.getPersistenceContext().createQuery(hql);
 			query.setParameter("orgFilter", orgFilter);
 			query.setParameter("termo", "%"+ termoBusca + "%");
-			List<Type> resultList = query.getResultList(); 
+			List<Type> resultList = query.getResultList();
 			typesLists.add(resultList);
 			returnedClasses.add(currentClass);
 			sizeLists = resultList.size();
 		}else{
-			Iterator<Class<?>> classIterator = typeClasses.values().iterator(); 
+			Iterator<Class<?>> classIterator = typeClasses.values().iterator();
 			while (classIterator.hasNext()) {
 				Class<?> class_ = classIterator.next();
 				hql = "select type from " + class_.getName() + " as type where type.ident like :termo and type.userDefined is not :orgFilter";
@@ -239,12 +237,12 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 				sizeLists += resultList.size();
 			}
 		}
-		
+
 		TypesDTO typesDTO = new TypesDTO(sizeLists);
-		
+
 		for (int i = 0; i < typesLists.size(); i++) {
 			List<Type> list = typesLists.get(i);
-			
+
 			int j = 0;
 			for (Iterator<Type> iterator = list.iterator(); iterator.hasNext();) {
 				Type type = (Type) iterator.next();
@@ -255,11 +253,11 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 				typesDTO.addType(typeIdent, superTypeIdent, rootType, j);
 				j++;
 			}
-			
+
 		}
 
 		return typesDTO;*/
-		
+
 		return rolesDTO;
 	}
 
@@ -276,42 +274,42 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 		MetricDefinitionDTO metricDefinitionDTO = null;
 		//AbilityDTO abi = null;
 		//AgentDTO agen = null;
-		
+
 		hql = "select role from "+MetricDefinition.class.getSimpleName()+" as role where role.name = :rolname";
 		query = metricDefinitionDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("rolname", nameMetricDefinition);
 		result = query.getResultList();
 		//Collection<RoleNeedsAbility> lis = result.get(0).getTheRoleNeedsAbility();
 		//Collection<AgentPlaysRole> lisaux = result.get(0).getTheAgentPlaysRole();
-		
+
 		/*for (RoleNeedsAbility roleNeedsAbility : lis) {
 			abis.add(roleNeedsAbility.getTheAbility());
 		}*/
-		
+
 		Converter converter = new ConverterImpl();
 		/*for(int i = 0;i < abis.size();i++){
 			try {
 				abi = (AbilityDTO) converter.getDTO(abis.get(i), AbilityDTO.class);
 				abisDTO.add(abi);
 			} catch (Implementation
-		
+
 		for (AgentPlaysRole agentPlaysRole : lisaux) {
 			agens.add(agentPlaysRole.getTheAgent());
 		}
-		
+
 		for(int i = 0;i < agens.size();i++){
 			try {
 				agen = (AgentDTO) converter.getDTO(agens.get(i), AgentDTO.class);
 				agensDTO.add(agen);
 			} catch (ImplementationException e) {
-				
+
 				e.printStackTrace();
-			}			
+			}
 		}
-		
+
 		*/
 		try {
-			
+
 			Collection<String> abis ;
 			abis = result.get(0).getUnits();
 			//metricDefinitionDTO =  new MetricDefinitionDTO();
@@ -324,8 +322,8 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 			for ( String string : resuk.getUnits() ) {
 				//System.out.println(string);
 			}
-			
-			
+
+
 			/*System.out.println("Abis:::"+abis);
 			if( abis  != null ){
 				System.out.println( "Abis:::"+abis.size() );
@@ -337,7 +335,7 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 			if(agens != null){
 				roleDTO.setAgentToRole(agensDTO);
 			}*/
-			
+
 		} catch (ImplementationException e) {
 			e.printStackTrace();
 		}
@@ -346,7 +344,7 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 		/*Collection<E>
 		for (int i = 0; i < result.get(0).u; i++) {
 			array_type array_element = array[i];
-			
+
 		}*/
 		return metricDefinitionDTO;
 	}

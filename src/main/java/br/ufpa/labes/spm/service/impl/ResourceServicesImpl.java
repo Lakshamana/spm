@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,32 +13,30 @@ import javax.persistence.TypedQuery;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.resources.IResourceDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IResourceTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.resources.IResourceDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
 import org.qrconsult.spm.dtos.formResources.ResourceDTO;
 import org.qrconsult.spm.dtos.formResources.ResourcesDTO;
 import org.qrconsult.spm.dtos.formTypes.TypesDTO;
-import org.qrconsult.spm.model.resources.Resource;
-import org.qrconsult.spm.model.types.ResourceType;
-import org.qrconsult.spm.model.types.Type;
-import org.qrconsult.spm.services.interfaces.ResourceServices;
+import br.ufpa.labes.spm.domain.Resource;
+import br.ufpa.labes.spm.domain.ResourceType;
+import br.ufpa.labes.spm.domain.Type;
+import br.ufpa.labes.spm.service.interfaces.ResourceServices;
 
 @Stateless
 public class ResourceServicesImpl implements ResourceServices{
 	private static final int SINGLE_RESULT = 1;
 
 	private static final String RESOURCE_CLASS_NAME = Resource.class.getSimpleName();
-	
-	@EJB
+
 	IResourceDAO resourceDAO;
-	
-	@EJB
+
 	IResourceTypeDAO resourceTypeDAO;
-	
+
 	Converter converter = new ConverterImpl();
-	
+
 	private Query query;
-	
+
 	@Override
 	public ResourceDTO getResource(String resourceIdent) {
 		Resource resource = resourceDAO.retrieveBySecondaryKey(resourceIdent);
@@ -49,43 +47,43 @@ public class ResourceServicesImpl implements ResourceServices{
 	@Override
 	public ResourcesDTO getResources() {
 		String hql;
-			hql = "select resource from " + RESOURCE_CLASS_NAME + " as resource";			
+			hql = "select resource from " + RESOURCE_CLASS_NAME + " as resource";
 		TypedQuery<Resource> query = resourceDAO.getPersistenceContext().createQuery(hql, Resource.class);
 		List<Resource> resources = query.getResultList();
-		
+
 		return this.convertResourcesToResourcesDTO(resources);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public ResourcesDTO getResources(String termoBusca, String domainFilter, Boolean orgFilter) {
-		
+
 		String activeFilter = (orgFilter == null) ? "" : " and res.isActive is :orgFilter" ;
-		
+
 		String hql;
 		if(domainFilter != null) {
 			hql = "select res from " + RESOURCE_CLASS_NAME + " as res where res.name like :termo and res.ident = :domain" + activeFilter;
 			query = resourceDAO.getPersistenceContext().createQuery(hql);
 			query.setParameter("termo", "%"+ termoBusca + "%");
-			query.setParameter("domain", domainFilter);	
-			
+			query.setParameter("domain", domainFilter);
+
 		} else {
 			hql = "select res from " + RESOURCE_CLASS_NAME + " as res where res.name like :termo" + activeFilter;
 			query = resourceDAO.getPersistenceContext().createQuery(hql);
-			query.setParameter("termo", "%"+ termoBusca + "%");			
-		
+			query.setParameter("termo", "%"+ termoBusca + "%");
+
 		}
 		if(!activeFilter.isEmpty()) {
-			
+
 			query.setParameter("orgFilter", orgFilter);
-		
+
 		}
 			List<Resource> resultado = query.getResultList();
-		
+
 		ResourcesDTO resourcesDTO = new ResourcesDTO(new ArrayList<ResourceDTO>());
 		resourcesDTO = convertResourcesToResourcesDTO(resultado);
-		
-		
+
+
 		return resourcesDTO;
 	}
 
@@ -94,7 +92,7 @@ public class ResourceServicesImpl implements ResourceServices{
 		String hql = "select o from " + RESOURCE_CLASS_NAME + " o where o.name = :name";
 		query = resourceDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("name", resourceName);
-		
+
 		return (Resource) query.getResultList().get(0);
 	}
 
@@ -104,14 +102,14 @@ public class ResourceServicesImpl implements ResourceServices{
 //			resources.add(this.getResourceFromName(name));
 			resources.add(resourceDAO.retrieveBySecondaryKey(ident));
 		}
-		
+
 		return resources;
 	}
-	
+
 	@Override
 	public ResourceDTO saveResource(ResourceDTO resourceDTO) {
 		System.out.println("aqui " + resourceDTO);
-		try {					
+		try {
 			ResourceType resourceType = resourceTypeDAO.retrieveBySecondaryKey(resourceDTO.getTheResourceType());
 			Resource resource = null;
 			Resource belongsTo = resourceDAO.retrieveBySecondaryKey(resourceDTO.getBelongsTo());
@@ -123,18 +121,18 @@ public class ResourceServicesImpl implements ResourceServices{
 			for (String requiresDTO : resourceDTO.getRequires()) {
 				System.out.println("requires: " + requiresDTO);
 			}
-			
+
 			String hql = "SELECT o FROM " + RESOURCE_CLASS_NAME + " o WHERE o.name = '" + resourceDTO.getName() + "'";
 			query = resourceDAO.getPersistenceContext().createQuery(hql);
-			if(query.getResultList().size() == SINGLE_RESULT) {				
-				resource = (Resource) query.getSingleResult();	
+			if(query.getResultList().size() == SINGLE_RESULT) {
+				resource = (Resource) query.getSingleResult();
 			}
 			if(resource == null) {
 				resource = (Resource) converter.getEntity(resourceDTO, Resource.class);
 				resource.setTheResourceType(resourceType);
 				resource.setBelongsTo(belongsTo);
 				resourceDAO.save(resource);
-				
+
 				String newIdent = resourceDAO.generateIdent(resource.getName(), resource);
 				resource.setIdent(newIdent);
 				resourceDTO.setIdent(newIdent);
@@ -157,14 +155,14 @@ public class ResourceServicesImpl implements ResourceServices{
 			resourceDAO.update(resource);
 		} catch (ImplementationException e) {
 			e.printStackTrace();
-		}		
-	
+		}
+
 		return resourceDTO;
 	}
 
 	@Override
 	public Boolean removeResource(ResourceDTO resourceDTO) throws SQLException {
-		
+
 		Resource resource = resourceDAO.retrieveBySecondaryKey(resourceDTO.getIdent());
 		System.out.println("aqui " + resource);
 		if (resource != null){
@@ -179,11 +177,11 @@ public class ResourceServicesImpl implements ResourceServices{
 	public TypesDTO getResourceTypes() {
 		String hql;
 		List<Type> typesLists = new ArrayList<Type>();
-		
+
 		hql = "from " + ResourceType.class.getSimpleName();
 		query = resourceTypeDAO.getPersistenceContext().createQuery(hql);
 		typesLists = query.getResultList();
-				
+
 		TypesDTO typesDTO = new TypesDTO(typesLists.size());
 		int j = 0;
 		for (Type type : typesLists) {
@@ -195,11 +193,11 @@ public class ResourceServicesImpl implements ResourceServices{
 		}
 		return typesDTO;
 	}
-	
+
 	private ResourceDTO convertResourceToResourceDTO(Resource resource) {
-		ResourceDTO resourceDTO = new ResourceDTO();		
+		ResourceDTO resourceDTO = new ResourceDTO();
 		try {
-			
+
 			resourceDTO = (ResourceDTO) converter.getDTO(resource, ResourceDTO.class);
 			resourceDTO.setCost(resource.getCost().toString());
 			resourceDTO.setMtbfTime(resource.getMtbfTime().toString());
@@ -213,13 +211,13 @@ public class ResourceServicesImpl implements ResourceServices{
 		} catch (ImplementationException e) {
 			e.printStackTrace();
 		}
-		
-		return resourceDTO;		
+
+		return resourceDTO;
 	}
-	
+
 	private ResourcesDTO convertResourcesToResourcesDTO(List<Resource> resourcesList) {
-		ResourcesDTO resourcesDTOList = new ResourcesDTO(new ArrayList<ResourceDTO>());		
-			
+		ResourcesDTO resourcesDTOList = new ResourcesDTO(new ArrayList<ResourceDTO>());
+
 		for(Resource resource : resourcesList) {
 			resourcesDTOList.addResourceDTO(this.convertResourceToResourceDTO(resource));
 		}
@@ -229,7 +227,7 @@ public class ResourceServicesImpl implements ResourceServices{
 	@Override
 	public ResourceDTO updateRequireds(String resourceName) {
 		ResourceDTO resourceDTO = new ResourceDTO();
-		
+
 		String hql = "select resource from " + RESOURCE_CLASS_NAME + " as resource where resource.name = '" + resourceName + "'";
 		query = resourceDAO.getPersistenceContext().createQuery(hql);
 		if(!query.getResultList().isEmpty()) {
@@ -237,7 +235,7 @@ public class ResourceServicesImpl implements ResourceServices{
 			resource.setRequires(null);
 			resourceDTO = (ResourceDTO) this.getDTOFromResource(resource);
 		}
-		
+
 		return resourceDTO;
 	}
 
@@ -249,7 +247,7 @@ public class ResourceServicesImpl implements ResourceServices{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return resourceDTO;
 	}
 
@@ -259,7 +257,7 @@ public class ResourceServicesImpl implements ResourceServices{
 		String hql = "select o.requires from " + RESOURCE_CLASS_NAME + " o where o.name = :name";
 		query = resourceDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("name", resourceName);
-		
+
 		List<Resource> resultado = query.getResultList();
 		for (Resource resource : resultado) {
 			System.out.println(resource);

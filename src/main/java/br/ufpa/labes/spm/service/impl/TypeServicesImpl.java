@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -13,69 +13,56 @@ import org.qrconsult.spm.beans.editor.WebAPSEEVO;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.types.IAbilityTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IActivityTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IArtifactTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IConnectionTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IEventTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IGroupTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IKnowledgeTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IMetricTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IPolicyTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IResourceTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IRoleTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IToolTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.ITypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IAbilityTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IActivityTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IConnectionTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IEventTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IGroupTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IKnowledgeTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IMetricTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IPolicyTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IRoleTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IToolTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.ITypeDAO;
 import org.qrconsult.spm.dtos.formTypes.TypeDTO;
 import org.qrconsult.spm.dtos.formTypes.TypesDTO;
-import org.qrconsult.spm.model.types.AbilityType;
-import org.qrconsult.spm.model.types.ActivityType;
-import org.qrconsult.spm.model.types.ArtifactType;
-import org.qrconsult.spm.model.types.ConnectionType;
-import org.qrconsult.spm.model.types.EventType;
-import org.qrconsult.spm.model.types.GroupType;
-import org.qrconsult.spm.model.types.KnowledgeType;
-import org.qrconsult.spm.model.types.MetricType;
-import org.qrconsult.spm.model.types.PolicyType;
-import org.qrconsult.spm.model.types.ResourceType;
-import org.qrconsult.spm.model.types.RoleType;
-import org.qrconsult.spm.model.types.ToolType;
-import org.qrconsult.spm.model.types.Type;
-import org.qrconsult.spm.services.interfaces.TypeServices;
+import br.ufpa.labes.spm.domain.AbilityType;
+import br.ufpa.labes.spm.domain.ActivityType;
+import br.ufpa.labes.spm.domain.ArtifactType;
+import br.ufpa.labes.spm.domain.ConnectionType;
+import br.ufpa.labes.spm.domain.EventType;
+import br.ufpa.labes.spm.domain.GroupType;
+import br.ufpa.labes.spm.domain.KnowledgeType;
+import br.ufpa.labes.spm.domain.MetricType;
+import br.ufpa.labes.spm.domain.PolicyType;
+import br.ufpa.labes.spm.domain.ResourceType;
+import br.ufpa.labes.spm.domain.RoleType;
+import br.ufpa.labes.spm.domain.ToolType;
+import br.ufpa.labes.spm.domain.Type;
+import br.ufpa.labes.spm.service.interfaces.TypeServices;
 import org.qrconsult.spm.util.Translator;
 
 @Stateless
 public class TypeServicesImpl implements TypeServices{
 
-	@EJB
 	ITypeDAO typeDAO;
-	@EJB
 	IArtifactTypeDAO artTypeDAO;
-	@EJB
 	IActivityTypeDAO actTypeDAO;
-	@EJB
 	IToolTypeDAO toolTypeDAO;
-	@EJB
 	IGroupTypeDAO grpTypeDAO;
-	@EJB
 	IMetricTypeDAO metTypeDAO;
-	@EJB
 	IAbilityTypeDAO abiTypeDAO;
-	@EJB
 	IRoleTypeDAO roleTypeDAO;
-	@EJB
 	IResourceTypeDAO resTypeDAO;
-	@EJB
 	IConnectionTypeDAO conTypeDAO;
-	@EJB
 	IKnowledgeTypeDAO knowTypeDAO;
-	@EJB
 	IEventTypeDAO eveTypeDAO;
-	@EJB
 	IPolicyTypeDAO polTypeDAO;
-	
+
 	Hashtable<String, Class<?>> typeClasses = new Hashtable<String, Class<?>>();
-	
+
 	public TypeServicesImpl(){
 		typeClasses.put("AbilityType", AbilityType.class);
 		typeClasses.put("ActivityType", ActivityType.class);
@@ -90,25 +77,25 @@ public class TypeServicesImpl implements TypeServices{
 		typeClasses.put("RoleType", RoleType.class);
 		typeClasses.put("ToolType", ToolType.class);
 	}
-	
+
 	@Override
 	public String[] getRootTypes(String typeClassName) {
-		
+
 		String internalPackageName = Translator.getInternalPackageName(typeClassName);
 		String hql = "select type.ident from " + internalPackageName + " as type where type.superType is null";
 
 		Query query = typeDAO.getPersistenceContext().createQuery(hql);
-		
+
 		List<String> list = query.getResultList();
 		String[] ret = new String[list.size()];
 		list.toArray(ret);
-		
+
 		return ret;
 	}
 
 	@Override
 	public String[] getSubTypes(String typeIdent) {
-		
+
 		String hql = "select type.ident from " + Type.class.getName() + " as type where type.superType is not null and type.superType.ident=:ident ";
 
 		Query query = typeDAO.getPersistenceContext().createQuery(hql);
@@ -123,13 +110,13 @@ public class TypeServicesImpl implements TypeServices{
 
 	@Override
 	public TypesDTO getTypes() {
-		
+
 		Class<?>[] typeClasses = { AbilityType.class, ActivityType.class,
 				ArtifactType.class, ConnectionType.class, EventType.class,
 				GroupType.class, KnowledgeType.class, MetricType.class,
 				PolicyType.class, ResourceType.class, RoleType.class,
 				ToolType.class };
-		
+
 		String hql;
 		Query query;
 		List<List<Type>> typesLists = new ArrayList<List<Type>>();
@@ -141,12 +128,12 @@ public class TypeServicesImpl implements TypeServices{
 			typesLists.add(query.getResultList());
 			sizeList += typesLists.get(i).size();
 		}
-		
+
 		TypesDTO typesDTO = new TypesDTO(sizeList);
 		int j = 0;
 		for (int i = 0; i < typesLists.size(); i++) {
 			List<Type> list = typesLists.get(i);
-			
+
 			for (Type type : list) {
 				String typeIdent = type.getIdent();
 				String superTypeIdent = (type.getSuperType()!=null ? type.getSuperType().getIdent() : "");
@@ -158,7 +145,7 @@ public class TypeServicesImpl implements TypeServices{
 
 		return typesDTO;
 	}
-	
+
 	@Override
 	public TypeDTO getType(String typeIdent) {
 		try{
@@ -202,9 +189,9 @@ public class TypeServicesImpl implements TypeServices{
 			String typeIdent = typeDTO.getIdent();
 			String typeClass = typeDTO.getRootType();
 			if (typeIdent != null && !typeIdent.equals("") && typeClass != null	&& !typeClass.equals("")) {
-				
+
 				if (typeClass.equals(ActivityType.class.getSimpleName())) {
-					
+
 					ActivityType type = actTypeDAO.retrieveBySecondaryKey(typeIdent);
 
 					Converter converter = new ConverterImpl();
@@ -225,9 +212,9 @@ public class TypeServicesImpl implements TypeServices{
 					actTypeDAO.update(type);
 
 					typeDTO = (TypeDTO) converter.getDTO(type, TypeDTO.class);
-					
+
 				} else if (typeClass.equals(ArtifactType.class.getSimpleName())) {
-					
+
 						ArtifactType type = artTypeDAO.retrieveBySecondaryKey(typeIdent);
 
 						Converter converter = new ConverterImpl();
@@ -248,7 +235,7 @@ public class TypeServicesImpl implements TypeServices{
 						artTypeDAO.update(type);
 
 						typeDTO = (TypeDTO) converter.getDTO(type, TypeDTO.class);
-					
+
 				} else if (typeClass.equals(AbilityType.class.getSimpleName())) {
 
 					AbilityType type = abiTypeDAO.retrieveBySecondaryKey(typeIdent);
@@ -271,7 +258,7 @@ public class TypeServicesImpl implements TypeServices{
 					abiTypeDAO.update(type);
 
 					typeDTO = (TypeDTO) converter.getDTO(type, TypeDTO.class);
-					
+
 				} else if (typeClass.equals(GroupType.class.getSimpleName())) {
 
 					GroupType type = grpTypeDAO.retrieveBySecondaryKey(typeIdent);
@@ -294,7 +281,7 @@ public class TypeServicesImpl implements TypeServices{
 					grpTypeDAO.update(type);
 
 					typeDTO = (TypeDTO) converter.getDTO(type, TypeDTO.class);
-					
+
 				} else if (typeClass.equals(RoleType.class.getSimpleName())) {
 
 					RoleType type = roleTypeDAO.retrieveBySecondaryKey(typeIdent);
@@ -317,7 +304,7 @@ public class TypeServicesImpl implements TypeServices{
 					roleTypeDAO.update(type);
 
 					typeDTO = (TypeDTO) converter.getDTO(type, TypeDTO.class);
-					
+
 				} else if (typeClass.equals(ResourceType.class.getSimpleName())) {
 
 					ResourceType type = resTypeDAO.retrieveBySecondaryKey(typeIdent);
@@ -340,7 +327,7 @@ public class TypeServicesImpl implements TypeServices{
 					resTypeDAO.update(type);
 
 					typeDTO = (TypeDTO) converter.getDTO(type, TypeDTO.class);
-					
+
 				} else if (typeClass.equals(ToolType.class.getSimpleName())) {
 
 					ToolType type = toolTypeDAO.retrieveBySecondaryKey(typeIdent);
@@ -363,7 +350,7 @@ public class TypeServicesImpl implements TypeServices{
 					toolTypeDAO.update(type);
 
 					typeDTO = (TypeDTO) converter.getDTO(type, TypeDTO.class);
-					
+
 				} else if (typeClass.equals(MetricType.class.getSimpleName())) {
 
 					MetricType type = metTypeDAO.retrieveBySecondaryKey(typeIdent);
@@ -386,7 +373,7 @@ public class TypeServicesImpl implements TypeServices{
 					metTypeDAO.update(type);
 
 					typeDTO = (TypeDTO) converter.getDTO(type, TypeDTO.class);
-					
+
 				}else return null;
 
 				return typeDTO;
@@ -411,25 +398,25 @@ public class TypeServicesImpl implements TypeServices{
 	@Override
 	public TypesDTO getTypes(String termoBusca, String domainFilter, boolean orgFilter) {
 		System.out.println("Param�tros: " + termoBusca + ", " + domainFilter + ", " + orgFilter);
-		
+
 		String hql;
 		Query query;
 		List<List<Type>> typesLists = new ArrayList<List<Type>>();
 		List<Class<?>> returnedClasses = new ArrayList<Class<?>>();
 		int sizeLists = 0;
-		
+
 		if(domainFilter!=null){
 			Class<?> currentClass = typeClasses.get(domainFilter);
 			hql = "select type from " + currentClass.getName() + " as type where type.ident like :termo and type.userDefined is not :orgFilter";
 			query = typeDAO.getPersistenceContext().createQuery(hql);
 			query.setParameter("orgFilter", orgFilter);
 			query.setParameter("termo", "%"+ termoBusca + "%");
-			List<Type> resultList = query.getResultList(); 
+			List<Type> resultList = query.getResultList();
 			typesLists.add(resultList);
 			returnedClasses.add(currentClass);
 			sizeLists = resultList.size();
 		}else{
-			Iterator<Class<?>> classIterator = typeClasses.values().iterator(); 
+			Iterator<Class<?>> classIterator = typeClasses.values().iterator();
 			while (classIterator.hasNext()) {
 				Class<?> class_ = classIterator.next();
 				hql = "select type from " + class_.getName() + " as type where type.ident like :termo and type.userDefined is not :orgFilter";
@@ -442,12 +429,12 @@ public class TypeServicesImpl implements TypeServices{
 				sizeLists += resultList.size();
 			}
 		}
-		
+
 		TypesDTO typesDTO = new TypesDTO(sizeLists);
-		
+
 		for (int i = 0; i < typesLists.size(); i++) {
 			List<Type> list = typesLists.get(i);
-			
+
 			int j = 0;
 			for (Iterator<Type> iterator = list.iterator(); iterator.hasNext();) {
 				Type type = (Type) iterator.next();
@@ -458,12 +445,12 @@ public class TypeServicesImpl implements TypeServices{
 				typesDTO.addType(typeIdent, superTypeIdent, rootType, j);
 				j++;
 			}
-			
+
 		}
 
 		return typesDTO;
 	}
-	
+
 	public static void main(String[] args){
 		TypeServicesImpl impl = new TypeServicesImpl();
 		TypesDTO types = impl.getTypes("", null, false);
@@ -474,12 +461,12 @@ public class TypeServicesImpl implements TypeServices{
 
 	@Override
 	public List<WebAPSEEVO> getTypesVO(String domain) {
-		
+
 		String internalPackageName = Translator.getInternalPackageName(domain);
 		String hql = "select type.ident from " + internalPackageName + " as type order by type.ident";
 
 		Query query = typeDAO.getPersistenceContext().createQuery(hql);
-		
+
 		List<String> list = query.getResultList();
 		List<WebAPSEEVO> typesVO = new ArrayList<WebAPSEEVO>();
 		for(String ident : list){

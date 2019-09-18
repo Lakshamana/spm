@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,67 +16,67 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
-import org.qrconsult.spm.dataAccess.interfaces.activities.IActivityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.activities.IDecomposedDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.artifacts.IArtifactDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IConnectionDAO;
-import org.qrconsult.spm.dataAccess.interfaces.organizationPolicies.IProjectDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IInvolvedArtifactsDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IReqAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IReqGroupDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IRequiredResourceDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModelGraphic.IGraphicCoordinateDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModelGraphic.IWebAPSEEObjectDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IDescriptionDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessModelDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.ITemplateDAO;
+import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
+import br.ufpa.labes.spm.repository.interfaces.activities.IDecomposedDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IConnectionDAO;
+import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IInvolvedArtifactsDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredResourceDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IGraphicCoordinateDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IWebAPSEEObjectDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IDescriptionDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessModelDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.ITemplateDAO;
 import org.qrconsult.spm.dtos.formProject.SimpleUpdateDTO;
 import org.qrconsult.spm.dtos.process.ProcessModelDTO;
 import org.qrconsult.spm.dtos.template.TemplateDTO;
-import org.qrconsult.spm.exceptions.DAOException;
-import org.qrconsult.spm.exceptions.DataBaseException;
-import org.qrconsult.spm.exceptions.WebapseeException;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.activities.Decomposed;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.artifacts.Artifact;
-import org.qrconsult.spm.model.connections.ArtifactCon;
-import org.qrconsult.spm.model.connections.Branch;
-import org.qrconsult.spm.model.connections.BranchAND;
-import org.qrconsult.spm.model.connections.BranchCond;
-import org.qrconsult.spm.model.connections.BranchCondToActivity;
-import org.qrconsult.spm.model.connections.BranchCondToMultipleCon;
-import org.qrconsult.spm.model.connections.Connection;
-import org.qrconsult.spm.model.connections.Dependency;
-import org.qrconsult.spm.model.connections.Feedback;
-import org.qrconsult.spm.model.connections.Join;
-import org.qrconsult.spm.model.connections.MultipleCon;
-import org.qrconsult.spm.model.connections.Sequence;
-import org.qrconsult.spm.model.organizationPolicies.Project;
-import org.qrconsult.spm.model.plainActivities.Automatic;
-import org.qrconsult.spm.model.plainActivities.InvolvedArtifacts;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.model.plainActivities.Parameters;
-import org.qrconsult.spm.model.plainActivities.ReqAgent;
-import org.qrconsult.spm.model.plainActivities.ReqAgentRequiresAbility;
-import org.qrconsult.spm.model.plainActivities.ReqGroup;
-import org.qrconsult.spm.model.plainActivities.RequiredPeople;
-import org.qrconsult.spm.model.plainActivities.RequiredResource;
-import org.qrconsult.spm.model.processModelGraphical.GraphicCoordinate;
-import org.qrconsult.spm.model.processModelGraphical.WebAPSEEObject;
-import org.qrconsult.spm.model.processModels.Description;
-import org.qrconsult.spm.model.processModels.Process;
-import org.qrconsult.spm.model.processModels.ProcessModel;
-import org.qrconsult.spm.model.processModels.Template;
-import org.qrconsult.spm.model.resources.Reservation;
-import org.qrconsult.spm.model.tools.Subroutine;
-import org.qrconsult.spm.model.tools.ToolParameters;
+import br.ufpa.labes.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.exceptions.DataBaseException;
+import br.ufpa.labes.spm.exceptions.WebapseeException;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.Artifact;
+import br.ufpa.labes.spm.domain.ArtifactCon;
+import br.ufpa.labes.spm.domain.Branch;
+import br.ufpa.labes.spm.domain.BranchAND;
+import br.ufpa.labes.spm.domain.BranchCond;
+import br.ufpa.labes.spm.domain.BranchCondToActivity;
+import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
+import br.ufpa.labes.spm.domain.Connection;
+import br.ufpa.labes.spm.domain.Dependency;
+import br.ufpa.labes.spm.domain.Feedback;
+import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.MultipleCon;
+import br.ufpa.labes.spm.domain.Sequence;
+import br.ufpa.labes.spm.domain.Project;
+import br.ufpa.labes.spm.domain.Automatic;
+import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.domain.Parameters;
+import br.ufpa.labes.spm.domain.ReqAgent;
+import br.ufpa.labes.spm.domain.ReqAgentRequiresAbility;
+import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.RequiredPeople;
+import br.ufpa.labes.spm.domain.RequiredResource;
+import br.ufpa.labes.spm.domain.GraphicCoordinate;
+import br.ufpa.labes.spm.domain.WebAPSEEObject;
+import br.ufpa.labes.spm.domain.Description;
+import br.ufpa.labes.spm.domain.Process;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.domain.Template;
+import br.ufpa.labes.spm.domain.Reservation;
+import br.ufpa.labes.spm.domain.Subroutine;
+import br.ufpa.labes.spm.domain.ToolParameters;
 import org.qrconsult.spm.process.impl.CopyProcessServiceImpl;
 import org.qrconsult.spm.process.interfaces.CopyProcessServices;
-import org.qrconsult.spm.services.interfaces.DynamicModeling;
-import org.qrconsult.spm.services.interfaces.TemplateServices;
+import br.ufpa.labes.spm.service.interfaces.DynamicModeling;
+import br.ufpa.labes.spm.service.interfaces.TemplateServices;
 import org.qrconsult.spm.util.i18n.Messages;
 
 @Stateless
@@ -89,49 +89,31 @@ public class TemplateServicesImpl implements TemplateServices {
 	COPY_PROC	= "Copy_Process",
 	COPY_TEMP	= "Copy_Template",
 	NEW_VERS_TEMP	= "New_Version_Template",
-	DEC_DEST	= "Decomposed_Destilling";	
-	
-	@EJB
+	DEC_DEST	= "Decomposed_Destilling";
+
 	ITemplateDAO templateDAO;
-	@EJB
 	CopyProcessServices copyServices;
-	@EJB
 	IDescriptionDAO descriptionDAO;
-	@EJB
 	IProcessDAO processDAO;
-	@EJB
 	IDecomposedDAO decomposedDAO;
-	@EJB
 	IProjectDAO projectDAO;
-	@EJB
 	IAgentDAO agentDAO;
-	@EJB
 	IProcessModelDAO processModelDAO;
-	@EJB
 	IArtifactDAO artifactDAO;
-	@EJB
 	IActivityDAO activityDAO;
-	@EJB
 	DynamicModeling dynamicModeling;
-	@EJB
 	IWebAPSEEObjectDAO webAPSEEObjectDAO;
-	@EJB
 	IGraphicCoordinateDAO graphicCoordinateDAO;
-	@EJB
 	IConnectionDAO connectionDAO;
-	@EJB
 	IReqAgentDAO reqAgentDAO;
-	@EJB
 	IReqGroupDAO reqGroupDAO;
-	@EJB
 	IRequiredResourceDAO reqResourceDAO;
-	@EJB
 	IInvolvedArtifactsDAO involvedArtifactsDAO;
 
 	private Query query;
 	private Properties artifactsIdents;
-	private Hashtable<String, Artifact> newArtifacts;	
-	
+	private Hashtable<String, Artifact> newArtifacts;
+
 	@Override
 	public Boolean createTemplate(String ident) {
 		Template template = new Template();
@@ -139,32 +121,32 @@ public class TemplateServicesImpl implements TemplateServices {
 		ProcessModel processModel = new ProcessModel();
 		template.insertIntoTheInstances(processModel);
 		templateDAO.save(template);
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public List<TemplateDTO> getTemplates() {
 		String hql = "select o from " + TEMPLATE_CLASSNAME + " o";
 		this.query = templateDAO.getPersistenceContext().createQuery(hql);
-		
+
 		List<Template> result = query.getResultList();
 		List<TemplateDTO> templatesDTO = this.convertTemplatesToTemplatesDTO(result);
 		System.out.println("lista dos templa:"+templatesDTO);
 		return templatesDTO;
-	}	
-	
+	}
+
 	@Override
-	public String createNewVersion(String template_id, String why, String version_id) {		
+	public String createNewVersion(String template_id, String why, String version_id) {
 		Template template = null;
 		String state = "";
 		try {
 			template = getTemplate(template_id);
-			state = template.getTemplateState();	
+			state = template.getTemplateState();
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
-		
+
 		if(state.equals(Template.DEFINED)){
 			Object[] artifactsIdentsFromProcess = artifactDAO.getArtifactsIdentsFromProcessModelWithoutTemplates(template_id);
 			Properties artifactsIdents = null;
@@ -172,37 +154,37 @@ public class TemplateServicesImpl implements TemplateServices {
 			if( artifactsIdentsFromProcess != null){
 				artifactsIdents = new Properties();
 				String token = "";
-				
+
 				for (int i = 0; i < artifactsIdentsFromProcess.length; i++) {
 					String oldArtifactIdent = (String) artifactsIdentsFromProcess[i];
 					artifactsIdents.put(oldArtifactIdent, oldArtifactIdent);
 				}
 			}
-			
+
 			Template newTemplate = new Template();
 			// Make relationship with Description
 			// Modify newTemplate
 			newTemplate.setIdent(version_id);
-			//Copy relationships in common with Old Template 
+			//Copy relationships in common with Old Template
 			Hashtable<String, String> coordinates = copyServices.copyProcessModelData(template.getTheProcessModel(),newTemplate.getTheProcessModel(),template_id,newTemplate.getIdent(), CopyProcessServiceImpl.NEW_VERS_TEMP, artifactsIdents);
 			newTemplate = (Template)templateDAO.save(newTemplate);
-			
+
 			//Make relationships of Template versioning
 			Description desc = new Description();
 			desc.setTheNewVersion(newTemplate);
 			desc.setTheOldVersion(template);
 			desc.setWhy(why);
-			desc.setDate(new Date());			
-			
+			desc.setDate(new Date());
+
 			desc = (Description)descriptionDAO.save(desc);
-			
+
 			template.insertIntoTheDerivedVersionDescriptions(desc);
 			newTemplate.setTheOriginalVersionDescription(desc);
 			template.setTemplateState(Template.PENDING);
-			
+
 			templateDAO.save(newTemplate);
 			templateDAO.save(template);
-						
+
 			copyServices.saveCoordinates(coordinates, version_id);
 			return newTemplate.getIdent();
 		}else {
@@ -211,23 +193,23 @@ public class TemplateServicesImpl implements TemplateServices {
 		}
 	}
 
-	
+
 	public Object[] getArtifactsIdentsFromProcessModelWithoutTemplates(String template_id){
-		
-		
+
+
 		return  artifactDAO.getArtifactsIdentsFromProcessModelWithoutTemplates(template_id);
 	}
 	@Override
 	public void processDistilling(String process_id, String template_id) {
-		String tar=process_id;  
-		String s[] = tar.split("\\.");  
+		String tar=process_id;
+		String s[] = tar.split("\\.");
 		 process_id = s[0];
 		System.out.println("estado :"+s[0]);
-		Process process = (Process)processDAO.retrieveBySecondaryKey(process_id);	
-		
+		Process process = (Process)processDAO.retrieveBySecondaryKey(process_id);
+
 		String state = process.getPState();
 		System.out.println("estado :"+state);
-				
+
 		if(state.equalsIgnoreCase(Process.FINISHED) || state.equalsIgnoreCase(Process.ENACTING)){
 			Object[] artifactsIdentsFromProcess = artifactDAO.getArtifactsIdentsFromProcessModelWithoutTemplates(process_id);
 			Properties artifactsIdents = null;
@@ -237,8 +219,8 @@ public class TemplateServicesImpl implements TemplateServices {
 				String token = "";
 				for (int i = 0; i < artifactsIdentsFromProcess.length; i++) {
 					String oldArtifactIdent = (String) artifactsIdentsFromProcess[i];
-					String newArtifactIdent = oldArtifactIdent; 
-					
+					String newArtifactIdent = oldArtifactIdent;
+
 					if(oldArtifactIdent.contains("-")){
 						token = oldArtifactIdent.substring(0 , oldArtifactIdent.indexOf("-"));
 						if(!token.equals("") && token.trim().contains(process_id)){
@@ -248,52 +230,52 @@ public class TemplateServicesImpl implements TemplateServices {
 					artifactsIdents.put(oldArtifactIdent, newArtifactIdent);
 				}
 			}
-			
+
 			Template template = new Template();
 			template.setIdent(template_id);
-			
+
 			//Copy relationships in common with Process
 			Hashtable<String, String> coordinates = copyServices.copyProcessModelData(process.getTheProcessModel(),template.getTheProcessModel(),process_id,template.getIdent(), CopyProcessServiceImpl.PROC_DEST, artifactsIdents);
 			template = (Template)templateDAO.save(template);
-			
+
 			templateDAO.save(template);
 			copyServices.saveCoordinates(coordinates, template_id);
-			
+
 		}else if(state.equalsIgnoreCase(Template.DRAFT) || state.equalsIgnoreCase(Template.OUTDATED)|| state.equalsIgnoreCase(Template.DEFINED)||state.equalsIgnoreCase(Template.PENDING)||state.equalsIgnoreCase(Template.NOT_STARTED)){
-			
+
 			System.out.println("atividade n�o iniciada");
 			System.out.println(Messages.getString("srcReuse.TempManag.TemplatesServices.templExecAProce")+" "+state+" "+Messages.getString("srcReuse.TempManag.TemplatesServices.templExecCannBeDist"));
-			
+
 		}
-		
+
 		else System.out.println(Messages.getString("srcReuse.TempManag.TemplatesServices.templExecAProce")+" "+state+" "+Messages.getString("srcReuse.TempManag.TemplatesServices.templExecCannBeDist")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
 	@Override
 	public boolean copyTemplate(String newTemplateIdent,String oldTemplateIdent) throws DAOException {
-		
+
 		Object[] artifactsIdentsFromUser = artifactDAO.getArtifactsIdentsFromProcessModelWithoutTemplates(oldTemplateIdent);
-		
+
 		if( artifactsIdentsFromUser != null){
 
 			this.artifactsIdents = new Properties();
 
 			for (int i = 0; i < artifactsIdentsFromUser.length; i++) {
-				
+
 				String artifactIdent = (String) artifactsIdentsFromUser[i];
-				
+
 				this.artifactsIdents.put(artifactIdent, artifactIdent);
 			}
 		}
 
 		Template sourceTemplate=null;
 		boolean abort=false;
-		
+
 		Object newProcess= templateDAO.retrieveBySecondaryKey(newTemplateIdent);
 		if(newProcess!=null){
 			abort=true;
 		}
-		
+
 		if(abort){
 			throw new DAOException("Template "+newTemplateIdent+" already exists! Please choose a new ident!");
 		}
@@ -331,9 +313,9 @@ public class TemplateServicesImpl implements TemplateServices {
 			String newProcessIdent, String operationType) {
 		try{
 			Hashtable<String, String> coordinates = new Hashtable<String, String>();
-			
+
 			Collection<Activity> activities = oldProcessModel.getTheActivity();
-			
+
 			Collection<Connection> connections = oldProcessModel.getTheConnection();
 
 			Collection<Activity> newActivities = null;//############################
@@ -341,7 +323,7 @@ public class TemplateServicesImpl implements TemplateServices {
 			newActivities = copyActivitiesOnProcessModel(activities,
 					oldProcessIdent, newProcessIdent, operationType,
 					newProcessIdent, coordinates);
-			
+
 			newProcessModel.insertIntoTheActivity(newActivities);
 
 			Hashtable<String, Activity> activitiesTable = generateActivitiesTable(newActivities);
@@ -352,24 +334,24 @@ public class TemplateServicesImpl implements TemplateServices {
 					oldProcessIdent, newProcessIdent, activitiesTable,
 					operationType, coordinates);
 			newProcessModel.insertIntoTheConnection(newConnections);
-			
+
 			return coordinates;
 		}catch(WebapseeException e){
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param activities
 	 * @param oldProcessIdent
 	 * @param newProcessIdent
 	 * @return
-	 * @throws DAOException 
+	 * @throws DAOException
 	 */
 	private Collection<Activity> copyActivitiesOnProcessModel(Collection<Activity> activities, String oldProcessIdent, String newProcessIdent, String operationType, String current_level, Hashtable<String, String> coordinates) throws DAOException {
 		Collection<Activity> newActivities = new HashSet<Activity>();
-		
+
 		for(Iterator<Activity> activityIterator = activities.iterator(); activityIterator.hasNext();){
 			Activity currentActivity = activityIterator.next();
 			Activity newActivity =null;
@@ -378,7 +360,7 @@ public class TemplateServicesImpl implements TemplateServices {
 				String newActivityIdent = currentActivity.getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 
 				this.addCoordinate(currentActivity.getOid(), currentActivity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+" + newActivityIdent, coordinates);
-				
+
 				if(currentActivity instanceof Normal){
 					newActivity = new Normal();
 					newActivity.setIdent(newActivityIdent);
@@ -407,7 +389,7 @@ public class TemplateServicesImpl implements TemplateServices {
 		return newActivities;
 
 	}
-	
+
 	private void copyDecomposedProperties(Decomposed newDecomposed, Decomposed currentDecomposed,String oldProcessIdent,String newProcessIdent, String operationType, Hashtable<String, String> coordinates) throws DAOException {
 		if(currentDecomposed.getTheActivityType()!=null){
 			newDecomposed.setTheActivityType(currentDecomposed.getTheActivityType());
@@ -424,8 +406,8 @@ public class TemplateServicesImpl implements TemplateServices {
 			newDecomposed.setTheReferedProcessModel(newReferedProcessModel);
 		}
 
-	}//END METHOD	
-	
+	}//END METHOD
+
 	private void copyAutomaticProperties(Automatic newAutomatic, Automatic currentAutomatic) {
 		// set common attribute
 		newAutomatic.setTheArtifact(currentAutomatic.getTheArtifact());
@@ -449,13 +431,13 @@ public class TemplateServicesImpl implements TemplateServices {
 			newSubRoutine.setTheToolParameters(newToolParameters);
 		}//end if
 
-	}//end method	
-	
+	}//end method
+
 	private void addCoordinate(Integer theReferredOid, String className, String newObjRef, Hashtable<String, String> coordinates) throws DAOException{
 		String currentObjKey = className + ":" + String.valueOf(theReferredOid);
 		coordinates.put(currentObjKey, newObjRef);
 	}
-	
+
 	/**
 	 * @param newActivities
 	 * @return
@@ -472,39 +454,39 @@ public class TemplateServicesImpl implements TemplateServices {
 	public void saveCoordinates(Hashtable<String, String> coordinates, String processIdent){
 		try{
 			Enumeration<String> enumer = coordinates.keys();
-			
+
 			WebAPSEEObject webObj;
 			GraphicCoordinate coord, newCoord;
-			
+
 			Activity act;
 			Connection con;
 			ReqAgent reqAg;
 			ReqGroup reqGr;
 			RequiredResource reqRes;
-			
+
 			while (enumer.hasMoreElements()) {
 				String currentObjKey = (String) enumer.nextElement();
-				
+
 				StringTokenizer currentObjTokenizer = new StringTokenizer(currentObjKey, ":");
 				String className = currentObjTokenizer.nextToken();
 				Integer theReferredOid = Integer.valueOf(currentObjTokenizer.nextToken());
-				
+
 				webObj = webAPSEEObjectDAO.retrieveWebAPSEEObject(theReferredOid, className);
-				
+
 				if(webObj!=null){
 					String key = coordinates.get(currentObjKey);
-					
+
 					StringTokenizer tokenizer = new StringTokenizer(key,"+");
 					String webObjType = tokenizer.nextToken();
 					String webObjKey = tokenizer.nextToken();
-					
+
 					coord = webObj.getTheGraphicCoordinate();
 					newCoord = new GraphicCoordinate();
 					newCoord.setTheProcess(processIdent);
 					newCoord.setX(coord.getX());
 					newCoord.setY(coord.getY());
 					newCoord.setVisible(coord.isVisible());
-					
+
 					if(webObjType.equals(WebAPSEEObject.ACTIVITY)){
 						act = (Activity) activityDAO.retrieveBySecondaryKey(webObjKey);
 						if(act!=null){
@@ -519,11 +501,11 @@ public class TemplateServicesImpl implements TemplateServices {
 						}
 					}else{
 						StringTokenizer webObjTokenizer = new StringTokenizer(webObjKey,":");
-						
+
 						String typeIdent = null;
 						String instanceIdent = null;
 						String normalIdent = null;
-						
+
 						if(webObjTokenizer.countTokens()==3){
 							typeIdent = webObjTokenizer.nextToken();
 							instanceIdent = webObjTokenizer.nextToken();
@@ -533,7 +515,7 @@ public class TemplateServicesImpl implements TemplateServices {
 							instanceIdent = "";
 							normalIdent = webObjTokenizer.nextToken();
 						}
-						
+
 						if(webObjType.equals(WebAPSEEObject.REQ_AGENT)){
 							reqAg = reqAgentDAO.findReqAgentFromProcessModel(instanceIdent, typeIdent, normalIdent);
 							if(reqAg!=null){
@@ -560,59 +542,59 @@ public class TemplateServicesImpl implements TemplateServices {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	public void decomposedDistilling(String dec_id, String template_id) throws WebapseeException {
-		
-		Decomposed decomposed = (Decomposed)decomposedDAO.retrieveBySecondaryKey(dec_id);	
-		
+
+		Decomposed decomposed = (Decomposed)decomposedDAO.retrieveBySecondaryKey(dec_id);
+
 		String state = decomposed.getTheReferedProcessModel().getPmState();
-				
+
 		if(!state.equals(ProcessModel.REQUIREMENTS)){
-			
+
 			Template template = new Template();
-			
+
 			template.setIdent(template_id);
-			
+
 			//Copy relationships in common with Process
 			Hashtable<String, String> coordinates =  copyServices.copyProcessModelData(decomposed.getTheReferedProcessModel(),template.getTheProcessModel(),dec_id,template.getIdent(), CopyProcessServiceImpl.DEC_DEST, null);
-			
+
 			template = (Template)templateDAO.save(template);
 
 			copyServices.saveCoordinates(coordinates, template_id);
 		}else System.out.println(Messages.getString("srcReuse.TempManag.TemplatesServices.templExecADecomp")+" "+state+" "+Messages.getString("srcReuse.TempManag.TemplatesServices.templExecCannBeDist")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
 	public String getStateOfTemplate(String template_id) throws WebapseeException{
 
 		Template template = getTemplate(template_id);
-	
+
 		String state = template.getTemplateState();
-		
+
 		if(state != null && !state.equals(""))
 			return state;
-		
+
 		return null;
 	}
-	
+
 	@Override
 	public void processInstantiation(String template_id, String instance_id, String userIdent) throws WebapseeException {
 		Template template = getTemplate(template_id);
-		
+
 		Project projectExists = projectDAO.retrieveBySecondaryKey(instance_id);
 		if(projectExists != null) {
 			throw new WebapseeException("O Projeto " + instance_id + " já foi cadastrado no banco.");
 		} else {
 			Object[] artifactsIdentsFromTemplate = artifactDAO.getArtifactsIdentsFromProcessModelWithoutTemplates(template_id);
 			Properties artifactsIdents = null;
-	
+
 			if( artifactsIdentsFromTemplate != null){
 				artifactsIdents = new Properties();
 				String token = "";
 				for (int i = 0; i < artifactsIdentsFromTemplate.length; i++) {
 					String oldArtifactIdent = (String) artifactsIdentsFromTemplate[i];
-					String newArtifactIdent = oldArtifactIdent; 
-					
+					String newArtifactIdent = oldArtifactIdent;
+
 					if(oldArtifactIdent.contains("-")){
 						token = oldArtifactIdent.substring(0 , oldArtifactIdent.indexOf("-"));
 						if(!token.equals("") && token.trim().contains(template_id)){
@@ -624,41 +606,41 @@ public class TemplateServicesImpl implements TemplateServices {
 			}
 			Process instance = new Process();
 			instance.setIdent(instance_id);
-	
+
 			//Copy relationships in common with Process
 			Hashtable<String, String> coordinates = copyServices.copyProcessModelData(template.getTheProcessModel(),instance.getTheProcessModel(),template_id,instance.getIdent(), CopyProcessServiceImpl.PROC_INST, artifactsIdents);
 			instance = (Process)processDAO.save(instance);
-			
+
 			//Create Project for the instance
 			Project project = new Project();
 			project.setIdent(instance_id);
 			project.setName(instance_id);
-			
+
 			project = (Project) projectDAO.save(project);
 			project.setProcessRefered(instance);
 			projectDAO.update(project);
-			
+
 			//Define the manager to created project
 			Agent manager = (Agent) agentDAO.retrieveBySecondaryKey(userIdent);
 			instance.insertIntoTheAgent(manager);
 			processDAO.update(instance);
-	
+
 			//Make relationships of Template versioning
 			ProcessModel pmodel = instance.getTheProcessModel();
 			pmodel.setTheOrigin(template);
 			template.insertIntoTheInstances(pmodel);
-	
+
 			processModelDAO.save(pmodel);
 			templateDAO.save(template);
 			copyServices.saveCoordinates(coordinates, instance_id);
 		}
 	}
-	
+
 	public void processComposition(String template_id, String currentLevel_id, Object[] artifactsIdentsFromUser) throws DAOException {
 		System.out.println("caiu na composi��o: "+artifactsIdentsFromUser[0]);
 		System.out.println("caiu na composi��o 2: "+artifactsIdentsFromUser[1]);
-		
-		
+
+
 //		Object[] artifactsIdentsFromUser = artifactDAO.getArtifactsIdentsFromProcessModelWithoutTemplates(template_id);
 
 		Properties artifactsIdents = null;
@@ -669,7 +651,7 @@ public class TemplateServicesImpl implements TemplateServices {
 
 			for (int i = 0; i < artifactsIdentsFromUser.length; i++) {
 				SimpleUpdateDTO artifactIdent = (SimpleUpdateDTO)artifactsIdentsFromUser[i];
-				
+
 				artifactsIdents.put(artifactIdent.getOldValue(), artifactIdent.getNewValue());
 			}
 		}
@@ -684,12 +666,12 @@ public class TemplateServicesImpl implements TemplateServices {
 			if(pModel1.getTheActivity().size()>0 || pModel1.getTheConnection().size()>0){
 				Collection actIds = this.getActivitiesToDelete(pModel1);
 				Collection conIds = this.getConnectionsToDelete(pModel1);
-				
+
 				Iterator iterActIds = actIds.iterator();
 				while (iterActIds.hasNext()) {
 					String id = (String) iterActIds.next();
 					try {
-						//The delete method from DynamicModelin is Invoked for each activity   
+						//The delete method from DynamicModelin is Invoked for each activity
 						dynamicModeling.deleteActivity(id);
 					} catch (DAOException e1) {
 						// TODO Auto-generated catch block
@@ -704,7 +686,7 @@ public class TemplateServicesImpl implements TemplateServices {
 				while (iterConIds.hasNext()) {
 					String id = (String) iterConIds.next();
 					try {
-						//The delete method from DynamicModelin is Invoked for each connection   
+						//The delete method from DynamicModelin is Invoked for each connection
 						dynamicModeling.deleteConnection(id);
 					} catch (DAOException e1) {
 						// TODO Auto-generated catch block
@@ -735,25 +717,25 @@ public class TemplateServicesImpl implements TemplateServices {
 			copyServices.saveCoordinates(coordinates, currentLevel_id.substring(0, currentLevel_id.indexOf(".")));
 		}
 		else if(state.equals(Template.DRAFT) || state.equals(Template.OUTDATED)|| state.equals(Template.ENACTING)||state.equals(Template.FINISHED )||state.equals(Template.NOT_STARTED)){
-			
+
 			System.out.println("atividade n�o definida agora"+state);
-			
+
 		}
 		else System.out.println(Messages.getString("srcReuse.TempManag.TemplatesServices.templExecAtemplInThe")+" "+state+" "+Messages.getString("srcReuse.TempManag.TemplatesServices.templExecCannBeInst"));
 	}
-	
+
 	//Delete activities of the Process Model
 	private Collection<String> getActivitiesToDelete(ProcessModel pModel){
-		
-		
+
+
 		Collection<String> actIds = new HashSet<String>();
-		
+
 		//Get activities of the Process Model
 		Collection activities = pModel.getTheActivity();
-		
+
 		Iterator iterActivity = activities.iterator();
 		while (iterActivity.hasNext()) {
-			
+
 			Activity activity = (Activity)iterActivity.next();
 			if(activity != null){
 				actIds.add(activity.getIdent());
@@ -764,16 +746,16 @@ public class TemplateServicesImpl implements TemplateServices {
 
 	//Delete connections of the Process Model
 	private Collection<String> getConnectionsToDelete(ProcessModel pModel){
-		
-		
+
+
 		Collection<String> conIds = new HashSet<String>();
-		
+
 		//Get connections of the Process Model
 		Collection connections = pModel.getTheConnection();
-		
+
 		Iterator iterConnection = connections.iterator();
 		while (iterConnection.hasNext()) {
-			
+
 			Connection connection = (Connection)iterConnection.next();
 			if(connection != null){
 				conIds.add(connection.getIdent());
@@ -785,32 +767,32 @@ public class TemplateServicesImpl implements TemplateServices {
 	@Override
 	public boolean toBecomeDefined(String template_id) throws WebapseeException {
 		Template template = getTemplate(template_id);
-		String state = template.getTemplateState();	
-		
+		String state = template.getTemplateState();
+
 		if(state.equals(Template.DRAFT)){
 			template.setTemplateState(Template.DEFINED);
-			
+
 			Description desc = template.getTheOriginalVersionDescription();
 			if(desc!=null){
 				Template oldTemplate = desc.getTheOldVersion();
 				oldTemplate.setTemplateState(Template.OUTDATED);
 				templateDAO.update(oldTemplate);
 			}
-			
+
 			templateDAO.save(template);
 			return true;
 		}else {
-			return false;			
+			return false;
 		}
 	}
-	
+
 	private TemplateDTO convertTemplateToTemplateDTO(Template template) {
 		TemplateDTO dto = new TemplateDTO();
 		dto.setIdent(template.getIdent());
 		dto.setTemplateState(template.getTemplateState());
 
 		dto.setTheInstances(new ArrayList<ProcessModelDTO>());
-		
+
 		return dto;
 	}
 
@@ -821,7 +803,7 @@ public class TemplateServicesImpl implements TemplateServices {
 		}
 		return templatesDTO;
 	}
-	
+
 	private Template getTemplate(String template_id) throws DAOException{
 		//checks of parameters
         Template temp;
@@ -834,13 +816,13 @@ public class TemplateServicesImpl implements TemplateServices {
         // checks related to the state of the system
         return temp;
 	}
-	
+
 	/**
 	 * @param connections
 	 * @param oldProcessIdent
 	 * @param newProcessIdent
 	 * @return
-	 * @throws DAOException 
+	 * @throws DAOException
 	 */
 	private Collection<Connection> copyConnectionsOnProcessModel(Collection<Connection> connections, String oldProcessIdent, String newProcessIdent,Hashtable<String,Activity> activitiesTable, String operationType, Hashtable<String, String> coordinates) throws DAOException {
 		//need to take care about all kind of connections
@@ -930,17 +912,17 @@ public class TemplateServicesImpl implements TemplateServices {
 					if( ((ArtifactCon)currentConnection).getTheArtifactType()!=null){
 						((ArtifactCon)newConnection).insertIntoTheArtifactType(	((ArtifactCon)currentConnection).getTheArtifactType());
 					}
-					
-					Artifact currentArtifact = ((ArtifactCon)currentConnection).getTheArtifact(); 
+
+					Artifact currentArtifact = ((ArtifactCon)currentConnection).getTheArtifact();
 					if( currentArtifact!=null ){
 						String currentArtifactIdent = currentArtifact.getIdent();
 						String newArtifactIdent = this.artifactsIdents.getProperty(currentArtifactIdent);
-						
+
 						if(newArtifactIdent==null || currentArtifactIdent.equals(newArtifactIdent)){
 							((ArtifactCon)newConnection).insertIntoTheArtifact(	currentArtifact );
 						}else{
 							try {
-								Artifact newArtifact = this.newArtifacts.get(newArtifactIdent); 
+								Artifact newArtifact = this.newArtifacts.get(newArtifactIdent);
 								if(newArtifact==null){
 
 									newArtifact = (Artifact) artifactDAO.retrieveBySecondaryKey(newArtifactIdent);
@@ -960,7 +942,7 @@ public class TemplateServicesImpl implements TemplateServices {
 
 						}
 					}
-					
+
 					//about activities
 					//ToActivity
 						Collection toActivities = ((ArtifactCon)currentConnection).getToActivity();
@@ -990,7 +972,7 @@ public class TemplateServicesImpl implements TemplateServices {
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
 					this.addCoordinate(((ArtifactCon)currentConnection).getOid(), ((ArtifactCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
-					
+
 				}//########################
 				else if(currentConnection instanceof Branch){
 
@@ -1109,7 +1091,7 @@ public class TemplateServicesImpl implements TemplateServices {
 					}//end for
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
-					
+
 					this.addCoordinate(((Join)currentConnection).getOid(), ((Join)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}//end join processing
 
@@ -1211,8 +1193,8 @@ public class TemplateServicesImpl implements TemplateServices {
 		}//end for postProcessing
 
 		return connectionsToResult;
-	}	
-	
+	}
+
 	private Collection<ToolParameters> copySubroutineToolParameters(Collection theToolParameters, Subroutine newSubRoutine) {
 		Collection<ToolParameters> newParameters = new LinkedList<ToolParameters>();
 
@@ -1260,7 +1242,7 @@ public class TemplateServicesImpl implements TemplateServices {
 	/**
 	 * @param destinationNormal
 	 * @param sourceNormal
-	 * @throws DAOException 
+	 * @throws DAOException
 	 */
 	private void copyNormalProperties(Normal destinationNormal,Normal sourceNormal, String operationType, String current_level, Hashtable<String, String> coordinates) throws DAOException{
 		//simple attributes
@@ -1323,19 +1305,19 @@ public class TemplateServicesImpl implements TemplateServices {
 	 * @param theRequiredPeople
 	 * @param destinationNormal
 	 * @return
-	 * @throws DAOException 
+	 * @throws DAOException
 	 */
 	private Collection<RequiredPeople> copyRequiredPeople(Collection theRequiredPeople, Normal destinationNormal, String operationType, Hashtable<String, String> coordinates) throws DAOException {
 		Collection<RequiredPeople> newRequiredPeoples = new HashSet<RequiredPeople>();
-		
+
 		String coordinateKey = null;
 		Collection<String> roles = new HashSet<String>();
-		
+
 		for(Iterator<RequiredPeople> requiredIterator= theRequiredPeople.iterator();requiredIterator.hasNext();){
 
 			RequiredPeople currentReqPeople = requiredIterator.next();
 			if(currentReqPeople!=null){
-				
+
 				if(currentReqPeople instanceof ReqAgent ){
 					ReqAgent currentReqAg = (ReqAgent)currentReqPeople;
 					ReqAgent newReqAgent = new ReqAgent();
@@ -1343,7 +1325,7 @@ public class TemplateServicesImpl implements TemplateServices {
 						newReqAgent.insertIntoTheRole( currentReqAg.getTheRole());
 						roles.add(currentReqAg.getTheRole().getIdent());
 						coordinateKey = newReqAgent.getTheRole().getIdent();
-						
+
 						if(!operationType.equals(PROC_DEST)){
 							if(currentReqAg.getTheAgent()!=null){
 								newReqAgent.insertIntoTheAgent(currentReqAg.getTheAgent());
@@ -1351,15 +1333,15 @@ public class TemplateServicesImpl implements TemplateServices {
 								}
 						}
 						coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
-						
+
 						//about ReqAgentRequiresAbility
 						Collection<ReqAgentRequiresAbility> newReqAgReqAbility=null;
 						newReqAgReqAbility = copyReqAgentReqAbility(currentReqAg.getTheReqAgentRequiresAbility(),newReqAgent);
 						newReqAgent.setTheReqAgentRequiresAbility(newReqAgReqAbility);
-						
+
 						this.addCoordinate(currentReqAg.getOid(), currentReqAg.getClass().getSimpleName(), WebAPSEEObject.REQ_AGENT +"+"+ coordinateKey, coordinates);
 						coordinateKey = null;
-						
+
 						//the common attribute normal activity
 						newReqAgent.insertIntoTheNormal(destinationNormal);
 
@@ -1372,20 +1354,20 @@ public class TemplateServicesImpl implements TemplateServices {
 
 					if(currentReqGroup.getTheGroupType()!=null){
 						newReqGroup.insertIntoTheGroupType( currentReqGroup.getTheGroupType() );
-						coordinateKey = newReqGroup.getTheGroupType().getIdent(); 
+						coordinateKey = newReqGroup.getTheGroupType().getIdent();
 						}
-					
+
 					if(!!operationType.equals(PROC_DEST)){
 						if(currentReqGroup.getTheGroup()!=null){
 							newReqGroup.insertIntoTheGroup(currentReqGroup.getTheGroup());
 							coordinateKey = coordinateKey + ":" + newReqGroup.getTheGroup().getIdent();
 							}
 					}
-					
+
 					coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
 					this.addCoordinate(currentReqGroup.getOid(), currentReqGroup.getClass().getSimpleName(), WebAPSEEObject.REQ_GROUP +"+"+coordinateKey, coordinates);
 					coordinateKey = null;
-					
+
 					//the common attribute normal activity
 					newReqGroup.insertIntoTheNormal(destinationNormal);
 
@@ -1436,13 +1418,13 @@ public class TemplateServicesImpl implements TemplateServices {
 	 * @param theRequiredResource
 	 * @param destinationNormal
 	 * @return
-	 * @throws DAOException 
+	 * @throws DAOException
 	 */
 	private Collection<RequiredResource> copyRequiredResources(Collection<RequiredResource> theRequiredResource, Normal destinationNormal, String operationType, Hashtable<String, String> coordinates) throws DAOException {
 		Collection<RequiredResource> newRequiredResources = new HashSet<RequiredResource>();
 
 		String coordinateKey = null;
-		
+
 		for(Iterator<RequiredResource> requiredIterator= theRequiredResource.iterator();requiredIterator.hasNext();){
 
 			RequiredResource currentReqResource = requiredIterator.next();
@@ -1465,7 +1447,7 @@ public class TemplateServicesImpl implements TemplateServices {
 				coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
 				this.addCoordinate(currentReqResource.getOid(), currentReqResource.getClass().getSimpleName(), WebAPSEEObject.REQ_RESOURCE +"+"+coordinateKey, coordinates);
 				coordinateKey = null;
-				
+
 				//add to Main Collection
 				newRequiredResources.add(newRequiredResource);
 
@@ -1511,10 +1493,10 @@ public class TemplateServicesImpl implements TemplateServices {
 	 * @param newNormalReference
 	 * @param kindRelationship
 	 * @return
-	 * @throws DAOException 
+	 * @throws DAOException
 	 */
 	private Collection<InvolvedArtifacts> copyInvolvedArtifacts(Collection<InvolvedArtifacts> currentInvolvedArtifacts,Normal newNormalReference,int kindRelationship, String current_level) throws DAOException {
-		
+
 		Collection<InvolvedArtifacts> newInvolvedArtifacts = new HashSet<InvolvedArtifacts>();
 		for(Iterator<InvolvedArtifacts> involvedIterator= currentInvolvedArtifacts.iterator();involvedIterator.hasNext();){
 			InvolvedArtifacts currentInvolved = involvedIterator.next();
@@ -1523,13 +1505,13 @@ public class TemplateServicesImpl implements TemplateServices {
 				if(currentInvolved.getTheArtifactType()!=null){
 					newInvolved.insertIntoTheArtifactType(currentInvolved.getTheArtifactType());
 				}
-				
-				Artifact currentArtifact = currentInvolved.getTheArtifact(); 
+
+				Artifact currentArtifact = currentInvolved.getTheArtifact();
 				if(currentArtifact!=null){
 					String currentArtifactIdent = currentArtifact.getIdent();
-					
+
 					String newArtifactIdent = this.artifactsIdents.getProperty(currentArtifactIdent);
-					
+
 					if(newArtifactIdent==null || currentArtifactIdent.equals(newArtifactIdent)){
 						newInvolved.insertIntoTheArtifact(currentArtifact);
 					}else{
@@ -1548,7 +1530,7 @@ public class TemplateServicesImpl implements TemplateServices {
 						this.newArtifacts.put(newArtifactIdent, newArtifact);
 					}
 				}
-				
+
 				if(kindRelationship==TO_INVOLVED){
 					newInvolved.insertIntoInInvolvedArtifacts(newNormalReference);
 				}else if(kindRelationship==FROM_INVOLVED){
@@ -1561,7 +1543,7 @@ public class TemplateServicesImpl implements TemplateServices {
 		}//END FOR
 		//after all, retrieve correct collection
 		return newInvolvedArtifacts;
-	}//end method	
-	
+	}//end method
+
 
 }

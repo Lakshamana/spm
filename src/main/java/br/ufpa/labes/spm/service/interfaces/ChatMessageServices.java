@@ -1,16 +1,15 @@
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
 import java.util.List;
 
-import javax.ejb.Remote;
 
-import org.qrconsult.spm.model.chat.ChatMessage;
+import br.ufpa.labes.spm.domain.ChatMessage;
 
 @Remote
 public interface ChatMessageServices {
 
 	public List<ChatMessage> buscarTodasAsMensagensDaConversa(String ident);
-	
+
 	public void salvarMensagem(ChatMessage message, String de);
-	
+
 }

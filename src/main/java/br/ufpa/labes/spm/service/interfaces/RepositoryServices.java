@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.qrconsult.spm.beans.ArtifactMngContent;
 import org.qrconsult.spm.beans.ArtifactMngDownload;
 import org.qrconsult.spm.dtos.formRepositorios.RepositoriesDTO;
 import org.qrconsult.spm.dtos.formRepositorios.RepositoryDTO;
-import org.qrconsult.spm.exceptions.WebapseeException;
-import org.qrconsult.spm.model.organizationPolicies.Repository;
+import br.ufpa.labes.spm.exceptions.WebapseeException;
+import br.ufpa.labes.spm.domain.Repository;
 
 @Remote
 public interface RepositoryServices {

@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
 import java.sql.SQLException;
 
@@ -7,7 +7,7 @@ import javax.ejb.Remote;
 import org.qrconsult.spm.dtos.formResources.ResourceDTO;
 import org.qrconsult.spm.dtos.formResources.ResourcesDTO;
 import org.qrconsult.spm.dtos.formTypes.TypesDTO;
-import org.qrconsult.spm.model.resources.Resource;
+import br.ufpa.labes.spm.domain.Resource;
 
 @Remote
 public interface ResourceServices {

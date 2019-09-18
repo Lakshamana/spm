@@ -1,20 +1,19 @@
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
 import java.util.Collection;
 
-import javax.ejb.Remote;
 
 import org.qrconsult.spm.dtos.dynamicModeling.WebapseeObjectDTO;
-import org.qrconsult.spm.exceptions.DAOException;
-import org.qrconsult.spm.exceptions.ModelingException;
-import org.qrconsult.spm.exceptions.ModelingWarning;
-import org.qrconsult.spm.exceptions.WebapseeException;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.artifacts.Artifact;
-import org.qrconsult.spm.model.connections.MultipleCon;
-import org.qrconsult.spm.model.tools.ClassMethodCall;
-import org.qrconsult.spm.model.tools.Script;
-import org.qrconsult.spm.model.types.ArtifactType;
+import br.ufpa.labes.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.exceptions.ModelingException;
+import br.ufpa.labes.spm.exceptions.ModelingWarning;
+import br.ufpa.labes.spm.exceptions.WebapseeException;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Artifact;
+import br.ufpa.labes.spm.domain.MultipleCon;
+import br.ufpa.labes.spm.domain.ClassMethodCall;
+import br.ufpa.labes.spm.domain.Script;
+import br.ufpa.labes.spm.domain.ArtifactType;
 
 @Remote
 public interface DynamicModeling {
@@ -208,7 +207,7 @@ public interface DynamicModeling {
 
 	/**
 	 * Rule G3.7 and 3.8
-	 * 
+	 *
 	 * @throws ModelingWarning
 	 */
 	public Integer addFeedbackConnection(String act_id_from,
@@ -470,7 +469,7 @@ public interface DynamicModeling {
 
 	public void imprimirNoConsole(String mensagem);
 
-	public String newInputArtifact(String level_id, String artifactIdent, String activityIdent) 
+	public String newInputArtifact(String level_id, String artifactIdent, String activityIdent)
 			throws WebapseeException, ModelingException;
 
 	public String newOutputArtifact(String level_id, String artifactIdent,

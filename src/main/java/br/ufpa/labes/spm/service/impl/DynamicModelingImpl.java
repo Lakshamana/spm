@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -8,102 +8,101 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 
-import org.qrconsult.spm.dataAccess.impl.plainActivities.AutomaticDAO;
-import org.qrconsult.spm.dataAccess.impl.types.ArtifactTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.activities.IActivityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.activities.IDecomposedDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IGroupDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IRoleDAO;
-import org.qrconsult.spm.dataAccess.interfaces.artifacts.IArtifactDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IArtifactConDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IBranchCondToActivityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IBranchCondToMultipleConDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IBranchDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IConnectionDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IJoinDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IMultipleConDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.ISimpleConDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IAutomaticDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IInvolvedArtifactsDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.INormalDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IParametersDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IReqAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IReqGroupDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IRequiredResourceDAO;
-import org.qrconsult.spm.dataAccess.interfaces.policies.staticPolicies.IPolConditionDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessModelDAO;
-import org.qrconsult.spm.dataAccess.interfaces.resources.IConsumableDAO;
-import org.qrconsult.spm.dataAccess.interfaces.resources.IResourceDAO;
-import org.qrconsult.spm.dataAccess.interfaces.taskagenda.IProcessAgendaDAO;
-import org.qrconsult.spm.dataAccess.interfaces.taskagenda.ITaskDAO;
-import org.qrconsult.spm.dataAccess.interfaces.tools.ISubroutineDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IArtifactTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IGroupTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IResourceTypeDAO;
+import br.ufpa.labes.spm.repository.impl.plainActivities.AutomaticDAO;
+import br.ufpa.labes.spm.repository.impl.types.ArtifactTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
+import br.ufpa.labes.spm.repository.interfaces.activities.IDecomposedDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IRoleDAO;
+import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IArtifactConDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchCondToActivityDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchCondToMultipleConDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IConnectionDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IJoinDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IMultipleConDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.ISimpleConDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IAutomaticDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IInvolvedArtifactsDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.INormalDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IParametersDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredResourceDAO;
+import br.ufpa.labes.spm.repository.interfaces.policies.staticPolicies.IPolConditionDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessModelDAO;
+import br.ufpa.labes.spm.repository.interfaces.resources.IConsumableDAO;
+import br.ufpa.labes.spm.repository.interfaces.resources.IResourceDAO;
+import br.ufpa.labes.spm.repository.interfaces.taskagenda.IProcessAgendaDAO;
+import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
+import br.ufpa.labes.spm.repository.interfaces.tools.ISubroutineDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IGroupTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
 import org.qrconsult.spm.dtos.dynamicModeling.WebapseeObjectDTO;
-import org.qrconsult.spm.exceptions.DAOException;
-import org.qrconsult.spm.exceptions.ModelingException;
-import org.qrconsult.spm.exceptions.ModelingWarning;
-import org.qrconsult.spm.exceptions.WebapseeException;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.activities.Decomposed;
-import org.qrconsult.spm.model.activities.Plain;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.agent.AgentPlaysRole;
-import org.qrconsult.spm.model.agent.Group;
-import org.qrconsult.spm.model.agent.Role;
-import org.qrconsult.spm.model.artifacts.Artifact;
-import org.qrconsult.spm.model.connections.ArtifactCon;
-import org.qrconsult.spm.model.connections.Branch;
-import org.qrconsult.spm.model.connections.BranchAND;
-import org.qrconsult.spm.model.connections.BranchCond;
-import org.qrconsult.spm.model.connections.BranchCondToActivity;
-import org.qrconsult.spm.model.connections.BranchCondToMultipleCon;
-import org.qrconsult.spm.model.connections.Connection;
-import org.qrconsult.spm.model.connections.Dependency;
-import org.qrconsult.spm.model.connections.Feedback;
-import org.qrconsult.spm.model.connections.Join;
-import org.qrconsult.spm.model.connections.MultipleCon;
-import org.qrconsult.spm.model.connections.Sequence;
-import org.qrconsult.spm.model.connections.SimpleCon;
-import org.qrconsult.spm.model.log.ModelingActivityEvent;
-import org.qrconsult.spm.model.plainActivities.Automatic;
-import org.qrconsult.spm.model.plainActivities.EnactionDescription;
-import org.qrconsult.spm.model.plainActivities.InvolvedArtifacts;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.model.plainActivities.Parameters;
-import org.qrconsult.spm.model.plainActivities.ReqAgent;
-import org.qrconsult.spm.model.plainActivities.ReqGroup;
-import org.qrconsult.spm.model.plainActivities.RequiredPeople;
-import org.qrconsult.spm.model.plainActivities.RequiredResource;
-import org.qrconsult.spm.model.policies.staticPolicies.PolCondition;
-import org.qrconsult.spm.model.processKnowledge.ActivityEstimation;
-import org.qrconsult.spm.model.processKnowledge.ActivityMetric;
-import org.qrconsult.spm.model.processModels.Process;
-import org.qrconsult.spm.model.processModels.ProcessModel;
-import org.qrconsult.spm.model.resources.Consumable;
-import org.qrconsult.spm.model.resources.Exclusive;
-import org.qrconsult.spm.model.resources.Resource;
-import org.qrconsult.spm.model.resources.Shareable;
-import org.qrconsult.spm.model.taskagenda.ProcessAgenda;
-import org.qrconsult.spm.model.taskagenda.Task;
-import org.qrconsult.spm.model.taskagenda.TaskAgenda;
-import org.qrconsult.spm.model.tools.ClassMethodCall;
-import org.qrconsult.spm.model.tools.Script;
-import org.qrconsult.spm.model.tools.Subroutine;
-import org.qrconsult.spm.model.types.ActivityType;
-import org.qrconsult.spm.model.types.ArtifactType;
-import org.qrconsult.spm.model.types.GroupType;
-import org.qrconsult.spm.model.types.ResourceType;
-import org.qrconsult.spm.model.types.Type;
-import org.qrconsult.spm.services.interfaces.DynamicModeling;
-import org.qrconsult.spm.services.interfaces.EnactmentEngineLocal;
-import org.qrconsult.spm.services.interfaces.Logging;
-import org.qrconsult.spm.services.interfaces.NotificationServices;
+import br.ufpa.labes.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.exceptions.ModelingException;
+import br.ufpa.labes.spm.exceptions.ModelingWarning;
+import br.ufpa.labes.spm.exceptions.WebapseeException;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.AgentPlaysRole;
+import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.Role;
+import br.ufpa.labes.spm.domain.Artifact;
+import br.ufpa.labes.spm.domain.ArtifactCon;
+import br.ufpa.labes.spm.domain.Branch;
+import br.ufpa.labes.spm.domain.BranchAND;
+import br.ufpa.labes.spm.domain.BranchCond;
+import br.ufpa.labes.spm.domain.BranchCondToActivity;
+import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
+import br.ufpa.labes.spm.domain.Connection;
+import br.ufpa.labes.spm.domain.Dependency;
+import br.ufpa.labes.spm.domain.Feedback;
+import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.MultipleCon;
+import br.ufpa.labes.spm.domain.Sequence;
+import br.ufpa.labes.spm.domain.SimpleCon;
+import br.ufpa.labes.spm.domain.ModelingActivityEvent;
+import br.ufpa.labes.spm.domain.Automatic;
+import br.ufpa.labes.spm.domain.EnactionDescription;
+import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.domain.Parameters;
+import br.ufpa.labes.spm.domain.ReqAgent;
+import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.RequiredPeople;
+import br.ufpa.labes.spm.domain.RequiredResource;
+import br.ufpa.labes.spm.domain.PolCondition;
+import br.ufpa.labes.spm.domain.ActivityEstimation;
+import br.ufpa.labes.spm.domain.ActivityMetric;
+import br.ufpa.labes.spm.domain.Process;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.domain.Consumable;
+import br.ufpa.labes.spm.domain.Exclusive;
+import br.ufpa.labes.spm.domain.Resource;
+import br.ufpa.labes.spm.domain.Shareable;
+import br.ufpa.labes.spm.domain.ProcessAgenda;
+import br.ufpa.labes.spm.domain.Task;
+import br.ufpa.labes.spm.domain.TaskAgenda;
+import br.ufpa.labes.spm.domain.ClassMethodCall;
+import br.ufpa.labes.spm.domain.Script;
+import br.ufpa.labes.spm.domain.Subroutine;
+import br.ufpa.labes.spm.domain.ActivityType;
+import br.ufpa.labes.spm.domain.ArtifactType;
+import br.ufpa.labes.spm.domain.GroupType;
+import br.ufpa.labes.spm.domain.ResourceType;
+import br.ufpa.labes.spm.domain.Type;
+import br.ufpa.labes.spm.service.interfaces.DynamicModeling;
+import br.ufpa.labes.spm.service.interfaces.EnactmentEngineLocal;
+import br.ufpa.labes.spm.service.interfaces.Logging;
+import br.ufpa.labes.spm.service.interfaces.NotificationServices;
 import org.qrconsult.spm.util.i18n.Messages;
 
 @Stateless(name="dynamicModeling")
@@ -115,75 +114,40 @@ public class DynamicModelingImpl implements DynamicModeling {
 	private static String DIRECTION_OUT = "OUT";
 	private static String DIRECTION_IN = "IN";
 
-	@EJB
 	EnactmentEngineLocal enactmentEngine;
-	@EJB
 	private Logging logging;
-	@EJB
 	public NotificationServices remote;
-	@EJB
 	IProcessDAO procDAO;
-	@EJB
 	IDecomposedDAO decDAO;
-	@EJB
 	IActivityDAO actDAO;
-	@EJB
 	INormalDAO normDAO;
-	@EJB
 	IAutomaticDAO autoDAO;
-	@EJB
 	IArtifactDAO artDAO;
-	@EJB
 	IProcessModelDAO pmodelDAO;
-	@EJB
 	ISubroutineDAO subDAO;
-	@EJB
 	IParametersDAO paramDAO;
-	@EJB
 	IArtifactConDAO artConDAO;
-	@EJB
 	IArtifactTypeDAO artTypeDAO;
-	@EJB
 	IInvolvedArtifactsDAO invArtDAO;
-	@EJB
 	IMultipleConDAO multiDAO;
-	@EJB
 	IConnectionDAO conDAO;
-	@EJB
 	IPolConditionDAO polConditionDAO;
-	@EJB
 	IBranchCondToMultipleConDAO bctmcDAO;
-	@EJB
 	IJoinDAO joinDAO;
-	@EJB
 	IBranchDAO branchDAO;
-	@EJB
 	IGroupTypeDAO groupTypeDAO;
-	@EJB
 	IRoleDAO roleDAO;
-	@EJB
 	IReqAgentDAO reqAgentDAO;
-	@EJB
 	IAgentDAO agentDAO;
-	@EJB
 	ITaskDAO taskDAO;
-	@EJB
 	IGroupDAO groupDAO;
-	@EJB
 	IReqGroupDAO reqGroupDAO;
-	@EJB
 	IResourceTypeDAO resTypeDAO;
-	@EJB
 	IRequiredResourceDAO reqResDAO;
-	@EJB
 	IResourceDAO resDAO;
-	@EJB
 	IConsumableDAO consumableDAO;
-	@EJB
 	IBranchCondToActivityDAO branchCondToActivityDAO;
-	@EJB
 	ISimpleConDAO simpleDAO;
-	@EJB
 	IProcessAgendaDAO pAgendaDAO;
 
 	@Override
@@ -191,7 +155,7 @@ public class DynamicModelingImpl implements DynamicModeling {
 		System.out.println("Mensagem vinda do Flex!");
 		System.out.println(mensagem);
 	}
-	
+
 	@Override
 	public Integer newNormalActivity(String level_id, String new_id) throws WebapseeException {
 		// Checks for the parameters
@@ -281,7 +245,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public Integer newDecomposedActivity(String level_id, String new_id) throws WebapseeException {
 
@@ -374,7 +338,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public Integer newAutomaticActivity(String level_id, String new_id) throws WebapseeException {
 
@@ -487,7 +451,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public Integer defineAsDecomposed(String act_id) throws DAOException, ModelingException {
 
@@ -594,9 +558,9 @@ System.out.println("salva :"+pmodel.getPmState());
 		return null;
 	}
 
-	
+
 	@Override
-	public Integer defineAsAutomatic(String act_id) throws DAOException, ModelingException { 
+	public Integer defineAsAutomatic(String act_id) throws DAOException, ModelingException {
 
 		// Checks for the parameters
 
@@ -700,9 +664,9 @@ System.out.println("salva :"+pmodel.getPmState());
 		return null;
 	}
 
-	
+
 	@Override
-	public Integer defineAsNormal(String act_id) throws DAOException, ModelingException { 
+	public Integer defineAsNormal(String act_id) throws DAOException, ModelingException {
 
 		// Checks for the parameters
 
@@ -804,10 +768,10 @@ System.out.println("salva :"+pmodel.getPmState());
 	 */
 	/*
 	 * public Activity createNewVersion(String act_id){
-	 * 
+	 *
 	 * }
 	 */
-	
+
 	@Override
 	public void defineInputArtifact(String act_id, String art_id) throws DAOException, ModelingException {
 
@@ -897,7 +861,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public void defineOutputArtifact(String act_id, String art_id) throws DAOException, ModelingException {
 
@@ -994,7 +958,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public Integer defineAutomatic(String auto_id, Script script, Collection parameters) throws DAOException {// Oid
 																												// Automatic
@@ -1032,7 +996,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return automatic.getOid();
 	}
 
-	
+
 	@Override
 	public Integer defineAutomatic(String auto_id, ClassMethodCall cmc, Collection parameters) throws DAOException {// recupera
 																													// Oid
@@ -1070,13 +1034,13 @@ System.out.println("salva :"+pmodel.getPmState());
 		return automatic.getOid();
 	}
 
-	
+
 	@Override
 	public void deleteActivity(String act_id) throws DAOException, WebapseeException {
 
 		// Checks for the parameters
 		Object act;
-		
+
 		try {
 			act = actDAO.retrieveBySecondaryKey(act_id);
 		} catch (Exception/* DAOException */e) {
@@ -1279,7 +1243,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		ProcessModel pmodel = null;
 
-		Decomposed actDecomposed = null; 
+		Decomposed actDecomposed = null;
 		// it is used only if the new activity
 		// Is not in the root process model.
 		if (st.hasMoreTokens()) {
@@ -1291,7 +1255,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			try {
 //				dec = decDAO.retrieveBySecondaryKey(currentModel);
 				activity = actDAO.retrieveBySecondaryKey(currentModel);
-				
+
 				System.out.println("==============>  Activity id: " + currentModel);
 			} catch (Exception/* DAOException */e1) {
 				throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccActiv") + //$NON-NLS-1$
@@ -1330,7 +1294,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon;
 	}
 
-	
+
 	@Override
 	public Integer newArtifactConnection(String level_id, String art_id) throws DAOException, ModelingException {// retorna
 		Artifact artifactAux = (Artifact) artDAO.retrieveBySecondaryKey(art_id);
@@ -1343,7 +1307,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon.getOid();
 	}
 
-	
+
 	@Override
 	public Integer defineType_ArtifactConnection(String con_id, String type) throws DAOException {
 		return defineType_ArtifactConnection_Internal(con_id, type).getOid();
@@ -1396,7 +1360,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon;
 	}
 
-	
+
 	@Override
 	public Integer changeType_ArtifactConnection(String con_id, String newType) throws DAOException {// retorna
 																										// Oid
@@ -1457,7 +1421,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon.getOid();
 	}
 
-	
+
 	@Override
 	public Integer defineInstance_ArtifactConnection(String con_id, String artifact_id) throws DAOException, ModelingException {
 		return defineInstance_ArtifactConnection_Internal(con_id, artifact_id).getOid();
@@ -1498,18 +1462,18 @@ System.out.println("salva :"+pmodel.getPmState());
 		// End Checks for the parameters
 
 		// Now we start the implementation of the rules
-		
+
 		Artifact artifactFromCon = artifactCon.getTheArtifact();
 		ArtifactType artifactTypeFromCon = artifactCon.getTheArtifactType();
 
 		if (artifactFromCon == null) {
-			
+
 			if (artifactTypeFromCon == null) {
 				// Rule G2.5
 				artifactCon.insertIntoTheArtifact(artifact);
 				ArtifactType type = artifact.getTheArtifactType();
 				artifactCon.insertIntoTheArtifactType(type);
-				
+
 				this.createInvolvedArtifacts(artifactCon, artifact, artifactFromCon, type);
 
 			} else if (artifactTypeFromCon.equals(artifact.getTheArtifactType())
@@ -1517,7 +1481,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Rule G2.7
 				artifactCon.insertIntoTheArtifact(artifact);
-				
+
 				this.createInvolvedArtifacts(artifactCon, artifact, artifactFromCon, artifactTypeFromCon);
 
 			} else {
@@ -1533,7 +1497,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				artifactCon.insertIntoTheArtifact(artifact);
 				ArtifactType type = artifact.getTheArtifactType();
 				artifactCon.insertIntoTheArtifactType(type);
-				
+
 				this.createInvolvedArtifacts(artifactCon, artifact, artifactFromCon, type);
 
 			} else if (artifactTypeFromCon.equals(artifact.getTheArtifactType())
@@ -1541,7 +1505,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				// Rule G2.8
 				artifactFromCon.removeFromTheArtifactCon(artifactCon);
 				artifactCon.insertIntoTheArtifact(artifact);
-				
+
 				this.createInvolvedArtifacts(artifactCon, artifact, artifactFromCon, artifactTypeFromCon);
 
 			} else {
@@ -1549,7 +1513,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheArtfTypeFromArtf")); //$NON-NLS-1$
 			}
 		}
-		
+
 		// Persistence Operations
 		artDAO.update(artifact);
 		artConDAO.update(artifactCon);
@@ -1557,7 +1521,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon;
 	}
 
-	
+
 	@Override
 	public Integer removeInstance_ArtifactConnection(String con_id) throws DAOException {// retorna
 																							// Oid
@@ -1648,7 +1612,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon.getOid();
 	}
 
-	
+
 	@Override
 	public Integer defineOutput_ArtifactConnection(String con_id, String act_id) throws DAOException, ModelingException, WebapseeException {
 		return defineOutput_ArtifactConnection_Internal(con_id, act_id).getOid();
@@ -1686,7 +1650,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					Messages.getString("facades.DynamicModeling.ModelingExcActv") + act_id + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		Activity activity = (Activity) act;
-		
+
 		// End Checks for the parameters
 
 		// Now we start the implementation of the rules
@@ -1701,7 +1665,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				Normal actNorm = (Normal) activity;
 
 				boolean normalContainsToArtifact = actNorm.getToArtifactCon().contains(artifactCon);
-				
+
 				if (!normalContainsToArtifact) {
 					if (!this.hasTheToArtifact(actNorm, artifactFromCon)) {
 
@@ -1808,7 +1772,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							// Persistence Operations
 							artConDAO.update(artifactCon);
 							actDAO.update(activity);
-							
+
 							return artifactCon;
 						} else
 							throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheActvStateDoes")); //$NON-NLS-1$
@@ -1853,7 +1817,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public Integer removeOutput_ArtifactConnection(String con_id, String act_id) throws DAOException, ModelingException {// retorna
 																															// Oid
@@ -1949,7 +1913,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public Integer defineInput_ArtifactConnection_Activity(String con_id, String act_id) throws DAOException, ModelingException {
 		return defineInput_ArtifactConnection_Activity_Internal(con_id, act_id).getOid();
@@ -2164,7 +2128,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public Integer removeInput_ArtifactConnection_Activity(String con_id, String act_id) throws DAOException, ModelingException { // retorna
 																																	// Oid
@@ -2264,7 +2228,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public Integer defineInput_ArtifactConnection_Multiple(String con_id, String mcon_id) throws DAOException, ModelingException {
 		return defineInput_ArtifactConnection_Multiple_Internal(con_id, mcon_id).getOid();
@@ -2398,7 +2362,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon;
 	}
 
-	
+
 	@Override
 	public Integer removeInput_ArtifactConnection_Multiple(String con_id, String multi_id) throws DAOException, ModelingException {// retorna
 																																	// Oid
@@ -2455,7 +2419,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public void deleteConnection(String con_id) throws DAOException, WebapseeException {
 
@@ -3180,10 +3144,10 @@ System.out.println("salva :"+pmodel.getPmState());
 		for (ArtifactCon con : activity.getToArtifactCon()) {
 			System.out.println(con.getTheArtifact().getIdent());
 		}
-		
+
 		return artifactCon.getIdent();
 	}
-	
+
 	//Para o Editor em Flex
 	@Override
 	public String newOutputArtifact(String level_id, String artifactIdent, String activityIdent) throws WebapseeException, ModelingException {
@@ -3193,18 +3157,18 @@ System.out.println("salva :"+pmodel.getPmState());
 		Activity activity = actDAO.retrieveBySecondaryKey(activityIdent);
 		String type_id = artifactAux.getTheArtifactType().getIdent();
 
-		
+
 		ArtifactCon artifactCon = artConDAO.retrieveBySecondaryKey(level_id);
 		if(artifactCon == null) artifactCon = this.newArtifactConnection_Internal(level_id);
 		artifactCon = this.defineType_ArtifactConnection_Internal(artifactCon.getIdent(), type_id);
-		
+
 		artifactCon = this.defineInstance_ArtifactConnection_Internal(artifactCon.getIdent(), artifactIdent);
-		
+
 		artifactCon = this.defineOutput_ArtifactConnection_Internal(artifactCon.getIdent(), activity.getIdent());
-		
+
 		return artifactCon.getIdent();
 	}
-	
+
 	@Override
 	public Integer newInputArtifact(String level_id, ArtifactType artifactType, Activity activity) throws WebapseeException, ModelingException { // retorna
 
@@ -3215,7 +3179,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon.getOid();
 	}
 
-	
+
 	@Override
 	public Integer newInputArtifact(String level_id, Artifact artifact, MultipleCon multipleCon) throws WebapseeException, ModelingException {// ArtifactCon
 
@@ -3230,7 +3194,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon.getOid();
 	}
 
-	
+
 	@Override
 	public Integer newInputArtifact(String level_id, ArtifactType artifactType, MultipleCon multipleCon) throws WebapseeException, ModelingException {// ArtifactCon
 																																						// retorna
@@ -3243,7 +3207,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon.getOid();
 	}
 
-	
+
 	@Override
 	public Integer newOutputArtifact(String level_id, Artifact artifact, Activity activity) throws WebapseeException, ModelingException {
 		// retorna ArtifactCon Oid
@@ -3259,7 +3223,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return artifactCon.getOid();
 	}
 
-	
+
 	@Override
 	public Integer newOutputArtifact(String level_id, ArtifactType artifactType, Activity activity) throws WebapseeException, ModelingException {// retorna
 																																					// Oid
@@ -3571,7 +3535,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public Integer addFeedbackConnection(String act_id_from, String act_id_to) throws DAOException, ModelingException, ModelingWarning {// retorna
 																																		// Oid
@@ -3673,7 +3637,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	
+
 	@Override
 	public Integer newJoinAND(String dependency, String level_id) throws DAOException { // retorna
 																						// Oid
@@ -3751,7 +3715,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return joinAND.getOid();
 	}
 
-	
+
 	@Override
 	public Integer newJoinOR(String dependency, String level_id) throws DAOException {// retorna
 																						// Oid
@@ -3829,7 +3793,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return joinOR.getOid();
 	}
 
-	
+
 	@Override
 	public Integer newJoinXOR(String dependency, String level_id) throws DAOException {// retorna
 																						// Oid
@@ -3907,7 +3871,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return joinXOR.getOid();
 	}
 
-	
+
 	@Override
 	public Integer newBranchAND(String dependency, String level_id) throws DAOException {// retorna
 																							// Oid
@@ -3984,7 +3948,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		return branchAND.getOid();
 	}
 
-	
+
 	@Override
 	public Integer newBranchOR(String dependency, String level_id) throws DAOException { // retorna
 																							// Oid
@@ -4064,7 +4028,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#newBranchXOR(
 	 * java.lang.String, java.lang.String)
@@ -4148,7 +4112,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * removeMultiConPredecessorConnection(java.lang.String, java.lang.String)
 	 */
@@ -4303,7 +4267,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * removeMultiConPredecessorActivity(java.lang.String, java.lang.String)
 	 */
@@ -4392,7 +4356,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * removeMultiConSuccessorConnection(java.lang.String, java.lang.String)
 	 */
@@ -4547,7 +4511,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * removeMultiConSuccessorActivity(java.lang.String, java.lang.String)
 	 */
@@ -4675,7 +4639,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#defineJoinTo_Activity
 	 * (java.lang.String, java.lang.String)
@@ -5148,7 +5112,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * defineJoinTo_Connection(java.lang.String, java.lang.String)
 	 */
@@ -5413,7 +5377,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * defineJoinFrom_Connection(java.lang.String, java.lang.String)
 	 */
@@ -5621,7 +5585,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * defineJoinFrom_Activity(java.lang.String, java.lang.String)
 	 */
@@ -5790,7 +5754,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * defineBranchFromActivity(java.lang.String, java.lang.String)
 	 */
@@ -6167,7 +6131,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * defineBranchFromConnection(java.lang.String, java.lang.String)
 	 */
@@ -6379,7 +6343,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * defineBranchToActivity(java.lang.String, java.lang.String)
 	 */
@@ -6690,7 +6654,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * defineBranchToConnection(java.lang.String, java.lang.String)
 	 */
@@ -6897,7 +6861,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#addRequiredRole
 	 * (java.lang.String, java.lang.String)
@@ -6963,7 +6927,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#addRequiredGroupType
 	 * (java.lang.String, java.lang.String)
@@ -7029,7 +6993,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#removeRequiredRole
 	 * (java.lang.String, java.lang.String)
@@ -7139,7 +7103,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#defineRequiredAgent
 	 * (java.lang.String, java.lang.String, java.lang.String)
@@ -7330,7 +7294,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#removeRequiredAgent
 	 * (java.lang.String, java.lang.String)
@@ -7442,7 +7406,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#defineRequiredGroup
 	 * (java.lang.String, java.lang.String)
@@ -7453,7 +7417,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Checks for the parameters
 
 		System.out.println(group_id);
-		
+
 		Object act;
 		try {
 			act = actDAO.retrieveBySecondaryKey(act_id);
@@ -7632,7 +7596,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#removeRequiredGroup
 	 * (java.lang.String, java.lang.String)
@@ -7739,7 +7703,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * removeRequiredGroupType(java.lang.String, java.lang.String)
 	 */
@@ -7826,7 +7790,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#newAgent(java
 	 * .lang.String, java.lang.String, java.lang.String)
@@ -7867,7 +7831,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#newGroup(java
 	 * .lang.String, java.lang.String, java.lang.String)
@@ -7904,7 +7868,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#newResource(java
 	 * .lang.String, java.lang.String, java.lang.String, float)
@@ -7912,8 +7876,8 @@ System.out.println("salva :"+pmodel.getPmState());
 	@Override
 	public Integer newResource(String resource_id, String resourceType_id, String normal_id, float amount_needed) throws WebapseeException,
 			ModelingException {// retorna Oid RequiredResource
-		System.out.println("Entrou no método newResource: id = " + resource_id + 
-				"; typeId = " + resourceType_id + "; normalId = " + normal_id + 
+		System.out.println("Entrou no método newResource: id = " + resource_id +
+				"; typeId = " + resourceType_id + "; normalId = " + normal_id +
 				"; amount = " + amount_needed);
 		this.addRequiredResourceType(normal_id, resourceType_id);
 		try {
@@ -7939,7 +7903,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * removeCompleteRequiredAgent(java.lang.String, java.lang.String,
 	 * java.lang.String)
@@ -7953,7 +7917,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * removeCompleteRequiredGroup(java.lang.String, java.lang.String,
 	 * java.lang.String)
@@ -7966,7 +7930,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * removeCompleteRequiredResource(java.lang.String, java.lang.String,
 	 * java.lang.String)
@@ -7984,7 +7948,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * addRequiredResourceType(java.lang.String, java.lang.String)
 	 */
@@ -8055,7 +8019,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * changeRequiredResourceType(java.lang.String, java.lang.String,
 	 * java.lang.String)
@@ -8154,7 +8118,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * removeRequiredResourceType(java.lang.String, java.lang.String)
 	 */
@@ -8259,7 +8223,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * defineRequiredResource(java.lang.String, java.lang.String, float)
 	 */
@@ -8430,7 +8394,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * removeRequiredResource(java.lang.String, java.lang.String)
 	 */
@@ -8563,7 +8527,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
 	 * changeRequiredResourceAmount(java.lang.String, java.lang.String, float)
 	 */
@@ -8792,7 +8756,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#addAgentToGroup
 	 * (java.lang.String, java.lang.String)
@@ -8912,7 +8876,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#removeAgentFromGroup
 	 * (java.lang.String, java.lang.String)
@@ -9197,13 +9161,11 @@ System.out.println("salva :"+pmodel.getPmState());
 				"</MESSAGE>"; //$NON-NLS-1$
 		try {
 			if (this.remote == null) {
-				// reloadRemote();
 			}
 			if (this.remote != null) {
 				this.remote.sendMessageToUser(message, agent.getIdent());
 			}
 
-		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -9245,13 +9207,11 @@ System.out.println("salva :"+pmodel.getPmState());
 					"</MESSAGE>"; //$NON-NLS-1$
 			try {
 				if (this.remote == null) {
-					// reloadRemote();
 				}
 				if (this.remote != null) {
 					this.remote.sendMessageToGroup(message, ids);
 				}
 
-			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -9289,13 +9249,11 @@ System.out.println("salva :"+pmodel.getPmState());
 					"</MESSAGE>"; //$NON-NLS-1$
 			try {
 				if (this.remote == null) {
-					// reloadRemote();
 				}
 				if (this.remote != null) {
 					this.remote.sendMessageToGroup(message, ids);
 				}
 
-			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -9351,13 +9309,11 @@ System.out.println("salva :"+pmodel.getPmState());
 						+ "<CLASS>" + task.getClass().getName() + "</CLASS>" + "<BY>APSEE_Manager</BY>" + "</NOTIFY>" + "</MESSAGE>";
 				try {
 					if (this.remote == null) {
-						// reloadRemote();
 					}
 					if (this.remote != null) {
 						this.remote.sendMessageToUser(message, procAgenda.getTheTaskAgenda().getTheAgent().getIdent());
 					}
 
-				} catch (RemoteException e) {
 					System.out.println("DynamicModelingImpl.removeTask() remote reference exception");
 				}
 				break;
@@ -9400,7 +9356,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		this.logging.registerAgendaEvent(task, "To" + state, why); //$NON-NLS-1$
 
 	}
-	
+
 	// Related to Artifacts
 
 	/**
@@ -9443,11 +9399,11 @@ System.out.println("salva :"+pmodel.getPmState());
 	}
 
 	/**
-	 * 
+	 *
 	 * Attributing to normal activities their involved artifacts
 	 */
 	private void createInvolvedArtifacts(ArtifactCon artifactCon, Artifact artifact, Artifact oldArtifact, ArtifactType type) {
-		
+
 		if (oldArtifact == null) {
 			// Attributing to normal activities their input artifacts
 			Collection<Activity> toActivities = artifactCon.getToActivity();
@@ -9462,7 +9418,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					invArt.insertIntoInInvolvedArtifacts((Normal) toActivity);
 				}
 			}
-			
+
 			// Attributing to normal activities their output artifacts
 			Collection<Activity> fromActivities = artifactCon.getFromActivity();
 			Iterator iterFromActivities = fromActivities.iterator();
@@ -9498,7 +9454,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					}
 				}
 			}
-			
+
 			// Attributing to normal activities their output artifacts
 			Collection<Activity> fromActivities = artifactCon.getFromActivity();
 			Iterator iterFromActivities = fromActivities.iterator();
@@ -10459,9 +10415,8 @@ System.out.println("salva :"+pmodel.getPmState());
 	}
 
 	/*
-	 * public void reloadRemote() { try { this.remote =
 	 * SecurityFacade.getInstance(); } catch (Exception e) {
-	 * 
+	 *
 	 * } }
 	 */
 	// seta as informacoes do WebapseeObjectDTO
@@ -10471,7 +10426,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		webapseeObjectDTO.setClassName(className);
 		return webapseeObjectDTO;
 	}
-	
+
 	@Override
 	public Integer getGlobalEvents(String act_id) throws DAOException, ModelingException {
 System.out.println("atividades: "+act_id);
@@ -10480,7 +10435,7 @@ System.out.println("atividades: "+act_id);
 		Object act;
 		try {
 			act = actDAO.retrieveBySecondaryKey(act_id);
-			
+
 		} catch (Exception/* DAOException */e) {
 			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccActv") + //$NON-NLS-1$
 					act_id + Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
@@ -10500,9 +10455,9 @@ System.out.println("atividades: "+act_id);
 			System.out.println("eventos:4 "+activity.getTheProcessModel().getTheProcess().getTheProcessEvent());
 			System.out.println("eventos:5 "+activity.getTheProcessModel().getTheProcess().getTheProcessEvent().iterator().next().getTheCatalogEvents());
 			System.out.println("eventos:6 "+activity.getTheProcessModel().getTheProcess().getTheProcessEvent().iterator().next().getTheCatalogEvents().getTheGlobalActivityEvent());
-			
+
 		}
-			
+
 
 		else if (activity instanceof Normal) { // Rule G1.4
 			Normal actNorm = (Normal) activity;
@@ -10514,7 +10469,7 @@ System.out.println("atividades: "+act_id);
 	System.out.println("eventos:4 "+actNorm.getTheActivityType().getTheProcess().iterator().next().getTheProcessEvent().iterator().next().getTheCatalogEvents());
 	System.out.println("eventos:5 "+actNorm.getTheActivityType().getTheProcess().iterator().next().getTheProcessEvent().iterator().next().getTheCatalogEvents().getTheGlobalActivityEvent());
 
-			
+
 		}
 		return null;
 	}

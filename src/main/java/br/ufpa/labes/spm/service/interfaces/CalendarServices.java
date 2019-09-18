@@ -1,8 +1,7 @@
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
 import java.util.List;
 
-import javax.ejb.Remote;
 
 import org.qrconsult.spm.dtos.calendar.CalendarDTO;
 import org.qrconsult.spm.dtos.calendar.CalendarsDTO;
@@ -13,13 +12,13 @@ public interface CalendarServices {
 
 
 	public void updateCalendar(CalendarDTO calendar,Integer projetoOid);
-	
+
 	public List<CalendarDTO> searchAllProjectCalendar();
 
    public Boolean deleteAgent(CalendarDTO calendar);
-	
+
    public CalendarDTO searchCalendarProjectById(Integer calendarOid, Integer projectOid);
-   
+
    public CalendarDTO changeCalendarToPtoject(CalendarDTO calendar, Integer projectOid);
 
 void saveCalendar(CalendarDTO calendarDTO, ProjectDTO projetoOid);

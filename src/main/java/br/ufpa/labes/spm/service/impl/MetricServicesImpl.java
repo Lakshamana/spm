@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,57 +13,54 @@ import javax.persistence.Query;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAbilityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processKnowledge.IMetricDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processKnowledge.IMetricDefinitionDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.ITypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAbilityDAO;
+import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IMetricDAO;
+import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IMetricDefinitionDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.ITypeDAO;
 import org.qrconsult.spm.dtos.formAbility.AbilityDTO;
 import org.qrconsult.spm.dtos.processKnowledge.MetricDTO;
 import org.qrconsult.spm.dtos.processKnowledge.MetricDefinitionDTO;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.agent.Ability;
-import org.qrconsult.spm.model.agent.Group;
-import org.qrconsult.spm.model.agent.Role;
-import org.qrconsult.spm.model.artifacts.Artifact;
-import org.qrconsult.spm.model.connections.Connection;
-import org.qrconsult.spm.model.knowledge.KnowledgeAttribute;
-import org.qrconsult.spm.model.log.Event;
-import org.qrconsult.spm.model.processKnowledge.Metric;
-import org.qrconsult.spm.model.processKnowledge.MetricDefinition;
-import org.qrconsult.spm.model.resources.Resource;
-import org.qrconsult.spm.model.tools.ToolDefinition;
-import org.qrconsult.spm.model.types.AbilityType;
-import org.qrconsult.spm.model.types.ActivityType;
-import org.qrconsult.spm.model.types.ArtifactType;
-import org.qrconsult.spm.model.types.ConnectionType;
-import org.qrconsult.spm.model.types.EventType;
-import org.qrconsult.spm.model.types.GroupType;
-import org.qrconsult.spm.model.types.KnowledgeType;
-import org.qrconsult.spm.model.types.MetricType;
-import org.qrconsult.spm.model.types.PolicyType;
-import org.qrconsult.spm.model.types.ResourceType;
-import org.qrconsult.spm.model.types.RoleType;
-import org.qrconsult.spm.model.types.ToolType;
-import org.qrconsult.spm.model.types.Type;
-import org.qrconsult.spm.services.interfaces.MetricServices;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Ability;
+import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.Role;
+import br.ufpa.labes.spm.domain.Artifact;
+import br.ufpa.labes.spm.domain.Connection;
+import br.ufpa.labes.spm.domain.KnowledgeAttribute;
+import br.ufpa.labes.spm.domain.Event;
+import br.ufpa.labes.spm.domain.Metric;
+import br.ufpa.labes.spm.domain.MetricDefinition;
+import br.ufpa.labes.spm.domain.Resource;
+import br.ufpa.labes.spm.domain.ToolDefinition;
+import br.ufpa.labes.spm.domain.AbilityType;
+import br.ufpa.labes.spm.domain.ActivityType;
+import br.ufpa.labes.spm.domain.ArtifactType;
+import br.ufpa.labes.spm.domain.ConnectionType;
+import br.ufpa.labes.spm.domain.EventType;
+import br.ufpa.labes.spm.domain.GroupType;
+import br.ufpa.labes.spm.domain.KnowledgeType;
+import br.ufpa.labes.spm.domain.MetricType;
+import br.ufpa.labes.spm.domain.PolicyType;
+import br.ufpa.labes.spm.domain.ResourceType;
+import br.ufpa.labes.spm.domain.RoleType;
+import br.ufpa.labes.spm.domain.ToolType;
+import br.ufpa.labes.spm.domain.Type;
+import br.ufpa.labes.spm.service.interfaces.MetricServices;
 
 
 @Stateless
 public class MetricServicesImpl implements MetricServices{
-	
-	@EJB
+
 	IMetricDefinitionDAO metricDefinitionDAO;
-	
-	@EJB
+
 	ITypeDAO typeDAO;
-	
-	@EJB
+
 	IMetricDAO metricDAO;
-	
-	
+
+
 	Hashtable<String, Class<?>> typeClasses = new Hashtable<String, Class<?>>();
 	Hashtable<String, Class<?>> classes = new Hashtable<String, Class<?>>();
-	
+
 	public MetricServicesImpl() {
 		// TODO Auto-generated constructor stub
 		typeClasses.put("AbilityType", AbilityType.class);
@@ -78,7 +75,7 @@ public class MetricServicesImpl implements MetricServices{
 		typeClasses.put("ResourceType", ResourceType.class);
 		typeClasses.put("RoleType", RoleType.class);
 		typeClasses.put("ToolType", ToolType.class);
-		
+
 		classes.put("AbilityType", Ability.class);
 		classes.put("ActivityType", Activity.class);
 		classes.put("ArtifactType", Artifact.class);
@@ -91,9 +88,9 @@ public class MetricServicesImpl implements MetricServices{
 		classes.put("Resource", Resource.class);
 		classes.put("RoleType", Role.class);
 		classes.put("ToolType", ToolDefinition.class);
-		
+
 	}
-	
+
 	@Override
 	public MetricDTO saveMetric(MetricDTO metricDTO) {
 		//metricDTO.getMetricDefinition();
@@ -123,15 +120,15 @@ public class MetricServicesImpl implements MetricServices{
 						metric = metricDAO.save(metric);
 						metricDTO = (MetricDTO) converter.getDTO(metric, MetricDTO.class);
 						System.out.println("MeAqui5");
-					}		
+					}
 				//}else{
 					System.out.println("MeAqui6");
 					//return null;
 				//}
 			}else{
 				return null;
-			}		
-			
+			}
+
 		} catch (ImplementationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -146,7 +143,7 @@ public class MetricServicesImpl implements MetricServices{
 		Query query;
 		List<MetricDefinition> result = null;
 		List<MetricDefinitionDTO> resultDTO = new ArrayList<MetricDefinitionDTO>();
-		
+
 		hql = "select metricDefinition from "+MetricDefinition.class.getSimpleName()+" as metricDefinition";
 		query = metricDefinitionDAO.getPersistenceContext().createQuery(hql);
 		result = query.getResultList();
@@ -157,7 +154,7 @@ public class MetricServicesImpl implements MetricServices{
 				try {
 					MetricDefinitionDTO abi = new MetricDefinitionDTO();
 					abi =  (MetricDefinitionDTO) converter.getDTO(result.get(i), MetricDefinitionDTO.class);
-					
+
 					String[] strings= new String[result.get(i).getUnits().size()];
 					Collection<String> unidades = new ArrayList<String>();
 					unidades = result.get(i).getUnits();
@@ -166,21 +163,21 @@ public class MetricServicesImpl implements MetricServices{
 					strings = unidades.toArray(strings);
 					System.out.println("ppp:"+strings[0]);
 					//resultDTO.add(abi);
-					
-					
-					
-					
+
+
+
+
 				} catch (ImplementationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
+
+
 				}*/
 			  int j=0;
-			  
+
 				for (MetricDefinition str : result) {
-					
+
 					MetricDefinitionDTO abi = new MetricDefinitionDTO();
 					List<String> lis = new ArrayList<String>();
 					String li = "";
@@ -204,17 +201,17 @@ public class MetricServicesImpl implements MetricServices{
 						j++;
 						System.out.println("ppp:"+strings[0]+":"+j);
 						resultDTO.add(abi);
-				
+
 					} catch (ImplementationException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
 				}
 				return resultDTO;
 			}else{
 				return null;
-			}	
+			}
 	}
 
 	@Override
@@ -224,19 +221,19 @@ public class MetricServicesImpl implements MetricServices{
 		List<List<Type>> typesLists = new ArrayList<List<Type>>();
 		List<Class<?>> returnedClasses = new ArrayList<Class<?>>();
 		int sizeLists = 0;
-		
+
 		if(domainFilter!=null){
 			Class<?> currentClass = typeClasses.get(domainFilter);
 			hql = "select type from " + currentClass.getName()  + " as type";
 			query = typeDAO.getPersistenceContext().createQuery(hql);
 			//query.setParameter("orgFilter", orgFilter);
 			//query.setParameter("termo", "%"+ termoBusca + "%");
-			List<Type> resultList = query.getResultList(); 
+			List<Type> resultList = query.getResultList();
 			typesLists.add(resultList);
 			returnedClasses.add(currentClass);
 			sizeLists = resultList.size();
 		}else{
-			/*Iterator<Class<?>> classIterator = typeClasses.values().iterator(); 
+			/*Iterator<Class<?>> classIterator = typeClasses.values().iterator();
 			while (classIterator.hasNext()) {
 				Class<?> class_ = classIterator.next();
 				hql = "select type from " + class_.getName() + " as type where type.ident like :termo and type.userDefined is not :orgFilter";
@@ -248,27 +245,27 @@ public class MetricServicesImpl implements MetricServices{
 				returnedClasses.add(class_);
 				sizeLists += resultList.size();*/
 			}
-		
-		
-		
+
+
+
 		List<String> strinList = new ArrayList<String>();
 		for (int i = 0; i < typesLists.size(); i++) {
 			List<Type> list = typesLists.get(i);
-			
+
 			for (Iterator<Type> iterator = list.iterator(); iterator.hasNext();) {
 				Type type = (Type) iterator.next();
 				String typeIdent = type.getIdent();
 				strinList.add(typeIdent);
 			}
-		
+
 		}
 		String[] strings= new String[strinList.size()];
 		strings = strinList.toArray(strings);
-		
+
 		for(int j= 0;j < strings.length;j++){
 			System.out.println(strings[j]+":");
 		}
-		
+
 		return strings;
 	}
 
@@ -276,7 +273,7 @@ public class MetricServicesImpl implements MetricServices{
 	@Override
 	public String[] getWithTypes(String domainFilter,String nameType) {
 		// TODO Auto-generated method stub
-		
+
 		String hql;
 		Query query = null;
 		List<List> typesLists = new ArrayList<List>();
@@ -290,35 +287,35 @@ public class MetricServicesImpl implements MetricServices{
 			System.out.println("hql:"+hql);
 			//query.setParameter("type", nameType);
 			query = typeDAO.getPersistenceContext().createQuery(hql);
-			List resultList = query.getResultList(); 
+			List resultList = query.getResultList();
 			typesLists.add(resultList);
 			returnedClasses.add(currentClass);
 			sizeLists = resultList.size();
 		}
-		
-		
-		
+
+
+
 		List<String> strinList = new ArrayList<String>();
 		for (int i = 0; i < typesLists.size(); i++) {
 			List list = typesLists.get(i);
-			
+
 			/*for (Iterator<Type> iterator = list.iterator(); iterator.hasNext();) {
 				Type type = (Type) iterator.next();
 				String typeIdent = type.getIdent();
 				strinList.add(typeIdent);
 			}*/
-			
+
 			for (Object object : list) {
-				
+
 				if (object instanceof Ability){
 					Ability abi = (Ability) object;
 					String typeIdent = abi.getName();
 					strinList.add(typeIdent);
-				}		
+				}
 				else if (object instanceof Connection){
 					Connection abi = (Connection) object;
 					String typeIdent = abi.getIdent();
-					strinList.add(typeIdent);	
+					strinList.add(typeIdent);
 				}else if (object instanceof Artifact){
 					Artifact abi = (Artifact) object;
 					String typeIdent = abi.getName();
@@ -345,15 +342,15 @@ public class MetricServicesImpl implements MetricServices{
 					strinList.add(typeIdent);
 				}
 			}
-		
+
 		}
 		String[] strings= new String[strinList.size()];
 		strings = strinList.toArray(strings);
-		
+
 		for(int j= 0;j < strings.length;j++){
 			System.out.println(strings[j]+":");
 		}
-		
+
 		return strings;
 	}
 }

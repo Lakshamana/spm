@@ -1,19 +1,18 @@
 /*
  * Created on 29/03/2005
  */
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
-import javax.ejb.Remote;
 
-import org.qrconsult.spm.exceptions.WebapseeException;
+import br.ufpa.labes.spm.exceptions.WebapseeException;
 
 /**
- * @author Breno Franca (brenofranca@yahoo.com.br) and Heribert Schlebbe²
- *         (schlebbe@informatik.uni-stuttgart.de) 
- *         LABES - Software Engineering Laboratory, Federal University of Para, Belem, Para, Brazil 
- *         Faculty of Computer Science, 
- *         University of Stuttgart, Stuttgart,Baden-Württemberg, Germany
- * 
+ * @author Breno Franca (brenofranca@yahoo.com.br) and Heribert Schlebbeï¿½
+ *         (schlebbe@informatik.uni-stuttgart.de)
+ *         LABES - Software Engineering Laboratory, Federal University of Para, Belem, Para, Brazil
+ *         Faculty of Computer Science,
+ *         University of Stuttgart, Stuttgart,Baden-Wï¿½rttemberg, Germany
+ *
  * @since April/2005
  * @version 1.0
  */
@@ -28,7 +27,7 @@ public interface EnactmentEngine {
 	 * Connections and Activities that are ready to begin, the Process Model
 	 * state is determined. So, the execution continues till the state of the
 	 * Process has been setted to Finished.
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            process_id
@@ -40,7 +39,7 @@ public interface EnactmentEngine {
 	 * components of the Process, including the Process Model, Acivities,
 	 * Connections, Resources, Process Agendas, and setting their states to the
 	 * initial state.
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            process_id
@@ -52,7 +51,7 @@ public interface EnactmentEngine {
 	 * Process Agenda. It will set the Task state to Active in his Agenda and in
 	 * the Proces Model if it's not Active. And, if the Activity is paused, the
 	 * Activity is re-started.
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            agent_id, String act_id
@@ -68,7 +67,7 @@ public interface EnactmentEngine {
 	 * associated condition of the Feedback Connection is satisfied (true),
 	 * then, Feedback will be executed till the condition turns to not satisfied
 	 * (false).
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            agent_id, String act_id
@@ -80,7 +79,7 @@ public interface EnactmentEngine {
 	 * Process Agenda. It will set the Task state to Paused in his Agenda, and
 	 * on the Proces Model if all the Agents that are required for this Activity
 	 * pause the Task also.
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            agent_id, String act_id
@@ -94,7 +93,7 @@ public interface EnactmentEngine {
 	 * his Process Agenda to another Agent. It will set the Task state to
 	 * Delegated in his Agenda, and created on the Process Agenda of the other
 	 * Agent.
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            from_agent_id, String act_id, String to_agent_id
@@ -111,7 +110,7 @@ public interface EnactmentEngine {
 	 * Connection is satisfied (true), then, Feedback will be executed till the
 	 * condition turns to not satisfied (false). To Fail an Activity it should
 	 * be Active or Paused.
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            act_id
@@ -124,7 +123,7 @@ public interface EnactmentEngine {
 	 * the successors according to their state, in case of an Activity. And,
 	 * cancel the Connections in case of a Multiple Connection (Branch or Join).
 	 * To Cancel an Activity it should be Waiting or Ready.
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            act_id
@@ -134,7 +133,7 @@ public interface EnactmentEngine {
 	/**
 	 * This method is called by the Process Manager to make a Shareable Resource
 	 * Unavailable. It will set the Resource state to Not Available.
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            resource_id
@@ -144,7 +143,7 @@ public interface EnactmentEngine {
 	/**
 	 * This method is called by the Process Manager to make a Shareable Resource
 	 * Available. It will set the Resource state to Available.
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            resource_id
@@ -154,7 +153,7 @@ public interface EnactmentEngine {
 	/**
 	 * This method is called by the Process Manager to register a defect on a
 	 * Exclusive Resource. It will set the Resource state to Defect.
-	 * 
+	 *
 	 * @return void
 	 * @param String
 	 *            resource_id

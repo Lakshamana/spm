@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,62 +15,62 @@ import javax.persistence.Query;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.activities.IActivityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IDependencyDAO;
-import org.qrconsult.spm.dataAccess.interfaces.log.IAgendaEventDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.INormalDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessModelDAO;
-import org.qrconsult.spm.dataAccess.interfaces.taskagenda.ITaskDAO;
+import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IDependencyDAO;
+import br.ufpa.labes.spm.repository.interfaces.log.IAgendaEventDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.INormalDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessModelDAO;
+import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
 import org.qrconsult.spm.dtos.agenda.AgendaEventDTO;
 import org.qrconsult.spm.dtos.agenda.AgendaEventsDTO;
 import org.qrconsult.spm.dtos.agenda.TaskDTO;
-import org.qrconsult.spm.exceptions.DAOException;
-import org.qrconsult.spm.exceptions.WebapseeException;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.activities.Decomposed;
-import org.qrconsult.spm.model.activities.Plain;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.agent.Group;
-import org.qrconsult.spm.model.connections.ArtifactCon;
-import org.qrconsult.spm.model.connections.Branch;
-import org.qrconsult.spm.model.connections.BranchAND;
-import org.qrconsult.spm.model.connections.BranchCond;
-import org.qrconsult.spm.model.connections.BranchCondToActivity;
-import org.qrconsult.spm.model.connections.BranchCondToMultipleCon;
-import org.qrconsult.spm.model.connections.Connection;
-import org.qrconsult.spm.model.connections.Dependency;
-import org.qrconsult.spm.model.connections.Feedback;
-import org.qrconsult.spm.model.connections.Join;
-import org.qrconsult.spm.model.connections.MultipleCon;
-import org.qrconsult.spm.model.connections.Sequence;
-import org.qrconsult.spm.model.connections.SimpleCon;
-import org.qrconsult.spm.model.log.AgendaEvent;
-import org.qrconsult.spm.model.log.ModelingActivityEvent;
-import org.qrconsult.spm.model.plainActivities.Automatic;
-import org.qrconsult.spm.model.plainActivities.EnactionDescription;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.model.plainActivities.ReqAgent;
-import org.qrconsult.spm.model.plainActivities.ReqGroup;
-import org.qrconsult.spm.model.plainActivities.RequiredPeople;
-import org.qrconsult.spm.model.plainActivities.RequiredResource;
-import org.qrconsult.spm.model.policies.staticPolicies.PolCondition;
-import org.qrconsult.spm.model.processKnowledge.ActivityEstimation;
-import org.qrconsult.spm.model.processKnowledge.ActivityMetric;
-import org.qrconsult.spm.model.processModels.Process;
-import org.qrconsult.spm.model.processModels.ProcessModel;
-import org.qrconsult.spm.model.resources.Consumable;
-import org.qrconsult.spm.model.resources.Exclusive;
-import org.qrconsult.spm.model.resources.Reservation;
-import org.qrconsult.spm.model.resources.Resource;
-import org.qrconsult.spm.model.resources.Shareable;
-import org.qrconsult.spm.model.taskagenda.ProcessAgenda;
-import org.qrconsult.spm.model.taskagenda.Task;
-import org.qrconsult.spm.model.taskagenda.TaskAgenda;
-import org.qrconsult.spm.model.types.ActivityType;
-import org.qrconsult.spm.services.interfaces.Logging;
-import org.qrconsult.spm.services.interfaces.TaskServices;
+import br.ufpa.labes.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.exceptions.WebapseeException;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.ArtifactCon;
+import br.ufpa.labes.spm.domain.Branch;
+import br.ufpa.labes.spm.domain.BranchAND;
+import br.ufpa.labes.spm.domain.BranchCond;
+import br.ufpa.labes.spm.domain.BranchCondToActivity;
+import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
+import br.ufpa.labes.spm.domain.Connection;
+import br.ufpa.labes.spm.domain.Dependency;
+import br.ufpa.labes.spm.domain.Feedback;
+import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.MultipleCon;
+import br.ufpa.labes.spm.domain.Sequence;
+import br.ufpa.labes.spm.domain.SimpleCon;
+import br.ufpa.labes.spm.domain.AgendaEvent;
+import br.ufpa.labes.spm.domain.ModelingActivityEvent;
+import br.ufpa.labes.spm.domain.Automatic;
+import br.ufpa.labes.spm.domain.EnactionDescription;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.domain.ReqAgent;
+import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.RequiredPeople;
+import br.ufpa.labes.spm.domain.RequiredResource;
+import br.ufpa.labes.spm.domain.PolCondition;
+import br.ufpa.labes.spm.domain.ActivityEstimation;
+import br.ufpa.labes.spm.domain.ActivityMetric;
+import br.ufpa.labes.spm.domain.Process;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.domain.Consumable;
+import br.ufpa.labes.spm.domain.Exclusive;
+import br.ufpa.labes.spm.domain.Reservation;
+import br.ufpa.labes.spm.domain.Resource;
+import br.ufpa.labes.spm.domain.Shareable;
+import br.ufpa.labes.spm.domain.ProcessAgenda;
+import br.ufpa.labes.spm.domain.Task;
+import br.ufpa.labes.spm.domain.TaskAgenda;
+import br.ufpa.labes.spm.domain.ActivityType;
+import br.ufpa.labes.spm.service.interfaces.Logging;
+import br.ufpa.labes.spm.service.interfaces.TaskServices;
 
 @Stateless
 public class TaskServicesImpl implements TaskServices {
@@ -82,31 +82,22 @@ public class TaskServicesImpl implements TaskServices {
 	private static final transient int TO_ACT_CAN_START = 1,
 			TO_ACT_CAN_FINISH = 2;
 
-	@EJB
 	ITaskDAO taskDAO;
 
-	@EJB
 	IProcessDAO processDAO;
 
-	@EJB
 	INormalDAO normalDAO;
 
-	@EJB
 	IActivityDAO activityDAO;
 
-	@EJB
 	IAgentDAO agentDAO;
 
-	@EJB
 	IAgendaEventDAO agendaEventDAO;
 
-	@EJB
 	Logging logging;
 
-	@EJB
 	IProcessModelDAO processModelDAO;
 
-	@EJB
 	IDependencyDAO dependencyDAO;
 
 	private Query query;
@@ -123,7 +114,7 @@ public class TaskServicesImpl implements TaskServices {
 		String hql = "SELECT task from " + TASK_CLASSNAME + " as task where task.theNormal.name = :name";
 		query = taskDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("name", name);
-		
+
 		List<Task> result = query.getResultList();
 		TaskDTO taskDTO = new TaskDTO();
 		if(!result.isEmpty()) {
@@ -133,7 +124,7 @@ public class TaskServicesImpl implements TaskServices {
 		}
 		return taskDTO;
 	}
-	
+
     /**
      * called by APSEE Manager.
      * begin with rules 1.1 - 1.4
@@ -332,7 +323,7 @@ public class TaskServicesImpl implements TaskServices {
 			if (this.isAllRequiredResourceAvailable(actNorm)) {
 				this.allocateAllForActivity(actNorm, true);
 				this.plainActivityHasStarted(pmodel);
-				this.updateAgenda(agent, actNorm, Plain.ACTIVE, "Rule 3.1"); //$NON-NLS-1$        		
+				this.updateAgenda(agent, actNorm, Plain.ACTIVE, "Rule 3.1"); //$NON-NLS-1$
 				EnactionDescription enact = actNorm.getTheEnactionDescription();
 				enact.setStateWithMessage(Plain.ACTIVE);
 				enact.setActualBegin(new Date());
@@ -353,7 +344,7 @@ public class TaskServicesImpl implements TaskServices {
 
 					this.updateAgenda(agent, actNorm, Plain.ACTIVE, "Rule 3.4"); //$NON-NLS-1$
 					this.logging.registerGlobalActivityEvent(actNorm,
-							"ToActive", "Rule 3.4"); //$NON-NLS-1$ //$NON-NLS-2$        			
+							"ToActive", "Rule 3.4"); //$NON-NLS-1$ //$NON-NLS-2$
 				} else {
 					// Rule 3.5
 					// throw new UserException
@@ -686,7 +677,7 @@ public class TaskServicesImpl implements TaskServices {
 
 	/**
 	 * called by APSEE Agenda. begin with rule 3.10
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean delegateTask(String from_agent_id, String act_id,
@@ -883,8 +874,8 @@ public class TaskServicesImpl implements TaskServices {
 		return returnTask;
 	}
 
-	
-	
+
+
 	/**
 	 * Delegates a Task from an Agent to another one, adjusting their Task
 	 * Agendas.
@@ -961,7 +952,6 @@ public class TaskServicesImpl implements TaskServices {
 				"</MESSAGE>"; //$NON-NLS-1$
 		// try {
 		// if(this.remote==null){
-		// reloadRemote();
 		//
 		// }
 		// if(this.remote!=null){
@@ -969,7 +959,6 @@ public class TaskServicesImpl implements TaskServices {
 		// task.getTheProcessAgenda().getTheTaskAgenda().getTheAgent();
 		// this.remote.sendMessageToUser(message, agent.getIdent());
 		// }
-		// } catch (RemoteException e) {
 		// // e.printStackTrace();
 		//           	 System.out.println("EnactmentEngine.updateAgenda() remote reference exception"); //$NON-NLS-1$
 		// }
@@ -3027,7 +3016,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * called by APSEE Manager. Applies to the rules 9.21, 9.22, 9.23, 9.24,
 	 * 9.25, 9.26, 9.27, 9.28, 9.29, 9.30, 9.31, 9.32, 9.33, 9.34, 9.35, 9.36,
 	 * 9.37
-	 * 
+	 *
 	 * Redoes an Activity and propagates the "redo" to the following Activities.
 	 */
 	private void redoActivityAndPropagate(Activity act) {
@@ -3572,7 +3561,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * called by APSEE Manager. Applies to the rule 9.14 Creates a new version
 	 * of an Artifact from a Plain Activity. This operatiosn is now handlered by
 	 * the artifact version control system
-	 * 
+	 *
 	 * private void createNewArtifactVersion (Plain actPlain)
 	 */
 
@@ -4189,7 +4178,7 @@ public class TaskServicesImpl implements TaskServices {
 
 	/**
 	 * called by APSEE Manager. Applies to the Rules 8.1, 8.10, 8.23, 8.24,
-	 * 
+	 *
 	 * Searches for Connections the are ready to be fired.
 	 */
 	public void searchForFiredConnections(ProcessModel pmodel, String why) {
@@ -4706,17 +4695,17 @@ public class TaskServicesImpl implements TaskServices {
 		}
 		return false;
 	}
-	
+
 	private AgendaEventsDTO convertAgentsToAgentsDTO(List<AgendaEvent> agentList ){
 		List<AgendaEventDTO> agente =  new ArrayList<AgendaEventDTO>();
 		for (AgendaEvent agent : agentList) {
 			agente.add(this.convertAgentToAgentDTO(agent));
 		}
-		
+
 		return new AgendaEventsDTO(agente);
-		
-		
-		
+
+
+
 	}
 
 	private AgendaEventDTO convertAgentToAgentDTO(AgendaEvent agent) {
@@ -4746,9 +4735,9 @@ public class TaskServicesImpl implements TaskServices {
 				AgendaEventDTO t = new AgendaEventDTO(task.getTheCatalogEvents().getDescription(),task.getWhen());
 				agendaEventDTO.add(t);
 		}
-		
+
 		System.out.println(query.getResultList());
-		
+
 		return agendaEventDTO;
 
 	}

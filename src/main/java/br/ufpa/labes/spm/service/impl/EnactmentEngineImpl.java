@@ -1,7 +1,7 @@
 /*
  * Created on 29/03/2005
  */
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -13,60 +13,60 @@ import java.util.LinkedList;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import org.qrconsult.spm.dataAccess.interfaces.activities.IActivityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.INormalDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessModelDAO;
-import org.qrconsult.spm.dataAccess.interfaces.resources.IResourceDAO;
-import org.qrconsult.spm.exceptions.DAOException;
-import org.qrconsult.spm.exceptions.DataBaseException;
-import org.qrconsult.spm.exceptions.UserException;
-import org.qrconsult.spm.exceptions.WebapseeException;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.activities.Decomposed;
-import org.qrconsult.spm.model.activities.Plain;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.agent.Group;
-import org.qrconsult.spm.model.connections.ArtifactCon;
-import org.qrconsult.spm.model.connections.Branch;
-import org.qrconsult.spm.model.connections.BranchAND;
-import org.qrconsult.spm.model.connections.BranchCond;
-import org.qrconsult.spm.model.connections.BranchCondToActivity;
-import org.qrconsult.spm.model.connections.BranchCondToMultipleCon;
-import org.qrconsult.spm.model.connections.Connection;
-import org.qrconsult.spm.model.connections.Dependency;
-import org.qrconsult.spm.model.connections.Feedback;
-import org.qrconsult.spm.model.connections.Join;
-import org.qrconsult.spm.model.connections.MultipleCon;
-import org.qrconsult.spm.model.connections.Sequence;
-import org.qrconsult.spm.model.connections.SimpleCon;
-import org.qrconsult.spm.model.log.ModelingActivityEvent;
-import org.qrconsult.spm.model.plainActivities.Automatic;
-import org.qrconsult.spm.model.plainActivities.EnactionDescription;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.model.plainActivities.ReqAgent;
-import org.qrconsult.spm.model.plainActivities.ReqGroup;
-import org.qrconsult.spm.model.plainActivities.RequiredPeople;
-import org.qrconsult.spm.model.plainActivities.RequiredResource;
-import org.qrconsult.spm.model.policies.staticPolicies.PolCondition;
-import org.qrconsult.spm.model.processKnowledge.ActivityEstimation;
-import org.qrconsult.spm.model.processKnowledge.ActivityMetric;
-import org.qrconsult.spm.model.processModels.Process;
-import org.qrconsult.spm.model.processModels.ProcessModel;
-import org.qrconsult.spm.model.resources.Consumable;
-import org.qrconsult.spm.model.resources.Exclusive;
-import org.qrconsult.spm.model.resources.Reservation;
-import org.qrconsult.spm.model.resources.Resource;
-import org.qrconsult.spm.model.resources.Shareable;
-import org.qrconsult.spm.model.taskagenda.ProcessAgenda;
-import org.qrconsult.spm.model.taskagenda.Task;
-import org.qrconsult.spm.model.taskagenda.TaskAgenda;
-import org.qrconsult.spm.model.types.ActivityType;
-import org.qrconsult.spm.services.interfaces.EnactmentEngine;
-import org.qrconsult.spm.services.interfaces.EnactmentEngineLocal;
-import org.qrconsult.spm.services.interfaces.Logging;
-import org.qrconsult.spm.services.interfaces.NotificationServices;
+import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.INormalDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessModelDAO;
+import br.ufpa.labes.spm.repository.interfaces.resources.IResourceDAO;
+import br.ufpa.labes.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.exceptions.DataBaseException;
+import br.ufpa.labes.spm.exceptions.UserException;
+import br.ufpa.labes.spm.exceptions.WebapseeException;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.ArtifactCon;
+import br.ufpa.labes.spm.domain.Branch;
+import br.ufpa.labes.spm.domain.BranchAND;
+import br.ufpa.labes.spm.domain.BranchCond;
+import br.ufpa.labes.spm.domain.BranchCondToActivity;
+import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
+import br.ufpa.labes.spm.domain.Connection;
+import br.ufpa.labes.spm.domain.Dependency;
+import br.ufpa.labes.spm.domain.Feedback;
+import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.MultipleCon;
+import br.ufpa.labes.spm.domain.Sequence;
+import br.ufpa.labes.spm.domain.SimpleCon;
+import br.ufpa.labes.spm.domain.ModelingActivityEvent;
+import br.ufpa.labes.spm.domain.Automatic;
+import br.ufpa.labes.spm.domain.EnactionDescription;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.domain.ReqAgent;
+import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.RequiredPeople;
+import br.ufpa.labes.spm.domain.RequiredResource;
+import br.ufpa.labes.spm.domain.PolCondition;
+import br.ufpa.labes.spm.domain.ActivityEstimation;
+import br.ufpa.labes.spm.domain.ActivityMetric;
+import br.ufpa.labes.spm.domain.Process;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.domain.Consumable;
+import br.ufpa.labes.spm.domain.Exclusive;
+import br.ufpa.labes.spm.domain.Reservation;
+import br.ufpa.labes.spm.domain.Resource;
+import br.ufpa.labes.spm.domain.Shareable;
+import br.ufpa.labes.spm.domain.ProcessAgenda;
+import br.ufpa.labes.spm.domain.Task;
+import br.ufpa.labes.spm.domain.TaskAgenda;
+import br.ufpa.labes.spm.domain.ActivityType;
+import br.ufpa.labes.spm.service.interfaces.EnactmentEngine;
+import br.ufpa.labes.spm.service.interfaces.EnactmentEngineLocal;
+import br.ufpa.labes.spm.service.interfaces.Logging;
+import br.ufpa.labes.spm.service.interfaces.NotificationServices;
 import org.qrconsult.spm.util.i18n.Messages;
 
 
@@ -78,29 +78,29 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 
 	@EJB
 	public NotificationServices remote;
-	
+
 	@EJB
     private Logging logging;
    // private SendMail sendMail = null;
-	
+
 	@EJB
 	IProcessDAO processDAO;
-	
+
 	@EJB
 	IProcessModelDAO processModelDAO;
-	
+
 	@EJB
 	INormalDAO normalDAO;
-	
+
 	@EJB
 	IActivityDAO activityDAO;
-	
+
 	@EJB
 	IAgentDAO agentDAO;
-	
+
 	@EJB
 	IResourceDAO resourceDAO;
-    
+
     /**
      * called by APSEE Manager.
      * begin with rules 1.1 - 1.4
@@ -326,7 +326,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
         }
 
         // now start the implementation of the rules
-        String why = ""; 
+        String why = "";
         String state = actNorm.getTheEnactionDescription().getState();
    		if(state.equals(Plain.ACTIVE)){
 
@@ -408,7 +408,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
     	// checks of parameters
 
     	if (actNorm == null){
-    		throw new DataBaseException(Messages.getString("facades.EnactmentEngine.DBExcActvDoesNot")); 
+    		throw new DataBaseException(Messages.getString("facades.EnactmentEngine.DBExcActvDoesNot"));
     	}
 
     	// checks related to the state of the system
@@ -423,7 +423,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
     	}
 
     	// now start the implementation of the rules
-    	String why = ""; 
+    	String why = "";
     	String state = actNorm.getTheEnactionDescription().getState();
 		if(state.equals(Plain.ACTIVE)){
 
@@ -494,7 +494,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
     public void pauseTask (String agent_id, String act_id)
 		throws WebapseeException, DAOException {
 
-    	// checks of parameters       
+    	// checks of parameters
         Normal actNorm = this.normalDAO.retrieveBySecondaryKey(act_id);
 
         Agent agent = this.agentDAO.retrieveBySecondaryKey(agent_id);
@@ -539,7 +539,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			this.logging.registerGlobalActivityEvent(actNorm, "ToPaused", "Rule 3.8"); //$NON-NLS-1$ //$NON-NLS-2$
     	}
         else{
-        	
+
         	String taskState = this.getTaskState(agent, actNorm);
         	if(taskState != null
         		&& !taskState.equals("")
@@ -553,12 +553,12 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
        	this.agentDAO.update(agent);
 
     }
-    
+
     public void pauseActiveTasks(String agentIdent) throws WebapseeException{
 
 		//TODO List result = this.normalDAO.getActiveTasksByAgent(agentIdent);
 		//TODO Iterator resultIterator = result.iterator();
-    			
+
 		/*while ( resultIterator.hasNext() ){
 			String ident = (String) resultIterator.next();
 			this.pauseTask(agentIdent, ident);
@@ -835,9 +835,9 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 
     	// checks of parameters
     	Resource resource;
-        
+
     	resource = this.resourceDAO.retrieveBySecondaryKey(resource_id);
-        
+
 
         if (resource == null){
         	throw new DataBaseException(Messages.getString("facades.EnactmentEngine.DBExcResource")+resource_id+Messages.getString("facades.EnactmentEngine.DBExcDoesNotExist")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -890,7 +890,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 
     	// checks of parameters
     	Resource resource;
-        
+
     	resource = this.resourceDAO.retrieveBySecondaryKey(resource_id);
 
         if (resource == null){
@@ -989,9 +989,9 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 
     	// checks of parameters
     	Resource resource;
-        
+
     	resource = this.resourceDAO.retrieveBySecondaryKey(resource_id);
-        
+
 
         if (resource == null){
         	throw new DataBaseException(Messages.getString("facades.EnactmentEngine.DBExcResource")+resource_id+Messages.getString("facades.EnactmentEngine.DBExcDoesNotExist")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -1151,7 +1151,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			}
 			return;
 		}
-		
+
 		// 	Dynamic rule 10.9
 		boolean allFailed = true;
 		for (int i = 0; i < states.length; i++) {
@@ -1177,7 +1177,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			}
 			return;
 		}
-		
+
 		// 	Dynamic rule 10.10
 		boolean allCanceled = true;
 		for (int i = 0; i < states.length; i++) {
@@ -1215,9 +1215,9 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				isAbstract = false;
 				break;
 			}
-			if (isAbstract && (state.equals(ProcessModel.ENACTING) 
-				|| state.equals(ProcessModel.INSTANTIATED) 
-				|| type.equals("Automatic") 
+			if (isAbstract && (state.equals(ProcessModel.ENACTING)
+				|| state.equals(ProcessModel.INSTANTIATED)
+				|| type.equals("Automatic")
 				|| type.equals("NormalWithAgent"))) {  //$NON-NLS-1$
 				isAbstract = false;
 				break;
@@ -1237,7 +1237,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			}
 			return;
 		}
-		
+
 		// 	Dynamic rules 10.6, 10.7, 10.8
 		boolean hasAnyInstant = false,
 		hasAnyEnacting = false,
@@ -1263,9 +1263,9 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			(hasAnyInstant || hasAnyNormal || hasAnyAutomatic)){
 			// Condition added (currstate.equals (ProcessModel.ENACTING)) to avoid state regression.
 			// In other words, a process model must not go back from ENACTING to INSTANTIATED!
-			if (!currstate.equals (ProcessModel.INSTANTIATED) 
+			if (!currstate.equals (ProcessModel.INSTANTIATED)
 				&& !currstate.equals (ProcessModel.ENACTING)){
-				
+
 				//TOOD processModel.setPmStateWithMessage(ProcessModel.INSTANTIATED);
 				if(hasAnyInstant)
 					this.logging.registerProcessModelEvent(processModel, "ToInstantiated", "Rule 10.6"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -1282,7 +1282,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				}
 			}
 		}
-		
+
 		// 	Dynamic rule 10.9
 		boolean allFinished = true;
 		for (int i = 0; i < states.length; i++) {
@@ -1335,7 +1335,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			close = true;
 		}*/
     	ProcessModel pmodel = this.processModelDAO.retrieve(pmodel_id);
-    	
+
 		Collection activities = pmodel.getTheActivity();
 		Iterator iter = activities.iterator();
 		while (iter.hasNext()) {
@@ -1393,9 +1393,9 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
      */
 	public void searchForFiredConnections(Integer pmodel_id, String why)
             throws WebapseeException {
-		
+
 		ProcessModel pmodel = this.processModelDAO.retrieve(pmodel_id);
-		
+
 	    Collection connections = pmodel.getTheConnection();
 
 	    while (true) {
@@ -1598,7 +1598,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 		if ((procModelState.equals(ProcessModel.ENACTING)) ||
 		    (procModelState.equals(ProcessModel.INSTANTIATED)) ||
 		    (procModelState.equals(ProcessModel.MIXED)))
-			//TODO 
+			//TODO
 			//processModel.setPmStateWithMessage(ProcessModel.INSTANTIATED);
 
 		this.logging.registerProcessModelEvent(processModel, "To"+ProcessModel.INSTANTIATED, "Rule ?"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -1755,7 +1755,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 							break;
 						}
 					}
-			    	
+
 			    	if(has) break;
 			    }
 			}
@@ -1929,7 +1929,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	(Agent agent, Normal normal, String state) {
 		System.out.println("Agent: " + agent);
 		System.out.println("Task agenda: " + agent.getTheTaskAgenda());
-		
+
 		TaskAgenda taskagenda = agent.getTheTaskAgenda();
 		Collection processagendas = taskagenda.getTheProcessAgenda();
 		Iterator iter = processagendas.iterator();
@@ -1941,7 +1941,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			    if (!oldLocalState.equals("Delegated")) {
 			    	task.setLocalState(state);
 			    }
-			    
+
 			    // Date settings
 			    if(task.getLocalState().equals(Plain.READY)
 			    	|| task.getLocalState().equals(Plain.WAITING)){
@@ -1954,7 +1954,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			    else if(task.getLocalState().equals(Plain.FINISHED)){
 			    	task.setEndDate(new Date());
 			    }
-			    
+
 				this.notifyAgentAbouActivityState(task);
 				return task;
 			}
@@ -2053,7 +2053,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
      * Determine that a Plain Activity has started, propagating to the Process Model.
      */
     private void plainActivityHasStarted (Integer pmodel_id/*, Session currentSession*/) throws WebapseeException {
-    	
+
     	ProcessModel pmodel =  this.processModelDAO.retrieve(pmodel_id);
     	ProcessModel parentModel = pmodel;
 		String why = ""; //$NON-NLS-1$
@@ -2097,7 +2097,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
      */
 	private void processModelHasStarted (Integer procModel_id, String why/*, Session currentSession*/)
 		throws WebapseeException {
-		
+
 		ProcessModel procModel = this.processModelDAO.retrieve(procModel_id);
 		// 	if modelId is not the root model, apply rule for its parent model
 		if (!this.isTheRootProcess(procModel)) {
@@ -2148,9 +2148,9 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	    		if(procAgenda != null){
 	    			Process actProcess = this.getTheProcess(act.getTheProcessModel());
 	    			Process agendaProcess = procAgenda.getTheProcess();
-	    			
+
 	    			if(actProcess.equals(agendaProcess)){ // optimizing code
-	    			
+
 	    				Collection tasks = procAgenda.getTheTask();
 	    				Iterator iter3 = tasks.iterator();
 	    				while (iter3.hasNext()) {
@@ -2478,8 +2478,8 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
      */
 	private void activityHasFinished (Activity act/*, Session currentSession*/)
 		throws WebapseeException {
-			
-		String why = ""; 
+
+		String why = "";
 		ProcessModel parentModel = act.getTheProcessModel();
 		String state = this.getState(act);
 		String modState = parentModel.getPmState();
@@ -2570,9 +2570,9 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 		throws WebapseeException {
 
 		//TODO processModel.setPmStateWithMessage(ProcessModel.FINISHED);
-		this.logging.registerProcessModelEvent(processModel, "ToFinished", "Rules G11.11"); 
+		this.logging.registerProcessModelEvent(processModel, "ToFinished", "Rules G11.11");
 		processModel.getTheProcess().setPState(Process.FINISHED);
-		this.logging.registerProcessEvent(processModel.getTheProcess(), "ToFinished", "Rule ?"); 
+		this.logging.registerProcessEvent(processModel.getTheProcess(), "ToFinished", "Rule ?");
 	}
 
     /**
@@ -2627,7 +2627,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					continue;
 
 				String depType = dep.getKindDep();
-				if (depType.equals ("end-end")){ 
+				if (depType.equals ("end-end")){
 					boolean depOk = true;
 					Iterator iterActsFrom = actsFrom.iterator();
 					while (iterActsFrom.hasNext()) {
@@ -2656,7 +2656,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	private boolean areDependenciesOKToFinish(Activity act, ProcessModel procModel){
 
 		if(!this.isTheRootProcess(procModel)){
-			
+
 			// Check if it is the last activity to finish
 			if(this.isActivityLastToFinish(act, procModel)){
 				// The NACs from the rule 4.2 must be checked.
@@ -2679,10 +2679,10 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 		}
 		return true;
 	}
-	
+
 	private boolean areNACsOk(ProcessModel procModel){
 		boolean ret = true;
-		
+
 		// NACs from the rule 4.2 must be checked.
 		Decomposed actDec = procModel.getTheDecomposed();
 	    Collection froms = this.getConnectionsFrom(actDec);
@@ -2693,7 +2693,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 Sequence seq = (Sequence)conn;
                 Activity from = seq.getFromActivity();
                 String state = this.getState(from);
-                if(seq.getTheDependency().getKindDep().equals("end-end") 
+                if(seq.getTheDependency().getKindDep().equals("end-end")
                     &&(!(state.equals(Plain.FINISHED)
                     || state.equals(ProcessModel.FINISHED)))){
                     ret = false;
@@ -2703,14 +2703,14 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
             else if(conn instanceof BranchAND){ // Rule 4.2 NAC-01
                 BranchAND bAND = (BranchAND)conn;
                 if(!bAND.isFired().booleanValue()
-                   && bAND.getTheDependency().getKindDep().equals("end-end")){ 
+                   && bAND.getTheDependency().getKindDep().equals("end-end")){
                     ret = false;
                     break;
                 }
             }
             else if(conn instanceof BranchCond){
                 BranchCond bCond = (BranchCond)conn;
-                if(bCond.getTheDependency().getKindDep().equals("end-end")){ 
+                if(bCond.getTheDependency().getKindDep().equals("end-end")){
                    if(!bCond.isFired().booleanValue()){ // Rule 4.2 NAC-02
                        ret = false;
                        break;
@@ -2741,7 +2741,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
         }
 	    return ret;
 	}
-	
+
 	private boolean isActivityLastToFinish(Activity act, ProcessModel procModel){
 
 		Collection acts = procModel.getTheActivity();
@@ -2749,12 +2749,12 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
         while (iter.hasNext()) {
             Activity activity = (Activity) iter.next();
             if(activity.equals(act)) continue;
-            
+
             String state = this.getState(activity);
             if (!(state.equals(Plain.FINISHED) || state.equals(ProcessModel.FINISHED))
                 && !(state.equals(Plain.FAILED) || state.equals(ProcessModel.FAILED))
                 && !(state.equals(Plain.CANCELED) || state.equals(ProcessModel.CANCELED))) {
-            	
+
             	return false;
             }
         }
@@ -2775,18 +2775,18 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 		    Iterator iterfroms = froms.iterator();
 		    while (iterfroms.hasNext()) {
                 Connection conn = (Connection) iterfroms.next();
-                
+
                 if(conn instanceof BranchAND){ // Rule 4.2 NAC-01
                     BranchAND bAND = (BranchAND)conn;
                     if(!bAND.isFired().booleanValue()
-                       && bAND.getTheDependency().getKindDep().equals("end-end")){ 
+                       && bAND.getTheDependency().getKindDep().equals("end-end")){
                         ret = false;
                         break;
                     }
                 }
                 else if(conn instanceof BranchCond){
                     BranchCond bCond = (BranchCond)conn;
-                    if(bCond.getTheDependency().getKindDep().equals("end-end")){ 
+                    if(bCond.getTheDependency().getKindDep().equals("end-end")){
                        if(!bCond.isFired().booleanValue()){ // Rule 4.2 NAC-02
                            ret = false;
                            break;
@@ -2810,17 +2810,17 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 else if(conn instanceof Join){ // Rule 4.2 NAC-01
                     Join join = (Join)conn;
                     if(!join.isFired().booleanValue()
-                       && join.getTheDependency().getKindDep().equals("end-end")){ 
+                       && join.getTheDependency().getKindDep().equals("end-end")){
                        ret = false;
                        break;
                     }
                 }
-                
+
                 else if(conn instanceof Sequence){ // Rule 4.2 NAC-04
                     Sequence seq = (Sequence)conn;
                     Activity from = seq.getFromActivity();
                     String state = this.getState(from);
-                    if(seq.getTheDependency().getKindDep().equals("end-end") 
+                    if(seq.getTheDependency().getKindDep().equals("end-end")
                         &&(!(state.equals(Plain.FINISHED)
                         || state.equals(ProcessModel.FINISHED)))){
                         ret = false;
@@ -3997,7 +3997,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
      * Redoes an Activity and propagates the "redo" to the
      * following Activities.
      */
-	
+
 	private void redoActivityAndPropagate (Activity act/*, Session currentSession*/)
 		throws WebapseeException {
 
@@ -4116,7 +4116,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			}
 
 			this.versioning(actNorm);
-			
+
 			if(rule912){
 				this.logging.registerGlobalActivityEvent (actNorm, "Redone", "Rule 9.12"); //$NON-NLS-1$ //$NON-NLS-2$
 				//TODO actNorm.getTheEnactionDescription().setStateWithMessage(Plain.WAITING);
@@ -4252,7 +4252,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	private void copyActivityRelationships(Activity actFrom, Activity actTo){
 
         if(!actFrom.getActivityEstimation().isEmpty()){
-        	
+
         	ActivityEstimation greater = null;
         	//Collection temp = new HashSet();
 
@@ -4270,7 +4270,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				}
 			}
         	//actFrom.getActivityEstimation().removeAll(temp);
-        	
+
         	// The last estimation from the old version must be copied for the new one.
         	if(greater != null){
         		ActivityEstimation lastEst = new ActivityEstimation();
@@ -4298,7 +4298,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				}
 			}
         	//actFrom.getActivityMetric().removeAll(temp);
-        	
+
         	// The last metric from the old version must be copied for the new one.
         	if(greater != null){
         		ActivityMetric lastMet = new ActivityMetric();
@@ -4373,36 +4373,36 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
     	Activity activity = this.activityDAO.retrieveBySecondaryKey(act_id);
 
         if (activity == null){
- 
+
         	throw new DataBaseException(Messages.getString("facades.EnactmentEngine.DBExcActivity")+act_id+Messages.getString("facades.EnactmentEngine.DBExcDoesNotExist")); //$NON-NLS-1$ //$NON-NLS-2$
         }
-        
+
         Process process = this.processDAO.retrieveBySecondaryKey(activity.getIdent().substring(0, activity.getIdent().indexOf(".")));
         String pState = process.getPState();
         if(pState.equals(Process.NOT_STARTED)){
         	throw new WebapseeException(Messages.getString("facades.EnactmentEngine.WAExcRedoNotEnactActivity"));
 		}
-        
+
         ProcessModel processModel = activity.getTheProcessModel();
         String processModelState = processModel.getPmState();
-        
+
         if(processModelState.equals(ProcessModel.FINISHED)
         	|| processModelState.equals(ProcessModel.FAILED)
         	|| processModelState.equals(ProcessModel.CANCELED)){
-        	throw new WebapseeException(Messages.getString("facades.EnactmentEngine.WAExcRedoFinishedProcMod")); 
+        	throw new WebapseeException(Messages.getString("facades.EnactmentEngine.WAExcRedoFinishedProcMod"));
         }
-        
+
 		// Now we start the implementation of the rules
 		String state = this.getState(activity);
 		System.out.println("Activity: " + activity.getIdent());
 		System.out.println("State after: " + state);
-		
+
 		if (state.equals(Plain.WAITING)
 			|| state.equals(ProcessModel.REQUIREMENTS)
 			|| state.equals(ProcessModel.ABSTRACT)
 			|| state.equals(ProcessModel.INSTANTIATED)
 			|| state.equals(Plain.READY)
-			|| state.equals("")) { 
+			|| state.equals("")) {
 
 			this.redoActivity(activity);
 
@@ -4430,19 +4430,19 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	       	this.searchForReadyActivities (activity.getTheProcessModel().getOid());
 	       	this.determineProcessModelStates(activity.getTheProcessModel());
 		}
-		
+
 		// Persistence Operation
 		this.activityDAO.update(activity);
 		System.out.println("State now: " + this.getState(activity));
 	}
-	
+
 	private void rollbackProcessModelState(ProcessModel processModel/*, Session currentSession*/){
 		String state = processModel.getPmState();
-		if(state.equals(ProcessModel.FINISHED) 
+		if(state.equals(ProcessModel.FINISHED)
 			|| state.equals(ProcessModel.FAILED)){
-			
+
 			boolean toEnacting = false;
-			
+
 			Collection acts = processModel.getTheActivity();
 			Iterator iter = acts.iterator();
 			while (iter.hasNext()) {
@@ -4450,11 +4450,11 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				if(activity != null){
 					String actState = this.getState(activity);
 					if(actState.equals(Plain.ACTIVE)
-						||actState.equals(Plain.PAUSED) 
-						||actState.equals(Plain.FINISHED) 
-						||actState.equals(Plain.FAILED) 
-						||actState.equals(ProcessModel.ENACTING) 
-						||actState.equals(ProcessModel.FINISHED) 
+						||actState.equals(Plain.PAUSED)
+						||actState.equals(Plain.FINISHED)
+						||actState.equals(Plain.FAILED)
+						||actState.equals(ProcessModel.ENACTING)
+						||actState.equals(ProcessModel.FINISHED)
 						||actState.equals(ProcessModel.FAILED)){
 
 						toEnacting = true;
@@ -4462,22 +4462,22 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					}
 				}
 			}
-			
+
 			if(toEnacting){
 				//TODO processModel.setPmStateWithMessage(ProcessModel.ENACTING);
-				this.logging.registerProcessModelEvent (processModel, "To"+ProcessModel.ENACTING, "Rule G1.10"); 
+				this.logging.registerProcessModelEvent (processModel, "To"+ProcessModel.ENACTING, "Rule G1.10");
 			}
 			else{
 				//TODO processModel.setPmStateWithMessage(ProcessModel.INSTANTIATED);
-				this.logging.registerProcessModelEvent (processModel, "To"+ProcessModel.INSTANTIATED, "Rule G1.11"); 
+				this.logging.registerProcessModelEvent (processModel, "To"+ProcessModel.INSTANTIATED, "Rule G1.11");
 			}
-			
+
 			// To Upper Levels
 			Decomposed upperDecomposed = processModel.getTheDecomposed();
 			if(upperDecomposed != null){
-				
+
 				this.rollbackProcessModelState(upperDecomposed.getTheProcessModel());
-				
+
 				Collection connsTo = this.getConnectionsTo(upperDecomposed);
 				Iterator iterConnsTo = connsTo.iterator();
 				while (iterConnsTo.hasNext()) {
@@ -4496,8 +4496,8 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				}
 			}
 		}
-	}	
-	
+	}
+
 
     /**
      * called by APSEE Manager.

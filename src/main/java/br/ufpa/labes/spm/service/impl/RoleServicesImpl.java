@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,25 +12,25 @@ import javax.persistence.Query;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAbilityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentPlaysRoleDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IRoleDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IRoleNeedsAbilityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IRoleTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAbilityDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentPlaysRoleDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IRoleDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IRoleNeedsAbilityDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IRoleTypeDAO;
 import org.qrconsult.spm.dtos.formAbility.AbilityDTO;
 import org.qrconsult.spm.dtos.formAgent.AgentDTO;
 import org.qrconsult.spm.dtos.formRole.RoleDTO;
 import org.qrconsult.spm.dtos.formRole.RolesDTO;
-import org.qrconsult.spm.model.agent.Ability;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.agent.AgentAffinityAgent;
-import org.qrconsult.spm.model.agent.AgentHasAbility;
-import org.qrconsult.spm.model.agent.AgentPlaysRole;
-import org.qrconsult.spm.model.agent.Group;
-import org.qrconsult.spm.model.agent.Role;
-import org.qrconsult.spm.model.agent.RoleNeedsAbility;
-import org.qrconsult.spm.model.types.RoleType;
-import org.qrconsult.spm.services.interfaces.RoleServices;
+import br.ufpa.labes.spm.domain.Ability;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.AgentAffinityAgent;
+import br.ufpa.labes.spm.domain.AgentHasAbility;
+import br.ufpa.labes.spm.domain.AgentPlaysRole;
+import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.Role;
+import br.ufpa.labes.spm.domain.RoleNeedsAbility;
+import br.ufpa.labes.spm.domain.RoleType;
+import br.ufpa.labes.spm.service.interfaces.RoleServices;
 
 @Stateless
 public class RoleServicesImpl implements RoleServices {

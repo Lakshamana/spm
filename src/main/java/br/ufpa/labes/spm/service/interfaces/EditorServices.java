@@ -1,10 +1,9 @@
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
-import javax.ejb.Remote;
 
 @Remote
 public interface EditorServices {
-	
+
 	public String getActivities( String sessionID );
 	public String getEditorContent( String pmodelID );
 

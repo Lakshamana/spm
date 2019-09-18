@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.List;
 
@@ -6,23 +6,21 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.chat.IChatMessageDAO;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.chat.ChatMessage;
-import org.qrconsult.spm.services.interfaces.ChatMessageServices;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.chat.IChatMessageDAO;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.ChatMessage;
+import br.ufpa.labes.spm.service.interfaces.ChatMessageServices;
 
 @Stateless
 public class ChatMessageServicesImpl implements ChatMessageServices {
 
-	@EJB
 	IAgentDAO agentDAO;
-	
-	@EJB
+
 	IChatMessageDAO messageDAO;
-	
+
 	TypedQuery<ChatMessage> query;
-	
+
 	@Override
 	public List<ChatMessage> buscarTodasAsMensagensDaConversa(String ident) {
 		String hql = "SELECT m FROM " + "ChatMessage" + " m WHERE m.ident = :ident";
@@ -43,13 +41,13 @@ public class ChatMessageServicesImpl implements ChatMessageServices {
 			messageDAO.save(message);
 		}
 	}
-	
-	
+
+
 	private Agent getAgent(String ident) {
 		String hql = "SELECT a FROM " + "Agent" + " a WHERE a.name = :ident";
 		TypedQuery<Agent> query = agentDAO.getPersistenceContext().createQuery(hql, Agent.class);
 		query.setParameter("ident", ident);
-		
+
 		List<Agent> agents = query.getResultList();
 		boolean singleResult = agents.size() >= 1;
 		if(singleResult) {

@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,43 +13,40 @@ import javax.persistence.Query;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.processKnowledge.IEstimationDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processKnowledge.IMetricDefinitionDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.ITypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IEstimationDAO;
+import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IMetricDefinitionDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.ITypeDAO;
 import org.qrconsult.spm.dtos.processKnowledge.EstimationDTO;
 import org.qrconsult.spm.dtos.processKnowledge.MetricDTO;
 import org.qrconsult.spm.dtos.processKnowledge.MetricDefinitionDTO;
-import org.qrconsult.spm.model.agent.Ability;
-import org.qrconsult.spm.model.agent.Group;
-import org.qrconsult.spm.model.agent.Role;
-import org.qrconsult.spm.model.artifacts.Artifact;
-import org.qrconsult.spm.model.connections.Connection;
-import org.qrconsult.spm.model.log.Event;
-import org.qrconsult.spm.model.processKnowledge.Estimation;
-import org.qrconsult.spm.model.processKnowledge.Metric;
-import org.qrconsult.spm.model.processKnowledge.MetricDefinition;
-import org.qrconsult.spm.model.resources.Resource;
-import org.qrconsult.spm.model.tools.ToolDefinition;
-import org.qrconsult.spm.model.types.MetricType;
-import org.qrconsult.spm.model.types.Type;
-import org.qrconsult.spm.services.interfaces.EstimationServices;
+import br.ufpa.labes.spm.domain.Ability;
+import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.Role;
+import br.ufpa.labes.spm.domain.Artifact;
+import br.ufpa.labes.spm.domain.Connection;
+import br.ufpa.labes.spm.domain.Event;
+import br.ufpa.labes.spm.domain.Estimation;
+import br.ufpa.labes.spm.domain.Metric;
+import br.ufpa.labes.spm.domain.MetricDefinition;
+import br.ufpa.labes.spm.domain.Resource;
+import br.ufpa.labes.spm.domain.ToolDefinition;
+import br.ufpa.labes.spm.domain.MetricType;
+import br.ufpa.labes.spm.domain.Type;
+import br.ufpa.labes.spm.service.interfaces.EstimationServices;
 
 
 @Stateless
 public class EstimationServicesImpl implements EstimationServices{
-	@EJB
 	IMetricDefinitionDAO metricDefinitionDAO;
-	
-	@EJB
+
 	ITypeDAO typeDAO;
-	
-	@EJB
+
 	IEstimationDAO estimationDAO;
-	
+
 	Hashtable<String, Class<?>> typeClasses = new Hashtable<String, Class<?>>();
 	Hashtable<String, Class<?>> classes = new Hashtable<String, Class<?>>();
-	
-	
+
+
 	@Override
 	public EstimationDTO saveEstimation(EstimationDTO estimationDTO) {
 		//metricDTO.getMetricDefinition();
@@ -79,21 +76,21 @@ public class EstimationServicesImpl implements EstimationServices{
 								estimation = estimationDAO.save(estimation);
 								estimationDTO = (EstimationDTO) converter.getDTO(estimation, EstimationDTO.class);
 								System.out.println("MeAqui5");
-							}		
+							}
 						//}else{
 							System.out.println("MeAqui6");
 							//return null;
 						//}
 					}else{
 						return null;
-					}		
-					
+					}
+
 				} catch (ImplementationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				System.out.println("MeAqui7");
-				return estimationDTO;	
+				return estimationDTO;
 		}
 
 	@Override
@@ -102,7 +99,7 @@ public class EstimationServicesImpl implements EstimationServices{
 		Query query;
 		List<MetricDefinition> result = null;
 		List<MetricDefinitionDTO> resultDTO = new ArrayList<MetricDefinitionDTO>();
-		
+
 		hql = "select metricDefinition from "+MetricDefinition.class.getSimpleName()+" as metricDefinition";
 		query = metricDefinitionDAO.getPersistenceContext().createQuery(hql);
 		result = query.getResultList();
@@ -113,7 +110,7 @@ public class EstimationServicesImpl implements EstimationServices{
 				try {
 					MetricDefinitionDTO abi = new MetricDefinitionDTO();
 					abi =  (MetricDefinitionDTO) converter.getDTO(result.get(i), MetricDefinitionDTO.class);
-					
+
 					String[] strings= new String[result.get(i).getUnits().size()];
 					Collection<String> unidades = new ArrayList<String>();
 					unidades = result.get(i).getUnits();
@@ -122,16 +119,16 @@ public class EstimationServicesImpl implements EstimationServices{
 					strings = unidades.toArray(strings);
 					System.out.println("ppp:"+strings[0]);
 					//resultDTO.add(abi);
-					
-					
-					
-					
+
+
+
+
 				} catch (ImplementationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
+
+
 				}*/
 			  int j=0;
 				for (MetricDefinition str : result) {
@@ -153,7 +150,7 @@ public class EstimationServicesImpl implements EstimationServices{
 						j++;
 						System.out.println("ppp:"+strings[0]+":"+j);
 						resultDTO.add(abi);
-				
+
 					} catch (ImplementationException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -162,7 +159,7 @@ public class EstimationServicesImpl implements EstimationServices{
 				return resultDTO;
 			}else{
 				return null;
-			}	
+			}
 	}
 
 	@Override
@@ -172,19 +169,19 @@ public class EstimationServicesImpl implements EstimationServices{
 		List<List<Type>> typesLists = new ArrayList<List<Type>>();
 		List<Class<?>> returnedClasses = new ArrayList<Class<?>>();
 		int sizeLists = 0;
-		
+
 		if(domainFilter!=null){
 			Class<?> currentClass = typeClasses.get(domainFilter);
 			hql = "select type from " + currentClass.getName()  + " as type";
 			query = typeDAO.getPersistenceContext().createQuery(hql);
 			//query.setParameter("orgFilter", orgFilter);
 			//query.setParameter("termo", "%"+ termoBusca + "%");
-			List<Type> resultList = query.getResultList(); 
+			List<Type> resultList = query.getResultList();
 			typesLists.add(resultList);
 			returnedClasses.add(currentClass);
 			sizeLists = resultList.size();
 		}else{
-			/*Iterator<Class<?>> classIterator = typeClasses.values().iterator(); 
+			/*Iterator<Class<?>> classIterator = typeClasses.values().iterator();
 			while (classIterator.hasNext()) {
 				Class<?> class_ = classIterator.next();
 				hql = "select type from " + class_.getName() + " as type where type.ident like :termo and type.userDefined is not :orgFilter";
@@ -196,33 +193,33 @@ public class EstimationServicesImpl implements EstimationServices{
 				returnedClasses.add(class_);
 				sizeLists += resultList.size();*/
 			}
-		
-		
-		
+
+
+
 		List<String> strinList = new ArrayList<String>();
 		for (int i = 0; i < typesLists.size(); i++) {
 			List<Type> list = typesLists.get(i);
-			
+
 			for (Iterator<Type> iterator = list.iterator(); iterator.hasNext();) {
 				Type type = (Type) iterator.next();
 				String typeIdent = type.getIdent();
 				strinList.add(typeIdent);
 			}
 		}
-		
+
 		String[] strings= new String[strinList.size()];
 		strings = strinList.toArray(strings);
-		
+
 		for(int j= 0;j < strings.length;j++){
 			System.out.println(strings[j]+":");
 		}
-		
+
 		return strings;
 	}
 	@Override
 	public String[] getWithTypes(String domainFilter, String nameType) {
 	// TODO Auto-generated method stub
-		
+
 		String hql;
 		Query query = null;
 		List<List> typesLists = new ArrayList<List>();
@@ -236,35 +233,35 @@ public class EstimationServicesImpl implements EstimationServices{
 			System.out.println("hql:"+hql);
 			//query.setParameter("type", nameType);
 			query = typeDAO.getPersistenceContext().createQuery(hql);
-			List resultList = query.getResultList(); 
+			List resultList = query.getResultList();
 			typesLists.add(resultList);
 			returnedClasses.add(currentClass);
 			sizeLists = resultList.size();
 		}
-		
-		
-		
+
+
+
 		List<String> strinList = new ArrayList<String>();
 		for (int i = 0; i < typesLists.size(); i++) {
 			List list = typesLists.get(i);
-			
+
 			/*for (Iterator<Type> iterator = list.iterator(); iterator.hasNext();) {
 				Type type = (Type) iterator.next();
 				String typeIdent = type.getIdent();
 				strinList.add(typeIdent);
 			}*/
-			
+
 			for (Object object : list) {
-				
+
 				if (object instanceof Ability){
 					Ability abi = (Ability) object;
 					String typeIdent = abi.getName();
 					strinList.add(typeIdent);
-				}		
+				}
 				else if (object instanceof Connection){
 					Connection abi = (Connection) object;
 					String typeIdent = abi.getIdent();
-					strinList.add(typeIdent);	
+					strinList.add(typeIdent);
 				}else if (object instanceof Artifact){
 					Artifact abi = (Artifact) object;
 					String typeIdent = abi.getName();
@@ -291,15 +288,15 @@ public class EstimationServicesImpl implements EstimationServices{
 					strinList.add(typeIdent);
 				}
 			}
-		
+
 		}
 		String[] strings= new String[strinList.size()];
 		strings = strinList.toArray(strings);
-		
+
 		for(int j= 0;j < strings.length;j++){
 			System.out.println(strings[j]+":");
 		}
-		
+
 		return strings;
 	}
 

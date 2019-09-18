@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -16,24 +16,24 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.Query;
 
-import org.qrconsult.spm.dataAccess.interfaces.activities.IActivityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.organizationPolicies.IProjectDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessDAO;
+import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
+import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
 import org.qrconsult.spm.dtos.formActivity.ActivityDTO;
 import org.qrconsult.spm.dtos.formActivity.ActivitysDTO;
 import org.qrconsult.spm.dtos.formActivity.DecomposedDTO;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.activities.Decomposed;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.model.plainActivities.ReqAgent;
-import org.qrconsult.spm.model.plainActivities.RequiredPeople;
-import org.qrconsult.spm.model.processModels.Process;
-import org.qrconsult.spm.model.processModels.ProcessModel;
-import org.qrconsult.spm.model.taskagenda.Task;
-import org.qrconsult.spm.services.interfaces.CalendarServices;
-import org.qrconsult.spm.services.interfaces.EasyModelingServices;
-import org.qrconsult.spm.services.interfaces.GanttServices;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.domain.ReqAgent;
+import br.ufpa.labes.spm.domain.RequiredPeople;
+import br.ufpa.labes.spm.domain.Process;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.domain.Task;
+import br.ufpa.labes.spm.service.interfaces.CalendarServices;
+import br.ufpa.labes.spm.service.interfaces.EasyModelingServices;
+import br.ufpa.labes.spm.service.interfaces.GanttServices;
 import org.qrconsult.spm.util.ServicesUtil;
 
 @Stateless(mappedName="GanttServices")
@@ -41,29 +41,24 @@ public class GanttServicesImpl implements GanttServices {
 
 	private static final String ACTIVITY_CLASSNAME = Activity.class.getSimpleName();
 
-	@EJB
 	IProcessDAO processDAO;
-	
-	@EJB
+
 	IActivityDAO activityDAO;
-	
-	@EJB
+
 	IProjectDAO projectDAO;
-	@EJB
 	EasyModelingServices easyModelingServices;
-	
-	@EJB
+
 	CalendarServices calendarServices;
-	
+
 	final int MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
 	private long minCalendar = -1;
 	private long maxCalendar = -1;
 	private int duration;
 	private Date plannedBegin;
 	private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-    
+
 	private Query query;
-	
+
 	@Override
 	public ActivitysDTO getGanttActivities(String processIdent) {
 		Process process = (Process) processDAO
@@ -73,15 +68,14 @@ public class GanttServicesImpl implements GanttServices {
 		ActivitysDTO gantt = new ActivitysDTO();
 		List<ActivityDTO> lista = new ArrayList<ActivityDTO>();
 		gantt = buildGantt(model, lista);
-		
+
 		return gantt;
 	}
-	
+
 	@Override
 	public String alo() {
-		return "Alô EJB";
 	}
-	
+
 	private static GanttServices lookupService() throws NamingException {
 		final Hashtable jndiProperties = new Hashtable();
 		jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
@@ -90,28 +84,27 @@ public class GanttServicesImpl implements GanttServices {
 	    jndiProperties.put(Context.SECURITY_PRINCIPAL, "admin");
 	    jndiProperties.put(Context.SECURITY_CREDENTIALS, "123");
 	    jndiProperties.put("jboss.naming.client.ejb.context", true);
-	    
+
 		final Context context = new InitialContext(jndiProperties);
 		final String appName = "";
 		final String moduleName = "jboss-as-ejb-remote-app";
 		final String distinctName = "";
 		final String beanName = GanttServicesImpl.class.getSimpleName();
 		final String viewClassName = GanttServices.class.getSimpleName();
-		
+
 		String enderecoLookup = "ejb:" + appName + "/" + moduleName + "/" + distinctName + "/" + beanName + "/" + viewClassName;
 		System.out.println(enderecoLookup);
 		return (GanttServices) context.lookup(enderecoLookup);
 	}
-	
+
 	public static void main(String[] args) {
-//		GanttServicesImpl ejb = new EJBProvider().getEJB(GanttServices.class);
 //		Class<GanttServices> classe = GanttServices.class;
 //		try {
-////			String enderecoLookup = "java:global/SPMEar/SPMServices/" + classe.getSimpleName() + "Impl!org.qrconsult.spm.services.interfaces." + classe.getSimpleName();
+////			String enderecoLookup = "java:global/SPMEar/SPMServices/" + classe.getSimpleName() + "Impl!br.ufpa.labes.spm.service.interfaces." + classe.getSimpleName();
 //			String enderecoLookup = "GanttServices";
 //			GanttServices ejb = (GanttServices) new InitialContext().lookup(enderecoLookup);
 //			System.out.println(ejb.alo());
-//			
+//
 //		} catch (NamingException e) {
 //			System.out.println("Erro ao fazer o lookup do serviço " + classe.getSimpleName());
 //			e.printStackTrace();
@@ -122,16 +115,16 @@ public class GanttServicesImpl implements GanttServices {
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	@Override
 	public boolean updateGanttTask(ActivityDTO activityDTO) {
-		
+
 //		//mudar o gethoursworked para getDuration
-//	
+//
 //		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy");
-//		
+//
 //		Date begin =  new Date();
 //		try {
 //			begin =  sdf1.parse(activityDTO.getPlannedBegin());
@@ -140,32 +133,32 @@ public class GanttServicesImpl implements GanttServices {
 //			e.printStackTrace();
 //		}
 //		System.out.println("caiu aqui no gant 2" + begin);
-//		
+//
 //		Date end =  new Date();
-//		
+//
 //		int duraction = activityDTO.getHoursWorked().intValue();
 //		end = new Date(begin.getTime() +(duraction * MILLIS_PER_DAY));
-//		
+//
 //		long dateBegin = begin.getTime();
 //		long dateEnd = end.getTime();
 //		System.out.println("data inicial "+ dateBegin+"data final "+dateEnd);
-//		
+//
 //		String project_oid =  activityDTO.getIdent();
-//		String ident[] = project_oid.split("\\."); 
-//		
+//		String ident[] = project_oid.split("\\.");
+//
 //		System.out.println("id projeto "+ ident[0]);
 //		Project project =  projectDAO.retrieveBySecondaryKey(ident[0]);
-//		
+//
 //		CalendarDTO replain = calendarServices.getCalendarForProject(project.getOid());
-//	
-//		
+//
+//
 //		easyModelingServices.replanningDates(activityDTO.getIdent(),dateBegin,dateEnd,replain);
-		
+
 		String hql = "SELECT o FROM " + ACTIVITY_CLASSNAME + " o where o.ident = '" + activityDTO.getIdent() + "'";
 		query = activityDAO.getPersistenceContext().createQuery(hql);
-		
+
 		List<Activity> result = query.getResultList();
-		
+
 		if(!result.isEmpty()) {
 			Activity activity = result.get(0);
 			activity.setName(activityDTO.getName());
@@ -176,10 +169,10 @@ public class GanttServicesImpl implements GanttServices {
 				activityDAO.update(normal);
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	private ActivitysDTO buildGantt(ProcessModel model,
 			List<ActivityDTO> lista) {
 		ActivitysDTO acts = null;
@@ -191,22 +184,22 @@ public class GanttServicesImpl implements GanttServices {
 		}
 		return acts;
 	}
-	
+
 	public List<ActivityDTO> getActivitiesHierarchy(ProcessModel model) {
 		Collection<Activity> activities = model.getTheActivity();
 		List<ActivityDTO> activitiesDTO = new ArrayList<ActivityDTO>();
-		
+
 		Iterator<Activity> activityIterator = activities.iterator();
 		while (activityIterator.hasNext()) {
 			Object activity = activityIterator.next();
 			ActivityDTO act = null;
-			
+
 			if(activity instanceof Decomposed) {
 				Decomposed decomposed = (Decomposed) activity;
 //				System.out.println("D ==> " + decomposed.getName() + " - " + this.getBeginDate(decomposed.getTheReferedProcessModel().getTheActivity()));
 				act = this.convertDecomposedToDecomposedDTO(decomposed);
 			}
-			
+
 			if(activity instanceof Normal) {
 				Normal normal = (Normal) activity;
 //				System.out.println("\tN ==> " + normal.getName() + " - " + normal.getPlannedBegin());
@@ -214,14 +207,14 @@ public class GanttServicesImpl implements GanttServices {
 					act = this.convertNormalToActivityDTO(normal, "");
 				}
 			}
-			
+
 			if(act != null) {
 				activitiesDTO.add(act);
 			}
 		}
-		return activitiesDTO;		
+		return activitiesDTO;
 	}
-	
+
 	public List<ActivityDTO> getActivitiesHierarchy(ProcessModel model, String parent) {
 		Collection<Activity> activities = model.getTheActivity();
 		List<ActivityDTO> activitiesDTO = new ArrayList<ActivityDTO>();
@@ -246,51 +239,51 @@ public class GanttServicesImpl implements GanttServices {
 				activitiesDTO.add(act);
 			}
 		}
-		return activitiesDTO;		
+		return activitiesDTO;
 	}
-	
+
 	private DecomposedDTO convertDecomposedToDecomposedDTO(Decomposed decomposed, String parent) {
 		ActivitysDTO dtos = new ActivitysDTO();
 		ProcessModel model = decomposed.getTheReferedProcessModel();
-		
+
 		DecomposedDTO decomposedDTO = new DecomposedDTO();
 		decomposedDTO.setId(decomposed.getOid());
 		decomposedDTO.setName(decomposed.getName());
 		decomposedDTO.setIdent(decomposed.getIdent());
-		
+
 		List<ActivityDTO> childs = this.getActivitiesHierarchy(model, "");
 		dtos.getActivitys().addAll(childs);
-		
+
 		Date plannedBeginDate = this.getBeginDate(model.getTheActivity());
 		Date plannedEndDate = this.getEndDate(model.getTheActivity());
-		
+
 		decomposedDTO.setDuration(String.valueOf(duration));
 		decomposedDTO.setPlannedBegin(format.format(plannedBeginDate));
 		decomposedDTO.setPlannedEnd(format.format(plannedEndDate));
 		decomposedDTO.setPercentCompleted("50");
 		decomposedDTO.setNormals(dtos);
-		
+
 		return decomposedDTO;
 	}
-	
+
 	private DecomposedDTO convertDecomposedToDecomposedDTO(Decomposed decomposed) {
 		@SuppressWarnings("deprecation")
 		Date plannedEnd = new Date(2008, 12, 01);
 		duration = 20;
 		ActivitysDTO dtos = new ActivitysDTO();
 		ProcessModel model = decomposed.getTheReferedProcessModel();
-		
+
 		DecomposedDTO decomposedDTO = new DecomposedDTO();
 		decomposedDTO.setId(decomposed.getOid());
 		decomposedDTO.setName(decomposed.getName());
 		decomposedDTO.setIdent(decomposed.getIdent());
-		
+
 		List<ActivityDTO> childs = this.getActivitiesHierarchy(model, "");
 		dtos.getActivitys().addAll(childs);
-		
+
 		Date plannedBeginDate = this.getBeginDate(model.getTheActivity());
 		Date plannedEndDate = this.getEndDate(model.getTheActivity());
-		
+
 		decomposedDTO.setDuration(String.valueOf(duration));
 		decomposedDTO.setPlannedBegin(format.format(plannedBeginDate));
 		decomposedDTO.setPlannedEnd(format.format(plannedEndDate));
@@ -301,14 +294,14 @@ public class GanttServicesImpl implements GanttServices {
 
 		return decomposedDTO;
 	}
-	
+
 	private ActivityDTO convertNormalToActivityDTO(Normal normal, String parent) {
 		@SuppressWarnings("deprecation")
 		Date plannedEnd = new Date(2008, 12, 01);
 		duration = 20;
-		
+
 //		System.out.println("Begin: " + normal.getPlannedBegin() + " - End: " + normal.getPlannedEnd());
-		
+
 		ActivityDTO activityDTO = new ActivityDTO();
 		activityDTO.setId(normal.getOid());
 		activityDTO.setName(normal.getName());
@@ -318,7 +311,7 @@ public class GanttServicesImpl implements GanttServices {
 
 		activityDTO.setPlannedBegin(format.format(normal.getPlannedBegin()));
 		activityDTO.setPlannedEnd(format.format(normal.getPlannedEnd()));
-		
+
 		int duracao = ServicesUtil.diasEntre(normal.getPlannedBegin(), normal.getPlannedEnd()) + 1;
 		activityDTO.setDuration(new Integer(duracao).toString());
 
@@ -348,7 +341,7 @@ public class GanttServicesImpl implements GanttServices {
 		activityDTO.setPercentCompleted("50");
 		return activityDTO;
 	}
-	
+
 	private String getNormalState(Normal normal) {
 		//Retorna o 1° LocalState das Tasks (Ver com o Ernani como funciona o relacionamento Normal->Tasks)
 		if(!normal.getTheTasks().isEmpty()) {
@@ -356,13 +349,13 @@ public class GanttServicesImpl implements GanttServices {
 				return task.getLocalState();
 			}
 		}
-		
+
 		return "";
 	}
 
 	public Date getBeginDate(Collection<Activity> activities) {
 		Date begin = new Timestamp(new Date().getTime());
-		
+
 		for (Activity activity : activities) {
 			if(activity instanceof Normal) {
 				Normal normal = (Normal) activity;
@@ -377,7 +370,7 @@ public class GanttServicesImpl implements GanttServices {
 					}
 				}
 			}
-			
+
 			if(activity instanceof Decomposed) {
 				Decomposed decomposed = (Decomposed) activity;
 				Collection<Activity> theActivity = decomposed.getTheReferedProcessModel().getTheActivity();
@@ -385,17 +378,17 @@ public class GanttServicesImpl implements GanttServices {
 //				if(!theActivity.isEmpty()) {
 					Date d = this.getBeginDate(theActivity);
 					if((d != null) && (!d.equals(new Date())))
-						begin = d; 
+						begin = d;
 //				}
 			}
 		}
-		
+
 		return begin;
 	}
-	
+
 	public Date getEndDate(Collection<Activity> activities) {
 		Date end = new Timestamp(1, 1, 1, 1, 1, 1,0);
-		
+
 		for (Activity activity : activities) {
 			if(activity instanceof Normal) {
 				Normal normal = (Normal) activity;
@@ -409,7 +402,7 @@ public class GanttServicesImpl implements GanttServices {
 					}
 				}
 			}
-			
+
 			if(activity instanceof Decomposed) {
 				Decomposed decomposed = (Decomposed) activity;
 				ProcessModel model = decomposed.getTheReferedProcessModel();
@@ -418,11 +411,11 @@ public class GanttServicesImpl implements GanttServices {
 //				if(!theActivity.isEmpty()) {
 				Date d = this.getBeginDate(theActivity);
 				if((d != null) && (!d.equals(new Date())))
-					end = d; 
+					end = d;
 //				}
 			}
 		}
-		
+
 		return end;
 	}
 

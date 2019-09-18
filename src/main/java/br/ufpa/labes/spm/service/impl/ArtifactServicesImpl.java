@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,20 +13,20 @@ import javax.persistence.Query;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.artifacts.IArtifactDAO;
-import org.qrconsult.spm.dataAccess.interfaces.organizationPolicies.IProjectDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IArtifactTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.ITypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
+import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.ITypeDAO;
 import org.qrconsult.spm.dtos.agenda.SimpleArtifactDescriptorDTO;
 import org.qrconsult.spm.dtos.formArtifacts.ArtifactDTO;
 import org.qrconsult.spm.dtos.formArtifacts.ArtifactsDTO;
 import org.qrconsult.spm.dtos.formTypes.TypesDTO;
-import org.qrconsult.spm.exceptions.DAOException;
-import org.qrconsult.spm.model.artifacts.Artifact;
-import org.qrconsult.spm.model.organizationPolicies.Project;
-import org.qrconsult.spm.model.types.ArtifactType;
-import org.qrconsult.spm.model.types.Type;
-import org.qrconsult.spm.services.interfaces.ArtifactServices;
+import br.ufpa.labes.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.domain.Artifact;
+import br.ufpa.labes.spm.domain.Project;
+import br.ufpa.labes.spm.domain.ArtifactType;
+import br.ufpa.labes.spm.domain.Type;
+import br.ufpa.labes.spm.service.interfaces.ArtifactServices;
 import org.qrconsult.spm.util.ident.ConversorDeIdent;
 import org.qrconsult.spm.util.ident.SemCaracteresEspeciais;
 import org.qrconsult.spm.util.ident.TrocaEspacoPorPonto;
@@ -39,33 +39,29 @@ public class ArtifactServicesImpl implements ArtifactServices {
 
 	private static final String ARTIFACT_CLASS_NAME = Artifact.class.getSimpleName();
 
-	@EJB
 	IArtifactDAO artifactDAO;
-	
-	@EJB
+
 	IArtifactTypeDAO artifactTypeDAO;
-	
-	@EJB
+
 	IProjectDAO projectDAO;
-	
-	@EJB
+
 	ITypeDAO typeDAO;
-	
+
 	Converter converter = new ConverterImpl();
 
 	private Query query;
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public TypesDTO getArtifactTypes() {
-						
+
 		String hql;
 		List<Type> typesLists = new ArrayList<Type>();
-		
+
 		hql = "from " + ArtifactType.class.getSimpleName();
 		query = typeDAO.getPersistenceContext().createQuery(hql);
 		typesLists = query.getResultList();
-				
+
 		TypesDTO typesDTO = new TypesDTO(typesLists.size());
 		int j = 0;
 		for (Type type : typesLists) {
@@ -77,7 +73,7 @@ public class ArtifactServicesImpl implements ArtifactServices {
 		}
 		return typesDTO;
 	}
-	
+
 	@Override
 	public ArtifactDTO getArtifact(String artifactIdent) {
 			try {
@@ -85,7 +81,7 @@ public class ArtifactServicesImpl implements ArtifactServices {
 				if(artifact != null) {
 					ArtifactDTO artifactDTO = (ArtifactDTO) converter.getDTO(artifact, ArtifactDTO.class);
 					ArtifactType theArtifactType = artifact.getTheArtifactType();
-					
+
 					if(theArtifactType != null) {
 						System.out.println(theArtifactType + " - " + theArtifactType.getIdent());
 						artifactDTO.setTheArtifactType(theArtifactType.getIdent());
@@ -97,7 +93,7 @@ public class ArtifactServicesImpl implements ArtifactServices {
 			}
 		return null;
 	}
-	
+
 	@Override
 	public ArtifactDTO alreadyExist(String artifactIdent) throws DAOException {
 		Artifact artifact = artifactDAO.retrieveBySecondaryKey(artifactIdent);
@@ -117,61 +113,61 @@ public class ArtifactServicesImpl implements ArtifactServices {
 					System.out.println(derivedTo);
 				}
 				ArtifactType artifactType = artifactTypeDAO.retrieveBySecondaryKey(artifactDTO.getTheArtifactType());
-				
+
 				List<Artifact> possess = this.getArtifactsFromNames(artifactDTO.getPossess());
 				List<Artifact> derivedTo = this.getArtifactsFromNames(artifactDTO.getDerivedTo());
 				Artifact artifact = null;
-				
+
 				this.getArtifacts(artifactDTO.getName(), null, null, null);
-				
+
 				artifact = artifactDAO.retrieveBySecondaryKey(artifactDTO.getIdent());
-				
+
 				if(artifact == null) {
 					artifact = (Artifact) converter.getEntity(artifactDTO, Artifact.class);
 					artifact.setTheArtifactType(artifactType);
 					artifactDAO.save(artifact);
-					
+
 					String newIdent = artifactDAO.generateIdent(artifact.getName(), artifact);
 					System.out.println("new ident: " + newIdent);
 					artifact.setIdent(newIdent);
 					artifactDTO.setIdent(newIdent);
 					artifactDAO.update(artifact);
-					
+
 				} else {
 					artifact.setName(artifactDTO.getName());
 					artifact.setDescription(artifactDTO.getDescription());
 					artifact.setTheArtifactType(artifactType);
 					artifact.setPathName(artifactDTO.getPathName());
 					artifact.setIsTemplate(artifactDTO.isIsTemplate());
-					artifact.setIsActive(artifactDTO.isIsActive());				
+					artifact.setIsActive(artifactDTO.isIsActive());
 				}
-				
-				for (Artifact derived : artifact.getDerivedTo()) { //Quebrar todas as   
+
+				for (Artifact derived : artifact.getDerivedTo()) { //Quebrar todas as
 					derived.setDerivedFrom(null);				   //rela��es que estavam
 				}										   //anteriormente, pra salvar
 				artifact.setDerivedTo(null);					   //somente as novas
-				
-				for (Artifact poss : artifact.getPossess()) { //Quebrar todas as  
-					poss.setBelongsTo(null);				  //rela��es que estavam 
-				}											  //anteriormente, pra salvar	
+
+				for (Artifact poss : artifact.getPossess()) { //Quebrar todas as
+					poss.setBelongsTo(null);				  //rela��es que estavam
+				}											  //anteriormente, pra salvar
 				artifact.setPossess(null);					  //somente as novas
-				
+
 //				artifactDAO.update(artifact);
 
 				artifact.setPossess(possess);
 				artifact.setDerivedTo(derivedTo);
-				
+
 				this.setPossessBelongsTo(artifact, possess);
 				this.setDerivedToDerivedFrom(artifact, derivedTo);
 				this.updateArtifacts(possess);
 				this.updateArtifacts(derivedTo);
-				
+
 				artifactDAO.update(artifact);
-				
+
 			} catch (ImplementationException e) {
 				e.printStackTrace();
-			}		
-		
+			}
+
 		return artifactDTO;
 	}
 
@@ -190,7 +186,7 @@ public class ArtifactServicesImpl implements ArtifactServices {
 	public ArtifactsDTO getArtifactsWithoutRelationship(boolean composicao) {
 		String hql;
 		if(composicao) {
-			hql = "select artifact from " + ARTIFACT_CLASS_NAME + " as artifact where artifact.belongsTo is null";			
+			hql = "select artifact from " + ARTIFACT_CLASS_NAME + " as artifact where artifact.belongsTo is null";
 		} else {
 			hql = "select artifact from " + ARTIFACT_CLASS_NAME + " as artifact where artifact.derivedFrom is null";
 		}
@@ -198,31 +194,31 @@ public class ArtifactServicesImpl implements ArtifactServices {
 		List<Artifact> artifacts = query.getResultList();
 		return this.convertArtifactsToArtifactsDTO(artifacts);
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public ArtifactsDTO getArtifacts(String termoBusca, String domainFilter, String projectFilter, Boolean orgFilter) {
 //		System.out.println("Param�tros: " + termoBusca + ", " + domainFilter + ", " + orgFilter);
-		
+
 		String activeFilter = (orgFilter == null) ? "" : " and art.isActive is :orgFilter" ;
-		
+
 		String hql;
 		if(domainFilter != null) {
 			hql = "select art from " + ARTIFACT_CLASS_NAME + " as art where art.name like :termo and art.ident = :domain" + activeFilter;
 			query = artifactDAO.getPersistenceContext().createQuery(hql);
 			query.setParameter("termo", "%"+ termoBusca + "%");
-			query.setParameter("domain", domainFilter);			
+			query.setParameter("domain", domainFilter);
 		} else {
 			hql = "select art from " + ARTIFACT_CLASS_NAME + " as art where art.name like :termo" + activeFilter;
 			query = artifactDAO.getPersistenceContext().createQuery(hql);
-			query.setParameter("termo", "%"+ termoBusca + "%");			
+			query.setParameter("termo", "%"+ termoBusca + "%");
 		}
 		if(!activeFilter.isEmpty()) {
 			query.setParameter("orgFilter", orgFilter);
 		}
-		
+
 		List<Artifact> resultado = query.getResultList();
-		
+
 		if(projectFilter != null) {
 			List<Artifact> artifactsFromProject = usingProjectFilter(projectFilter);
 			List<Artifact> artifactsToRemove = new ArrayList<Artifact>();
@@ -237,22 +233,22 @@ public class ArtifactServicesImpl implements ArtifactServices {
 		}
 		ArtifactsDTO artifactsDTO = new ArtifactsDTO(new ArrayList<ArtifactDTO>());
 		artifactsDTO = convertArtifactsToArtifactsDTO(resultado);
-		
+
 		return artifactsDTO;
 	}
 
 	private List<Artifact> usingProjectFilter(String projectFilter) {
 		List<Artifact> artifactsFromProject = new ArrayList<Artifact>();
-		
+
 		String hql = "SELECT project FROM " + Project.class.getSimpleName() + " AS project WHERE project.name = :name";
 		query = projectDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("name", projectFilter);
-		
+
 		if(!query.getResultList().isEmpty()) {
 			Project project = (Project) query.getResultList().get(0);
 			artifactsFromProject.addAll(project.getFinalArtifacts());
 		}
-		
+
 		return artifactsFromProject;
 	}
 
@@ -261,13 +257,13 @@ public class ArtifactServicesImpl implements ArtifactServices {
 	public ArtifactsDTO getArtifactsThatBelongsTo(String artifactName) {
 		String hql = "select artifact from " + ARTIFACT_CLASS_NAME + " as artifact where artifact.belongsTo.name = '" + artifactName + "'";
 		query = artifactDAO.getPersistenceContext().createQuery(hql);
-		
+
 		List<Artifact> resultado = query.getResultList();
 		ArtifactsDTO artifactsDTO = new ArtifactsDTO(new ArrayList<ArtifactDTO>());
-		
+
 		if(!resultado.isEmpty())
 			artifactsDTO = convertArtifactsToArtifactsDTO(resultado);
-		
+
 		return artifactsDTO;
 	}
 
@@ -276,20 +272,20 @@ public class ArtifactServicesImpl implements ArtifactServices {
 	public ArtifactsDTO getArtifactsDerivedFrom(String artifactName) {
 		String hql = "select artifact from " + ARTIFACT_CLASS_NAME + " as artifact where artifact.derivedFrom.name = '" + artifactName + "'";
 		query = artifactDAO.getPersistenceContext().createQuery(hql);
-		
+
 		List<Artifact> resultado = query.getResultList();
 		ArtifactsDTO artifactsDTO = new ArtifactsDTO(new ArrayList<ArtifactDTO>());
-		
+
 		if(!resultado.isEmpty())
 			artifactsDTO = convertArtifactsToArtifactsDTO(resultado);
-		
+
 		return artifactsDTO;
 	}
-	
+
 	@Override
 	public ArtifactDTO updateBelongsTo(String artifactName) {
 		ArtifactDTO artifactDTO = new ArtifactDTO();
-		
+
 		String hql = "select artifact from " + ARTIFACT_CLASS_NAME + " as artifact where artifact.name = '" + artifactName + "'";
 		query = artifactDAO.getPersistenceContext().createQuery(hql);
 		if(!query.getResultList().isEmpty()) {
@@ -297,7 +293,7 @@ public class ArtifactServicesImpl implements ArtifactServices {
 			artifact.setBelongsTo(null);
 			artifactDTO = this.convertArtifactToArtifactDTO(artifact);
 		}
-		
+
 		return artifactDTO;
 	}
 
@@ -311,75 +307,75 @@ public class ArtifactServicesImpl implements ArtifactServices {
 			artifact.setDerivedFrom(null);
 			artifactDTO = this.convertArtifactToArtifactDTO(artifact);
 		}
-		
+
 		return artifactDTO;
 	}
-	
+
 	@Override
 	public Boolean removeArtifact(ArtifactDTO artifactDTO) {
 		String hql = "select artifact from " + ARTIFACT_CLASS_NAME + " as artifact where artifact.name = '" + artifactDTO.getName() + "'";
 		query = artifactDAO.getPersistenceContext().createQuery(hql);
 //		Artifact artifact = (Artifact) query.getSingleResult();
 		Artifact artifact = (Artifact) query.getResultList().get(0);
-		
+
 		Collection<Artifact> possess = this.getArtifactsFromNames(artifactDTO.getPossess());
 		List<Artifact> derivedTo = this.getArtifactsFromNames(artifactDTO.getDerivedTo());
-		
+
 		if(artifact != null) {
 			this.setPossessBelongsTo(null, possess);
 			this.setDerivedToDerivedFrom(null, derivedTo);
 			this.updateArtifacts(possess);
 			this.updateArtifacts(derivedTo);
-			
+
 			artifactDAO.getPersistenceContext().remove(artifact);
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	private void updateArtifacts(Collection<Artifact> possess) {
 		for (Artifact artifact : possess) {
 			artifactDAO.update(artifact);
 		}
 	}
-	
+
 	private void setPossessBelongsTo(Artifact artifact, Collection<Artifact> possess) {
 		for (Artifact component : possess) {
 			component.setBelongsTo(artifact);
-		}	
+		}
 	}
-	
+
 	private void setDerivedToDerivedFrom(Artifact artifact, Collection<Artifact> derivedTo) {
 		for (Artifact derived : derivedTo) {
 			derived.setDerivedFrom(artifact);
-		}	
+		}
 	}
-	
+
 	private ArtifactDTO convertArtifactToArtifactDTO(Artifact artifact) {
-		ArtifactDTO artifactDTO = new ArtifactDTO();		
+		ArtifactDTO artifactDTO = new ArtifactDTO();
 		try {
-			
+
 			artifactDTO = (ArtifactDTO) converter.getDTO(artifact, ArtifactDTO.class);
 			if(artifact.getTheArtifactType() != null)
 				artifactDTO.setTheArtifactType(artifact.getTheArtifactType().getIdent());
 		} catch (ImplementationException e) {
 			e.printStackTrace();
 		}
-		
-		return artifactDTO;		
+
+		return artifactDTO;
 	}
-	
+
 	private ArtifactsDTO convertArtifactsToArtifactsDTO(List<Artifact> artifactsList) {
-		ArtifactsDTO artifactsDTOList = new ArtifactsDTO(new ArrayList<ArtifactDTO>());		
-			
+		ArtifactsDTO artifactsDTOList = new ArtifactsDTO(new ArrayList<ArtifactDTO>());
+
 		for(Artifact artifact : artifactsList) {
 			artifactsDTOList.addArtifactDTO(this.convertArtifactToArtifactDTO(artifact));
 		}
-	
+
 		return artifactsDTOList;
 	}
-	
+
 	private List<Artifact> getArtifactsFromNames(Collection<String> collection) {
 		List<Artifact> artifacts = new ArrayList<Artifact>();
 		for(String name : collection) {
@@ -389,10 +385,10 @@ public class ArtifactServicesImpl implements ArtifactServices {
 //		for (Artifact artifact : artifacts) {
 //			System.out.println(artifact.getName());
 //		}
-		
+
 		return artifacts;
 	}
-	
+
 	private Artifact getArtifactFromName(String ident) {
 //		String hql = "select o from " + ARTIFACT_CLASS_NAME + " o where o.name = :name";
 //		query = artifactDAO.getPersistenceContext().createQuery(hql);
@@ -400,19 +396,19 @@ public class ArtifactServicesImpl implements ArtifactServices {
 		System.out.println("Ident: " + ident);
 		Artifact artifact = artifactDAO.retrieveBySecondaryKey(ident);
 		System.out.println(artifact);
-		
+
 		return artifact;
 	}
-	
+
 	@Override
 	public Map<String, SimpleArtifactDescriptorDTO[]> getArtifactsForSelectedActivity(String identActivity) {
 		SimpleArtifactDescriptorDTO[] input = artifactDAO.getInputArtifactsForNormal(identActivity);
 		SimpleArtifactDescriptorDTO[] output = artifactDAO.getOutputArtifactsForNormal(identActivity);
-		
+
 		Map<String, SimpleArtifactDescriptorDTO[]> result = new HashMap<String, SimpleArtifactDescriptorDTO[]>();
 		result.put("input", input);
 		result.put("output", output);
-		
+
 		return result;
 	}
 

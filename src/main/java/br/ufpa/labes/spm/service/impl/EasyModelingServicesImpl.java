@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,91 +20,90 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 
 import org.qrconsult.spm.beans.editor.WebAPSEENodePosition;
-import org.qrconsult.spm.dataAccess.impl.activities.DecomposedDAO;
-import org.qrconsult.spm.dataAccess.impl.plainActivities.NormalDAO;
-import org.qrconsult.spm.dataAccess.impl.processModels.ProcessDAO;
-import org.qrconsult.spm.dataAccess.impl.processModels.ProcessModelDAO;
-import org.qrconsult.spm.dataAccess.interfaces.activities.IActivityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.activities.IDecomposedDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IGroupDAO;
-import org.qrconsult.spm.dataAccess.interfaces.agent.IRoleDAO;
-import org.qrconsult.spm.dataAccess.interfaces.artifacts.IArtifactDAO;
-import org.qrconsult.spm.dataAccess.interfaces.calendar.ICalendarDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IArtifactConDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IBranchCondToActivityDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IBranchCondToMultipleConDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IBranchDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IConnectionDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IJoinDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.IMultipleConDAO;
-import org.qrconsult.spm.dataAccess.interfaces.connections.ISimpleConDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IAutomaticDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IInvolvedArtifactsDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.INormalDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IParametersDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IReqAgentDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IReqGroupDAO;
-import org.qrconsult.spm.dataAccess.interfaces.plainActivities.IRequiredResourceDAO;
-import org.qrconsult.spm.dataAccess.interfaces.policies.staticPolicies.IPolConditionDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModelGraphic.IGraphicCoordinateDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModelGraphic.IWebAPSEEObjectDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessDAO;
-import org.qrconsult.spm.dataAccess.interfaces.processModels.IProcessModelDAO;
-import org.qrconsult.spm.dataAccess.interfaces.resources.IConsumableDAO;
-import org.qrconsult.spm.dataAccess.interfaces.resources.IResourceDAO;
-import org.qrconsult.spm.dataAccess.interfaces.taskagenda.IProcessAgendaDAO;
-import org.qrconsult.spm.dataAccess.interfaces.taskagenda.ITaskDAO;
-import org.qrconsult.spm.dataAccess.interfaces.tools.ISubroutineDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IArtifactTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IGroupTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IResourceTypeDAO;
+import br.ufpa.labes.spm.repository.impl.activities.DecomposedDAO;
+import br.ufpa.labes.spm.repository.impl.plainActivities.NormalDAO;
+import br.ufpa.labes.spm.repository.impl.processModels.ProcessDAO;
+import br.ufpa.labes.spm.repository.impl.processModels.ProcessModelDAO;
+import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
+import br.ufpa.labes.spm.repository.interfaces.activities.IDecomposedDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IRoleDAO;
+import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
+import br.ufpa.labes.spm.repository.interfaces.calendar.ICalendarDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IArtifactConDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchCondToActivityDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchCondToMultipleConDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IConnectionDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IJoinDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IMultipleConDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.ISimpleConDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IAutomaticDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IInvolvedArtifactsDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.INormalDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IParametersDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqAgentDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredResourceDAO;
+import br.ufpa.labes.spm.repository.interfaces.policies.staticPolicies.IPolConditionDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IGraphicCoordinateDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IWebAPSEEObjectDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
+import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessModelDAO;
+import br.ufpa.labes.spm.repository.interfaces.resources.IConsumableDAO;
+import br.ufpa.labes.spm.repository.interfaces.resources.IResourceDAO;
+import br.ufpa.labes.spm.repository.interfaces.taskagenda.IProcessAgendaDAO;
+import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
+import br.ufpa.labes.spm.repository.interfaces.tools.ISubroutineDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IGroupTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
 import org.qrconsult.spm.dtos.calendar.CalendarDTO;
-import org.qrconsult.spm.exceptions.DAOException;
-import org.qrconsult.spm.exceptions.ModelingException;
-import org.qrconsult.spm.exceptions.WebapseeException;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.activities.Decomposed;
-import org.qrconsult.spm.model.activities.Plain;
-import org.qrconsult.spm.model.artifacts.Artifact;
-import org.qrconsult.spm.model.connections.ArtifactCon;
-import org.qrconsult.spm.model.connections.Branch;
-import org.qrconsult.spm.model.connections.BranchAND;
-import org.qrconsult.spm.model.connections.BranchCond;
-import org.qrconsult.spm.model.connections.BranchCondToActivity;
-import org.qrconsult.spm.model.connections.BranchCondToMultipleCon;
-import org.qrconsult.spm.model.connections.Connection;
-import org.qrconsult.spm.model.connections.Dependency;
-import org.qrconsult.spm.model.connections.Feedback;
-import org.qrconsult.spm.model.connections.Join;
-import org.qrconsult.spm.model.connections.MultipleCon;
-import org.qrconsult.spm.model.connections.Sequence;
-import org.qrconsult.spm.model.connections.SimpleCon;
-import org.qrconsult.spm.model.plainActivities.Automatic;
-import org.qrconsult.spm.model.plainActivities.EnactionDescription;
-import org.qrconsult.spm.model.plainActivities.InvolvedArtifacts;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.model.plainActivities.Parameters;
-import org.qrconsult.spm.model.plainActivities.ReqAgent;
-import org.qrconsult.spm.model.plainActivities.ReqAgentRequiresAbility;
-import org.qrconsult.spm.model.plainActivities.ReqGroup;
-import org.qrconsult.spm.model.plainActivities.RequiredPeople;
-import org.qrconsult.spm.model.plainActivities.RequiredResource;
-import org.qrconsult.spm.model.processModelGraphical.GraphicCoordinate;
-import org.qrconsult.spm.model.processModelGraphical.WebAPSEEObject;
-import org.qrconsult.spm.model.processModels.Process;
-import org.qrconsult.spm.model.processModels.ProcessModel;
-import org.qrconsult.spm.model.resources.Reservation;
-import org.qrconsult.spm.model.tools.Subroutine;
-import org.qrconsult.spm.model.tools.ToolParameters;
-import org.qrconsult.spm.services.interfaces.DynamicModeling;
-import org.qrconsult.spm.services.interfaces.EasyModelingServices;
-import org.qrconsult.spm.services.interfaces.EnactmentEngineLocal;
-import org.qrconsult.spm.services.interfaces.NotificationServices;
-import org.qrconsult.spm.services.interfaces.commonData.SimpleActivityQueryResult;
+import br.ufpa.labes.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.exceptions.ModelingException;
+import br.ufpa.labes.spm.exceptions.WebapseeException;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.domain.Artifact;
+import br.ufpa.labes.spm.domain.ArtifactCon;
+import br.ufpa.labes.spm.domain.Branch;
+import br.ufpa.labes.spm.domain.BranchAND;
+import br.ufpa.labes.spm.domain.BranchCond;
+import br.ufpa.labes.spm.domain.BranchCondToActivity;
+import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
+import br.ufpa.labes.spm.domain.Connection;
+import br.ufpa.labes.spm.domain.Dependency;
+import br.ufpa.labes.spm.domain.Feedback;
+import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.MultipleCon;
+import br.ufpa.labes.spm.domain.Sequence;
+import br.ufpa.labes.spm.domain.SimpleCon;
+import br.ufpa.labes.spm.domain.Automatic;
+import br.ufpa.labes.spm.domain.EnactionDescription;
+import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.domain.Parameters;
+import br.ufpa.labes.spm.domain.ReqAgent;
+import br.ufpa.labes.spm.domain.ReqAgentRequiresAbility;
+import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.RequiredPeople;
+import br.ufpa.labes.spm.domain.RequiredResource;
+import br.ufpa.labes.spm.domain.GraphicCoordinate;
+import br.ufpa.labes.spm.domain.WebAPSEEObject;
+import br.ufpa.labes.spm.domain.Process;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.domain.Reservation;
+import br.ufpa.labes.spm.domain.Subroutine;
+import br.ufpa.labes.spm.domain.ToolParameters;
+import br.ufpa.labes.spm.service.interfaces.DynamicModeling;
+import br.ufpa.labes.spm.service.interfaces.EasyModelingServices;
+import br.ufpa.labes.spm.service.interfaces.EnactmentEngineLocal;
+import br.ufpa.labes.spm.service.interfaces.NotificationServices;
+import br.ufpa.labes.spm.service.interfaces.commonData.SimpleActivityQueryResult;
 import org.qrconsult.spm.util.i18n.Messages;
 
 @Stateless(name="easyModeling")
@@ -119,88 +118,48 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	private Properties allActs;
 	private Properties allConns;
 
-	@EJB
 	EnactmentEngineLocal enactmentLocal;
-	@EJB
 	ICalendarDAO calendarioDTO;
-	@EJB
 	DynamicModeling dynamicModeling;
-	@EJB
 	IProcessDAO procDAO;
-	@EJB
 	NotificationServices remote;
-	@EJB
 	IDecomposedDAO decDAO;
-	@EJB
 	IActivityDAO actDAO;
-	@EJB
 	INormalDAO normDAO;
-	@EJB
 	IAutomaticDAO autoDAO;
-	@EJB
 	IArtifactDAO artDAO;
-	@EJB
 	IInvolvedArtifactsDAO involvedDAO;
-	@EJB
 	IGraphicCoordinateDAO coordDAO;
-	@EJB
 	IProcessModelDAO pmodelDAO;
-	@EJB
 	ISubroutineDAO subDAO;
-	@EJB
 	IParametersDAO paramDAO;
-	@EJB
 	IArtifactConDAO artConDAO;
-	@EJB
 	IArtifactTypeDAO artTypeDAO;
-	@EJB
 	IInvolvedArtifactsDAO invArtDAO;
-	@EJB
 	IMultipleConDAO multiDAO;
-	@EJB
 	IConnectionDAO conDAO;
-	@EJB
 	IPolConditionDAO polConditionDAO;
-	@EJB
 	IBranchCondToMultipleConDAO bctmcDAO;
-	@EJB
 	IJoinDAO joinDAO;
-	@EJB
 	IBranchDAO branchDAO;
-	@EJB
 	IGroupTypeDAO groupTypeDAO;
-	@EJB
 	IRoleDAO roleDAO;
-	@EJB
 	IReqAgentDAO reqAgentDAO;
-	@EJB
 	IAgentDAO agentDAO;
-	@EJB
 	ITaskDAO taskDAO;
-	@EJB
 	IGroupDAO groupDAO;
-	@EJB
 	IReqGroupDAO reqGroupDAO;
-	@EJB
 	IResourceTypeDAO resTypeDAO;
-	@EJB
 	IRequiredResourceDAO reqResDAO;
-	@EJB
 	IResourceDAO resDAO;
-	@EJB
 	IConsumableDAO consumableDAO;
-	@EJB
 	IBranchCondToActivityDAO branchCondToActivityDAO;
-	@EJB
 	ISimpleConDAO simpleDAO;
-	@EJB
 	IProcessAgendaDAO pAgendaDAO;
-	@EJB
 	IWebAPSEEObjectDAO webAPSEEObjDAO;
-	@EJB
 	IGraphicCoordinateDAO grapDAO;
-	
-	
+
+
 	private Date newBeginDate;
 
 	private Date newEndDate;
@@ -209,7 +168,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	public String messageToFlex() {
 		return "Mensagem do easyModelingServices";
 	}
-	
+
 	@Override
 	public Map<String, String> mapToFlex() {
 		System.out.println("Entrou no metodo mapToFlex");
@@ -219,7 +178,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		mapa.put("pos3", "8,54");
 		return mapa;
 	}
-	
+
 	@Override
 	public void flexMap(String[] obj) {
 		System.out.println("Mapa do Flex");
@@ -227,11 +186,11 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		System.out.println(obj.getClass().getSimpleName());
 		System.out.println(obj.getClass());
 	}
-	
+
 	@Override
 	public void getCoordinatesResponse(String processId, String[] idents, String[] xs, String[] ys, String[] types, String[] nodeTypes, String[] referredObjs) {
 //		Map<String, String> coordenadas = new HashMap<String, String>();
-		
+
 		List<WebAPSEENodePosition> webAPSEENodes = new ArrayList<WebAPSEENodePosition>();
 		for (int i = 0; i < idents.length; i++) {
 			Double x = new Double(xs[i]);
@@ -239,32 +198,32 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			Double nodeType = new Double(nodeTypes[i]);
 			int nodePositionType = this.nodePositionType(nodeType.intValue());
 			System.out.println("posi: "+x.intValue()+" "+y.intValue()+ " "+idents[i]+" "+ types[i]+" "+nodePositionType);
-			
+
 			WebAPSEENodePosition position = new WebAPSEENodePosition(x.intValue(), y.intValue(), idents[i], types[i], nodePositionType);
-			
+
 			String[] objects = referredObjs[i].split(";");
 			position.setTheReferredObjects(Arrays.asList(objects));
 			webAPSEENodes.add(position);
-			
+
 //			prints
 			System.out.println("Ident: " + idents[i] + "Referred: " + referredObjs[i]);
 			System.out.println("ReferredObjects");
 			for (String obj : objects) {
 				System.out.println("Obj: " + obj);
 			}
-			
+
 		}
-		
+
 		saveWebAPSEENodePositions(processId, webAPSEENodes);
 
 	}
-	
+
 	public void saveWebAPSEENodePositions(String processIdent, Collection<WebAPSEENodePosition> positions) {
-		
+
 		try {
 			WebAPSEEObject webAPSEEObj = null;
 			GraphicCoordinate graphicCoord;
-			
+
 			Integer theReferredOid = null;
 			String className = null;
 			boolean ok = false;
@@ -272,7 +231,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			for (Iterator<WebAPSEENodePosition> iterator = positions.iterator(); iterator.hasNext();) {
 				WebAPSEENodePosition webAPSEENodePosition = (WebAPSEENodePosition) iterator.next();
 				ok = false;
-				
+
 				if(webAPSEENodePosition.getNodeType()==WebAPSEENodePosition.ACTIVITYNODE){
 					Activity act = (Activity) actDAO.retrieveBySecondaryKey(webAPSEENodePosition.getInstanceID());
 					if(act!=null){
@@ -281,7 +240,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						ok = true;
 						webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
 					}
-					
+
 				} else if (webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.ARTIFACTCONNODE
 						|| webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.BRANCHNODE
 						|| webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.JOINNODE
@@ -289,15 +248,15 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 					Connection con = (Connection) conDAO.retrieveBySecondaryKey(webAPSEENodePosition.getInstanceID());
 					if(!webAPSEENodePosition.getTheReferredObjects().isEmpty()) {
-						
+
 						List<String> objs = (List<String>) webAPSEENodePosition.getTheReferredObjects();
-						
+
 						con = new Connection();
-						
+
 						con=(Connection) conDAO.retrieveBySecondaryKey(objs.get(0));
 						System.out.print("aqui: "+con);
 					}
-					
+
 					con = (Connection) conDAO.retrieveBySecondaryKey(webAPSEENodePosition.getInstanceID());
 					if(con!=null){
 						System.out.print("com n�o nula: ");
@@ -306,7 +265,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						ok = true;
 						webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
 					}
-					
+
 					if (webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.ARTIFACTCONNODE) {
 						con = (Connection) conDAO.retrieveBySecondaryKey(webAPSEENodePosition.getInstanceID());
 						ArtifactCon artifactCon = (ArtifactCon) con;
@@ -316,20 +275,20 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						className = artifactCon.getClass().getSimpleName();
 						webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
 					}
-					
+
 				}else if(webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.REQAGENTNODE){
-			
+
 					Collection<String> theReferredObjs = webAPSEENodePosition.getTheReferredObjects();
 //					System.out.println("caiu no req: "+theReferredObjs);
 					if(theReferredObjs.size()==1){
 						String[] normals = new String[1];
 						theReferredObjs.toArray(normals);
 						String normal = normals[0];
-						
+
 						ReqAgent reqAg = (ReqAgent) reqAgentDAO.findReqAgentFromProcessModel(webAPSEENodePosition.getInstanceID(), webAPSEENodePosition.getTypeID(), normal);
 						if(reqAg!=null){
 //							System.out.println("caiu no ref id: "+reqAg.getOid());
-							
+
 							theReferredOid = reqAg.getOid();
 							className = reqAg.getClass().getSimpleName();
 							ok = true;
@@ -342,7 +301,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						String[] normals = new String[1];
 						theReferredObjs.toArray(normals);
 						String normal = normals[0];
-						
+
 						ReqGroup reqGroup = (ReqGroup) reqGroupDAO.findReqGroupFromProcessModel(webAPSEENodePosition.getInstanceID(), webAPSEENodePosition.getTypeID(), normal);
 						if(reqGroup!=null){
 							theReferredOid = reqGroup.getOid();
@@ -357,7 +316,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						String[] normals = new String[1];
 						theReferredObjs.toArray(normals);
 						String normal = normals[0];
-						
+
 						RequiredResource reqRes = (RequiredResource) reqResDAO.findRequiredResourceFromProcessModel(webAPSEENodePosition.getInstanceID(), webAPSEENodePosition.getTypeID(), normal);
 						if(reqRes!=null){
 							theReferredOid = reqRes.getOid();
@@ -374,8 +333,8 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						webAPSEEObj = new WebAPSEEObject(theReferredOid, className, graphicCoord);
 						System.out.println("caiu no ok"+webAPSEEObj.getTheReferredOid());
 						webAPSEEObjDAO.save(webAPSEEObj);
-						
-						
+
+
 					}else{
 						System.out.print("caiu no else: ");
 					System.out.println(webAPSEEObj.getClassName().equals("RequiredResource"));
@@ -390,22 +349,22 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}
 				}
 			}
-			
+
 		} catch (WebapseeException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private GraphicCoordinate updateGraphicCoordinate(WebAPSEENodePosition webAPSEENodePosition, GraphicCoordinate coord, String process) {
-		
+
 		coord.setX(webAPSEENodePosition.getX());
 		coord.setY(webAPSEENodePosition.getY());
 		coord.setVisible(webAPSEENodePosition.isVisible());
 		coord.setTheProcess(process);
-		
+
 		return coord;
 	}
-	
+
 	private int nodePositionType(int nodeTypeFromFlex) {
 		typesToConvert = new HashMap<Integer, Integer>();
 		typesToConvert.put(1, WebAPSEENodePosition.REQAGENTNODE);
@@ -416,10 +375,10 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		typesToConvert.put(6, WebAPSEENodePosition.ACTIVITYNODE);
 		typesToConvert.put(7, WebAPSEENodePosition.ACTIVITYNODE);
 		typesToConvert.put(8, WebAPSEENodePosition.REQGROUPNODE);
-		
+
 		return typesToConvert.get(nodeTypeFromFlex);
 	}
-	
+
 	@Override
 	public String copyActivity(String act_id, String level_to_copy) {
 
@@ -682,9 +641,9 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				procDAO.update(process);
 				procDAO.getPersistenceContext().getTransaction().commit();
 				this.activitiesTable.clear();
-				
+
 //				this.saveCoordinates(coordinates);
-				
+
 				return clone.getIdent();
 			} else {
 				this.activitiesTable.clear();
@@ -731,7 +690,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		Process process = (Process) proc;
 
 		ProcessModel pmodel = null;
-		
+
 		Decomposed actDecomposed = null; // it is used only if the new activity
 											// Is not in the root process model.
 		if (st.hasMoreTokens()) {
@@ -766,7 +725,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			acts[i] = (Activity) actDAO.retrieveBySecondaryKey(act_id);
 
 			if (acts[i] == null) {
-				
+
 				try {
 					throw new DAOException(
 							Messages.getString("facades.DynamicModeling.ModelingExcActv") + act_id + Messages.getString("facades.DynamicModeling.DaoExcNotFound"));
@@ -787,7 +746,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			cons[i] = (Connection) conDAO.retrieveBySecondaryKey(con_id);
 
 			if (cons[i] == null) {
-				
+
 				try {
 					throw new DAOException(
 							Messages.getString("facades.DynamicModeling.ModelingExcActv") + con_id + Messages.getString("facades.DynamicModeling.DaoExcNotFound"));
@@ -846,7 +805,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					procDAO.update(process);
 					this.activitiesTable.clear();
 				} else {
-					
+
 					try {
 						throw new ModelingException("Process Model not ready to receive copies. It has already been concluded!");
 					} catch (ModelingException e) {
@@ -855,7 +814,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}
 				}
 			} else {
-				
+
 				try {
 					throw new ModelingException("Process " + process_id + " not ready to receive copies. It has already been concluded!");
 				} catch (ModelingException e) {
@@ -897,7 +856,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				procDAO.update(process);
 				this.activitiesTable.clear();
 			} else {
-				
+
 				try {
 					throw new ModelingException("Process Model not ready to receive copies. It has already been concluded!");
 				} catch (ModelingException e) {
@@ -906,7 +865,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				}
 			}
 		} else {
-			
+
 			try {
 				throw new ModelingException("Process model target to copy not found!");
 			} catch (ModelingException e) {
@@ -916,20 +875,20 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		}
 	}
 
-	
+
 	public void calculateUtilsDays(long new_begin_date, long new_end_date,CalendarDTO replainDates){
 		System.out.print("caiu no recalcula" +new_begin_date+" "+new_end_date);
 		CalendarDTO newDates = new CalendarDTO();
 		newDates = filtraDatas(replainDates);
 		int inicial = 0;
-		
+
 		ArrayList<Date> notWorkingDays = new  ArrayList<>();
-				
+
 		Date plannedBegin = new Date(new_begin_date);
 		Date plannedEnd = new Date(new_end_date);
 
 		SimpleDateFormat simple =  new SimpleDateFormat("MMM dd HH:mm:ss yyyy");
-		
+
 		for (int i = 0; i < newDates.getNotWorkingDays().size(); i++) {
 			try {
 				String s[] = newDates.getNotWorkingDays().get(i).split(" ");
@@ -942,39 +901,39 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				e.printStackTrace();
 			}
 		}
-		
+
 		System.out.print("inicio" +plannedBegin+" "+plannedEnd+"array"+replainDates.getNotWorkingDays().get(0));
-		
+
 		newBeginDate = new Date();
 		newEndDate = new Date();
-		
+
 		Date end = new Date();
-		
+
 		for (int i = 0; i < notWorkingDays.size(); i++) {
-		
+
 			if (isSunday(plannedBegin) == true) {
-            
+
 				plannedBegin = new Date(plannedBegin.getTime() + MILLIS_PER_DAY);
-                
+
 				System.out.println("inicio "+plannedBegin);
-            } 
+            }
 			else if (isSaturday(plannedBegin) == true) {
-            
+
 				plannedBegin = new Date(plannedBegin.getTime() + (2 * MILLIS_PER_DAY));
                 System.out.println("fim sabado"+plannedBegin);
-            
+
 			}
 
             if (isSunday(plannedEnd) == true) {
-            
+
             	plannedEnd = new Date(plannedEnd.getTime() + MILLIS_PER_DAY);
-            } 
+            }
             else if (isSaturday(plannedEnd) == true) {
-            
+
             	plannedEnd = new Date(plannedEnd.getTime() + (2 * MILLIS_PER_DAY));
             }
-			
-			
+
+
             //começa o paranauê
             if (plannedBegin.after(notWorkingDays.get(i)) || plannedEnd.before(notWorkingDays.get(i))) {
             System.out.println("caiu no if"+notWorkingDays.get(i));
@@ -1002,11 +961,11 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
                      }
 			}
             	 end = new Date(plannedEnd.getTime() + (inicial * MILLIS_PER_DAY));
-				
+
             	 newEndDate =  end;
 				newBeginDate = plannedBegin;
 				System.out.println("nova data inicial parcial"+newBeginDate+" nniva data final parcial"+newEndDate);
-				
+
 				//verifica se a nova data final é sabado ou domingo
 	            if (isSunday(newEndDate) == true) {
 	                newEndDate = new Date(end.getTime() + MILLIS_PER_DAY);
@@ -1017,7 +976,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	                    } else if (newEndDate.compareTo(notWorkingDays.get(i1))==0) {
 	                        System.out.println("é igual");
 	                        newEndDate = new Date(newEndDate.getTime() + MILLIS_PER_DAY);
-	                        
+
 	                    }
 	                }
 
@@ -1029,32 +988,32 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	                    } else if (newEndDate.compareTo(notWorkingDays.get(i1))==0) {
 	                        System.out.println("é igual");
 	                        newEndDate = new Date(newEndDate.getTime() + MILLIS_PER_DAY);
-	                        
+
 	                    }
 	                }
 	            }
 			}
 		}
-		
+
 		System.out.println("nova data inicial "+newBeginDate+" nniva data final "+newEndDate);
-		
-		
-		
+
+
+
 	}
-	
+
 	@Override
 	public void replanningDates(String act_id, long new_begin_date, long new_end_date, CalendarDTO replanningDates) {
- 
-		 
+
+
 		Normal normal = new Normal();
 		Decomposed decomposed =  new Decomposed();
-		
+
 		Object tipo = actDAO.retrieveBySecondaryKey(act_id);
 	if(tipo instanceof Normal){
 		normal =(Normal) tipo;
-		
+
 	}else{
-		
+
 		decomposed =(Decomposed) tipo;
 	}
 		// Implementation of the rules
@@ -1075,7 +1034,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 		calculateUtilsDays(new_begin_date,new_end_date,replanningDates);
 			//Chamar metodo que calcula as datas válidas de inicio e fim da atividade de acordo com o Calendário do projeto
-			
+
 			normal.setPlannedBegin(newBeginDate);
 			normal.setPlannedEnd(newEndDate);
 
@@ -1099,13 +1058,13 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			this.upperPropagation(upperDecomposed, normal,replanningDates);
 
 			actDAO.update(normal);
-			
-			
-			
+
+
+
 			this.lastValid = null;
 		} else {
 			this.lastValid = null;
-			
+
 			try {
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ReplanningFinishedActivity"));
 			} catch (ModelingException e) {
@@ -1117,7 +1076,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 	/**
 	 * AUXILIAR METHODS
-	 * 
+	 *
 	 * @throws DAOException
 	 */
 
@@ -1237,7 +1196,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 	private Map<Integer, Integer> typesToConvert;
 
-	
+
 	private Collection<InvolvedArtifacts> copyInvolvedArtifacts(Collection<InvolvedArtifacts> currentInvolvedArtifacts, Normal newNormalReference,
 			int kindRelationship) {
 
@@ -1267,7 +1226,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		return newInvolvedArtifacts;
 	}// end method
 
-	
+
 	private Collection<RequiredResource> copyRequiredResources(Collection<RequiredResource> theRequiredResource, Normal destinationNormal,
 			Hashtable<String, String> coordinates) throws DAOException {
 		Collection<RequiredResource> newRequiredResources = new HashSet<RequiredResource>();
@@ -1307,7 +1266,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		return newRequiredResources;
 	}// end method
 
-	
+
 	private Collection<RequiredPeople> copyRequiredPeople(Collection theRequiredPeople, Normal destinationNormal,
 			Hashtable<String, String> coordinates) throws DAOException {
 		Collection<RequiredPeople> newRequiredPeoples = new HashSet<RequiredPeople>();
@@ -1379,7 +1338,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		return newRequiredPeoples;
 	}// end method
 
-	
+
 	private Collection<ReqAgentRequiresAbility> copyReqAgentReqAbility(Collection theReqAgentRequiresAbility, ReqAgent newReqAgent) {
 		Collection<ReqAgentRequiresAbility> newReqAgReqAbilities = new HashSet<ReqAgentRequiresAbility>();
 
@@ -1450,7 +1409,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		return null;
 	}// end method
 
-	
+
 	private Hashtable<String, Activity> copyActivitiesOnProcessModel(Collection<Activity> activities, String level_to,
 			Hashtable<String, String> coordinates) throws DAOException {
 		Hashtable<String, Activity> newActivities = new Hashtable<String, Activity>();
@@ -1493,7 +1452,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		return newActivities;
 	}
 
-	
+
 	/**
 	 * @param newActivities
 	 * @return
@@ -1507,7 +1466,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		return activitiesTable;
 	}
 
-	
+
 	/**
 	 * @param connections
 	 * @param oldProcessIdent
@@ -2224,23 +2183,23 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	}
 
 	/**
-	 * 
+	 *
 	 * 1. END-START
-	 * 
+	 *
 	 * PlannedBegin(successor) = PlannedEnd(predecessor) + 1 day
 	 * PlannedEnd(successor) = PlannedBegin(successor) + How Long (business
 	 * days)
-	 * 
+	 *
 	 * 2. END-END
-	 * 
+	 *
 	 * PlannedBegin(successor) = PlannedEnd(sucessor) - HowLong (business days)
 	 * PlannedEnd(successor) = PlannedEnd(predecessor) + 1 day
-	 * 
+	 *
 	 * 3. START-START
-	 * 
+	 *
 	 * PlannedBegin(successor) = PlannedBegin(predecessor) + 1 day
 	 * PlannedEnd(successor) = PlannedBegin(sucessor) + HowLong (business days)
-	 * 
+	 *
 	 */
 	private void applyDatesFromPredecessor(Normal normal, Activity predecessor, String dependency, Date greaterPredecessor,CalendarDTO replanningDates ) {
 
@@ -2259,7 +2218,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				newPlannedBegin = this.moveFromWeekendToMonday(newPlannedBegin);
 //calculateUtilsDays(calculateUtilsDays,replanningDates);
 				//Chamar metodo que calcula as datas válidas de inicio e fim da atividade de acordo com o Calendário do projeto
-				
+
 				normal.setPlannedBegin(newPlannedBegin);
 
 				int oldHowLong = Math.round(normal.getHowLong().floatValue());
@@ -2285,7 +2244,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				newPlannedBegin = this.moveFromWeekendToMonday(newPlannedBegin);
 				//calculateUtilsDays(replanningDates);
 				//Chamar metodo que calcula as datas válidas de inicio e fim da atividade de acordo com o Calendário do projeto
-				
+
 				normal.setPlannedBegin(newPlannedBegin);
 
 				int oldHowLong = Math.round(normal.getHowLong().floatValue());
@@ -2367,7 +2326,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					newPlannedBegin = this.moveFromWeekendToMonday(newPlannedBegin);
 				//	calculateUtilsDays(replanningDates);
 					//Chamar metodo que calcula as datas válidas de inicio e fim da atividade de acordo com o Calendário do projeto
-					
+
 					normal.setPlannedBegin(newPlannedBegin);
 
 					int oldHowLong = Math.round(normal.getHowLong().floatValue());
@@ -2485,7 +2444,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		}
 		return false;
 	}
-	
+
 	private boolean isFriday(Date date) {
 
 		Calendar cal = new GregorianCalendar();
@@ -2834,7 +2793,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.EasyModelingInterface#
 	 * applyAllocationToProcess(java.lang.String, java.lang.String,
 	 * java.lang.String)
@@ -2842,7 +2801,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	@Override
 	public void applyAllocationToProcess(String process_id, String role_id, String agent_id) {
 
-		
+
 		SimpleActivityQueryResult[] acts = procDAO.getAllNormalActivitiesFromProcess(process_id);
 
 		NormalDAO nDAO = new NormalDAO();
@@ -2887,30 +2846,30 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	public CalendarDTO filtraDatas(CalendarDTO calendar){
 		CalendarDTO replainDates = new CalendarDTO();
 		ArrayList<String> replainTexto = new ArrayList<>();
-		
-		
+
+
 		for (int i = 0; i < calendar.getNotWorkingDays().size(); i++) {
 			String c[] = calendar.getNotWorkingDays().get(i).split("\\,");
-			
+
 			replainTexto.add(c[3]);
 		}
-		
+
 			replainDates.setNotWorkingDays(replainTexto);
-			System.out.println("calendario "+replainDates.getNotWorkingDays().get(0));	
+			System.out.println("calendario "+replainDates.getNotWorkingDays().get(0));
 			System.out.println("calendario "+replainDates.getNotWorkingDays().get(1));
-				
-		
+
+
 		return replainDates;
-		
-		
-		
-		
-		
+
+
+
+
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.qrconsult.spm.services.impl.EasyModelingInterface#
 	 * applyAllocationToProcessModel(java.lang.String, java.lang.String,
 	 * java.lang.String)

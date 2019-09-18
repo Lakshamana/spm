@@ -1,8 +1,7 @@
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
 import java.util.List;
 
-import javax.ejb.Remote;
 
 import org.qrconsult.spm.dtos.formActivity.ActivitysDTO;
 import org.qrconsult.spm.dtos.formProject.ProjectsDTO;
@@ -19,5 +18,5 @@ public interface ProcessServices {
 	public ActivitysDTO getActitivitiesFromProcess(String processIdent);
 
 	public ProcessesDTO getProjectsManagedBy(String agentIdent);
-	
+
 }

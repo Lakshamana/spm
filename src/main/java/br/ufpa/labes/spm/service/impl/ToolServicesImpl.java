@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,30 +11,27 @@ import javax.persistence.Query;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.tools.IToolDefinitionDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IArtifactTypeDAO;
-import org.qrconsult.spm.dataAccess.interfaces.types.IToolTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.tools.IToolDefinitionDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IToolTypeDAO;
 import org.qrconsult.spm.dtos.formTool.ToolDTO;
 import org.qrconsult.spm.dtos.formTool.ToolsDTO;
 import org.qrconsult.spm.dtos.formTypes.TypesDTO;
-import org.qrconsult.spm.model.tools.ToolDefinition;
-import org.qrconsult.spm.model.types.ArtifactType;
-import org.qrconsult.spm.model.types.ToolType;
-import org.qrconsult.spm.model.types.Type;
-import org.qrconsult.spm.services.interfaces.ToolServices;
+import br.ufpa.labes.spm.domain.ToolDefinition;
+import br.ufpa.labes.spm.domain.ArtifactType;
+import br.ufpa.labes.spm.domain.ToolType;
+import br.ufpa.labes.spm.domain.Type;
+import br.ufpa.labes.spm.service.interfaces.ToolServices;
 
 @Stateless
 public class ToolServicesImpl implements ToolServices {
 
 	private final String TOOL_CLASSNAME = ToolDefinition.class.getSimpleName();
 
-	@EJB
 	IToolDefinitionDAO toolDAO;
 
-	@EJB
 	IToolTypeDAO toolTypeDAO;
 
-	@EJB
 	IArtifactTypeDAO artifactTypeDAO;
 
 	Converter converter = new ConverterImpl();
@@ -77,7 +74,7 @@ public class ToolServicesImpl implements ToolServices {
 		} else {
 			tool = this.convertToolDTOToTool(toolDTO);
 			toolDAO.save(tool);
-			
+
 			String newIdent = toolDAO.generateIdent(tool.getName(), tool);
 			tool.setIdent(newIdent);
 //			toolDTO.setIdent(newIdent);
@@ -195,7 +192,7 @@ public class ToolServicesImpl implements ToolServices {
 			}
 //			tool.setTheArtifactType(new HashSet<ArtifactType>());
 			tool.getTheArtifactType().clear();
-			
+
 			toolDAO.update(tool);
 
 			toolDAO.delete(tool);

@@ -1,16 +1,16 @@
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
 import javax.ejb.Local;
 
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.activities.Plain;
-import org.qrconsult.spm.model.connections.Branch;
-import org.qrconsult.spm.model.connections.Join;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.model.processModels.Process;
-import org.qrconsult.spm.model.processModels.ProcessModel;
-import org.qrconsult.spm.model.resources.Resource;
-import org.qrconsult.spm.model.taskagenda.Task;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.domain.Branch;
+import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.domain.Process;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.domain.Resource;
+import br.ufpa.labes.spm.domain.Task;
 
 @Local
 public interface Logging {

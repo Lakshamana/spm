@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.List;
 import java.util.Properties;
@@ -19,7 +19,7 @@ import javax.persistence.Query;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.email.IEmailDAO;
+import br.ufpa.labes.spm.repository.interfaces.email.IEmailDAO;
 import org.qrconsult.spm.dtos.agenda.TaskDTO;
 import org.qrconsult.spm.dtos.email.EmailDTO;
 import org.qrconsult.spm.dtos.formAbility.AbilityDTO;
@@ -30,23 +30,22 @@ import org.qrconsult.spm.dtos.formAgent.AgentsDTO;
 import org.qrconsult.spm.dtos.formAgent.ConfigurationDTO;
 import org.qrconsult.spm.dtos.formGroup.GroupDTO;
 import org.qrconsult.spm.dtos.formRole.RoleDTO;
-import org.qrconsult.spm.model.agent.Agent;
-import org.qrconsult.spm.model.email.Email;
-import org.qrconsult.spm.services.interfaces.AgentServices;
-import org.qrconsult.spm.services.interfaces.EmailServices;
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.Email;
+import br.ufpa.labes.spm.service.interfaces.AgentServices;
+import br.ufpa.labes.spm.service.interfaces.EmailServices;
 import org.qrconsult.spm.util.Md5;
 
 @Stateless
 public class EmailServiceImpl implements EmailServices {
 
-	@EJB
 	IEmailDAO emailDAO;
 	private static final String EMAIL_CLASSENAME = Email.class.getSimpleName();
 	private Query query;
 	Converter converter = new ConverterImpl();
 
 	private Email email;
-	
+
 
 	@Override
 	public EmailDTO saveConfiEmail(EmailDTO emailDTO) {
@@ -59,36 +58,36 @@ public class EmailServiceImpl implements EmailServices {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 
 		return emailDTO;
 	}
 
 	@Override
 	public EmailDTO updateConfiEmail(EmailDTO emailDTO) {
-	
+
 		email = new Email();
 		try {
 			email = this.convertEmailDTOToEmail(emailDTO);
 			System.out.print(email.getServerHost()+email.getServerPort()+email.getUserName()+email.getPassword()+email.isServicoTls()+email.isServicoSsl()+email.getOid().toString());
-			
+
 			emailDAO.update(email);
 			email = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 
 		return emailDTO;
 	}
 
-	
+
 	private Email convertEmailDTOToEmail(EmailDTO emailDTO) {
 		try {
 
 			Email email = new Email();
 			email = (Email) converter.getEntity(emailDTO, email);
-		
+
 			return email;
 
 		} catch (ImplementationException e) {
@@ -97,19 +96,19 @@ public class EmailServiceImpl implements EmailServices {
 
 		return null;
 	}
-	
-	
+
+
 
 	class SMTPAuthenticator extends Authenticator {
 	    String login;
 	    String password;
-	 
+
 	    //Recebendo usuario e senha e guardando nas variaveis
 	    public SMTPAuthenticator(String login, String password) {
 	        this.login = login;
 	        this.password = password;
 	    }
-	 
+
 	    //Esse Ã© o metodo usado para enviar usuario e senha
 	    public PasswordAuthentication getPasswordAuthentication() {
 	        return new PasswordAuthentication(this.login, this.password);
@@ -120,58 +119,58 @@ public class EmailServiceImpl implements EmailServices {
 	public EmailDTO testeEmail(EmailDTO emailDTO) {
 		System.out.println("dados do email: "+emailDTO.getServerHost());
 		  try {
-		    	 
+
 	            //Variaveis
 	            String d_email = emailDTO.getUserName(),
 	                    d_password = emailDTO.getPassword(),
 	                    d_host = emailDTO.getServerHost(),
 	                    //d_host = "smtp.gmail.com",
-	                    		d_port = emailDTO.getServerPort(), 
+	                    		d_port = emailDTO.getServerPort(),
 	                   // d_port = "465",
 	                    m_to = emailDTO.getUserName(),
 	                    m_subject = "teste",
 	                    m_text = "teste de conexÃ£o servidor email.";
-	 
+
 	            //Propriedades Necessarias
 	            Properties props = new Properties();
-	             
+
 	            //Modo debug para verificar os passos do envio
 	            props.put("mail.debug", "true");
-	             
+
 	            //Servidor SMTP
 	            props.put("mail.host", d_host);
 	             //liga tls
 	              props.put("mail.smtp.starttls.enable", emailDTO.isServicoTls());
 	            //Porta
 	            props.put("mail.smtp.port", d_port);
-	             
+
 	            //Necessario autenticacao
 	            props.put("mail.smtp.auth", "true");
-	             
+
 	            //Liga o SSL
 	            props.put("mail.smtp.ssl.enable", emailDTO.isServicoSsl());
-	 
+
 	            //Cria a sessao
 	            Session session = Session.getInstance(props,  new SMTPAuthenticator(d_email, d_password));
-	 
+
 	            //Pega a sessao com usuario e senha
 	            MimeMessage msg = new MimeMessage(session);
-	             
+
 	            //Coloca O corpo do titulo
 	            msg.setText(m_text);
-	             
+
 	            //Coloca o assunto
 	            msg.setSubject(m_subject);
-	             
+
 	            //Coloca quem enviou
 	            msg.setFrom(new InternetAddress(d_email));
-	             
+
 	            //Coloca para quem sera enviado
 	            msg.addRecipient(Message.RecipientType.TO,  new InternetAddress(m_to));
-	             
+
 	            //Envia a mensagem
 	            Transport.send(msg);
-	 
+
 	            System.out.println("Terminado");
 	            emailDTO.setTeste(true);
 	        } catch (MessagingException mex) {
@@ -184,7 +183,7 @@ public class EmailServiceImpl implements EmailServices {
 		return emailDTO;
 	}
 	public EmailDTO getConfiEmail(EmailDTO email) {
-		
+
 		try {
 			query = emailDAO
 					.getPersistenceContext()
@@ -192,7 +191,7 @@ public class EmailServiceImpl implements EmailServices {
 							"SELECT email FROM "
 									+ EMAIL_CLASSENAME
 									+ " AS email");
-			
+
 
 			System.out.println(query.getSingleResult());
 
@@ -203,13 +202,13 @@ e.printStackTrace();
 			return null;
 		}
 	}
-	
-	
+
+
 	private EmailDTO convertEmailToEmailDTO(Email email) {
 		EmailDTO emailDTO = new EmailDTO();
 		try {
 			emailDTO = (EmailDTO) converter.getDTO(email, EmailDTO.class);
-		
+
 			return emailDTO;
 
 		} catch (ImplementationException e) {
@@ -218,84 +217,84 @@ e.printStackTrace();
 
 		return null;
 	}
-	
+
 	@Override
 	public AgentDTO enviaSenhaEmail(EmailDTO emailDTO,AgentDTO email) {
-		UUID uuid = UUID.randomUUID();    
-		String myRandom = uuid.toString();    
+		UUID uuid = UUID.randomUUID();
+		String myRandom = uuid.toString();
 		String novaSenha = myRandom.substring(0,6);
-		
+
 		System.out.println("dados do email: "+email.geteMail()+" "+email.getEMail());
 		  try {
-		  
-		    	 
+
+
 	            //Variaveis
 	            String d_email = emailDTO.getUserName(),
 	                    d_password = emailDTO.getPassword(),
 	                    d_host = emailDTO.getServerHost(),
 	                    //d_host = "smtp.gmail.com",
-	                    		d_port = emailDTO.getServerPort(), 
+	                    		d_port = emailDTO.getServerPort(),
 	                   // d_port = "465",
 	                    m_to = email.getEMail(),
-	                    m_subject = "SPF - Recuperação de senha",
+	                    m_subject = "SPF - Recuperaï¿½ï¿½o de senha",
 	                    m_text = ".";
-	 
+
 	            //Propriedades Necessarias
 	            Properties props = new Properties();
-	             
+
 	            //Modo debug para verificar os passos do envio
 	            props.put("mail.debug", "true");
-	             
+
 	            //Servidor SMTP
 	            props.put("mail.host", d_host);
 	             //liga tls
 	              props.put("mail.smtp.starttls.enable", emailDTO.isServicoTls());
 	            //Porta
 	            props.put("mail.smtp.port", d_port);
-	             
+
 	            //Necessario autenticacao
 	            props.put("mail.smtp.auth", "true");
-	             
+
 	            //Liga o SSL
 	            props.put("mail.smtp.ssl.enable", emailDTO.isServicoSsl());
-	 
+
 	            //Cria a sessao
 	            Session session = Session.getInstance(props,  new SMTPAuthenticator(d_email, d_password));
-	 
+
 	            //Pega a sessao com usuario e senha
 	            MimeMessage msg = new MimeMessage(session);
-	            String rodape = "<br></br>Esta é uma mensagem automática gerada pelo sistema SPF. Favor não responde-la.<p></p>Atenciosamente,<p></p>Time do SPF.";
+	            String rodape = "<br></br>Esta ï¿½ uma mensagem automï¿½tica gerada pelo sistema SPF. Favor nï¿½o responde-la.<p></p>Atenciosamente,<p></p>Time do SPF.";
 	            msg.setContent(" <img src=\"http://68.169.54.200/spm/wp-content/uploads/2013/10/logo.jpg\">"
-		                + "<p></p>Sr(a) "+email.getName()+", <p></p>Informamos que sua senha foi alterada no sistema SPF. <p></p>Utilize a senha abaixo para acessar o sistema.Recomendamos alterá-la no primeiro acesso.<p></p>"
+		                + "<p></p>Sr(a) "+email.getName()+", <p></p>Informamos que sua senha foi alterada no sistema SPF. <p></p>Utilize a senha abaixo para acessar o sistema.Recomendamos alterï¿½-la no primeiro acesso.<p></p>"
 		                + "Nova senha: <h4>" + novaSenha.toString()+"</h4><p></p>"+ rodape, "text/html");
-	          
-	             
+
+
 	            //Coloca quem enviou
 	            msg.setFrom(new InternetAddress(d_email));
 	             msg.setSubject(m_subject);
 	            //Coloca para quem sera enviado
 	            msg.addRecipient(Message.RecipientType.TO,  new InternetAddress(m_to));
-	             
+
 	            //Envia a mensagem
 	            Transport.send(msg);
-	 
+
 	            System.out.println("Terminado");
-	           
+
 	            email.setPassword(novaSenha);
-	            
-	         
-	          
-	           
+
+
+
+
 	        } catch (MessagingException mex) {
-	        	
+
 	            System.out.println("Falha no envio, exception: " + mex);
-	          
+
 	        } catch (Exception e) {
-	        
+
 	            e.printStackTrace();
-	          
+
 	        }
 		return email;
 	}
-	
+
 }

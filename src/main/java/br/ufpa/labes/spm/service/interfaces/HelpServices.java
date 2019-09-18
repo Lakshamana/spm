@@ -1,8 +1,7 @@
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
 import java.util.List;
 
-import javax.ejb.Remote;
 
 import org.qrconsult.spm.dtos.help.HelpTopicDTO;
 
@@ -13,7 +12,7 @@ public interface HelpServices {
 	public HelpTopicDTO saveTopic(HelpTopicDTO helpTopicDTO);
 
 	public HelpTopicDTO getHelpTopicByToken(String token);
-	
+
 	public void removeTopic(HelpTopicDTO helpTopicDTO);
 
 }

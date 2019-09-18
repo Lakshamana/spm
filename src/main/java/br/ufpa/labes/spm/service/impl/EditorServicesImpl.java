@@ -1,34 +1,33 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.ejb.Stateless;
 
-import org.qrconsult.spm.dataAccess.impl.activities.DecomposedDAO;
-import org.qrconsult.spm.dataAccess.impl.processModelGraphical.WebAPSEEObjectDAO;
-import org.qrconsult.spm.dataAccess.impl.processModels.ProcessDAO;
-import org.qrconsult.spm.exceptions.DAOException;
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.activities.Decomposed;
-import org.qrconsult.spm.model.connections.ArtifactCon;
-import org.qrconsult.spm.model.connections.BranchAND;
-import org.qrconsult.spm.model.connections.BranchCond;
-import org.qrconsult.spm.model.connections.Connection;
-import org.qrconsult.spm.model.connections.Feedback;
-import org.qrconsult.spm.model.connections.Join;
-import org.qrconsult.spm.model.connections.MultipleCon;
-import org.qrconsult.spm.model.connections.Sequence;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.model.plainActivities.ReqAgent;
-import org.qrconsult.spm.model.plainActivities.ReqGroup;
-import org.qrconsult.spm.model.plainActivities.RequiredPeople;
-import org.qrconsult.spm.model.plainActivities.RequiredResource;
-import org.qrconsult.spm.model.processModelGraphical.GraphicCoordinate;
-import org.qrconsult.spm.model.processModelGraphical.WebAPSEEObject;
-import org.qrconsult.spm.model.processModels.Process;
-import org.qrconsult.spm.model.processModels.ProcessModel;
-import org.qrconsult.spm.services.interfaces.EditorServices;
+import br.ufpa.labes.spm.repository.impl.activities.DecomposedDAO;
+import br.ufpa.labes.spm.repository.impl.processModelGraphical.WebAPSEEObjectDAO;
+import br.ufpa.labes.spm.repository.impl.processModels.ProcessDAO;
+import br.ufpa.labes.spm.exceptions.DAOException;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.domain.ArtifactCon;
+import br.ufpa.labes.spm.domain.BranchAND;
+import br.ufpa.labes.spm.domain.BranchCond;
+import br.ufpa.labes.spm.domain.Connection;
+import br.ufpa.labes.spm.domain.Feedback;
+import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.MultipleCon;
+import br.ufpa.labes.spm.domain.Sequence;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.domain.ReqAgent;
+import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.RequiredPeople;
+import br.ufpa.labes.spm.domain.RequiredResource;
+import br.ufpa.labes.spm.domain.GraphicCoordinate;
+import br.ufpa.labes.spm.domain.WebAPSEEObject;
+import br.ufpa.labes.spm.domain.Process;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.service.interfaces.EditorServices;
 
 @Stateless
 public class EditorServicesImpl implements EditorServices {
@@ -314,7 +313,7 @@ public class EditorServicesImpl implements EditorServices {
 				for (Iterator<RequiredResource> itReqRes = resources.iterator(); itReqRes.hasNext();) {
 					RequiredResource requiredResource = (RequiredResource) itReqRes.next();
 					GraphicCoordinate reqRGP = null;
-					
+
 					try {
 						webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(requiredResource.getOid(), requiredResource.getClass().getSimpleName());
 					} catch (DAOException e) {
@@ -352,8 +351,8 @@ public class EditorServicesImpl implements EditorServices {
 		connectionsBuffer.append("</CONNECTIONS>");
 		rootBuffer.append(connectionsBuffer);
 		rootBuffer.append("</EDITOR>");
-		
-		
+
+
 		return rootBuffer.toString();
 	}
 

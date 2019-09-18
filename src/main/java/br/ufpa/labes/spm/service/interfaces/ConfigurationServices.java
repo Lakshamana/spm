@@ -1,6 +1,5 @@
-package org.qrconsult.spm.services.interfaces;
+package br.ufpa.labes.spm.service.interfaces;
 
-import javax.ejb.Remote;
 
 import org.qrconsult.spm.dtos.formAgent.AgentDTO;
 import org.qrconsult.spm.dtos.formAgent.ConfigurationDTO;
@@ -11,6 +10,6 @@ public interface ConfigurationServices {
 	public boolean perfilSave(ConfigurationDTO confi,AgentDTO agent);
 
 	public ConfigurationDTO getPerfil(Integer oid);
-	
+
 	public ConfigurationDTO updateConfiguration(Integer agentOid, ConfigurationDTO configuration);
 }

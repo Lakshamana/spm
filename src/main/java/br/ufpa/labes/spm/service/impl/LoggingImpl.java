@@ -1,37 +1,36 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.Date;
 
-import javax.ejb.Stateless;
 
-import org.qrconsult.spm.model.activities.Activity;
-import org.qrconsult.spm.model.activities.Decomposed;
-import org.qrconsult.spm.model.activities.Plain;
-import org.qrconsult.spm.model.connections.Branch;
-import org.qrconsult.spm.model.connections.Join;
-import org.qrconsult.spm.model.log.AgendaEvent;
-import org.qrconsult.spm.model.log.GlobalActivityEvent;
-import org.qrconsult.spm.model.log.Log;
-import org.qrconsult.spm.model.log.ModelingActivityEvent;
-import org.qrconsult.spm.model.log.ProcessEvent;
-import org.qrconsult.spm.model.log.ProcessModelEvent;
-import org.qrconsult.spm.model.log.ResourceEvent;
-import org.qrconsult.spm.model.plainActivities.Normal;
-import org.qrconsult.spm.model.processModels.ProcessModel;
-import org.qrconsult.spm.model.resources.Resource;
-import org.qrconsult.spm.model.taskagenda.Task;
-import org.qrconsult.spm.model.processModels.Process;
-import org.qrconsult.spm.model.types.EventType;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.domain.Decomposed;
+import br.ufpa.labes.spm.domain.Plain;
+import br.ufpa.labes.spm.domain.Branch;
+import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.AgendaEvent;
+import br.ufpa.labes.spm.domain.GlobalActivityEvent;
+import br.ufpa.labes.spm.domain.Log;
+import br.ufpa.labes.spm.domain.ModelingActivityEvent;
+import br.ufpa.labes.spm.domain.ProcessEvent;
+import br.ufpa.labes.spm.domain.ProcessModelEvent;
+import br.ufpa.labes.spm.domain.ResourceEvent;
+import br.ufpa.labes.spm.domain.Normal;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.domain.Resource;
+import br.ufpa.labes.spm.domain.Task;
+import br.ufpa.labes.spm.domain.Process;
+import br.ufpa.labes.spm.domain.EventType;
 import org.qrconsult.spm.notifications.mail.EventNotification;
-import org.qrconsult.spm.services.interfaces.Logging;
+import br.ufpa.labes.spm.service.interfaces.Logging;
 
 @Stateless
 public class LoggingImpl implements Logging {
 
 	public LoggingImpl() {
-		
+
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.qrconsult.spm.services.impl.Logging#registerModelingActivityEvent(org.qrconsult.spm.model.activities.Activity, java.lang.String, java.lang.String)
 	 */
@@ -53,10 +52,10 @@ public class LoggingImpl implements Logging {
 		event.setTheLog(log);
 		log.getTheEvent().add(event);
 		activity.getTheModelingActivityEvent().add (event);
-		
+
 		EventNotification.getInstance().notifyEvent( event );
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.qrconsult.spm.services.impl.Logging#registerGlobalActivityEvent(org.qrconsult.spm.model.activities.Plain, java.lang.String, java.lang.String)
 	 */
@@ -79,7 +78,7 @@ public class LoggingImpl implements Logging {
 		type.getTheEvent().add (event);
 		activity.getTheGlobalActivityEvent().add (event);
 
-		EventNotification.getInstance().notifyEvent( event );		
+		EventNotification.getInstance().notifyEvent( event );
 	}
 
 	/* (non-Javadoc)
@@ -90,7 +89,7 @@ public class LoggingImpl implements Logging {
 		EventType type = new EventType();
 		type.setIdent("Enactment Event" + Math.random()*10+ System.currentTimeMillis());
 		type.setDescription("This is an enactment event. Automatically generated.");
-		
+
 		ProcessEvent event = new ProcessEvent();
 		event.setTheProcess(process);
 		event.setTheLog(process.getTheLog());
@@ -102,10 +101,10 @@ public class LoggingImpl implements Logging {
 		event.setTheEventType(type);
 		type.getTheEvent().add (event);
 		process.getTheProcessEvent().add (event);
-		
+
 		EventNotification.getInstance().notifyEvent( event );
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.qrconsult.spm.services.impl.Logging#registerBranchEvent(org.qrconsult.spm.model.connections.Branch, java.lang.String)
 	 */
@@ -128,7 +127,7 @@ public class LoggingImpl implements Logging {
 		branch.getTheProcessModel().getProcessModelEvent.add (event);
 */
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.qrconsult.spm.services.impl.Logging#registerJoinEvent(org.qrconsult.spm.model.connections.Join, java.lang.String)
 	 */
@@ -151,7 +150,7 @@ public class LoggingImpl implements Logging {
 		join.theProcessModelEvent.add (event);
 */
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.qrconsult.spm.services.impl.Logging#registerProcessModelEvent(org.qrconsult.spm.model.processModels.ProcessModel, java.lang.String, java.lang.String)
 	 */
@@ -160,7 +159,7 @@ public class LoggingImpl implements Logging {
 		EventType type = new EventType();
 		type.setIdent("Enactment Event" + Math.random()*10+ System.currentTimeMillis());
 		type.setDescription("This is an enactment event. Automatically generated.");
-	
+
 		ProcessModelEvent event = new ProcessModelEvent();
 		event.setTheProcessModel(model);
   		Log log = this.getTheProcess(model).getTheLog();
@@ -173,10 +172,10 @@ public class LoggingImpl implements Logging {
        	event.setTheEventType(type);
        	type.getTheEvent().add(event);
        	model.getTheProcessModelEvent().add (event);
-       	
+
        	EventNotification.getInstance().notifyEvent( event );
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.qrconsult.spm.services.impl.Logging#registerResourceEvent(org.qrconsult.spm.model.resources.Resource, org.qrconsult.spm.model.plainActivities.Normal, java.lang.String, java.lang.String)
 	 */
@@ -202,10 +201,10 @@ public class LoggingImpl implements Logging {
 		event.setTheEventType(type);
 		type.getTheEvent().add (event);
 		resource.getTheResourceEvent().add (event);
-		
+
 		EventNotification.getInstance().notifyEvent( event );
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.qrconsult.spm.services.impl.Logging#registerAgendaEvent(org.qrconsult.spm.model.taskagenda.Task, java.lang.String, java.lang.String)
 	 */
@@ -228,17 +227,17 @@ public class LoggingImpl implements Logging {
 		agEvent.setTheEventType(type);
 		type.getTheEvent().add(agEvent);
 		task.getTheAgendaEvent().add(agEvent);
-		
+
 		EventNotification.getInstance().notifyEvent( agEvent );
 	}
-	
+
 	// Utility
-	
+
 	private Process getTheProcess(ProcessModel pmodel){
-		
+
 	    Process process = null;
 		Decomposed decAct = pmodel.getTheDecomposed();
-			
+
 		if(decAct == null)
 			process = pmodel.getTheProcess();
 		else

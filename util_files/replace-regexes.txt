@@ -28,7 +28,7 @@ let SPMROOT = pasta raiz do projeto SPM
 
 - De pacotes de modelos SPM por objetos domain JHipster (modelos):
   search: `(package|import) org\.qrconsult\.spm\.model\.(.*)\.(.*);`
-  replaceby: `br.ufpa.labes.spm.domain.$2;`
+  replaceby: `$1 br.ufpa.labes.spm.domain.$2;`
 
 - De pacotes e importações de exceções SPM pela versão mais atual:
   search: `(package|import) org\.qrconsult\.spm\.exceptions(.*);`

@@ -1,4 +1,4 @@
-package org.qrconsult.spm.services.impl;
+package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +10,10 @@ import javax.persistence.TypedQuery;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
-import org.qrconsult.spm.dataAccess.interfaces.IHelpTopicDAO;
+import br.ufpa.labes.spm.repository.interfaces.IHelpTopicDAO;
 import org.qrconsult.spm.dtos.help.HelpTopicDTO;
-import org.qrconsult.spm.model.help.HelpTopic;
-import org.qrconsult.spm.services.interfaces.HelpServices;
+import br.ufpa.labes.spm.domain.HelpTopic;
+import br.ufpa.labes.spm.service.interfaces.HelpServices;
 import org.qrconsult.spm.util.ident.ConversorDeIdent;
 import org.qrconsult.spm.util.ident.SemCaracteresEspeciais;
 import org.qrconsult.spm.util.ident.TrocaEspacoPorPonto;
@@ -21,7 +21,6 @@ import org.qrconsult.spm.util.ident.TrocaEspacoPorPonto;
 @Stateless
 public class HelpServicesImpl  implements HelpServices{
 
-	@EJB
 	IHelpTopicDAO helpTopicDAO;
 
 	Converter converter = new ConverterImpl();
@@ -47,14 +46,14 @@ public class HelpServicesImpl  implements HelpServices{
 			return null;
 		}
 	}
-	
+
 	@Override
 	public HelpTopicDTO getHelpTopicByToken(String token) {
 		TypedQuery<HelpTopic> query;
 		String hql = "SELECT h FROM " + HelpTopic.class.getSimpleName() + " h WHERE h.tokenRelated = :token";
 		query = helpTopicDAO.getPersistenceContext().createQuery(hql, HelpTopic.class);
 		query.setParameter("token", token);
-		
+
 		List<HelpTopic> result = query.getResultList();
 		if(!result.isEmpty()) {
 			HelpTopic topic = result.get(0);
@@ -66,7 +65,7 @@ public class HelpServicesImpl  implements HelpServices{
 			}
 			return helpTopicDTO;
 		}
-		
+
 		return HelpTopicDTO.nullHelpTopicDTO();
 	}
 
@@ -86,7 +85,7 @@ public class HelpServicesImpl  implements HelpServices{
 			}
 		}
 	}
-	
+
 	@Override
 	public HelpTopicDTO saveTopic(HelpTopicDTO helpTopicDTO) {
 		if (helpTopicDTO.getIdent() == null || "".equals(helpTopicDTO.getIdent())){ //Quando se trata de um novo t�pico de ajuda
@@ -99,17 +98,17 @@ public class HelpServicesImpl  implements HelpServices{
 
 					helpTopic = (HelpTopic) converter.getEntity(helpTopicDTO, HelpTopic.class);
 					helpTopicDAO.save(helpTopic);
-					
+
 					String newIdent = ConversorDeIdent.de(helpTopic.getId()+ " " + helpTopic.getTitle()).para(new SemCaracteresEspeciais())
 							.para(new TrocaEspacoPorPonto())
-							.ident(); 
-					
+							.ident();
+
 					System.out.println("-> " + newIdent);
-					
+
 					helpTopic.setIdent(newIdent);
 					helpTopicDTO.setIdent(newIdent);
 					helpTopicDAO.update(helpTopic);
-					
+
 					return helpTopicDTO;
 				} catch (ImplementationException e) {
 					e.printStackTrace();
@@ -129,7 +128,7 @@ public class HelpServicesImpl  implements HelpServices{
 				} catch (ImplementationException e) {
 					e.printStackTrace();
 					return null;
-				} 
+				}
 			}
 		} else { //Quando se trata de edi��o de um t�pico de ajuda
 			HelpTopic helpTopic = helpTopicDAO.retrieveBySecondaryKey(helpTopicDTO.getIdent());
