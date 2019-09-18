@@ -32,7 +32,7 @@ import br.ufpa.labes.spm.domain.Task;
 import br.ufpa.labes.spm.service.interfaces.CalendarServices;
 import br.ufpa.labes.spm.service.interfaces.EasyModelingServices;
 import br.ufpa.labes.spm.service.interfaces.GanttServices;
-import org.qrconsult.spm.util.ServicesUtil;
+import br.ufpa.labes.spm.util.ServicesUtil;
 
 public class GanttServicesImpl implements GanttServices {
 

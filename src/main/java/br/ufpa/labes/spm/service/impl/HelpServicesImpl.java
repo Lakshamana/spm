@@ -12,9 +12,9 @@ import br.ufpa.labes.spm.repository.interfaces.IHelpTopicDAO;
 import br.ufpa.labes.spm.service.dto.HelpTopicDTO;
 import br.ufpa.labes.spm.domain.HelpTopic;
 import br.ufpa.labes.spm.service.interfaces.HelpServices;
-import org.qrconsult.spm.util.ident.ConversorDeIdent;
-import org.qrconsult.spm.util.ident.SemCaracteresEspeciais;
-import org.qrconsult.spm.util.ident.TrocaEspacoPorPonto;
+import br.ufpa.labes.spm.util.ident.ConversorDeIdent;
+import br.ufpa.labes.spm.util.ident.SemCaracteresEspeciais;
+import br.ufpa.labes.spm.util.ident.TrocaEspacoPorPonto;
 
 public class HelpServicesImpl  implements HelpServices{
 

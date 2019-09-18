@@ -103,7 +103,7 @@ import br.ufpa.labes.spm.service.interfaces.EasyModelingServices;
 import br.ufpa.labes.spm.service.interfaces.EnactmentEngineLocal;
 import br.ufpa.labes.spm.service.interfaces.NotificationServices;
 import br.ufpa.labes.spm.service.interfaces.commonData.SimpleActivityQueryResult;
-import org.qrconsult.spm.util.i18n.Messages;
+import br.ufpa.labes.spm.util.i18n.Messages;
 
 public class EasyModelingServicesImpl implements EasyModelingServices {
 

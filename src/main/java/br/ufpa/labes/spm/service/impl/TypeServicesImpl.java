@@ -40,7 +40,7 @@ import br.ufpa.labes.spm.domain.RoleType;
 import br.ufpa.labes.spm.domain.ToolType;
 import br.ufpa.labes.spm.domain.Type;
 import br.ufpa.labes.spm.service.interfaces.TypeServices;
-import org.qrconsult.spm.util.Translator;
+import br.ufpa.labes.spm.util.Translator;
 
 public class TypeServicesImpl implements TypeServices{
 

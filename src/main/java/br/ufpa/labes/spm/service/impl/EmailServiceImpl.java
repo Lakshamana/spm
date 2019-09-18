@@ -32,7 +32,7 @@ import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.Email;
 import br.ufpa.labes.spm.service.interfaces.AgentServices;
 import br.ufpa.labes.spm.service.interfaces.EmailServices;
-import org.qrconsult.spm.util.Md5;
+import br.ufpa.labes.spm.util.Md5;
 
 public class EmailServiceImpl implements EmailServices {
 

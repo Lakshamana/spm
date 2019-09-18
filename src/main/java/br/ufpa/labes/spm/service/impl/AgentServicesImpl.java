@@ -50,7 +50,7 @@ import br.ufpa.labes.spm.domain.ProcessAgenda;
 import br.ufpa.labes.spm.domain.Task;
 import br.ufpa.labes.spm.domain.TaskAgenda;
 import br.ufpa.labes.spm.service.interfaces.AgentServices;
-import org.qrconsult.spm.util.Md5;
+import br.ufpa.labes.spm.util.Md5;
 
 public class AgentServicesImpl implements AgentServices {
 

@@ -25,9 +25,9 @@ import br.ufpa.labes.spm.domain.Project;
 import br.ufpa.labes.spm.domain.ArtifactType;
 import br.ufpa.labes.spm.domain.Type;
 import br.ufpa.labes.spm.service.interfaces.ArtifactServices;
-import org.qrconsult.spm.util.ident.ConversorDeIdent;
-import org.qrconsult.spm.util.ident.SemCaracteresEspeciais;
-import org.qrconsult.spm.util.ident.TrocaEspacoPorPonto;
+import br.ufpa.labes.spm.util.ident.ConversorDeIdent;
+import br.ufpa.labes.spm.util.ident.SemCaracteresEspeciais;
+import br.ufpa.labes.spm.util.ident.TrocaEspacoPorPonto;
 
 
 public class ArtifactServicesImpl implements ArtifactServices {

@@ -75,7 +75,7 @@ import org.qrconsult.spm.process.impl.CopyProcessServiceImpl;
 import org.qrconsult.spm.process.interfaces.CopyProcessServices;
 import br.ufpa.labes.spm.service.interfaces.DynamicModeling;
 import br.ufpa.labes.spm.service.interfaces.TemplateServices;
-import org.qrconsult.spm.util.i18n.Messages;
+import br.ufpa.labes.spm.util.i18n.Messages;
 
 public class TemplateServicesImpl implements TemplateServices {
 	public static final String TEMPLATE_CLASSNAME = Template.class.getSimpleName();

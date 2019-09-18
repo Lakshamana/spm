@@ -65,7 +65,7 @@ import br.ufpa.labes.spm.service.interfaces.EnactmentEngine;
 import br.ufpa.labes.spm.service.interfaces.EnactmentEngineLocal;
 import br.ufpa.labes.spm.service.interfaces.Logging;
 import br.ufpa.labes.spm.service.interfaces.NotificationServices;
-import org.qrconsult.spm.util.i18n.Messages;
+import br.ufpa.labes.spm.util.i18n.Messages;
 
 
 /**

@@ -174,7 +174,7 @@ import org.qrconsult.spm.process.interfaces.IProcessExporter;
 import br.ufpa.labes.spm.service.interfaces.EnactmentEngineLocal;
 import br.ufpa.labes.spm.service.interfaces.ProjectServices;
 import br.ufpa.labes.spm.service.interfaces.ReportServices;
-import org.qrconsult.spm.util.UtilReflection;
+import br.ufpa.labes.spm.util.UtilReflection;
 
 public class ProjectServicesImpl implements ProjectServices {
 

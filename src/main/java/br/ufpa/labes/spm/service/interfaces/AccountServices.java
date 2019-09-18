@@ -7,8 +7,8 @@ import br.ufpa.labes.spm.exceptions.SPMException;
 import br.ufpa.labes.spm.domain.Author;
 import br.ufpa.labes.spm.domain.Organization;
 import br.ufpa.labes.spm.domain.Person;
-import org.qrconsult.spm.util.PagingContext;
-import org.qrconsult.spm.util.SortCriteria;
+import br.ufpa.labes.spm.util.PagingContext;
+import br.ufpa.labes.spm.util.SortCriteria;
 
 
 @Remote
