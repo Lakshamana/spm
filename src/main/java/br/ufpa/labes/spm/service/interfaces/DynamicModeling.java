@@ -3,7 +3,7 @@ package br.ufpa.labes.spm.service.interfaces;
 import java.util.Collection;
 
 
-import org.qrconsult.spm.dtos.dynamicModeling.WebapseeObjectDTO;
+import br.ufpa.labes.spm.service.dto.WebapseeObjectDTO;
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.exceptions.ModelingException;
 import br.ufpa.labes.spm.exceptions.ModelingWarning;

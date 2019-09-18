@@ -6,8 +6,8 @@ import javax.ejb.Remote;
 
 import org.qrconsult.spm.beans.ArtifactMngContent;
 import org.qrconsult.spm.beans.ArtifactMngDownload;
-import org.qrconsult.spm.dtos.formRepositorios.RepositoriesDTO;
-import org.qrconsult.spm.dtos.formRepositorios.RepositoryDTO;
+import br.ufpa.labes.spm.service.dto.RepositoriesDTO;
+import br.ufpa.labes.spm.service.dto.RepositoryDTO;
 import br.ufpa.labes.spm.exceptions.WebapseeException;
 import br.ufpa.labes.spm.domain.Repository;
 

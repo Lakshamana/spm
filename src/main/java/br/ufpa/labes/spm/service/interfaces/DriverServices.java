@@ -2,9 +2,9 @@ package br.ufpa.labes.spm.service.interfaces;
 
 import javax.ejb.Remote;
 
-import org.qrconsult.spm.dtos.driver.DriverDTO;
-import org.qrconsult.spm.dtos.formAgent.ConfigurationDTO;
-import org.qrconsult.spm.dtos.formOrganization.CompanyDTO;
+import br.ufpa.labes.spm.service.dto.DriverDTO;
+import br.ufpa.labes.spm.service.dto.ConfigurationDTO;
+import br.ufpa.labes.spm.service.dto.CompanyDTO;
 
 @Remote
 public interface DriverServices {

@@ -3,10 +3,10 @@ package br.ufpa.labes.spm.service.interfaces;
 import java.util.List;
 
 
-import org.qrconsult.spm.dtos.formActivity.ActivitysDTO;
-import org.qrconsult.spm.dtos.formProject.ProjectsDTO;
-import org.qrconsult.spm.dtos.process.ProcessDTO;
-import org.qrconsult.spm.dtos.process.ProcessesDTO;
+import br.ufpa.labes.spm.service.dto.ActivitysDTO;
+import br.ufpa.labes.spm.service.dto.ProjectsDTO;
+import br.ufpa.labes.spm.service.dto.ProcessDTO;
+import br.ufpa.labes.spm.service.dto.ProcessesDTO;
 
 @Remote
 public interface ProcessServices {

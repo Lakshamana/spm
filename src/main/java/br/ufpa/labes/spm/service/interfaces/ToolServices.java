@@ -1,9 +1,9 @@
 package br.ufpa.labes.spm.service.interfaces;
 
 import javax.ejb.Remote;
-import org.qrconsult.spm.dtos.formTool.ToolDTO;
-import org.qrconsult.spm.dtos.formTool.ToolsDTO;
-import org.qrconsult.spm.dtos.formTypes.TypesDTO;
+import br.ufpa.labes.spm.service.dto.ToolDTO;
+import br.ufpa.labes.spm.service.dto.ToolsDTO;
+import br.ufpa.labes.spm.service.dto.TypesDTO;
 
 @Remote
 public interface ToolServices {

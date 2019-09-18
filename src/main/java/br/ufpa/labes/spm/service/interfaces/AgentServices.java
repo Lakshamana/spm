@@ -3,15 +3,15 @@ package br.ufpa.labes.spm.service.interfaces;
 import java.util.List;
 
 
-import org.qrconsult.spm.dtos.agenda.TaskDTO;
-import org.qrconsult.spm.dtos.formAbility.AbilityDTO;
-import org.qrconsult.spm.dtos.formAgent.AgentAffinityAgentDTO;
-import org.qrconsult.spm.dtos.formAgent.AgentDTO;
-import org.qrconsult.spm.dtos.formAgent.AgentHasAbilityDTO;
-import org.qrconsult.spm.dtos.formAgent.AgentsDTO;
-import org.qrconsult.spm.dtos.formAgent.ConfigurationDTO;
-import org.qrconsult.spm.dtos.formGroup.GroupDTO;
-import org.qrconsult.spm.dtos.formRole.RoleDTO;
+import br.ufpa.labes.spm.service.dto.TaskDTO;
+import br.ufpa.labes.spm.service.dto.AbilityDTO;
+import br.ufpa.labes.spm.service.dto.AgentAffinityAgentDTO;
+import br.ufpa.labes.spm.service.dto.AgentDTO;
+import br.ufpa.labes.spm.service.dto.AgentHasAbilityDTO;
+import br.ufpa.labes.spm.service.dto.AgentsDTO;
+import br.ufpa.labes.spm.service.dto.ConfigurationDTO;
+import br.ufpa.labes.spm.service.dto.GroupDTO;
+import br.ufpa.labes.spm.service.dto.RoleDTO;
 import br.ufpa.labes.spm.domain.Agent;
 
 @Remote

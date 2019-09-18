@@ -9,7 +9,7 @@ import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.IHelpTopicDAO;
-import org.qrconsult.spm.dtos.help.HelpTopicDTO;
+import br.ufpa.labes.spm.service.dto.HelpTopicDTO;
 import br.ufpa.labes.spm.domain.HelpTopic;
 import br.ufpa.labes.spm.service.interfaces.HelpServices;
 import org.qrconsult.spm.util.ident.ConversorDeIdent;

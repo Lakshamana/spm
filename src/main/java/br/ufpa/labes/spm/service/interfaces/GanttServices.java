@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.service.interfaces;
 
 
-import org.qrconsult.spm.dtos.formActivity.ActivityDTO;
-import org.qrconsult.spm.dtos.formActivity.ActivitysDTO;
+import br.ufpa.labes.spm.service.dto.ActivityDTO;
+import br.ufpa.labes.spm.service.dto.ActivitysDTO;
 
 @Remote
 public interface GanttServices {

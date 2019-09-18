@@ -3,8 +3,8 @@ package br.ufpa.labes.spm.service.interfaces;
 import java.util.List;
 
 
-import org.qrconsult.spm.dtos.agenda.AgendaEventDTO;
-import org.qrconsult.spm.dtos.agenda.AgendaEventsDTO;
+import br.ufpa.labes.spm.service.dto.AgendaEventDTO;
+import br.ufpa.labes.spm.service.dto.AgendaEventsDTO;
 import br.ufpa.labes.spm.exceptions.WebapseeException;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.ProcessModel;

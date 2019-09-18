@@ -2,8 +2,8 @@ package br.ufpa.labes.spm.service.interfaces;
 
 import javax.ejb.Remote;
 
-import org.qrconsult.spm.dtos.email.EmailDTO;
-import org.qrconsult.spm.dtos.formAgent.AgentDTO;
+import br.ufpa.labes.spm.service.dto.EmailDTO;
+import br.ufpa.labes.spm.service.dto.AgentDTO;
 
 
 @Remote

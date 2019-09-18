@@ -5,24 +5,24 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import org.qrconsult.spm.dtos.formReport.reportItems.ActivitiesByAgentReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.AgentMetricsReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.AgentsByGroupReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.AgentsByRoleReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.AgentsReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.ArtifactMetricsReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.CostDeviationReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.DocumentManagementPlanItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.KnowledgeItensReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.ProjectArtifactsReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.ProjectsBySystemReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.RequirementItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.ResourceMetricsReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.ResourceStatesReportItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.ResourcesPlanItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.SchedulePlanItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.WorkBreakdownStructureItem;
-import org.qrconsult.spm.dtos.formReport.reportItems.resourcesCostPlan.ResourcesCostPlanItem;
+import br.ufpa.labes.spm.service.dto.ActivitiesByAgentReportItem;
+import br.ufpa.labes.spm.service.dto.AgentMetricsReportItem;
+import br.ufpa.labes.spm.service.dto.AgentsByGroupReportItem;
+import br.ufpa.labes.spm.service.dto.AgentsByRoleReportItem;
+import br.ufpa.labes.spm.service.dto.AgentsReportItem;
+import br.ufpa.labes.spm.service.dto.ArtifactMetricsReportItem;
+import br.ufpa.labes.spm.service.dto.CostDeviationReportItem;
+import br.ufpa.labes.spm.service.dto.DocumentManagementPlanItem;
+import br.ufpa.labes.spm.service.dto.KnowledgeItensReportItem;
+import br.ufpa.labes.spm.service.dto.ProjectArtifactsReportItem;
+import br.ufpa.labes.spm.service.dto.ProjectsBySystemReportItem;
+import br.ufpa.labes.spm.service.dto.RequirementItem;
+import br.ufpa.labes.spm.service.dto.ResourceMetricsReportItem;
+import br.ufpa.labes.spm.service.dto.ResourceStatesReportItem;
+import br.ufpa.labes.spm.service.dto.ResourcesPlanItem;
+import br.ufpa.labes.spm.service.dto.SchedulePlanItem;
+import br.ufpa.labes.spm.service.dto.WorkBreakdownStructureItem;
+import br.ufpa.labes.spm.service.dto.ResourcesCostPlanItem;
 
 @Remote
 public interface ReportServices {

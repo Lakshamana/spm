@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import javax.ejb.Remote;
-import org.qrconsult.spm.dtos.calendar.CalendarDTO;
+import br.ufpa.labes.spm.service.dto.CalendarDTO;
 import br.ufpa.labes.spm.domain.ProcessModel;
 
 @Remote

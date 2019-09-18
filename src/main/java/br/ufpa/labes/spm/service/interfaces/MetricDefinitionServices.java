@@ -2,8 +2,8 @@ package br.ufpa.labes.spm.service.interfaces;
 
 import javax.ejb.Remote;
 
-import org.qrconsult.spm.dtos.processKnowledge.MetricDefinitionDTO;
-import org.qrconsult.spm.dtos.processKnowledge.MetricDefinitionsDTO;
+import br.ufpa.labes.spm.service.dto.MetricDefinitionDTO;
+import br.ufpa.labes.spm.service.dto.MetricDefinitionsDTO;
 
 @Remote
 public interface MetricDefinitionServices {

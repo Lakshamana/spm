@@ -3,12 +3,12 @@ package br.ufpa.labes.spm.service.interfaces;
 import java.util.List;
 
 
-import org.qrconsult.spm.dtos.dashboard.ProjectCost;
-import org.qrconsult.spm.dtos.dashboard.ProjectStatistic;
-import org.qrconsult.spm.dtos.formAgent.AgentsDTO;
-import org.qrconsult.spm.dtos.formArtifacts.ArtifactsDTO;
-import org.qrconsult.spm.dtos.formProject.ProjectDTO;
-import org.qrconsult.spm.dtos.formProject.ProjectsDTO;
+import br.ufpa.labes.spm.service.dto.ProjectCost;
+import br.ufpa.labes.spm.service.dto.ProjectStatistic;
+import br.ufpa.labes.spm.service.dto.AgentsDTO;
+import br.ufpa.labes.spm.service.dto.ArtifactsDTO;
+import br.ufpa.labes.spm.service.dto.ProjectDTO;
+import br.ufpa.labes.spm.service.dto.ProjectsDTO;
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.exceptions.WebapseeException;
 import br.ufpa.labes.spm.domain.Project;

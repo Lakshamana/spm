@@ -3,7 +3,7 @@ package br.ufpa.labes.spm.service.interfaces;
 import java.util.List;
 
 
-import org.qrconsult.spm.dtos.help.HelpTopicDTO;
+import br.ufpa.labes.spm.service.dto.HelpTopicDTO;
 
 @Remote
 public interface HelpServices {

@@ -1,11 +1,11 @@
 package br.ufpa.labes.spm.service.interfaces;
 
 
-import org.qrconsult.spm.dtos.formAgent.AgentDTO;
-import org.qrconsult.spm.dtos.formAgent.AgentsDTO;
-import org.qrconsult.spm.dtos.formGroup.GroupDTO;
-import org.qrconsult.spm.dtos.formGroup.GroupsDTO;
-import org.qrconsult.spm.dtos.formTypes.TypesDTO;
+import br.ufpa.labes.spm.service.dto.AgentDTO;
+import br.ufpa.labes.spm.service.dto.AgentsDTO;
+import br.ufpa.labes.spm.service.dto.GroupDTO;
+import br.ufpa.labes.spm.service.dto.GroupsDTO;
+import br.ufpa.labes.spm.service.dto.TypesDTO;
 
 @Remote
 public interface GroupServices {

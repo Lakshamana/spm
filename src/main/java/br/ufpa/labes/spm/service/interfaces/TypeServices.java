@@ -4,8 +4,8 @@ import java.util.List;
 
 
 import org.qrconsult.spm.beans.editor.WebAPSEEVO;
-import org.qrconsult.spm.dtos.formTypes.TypeDTO;
-import org.qrconsult.spm.dtos.formTypes.TypesDTO;
+import br.ufpa.labes.spm.service.dto.TypeDTO;
+import br.ufpa.labes.spm.service.dto.TypesDTO;
 
 @Remote
 public interface TypeServices {

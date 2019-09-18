@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import org.qrconsult.spm.dtos.processKnowledge.MetricDTO;
-import org.qrconsult.spm.dtos.processKnowledge.MetricDefinitionDTO;
+import br.ufpa.labes.spm.service.dto.MetricDTO;
+import br.ufpa.labes.spm.service.dto.MetricDefinitionDTO;
 
 
 @Remote

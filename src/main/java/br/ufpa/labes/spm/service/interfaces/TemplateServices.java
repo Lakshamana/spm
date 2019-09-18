@@ -4,8 +4,8 @@ import java.lang.reflect.Array;
 import java.util.List;
 
 
-import org.qrconsult.spm.dtos.formProject.SimpleUpdateDTO;
-import org.qrconsult.spm.dtos.template.TemplateDTO;
+import br.ufpa.labes.spm.service.dto.SimpleUpdateDTO;
+import br.ufpa.labes.spm.service.dto.TemplateDTO;
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.exceptions.WebapseeException;
 

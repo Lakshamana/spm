@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.service.interfaces;
 
 
-import org.qrconsult.spm.dtos.formAgent.AgentDTO;
-import org.qrconsult.spm.dtos.formAgent.ConfigurationDTO;
+import br.ufpa.labes.spm.service.dto.AgentDTO;
+import br.ufpa.labes.spm.service.dto.ConfigurationDTO;
 
 @Remote
 public interface ConfigurationServices {

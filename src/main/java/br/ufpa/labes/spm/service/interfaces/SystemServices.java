@@ -3,9 +3,9 @@ package br.ufpa.labes.spm.service.interfaces;
 import java.util.List;
 
 
-import org.qrconsult.spm.dtos.formProject.ProjectDTO;
-import org.qrconsult.spm.dtos.formSystem.SystemDTO;
-import org.qrconsult.spm.dtos.formSystem.SystemsDTO;
+import br.ufpa.labes.spm.service.dto.ProjectDTO;
+import br.ufpa.labes.spm.service.dto.SystemDTO;
+import br.ufpa.labes.spm.service.dto.SystemsDTO;
 
 
 

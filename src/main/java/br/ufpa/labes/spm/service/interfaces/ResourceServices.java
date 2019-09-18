@@ -4,9 +4,9 @@ import java.sql.SQLException;
 
 import javax.ejb.Remote;
 
-import org.qrconsult.spm.dtos.formResources.ResourceDTO;
-import org.qrconsult.spm.dtos.formResources.ResourcesDTO;
-import org.qrconsult.spm.dtos.formTypes.TypesDTO;
+import br.ufpa.labes.spm.service.dto.ResourceDTO;
+import br.ufpa.labes.spm.service.dto.ResourcesDTO;
+import br.ufpa.labes.spm.service.dto.TypesDTO;
 import br.ufpa.labes.spm.domain.Resource;
 
 @Remote

@@ -3,10 +3,10 @@ package br.ufpa.labes.spm.service.interfaces;
 import java.util.List;
 
 
-import org.qrconsult.spm.dtos.formAbility.AbilityDTO;
-import org.qrconsult.spm.dtos.formAgent.AgentDTO;
-import org.qrconsult.spm.dtos.formRole.RoleDTO;
-import org.qrconsult.spm.dtos.formRole.RolesDTO;
+import br.ufpa.labes.spm.service.dto.AbilityDTO;
+import br.ufpa.labes.spm.service.dto.AgentDTO;
+import br.ufpa.labes.spm.service.dto.RoleDTO;
+import br.ufpa.labes.spm.service.dto.RolesDTO;
 
 @Remote
 public interface RoleServices {

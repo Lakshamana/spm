@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import org.qrconsult.spm.dtos.processKnowledge.EstimationDTO;
-import org.qrconsult.spm.dtos.processKnowledge.MetricDefinitionDTO;
+import br.ufpa.labes.spm.service.dto.EstimationDTO;
+import br.ufpa.labes.spm.service.dto.MetricDefinitionDTO;
 
 @Remote
 public interface EstimationServices {

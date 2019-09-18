@@ -60,7 +60,7 @@ import br.ufpa.labes.spm.repository.interfaces.tools.ISubroutineDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IGroupTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
-import org.qrconsult.spm.dtos.calendar.CalendarDTO;
+import br.ufpa.labes.spm.service.dto.CalendarDTO;
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.exceptions.ModelingException;
 import br.ufpa.labes.spm.exceptions.WebapseeException;

@@ -2,8 +2,8 @@ package br.ufpa.labes.spm.service.interfaces;
 
 import javax.ejb.Remote;
 
-import org.qrconsult.spm.dtos.formOrganization.CompaniesDTO;
-import org.qrconsult.spm.dtos.formOrganization.CompanyDTO;
+import br.ufpa.labes.spm.service.dto.CompaniesDTO;
+import br.ufpa.labes.spm.service.dto.CompanyDTO;
 
 @Remote
 public interface CompanyServices {

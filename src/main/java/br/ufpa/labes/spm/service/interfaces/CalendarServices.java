@@ -3,9 +3,9 @@ package br.ufpa.labes.spm.service.interfaces;
 import java.util.List;
 
 
-import org.qrconsult.spm.dtos.calendar.CalendarDTO;
-import org.qrconsult.spm.dtos.calendar.CalendarsDTO;
-import org.qrconsult.spm.dtos.formProject.ProjectDTO;
+import br.ufpa.labes.spm.service.dto.CalendarDTO;
+import br.ufpa.labes.spm.service.dto.CalendarsDTO;
+import br.ufpa.labes.spm.service.dto.ProjectDTO;
 
 @Remote
 public interface CalendarServices {

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.service.interfaces;
 
 
-import org.qrconsult.spm.dtos.formAbility.AbilityDTO;
-import org.qrconsult.spm.dtos.formAbility.AbilitysDTO;
+import br.ufpa.labes.spm.service.dto.AbilityDTO;
+import br.ufpa.labes.spm.service.dto.AbilitysDTO;
 
 @Remote
 public interface AbilityServices {
