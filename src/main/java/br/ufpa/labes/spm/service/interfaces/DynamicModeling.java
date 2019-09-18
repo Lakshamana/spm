@@ -217,37 +217,37 @@ public interface DynamicModeling {
 	/**
 	 * Rule G3.9
 	 */
-	public Integer newJoinAND(String dependency, String level_id)
+	public Integer newJoinANDCon(String dependency, String level_id)
 			throws DAOException;
 
 	/**
 	 * Rule G3.10
 	 */
-	public Integer newJoinOR(String dependency, String level_id)
+	public Integer newJoinConOR(String dependency, String level_id)
 			throws DAOException;
 
 	/**
 	 * Rule G3.11
 	 */
-	public Integer newJoinXOR(String dependency, String level_id)
+	public Integer newJoinConXOR(String dependency, String level_id)
 			throws DAOException;
 
 	/**
 	 * Rule G3.12
 	 */
-	public Integer newBranchAND(String dependency, String level_id)
+	public Integer newBranchANDCon(String dependency, String level_id)
 			throws DAOException;
 
 	/**
 	 * Rule G3.13
 	 */
-	public Integer newBranchOR(String dependency, String level_id)
+	public Integer newBranchConOR(String dependency, String level_id)
 			throws DAOException;
 
 	/**
 	 * Rule G3.14
 	 */
-	public Integer newBranchXOR(String dependency, String level_id)
+	public Integer newBranchConXOR(String dependency, String level_id)
 			throws DAOException;
 
 	/**
@@ -281,56 +281,56 @@ public interface DynamicModeling {
 	 * G4.12 G4.13, G4.14 and G4.15. WARNING: This Method contains Dynamic
 	 * Changes related code!
 	 */
-	public WebapseeObjectDTO defineJoinTo_Activity(String con_id,
+	public WebapseeObjectDTO defineJoinConTo_Activity(String con_id,
 			String act_id) throws DAOException, WebapseeException;
 
 	/**
 	 * Rules G4.16, G4.17, G4.18, G4.19, G4.20 and G4.21 WARNING: This Method
 	 * contains Dynamic Changes related code!
 	 */
-	public Integer defineJoinTo_Connection(String con_id,
+	public Integer defineJoinConTo_Connection(String con_id,
 			String to_con_id) throws DAOException, WebapseeException;
 
 	/**
 	 * Rules G4.22, G4.23, G4.28 and G4.29 WARNING: This Method contains Dynamic
 	 * Changes related code!
 	 */
-	public void defineJoinFrom_Connection(String con_id,
+	public void defineJoinConFrom_Connection(String con_id,
 			String from_con_id) throws DAOException, WebapseeException;
 
 	/**
 	 * Rules G4.24, G4.25, G4.26, G4.27 G4.30, G4.31, G4.32 and G4.33 WARNING:
 	 * This Method contains Dynamic Changes related code!
 	 */
-	public void defineJoinFrom_Activity(String con_id, String act_id)
+	public void defineJoinConFrom_Activity(String con_id, String act_id)
 			throws DAOException, WebapseeException;
 
 	/**
 	 * Rules G5.1, G5.2, G5.3, G5.4 G5.5, G5.6, G5.7, G5.8, G5.9 G5.10, G5.11
 	 * and G5.12 WARNING: This Method contains Dynamic Changes related code!
 	 */
-	public WebapseeObjectDTO defineBranchFromActivity(String con_id,
+	public WebapseeObjectDTO defineBranchConFromActivity(String con_id,
 			String act_id) throws DAOException, WebapseeException;
 
 	/**
 	 * Rules G5.13, G5.14, G5.15 G5.16, G5.17 and G5.18 WARNING: This Method
 	 * contains Dynamic Changes related code!
 	 */
-	public WebapseeObjectDTO defineBranchFromConnection(String con_id,
+	public WebapseeObjectDTO defineBranchConFromConnection(String con_id,
 			String from_con_id) throws DAOException, WebapseeException;
 
 	/**
 	 * Rules G5.19, G5.20, G5.21 G5.22, G5.23, G5.26, G5.27 G5.28, G5.29 and
 	 * G5.30 WARNING: This Method contains Dynamic Changes related code!
 	 */
-	public void defineBranchToActivity(String con_id, String act_id)
+	public void defineBranchConToActivity(String con_id, String act_id)
 			throws DAOException, WebapseeException;
 
 	/**
 	 * Rules G5.24, G5.25, G5.31 and G5.32 WARNING: This Method contains Dynamic
 	 * Changes related code!
 	 */
-	public void defineBranchToConnection(String con_id,
+	public void defineBranchConToConnection(String con_id,
 			String to_con_id) throws DAOException, WebapseeException;
 
 	/**

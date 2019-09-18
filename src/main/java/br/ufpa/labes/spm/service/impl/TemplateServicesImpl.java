@@ -41,15 +41,15 @@ import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactCon;
-import br.ufpa.labes.spm.domain.Branch;
-import br.ufpa.labes.spm.domain.BranchAND;
-import br.ufpa.labes.spm.domain.BranchCond;
-import br.ufpa.labes.spm.domain.BranchCondToActivity;
-import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
+import br.ufpa.labes.spm.domain.BranchCon;
+import br.ufpa.labes.spm.domain.BranchANDCon;
+import br.ufpa.labes.spm.domain.BranchConCond;
+import br.ufpa.labes.spm.domain.BranchConCondToActivity;
+import br.ufpa.labes.spm.domain.BranchConCondToMultipleCon;
 import br.ufpa.labes.spm.domain.Connection;
 import br.ufpa.labes.spm.domain.Dependency;
 import br.ufpa.labes.spm.domain.Feedback;
-import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.JoinCon;
 import br.ufpa.labes.spm.domain.MultipleCon;
 import br.ufpa.labes.spm.domain.Sequence;
 import br.ufpa.labes.spm.domain.Project;
@@ -971,126 +971,126 @@ public class TemplateServicesImpl implements TemplateServices {
 					this.addCoordinate(((ArtifactCon)currentConnection).getOid(), ((ArtifactCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 
 				}//########################
-				else if(currentConnection instanceof Branch){
+				else if(currentConnection instanceof BranchCon){
 
 					//########################
-					if(currentConnection instanceof BranchAND){
-						newConnection = new BranchAND();
+					if(currentConnection instanceof BranchANDCon){
+						newConnection = new BranchANDCon();
 						//ToActivity
-						Collection toActivities = ((BranchAND)currentConnection).getToActivity();
+						Collection toActivities = ((BranchANDCon)currentConnection).getToActivity();
 						for(Iterator<Activity> toActivityIterator = toActivities.iterator();toActivityIterator.hasNext();){
 							Activity currentToAct = toActivityIterator.next();
 							if(currentToAct!=null){
 								String actIdent = currentToAct.getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 								Activity newToAct = activitiesTable.get(actIdent);
 								if(newToAct!=null){
-									((BranchAND)newConnection).insertIntoToActivity(newToAct);
+									((BranchANDCon)newConnection).insertIntoToActivity(newToAct);
 								}//end if
 							}//end if != null
 						}//end for
 
 					}//########################
-					else if(currentConnection instanceof BranchCond){
-						newConnection = new BranchCond();
+					else if(currentConnection instanceof BranchConCond){
+						newConnection = new BranchConCond();
 
-						((BranchCond)newConnection).setKindBranch( ((BranchCond)currentConnection).getKindBranch());
+						((BranchCond)newConnection).setKindBranch( ((BranchCond)currentConnection).getKindBranchCon());
 
 						//	ToActivity
-						Collection toActivities = ((BranchCond)currentConnection).getTheBranchCondToActivity();
-						for(Iterator<BranchCondToActivity> toActivityIterator = toActivities.iterator(); toActivityIterator.hasNext();){
-							BranchCondToActivity currentToAct = toActivityIterator.next();
+						Collection toActivities = ((BranchCond)currentConnection).getTheBranchConCondToActivity();
+						for(Iterator<BranchConCondToActivity> toActivityIterator = toActivities.iterator(); toActivityIterator.hasNext();){
+							BranchConCondToActivity currentToAct = toActivityIterator.next();
 							if(currentToAct!=null){
-								BranchCondToActivity newBranchCondToAct = new BranchCondToActivity();
+								BranchCondToActivity newBranchCondToAct = new BranchConCondToActivity();
 
 								if(currentToAct.getTheActivity()!=null){
 									String actIdent = currentToAct.getTheActivity().getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 									Activity newToAct = activitiesTable.get(actIdent);
 									if(newToAct!=null){
-										newToAct.insertIntoTheBranchCondToActivity(newBranchCondToAct);
+										newToAct.insertIntoTheBranchCondToActivity(newBranchConCondToAct);
 									}//end if
 								}//end if != null
 
 								//about conditions
 								if(currentToAct.getTheCondition() != null){
-									newBranchCondToAct.removeFromTheCondition();
-									newBranchCondToAct.insertIntoTheCondition(currentToAct.getTheCondition().createClone());
+									newBranchConCondToAct.removeFromTheCondition();
+									newBranchConCondToAct.insertIntoTheCondition(currentToAct.getTheCondition().createClone());
 								}//end if condition != null
 
-								//add current element to newBranchCond object
-								((BranchCond)newConnection).insertIntoTheBranchCondToActivity(newBranchCondToAct);
+								//add current element to newBranchConCond object
+								((BranchCond)newConnection).insertIntoTheBranchCondToActivity(newBranchConCondToAct);
 							}//end if != null
 						}//end for
 
 						//###########
 
-						//	((BranchCond)currentConnection).getKindBranch();
+						//	((BranchCond)currentConnection).getKindBranchCon();
 
 						//##########
 
 
-					}//end if common atribute for all branch connections ((Branch)newConnection).setFired(((Branch)currentConnection).getFired());
+					}//end if common atribute for all branch connections ((Branch)newConnection).setFired(((BranchCon)currentConnection).getFired());
 
 					//about dependency
-					if( ((Branch)currentConnection).getTheDependency() !=null){
+					if( ((BranchCon)currentConnection).getTheDependency() !=null){
 						Dependency newDependency = new Dependency();
-						newDependency.setKindDep( ((Branch)currentConnection).getTheDependency().getKindDep());
-						newDependency.insertIntoTheMultipleCon( ((Branch)newConnection));
+						newDependency.setKindDep( ((BranchCon)currentConnection).getTheDependency().getKindDep());
+						newDependency.insertIntoTheMultipleCon( ((BranchCon)newConnection));
 					}//end if
 					//about from activity
-					if( ((Branch)currentConnection).getFromActivity()!=null ){
-						String actIdent = ((Branch)currentConnection).getFromActivity().getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
+					if( ((BranchCon)currentConnection).getFromActivity()!=null ){
+						String actIdent = ((BranchCon)currentConnection).getFromActivity().getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 						Activity newFromAct = activitiesTable.get(actIdent);
 						if(newFromAct!=null){
-							((Branch)newConnection).insertIntoFromActivity(newFromAct);
+							((BranchCon)newConnection).insertIntoFromActivity(newFromAct);
 						}//end if
 					}//end if
 
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
 
-					this.addCoordinate(((Branch)currentConnection).getOid(), ((Branch)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
+					this.addCoordinate(((Branch)currentConnection).getOid(), ((BranchCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}
-				else if(currentConnection instanceof Join){
-					newConnection = new Join();
+				else if(currentConnection instanceof JoinCon){
+					newConnection = new JoinCon();
 					//simple attributes
-					//((Join)newConnection).setFired( ((Join)currentConnection).getFired() );
+					//((Join)newConnection).setFired( ((JoinCon)currentConnection).getFired() );
 
-					((Join)newConnection).setKindJoin(((Join)currentConnection).getKindJoin());
+					((Join)newConnection).setKindJoin(((Join)currentConnection).getKindJoinCon());
 
 					//about dependency
-					if( ((Join)currentConnection).getTheDependency() !=null){
+					if( ((JoinCon)currentConnection).getTheDependency() !=null){
 						Dependency newDependency = new Dependency();
-						newDependency.setKindDep( ((Join)currentConnection).getTheDependency().getKindDep());
-						newDependency.insertIntoTheMultipleCon(((Join)newConnection));
+						newDependency.setKindDep( ((JoinCon)currentConnection).getTheDependency().getKindDep());
+						newDependency.insertIntoTheMultipleCon(((JoinCon)newConnection));
 					}//end if
 
 					//About activities
 					//ToActivity
 					//About to Activity
-					if( ((Join)currentConnection).getToActivity()!=null ){
-						String actIdent = ((Join)currentConnection).getToActivity().getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
+					if( ((JoinCon)currentConnection).getToActivity()!=null ){
+						String actIdent = ((JoinCon)currentConnection).getToActivity().getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 						Activity newToAct = activitiesTable.get(actIdent);
 						if(newToAct!=null){
-							((Join)newConnection).insertIntoToActivity(newToAct);
+							((JoinCon)newConnection).insertIntoToActivity(newToAct);
 						}//end if
 					}//end if
 					//FromActivity
-					Collection fromActivities = ((Join)currentConnection).getFromActivity();
+					Collection fromActivities = ((JoinCon)currentConnection).getFromActivity();
 					for(Iterator<Activity> fromActivityIterator = fromActivities.iterator();fromActivityIterator.hasNext();){
 						Activity currentFromAct = fromActivityIterator.next();
 						if(currentFromAct!=null){
 							String actIdent = currentFromAct.getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 							Activity newFromAct = activitiesTable.get(actIdent);
 							if(newFromAct!=null){
-								((Join)newConnection).insertIntoFromActivity(newFromAct);
+								((JoinCon)newConnection).insertIntoFromActivity(newFromAct);
 							}//end if
 						}//end if != null
 					}//end for
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
 
-					this.addCoordinate(((Join)currentConnection).getOid(), ((Join)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
-				}//end join processing
+					this.addCoordinate(((Join)currentConnection).getOid(), ((JoinCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
+				}//end joinCon processing
 
 				//about conection type
 				if(currentConnection.getTheConnectionType()!=null){
@@ -1129,59 +1129,59 @@ public class TemplateServicesImpl implements TemplateServices {
 				}//end for
 
 			}//end if artifactCon
-			else if(currentPostConnection instanceof Branch){
+			else if(currentPostConnection instanceof BranchCon){
 				//From MultipleConnection
 
-				MultipleCon fromMultipleCon = ((Branch)currentPostConnection).getFromMultipleConnection();
+				MultipleCon fromMultipleCon = ((BranchCon)currentPostConnection).getFromMultipleConnection();
 				if(fromMultipleCon!=null){
 					String multipleIdent = fromMultipleCon.getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 					MultipleCon newFromMultipleCon = (MultipleCon) connectionTable.get(multipleIdent);
 					if(newFromMultipleCon!=null){
-						((Branch)alreadyCreatedConnection).insertIntoFromMultipleConnection(newFromMultipleCon);
+						((BranchCon)alreadyCreatedConnection).insertIntoFromMultipleConnection(newFromMultipleCon);
 					}//end if
 				}//end if
 
-				if(currentPostConnection instanceof BranchAND){
-					Collection toMultipleCon = ((BranchAND)currentPostConnection).getToMultipleCon();
+				if(currentPostConnection instanceof BranchANDCon){
+					Collection toMultipleCon = ((BranchANDCon)currentPostConnection).getToMultipleCon();
 					for(Iterator<MultipleCon> toMultipleConIterator = toMultipleCon.iterator();toMultipleConIterator.hasNext();){
 						MultipleCon currentMultiple = toMultipleConIterator.next();
 						if(currentMultiple!=null){
 							String multipleIdent = currentMultiple.getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 							MultipleCon newFromMultipleCon = (MultipleCon) connectionTable.get(multipleIdent);
 							if(newFromMultipleCon!=null){
-								((BranchAND)alreadyCreatedConnection).insertIntoToMultipleCon(newFromMultipleCon);
+								((BranchANDCon)alreadyCreatedConnection).insertIntoToMultipleCon(newFromMultipleCon);
 							}//end if
 						}//end if != null
 					}//end for
-				}else if(currentPostConnection instanceof BranchCond){
-					Collection toMultipleCon = ((BranchCond)currentPostConnection).getTheBranchCondToMultipleCon();
-					for(Iterator<BranchCondToMultipleCon> toMultipleIterator = toMultipleCon.iterator();toMultipleIterator.hasNext();){
-						BranchCondToMultipleCon currentToMult = toMultipleIterator.next();
+				}else if(currentPostConnection instanceof BranchConCond){
+					Collection toMultipleCon = ((BranchCond)currentPostConnection).getTheBranchConCondToMultipleCon();
+					for(Iterator<BranchConCondToMultipleCon> toMultipleIterator = toMultipleCon.iterator();toMultipleIterator.hasNext();){
+						BranchConCondToMultipleCon currentToMult = toMultipleIterator.next();
 						if(currentToMult!=null){
-							BranchCondToMultipleCon newBranchCondToMult = new BranchCondToMultipleCon();
+							BranchCondToMultipleCon newBranchCondToMult = new BranchConCondToMultipleCon();
 							if(currentToMult.getTheMultipleCon()!=null){
 								String multipleIdent = currentToMult.getTheMultipleCon().getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 								MultipleCon newToMultipleCon = (MultipleCon) connectionTable.get(multipleIdent);
 								if(newToMultipleCon!=null){
-									((BranchCondToMultipleCon)newBranchCondToMult).insertIntoTheMultipleCon(newToMultipleCon);
+									((BranchCondToMultipleCon)newBranchConCondToMult).insertIntoTheMultipleCon(newToMultipleCon);
 								}//end if
 							}//end if != null
 							// about conditions
-//							newBranchCondToMult.setCondition(currentToMult.getCondition());
-							((BranchCond)alreadyCreatedConnection).insertIntoTheBranchCondToMultipleCon(newBranchCondToMult);
+//							newBranchConCondToMult.setCondition(currentToMult.getCondition());
+							((BranchCond)alreadyCreatedConnection).insertIntoTheBranchCondToMultipleCon(newBranchConCondToMult);
 						}//end if != null
 					}//end for
 				}//end if
 
 			}
-			else if(currentPostConnection instanceof Join){
+			else if(currentPostConnection instanceof JoinCon){
 				//to MultipleCon
-				MultipleCon toMultipleCon = ((Join)currentPostConnection).getToMultipleCon();
+				MultipleCon toMultipleCon = ((JoinCon)currentPostConnection).getToMultipleCon();
 				if(toMultipleCon!=null){
 					String multipleIdent = toMultipleCon.getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 					MultipleCon newToMultipleCon = (MultipleCon) connectionTable.get(multipleIdent);
 					if(newToMultipleCon!=null){
-						((Join)alreadyCreatedConnection).insertIntoToMultipleCon(newToMultipleCon);
+						((JoinCon)alreadyCreatedConnection).insertIntoToMultipleCon(newToMultipleCon);
 					}//end if
 				}//end if
 				//Don`t care about fromConnection...be cause all To are already checked!

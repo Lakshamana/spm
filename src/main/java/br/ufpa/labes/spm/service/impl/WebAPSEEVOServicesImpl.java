@@ -85,7 +85,7 @@ public class WebAPSEEVOServicesImpl implements WebAPSEEVOServices {
 	}
 
 	private String getAgentVOList(){
-		String hql = "select distinct agent from " + AGENT_CLASS_NAME + " as agent LEFT JOIN agent.theAgentPlaysRole roles order by agent.ident";
+		String hql = "select distinct agent from " + AGENT_CLASS_NAME + " as agent LEFT JOINCon agent.theAgentPlaysRole roles order by agent.ident";
 		query = agentDAO.getPersistenceContext().createQuery(hql);
 		Collection<Agent> agents = query.getResultList();
 

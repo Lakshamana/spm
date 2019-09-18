@@ -16,12 +16,12 @@ import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Decomposed;
-import br.ufpa.labes.spm.domain.Branch;
-import br.ufpa.labes.spm.domain.BranchAND;
-import br.ufpa.labes.spm.domain.BranchCond;
-import br.ufpa.labes.spm.domain.BranchCondToActivity;
-import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
-import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.BranchCon;
+import br.ufpa.labes.spm.domain.BranchANDCon;
+import br.ufpa.labes.spm.domain.BranchConCond;
+import br.ufpa.labes.spm.domain.BranchConCondToActivity;
+import br.ufpa.labes.spm.domain.BranchConCondToMultipleCon;
+import br.ufpa.labes.spm.domain.JoinCon;
 import br.ufpa.labes.spm.domain.MultipleCon;
 import br.ufpa.labes.spm.domain.Sequence;
 import br.ufpa.labes.spm.domain.Normal;
@@ -346,10 +346,10 @@ public class CriticalPathMethod {
 			}
 		}
 
-		if(act.getToJoin() != null)
-		    connTo.addAll(act.getToJoin());
-		if(act.getToBranch() != null)
-		    connTo.addAll(act.getToBranch());
+		if(act.getToJoinCon() != null)
+		    connTo.addAll(act.getToJoinCon());
+		if(act.getToBranchCon() != null)
+		    connTo.addAll(act.getToBranchCon());
 
 		boolean isEmpty = true;
 		for (Iterator<Path> iterator = connTo.iterator(); iterator.hasNext();) {
@@ -380,14 +380,14 @@ public class CriticalPathMethod {
 			}
 		}
 
-		connFrom.addAll(act.getFromJoin());
-		connFrom.addAll(act.getFromBranchAND());
-		Collection bctas = act.getTheBranchCondToActivity();
+		connFrom.addAll(act.getFromJoinCon());
+		connFrom.addAll(act.getFromBranchANDCon());
+		Collection bctas = act.getTheBranchConCondToActivity();
 		Iterator iterBctas = bctas.iterator();
 		while (iterBctas.hasNext()) {
-			BranchCondToActivity bcta = (BranchCondToActivity) iterBctas.next();
-			if (bcta.getTheBranchCond() != null)
-				connFrom.add(bcta.getTheBranchCond());
+			BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
+			if (bcta.getTheBranchConCond() != null)
+				connFrom.add(bcta.getTheBranchConCond());
 		}
 
 		boolean isEmpty = true;
@@ -409,10 +409,10 @@ public class CriticalPathMethod {
 			if(seq.getToActivity() != null)
 			    succ.add(seq.getToActivity());
 		}
-		else if (conn instanceof Branch) {
-			Branch branch = (Branch)conn;
-			if(branch instanceof BranchAND){
-				BranchAND bAND = (BranchAND)branch;
+		else if (conn instanceof BranchCon) {
+			Branch branch = (BranchCon)conn;
+			if(branch instanceof BranchANDCon){
+				BranchAND bAND = (BranchAND)branchCon;
 				if(bAND.getToActivity() != null)
 				    succ.addAll(bAND.getToActivity());
 				if(bAND.getToMultipleCon() != null){
@@ -426,29 +426,29 @@ public class CriticalPathMethod {
 				}
 			}
 			else{
-				BranchCond bCond = (BranchCond)branch;
-				Collection bctmc = bCond.getTheBranchCondToMultipleCon();
-				Collection atbc = bCond.getTheBranchCondToActivity();
+				BranchCond bCond = (BranchCond)branchCon;
+				Collection bctmc = bCond.getTheBranchConCondToMultipleCon();
+				Collection atbc = bCond.getTheBranchConCondToActivity();
 				Iterator iterMulti = bctmc.iterator(),
 						 iterAct = atbc.iterator();
 				while (iterMulti.hasNext()) {
-					BranchCondToMultipleCon multi = (BranchCondToMultipleCon) iterMulti.next();
+					BranchCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
 					if(multi.getTheMultipleCon() != null)
 					    succ.addAll(this.getSuccessors(multi.getTheMultipleCon()));
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchCondToActivity) iterAct.next();
+					BranchCondToActivity act = (BranchConCondToActivity) iterAct.next();
 					if(act.getTheActivity() != null)
 					    succ.add(act.getTheActivity());
 				}
 			}
 		}
-		else if (conn instanceof Join) {
-			Join join = (Join)conn;
-			if(join.getToActivity() != null)
-			    succ.add(join.getToActivity());
-			if(join.getToMultipleCon() != null)
-			    succ.addAll(this.getSuccessors(join.getToMultipleCon()));
+		else if (conn instanceof JoinCon) {
+			Join join = (JoinCon)conn;
+			if(joinCon.getToActivity() != null)
+			    succ.add(joinCon.getToActivity());
+			if(joinCon.getToMultipleCon() != null)
+			    succ.addAll(this.getSuccessors(joinCon.getToMultipleCon()));
 		}
 		return succ;
 	}
@@ -461,18 +461,18 @@ public class CriticalPathMethod {
 			if (act != null)
 				pred.add(act);
 
-		} else if (conn instanceof Branch) {
-			Branch branch = (Branch) conn;
-			Activity act = branch.getFromActivity();
+		} else if (conn instanceof BranchCon) {
+			Branch branch = (BranchCon) conn;
+			Activity act = branchCon.getFromActivity();
 			if (act != null)
 				pred.add(act);
-			MultipleCon multi = branch.getFromMultipleConnection();
+			MultipleCon multi = branchCon.getFromMultipleConnection();
 			if (multi != null)
 				pred.add(multi);
-		} else if (conn instanceof Join) {
-			Join join = (Join) conn;
-			pred.addAll(join.getFromActivity());
-			pred.addAll(join.getFromMultipleCon());
+		} else if (conn instanceof JoinCon) {
+			Join join = (JoinCon) conn;
+			pred.addAll(joinCon.getFromActivity());
+			pred.addAll(joinCon.getFromMultipleCon());
 		}
 		return pred;
 	}

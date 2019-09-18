@@ -4,8 +4,8 @@ import javax.ejb.Local;
 
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Plain;
-import br.ufpa.labes.spm.domain.Branch;
-import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.BranchCon;
+import br.ufpa.labes.spm.domain.JoinCon;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.domain.ProcessModel;
@@ -24,9 +24,9 @@ public interface Logging {
 	public abstract void registerProcessEvent(Process process, String what,
 			String why);
 
-	public abstract void registerBranchEvent(Branch branch, String why);
+	public abstract void registerBranchEvent(Branch branchCon, String why);
 
-	public abstract void registerJoinEvent(Join join, String why);
+	public abstract void registerJoinEvent(Join joinCon, String why);
 
 	public abstract void registerProcessModelEvent(ProcessModel model,
 			String what, String why);

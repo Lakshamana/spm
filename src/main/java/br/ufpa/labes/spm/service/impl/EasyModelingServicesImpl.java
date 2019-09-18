@@ -33,11 +33,11 @@ import br.ufpa.labes.spm.repository.interfaces.agent.IRoleDAO;
 import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
 import br.ufpa.labes.spm.repository.interfaces.calendar.ICalendarDAO;
 import br.ufpa.labes.spm.repository.interfaces.connections.IArtifactConDAO;
-import br.ufpa.labes.spm.repository.interfaces.connections.IBranchCondToActivityDAO;
-import br.ufpa.labes.spm.repository.interfaces.connections.IBranchCondToMultipleConDAO;
-import br.ufpa.labes.spm.repository.interfaces.connections.IBranchDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchConCondToActivityDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchConCondToMultipleConDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IBranchConDAO;
 import br.ufpa.labes.spm.repository.interfaces.connections.IConnectionDAO;
-import br.ufpa.labes.spm.repository.interfaces.connections.IJoinDAO;
+import br.ufpa.labes.spm.repository.interfaces.connections.IJoinConDAO;
 import br.ufpa.labes.spm.repository.interfaces.connections.IMultipleConDAO;
 import br.ufpa.labes.spm.repository.interfaces.connections.ISimpleConDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IAutomaticDAO;
@@ -69,15 +69,15 @@ import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.Plain;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactCon;
-import br.ufpa.labes.spm.domain.Branch;
-import br.ufpa.labes.spm.domain.BranchAND;
-import br.ufpa.labes.spm.domain.BranchCond;
-import br.ufpa.labes.spm.domain.BranchCondToActivity;
-import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
+import br.ufpa.labes.spm.domain.BranchCon;
+import br.ufpa.labes.spm.domain.BranchANDCon;
+import br.ufpa.labes.spm.domain.BranchConCond;
+import br.ufpa.labes.spm.domain.BranchConCondToActivity;
+import br.ufpa.labes.spm.domain.BranchConCondToMultipleCon;
 import br.ufpa.labes.spm.domain.Connection;
 import br.ufpa.labes.spm.domain.Dependency;
 import br.ufpa.labes.spm.domain.Feedback;
-import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.JoinCon;
 import br.ufpa.labes.spm.domain.MultipleCon;
 import br.ufpa.labes.spm.domain.Sequence;
 import br.ufpa.labes.spm.domain.SimpleCon;
@@ -137,9 +137,9 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	IMultipleConDAO multiDAO;
 	IConnectionDAO conDAO;
 	IPolConditionDAO polConditionDAO;
-	IBranchCondToMultipleConDAO bctmcDAO;
-	IJoinDAO joinDAO;
-	IBranchDAO branchDAO;
+	IBranchConCondToMultipleConDAO bctmcDAO;
+	IJoinDAO joinConDAO;
+	IBranchDAO branchConDAO;
 	IGroupTypeDAO groupTypeDAO;
 	IRoleDAO roleDAO;
 	IReqAgentDAO reqAgentDAO;
@@ -151,7 +151,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	IRequiredResourceDAO reqResDAO;
 	IResourceDAO resDAO;
 	IConsumableDAO consumableDAO;
-	IBranchCondToActivityDAO branchCondToActivityDAO;
+	IBranchCondToActivityDAO branchConCondToActivityDAO;
 	ISimpleConDAO simpleDAO;
 	IProcessAgendaDAO pAgendaDAO;
 	IWebAPSEEObjectDAO webAPSEEObjDAO;
@@ -240,8 +240,8 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}
 
 				} else if (webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.ARTIFACTCONNODE
-						|| webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.BRANCHNODE
-						|| webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.JOINNODE
+						|| webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.BRANCHConNODE
+						|| webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.JOINConNODE
 						|| webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.SEQUENCENODE) {
 
 					Connection con = (Connection) conDAO.retrieveBySecondaryKey(webAPSEENodePosition.getInstanceID());
@@ -368,8 +368,8 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		typesToConvert.put(1, WebAPSEENodePosition.REQAGENTNODE);
 		typesToConvert.put(2, WebAPSEENodePosition.ARTIFACTCONNODE);
 		typesToConvert.put(3, WebAPSEENodePosition.REQRESOURCENODE);
-		typesToConvert.put(4, WebAPSEENodePosition.BRANCHNODE);
-		typesToConvert.put(5, WebAPSEENodePosition.JOINNODE);
+		typesToConvert.put(4, WebAPSEENodePosition.BRANCHConNODE);
+		typesToConvert.put(5, WebAPSEENodePosition.JOINConNODE);
 		typesToConvert.put(6, WebAPSEENodePosition.ACTIVITYNODE);
 		typesToConvert.put(7, WebAPSEENodePosition.ACTIVITYNODE);
 		typesToConvert.put(8, WebAPSEENodePosition.REQGROUPNODE);
@@ -1595,127 +1595,127 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					this.addCoordinate(((ArtifactCon) currentConnection).getOid(), ((ArtifactCon) currentConnection).getClass().getSimpleName(),
 							WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}// ########################
-				else if (currentConnection instanceof Branch) {
+				else if (currentConnection instanceof BranchCon) {
 
 					// ########################
-					if (currentConnection instanceof BranchAND) {
-						newConnection = new BranchAND();
+					if (currentConnection instanceof BranchANDCon) {
+						newConnection = new BranchANDCon();
 						// ToActivity
-						Collection toActivities = ((BranchAND) currentConnection).getToActivity();
+						Collection toActivities = ((BranchANDCon) currentConnection).getToActivity();
 						for (Iterator<Activity> toActivityIterator = toActivities.iterator(); toActivityIterator.hasNext();) {
 							Activity currentToAct = toActivityIterator.next();
 							if (currentToAct != null) {
 								String actIdent = currentToAct.getIdent();
 								Activity newToAct = activitiesTable.get(actIdent);
 								if (newToAct != null) {
-									((BranchAND) newConnection).insertIntoToActivity(newToAct);
+									((BranchANDCon) newConnection).insertIntoToActivity(newToAct);
 								}// end if
 							}// end if != null
 						}// end for
 
 					}// ########################
-					else if (currentConnection instanceof BranchCond) {
-						newConnection = new BranchCond();
+					else if (currentConnection instanceof BranchConCond) {
+						newConnection = new BranchConCond();
 
-						((BranchCond) newConnection).setKindBranch(((BranchCond) currentConnection).getKindBranch());
+						((BranchCond) newConnection).setKindBranch(((BranchCond) currentConnection).getKindBranchCon());
 
 						// ToActivity
-						Collection toActivities = ((BranchCond) currentConnection).getTheBranchCondToActivity();
-						for (Iterator<BranchCondToActivity> toActivityIterator = toActivities.iterator(); toActivityIterator.hasNext();) {
-							BranchCondToActivity currentToAct = toActivityIterator.next();
+						Collection toActivities = ((BranchCond) currentConnection).getTheBranchConCondToActivity();
+						for (Iterator<BranchConCondToActivity> toActivityIterator = toActivities.iterator(); toActivityIterator.hasNext();) {
+							BranchConCondToActivity currentToAct = toActivityIterator.next();
 							if (currentToAct != null) {
-								BranchCondToActivity newBranchCondToAct = new BranchCondToActivity();
+								BranchCondToActivity newBranchCondToAct = new BranchConCondToActivity();
 
 								if (currentToAct.getTheActivity() != null) {
 									String actIdent = currentToAct.getTheActivity().getIdent();
 									Activity newToAct = activitiesTable.get(actIdent);
 									if (newToAct != null) {
-										newToAct.insertIntoTheBranchCondToActivity(newBranchCondToAct);
+										newToAct.insertIntoTheBranchCondToActivity(newBranchConCondToAct);
 									}// end if
 								}// end if != null
 
 								// about conditions
 								if (currentToAct.getTheCondition() != null) {
-									newBranchCondToAct.removeFromTheCondition();
-									newBranchCondToAct.insertIntoTheCondition(currentToAct.getTheCondition().createClone());
+									newBranchConCondToAct.removeFromTheCondition();
+									newBranchConCondToAct.insertIntoTheCondition(currentToAct.getTheCondition().createClone());
 								}// end if condition != null
 
-								// add current element to newBranchCond object
-								((BranchCond) newConnection).insertIntoTheBranchCondToActivity(newBranchCondToAct);
+								// add current element to newBranchConCond object
+								((BranchCond) newConnection).insertIntoTheBranchCondToActivity(newBranchConCondToAct);
 							}// end if != null
 						}// end for
 
 						// ###########
 
-						// ((BranchCond)currentConnection).getKindBranch();
+						// ((BranchCond)currentConnection).getKindBranchCon();
 
 						// ##########
 
-					}// end if common atribute for all branch connections
-						// ((Branch)newConnection).setFired(((Branch)currentConnection).getFired());
+					}// end if common atribute for all branchCon connections
+						// ((Branch)newConnection).setFired(((BranchCon)currentConnection).getFired());
 
 					// about dependency
-					if (((Branch) currentConnection).getTheDependency() != null) {
+					if (((BranchCon) currentConnection).getTheDependency() != null) {
 						Dependency newDependency = new Dependency();
-						newDependency.setKindDep(((Branch) currentConnection).getTheDependency().getKindDep());
-						newDependency.insertIntoTheMultipleCon(((Branch) newConnection));
+						newDependency.setKindDep(((BranchCon) currentConnection).getTheDependency().getKindDep());
+						newDependency.insertIntoTheMultipleCon(((BranchCon) newConnection));
 					}// end if
 						// about from activity
-					if (((Branch) currentConnection).getFromActivity() != null) {
-						String actIdent = ((Branch) currentConnection).getFromActivity().getIdent();
+					if (((BranchCon) currentConnection).getFromActivity() != null) {
+						String actIdent = ((BranchCon) currentConnection).getFromActivity().getIdent();
 						Activity newFromAct = activitiesTable.get(actIdent);
 						if (newFromAct != null) {
-							((Branch) newConnection).insertIntoFromActivity(newFromAct);
+							((BranchCon) newConnection).insertIntoFromActivity(newFromAct);
 						}// end if
 					}// end if
 
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
-					this.addCoordinate(((Branch) currentConnection).getOid(), ((Branch) currentConnection).getClass().getSimpleName(),
+					this.addCoordinate(((Branch) currentConnection).getOid(), ((BranchCon) currentConnection).getClass().getSimpleName(),
 							WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 
-				} else if (currentConnection instanceof Join) {
-					newConnection = new Join();
+				} else if (currentConnection instanceof JoinCon) {
+					newConnection = new JoinCon();
 					// simple attributes
-					// ((Join)newConnection).setFired(
-					// ((Join)currentConnection).getFired() );
+					// ((JoinCon)newConnection).setFired(
+					// ((JoinCon)currentConnection).getFired() );
 
-					((Join) newConnection).setKindJoin(((Join) currentConnection).getKindJoin());
+					((Join) newConnection).setKindJoin(((Join) currentConnection).getKindJoinCon());
 
 					// about dependency
-					if (((Join) currentConnection).getTheDependency() != null) {
+					if (((JoinCon) currentConnection).getTheDependency() != null) {
 						Dependency newDependency = new Dependency();
-						newDependency.setKindDep(((Join) currentConnection).getTheDependency().getKindDep());
-						newDependency.insertIntoTheMultipleCon(((Join) newConnection));
+						newDependency.setKindDep(((JoinCon) currentConnection).getTheDependency().getKindDep());
+						newDependency.insertIntoTheMultipleCon(((JoinCon) newConnection));
 					}// end if
 
 					// About activities
 					// ToActivity
 					// About to Activity
-					if (((Join) currentConnection).getToActivity() != null) {
-						String actIdent = ((Join) currentConnection).getToActivity().getIdent();
+					if (((JoinCon) currentConnection).getToActivity() != null) {
+						String actIdent = ((JoinCon) currentConnection).getToActivity().getIdent();
 						Activity newToAct = activitiesTable.get(actIdent);
 						if (newToAct != null) {
-							((Join) newConnection).insertIntoToActivity(newToAct);
+							((JoinCon) newConnection).insertIntoToActivity(newToAct);
 						}// end if
 					}// end if
 						// FromActivity
-					Collection fromActivities = ((Join) currentConnection).getFromActivity();
+					Collection fromActivities = ((JoinCon) currentConnection).getFromActivity();
 					for (Iterator<Activity> fromActivityIterator = fromActivities.iterator(); fromActivityIterator.hasNext();) {
 						Activity currentFromAct = fromActivityIterator.next();
 						if (currentFromAct != null) {
 							String actIdent = currentFromAct.getIdent();
 							Activity newFromAct = activitiesTable.get(actIdent);
 							if (newFromAct != null) {
-								((Join) newConnection).insertIntoFromActivity(newFromAct);
+								((JoinCon) newConnection).insertIntoFromActivity(newFromAct);
 							}// end if
 						}// end if != null
 					}// end for
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
-					this.addCoordinate(((Join) currentConnection).getOid(), ((Join) currentConnection).getClass().getSimpleName(),
+					this.addCoordinate(((Join) currentConnection).getOid(), ((JoinCon) currentConnection).getClass().getSimpleName(),
 							WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
-				}// end join processing
+				}// end joinCon processing
 
 				// about conection type
 				if (currentConnection.getTheConnectionType() != null) {
@@ -1755,58 +1755,58 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				}// end for
 
 			}// end if artifactCon
-			else if (currentPostConnection instanceof Branch) {
+			else if (currentPostConnection instanceof BranchCon) {
 				// From MultipleConnection
 
-				MultipleCon fromMultipleCon = ((Branch) currentPostConnection).getFromMultipleConnection();
+				MultipleCon fromMultipleCon = ((BranchCon) currentPostConnection).getFromMultipleConnection();
 				if (fromMultipleCon != null) {
 					String multipleIdent = fromMultipleCon.getIdent();
 					MultipleCon newFromMultipleCon = (MultipleCon) connectionTable.get(multipleIdent);
 					if (newFromMultipleCon != null) {
-						((Branch) alreadyCreatedConnection).insertIntoFromMultipleConnection(newFromMultipleCon);
+						((BranchCon) alreadyCreatedConnection).insertIntoFromMultipleConnection(newFromMultipleCon);
 					}// end if
 				}// end if
 
-				if (currentPostConnection instanceof BranchAND) {
-					Collection toMultipleCon = ((BranchAND) currentPostConnection).getToMultipleCon();
+				if (currentPostConnection instanceof BranchANDCon) {
+					Collection toMultipleCon = ((BranchANDCon) currentPostConnection).getToMultipleCon();
 					for (Iterator<MultipleCon> toMultipleConIterator = toMultipleCon.iterator(); toMultipleConIterator.hasNext();) {
 						MultipleCon currentMultiple = toMultipleConIterator.next();
 						if (currentMultiple != null) {
 							String multipleIdent = currentMultiple.getIdent();
 							MultipleCon newFromMultipleCon = (MultipleCon) connectionTable.get(multipleIdent);
 							if (newFromMultipleCon != null) {
-								((BranchAND) alreadyCreatedConnection).insertIntoToMultipleCon(newFromMultipleCon);
+								((BranchANDCon) alreadyCreatedConnection).insertIntoToMultipleCon(newFromMultipleCon);
 							}// end if
 						}// end if != null
 					}// end for
-				} else if (currentPostConnection instanceof BranchCond) {
-					Collection toMultipleCon = ((BranchCond) currentPostConnection).getTheBranchCondToMultipleCon();
-					for (Iterator<BranchCondToMultipleCon> toMultipleIterator = toMultipleCon.iterator(); toMultipleIterator.hasNext();) {
-						BranchCondToMultipleCon currentToMult = toMultipleIterator.next();
+				} else if (currentPostConnection instanceof BranchConCond) {
+					Collection toMultipleCon = ((BranchCond) currentPostConnection).getTheBranchConCondToMultipleCon();
+					for (Iterator<BranchConCondToMultipleCon> toMultipleIterator = toMultipleCon.iterator(); toMultipleIterator.hasNext();) {
+						BranchConCondToMultipleCon currentToMult = toMultipleIterator.next();
 						if (currentToMult != null) {
-							BranchCondToMultipleCon newBranchCondToMult = new BranchCondToMultipleCon();
+							BranchCondToMultipleCon newBranchCondToMult = new BranchConCondToMultipleCon();
 							if (currentToMult.getTheMultipleCon() != null) {
 								String multipleIdent = currentToMult.getTheMultipleCon().getIdent();
 								MultipleCon newToMultipleCon = (MultipleCon) connectionTable.get(multipleIdent);
 								if (newToMultipleCon != null) {
-									((BranchCondToMultipleCon) newBranchCondToMult).insertIntoTheMultipleCon(newToMultipleCon);
+									((BranchCondToMultipleCon) newBranchConCondToMult).insertIntoTheMultipleCon(newToMultipleCon);
 								}// end if
 							}// end if != null
 								// about conditions
-								// newBranchCondToMult.setCondition(currentToMult.getCondition());
-							((BranchCond) alreadyCreatedConnection).insertIntoTheBranchCondToMultipleCon(newBranchCondToMult);
+								// newBranchConCondToMult.setCondition(currentToMult.getCondition());
+							((BranchCond) alreadyCreatedConnection).insertIntoTheBranchCondToMultipleCon(newBranchConCondToMult);
 						}// end if != null
 					}// end for
 				}// end if
 
-			} else if (currentPostConnection instanceof Join) {
+			} else if (currentPostConnection instanceof JoinCon) {
 				// to MultipleCon
-				MultipleCon toMultipleCon = ((Join) currentPostConnection).getToMultipleCon();
+				MultipleCon toMultipleCon = ((JoinCon) currentPostConnection).getToMultipleCon();
 				if (toMultipleCon != null) {
 					String multipleIdent = toMultipleCon.getIdent();
 					MultipleCon newToMultipleCon = (MultipleCon) connectionTable.get(multipleIdent);
 					if (newToMultipleCon != null) {
-						((Join) alreadyCreatedConnection).insertIntoToMultipleCon(newToMultipleCon);
+						((JoinCon) alreadyCreatedConnection).insertIntoToMultipleCon(newToMultipleCon);
 					}// end if
 				}// end if
 					// Don`t care about fromConnection...be cause all To are
@@ -2652,10 +2652,10 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			Sequence seq = (Sequence) conn;
 			if (seq.getToActivity() != null)
 				succ.add(seq.getToActivity());
-		} else if (conn instanceof Branch) {
-			Branch branch = (Branch) conn;
-			if (branch instanceof BranchAND) {
-				BranchAND bAND = (BranchAND) branch;
+		} else if (conn instanceof BranchCon) {
+			Branch branch = (BranchCon) conn;
+			if (branch instanceof BranchANDCon) {
+				BranchAND bAND = (BranchAND) branchCon;
 				if (bAND.getToActivity() != null)
 					succ.addAll(bAND.getToActivity());
 				if (bAND.getToMultipleCon() != null) {
@@ -2668,27 +2668,27 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}
 				}
 			} else {
-				BranchCond bCond = (BranchCond) branch;
-				Collection bctmc = bCond.getTheBranchCondToMultipleCon();
-				Collection atbc = bCond.getTheBranchCondToActivity();
+				BranchCond bCond = (BranchCond) branchCon;
+				Collection bctmc = bCond.getTheBranchConCondToMultipleCon();
+				Collection atbc = bCond.getTheBranchConCondToActivity();
 				Iterator iterMulti = bctmc.iterator(), iterAct = atbc.iterator();
 				while (iterMulti.hasNext()) {
-					BranchCondToMultipleCon multi = (BranchCondToMultipleCon) iterMulti.next();
+					BranchCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
 					if (multi.getTheMultipleCon() != null)
 						succ.addAll(this.getSuccessors(multi.getTheMultipleCon()));
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchCondToActivity) iterAct.next();
+					BranchCondToActivity act = (BranchConCondToActivity) iterAct.next();
 					if (act.getTheActivity() != null)
 						succ.add(act.getTheActivity());
 				}
 			}
-		} else if (conn instanceof Join) {
-			Join join = (Join) conn;
-			if (join.getToActivity() != null)
-				succ.add(join.getToActivity());
-			if (join.getToMultipleCon() != null)
-				succ.addAll(this.getSuccessors(join.getToMultipleCon()));
+		} else if (conn instanceof JoinCon) {
+			Join join = (JoinCon) conn;
+			if (joinCon.getToActivity() != null)
+				succ.add(joinCon.getToActivity());
+			if (joinCon.getToMultipleCon() != null)
+				succ.addAll(this.getSuccessors(joinCon.getToMultipleCon()));
 		}
 		return succ;
 	}
@@ -2704,18 +2704,18 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			Sequence seq = (Sequence) conn;
 			if (seq.getFromActivity() != null)
 				pred.add(seq.getFromActivity());
-		} else if (conn instanceof Branch) {
-			Branch branch = (Branch) conn;
-			if (branch.getFromActivity() != null)
-				pred.add(branch.getFromActivity());
-			if (branch.getFromMultipleConnection() != null)
-				pred.addAll(this.getPredecessors(branch.getFromMultipleConnection()));
-		} else if (conn instanceof Join) {
-			Join join = (Join) conn;
-			if (join.getFromActivity() != null)
-				pred.addAll(join.getFromActivity());
-			if (join.getFromMultipleCon() != null) {
-				Collection multis = join.getFromMultipleCon();
+		} else if (conn instanceof BranchCon) {
+			Branch branch = (BranchCon) conn;
+			if (branchCon.getFromActivity() != null)
+				pred.add(branchCon.getFromActivity());
+			if (branchCon.getFromMultipleConnection() != null)
+				pred.addAll(this.getPredecessors(branchCon.getFromMultipleConnection()));
+		} else if (conn instanceof JoinCon) {
+			Join join = (JoinCon) conn;
+			if (joinCon.getFromActivity() != null)
+				pred.addAll(joinCon.getFromActivity());
+			if (joinCon.getFromMultipleCon() != null) {
+				Collection multis = joinCon.getFromMultipleCon();
 				Iterator iterMultis = multis.iterator();
 				while (iterMultis.hasNext()) {
 					MultipleCon multi = (MultipleCon) iterMultis.next();
@@ -2734,10 +2734,10 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		Collection connTo = new LinkedList();
 		if (act.getToSimpleCon() != null)
 			connTo.addAll(act.getToSimpleCon());
-		if (act.getToJoin() != null)
-			connTo.addAll(act.getToJoin());
-		if (act.getToBranch() != null)
-			connTo.addAll(act.getToBranch());
+		if (act.getToJoinCon() != null)
+			connTo.addAll(act.getToJoinCon());
+		if (act.getToBranchCon() != null)
+			connTo.addAll(act.getToBranchCon());
 		return connTo;
 	}
 
@@ -2749,16 +2749,16 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		Collection connFrom = new LinkedList();
 		if (act.getFromSimpleCon() != null)
 			connFrom.addAll(act.getFromSimpleCon());
-		if (act.getFromJoin() != null)
-			connFrom.addAll(act.getFromJoin());
-		if (act.getFromBranchAND() != null)
-			connFrom.addAll(act.getFromBranchAND());
-		Collection bctas = act.getTheBranchCondToActivity();
+		if (act.getFromJoinCon() != null)
+			connFrom.addAll(act.getFromJoinCon());
+		if (act.getFromBranchANDCon() != null)
+			connFrom.addAll(act.getFromBranchANDCon());
+		Collection bctas = act.getTheBranchConCondToActivity();
 		Iterator iterBctas = bctas.iterator();
 		while (iterBctas.hasNext()) {
-			BranchCondToActivity bcta = (BranchCondToActivity) iterBctas.next();
-			if (bcta.getTheBranchCond() != null)
-				connFrom.add(bcta.getTheBranchCond());
+			BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
+			if (bcta.getTheBranchConCond() != null)
+				connFrom.add(bcta.getTheBranchConCond());
 		}
 		return connFrom;
 	}

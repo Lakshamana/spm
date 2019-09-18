@@ -76,15 +76,15 @@ import br.ufpa.labes.spm.domain.RoleNeedsAbility;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactTask;
 import br.ufpa.labes.spm.domain.ArtifactCon;
-import br.ufpa.labes.spm.domain.Branch;
-import br.ufpa.labes.spm.domain.BranchAND;
-import br.ufpa.labes.spm.domain.BranchCond;
-import br.ufpa.labes.spm.domain.BranchCondToActivity;
-import br.ufpa.labes.spm.domain.BranchCondToMultipleCon;
+import br.ufpa.labes.spm.domain.BranchCon;
+import br.ufpa.labes.spm.domain.BranchANDCon;
+import br.ufpa.labes.spm.domain.BranchConCond;
+import br.ufpa.labes.spm.domain.BranchConCondToActivity;
+import br.ufpa.labes.spm.domain.BranchConCondToMultipleCon;
 import br.ufpa.labes.spm.domain.Connection;
 import br.ufpa.labes.spm.domain.Dependency;
 import br.ufpa.labes.spm.domain.Feedback;
-import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.JoinCon;
 import br.ufpa.labes.spm.domain.MultipleCon;
 import br.ufpa.labes.spm.domain.Sequence;
 import br.ufpa.labes.spm.domain.SimpleCon;
@@ -395,16 +395,16 @@ public class ProjectServicesImpl implements ProjectServices {
 				processXML.append(getArtifactConTag(artifactCon));
 			}
 
-			Collection<BranchAND> fromBranch = activity.getFromBranchAND();
-			for (Iterator<BranchAND> iterator2 = fromBranch.iterator(); iterator2.hasNext();) {
-				BranchAND branchAND = (BranchAND) iterator2.next();
-				processXML.append(getBranchTag(branchAND));
+			Collection<BranchAND> fromBranch = activity.getFromBranchANDCon();
+			for (Iterator<BranchAND> iterator2 = fromBranchCon.iterator(); iterator2.hasNext();) {
+				BranchAND branchAND = (BranchANDCon) iterator2.next();
+				processXML.append(getBranchTag(branchANDCon));
 			}
 
-			Collection<Join> fromJoin = activity.getFromJoin();
-			for (Iterator<Join> iterator2 = fromJoin.iterator(); iterator2.hasNext();) {
-				Join join = (Join) iterator2.next();
-				processXML.append(getJoinTag(join));
+			Collection<Join> fromJoin = activity.getFromJoinCon();
+			for (Iterator<Join> iterator2 = fromJoinCon.iterator(); iterator2.hasNext();) {
+				Join join = (JoinCon) iterator2.next();
+				processXML.append(getJoinTag(joinCon));
 			}
 
 			Collection<SimpleCon> fromSimpleCon = activity.getFromSimpleCon();
@@ -422,16 +422,16 @@ public class ProjectServicesImpl implements ProjectServices {
 				processXML.append(getArtifactConTag(artifactCon2));
 			}
 
-			Collection<Branch> toBranch = activity.getToBranch();
-			for (Iterator<Branch> iterator2 = toBranch.iterator(); iterator2.hasNext();) {
-				Branch branch = (Branch) iterator2.next();
-				processXML.append(getBranchTag((BranchAND)branch));
+			Collection<Branch> toBranch = activity.getToBranchCon();
+			for (Iterator<Branch> iterator2 = toBranchCon.iterator(); iterator2.hasNext();) {
+				Branch branch = (BranchCon) iterator2.next();
+				processXML.append(getBranchTag((BranchAND)branchCon));
 			}
 
-			Collection<Join> toJoin = activity.getToJoin();
-			for (Iterator<Join> iterator2 = toJoin.iterator(); iterator2.hasNext();) {
-				Join join = (Join) iterator2.next();
-				processXML.append(getJoinTag(join));
+			Collection<Join> toJoin = activity.getToJoinCon();
+			for (Iterator<Join> iterator2 = toJoinCon.iterator(); iterator2.hasNext();) {
+				Join join = (JoinCon) iterator2.next();
+				processXML.append(getJoinTag(joinCon));
 			}
 
 			Collection<SimpleCon> toSimpleCon = activity.getToSimpleCon();
@@ -468,88 +468,88 @@ public class ProjectServicesImpl implements ProjectServices {
 		return seqXML.toString();
 	}
 
-	private String getJoinTag(Join join) throws DAOException{
-		StringBuffer joinXML = new StringBuffer();
-		joinXML.append("<JOIN ID=\"" + join.getOid() + "\">\n");
-		joinXML.append("<DEPENDENCY>" + join.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
+	private String getJoinTag(Join joinCon) throws DAOException{
+		StringBuffer joinConXML = new StringBuffer();
+		joinXML.append("<JOIN ID=\"" + joinCon.getOid() + "\">\n");
+		joinXML.append("<DEPENDENCY>" + joinCon.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
 
 		//TO
-		Activity toActivity = join.getToActivity();
+		Activity toActivity = joinCon.getToActivity();
 		if(toActivity!=null){
-			joinXML.append("<TO_ACTIVITY ID=\""+ toActivity.getIdent() + "\"/>\n");
+			joinConXML.append("<TO_ACTIVITY ID=\""+ toActivity.getIdent() + "\"/>\n");
 		}else{
-			MultipleCon multCon = join.getToMultipleCon();
-			joinXML.append("<TO_MULTIPLECON ID=\""+ multCon.getIdent() + "\"/>\n");
+			MultipleCon multCon = joinCon.getToMultipleCon();
+			joinConXML.append("<TO_MULTIPLECON ID=\""+ multCon.getIdent() + "\"/>\n");
 		}
 
 		//FROM
-		Collection<Activity> fromActivities = join.getFromActivity();
+		Collection<Activity> fromActivities = joinCon.getFromActivity();
 		if(fromActivities!=null){
-			joinXML.append("<FROM_ACTIVITY>\n");
+			joinConXML.append("<FROM_ACTIVITY>\n");
 			for (Iterator<Activity> iterator3 = fromActivities.iterator(); iterator3.hasNext();) {
 				Activity activity2 = (Activity) iterator3.next();
-				joinXML.append("<ACTIVITY ID=\"" + activity2.getIdent() + "\"/>\n");
+				joinConXML.append("<ACTIVITY ID=\"" + activity2.getIdent() + "\"/>\n");
 			}
-			joinXML.append("</FROM_ACTIVITY>\n");
+			joinConXML.append("</FROM_ACTIVITY>\n");
 		}
 
-		Collection<MultipleCon> fromMultipleCon = join.getFromMultipleCon();
+		Collection<MultipleCon> fromMultipleCon = joinCon.getFromMultipleCon();
 		if(fromMultipleCon!=null){
-			joinXML.append("<FROM_MULTIPLECON>\n");
+			joinConXML.append("<FROM_MULTIPLECON>\n");
 			for (Iterator<MultipleCon> iterator3 = fromMultipleCon.iterator(); iterator3.hasNext();) {
 				MultipleCon multCon2 = (MultipleCon) iterator3.next();
-				joinXML.append("<MULTIPLECON ID=\"" + multCon2.getIdent() + "\"/>\n");
+				joinConXML.append("<MULTIPLECON ID=\"" + multCon2.getIdent() + "\"/>\n");
 			}
-			joinXML.append("</FROM_MULTIPLECON>\n");
+			joinConXML.append("</FROM_MULTIPLECON>\n");
 		}
 
 		//POSITION
-		joinXML.append(getPositionTag(join.getOid(), join.getClass().getSimpleName()));
-		joinXML.append("</JOIN>\n");
+		joinXML.append(getPositionTag(join.getOid(), joinCon.getClass().getSimpleName()));
+		joinXML.append("</JOINCon>\n");
 
-		return joinXML.toString();
+		return joinConXML.toString();
 	}
 
-	private String getBranchTag(BranchAND branch) throws DAOException{
-		StringBuffer branchXML = new StringBuffer();
-		branchXML.append("<BRANCH ID=\"" + branch.getOid() + "\">\n");
-		branchXML.append("<DEPENDENCY>" + branch.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
+	private String getBranchTag(BranchAND branchCon) throws DAOException{
+		StringBuffer branchConXML = new StringBuffer();
+		branchXML.append("<BRANCH ID=\"" + branchCon.getOid() + "\">\n");
+		branchXML.append("<DEPENDENCY>" + branchCon.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
 
 		//FROM
-		Activity fromActivity = branch.getFromActivity();
+		Activity fromActivity = branchCon.getFromActivity();
 		if(fromActivity!=null){
-			branchXML.append("<FROM_ACTIVITY ID=\""+ fromActivity.getIdent() + "\"/>\n");
+			branchConXML.append("<FROM_ACTIVITY ID=\""+ fromActivity.getIdent() + "\"/>\n");
 		}else{
-			MultipleCon multCon = branch.getFromMultipleConnection();
-			//branchXML.append("<FROM_MULTIPLECON ID=\""+ multCon.getIdent() + "\"/>\n");
+			MultipleCon multCon = branchCon.getFromMultipleConnection();
+			//branchConXML.append("<FROM_MULTIPLECON ID=\""+ multCon.getIdent() + "\"/>\n");
 		}
 
 		//TO
-		Collection<Activity> toActivities = branch.getToActivity();
+		Collection<Activity> toActivities = branchCon.getToActivity();
 		if(toActivities!=null){
-			branchXML.append("<TO_ACTIVITY>\n");
+			branchConXML.append("<TO_ACTIVITY>\n");
 			for (Iterator<Activity> iterator3 = toActivities.iterator(); iterator3.hasNext();) {
 				Activity activity2 = (Activity) iterator3.next();
-				branchXML.append("<ACTIVITY ID=\"" + activity2.getIdent() + "\"/>\n");
+				branchConXML.append("<ACTIVITY ID=\"" + activity2.getIdent() + "\"/>\n");
 			}
-			branchXML.append("</TO_ACTIVITY>\n");
+			branchConXML.append("</TO_ACTIVITY>\n");
 		}
 
-		Collection<MultipleCon> toMultipleCon = branch.getToMultipleCon();
+		Collection<MultipleCon> toMultipleCon = branchCon.getToMultipleCon();
 		if(toMultipleCon!=null){
-			branchXML.append("<TO_MULTIPLECON>\n");
+			branchConXML.append("<TO_MULTIPLECON>\n");
 			for (Iterator<MultipleCon> iterator3 = toMultipleCon.iterator(); iterator3.hasNext();) {
 				MultipleCon multCon2 = (MultipleCon) iterator3.next();
-				branchXML.append("<MULTIPLECON ID=\"" + multCon2.getIdent() + "\"/>\n");
+				branchConXML.append("<MULTIPLECON ID=\"" + multCon2.getIdent() + "\"/>\n");
 			}
-			branchXML.append("</TO_MULTIPLECON>\n");
+			branchConXML.append("</TO_MULTIPLECON>\n");
 		}
 
 		//POSITION
-		branchXML.append(getPositionTag(branch.getOid(), branch.getClass().getSimpleName()));
-		branchXML.append("</BRANCH>\n");
+		branchXML.append(getPositionTag(branch.getOid(), branchCon.getClass().getSimpleName()));
+		branchXML.append("</BRANCHCon>\n");
 
-		return branchXML.toString();
+		return branchConXML.toString();
 	}
 
 	private String getArtifactConTag(ArtifactCon artifactCon) throws DAOException{
@@ -644,7 +644,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	@SuppressWarnings("unchecked")
 	private List<Agent> getAgentsFromProcess(Process processRefered) {
 		List<Agent> result = Collections.emptyList();
-		String hql = "SELECT DISTINCT a FROM " + AGENT_CLASSNAME + " a JOIN a.theProcess p WHERE p.ident = :ident)";
+		String hql = "SELECT DISTINCT a FROM " + AGENT_CLASSNAME + " a JOINCon a.theProcess p WHERE p.ident = :ident)";
 		query = agentDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("ident", processRefered.getIdent());
 
@@ -1288,7 +1288,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	/*
 	 * AgentAffinityAgent, AgentHasAbility, AgentPlaysRole, RoleNeedsAbility,
-	 * ArtifactTask, BranchCondToActivity, BranchCondToMultipleCon,
+	 * ArtifactTask, BranchCondToActivity, BranchConCondToMultipleCon,
 	 * ReqAgentRequiresAbility
 	 */
 	private Hashtable<String, Object> associatives; // Associative objects that must be in the resulting XML file <CanonicalClassName_Oid, Object Reference>
@@ -1746,7 +1746,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	 */
 	private void loadOrgAssociatives(Element associatives) {
 		/*
-		 * ArtifactTask, BranchCondToActivity, BranchCondToMultipleCon,
+		 * ArtifactTask, BranchCondToActivity, BranchConCondToMultipleCon,
 		 * ReqAgentRequiresAbility
 		 */
 		List<Element> aaas = associatives.getChildren(AgentAffinityAgent.class.getSimpleName());
@@ -2214,15 +2214,15 @@ public class ProjectServicesImpl implements ProjectServices {
 		ElementFilter artifactConFilter = new ElementFilter(ArtifactCon.class.getSimpleName());
 		ElementFilter sequenceFilter = new ElementFilter(Sequence.class.getSimpleName());
 		ElementFilter feedbackFilter = new ElementFilter(Feedback.class.getSimpleName());
-		ElementFilter branchANDFilter = new ElementFilter(BranchAND.class.getSimpleName());
-		ElementFilter branchCondFilter = new ElementFilter(BranchCond.class.getSimpleName());
-		ElementFilter joinFilter = new ElementFilter(Join.class.getSimpleName());
+		ElementFilter branchANDFilter = new ElementFilter(BranchANDCon.class.getSimpleName());
+		ElementFilter branchCondFilter = new ElementFilter(BranchConCond.class.getSimpleName());
+		ElementFilter joinFilter = new ElementFilter(JoinCon.class.getSimpleName());
 
 		AbstractFilter connectionFilter = ((AbstractFilter) artifactConFilter.or(sequenceFilter));
 		connectionFilter = ((AbstractFilter) connectionFilter.or(feedbackFilter));
-		connectionFilter = ((AbstractFilter) connectionFilter.or(branchANDFilter));
-		connectionFilter = ((AbstractFilter) connectionFilter.or(branchCondFilter));
-		connectionFilter = ((AbstractFilter) connectionFilter.or(joinFilter));
+		connectionFilter = ((AbstractFilter) connectionFilter.or(branchANDConFilter));
+		connectionFilter = ((AbstractFilter) connectionFilter.or(branchConCondFilter));
+		connectionFilter = ((AbstractFilter) connectionFilter.or(joinConFilter));
 
 		Iterator<Element> iter = processComponents.getDescendants(connectionFilter);
 		while (iter.hasNext()) {
@@ -2306,13 +2306,13 @@ public class ProjectServicesImpl implements ProjectServices {
 				feedback = (Feedback) this.persistObject(feedback, null);
 				this.processComponents.put(key, feedback);
 			}
-			else if(connection instanceof BranchAND){
-				BranchAND branchAND = (BranchAND) connection;
+			else if(connection instanceof BranchANDCon){
+				BranchAND branchAND = (BranchANDCon) connection;
 
 				Element fromActivityElm = connectionElm.getChild("FromActivity");
 				if(fromActivityElm != null){
 					String fromRef = fromActivityElm.getAttributeValue("REF");
-					branchAND.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchANDCon.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				Element toActivities = connectionElm.getChild("ToActivity");
@@ -2322,17 +2322,17 @@ public class ProjectServicesImpl implements ProjectServices {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						branchAND.insertIntoToActivity((Activity) this.processComponents.get(itemRef));
+						branchANDCon.insertIntoToActivity((Activity) this.processComponents.get(itemRef));
 					}
 				}
 
 				// Not needed! It'll be settled by the artifact connection
-				// branchAND.insertIntoFromArtifactCon(null);
+				// branchANDCon.insertIntoFromArtifactCon(null);
 
 				Element fromMultipleCon = connectionElm.getChild("FromMultipleConnection");
 				if(fromMultipleCon != null){
 					String fromRef = fromMultipleCon.getAttributeValue("REF");
-					branchAND.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchANDCon.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				Element toMultipleCons = connectionElm.getChild("ToMultipleCon");
@@ -2342,42 +2342,42 @@ public class ProjectServicesImpl implements ProjectServices {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						branchAND.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(itemRef));
+						branchANDCon.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(itemRef));
 					}
 				}
 
-				branchAND = (BranchAND) this.persistObject(branchAND, null);
-				this.processComponents.put(key, branchAND);
+				branchAND = (BranchAND) this.persistObject(branchANDCon, null);
+				this.processComponents.put(key, branchANDCon);
 			}
-			else if(connection instanceof BranchCond){
-				BranchCond branchCond = (BranchCond) connection;
+			else if(connection instanceof BranchConCond){
+				BranchCond branchCond = (BranchConCond) connection;
 
 				Element fromActivityElm = connectionElm.getChild("FromActivity");
 				if(fromActivityElm != null){
 					String fromRef = fromActivityElm.getAttributeValue("REF");
-					branchCond.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchConCond.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				// Not needed! It'll be settled by the associative class
-				//branchCond.insertIntoTheBranchCondToActivity(null);
+				//branchCond.insertIntoTheBranchConCondToActivity(null);
 
 				// Not needed! It'll be settled by the artifact connection
-				// branchCond.insertIntoFromArtifactCon(null);
+				// branchConCond.insertIntoFromArtifactCon(null);
 
 				Element fromMultipleCon = connectionElm.getChild("FromMultipleConnection");
 				if(fromMultipleCon != null){
 					String fromRef = fromMultipleCon.getAttributeValue("REF");
-					branchCond.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchConCond.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				// Not needed! It'll be settled by the associative class
-				// branchCond.insertIntoTheBranchCondToMultipleCon(null);
+				// branchCond.insertIntoTheBranchConCondToMultipleCon(null);
 
-				branchCond = (BranchCond) this.persistObject(branchCond, null);
-				this.processComponents.put(key, branchCond);
+				branchCond = (BranchCond) this.persistObject(branchConCond, null);
+				this.processComponents.put(key, branchConCond);
 			}
-			else if(connection instanceof Join){
-				Join join = (Join) connection;
+			else if(connection instanceof JoinCon){
+				Join join = (JoinCon) connection;
 
 				Element fromActivities = connectionElm.getChild("FromActivity");
 				if(fromActivities != null){
@@ -2386,18 +2386,18 @@ public class ProjectServicesImpl implements ProjectServices {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						join.insertIntoFromActivity((Activity) this.processComponents.get(itemRef));
+						joinCon.insertIntoFromActivity((Activity) this.processComponents.get(itemRef));
 					}
 				}
 
 				Element toActivityElm = connectionElm.getChild("ToActivity");
 				if(toActivityElm != null){
 					String toRef = toActivityElm.getAttributeValue("REF");
-					join.insertIntoToActivity((Activity) this.processComponents.get(toRef));
+					joinCon.insertIntoToActivity((Activity) this.processComponents.get(toRef));
 				}
 
 				// Not needed! It'll be settled by the artifact connection
-				// join.insertIntoFromArtifactCon(null);
+				// joinCon.insertIntoFromArtifactCon(null);
 
 				Element fromMultipleCons = connectionElm.getChild("FromMultipleCon");
 				if(fromMultipleCons != null){
@@ -2406,18 +2406,18 @@ public class ProjectServicesImpl implements ProjectServices {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						join.insertIntoFromMultipleCon((MultipleCon) this.processComponents.get(itemRef));
+						joinCon.insertIntoFromMultipleCon((MultipleCon) this.processComponents.get(itemRef));
 					}
 				}
 
 				Element toMultipleConElm = connectionElm.getChild("ToMultipleCon");
 				if(toMultipleConElm != null){
 					String toRef = toMultipleConElm.getAttributeValue("REF");
-					join.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(toRef));
+					joinCon.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(toRef));
 				}
 
-				join = (Join) this.persistObject(join, null);
-				this.processComponents.put(key, join);
+				join = (Join) this.persistObject(joinCon, null);
+				this.processComponents.put(key, joinCon);
 			}
 		}
 
@@ -3437,63 +3437,63 @@ public class ProjectServicesImpl implements ProjectServices {
 			}
 		}
 
-		List<Element> bctas = associatives.getChildren(BranchCondToActivity.class.getSimpleName());
+		List<Element> bctas = associatives.getChildren(BranchConCondToActivity.class.getSimpleName());
 		Iterator<Element> iterbctas = bctas.iterator();
 		while (iterbctas.hasNext()) {
 			Element bctaElm = (Element) iterbctas.next();
 
 			String key = bctaElm.getAttributeValue("KEY");
 
-			Element branchCondElm = bctaElm.getChild("TheBranchCond");
-			String branchCondKey = branchCondElm.getAttributeValue("REF");
+			Element branchCondElm = bctaElm.getChild("TheBranchConCond");
+			String branchCondKey = branchConCondElm.getAttributeValue("REF");
 
-			BranchCond branchCond = (BranchCond) this.processComponents.get(branchCondKey);
+			BranchCond branchCond = (BranchCond) this.processComponents.get(branchConCondKey);
 
 			Element actElm = bctaElm.getChild("TheActivity");
 			String actKey = actElm.getAttributeValue("REF");
 
 			Activity activity = (Activity) this.processComponents.get(actKey);
 
-			if(!this.isAssociativeExists(BranchCondToActivity.class, branchCond, activity)){
+			if(!this.isAssociativeExists(BranchCondToActivity.class, branchConCond, activity)){
 
-				BranchCondToActivity bcta = new BranchCondToActivity();
-				bcta.insertIntoTheBranchCond(branchCond);
+				BranchCondToActivity bcta = new BranchConCondToActivity();
+				bcta.insertIntoTheBranchCond(branchConCond);
 				bcta.insertIntoTheActivity(activity);
 
 				this.processComponents.put(bctaElm.getChild("TheCondition").getAttributeValue("REF"), bcta.getTheCondition());
 
-				bcta = (BranchCondToActivity) this.persistObject(bcta, null);
+				bcta = (BranchConCondToActivity) this.persistObject(bcta, null);
 
 				this.associatives.put(key, bcta);
 			}
 		}
 
-		List<Element> bctms = associatives.getChildren(BranchCondToMultipleCon.class.getSimpleName());
+		List<Element> bctms = associatives.getChildren(BranchConCondToMultipleCon.class.getSimpleName());
 		Iterator<Element> iterbctms = bctas.iterator();
 		while (iterbctms.hasNext()) {
 			Element bctmElm = (Element) iterbctms.next();
 
 			String key = bctmElm.getAttributeValue("KEY");
 
-			Element branchCondElm = bctmElm.getChild("TheBranchCond");
-			String branchCondKey = branchCondElm.getAttributeValue("REF");
+			Element branchCondElm = bctmElm.getChild("TheBranchConCond");
+			String branchCondKey = branchConCondElm.getAttributeValue("REF");
 
-			BranchCond branchCond = (BranchCond) this.processComponents.get(branchCondKey);
+			BranchCond branchCond = (BranchCond) this.processComponents.get(branchConCondKey);
 
 			Element mcElm = bctmElm.getChild("TheMultipleCon");
 			String mcKey = mcElm.getAttributeValue("REF");
 
 			MultipleCon multipleCon = (MultipleCon) this.processComponents.get(mcKey);
 
-			if(!this.isAssociativeExists(BranchCondToMultipleCon.class, branchCond, multipleCon)){
+			if(!this.isAssociativeExists(BranchCondToMultipleCon.class, branchConCond, multipleCon)){
 
-				BranchCondToMultipleCon bctm = new BranchCondToMultipleCon();
-				bctm.insertIntoTheBranchCond(branchCond);
+				BranchCondToMultipleCon bctm = new BranchConCondToMultipleCon();
+				bctm.insertIntoTheBranchCond(branchConCond);
 				bctm.insertIntoTheMultipleCon(multipleCon);
 
 				this.processComponents.put(bctmElm.getChild("TheCondition").getAttributeValue("REF"), bctm.getTheCondition());
 
-				bctm = (BranchCondToMultipleCon) this.persistObject(bctm, null);
+				bctm = (BranchConCondToMultipleCon) this.persistObject(bctm, null);
 
 				this.associatives.put(key, bctm);
 			}
@@ -3816,8 +3816,8 @@ public class ProjectServicesImpl implements ProjectServices {
 				if (content.getParentElement().getParentElement() != null) {
 
 					if (((Element) content.getParent().getParent()).getQualifiedName().equals("SEQUENCENODE")
-						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("BRANCHNODE")
-						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("JOINNODE")
+						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("BRANCHConNODE")
+						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("JOINConNODE")
 						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("ARTIFACTCONNODE")) {
 
 						if(((Element) content.getParent()).getQualifiedName().equals("IDENT")){
@@ -4038,10 +4038,10 @@ public class ProjectServicesImpl implements ProjectServices {
 			hql += "obj.theRole.ident = '"+ ((Role)from).getIdent() + "' AND obj.theAbility.ident = '"+ ((Ability)to).getIdent() + "'";
 		else if(classe.equals(ArtifactTask.class))
 			hql += "obj.theArtifact.ident = '"+ ((Artifact)from).getIdent() + "' AND obj.theTask.theNormal.ident = '"+ ((Task)to).getTheNormal().getIdent() + "'";
-		else if(classe.equals(BranchCondToActivity.class))
-			hql += "obj.theBranchCond.ident = '"+ ((BranchCond)from).getIdent() + "' AND obj.theActivity.ident = '"+ ((Activity)to).getIdent() + "'";
-		else if(classe.equals(BranchCondToMultipleCon.class))
-			hql += "obj.theBranchCond.ident = '"+ ((BranchCond)from).getIdent() + "' AND obj.theMultipleCon.ident = '"+ ((MultipleCon)to).getIdent() + "'";
+		else if(classe.equals(BranchConCondToActivity.class))
+			hql += "obj.theBranchCond.ident = '"+ ((BranchConCond)from).getIdent() + "' AND obj.theActivity.ident = '"+ ((Activity)to).getIdent() + "'";
+		else if(classe.equals(BranchConCondToMultipleCon.class))
+			hql += "obj.theBranchCond.ident = '"+ ((BranchConCond)from).getIdent() + "' AND obj.theMultipleCon.ident = '"+ ((MultipleCon)to).getIdent() + "'";
 		else if(classe.equals(ReqAgentRequiresAbility.class))
 			hql += "obj.theReqAgent.theNormal.ident = '"+ ((ReqAgent)from).getTheNormal().getIdent() +"' " +
 					"AND obj.theReqAgent.theRole.ident = '"+ ((ReqAgent)from).getTheRole().getIdent() +"' " +

@@ -11,11 +11,11 @@ import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.ArtifactCon;
-import br.ufpa.labes.spm.domain.BranchAND;
-import br.ufpa.labes.spm.domain.BranchCond;
+import br.ufpa.labes.spm.domain.BranchANDCon;
+import br.ufpa.labes.spm.domain.BranchConCond;
 import br.ufpa.labes.spm.domain.Connection;
 import br.ufpa.labes.spm.domain.Feedback;
-import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.JoinCon;
 import br.ufpa.labes.spm.domain.MultipleCon;
 import br.ufpa.labes.spm.domain.Sequence;
 import br.ufpa.labes.spm.domain.Normal;
@@ -139,10 +139,10 @@ public class EditorServicesImpl implements EditorServices {
 
 				connectionsBuffer.append("</ARTIFACTCON>");
 			} else if (conn instanceof MultipleCon) {
-				// JOIN
-				if (conn instanceof Join) {
-					Join jCon = (Join) conn;
-					connectionsBuffer.append("<JOIN ID=\"").append(jCon.getIdent()).append("\">");
+				// JOINCon
+				if (conn instanceof JoinCon) {
+					Join jCon = (JoinCon) conn;
+					connectionsBuffer.append("<JOINCon ID=\"").append(jCon.getIdent()).append("\">");
 					if (jCon.getTheDependency() != null)
 						connectionsBuffer.append("<DEPENDENCY>").append(jCon.getTheDependency().getKindDep()).append("</DEPENDENCY>");
 					if (jCon.getTheConnectionType() != null)
@@ -170,10 +170,10 @@ public class EditorServicesImpl implements EditorServices {
 					if (conGP != null)
 						connectionsBuffer.append(getPositionContent(conGP));
 
-					connectionsBuffer.append("</JOIN>");
-				} else if (conn instanceof BranchAND) {
-					BranchAND bCon = (BranchAND) conn;
-					connectionsBuffer.append("<BRANCHAND ID=\"").append(bCon.getIdent()).append("\">");
+					connectionsBuffer.append("</JOINCon>");
+				} else if (conn instanceof BranchANDCon) {
+					BranchAND bCon = (BranchANDCon) conn;
+					connectionsBuffer.append("<BRANCHANDCon ID=\"").append(bCon.getIdent()).append("\">");
 					if (bCon.getTheDependency() != null)
 						connectionsBuffer.append("<DEPENDENCY>").append(bCon.getTheDependency().getKindDep()).append("</DEPENDENCY>");
 					if (bCon.getTheConnectionType() != null)
@@ -201,8 +201,8 @@ public class EditorServicesImpl implements EditorServices {
 
 					if (conGP != null)
 						connectionsBuffer.append(getPositionContent(conGP));
-					connectionsBuffer.append("</BRANCHAND>");
-				} else if (conn instanceof BranchCond) {
+					connectionsBuffer.append("</BRANCHANDCon>");
+				} else if (conn instanceof BranchConCond) {
 
 				}
 			} else if (conn instanceof Sequence) {

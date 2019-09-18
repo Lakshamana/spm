@@ -6,8 +6,8 @@ import java.util.Date;
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.Plain;
-import br.ufpa.labes.spm.domain.Branch;
-import br.ufpa.labes.spm.domain.Join;
+import br.ufpa.labes.spm.domain.BranchCon;
+import br.ufpa.labes.spm.domain.JoinCon;
 import br.ufpa.labes.spm.domain.AgendaEvent;
 import br.ufpa.labes.spm.domain.GlobalActivityEvent;
 import br.ufpa.labes.spm.domain.Log;
@@ -105,16 +105,16 @@ public class LoggingImpl implements Logging {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.qrconsult.spm.services.impl.Logging#registerBranchEvent(org.qrconsult.spm.model.connections.Branch, java.lang.String)
+	 * @see org.qrconsult.spm.services.impl.Logging#registerBranchEvent(org.qrconsult.spm.model.connections.BranchCon, java.lang.String)
 	 */
 	@Override
-	public void registerBranchEvent(Branch branch, String why){
+	public void registerBranchEvent(Branch branchCon, String why){
 /*		EventType type = new EventType();
 		type.setIdent("Enactment Event" + Math.random()*10+ System.currentTimeMillis());
 		type.setDescription("This is an enactment event. Automatically generated.");
 
 		ConnectionEvent event = new ConnectionEvent();
-		Log log = this.getTheProcess(branch.getTheProcessModel()).getTheLog();
+		Log log = this.getTheProcess(branchCon.getTheProcessModel()).getTheLog();
 		event.setTheLog(log);
 		log.getTheEvent().add(event);
 		event.setWhy (why);
@@ -123,21 +123,21 @@ public class LoggingImpl implements Logging {
 		event.getTheCatalogEvents().setDescription ("Fired");
 		event.setTheEventType(type);
 		type.getTheEvent().add(event);
-		branch.getTheProcessModel().getProcessModelEvent.add (event);
+		branchCon.getTheProcessModel().getProcessModelEvent.add (event);
 */
 	}
 
 	/* (non-Javadoc)
-	 * @see org.qrconsult.spm.services.impl.Logging#registerJoinEvent(org.qrconsult.spm.model.connections.Join, java.lang.String)
+	 * @see org.qrconsult.spm.services.impl.Logging#registerJoinEvent(org.qrconsult.spm.model.connections.JoinCon, java.lang.String)
 	 */
 	@Override
-	public void registerJoinEvent(Join join, String why){
+	public void registerJoinEvent(Join joinCon, String why){
 /*		EventType type = new EventType();
 		type.setIdent("Enactment Event" + Math.random()*10+ System.currentTimeMillis());
 		type.setDescription("This is an enactment event. Automatically generated.");
 
 		ConnectionEvent event = new ConnectionEvent();
-		Log log = this.getTheProcess(join.getTheProcessModel()).getTheLog();
+		Log log = this.getTheProcess(joinCon.getTheProcessModel()).getTheLog();
 		event.setTheLog(log);
 		log.getTheEvent().add(event);
 		event.setWhy (why);
@@ -146,7 +146,7 @@ public class LoggingImpl implements Logging {
 		event.getTheCatalogEvents().setDescription ("Fired");
 		event.setTheEventType(type);
 		type.getTheEvent().add(event);
-		join.theProcessModelEvent.add (event);
+		joinCon.theProcessModelEvent.add (event);
 */
 	}
 

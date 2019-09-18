@@ -4,11 +4,9 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 
-import javax.ejb.Remote;
 import br.ufpa.labes.spm.service.dto.CalendarDTO;
 import br.ufpa.labes.spm.domain.ProcessModel;
 
-@Remote
 public interface EasyModelingServices {
 
 	public String copyActivity(String act_id, String level_to_copy);
