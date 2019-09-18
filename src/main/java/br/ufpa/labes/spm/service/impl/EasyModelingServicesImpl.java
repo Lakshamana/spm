@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import javax.ejb.EJB;
 
 import org.qrconsult.spm.beans.editor.WebAPSEENodePosition;
 import br.ufpa.labes.spm.repository.impl.activities.DecomposedDAO;
@@ -106,7 +105,6 @@ import br.ufpa.labes.spm.service.interfaces.NotificationServices;
 import br.ufpa.labes.spm.service.interfaces.commonData.SimpleActivityQueryResult;
 import org.qrconsult.spm.util.i18n.Messages;
 
-@Stateless(name="easyModeling")
 public class EasyModelingServicesImpl implements EasyModelingServices {
 
 	final int MILLIS_PER_DAY = 1000 * 60 * 60 * 24;

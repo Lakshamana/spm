@@ -4,8 +4,6 @@ package br.ufpa.labes.spm.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -19,7 +17,6 @@ import br.ufpa.labes.spm.domain.Calendar;
 import br.ufpa.labes.spm.domain.Project;
 import br.ufpa.labes.spm.service.interfaces.CalendarServices;
 
-@Stateless
 public class CalendarServicesImpl implements CalendarServices  {
 
 	ICalendarDAO calendarDAO;

@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.ejb.EJB;
 
 import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
 import br.ufpa.labes.spm.exceptions.DAOException;
@@ -30,7 +29,6 @@ import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.domain.ProcessModel;
 import br.ufpa.labes.spm.domain.Connection;
 
-@Stateless
 public class CriticalPathMethod {
 
 	IProcessDAO processDAO;

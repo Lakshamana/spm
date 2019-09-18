@@ -2,8 +2,6 @@ package br.ufpa.labes.spm.service.impl;
 
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
@@ -12,7 +10,6 @@ import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.ChatMessage;
 import br.ufpa.labes.spm.service.interfaces.ChatMessageServices;
 
-@Stateless
 public class ChatMessageServicesImpl implements ChatMessageServices {
 
 	IAgentDAO agentDAO;

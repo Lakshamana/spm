@@ -24,7 +24,6 @@ import br.ufpa.labes.spm.domain.EventType;
 import org.qrconsult.spm.notifications.mail.EventNotification;
 import br.ufpa.labes.spm.service.interfaces.Logging;
 
-@Stateless
 public class LoggingImpl implements Logging {
 
 	public LoggingImpl() {

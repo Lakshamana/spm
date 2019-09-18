@@ -9,8 +9,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -36,7 +34,6 @@ import br.ufpa.labes.spm.service.interfaces.EasyModelingServices;
 import br.ufpa.labes.spm.service.interfaces.GanttServices;
 import org.qrconsult.spm.util.ServicesUtil;
 
-@Stateless(mappedName="GanttServices")
 public class GanttServicesImpl implements GanttServices {
 
 	private static final String ACTIVITY_CLASSNAME = Activity.class.getSimpleName();

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -32,25 +30,19 @@ import br.ufpa.labes.spm.domain.RoleNeedsAbility;
 import br.ufpa.labes.spm.domain.RoleType;
 import br.ufpa.labes.spm.service.interfaces.RoleServices;
 
-@Stateless
 public class RoleServicesImpl implements RoleServices {
 
 	private static final String AGENT_PLAY_ROLE_CLASSNAME = AgentPlaysRole.class
 			.getSimpleName();
 	private static final String ROLE_CLASSNAME = Role.class.getSimpleName();
-	@EJB
 	IAbilityDAO abilityDAO;
 
-	@EJB
 	IRoleDAO roleDAO;
 
-	@EJB
 	IRoleTypeDAO roleTypeDAO;
 
-	@EJB
 	IRoleNeedsAbilityDAO roleNeedsDAO;
 
-	@EJB
 	IAgentPlaysRoleDAO agentPlaysRole;
 
 	Converter converter = new ConverterImpl();

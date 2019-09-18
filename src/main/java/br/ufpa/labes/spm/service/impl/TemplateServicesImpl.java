@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
@@ -79,7 +77,6 @@ import br.ufpa.labes.spm.service.interfaces.DynamicModeling;
 import br.ufpa.labes.spm.service.interfaces.TemplateServices;
 import org.qrconsult.spm.util.i18n.Messages;
 
-@Stateless
 public class TemplateServicesImpl implements TemplateServices {
 	public static final String TEMPLATE_CLASSNAME = Template.class.getSimpleName();
 	public static final transient String

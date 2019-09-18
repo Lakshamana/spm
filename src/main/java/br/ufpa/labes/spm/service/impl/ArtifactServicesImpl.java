@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -32,7 +30,6 @@ import org.qrconsult.spm.util.ident.SemCaracteresEspeciais;
 import org.qrconsult.spm.util.ident.TrocaEspacoPorPonto;
 
 
-@Stateless
 public class ArtifactServicesImpl implements ArtifactServices {
 
 	private static final int SINGLE_RESULT = 1;

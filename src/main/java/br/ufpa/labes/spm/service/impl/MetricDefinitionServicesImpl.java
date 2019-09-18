@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -34,7 +32,6 @@ import br.ufpa.labes.spm.domain.RoleType;
 import br.ufpa.labes.spm.domain.Type;
 import br.ufpa.labes.spm.service.interfaces.MetricDefinitionServices;
 
-@Stateless
 public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 	IMetricTypeDAO metricTypeDAO;
 

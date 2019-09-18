@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.EJB;
 
 import br.ufpa.labes.spm.repository.interfaces.IReportDAO;
 import org.qrconsult.spm.dtos.formReport.reportItems.ActivitiesByAgentReportItem;
@@ -37,7 +36,6 @@ import org.qrconsult.spm.dtos.formReport.reportItems.resourcesCostPlan.Resources
 import org.qrconsult.spm.dtos.formReport.reportItems.resourcesCostPlan.ResourcesCostShareableItem;
 import br.ufpa.labes.spm.service.interfaces.ReportServices;
 
-@Stateless
 public class ReportServicesImpl implements ReportServices {
 	IReportDAO reportDAO;
 

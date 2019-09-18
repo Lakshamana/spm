@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -54,7 +52,6 @@ import br.ufpa.labes.spm.domain.TaskAgenda;
 import br.ufpa.labes.spm.service.interfaces.AgentServices;
 import org.qrconsult.spm.util.Md5;
 
-@Stateless
 public class AgentServicesImpl implements AgentServices {
 
 	private static final String PROJECT_CLASSNAME = Project.class.getSimpleName();

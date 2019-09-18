@@ -2,8 +2,6 @@ package br.ufpa.labes.spm.service.impl;
 
 import java.util.Collection;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.beans.editor.WebAPSEEVO;
@@ -27,7 +25,6 @@ import br.ufpa.labes.spm.domain.ResourceType;
 import br.ufpa.labes.spm.service.interfaces.WebAPSEEVOServices;
 
 
-@Stateless
 public class WebAPSEEVOServicesImpl implements WebAPSEEVOServices {
 
 	private static final String ARTIFACT_CLASS_NAME = Artifact.class.getSimpleName();

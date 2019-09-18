@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 
 import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
@@ -73,32 +71,23 @@ import org.qrconsult.spm.util.i18n.Messages;
 /**
  * @author Breno Franca and Heribert Schlebbe
  */
-@Stateless
 public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLocal{
 
-	@EJB
 	public NotificationServices remote;
 
-	@EJB
     private Logging logging;
    // private SendMail sendMail = null;
 
-	@EJB
 	IProcessDAO processDAO;
 
-	@EJB
 	IProcessModelDAO processModelDAO;
 
-	@EJB
 	INormalDAO normalDAO;
 
-	@EJB
 	IActivityDAO activityDAO;
 
-	@EJB
 	IAgentDAO agentDAO;
 
-	@EJB
 	IResourceDAO resourceDAO;
 
     /**

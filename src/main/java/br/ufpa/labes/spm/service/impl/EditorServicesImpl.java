@@ -29,7 +29,6 @@ import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.domain.ProcessModel;
 import br.ufpa.labes.spm.service.interfaces.EditorServices;
 
-@Stateless
 public class EditorServicesImpl implements EditorServices {
 
 	@Override

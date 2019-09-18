@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.service.impl;
 
 import java.util.List;
 
-import javax.ejb.EJB;
 
 import br.ufpa.labes.spm.repository.interfaces.IUserDAO;
 import br.ufpa.labes.spm.repository.interfaces.people.IAuthorDAO;
@@ -20,7 +19,6 @@ import org.qrconsult.spm.util.PagingContext;
 import org.qrconsult.spm.util.SortCriteria;
 
 
-@Stateless
 public class AccountServicesImpl implements AccountServices {
 
 	IUserDAO userDao;

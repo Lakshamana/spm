@@ -3,8 +3,6 @@ package br.ufpa.labes.spm.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -21,7 +19,6 @@ import br.ufpa.labes.spm.domain.AbilityType;
 import br.ufpa.labes.spm.service.interfaces.AbilityServices;
 
 
-@Stateless
 public class AbilityServicesImpl  implements AbilityServices{
 
 	IAbilityDAO abilityDAO;

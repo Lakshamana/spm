@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -23,7 +21,6 @@ import br.ufpa.labes.spm.domain.ResourceType;
 import br.ufpa.labes.spm.domain.Type;
 import br.ufpa.labes.spm.service.interfaces.ResourceServices;
 
-@Stateless
 public class ResourceServicesImpl implements ResourceServices{
 	private static final int SINGLE_RESULT = 1;
 

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -23,7 +21,6 @@ import br.ufpa.labes.spm.domain.ToolType;
 import br.ufpa.labes.spm.domain.Type;
 import br.ufpa.labes.spm.service.interfaces.ToolServices;
 
-@Stateless
 public class ToolServicesImpl implements ToolServices {
 
 	private final String TOOL_CLASSNAME = ToolDefinition.class.getSimpleName();

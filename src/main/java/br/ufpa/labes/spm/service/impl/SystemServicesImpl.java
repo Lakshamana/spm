@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -30,7 +28,6 @@ import br.ufpa.labes.spm.service.interfaces.ProjectServices;
 import br.ufpa.labes.spm.service.interfaces.SystemServices;
 
 
-@Stateless
 public class SystemServicesImpl implements SystemServices{
 
 	private static final String SYSTEM_CLASSNAME = System.class.getSimpleName();

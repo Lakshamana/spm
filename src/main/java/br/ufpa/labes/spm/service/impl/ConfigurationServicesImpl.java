@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.service.impl;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -16,7 +14,6 @@ import br.ufpa.labes.spm.domain.Configuration;
 import br.ufpa.labes.spm.service.interfaces.AgentServices;
 import br.ufpa.labes.spm.service.interfaces.ConfigurationServices;
 
-@Stateless
 public class ConfigurationServicesImpl implements ConfigurationServices {
 
 	IConfiDAO confiDAO;

@@ -20,8 +20,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -178,7 +176,6 @@ import br.ufpa.labes.spm.service.interfaces.ProjectServices;
 import br.ufpa.labes.spm.service.interfaces.ReportServices;
 import org.qrconsult.spm.util.UtilReflection;
 
-@Stateless
 public class ProjectServicesImpl implements ProjectServices {
 
 	private static final int SINGLE_RESULT = 1;

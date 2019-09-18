@@ -3,8 +3,6 @@ package br.ufpa.labes.spm.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -18,7 +16,6 @@ import org.qrconsult.spm.util.ident.ConversorDeIdent;
 import org.qrconsult.spm.util.ident.SemCaracteresEspeciais;
 import org.qrconsult.spm.util.ident.TrocaEspacoPorPonto;
 
-@Stateless
 public class HelpServicesImpl  implements HelpServices{
 
 	IHelpTopicDAO helpTopicDAO;

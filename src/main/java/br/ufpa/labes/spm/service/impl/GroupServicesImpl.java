@@ -3,8 +3,6 @@ package br.ufpa.labes.spm.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -26,7 +24,6 @@ import br.ufpa.labes.spm.domain.GroupType;
 import br.ufpa.labes.spm.domain.Type;
 import br.ufpa.labes.spm.service.interfaces.GroupServices;
 
-@Stateless
 public class GroupServicesImpl implements GroupServices {
 
 	private static final String GROUP_CLASS_NAME = Group.class.getSimpleName();

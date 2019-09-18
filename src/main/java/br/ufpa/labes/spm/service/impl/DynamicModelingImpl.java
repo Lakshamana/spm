@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import javax.ejb.EJB;
 
 import br.ufpa.labes.spm.repository.impl.plainActivities.AutomaticDAO;
 import br.ufpa.labes.spm.repository.impl.types.ArtifactTypeDAO;
@@ -105,7 +104,6 @@ import br.ufpa.labes.spm.service.interfaces.Logging;
 import br.ufpa.labes.spm.service.interfaces.NotificationServices;
 import org.qrconsult.spm.util.i18n.Messages;
 
-@Stateless(name="dynamicModeling")
 public class DynamicModelingImpl implements DynamicModeling {
 
 	// private static String UPT = "UPT";

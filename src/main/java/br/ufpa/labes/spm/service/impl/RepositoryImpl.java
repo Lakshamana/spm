@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.artifactManagement.interfaces.ArtifactManagerInterface;
@@ -37,7 +35,6 @@ import br.ufpa.labes.spm.domain.Structure;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.service.interfaces.RepositoryServices;
 
-@Stateless
 public class RepositoryImpl implements RepositoryServices{
 
 

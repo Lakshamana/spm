@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -72,7 +70,6 @@ import br.ufpa.labes.spm.domain.ActivityType;
 import br.ufpa.labes.spm.service.interfaces.Logging;
 import br.ufpa.labes.spm.service.interfaces.TaskServices;
 
-@Stateless
 public class TaskServicesImpl implements TaskServices {
 
 	private static final String TASK_CLASSNAME = Task.class.getName();

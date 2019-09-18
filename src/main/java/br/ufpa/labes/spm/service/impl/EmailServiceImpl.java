@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -36,7 +34,6 @@ import br.ufpa.labes.spm.service.interfaces.AgentServices;
 import br.ufpa.labes.spm.service.interfaces.EmailServices;
 import org.qrconsult.spm.util.Md5;
 
-@Stateless
 public class EmailServiceImpl implements EmailServices {
 
 	IEmailDAO emailDAO;

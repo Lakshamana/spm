@@ -5,8 +5,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.beans.editor.WebAPSEEVO;
@@ -44,7 +42,6 @@ import br.ufpa.labes.spm.domain.Type;
 import br.ufpa.labes.spm.service.interfaces.TypeServices;
 import org.qrconsult.spm.util.Translator;
 
-@Stateless
 public class TypeServicesImpl implements TypeServices{
 
 	ITypeDAO typeDAO;

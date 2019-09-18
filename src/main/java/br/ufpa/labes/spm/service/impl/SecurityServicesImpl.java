@@ -4,7 +4,6 @@ package br.ufpa.labes.spm.service.impl;
 import java.rmi.RemoteException;
 import java.util.Collection;
 
-import javax.ejb.EJBException;
 
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.exceptions.ObjectLockedException;
@@ -13,7 +12,6 @@ import br.ufpa.labes.spm.exceptions.UserInvalidException;
 import br.ufpa.labes.spm.exceptions.UserNotManagerException;
 import br.ufpa.labes.spm.service.interfaces.NotificationServices;
 
-@Stateless
 public class SecurityServicesImpl implements NotificationServices {
 
 	private static NotificationServices instance;

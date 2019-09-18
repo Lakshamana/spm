@@ -4,8 +4,6 @@ package br.ufpa.labes.spm.service.impl;
 import java.io.IOException;
 import java.util.Arrays;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 
@@ -33,7 +31,6 @@ import br.ufpa.labes.spm.service.interfaces.DriverServices;
 //import com.google.api.services.drive.model.File;
 
 
-@Stateless
 public class DriverServicesImpl  implements DriverServices {
 
    IDriverDAO driverDAO;

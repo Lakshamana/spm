@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
@@ -32,7 +30,6 @@ import br.ufpa.labes.spm.domain.Task;
 import br.ufpa.labes.spm.service.interfaces.ProcessServices;
 
 
-@Stateless
 public class ProcessServicesImpl implements ProcessServices {
 
 	private static final String PROCESSAGENDA_CLASSNAME = ProcessAgenda.class.getName();
