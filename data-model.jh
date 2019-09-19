@@ -61,7 +61,7 @@ entity Agent {
     costHour Float,
     passwordHash String,
     tipoUser Integer,
-    isActive Boolean,
+    active Boolean,
     online Boolean,
     photoURL String
     upload String
@@ -119,7 +119,7 @@ entity WorkGroup {
     ident String,
     name String,
     description TextBlob,
-    isActive Boolean
+    active Boolean
 }
 
 entity OutOfWorkPeriod {
@@ -206,7 +206,7 @@ entity Artifact {
     fileName String,
     latestVersion String,
     isTemplate Boolean,
-    isActive Boolean
+    active Boolean
 }
 
 entity ArtifactTask {
@@ -999,7 +999,7 @@ entity Resource {
     mtbfUnitTime String,
     currency String,
     cost Float,
-    isActive Boolean
+    active Boolean
 }
 
 relationship ManyToOne {
