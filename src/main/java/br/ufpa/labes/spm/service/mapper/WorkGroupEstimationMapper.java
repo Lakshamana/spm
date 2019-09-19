@@ -1,28 +1,28 @@
 package br.ufpa.labes.spm.service.mapper;
 
 import br.ufpa.labes.spm.domain.*;
-import br.ufpa.labes.spm.service.dto.WorkGroupEstimationDTO;
+import br.ufpa.labes.spm.service.dto.WorkWorkGroupEstimationDTO;
 
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity {@link WorkGroupEstimation} and its DTO {@link WorkGroupEstimationDTO}.
+ * Mapper for the entity {@link WorkWorkGroupEstimation} and its DTO {@link WorkWorkGroupEstimationDTO}.
  */
-@Mapper(componentModel = "spring", uses = {WorkGroupMapper.class})
-public interface WorkGroupEstimationMapper extends EntityMapper<WorkGroupEstimationDTO, WorkGroupEstimation> {
+@Mapper(componentModel = "spring", uses = {WorkWorkGroupMapper.class})
+public interface WorkWorkGroupEstimationMapper extends EntityMapper<WorkWorkGroupEstimationDTO, WorkWorkGroupEstimation> {
 
-    @Mapping(source = "theWorkGroup.id", target = "theWorkGroupId")
-    WorkGroupEstimationDTO toDto(WorkGroupEstimation workGroupEstimation);
+    @Mapping(source = "theWorkWorkGroup.id", target = "theWorkWorkGroupId")
+    WorkWorkGroupEstimationDTO toDto(WorkWorkGroupEstimation workWorkGroupEstimation);
 
-    @Mapping(source = "theWorkGroupId", target = "theWorkGroup")
-    WorkGroupEstimation toEntity(WorkGroupEstimationDTO workGroupEstimationDTO);
+    @Mapping(source = "theWorkWorkGroupId", target = "theWorkWorkGroup")
+    WorkWorkGroupEstimation toEntity(WorkWorkGroupEstimationDTO workWorkGroupEstimationDTO);
 
-    default WorkGroupEstimation fromId(Long id) {
+    default WorkWorkGroupEstimation fromId(Long id) {
         if (id == null) {
             return null;
         }
-        WorkGroupEstimation workGroupEstimation = new WorkGroupEstimation();
-        workGroupEstimation.setId(id);
-        return workGroupEstimation;
+        WorkWorkGroupEstimation workWorkGroupEstimation = new WorkWorkGroupEstimation();
+        workWorkGroupEstimation.setId(id);
+        return workWorkGroupEstimation;
     }
 }

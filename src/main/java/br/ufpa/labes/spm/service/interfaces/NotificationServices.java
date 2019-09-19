@@ -14,7 +14,7 @@ import br.ufpa.labes.spm.exceptions.UserNotManagerException;
 public interface NotificationServices {
 
 
-	public abstract boolean isAgentInGroup(String agent_id, String group_id)
+	public abstract boolean isAgentInWorkGroup(String agent_id, String WorkGroup_id)
 
 	public abstract boolean isActivityInTasks(String id_activity,
 

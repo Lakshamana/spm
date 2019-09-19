@@ -1,9 +1,9 @@
 package br.ufpa.labes.spm.service;
 
-import br.ufpa.labes.spm.domain.WorkGroupInstSug;
-import br.ufpa.labes.spm.repository.WorkGroupInstSugRepository;
-import br.ufpa.labes.spm.service.dto.WorkGroupInstSugDTO;
-import br.ufpa.labes.spm.service.mapper.WorkGroupInstSugMapper;
+import br.ufpa.labes.spm.domain.WorkWorkGroupInstSug;
+import br.ufpa.labes.spm.repository.WorkWorkGroupInstSugRepository;
+import br.ufpa.labes.spm.service.dto.WorkWorkGroupInstSugDTO;
+import br.ufpa.labes.spm.service.mapper.WorkWorkGroupInstSugMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,79 +18,79 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Service Implementation for managing {@link WorkGroupInstSug}.
+ * Service Implementation for managing {@link WorkWorkGroupInstSug}.
  */
 @Service
 @Transactional
-public class WorkGroupInstSugService {
+public class WorkWorkGroupInstSugService {
 
-    private final Logger log = LoggerFactory.getLogger(WorkGroupInstSugService.class);
+    private final Logger log = LoggerFactory.getLogger(WorkWorkGroupInstSugService.class);
 
-    private final WorkGroupInstSugRepository workGroupInstSugRepository;
+    private final WorkWorkGroupInstSugRepository workWorkGroupInstSugRepository;
 
-    private final WorkGroupInstSugMapper workGroupInstSugMapper;
+    private final WorkWorkGroupInstSugMapper workWorkGroupInstSugMapper;
 
-    public WorkGroupInstSugService(WorkGroupInstSugRepository workGroupInstSugRepository, WorkGroupInstSugMapper workGroupInstSugMapper) {
-        this.workGroupInstSugRepository = workGroupInstSugRepository;
-        this.workGroupInstSugMapper = workGroupInstSugMapper;
+    public WorkWorkGroupInstSugService(WorkWorkGroupInstSugRepository workWorkGroupInstSugRepository, WorkWorkGroupInstSugMapper workWorkGroupInstSugMapper) {
+        this.workWorkGroupInstSugRepository = workWorkGroupInstSugRepository;
+        this.workWorkGroupInstSugMapper = workWorkGroupInstSugMapper;
     }
 
     /**
-     * Save a workGroupInstSug.
+     * Save a workWorkGroupInstSug.
      *
-     * @param workGroupInstSugDTO the entity to save.
+     * @param workWorkGroupInstSugDTO the entity to save.
      * @return the persisted entity.
      */
-    public WorkGroupInstSugDTO save(WorkGroupInstSugDTO workGroupInstSugDTO) {
-        log.debug("Request to save WorkGroupInstSug : {}", workGroupInstSugDTO);
-        WorkGroupInstSug workGroupInstSug = workGroupInstSugMapper.toEntity(workGroupInstSugDTO);
-        workGroupInstSug = workGroupInstSugRepository.save(workGroupInstSug);
-        return workGroupInstSugMapper.toDto(workGroupInstSug);
+    public WorkWorkGroupInstSugDTO save(WorkWorkGroupInstSugDTO workWorkGroupInstSugDTO) {
+        log.debug("Request to save WorkWorkGroupInstSug : {}", workWorkGroupInstSugDTO);
+        WorkWorkGroupInstSug workWorkGroupInstSug = workWorkGroupInstSugMapper.toEntity(workWorkGroupInstSugDTO);
+        workWorkGroupInstSug = workWorkGroupInstSugRepository.save(workWorkGroupInstSug);
+        return workWorkGroupInstSugMapper.toDto(workWorkGroupInstSug);
     }
 
     /**
-     * Get all the workGroupInstSugs.
+     * Get all the workWorkGroupInstSugs.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<WorkGroupInstSugDTO> findAll() {
-        log.debug("Request to get all WorkGroupInstSugs");
-        return workGroupInstSugRepository.findAllWithEagerRelationships().stream()
-            .map(workGroupInstSugMapper::toDto)
+    public List<WorkWorkGroupInstSugDTO> findAll() {
+        log.debug("Request to get all WorkWorkGroupInstSugs");
+        return workWorkGroupInstSugRepository.findAllWithEagerRelationships().stream()
+            .map(workWorkGroupInstSugMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
-     * Get all the workGroupInstSugs with eager load of many-to-many relationships.
+     * Get all the workWorkGroupInstSugs with eager load of many-to-many relationships.
      *
      * @return the list of entities.
      */
-    public Page<WorkGroupInstSugDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return workGroupInstSugRepository.findAllWithEagerRelationships(pageable).map(workGroupInstSugMapper::toDto);
+    public Page<WorkWorkGroupInstSugDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return workWorkGroupInstSugRepository.findAllWithEagerRelationships(pageable).map(workWorkGroupInstSugMapper::toDto);
     }
-    
+
 
     /**
-     * Get one workGroupInstSug by id.
+     * Get one workWorkGroupInstSug by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<WorkGroupInstSugDTO> findOne(Long id) {
-        log.debug("Request to get WorkGroupInstSug : {}", id);
-        return workGroupInstSugRepository.findOneWithEagerRelationships(id)
-            .map(workGroupInstSugMapper::toDto);
+    public Optional<WorkWorkGroupInstSugDTO> findOne(Long id) {
+        log.debug("Request to get WorkWorkGroupInstSug : {}", id);
+        return workWorkGroupInstSugRepository.findOneWithEagerRelationships(id)
+            .map(workWorkGroupInstSugMapper::toDto);
     }
 
     /**
-     * Delete the workGroupInstSug by id.
+     * Delete the workWorkGroupInstSug by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete WorkGroupInstSug : {}", id);
-        workGroupInstSugRepository.deleteById(id);
+        log.debug("Request to delete WorkWorkGroupInstSug : {}", id);
+        workWorkGroupInstSugRepository.deleteById(id);
     }
 }

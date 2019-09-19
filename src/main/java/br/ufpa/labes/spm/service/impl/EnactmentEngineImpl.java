@@ -25,7 +25,7 @@ import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.Plain;
 import br.ufpa.labes.spm.domain.Agent;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.ArtifactCon;
 import br.ufpa.labes.spm.domain.BranchCon;
 import br.ufpa.labes.spm.domain.BranchANDCon;
@@ -44,7 +44,7 @@ import br.ufpa.labes.spm.domain.Automatic;
 import br.ufpa.labes.spm.domain.EnactionDescription;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.ReqAgent;
-import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 import br.ufpa.labes.spm.domain.RequiredResource;
 import br.ufpa.labes.spm.domain.PolCondition;
@@ -1065,15 +1065,15 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 						Collection reqPeople = normal.getTheRequiredPeople();
 						Iterator iter2 = reqPeople.iterator();
 						int reqAgentSize = 0;
-						int reqGroupSize = 0;
+						int reqWorkGroupSize = 0;
 						while (iter2.hasNext()) {
 							RequiredPeople reqP = (RequiredPeople) iter2.next();
 							if (reqP instanceof ReqAgent)
 								reqAgentSize++;
 							else
-								reqGroupSize++;
+								reqWorkGroupSize++;
 						}
-						if (reqAgentSize > 0 || reqGroupSize > 0)
+						if (reqAgentSize > 0 || reqWorkGroupSize > 0)
 							types[n] = "NormalWithAgent"; //$NON-NLS-1$
 						else types[n] = "NormalWithoutAgent"; //$NON-NLS-1$
 						states[n] = normal.getTheEnactionDescription().getState();
@@ -1684,7 +1684,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					}
 				}
 			}
-/*			else{ // is ReqGroup NOT ALLOWED
+/*			else{ // is ReqWorkGroup NOT ALLOWED
 			}
 */		}
 
@@ -1732,10 +1732,10 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				}
 			}
 			else {
-			    ReqGroup reqGroup = (ReqGroup)reqP;
-			    Group group  = reqGroup.getTheGroup();
-			    if(group != null){
-			        Collection agents = group.getTheAgent();
+			    ReqWorkGroup reqWorkGroup = (ReqWorkGroup)reqP;
+			    WorkGroup WorkGroup  = reqWorkGroup.getTheWorkGroup();
+			    if(WorkGroup != null){
+			        Collection agents = WorkGroup.getTheAgents();
 			    	Iterator iter2 = agents.iterator();
 			    	while (iter2.hasNext()) {
 						Agent agent = (Agent) iter2.next();
@@ -1861,10 +1861,10 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					involvedAgents.add(agent);
 			}
 			else{
-			    ReqGroup reqGroup = (ReqGroup)reqP;
-			    Group group  = reqGroup.getTheGroup();
-			    if(group != null){
-			        Collection agents = group.getTheAgent();
+			    ReqWorkGroup reqWorkGroup = (ReqWorkGroup)reqP;
+			    WorkGroup WorkGroup  = reqWorkGroup.getTheWorkGroup();
+			    if(WorkGroup != null){
+			        Collection agents = WorkGroup.getTheAgents();
 			    	Iterator iter2 = agents.iterator();
 			    	while (iter2.hasNext()) {
 						Agent agent = (Agent) iter2.next();

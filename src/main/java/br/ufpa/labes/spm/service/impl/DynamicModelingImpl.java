@@ -13,7 +13,7 @@ import br.ufpa.labes.spm.repository.impl.types.ArtifactTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
 import br.ufpa.labes.spm.repository.interfaces.activities.IDecomposedDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
-import br.ufpa.labes.spm.repository.interfaces.agent.IGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IWorkGroupDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IRoleDAO;
 import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
 import br.ufpa.labes.spm.repository.interfaces.connections.IArtifactConDAO;
@@ -29,7 +29,7 @@ import br.ufpa.labes.spm.repository.interfaces.plainActivities.IInvolvedArtifact
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.INormalDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IParametersDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqAgentDAO;
-import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqWorkGroupDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredResourceDAO;
 import br.ufpa.labes.spm.repository.interfaces.policies.staticPolicies.IPolConditionDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
@@ -40,7 +40,7 @@ import br.ufpa.labes.spm.repository.interfaces.taskagenda.IProcessAgendaDAO;
 import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
 import br.ufpa.labes.spm.repository.interfaces.tools.ISubroutineDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
-import br.ufpa.labes.spm.repository.interfaces.types.IGroupTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IWorkGroupTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
 import br.ufpa.labes.spm.service.dto.WebapseeObjectDTO;
 import br.ufpa.labes.spm.exceptions.DAOException;
@@ -52,7 +52,7 @@ import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.domain.Plain;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.Role;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactCon;
@@ -75,7 +75,7 @@ import br.ufpa.labes.spm.domain.InvolvedArtifacts;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.Parameters;
 import br.ufpa.labes.spm.domain.ReqAgent;
-import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 import br.ufpa.labes.spm.domain.RequiredResource;
 import br.ufpa.labes.spm.domain.PolCondition;
@@ -95,7 +95,7 @@ import br.ufpa.labes.spm.domain.Script;
 import br.ufpa.labes.spm.domain.Subroutine;
 import br.ufpa.labes.spm.domain.ActivityType;
 import br.ufpa.labes.spm.domain.ArtifactType;
-import br.ufpa.labes.spm.domain.GroupType;
+import br.ufpa.labes.spm.domain.WorkGroupType;
 import br.ufpa.labes.spm.domain.ResourceType;
 import br.ufpa.labes.spm.domain.Type;
 import br.ufpa.labes.spm.service.interfaces.DynamicModeling;
@@ -133,13 +133,13 @@ public class DynamicModelingImpl implements DynamicModeling {
 	IBranchConCondToMultipleConDAO bctmcDAO;
 	IJoinDAO joinConDAO;
 	IBranchDAO branchConDAO;
-	IGroupTypeDAO groupTypeDAO;
+	IWorkGroupTypeDAO WorkGroupTypeDAO;
 	IRoleDAO roleDAO;
 	IReqAgentDAO reqAgentDAO;
 	IAgentDAO agentDAO;
 	ITaskDAO taskDAO;
-	IGroupDAO groupDAO;
-	IReqGroupDAO reqGroupDAO;
+	IWorkGroupDAO WorkGroupDAO;
+	IReqWorkGroupDAO reqWorkGroupDAO;
 	IResourceTypeDAO resTypeDAO;
 	IRequiredResourceDAO reqResDAO;
 	IResourceDAO resDAO;
@@ -6927,11 +6927,11 @@ System.out.println("salva :"+pmodel.getPmState());
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#addRequiredGroupType
+	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#addRequiredWorkGroupType
 	 * (java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void addRequiredGroupType(String act_id, String g_type) throws DAOException, ModelingException {
+	public void addRequiredWorkGroupType(String act_id, String g_type) throws DAOException, ModelingException {
 
 		// Checks for the parameters
 
@@ -6951,17 +6951,17 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		Object gType;
 		try {
-			gType = groupTypeDAO.retrieveBySecondaryKey(g_type);
+			gType = WorkGroupTypeDAO.retrieveBySecondaryKey(g_type);
 		} catch (Exception/* DAOException */e) {
-			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccGroupType") + //$NON-NLS-1$
+			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccWorkGroupType") + //$NON-NLS-1$
 					g_type + Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
 		}
 
 		if (gType == null)
 			throw new DAOException(
-					Messages.getString("facades.DynamicModeling.DaoExcGroupType") + g_type + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("facades.DynamicModeling.DaoExcWorkGroupType") + g_type + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		GroupType groupType = (GroupType) gType;
+		WorkGroupType WorkGroupType = (WorkGroupType) gType;
 
 		// End Checks for the parameters
 
@@ -6973,16 +6973,16 @@ System.out.println("salva :"+pmodel.getPmState());
 				|| (!state.equals(Plain.CANCELED) // Rule G6.4
 						&& !state.equals(Plain.FAILED) && !state.equals(Plain.FINISHED))) {
 
-			ReqGroup reqGroup = new ReqGroup();
+			ReqWorkGroup reqWorkGroup = new ReqWorkGroup();
 
-			groupType.getTheReqGroup().add(reqGroup);
-			reqGroup.setTheGroupType(groupType);
-			reqGroup.setTheNormal(actNorm);
-			actNorm.getTheRequiredPeople().add(reqGroup);
+			WorkGroupType.getTheReqWorkGroup().add(reqWorkGroup);
+			reqWorkGroup.setTheWorkGroupType(WorkGroupType);
+			reqWorkGroup.setTheNormal(actNorm);
+			actNorm.getTheRequiredPeople().add(reqWorkGroup);
 
 			// Persistence Operations
 			actDAO.update(actNorm);
-			groupTypeDAO.update(groupType);
+			WorkGroupTypeDAO.update(WorkGroupType);
 		} else {
 			throw new ModelingException(
 					Messages.getString("facades.DynamicModeling.ModelingExcActv") + actNorm.getIdent() + Messages.getString("facades.DynamicModeling.ModelingExcHasAlreadyFinis")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -7406,15 +7406,15 @@ System.out.println("salva :"+pmodel.getPmState());
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#defineRequiredGroup
+	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#defineRequiredWorkGroup
 	 * (java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void defineRequiredGroup(String act_id, String group_id) throws DAOException, WebapseeException {
+	public void defineRequiredWorkGroup(String act_id, String WorkGroup_id) throws DAOException, WebapseeException {
 
 		// Checks for the parameters
 
-		System.out.println(group_id);
+		System.out.println(WorkGroup_id);
 
 		Object act;
 		try {
@@ -7432,17 +7432,17 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		Object gr;
 		try {
-			gr = groupDAO.retrieveBySecondaryKey(group_id);
+			gr = WorkGroupDAO.retrieveBySecondaryKey(WorkGroup_id);
 		} catch (Exception/* DAOException */e) {
-			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccGroup") + //$NON-NLS-1$
-					group_id + Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
+			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccWorkGroup") + //$NON-NLS-1$
+					WorkGroup_id + Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
 		}
 
 		if (gr == null)
 			throw new DAOException(
-					Messages.getString("facades.DynamicModeling.DaoExcGroup") + group_id + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("facades.DynamicModeling.DaoExcWorkGroup") + WorkGroup_id + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		Group group = (Group) gr;
+		WorkGroup WorkGroup = (WorkGroup) gr;
 
 		// End Checks for the parameters
 
@@ -7450,26 +7450,26 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		String state = actNorm.getTheEnactionDescription().getState();
 
-		Collection reqGroups = this.getRequiredGroups(actNorm);
+		Collection reqWorkGroups = this.getRequiredWorkGroups(actNorm);
 
-		// Test for the group and its agents are already allocated to the
+		// Test for the WorkGroup and its agents are already allocated to the
 		// activity.
-		Iterator iterExcp = reqGroups.iterator();
+		Iterator iterExcp = reqWorkGroups.iterator();
 		while (iterExcp.hasNext()) {
-			ReqGroup reqAux = (ReqGroup) iterExcp.next();
-			if (reqAux.getTheGroup() != null) {
-				if (reqAux.getTheGroup().equals(group)) {
-					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheGroup") + group.getIdent() //$NON-NLS-1$
+			ReqWorkGroup reqAux = (ReqWorkGroup) iterExcp.next();
+			if (reqAux.getTheWorkGroup() != null) {
+				if (reqAux.getTheWorkGroup().equals(WorkGroup)) {
+					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheWorkGroup") + WorkGroup.getIdent() //$NON-NLS-1$
 							+ Messages.getString("facades.DynamicModeling.ModelingExcIsAlreAllocToActv") //$NON-NLS-1$
 							+ actNorm.getName());
 				}
 			}
 		}
 
-		Collection agentsGroup = group.getTheAgent();
+		Collection agentsWorkGroup = WorkGroup.getTheAgents();
 		Collection invAgents = this.getInvolvedAgents(actNorm);
 
-		Iterator iterAgents = agentsGroup.iterator();
+		Iterator iterAgents = agentsWorkGroup.iterator();
 		while (iterAgents.hasNext()) {
 			Agent agent = (Agent) iterAgents.next();
 			if (agent != null) {
@@ -7487,19 +7487,19 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 		}
 
-		Iterator iter = reqGroups.iterator();
+		Iterator iter = reqWorkGroups.iterator();
 
 		if (state.equals("")) { //$NON-NLS-1$
 			// Rule G6.17
 			while (iter.hasNext()) {
 
-				ReqGroup reqGroup = (ReqGroup) iter.next();
-				if (reqGroup.getTheGroup() == null) {
-					if (this.isSubType(group.getTheGroupType(), reqGroup.getTheGroupType())) {
-						reqGroup.setTheGroup(group);
-						group.getTheReqGroup().add(reqGroup);
-						actNorm.getTheRequiredPeople().add(reqGroup);
-						reqGroup.setTheNormal(actNorm);
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) iter.next();
+				if (reqWorkGroup.getTheWorkGroup() == null) {
+					if (this.isSubType(WorkGroup.getTheWorkGroupType(), reqWorkGroup.getTheWorkGroupType())) {
+						reqWorkGroup.setTheWorkGroup(WorkGroup);
+						WorkGroup.getTheReqWorkGroup().add(reqWorkGroup);
+						actNorm.getTheRequiredPeople().add(reqWorkGroup);
+						reqWorkGroup.setTheNormal(actNorm);
 
 						// Dynamic Changes related code
 						ProcessModel pmodel = actNorm.getTheProcessModel();
@@ -7507,8 +7507,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						if (processState.equals(Process.ENACTING)) {
 							actNorm.getTheEnactionDescription().setStateWithMessage(Plain.WAITING);
 							this.logging.registerGlobalActivityEvent(actNorm, "ToWaiting", "Rule G6.17"); //$NON-NLS-1$ //$NON-NLS-2$
-							Collection agentsInGroup = reqGroup.getTheGroup().getTheAgent();
-							Iterator iterAg = agentsInGroup.iterator();
+							Collection agentsInWorkGroup = reqWorkGroup.getTheWorkGroup().getTheAgent();
+							Iterator iterAg = agentsInWorkGroup.iterator();
 							while (iterAg.hasNext()) {
 								Agent ag = (Agent) iterAg.next();
 								this.updateAgenda(ag, actNorm, Plain.WAITING, "Rule G6.17"); //$NON-NLS-1$
@@ -7520,24 +7520,24 @@ System.out.println("salva :"+pmodel.getPmState());
 
 						// Persistence Operations
 						actDAO.update(actNorm);
-						groupDAO.update(group);
+						WorkGroupDAO.update(WorkGroup);
 					}
 				}
 			}
 		} else if ((state.equals(Plain.WAITING) || state.equals(Plain.READY))) {
 			// Rule G6.18
 			while (iter.hasNext()) {
-				ReqGroup reqGroup = (ReqGroup) iter.next();
-				if (reqGroup.getTheGroup() == null) {
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) iter.next();
+				if (reqWorkGroup.getTheWorkGroup() == null) {
 
-					if (this.isSubType(group.getTheGroupType(), reqGroup.getTheGroupType())) {
-						reqGroup.setTheGroup(group);
-						group.getTheReqGroup().add(reqGroup);
-						actNorm.getTheRequiredPeople().add(reqGroup);
-						reqGroup.setTheNormal(actNorm);
+					if (this.isSubType(WorkGroup.getTheWorkGroupType(), reqWorkGroup.getTheWorkGroupType())) {
+						reqWorkGroup.setTheWorkGroup(WorkGroup);
+						WorkGroup.getTheReqWorkGroup().add(reqWorkGroup);
+						actNorm.getTheRequiredPeople().add(reqWorkGroup);
+						reqWorkGroup.setTheNormal(actNorm);
 
-						Collection agentsInGroup = reqGroup.getTheGroup().getTheAgent();
-						Iterator iterAg = agentsInGroup.iterator();
+						Collection agentsInWorkGroup = reqWorkGroup.getTheWorkGroup().getTheAgent();
+						Iterator iterAg = agentsInWorkGroup.iterator();
 						while (iterAg.hasNext()) {
 							Agent ag = (Agent) iterAg.next();
 							this.updateAgenda(ag, actNorm, state, "Rule G6.18"); //$NON-NLS-1$
@@ -7551,23 +7551,23 @@ System.out.println("salva :"+pmodel.getPmState());
 
 						// Persistence Operations
 						actDAO.update(actNorm);
-						groupDAO.update(group);
+						WorkGroupDAO.update(WorkGroup);
 					}
 				}
 			}
 		} else if ((state.equals(Plain.ACTIVE) || state.equals(Plain.PAUSED))) {
 			// Rule G6.19
 			while (iter.hasNext()) {
-				ReqGroup reqGroup = (ReqGroup) iter.next();
-				if (reqGroup.getTheGroup() == null) {
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) iter.next();
+				if (reqWorkGroup.getTheWorkGroup() == null) {
 
-					if (this.isSubType(group.getTheGroupType(), reqGroup.getTheGroupType())) {
-						reqGroup.setTheGroup(group);
-						group.getTheReqGroup().add(reqGroup);
-						actNorm.getTheRequiredPeople().add(reqGroup);
-						reqGroup.setTheNormal(actNorm);
-						Collection agentsInGroup = reqGroup.getTheGroup().getTheAgent();
-						Iterator iterAg = agentsInGroup.iterator();
+					if (this.isSubType(WorkGroup.getTheWorkGroupType(), reqWorkGroup.getTheWorkGroupType())) {
+						reqWorkGroup.setTheWorkGroup(WorkGroup);
+						WorkGroup.getTheReqWorkGroup().add(reqWorkGroup);
+						actNorm.getTheRequiredPeople().add(reqWorkGroup);
+						reqWorkGroup.setTheNormal(actNorm);
+						Collection agentsInWorkGroup = reqWorkGroup.getTheWorkGroup().getTheAgent();
+						Iterator iterAg = agentsInWorkGroup.iterator();
 						while (iterAg.hasNext()) {
 							Agent ag = (Agent) iterAg.next();
 							this.updateAgenda(ag, actNorm, Plain.READY, "Rule G6.19"); //$NON-NLS-1$
@@ -7581,7 +7581,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 						// Persistence Operations
 						actDAO.update(actNorm);
-						groupDAO.update(group);
+						WorkGroupDAO.update(WorkGroup);
 					}
 				}
 			}
@@ -7596,11 +7596,11 @@ System.out.println("salva :"+pmodel.getPmState());
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#removeRequiredGroup
+	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#removeRequiredWorkGroup
 	 * (java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void removeRequiredGroup(String act_id, String group_id) throws DAOException, ModelingException {
+	public void removeRequiredWorkGroup(String act_id, String WorkGroup_id) throws DAOException, ModelingException {
 
 		// Checks for the parameters
 		System.out.println(act_id);
@@ -7620,37 +7620,37 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		Object gr;
 		try {
-			gr = groupDAO.retrieveBySecondaryKey(group_id);
+			gr = WorkGroupDAO.retrieveBySecondaryKey(WorkGroup_id);
 		} catch (Exception/* DAOException */e) {
-			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccGroup") + //$NON-NLS-1$
-					group_id + Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
+			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccWorkGroup") + //$NON-NLS-1$
+					WorkGroup_id + Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
 		}
 
 		if (gr == null)
 			throw new DAOException(
-					Messages.getString("facades.DynamicModeling.DaoExcGroup") + group_id + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("facades.DynamicModeling.DaoExcWorkGroup") + WorkGroup_id + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		Group group = (Group) gr;
+		WorkGroup WorkGroup = (WorkGroup) gr;
 
 		// End Checks for the parameters
 
 		// Now we start the implementation of the rules
 
 		String state = actNorm.getTheEnactionDescription().getState();
-		Collection reqAgents = this.getRequiredGroups(actNorm);
+		Collection reqAgents = this.getRequiredWorkGroups(actNorm);
 		Iterator iter = reqAgents.iterator();
 
 		if (state.equals("")) { // Rules G6.32  //$NON-NLS-1$
 			while (iter.hasNext()) {
-				ReqGroup reqGroup = (ReqGroup) iter.next();
-				if (reqGroup.getTheGroup() != null) {
-					if (reqGroup.getTheGroup().equals(group)) {
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) iter.next();
+				if (reqWorkGroup.getTheWorkGroup() != null) {
+					if (reqWorkGroup.getTheWorkGroup().equals(WorkGroup)) {
 
-						reqGroup.removeFromTheGroup();
+						reqWorkGroup.removeFromTheWorkGroup();
 
 						// Persistence Operations
 						actDAO.update(actNorm);
-						groupDAO.update(group);
+						WorkGroupDAO.update(WorkGroup);
 						break;
 					}
 				}
@@ -7658,16 +7658,16 @@ System.out.println("salva :"+pmodel.getPmState());
 		} else if (!(state.equals(Plain.FAILED) || state.equals(Plain.CANCELED) || state.equals(Plain.FINISHED))) { // Rule
 																													// G6.33
 			while (iter.hasNext()) {
-				ReqGroup reqGroup = (ReqGroup) iter.next();
-				if (reqGroup.getTheGroup() != null) {
-					if (reqGroup.getTheGroup().equals(group)) {
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) iter.next();
+				if (reqWorkGroup.getTheWorkGroup() != null) {
+					if (reqWorkGroup.getTheWorkGroup().equals(WorkGroup)) {
 
-						reqGroup.removeFromTheGroup();
+						reqWorkGroup.removeFromTheWorkGroup();
 
 						Collection ids = new HashSet();
 
-						Collection agentsInGroup = group.getTheAgent();
-						Iterator iterAgents = agentsInGroup.iterator();
+						Collection agentsInWorkGroup = WorkGroup.getTheAgents();
+						Iterator iterAgents = agentsInWorkGroup.iterator();
 						while (iterAgents.hasNext()) {
 							Agent agent = (Agent) iterAgents.next();
 							Process process = this.getTheProcess(actNorm.getTheProcessModel());
@@ -7683,12 +7683,12 @@ System.out.println("salva :"+pmodel.getPmState());
 							}
 						}
 
-						this.notifyAgents(actNorm, null, ids, group.getOid(),
-								DynamicModelingImpl.DEL, group.getClass(), group.getIdent(), null); //$NON-NLS-1$
+						this.notifyAgents(actNorm, null, ids, WorkGroup.getOid(),
+								DynamicModelingImpl.DEL, WorkGroup.getClass(), WorkGroup.getIdent(), null); //$NON-NLS-1$
 
 						// Persistence Operations
 						actDAO.update(actNorm);
-						groupDAO.update(group);
+						WorkGroupDAO.update(WorkGroup);
 						break;
 					}
 				}
@@ -7703,10 +7703,10 @@ System.out.println("salva :"+pmodel.getPmState());
 	 * (non-Javadoc)
 	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
-	 * removeRequiredGroupType(java.lang.String, java.lang.String)
+	 * removeRequiredWorkGroupType(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void removeRequiredGroupType(String act_id, String g_type) throws DAOException {
+	public void removeRequiredWorkGroupType(String act_id, String g_type) throws DAOException {
 
 		// Checks for the parameters
 
@@ -7726,60 +7726,60 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		Object gt;
 		try {
-			gt = groupTypeDAO.retrieveBySecondaryKey(g_type);
+			gt = WorkGroupTypeDAO.retrieveBySecondaryKey(g_type);
 		} catch (Exception/* DAOException */e) {
-			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccGroupType") + g_type //$NON-NLS-1$
+			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccWorkGroupType") + g_type //$NON-NLS-1$
 					+ Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
 		}
 
 		if (gt == null)
 			throw new DAOException(
-					Messages.getString("facades.DynamicModeling.DaoExcGroupType") + g_type + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("facades.DynamicModeling.DaoExcWorkGroupType") + g_type + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		GroupType groupType = (GroupType) gt;
+		WorkGroupType WorkGroupType = (WorkGroupType) gt;
 
 		// End Checks for the parameters
 
 		// Now we start the implementation of the rules
 
 		String state = actNorm.getTheEnactionDescription().getState();
-		Collection reqAgents = this.getRequiredGroups(actNorm);
+		Collection reqAgents = this.getRequiredWorkGroups(actNorm);
 		reqAgents.remove(null);
 		Iterator iter = reqAgents.iterator();
 
 		if (state.equals("")) { // Rule G6.24 and G6.26 //$NON-NLS-1$
 			while (iter.hasNext()) {
-				ReqGroup reqGroup = (ReqGroup) iter.next();
-				if (reqGroup.getTheGroupType().equals(groupType)) {
-					actNorm.removeFromTheRequiredPeople(reqGroup);
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) iter.next();
+				if (reqWorkGroup.getTheWorkGroupType().equals(WorkGroupType)) {
+					actNorm.removeFromTheRequiredPeople(reqWorkGroup);
 
-					if (reqGroup.getTheGroup() != null) {
-						reqGroup.getTheGroup().removeFromTheReqGroup(reqGroup);
+					if (reqWorkGroup.getTheWorkGroup() != null) {
+						reqWorkGroup.getTheWorkGroup().removeFromTheReqWorkGroup(reqWorkGroup);
 					}
 
-					groupType.removeFromTheReqGroup(reqGroup);
+					WorkGroupType.removeFromTheReqWorkGroup(reqWorkGroup);
 
 					// Persistence Operations
 					actDAO.update(actNorm);
-					groupTypeDAO.update(groupType);
+					WorkGroupTypeDAO.update(WorkGroupType);
 
-					reqGroupDAO.daoDelete(reqGroup);
+					reqWorkGroupDAO.daoDelete(reqWorkGroup);
 					break;
 				}
 			}
 		} else {
 			while (iter.hasNext()) { // Rule G6.25 and G6.27
-				ReqGroup reqGroup = (ReqGroup) iter.next();
-				if (reqGroup.getTheGroup() == null && reqGroup.getTheGroupType().equals(groupType)) {
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) iter.next();
+				if (reqWorkGroup.getTheWorkGroup() == null && reqWorkGroup.getTheWorkGroupType().equals(WorkGroupType)) {
 
-					actNorm.removeFromTheRequiredPeople(reqGroup);
-					groupType.removeFromTheReqGroup(reqGroup);
+					actNorm.removeFromTheRequiredPeople(reqWorkGroup);
+					WorkGroupType.removeFromTheReqWorkGroup(reqWorkGroup);
 
 					// Persistence Operations
 					actDAO.update(actNorm);
-					groupTypeDAO.update(groupType);
+					WorkGroupTypeDAO.update(WorkGroupType);
 
-					reqGroupDAO.daoDelete(reqGroup);
+					reqWorkGroupDAO.daoDelete(reqWorkGroup);
 					break;
 				}
 			}
@@ -7831,19 +7831,19 @@ System.out.println("salva :"+pmodel.getPmState());
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#newGroup(java
+	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#newWorkGroup(java
 	 * .lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Integer newGroup(String group_id, String groupType_id, String normal_id) throws WebapseeException, ModelingException {// retorna
+	public Integer newWorkGroup(String WorkGroup_id, String WorkGroupType_id, String normal_id) throws WebapseeException, ModelingException {// retorna
 																																	// Oid
-																																	// ReqGroup
+																																	// ReqWorkGroup
 
-		this.addRequiredGroupType(normal_id, groupType_id);
+		this.addRequiredWorkGroupType(normal_id, WorkGroupType_id);
 		try {
-			this.defineRequiredGroup(normal_id, group_id);
+			this.defineRequiredWorkGroup(normal_id, WorkGroup_id);
 		} catch (WebapseeException e) {
-			this.removeRequiredGroupType(normal_id, groupType_id);
+			this.removeRequiredWorkGroupType(normal_id, WorkGroupType_id);
 			throw e;
 		}
 
@@ -7852,11 +7852,11 @@ System.out.println("salva :"+pmodel.getPmState());
 		Iterator iter = reqPeople.iterator();
 		while (iter.hasNext()) {
 			RequiredPeople reqP = (RequiredPeople) iter.next();
-			if (reqP instanceof ReqGroup) {
-				ReqGroup reqGroup = (ReqGroup) reqP;
-				if (reqGroup.getTheGroup() != null) {
-					if (reqGroup.getTheGroup().getIdent().equals(group_id)) {
-						return reqGroup.getOid();
+			if (reqP instanceof ReqWorkGroup) {
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) reqP;
+				if (reqWorkGroup.getTheWorkGroup() != null) {
+					if (reqWorkGroup.getTheWorkGroup().getIdent().equals(WorkGroup_id)) {
+						return reqWorkGroup.getOid();
 					}
 				}
 			}
@@ -7917,13 +7917,13 @@ System.out.println("salva :"+pmodel.getPmState());
 	 * (non-Javadoc)
 	 *
 	 * @see org.qrconsult.spm.services.impl.DynamicModelingExtraida#
-	 * removeCompleteRequiredGroup(java.lang.String, java.lang.String,
+	 * removeCompleteRequiredWorkGroup(java.lang.String, java.lang.String,
 	 * java.lang.String)
 	 */
 	@Override
-	public void removeCompleteRequiredGroup(String normal_id, String group_id, String groupType_id) throws DAOException, ModelingException {
-		this.removeRequiredGroup(normal_id, group_id);
-		this.removeRequiredGroupType(normal_id, groupType_id);
+	public void removeCompleteRequiredWorkGroup(String normal_id, String WorkGroup_id, String WorkGroupType_id) throws DAOException, ModelingException {
+		this.removeRequiredWorkGroup(normal_id, WorkGroup_id);
+		this.removeRequiredWorkGroupType(normal_id, WorkGroupType_id);
 	}
 
 	/*
@@ -8749,18 +8749,18 @@ System.out.println("salva :"+pmodel.getPmState());
 	}
 
 	/**
-	 * Add and Remove agents from group.
+	 * Add and Remove agents from WorkGroup.
 	 */
 
 	/*
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#addAgentToGroup
+	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#addAgentToWorkGroup
 	 * (java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void addAgentToGroup(String agentId, String groupId) throws WebapseeException {
+	public void addAgentToWorkGroup(String agentId, String WorkGroupId) throws WebapseeException {
 
 		// Checks for the parameters
 
@@ -8780,28 +8780,28 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		Object gr;
 		try {
-			gr = groupDAO.retrieveBySecondaryKey(groupId);
+			gr = WorkGroupDAO.retrieveBySecondaryKey(WorkGroupId);
 		} catch (Exception/* DAOException */e) {
-			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccGroup") + //$NON-NLS-1$
-					groupId + Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
+			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccWorkGroup") + //$NON-NLS-1$
+					WorkGroupId + Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
 		}
 
 		if (gr == null)
 			throw new DAOException(
-					Messages.getString("facades.DynamicModeling.DaoExcGroup") + groupId + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("facades.DynamicModeling.DaoExcWorkGroup") + WorkGroupId + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		Group group = (Group) gr;
+		WorkGroup WorkGroup = (WorkGroup) gr;
 
 		// End Checks for the parameters
 
 		// Now we start the implementation of the rules
 
 		Collection processModels = new HashSet();
-		Collection reqGroups = group.getTheReqGroup();
-		Iterator iterReqGroups = reqGroups.iterator();
-		while (iterReqGroups.hasNext()) {
-			ReqGroup reqGroup = (ReqGroup) iterReqGroups.next();
-			Normal actNorm = reqGroup.getTheNormal();
+		Collection reqWorkGroups = WorkGroup.getTheReqWorkGroup();
+		Iterator iterReqWorkGroups = reqWorkGroups.iterator();
+		while (iterReqWorkGroups.hasNext()) {
+			ReqWorkGroup reqWorkGroup = (ReqWorkGroup) iterReqWorkGroups.next();
+			Normal actNorm = reqWorkGroup.getTheNormal();
 
 			if (actNorm != null) {
 				Collection invAgents = this.getInvolvedAgents(actNorm);
@@ -8827,8 +8827,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						String procState = process.getPState();
 						if (procState.equals(Process.ENACTING)) {
 							actNorm.getTheEnactionDescription().setStateWithMessage(Plain.WAITING);
-							this.logging.registerGlobalActivityEvent(actNorm, "ToWaiting", "Rule Adding Agent to a Group"); //$NON-NLS-1$ //$NON-NLS-2$
-							this.updateAgenda(agent, actNorm, Plain.WAITING, "Rule Adding Agent to a Group"); //$NON-NLS-1$
+							this.logging.registerGlobalActivityEvent(actNorm, "ToWaiting", "Rule Adding Agent to a WorkGroup"); //$NON-NLS-1$ //$NON-NLS-2$
+							this.updateAgenda(agent, actNorm, Plain.WAITING, "Rule Adding Agent to a WorkGroup"); //$NON-NLS-1$
 
 							Collection ids = new HashSet();
 							ids.add(agent.getIdent());
@@ -8842,7 +8842,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					} else if (!state.equals(Plain.FAILED) && !state.equals(Plain.FINISHED) && !state.equals(Plain.CANCELED)) {
 
 						// Dynamic Changes related code
-						this.updateAgenda(agent, actNorm, state, "Rule Adding Agent to a Group"); //$NON-NLS-1$
+						this.updateAgenda(agent, actNorm, state, "Rule Adding Agent to a WorkGroup"); //$NON-NLS-1$
 
 						Collection ids = new HashSet();
 						ids.add(agent.getIdent());
@@ -8856,19 +8856,19 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 		}
 		// Establishing the relationship
-		group.insertIntoTheAgent(agent);
+		WorkGroup.insertIntoTheAgent(agent);
 
 		Iterator iterPMs = processModels.iterator();
 		while (iterPMs.hasNext()) {
 			ProcessModel procModel = (ProcessModel) iterPMs.next();
-			this.enactmentEngine.searchForFiredConnections(procModel.getOid(), "Rule Adding Agent to a Group"); //$NON-NLS-1$
+			this.enactmentEngine.searchForFiredConnections(procModel.getOid(), "Rule Adding Agent to a WorkGroup"); //$NON-NLS-1$
 			this.enactmentEngine.searchForReadyActivities(procModel.getOid());
 			this.enactmentEngine.determineProcessModelStates(procModel);
 
 		}
 
 		// Persistence Operations
-		groupDAO.update(group);
+		WorkGroupDAO.update(WorkGroup);
 		agentDAO.update(agent);
 	}
 
@@ -8876,11 +8876,11 @@ System.out.println("salva :"+pmodel.getPmState());
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#removeAgentFromGroup
+	 * org.qrconsult.spm.services.impl.DynamicModelingExtraida#removeAgentFromWorkGroup
 	 * (java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void removeAgentFromGroup(String agentId, String groupId) throws WebapseeException {
+	public void removeAgentFromWorkGroup(String agentId, String WorkGroupId) throws WebapseeException {
 
 		// Checks for the parameters
 
@@ -8900,27 +8900,27 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		Object gr;
 		try {
-			gr = groupDAO.retrieveBySecondaryKey(groupId);
+			gr = WorkGroupDAO.retrieveBySecondaryKey(WorkGroupId);
 		} catch (Exception/* DAOException */e) {
-			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccGroup") + //$NON-NLS-1$
-					groupId + Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
+			throw new DAOException(Messages.getString("facades.DynamicModeling.DaoExcDatabaseAccWorkGroup") + //$NON-NLS-1$
+					WorkGroupId + Messages.getString("facades.DynamicModeling.DaoExcFailed") + e); //$NON-NLS-1$
 		}
 
 		if (gr == null)
 			throw new DAOException(
-					Messages.getString("facades.DynamicModeling.DaoExcGroup") + groupId + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("facades.DynamicModeling.DaoExcWorkGroup") + WorkGroupId + Messages.getString("facades.DynamicModeling.DaoExcNotFound")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		Group group = (Group) gr;
+		WorkGroup WorkGroup = (WorkGroup) gr;
 
 		// End Checks for the parameters
 
 		// Now we start the implementation of the rules
 
-		Collection reqGroups = group.getTheReqGroup();
-		Iterator iterReqGroups = reqGroups.iterator();
-		while (iterReqGroups.hasNext()) {
-			ReqGroup reqGroup = (ReqGroup) iterReqGroups.next();
-			Normal actNorm = reqGroup.getTheNormal();
+		Collection reqWorkGroups = WorkGroup.getTheReqWorkGroup();
+		Iterator iterReqWorkGroups = reqWorkGroups.iterator();
+		while (iterReqWorkGroups.hasNext()) {
+			ReqWorkGroup reqWorkGroup = (ReqWorkGroup) iterReqWorkGroups.next();
+			Normal actNorm = reqWorkGroup.getTheNormal();
 
 			if (actNorm != null) {
 				Collection invAgents = this.getInvolvedAgents(actNorm);
@@ -8965,14 +8965,14 @@ System.out.println("salva :"+pmodel.getPmState());
 					}
 				}
 				// Establishing the relationship
-				group.removeFromTheAgent(agent);
+				WorkGroup.removeFromTheAgent(agent);
 			}
 		}
 		// Establishing the relationship
-		group.removeFromTheAgent(agent);
+		WorkGroup.removeFromTheAgent(agent);
 
 		// Persistence Operations
-		groupDAO.update(group);
+		WorkGroupDAO.update(WorkGroup);
 		agentDAO.update(agent);
 	}
 
@@ -8980,25 +8980,25 @@ System.out.println("salva :"+pmodel.getPmState());
 	 * |***Auxiliar Methods***|*
 	 **************************************************************************/
 
-	private Group cloneGroup(Group source, String newGroupId) {
+	private WorkGroup cloneWorkGroup(WorkGroup source, String newWorkGroupId) {
 
 		if (source == null)
 			return null;
 
 		source.setIsActive(false);
 
-		Group destiny = new Group();
-		destiny.setIdent(newGroupId);
-		destiny.setName(newGroupId);
+		WorkGroup destiny = new WorkGroup();
+		destiny.setIdent(newWorkGroupId);
+		destiny.setName(newWorkGroupId);
 		destiny.setDescription(source.getDescription());
 		destiny.setIsActive(true);
 
-		// destiny.setSubGroups(null);
-		// destiny.setSuperGroup(null);
+		// destiny.setSubWorkGroups(null);
+		// destiny.setSuperWorkGroup(null);
 
 		destiny.setTheAgent(null);
-		destiny.setTheGroupType(source.getTheGroupType());
-		// destiny.setTheReqGroup(theReqGroup);
+		destiny.setTheWorkGroupType(source.getTheWorkGroupType());
+		// destiny.setTheReqWorkGroup(theReqWorkGroup);
 
 		return destiny;
 	}
@@ -9060,11 +9060,11 @@ System.out.println("salva :"+pmodel.getPmState());
 				Agent agent = reqAgent.getTheAgent();
 				if (agent != null)
 					involvedAgents.add(agent);
-			} else { // ReqGroup
-				ReqGroup reqGroup = (ReqGroup) reqP;
-				Group group = reqGroup.getTheGroup();
-				if (group != null) {
-					Collection agents = group.getTheAgent();
+			} else { // ReqWorkGroup
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) reqP;
+				WorkGroup WorkGroup = reqWorkGroup.getTheWorkGroup();
+				if (WorkGroup != null) {
+					Collection agents = WorkGroup.getTheAgents();
 					agents.remove(null);
 					if (!agents.isEmpty()) {
 						involvedAgents.addAll(agents);
@@ -9094,21 +9094,21 @@ System.out.println("salva :"+pmodel.getPmState());
 	}
 
 	/**
-	 * Returns all the RequiredGroups allocated to a Normal Activity.
+	 * Returns all the RequiredWorkGroups allocated to a Normal Activity.
 	 */
-	private Collection getRequiredGroups(Normal normal) {
+	private Collection getRequiredWorkGroups(Normal normal) {
 
-		Collection requiredGroups = new HashSet();
+		Collection requiredWorkGroups = new HashSet();
 		Collection reqPeople = normal.getTheRequiredPeople();
 		Iterator iter = reqPeople.iterator();
 		while (iter.hasNext()) {
 			RequiredPeople reqP = (RequiredPeople) iter.next();
-			if (reqP instanceof ReqGroup) {
-				ReqGroup reqGroup = (ReqGroup) reqP;
-				requiredGroups.add(reqGroup);
+			if (reqP instanceof ReqWorkGroup) {
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) reqP;
+				requiredWorkGroups.add(reqWorkGroup);
 			}
 		}
-		return requiredGroups;
+		return requiredWorkGroups;
 	}
 
 	/**
@@ -9128,9 +9128,9 @@ System.out.println("salva :"+pmodel.getPmState());
 					has = true;
 					break;
 				}
-			} else { // ReqGroup
-				ReqGroup reqGroup = (ReqGroup) reqP;
-				Collection agents = reqGroup.getTheGroup().getTheAgent();
+			} else { // ReqWorkGroup
+				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) reqP;
+				Collection agents = reqWorkGroup.getTheWorkGroup().getTheAgent();
 				agents.remove(null);
 				if (!agents.isEmpty()) {
 					has = true;
@@ -9207,7 +9207,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (this.remote == null) {
 				}
 				if (this.remote != null) {
-					this.remote.sendMessageToGroup(message, ids);
+					this.remote.sendMessageToWorkGroup(message, ids);
 				}
 
 				// TODO Auto-generated catch block
@@ -9231,7 +9231,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 
 			String actId = "";
-			if (classe.equals(Artifact.class) || classe.equals(Agent.class) || classe.equals(Group.class) || classe.equals(Consumable.class)
+			if (classe.equals(Artifact.class) || classe.equals(Agent.class) || classe.equals(WorkGroup.class) || classe.equals(Consumable.class)
 					|| classe.equals(Exclusive.class) || classe.equals(Shareable.class)) {
 				actId = "<ACTIVITY>" + actNorm.getIdent() + "</ACTIVITY>";
 			}
@@ -9249,7 +9249,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (this.remote == null) {
 				}
 				if (this.remote != null) {
-					this.remote.sendMessageToGroup(message, ids);
+					this.remote.sendMessageToWorkGroup(message, ids);
 				}
 
 				// TODO Auto-generated catch block
@@ -10336,11 +10336,11 @@ System.out.println("salva :"+pmodel.getPmState());
 		return has;
 	}
 
-	private boolean isSubType(Type subResType, GroupType groupType) {
-		if (subResType.equals(groupType))
+	private boolean isSubType(Type subResType, WorkGroupType WorkGroupType) {
+		if (subResType.equals(WorkGroupType))
 			return true;
 		if (subResType.getSuperType() != null) {
-			return this.isSubType(subResType.getSuperType(), groupType);
+			return this.isSubType(subResType.getSuperType(), WorkGroupType);
 		} else
 			return false;
 	}

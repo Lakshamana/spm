@@ -1,9 +1,9 @@
 package br.ufpa.labes.spm.service;
 
-import br.ufpa.labes.spm.domain.WorkGroupMetric;
-import br.ufpa.labes.spm.repository.WorkGroupMetricRepository;
-import br.ufpa.labes.spm.service.dto.WorkGroupMetricDTO;
-import br.ufpa.labes.spm.service.mapper.WorkGroupMetricMapper;
+import br.ufpa.labes.spm.domain.WorkWorkGroupMetric;
+import br.ufpa.labes.spm.repository.WorkWorkGroupMetricRepository;
+import br.ufpa.labes.spm.service.dto.WorkWorkGroupMetricDTO;
+import br.ufpa.labes.spm.service.mapper.WorkWorkGroupMetricMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,70 +16,70 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Service Implementation for managing {@link WorkGroupMetric}.
+ * Service Implementation for managing {@link WorkWorkGroupMetric}.
  */
 @Service
 @Transactional
-public class WorkGroupMetricService {
+public class WorkWorkGroupMetricService {
 
-    private final Logger log = LoggerFactory.getLogger(WorkGroupMetricService.class);
+    private final Logger log = LoggerFactory.getLogger(WorkWorkGroupMetricService.class);
 
-    private final WorkGroupMetricRepository workGroupMetricRepository;
+    private final WorkWorkGroupMetricRepository workWorkGroupMetricRepository;
 
-    private final WorkGroupMetricMapper workGroupMetricMapper;
+    private final WorkWorkGroupMetricMapper workWorkGroupMetricMapper;
 
-    public WorkGroupMetricService(WorkGroupMetricRepository workGroupMetricRepository, WorkGroupMetricMapper workGroupMetricMapper) {
-        this.workGroupMetricRepository = workGroupMetricRepository;
-        this.workGroupMetricMapper = workGroupMetricMapper;
+    public WorkWorkGroupMetricService(WorkWorkGroupMetricRepository workWorkGroupMetricRepository, WorkWorkGroupMetricMapper workWorkGroupMetricMapper) {
+        this.workWorkGroupMetricRepository = workWorkGroupMetricRepository;
+        this.workWorkGroupMetricMapper = workWorkGroupMetricMapper;
     }
 
     /**
-     * Save a workGroupMetric.
+     * Save a workWorkGroupMetric.
      *
-     * @param workGroupMetricDTO the entity to save.
+     * @param workWorkGroupMetricDTO the entity to save.
      * @return the persisted entity.
      */
-    public WorkGroupMetricDTO save(WorkGroupMetricDTO workGroupMetricDTO) {
-        log.debug("Request to save WorkGroupMetric : {}", workGroupMetricDTO);
-        WorkGroupMetric workGroupMetric = workGroupMetricMapper.toEntity(workGroupMetricDTO);
-        workGroupMetric = workGroupMetricRepository.save(workGroupMetric);
-        return workGroupMetricMapper.toDto(workGroupMetric);
+    public WorkWorkGroupMetricDTO save(WorkWorkGroupMetricDTO workWorkGroupMetricDTO) {
+        log.debug("Request to save WorkWorkGroupMetric : {}", workWorkGroupMetricDTO);
+        WorkWorkGroupMetric workWorkGroupMetric = workWorkGroupMetricMapper.toEntity(workWorkGroupMetricDTO);
+        workWorkGroupMetric = workWorkGroupMetricRepository.save(workWorkGroupMetric);
+        return workWorkGroupMetricMapper.toDto(workWorkGroupMetric);
     }
 
     /**
-     * Get all the workGroupMetrics.
+     * Get all the workWorkGroupMetrics.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<WorkGroupMetricDTO> findAll() {
-        log.debug("Request to get all WorkGroupMetrics");
-        return workGroupMetricRepository.findAll().stream()
-            .map(workGroupMetricMapper::toDto)
+    public List<WorkWorkGroupMetricDTO> findAll() {
+        log.debug("Request to get all WorkWorkGroupMetrics");
+        return workWorkGroupMetricRepository.findAll().stream()
+            .map(workWorkGroupMetricMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
     /**
-     * Get one workGroupMetric by id.
+     * Get one workWorkGroupMetric by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<WorkGroupMetricDTO> findOne(Long id) {
-        log.debug("Request to get WorkGroupMetric : {}", id);
-        return workGroupMetricRepository.findById(id)
-            .map(workGroupMetricMapper::toDto);
+    public Optional<WorkWorkGroupMetricDTO> findOne(Long id) {
+        log.debug("Request to get WorkWorkGroupMetric : {}", id);
+        return workWorkGroupMetricRepository.findById(id)
+            .map(workWorkGroupMetricMapper::toDto);
     }
 
     /**
-     * Delete the workGroupMetric by id.
+     * Delete the workWorkGroupMetric by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete WorkGroupMetric : {}", id);
-        workGroupMetricRepository.deleteById(id);
+        log.debug("Request to delete WorkWorkGroupMetric : {}", id);
+        workWorkGroupMetricRepository.deleteById(id);
     }
 }

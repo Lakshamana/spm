@@ -342,7 +342,7 @@ public interface DynamicModeling {
 	/**
 	 * Rules G6.3 and G6.4 The Activity in Parameters must be a Normal activity!
 	 */
-	public void addRequiredGroupType(String act_id, String g_type)
+	public void addRequiredWorkGroupType(String act_id, String g_type)
 			throws DAOException, ModelingException;
 
 	/**
@@ -372,21 +372,21 @@ public interface DynamicModeling {
 	 * applicable. WARNING: This Method contains Dynamic Changes related code!
 	 * The Activity in Parameters must be a Normal activity!
 	 */
-	public void defineRequiredGroup(String act_id, String group_id)
+	public void defineRequiredWorkGroup(String act_id, String WorkGroup_id)
 			throws DAOException, WebapseeException;
 
 	/**
 	 * Rules G6.32 and G6.33 The Activity in Parameters must be a Normal
 	 * activity!
 	 */
-	public void removeRequiredGroup(String act_id, String group_id)
+	public void removeRequiredWorkGroup(String act_id, String WorkGroup_id)
 			throws DAOException, ModelingException;
 
 	/**
 	 * Rules G6.24, G6.25, G6.26 and G6.27 Rules G6.28 and G6.29 are not
 	 * applicable! The Activity in Parameters must be a Normal activity!
 	 */
-	public void removeRequiredGroupType(String act_id, String g_type)
+	public void removeRequiredWorkGroupType(String act_id, String g_type)
 			throws DAOException;
 
 	/***************************************************************************
@@ -396,7 +396,7 @@ public interface DynamicModeling {
 	public Integer newAgent(String agent_id, String role_id,
 			String normal_id) throws WebapseeException;
 
-	public Integer newGroup(String group_id, String groupType_id,
+	public Integer newWorkGroup(String WorkGroup_id, String WorkGroupType_id,
 			String normal_id) throws WebapseeException, ModelingException;
 
 	public Integer newResource(String resource_id,
@@ -407,8 +407,8 @@ public interface DynamicModeling {
 			String agent_id, String role_id) throws DAOException,
 			ModelingException;
 
-	public void removeCompleteRequiredGroup(String normal_id,
-			String group_id, String groupType_id) throws DAOException,
+	public void removeCompleteRequiredWorkGroup(String normal_id,
+			String WorkGroup_id, String WorkGroupType_id) throws DAOException,
 			ModelingException;
 
 	public void removeCompleteRequiredResource(String normal_id,
@@ -455,15 +455,15 @@ public interface DynamicModeling {
 			ModelingException;
 
 	/**
-	 * Rule Adding Agent to a Group
+	 * Rule Adding Agent to a WorkGroup
 	 */
-	public void addAgentToGroup(String agentId, String groupId)
+	public void addAgentToWorkGroup(String agentId, String WorkGroupId)
 			throws WebapseeException;
 
 	/**
-	 * Rule Removing Agent to a Group
+	 * Rule Removing Agent to a WorkGroup
 	 */
-	public void removeAgentFromGroup(String agentId, String groupId)
+	public void removeAgentFromWorkGroup(String agentId, String WorkGroupId)
 			throws WebapseeException;
 
 

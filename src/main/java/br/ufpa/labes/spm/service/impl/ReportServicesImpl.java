@@ -11,7 +11,7 @@ import br.ufpa.labes.spm.service.dto.ActivitiesByAgentReportItem;
 import br.ufpa.labes.spm.service.dto.ActivitiesByProcessReportItem;
 import br.ufpa.labes.spm.service.dto.AgentItemBean;
 import br.ufpa.labes.spm.service.dto.AgentMetricsReportItem;
-import br.ufpa.labes.spm.service.dto.AgentsByGroupReportItem;
+import br.ufpa.labes.spm.service.dto.AgentsByWorkGroupReportItem;
 import br.ufpa.labes.spm.service.dto.AgentsByRoleReportItem;
 import br.ufpa.labes.spm.service.dto.AgentsReportItem;
 import br.ufpa.labes.spm.service.dto.ArtifactMetricsReportItem;
@@ -133,18 +133,18 @@ public class ReportServicesImpl implements ReportServices {
 	}
 
 	@Override
-	public List<AgentsByGroupReportItem> generateAgentsByGroupReport() {
-		List<Object[]> data = reportDAO.getAgentsByGroupReportData();
+	public List<AgentsByWorkGroupReportItem> generateAgentsByWorkGroupReport() {
+		List<Object[]> data = reportDAO.getAgentsByWorkGroupReportData();
 
 		if ( data.size() == 0 )
-			return new ArrayList<AgentsByGroupReportItem>();
+			return new ArrayList<AgentsByWorkGroupReportItem>();
 
-		List<AgentsByGroupReportItem> beansList = new ArrayList<AgentsByGroupReportItem>();
+		List<AgentsByWorkGroupReportItem> beansList = new ArrayList<AgentsByWorkGroupReportItem>();
 
 		for ( Object[] entry : data ) {
-			AgentsByGroupReportItem item = new AgentsByGroupReportItem();
+			AgentsByWorkGroupReportItem item = new AgentsByWorkGroupReportItem();
 
-			item.setGroupName( (String)entry[ 0 ] );
+			item.setWorkGroupName( (String)entry[ 0 ] );
 			item.setAgentName( (String)entry[ 1 ] );
 
 			beansList.add( item );

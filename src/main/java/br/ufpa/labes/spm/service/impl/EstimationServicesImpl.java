@@ -18,7 +18,7 @@ import br.ufpa.labes.spm.service.dto.EstimationDTO;
 import br.ufpa.labes.spm.service.dto.MetricDTO;
 import br.ufpa.labes.spm.service.dto.MetricDefinitionDTO;
 import br.ufpa.labes.spm.domain.Ability;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.Role;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.Connection;
@@ -267,8 +267,8 @@ public class EstimationServicesImpl implements EstimationServices{
 					//Event abi = (Event) object;
 					//String typeIdent = abi.getIdent();
 					//strinList.add(typeIdent);
-				}else if (object instanceof Group){
-					Group abi = (Group) object;
+				}else if (object instanceof WorkGroup){
+					WorkGroup abi = (WorkGroup) object;
 					String typeIdent = abi.getName();
 					strinList.add(typeIdent);
 				}else if (object instanceof Resource){

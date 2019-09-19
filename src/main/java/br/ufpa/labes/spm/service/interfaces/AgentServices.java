@@ -10,7 +10,7 @@ import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.AgentHasAbilityDTO;
 import br.ufpa.labes.spm.service.dto.AgentsDTO;
 import br.ufpa.labes.spm.service.dto.ConfigurationDTO;
-import br.ufpa.labes.spm.service.dto.GroupDTO;
+import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
 import br.ufpa.labes.spm.service.dto.RoleDTO;
 import br.ufpa.labes.spm.domain.Agent;
 
@@ -32,7 +32,7 @@ public interface AgentServices {
 
 	public List<AgentDTO> getAfinityToAgent();
 
-	public List<GroupDTO> getGroupToAgent();
+	public List<WorkGroupDTO> getWorkGroupToAgent();
 
 	public AgentDTO saveCargoToAgent(AgentDTO agentDTO);
 
@@ -46,7 +46,7 @@ public interface AgentServices {
 
 	public AgentAffinityAgentDTO getAffinityAgent(String toAffinity, String fromAffinity);
 
-	public AgentDTO saveGroupToAgent(AgentDTO agentDTO);
+	public AgentDTO saveWorkGroupToAgent(AgentDTO agentDTO);
 
 	public AgentsDTO getAgents();
 
@@ -62,7 +62,7 @@ public interface AgentServices {
 
 	public Boolean removeAfinityAgent(AgentDTO agentDTO, String affinityName);
 
-	public Boolean removeGroupAgent(AgentDTO agentDTO, String groupName);
+	public Boolean removeWorkGroupAgent(AgentDTO agentDTO, String WorkGroupName);
 
 	public List<TaskDTO> getAgentTasks(String agentIdent, String processIdent);
 

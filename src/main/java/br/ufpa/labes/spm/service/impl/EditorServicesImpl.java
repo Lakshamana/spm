@@ -20,7 +20,7 @@ import br.ufpa.labes.spm.domain.MultipleCon;
 import br.ufpa.labes.spm.domain.Sequence;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.ReqAgent;
-import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 import br.ufpa.labes.spm.domain.RequiredResource;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
@@ -285,10 +285,10 @@ public class EditorServicesImpl implements EditorServices {
 						// // COMO GARANTIR QUE UM REQAGENT EH REUTILIZADO?? NA
 						// HORA DO DESENHO PELA POSICAO
 
-					} else if (requiredPeople instanceof ReqGroup) {
-						ReqGroup reqGroup = (ReqGroup) requiredPeople;
+					} else if (requiredPeople instanceof ReqWorkGroup) {
+						ReqWorkGroup reqWorkGroup = (ReqWorkGroup) requiredPeople;
 						try {
-							webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(reqGroup.getOid(), reqGroup.getClass().getSimpleName());
+							webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(reqWorkGroup.getOid(), reqWorkGroup.getClass().getSimpleName());
 						} catch (DAOException e) {
 							webAPSEEObject= null;
 							e.printStackTrace();
@@ -296,15 +296,15 @@ public class EditorServicesImpl implements EditorServices {
 						if (webAPSEEObject != null) {
 							reqPGP = webAPSEEObject.getTheGraphicCoordinate();
 						}
-						// //////REQGROUP
-						reqPeopleBuffer.append("<REQGROUP>");
-						if (reqGroup.getTheGroup() != null)
-							reqPeopleBuffer.append("<GROUP>").append(reqGroup.getTheGroup().getIdent()).append("</GROUP>");
-						if (reqGroup.getTheGroupType() != null)
-							reqPeopleBuffer.append("<TYPE>").append(reqGroup.getTheGroupType().getIdent()).append("</TYPE>");
+						// //////REQWorkGroup
+						reqPeopleBuffer.append("<REQWorkGroup>");
+						if (reqWorkGroup.getTheWorkGroup() != null)
+							reqPeopleBuffer.append("<WorkGroup>").append(reqWorkGroup.getTheWorkGroup().getIdent()).append("</WorkGroup>");
+						if (reqWorkGroup.getTheWorkGroupType() != null)
+							reqPeopleBuffer.append("<TYPE>").append(reqWorkGroup.getTheWorkGroupType().getIdent()).append("</TYPE>");
 						reqPeopleBuffer.append("<NORMAL>").append(normal.getIdent()).append("</NORMAL>");
 						reqPeopleBuffer.append(getPositionContent(reqPGP));
-						reqPeopleBuffer.append("</REQGROUP>");
+						reqPeopleBuffer.append("</REQWorkGroup>");
 					}
 				}
 

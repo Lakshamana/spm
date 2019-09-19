@@ -24,7 +24,7 @@ import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.AgentAffinityAgent;
 import br.ufpa.labes.spm.domain.AgentHasAbility;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.Role;
 import br.ufpa.labes.spm.domain.RoleNeedsAbility;
 import br.ufpa.labes.spm.domain.RoleType;

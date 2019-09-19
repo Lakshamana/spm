@@ -7,7 +7,7 @@ import javax.ejb.Remote;
 
 import br.ufpa.labes.spm.service.dto.ActivitiesByAgentReportItem;
 import br.ufpa.labes.spm.service.dto.AgentMetricsReportItem;
-import br.ufpa.labes.spm.service.dto.AgentsByGroupReportItem;
+import br.ufpa.labes.spm.service.dto.AgentsByWorkGroupReportItem;
 import br.ufpa.labes.spm.service.dto.AgentsByRoleReportItem;
 import br.ufpa.labes.spm.service.dto.AgentsReportItem;
 import br.ufpa.labes.spm.service.dto.ArtifactMetricsReportItem;
@@ -29,7 +29,7 @@ public interface ReportServices {
 	List<AgentsReportItem> generateAgentReport(Date date);
 	List<Object> generateActivitiesByProcessReport(String processIdent);
 	List<AgentsByRoleReportItem> generateAgentsByRoleReport();
-	List<AgentsByGroupReportItem> generateAgentsByGroupReport();
+	List<AgentsByWorkGroupReportItem> generateAgentsByWorkGroupReport();
 	List<ProjectArtifactsReportItem> generateProjectArtifactsReport(String processIdent);
 	List<ActivitiesByAgentReportItem> generateActivitiesByAgentReport(String agentIdent);
 	List<RequirementItem> generateRequirementItemReport(String params);

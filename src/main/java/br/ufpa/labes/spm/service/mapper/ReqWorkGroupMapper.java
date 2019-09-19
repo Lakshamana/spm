@@ -1,30 +1,30 @@
 package br.ufpa.labes.spm.service.mapper;
 
 import br.ufpa.labes.spm.domain.*;
-import br.ufpa.labes.spm.service.dto.ReqWorkGroupDTO;
+import br.ufpa.labes.spm.service.dto.ReqWorkWorkGroupDTO;
 
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity {@link ReqWorkGroup} and its DTO {@link ReqWorkGroupDTO}.
+ * Mapper for the entity {@link ReqWorkWorkGroup} and its DTO {@link ReqWorkWorkGroupDTO}.
  */
-@Mapper(componentModel = "spring", uses = {WorkGroupTypeMapper.class, WorkGroupMapper.class})
-public interface ReqWorkGroupMapper extends EntityMapper<ReqWorkGroupDTO, ReqWorkGroup> {
+@Mapper(componentModel = "spring", uses = {WorkWorkGroupTypeMapper.class, WorkWorkGroupMapper.class})
+public interface ReqWorkWorkGroupMapper extends EntityMapper<ReqWorkWorkGroupDTO, ReqWorkWorkGroup> {
 
-    @Mapping(source = "theWorkGroupType.id", target = "theWorkGroupTypeId")
-    @Mapping(source = "theWorkGroup.id", target = "theWorkGroupId")
-    ReqWorkGroupDTO toDto(ReqWorkGroup reqWorkGroup);
+    @Mapping(source = "theWorkWorkGroupType.id", target = "theWorkWorkGroupTypeId")
+    @Mapping(source = "theWorkWorkGroup.id", target = "theWorkWorkGroupId")
+    ReqWorkWorkGroupDTO toDto(ReqWorkWorkGroup reqWorkWorkGroup);
 
-    @Mapping(source = "theWorkGroupTypeId", target = "theWorkGroupType")
-    @Mapping(source = "theWorkGroupId", target = "theWorkGroup")
-    ReqWorkGroup toEntity(ReqWorkGroupDTO reqWorkGroupDTO);
+    @Mapping(source = "theWorkWorkGroupTypeId", target = "theWorkWorkGroupType")
+    @Mapping(source = "theWorkWorkGroupId", target = "theWorkWorkGroup")
+    ReqWorkWorkGroup toEntity(ReqWorkWorkGroupDTO reqWorkWorkGroupDTO);
 
-    default ReqWorkGroup fromId(Long id) {
+    default ReqWorkWorkGroup fromId(Long id) {
         if (id == null) {
             return null;
         }
-        ReqWorkGroup reqWorkGroup = new ReqWorkGroup();
-        reqWorkGroup.setId(id);
-        return reqWorkGroup;
+        ReqWorkWorkGroup reqWorkWorkGroup = new ReqWorkWorkGroup();
+        reqWorkWorkGroup.setId(id);
+        return reqWorkWorkGroup;
     }
 }

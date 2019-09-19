@@ -22,7 +22,7 @@ import br.ufpa.labes.spm.repository.interfaces.connections.IConnectionDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IInvolvedArtifactsDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqAgentDAO;
-import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqWorkGroupDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredResourceDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IGraphicCoordinateDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IWebAPSEEObjectDAO;
@@ -59,7 +59,7 @@ import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.Parameters;
 import br.ufpa.labes.spm.domain.ReqAgent;
 import br.ufpa.labes.spm.domain.ReqAgentRequiresAbility;
-import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 import br.ufpa.labes.spm.domain.RequiredResource;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
@@ -103,7 +103,7 @@ public class TemplateServicesImpl implements TemplateServices {
 	IGraphicCoordinateDAO graphicCoordinateDAO;
 	IConnectionDAO connectionDAO;
 	IReqAgentDAO reqAgentDAO;
-	IReqGroupDAO reqGroupDAO;
+	IReqWorkGroupDAO reqWorkGroupDAO;
 	IRequiredResourceDAO reqResourceDAO;
 	IInvolvedArtifactsDAO involvedArtifactsDAO;
 
@@ -458,7 +458,7 @@ public class TemplateServicesImpl implements TemplateServices {
 			Activity act;
 			Connection con;
 			ReqAgent reqAg;
-			ReqGroup reqGr;
+			ReqWorkGroup reqGr;
 			RequiredResource reqRes;
 
 			while (enumer.hasMoreElements()) {
@@ -519,8 +519,8 @@ public class TemplateServicesImpl implements TemplateServices {
 								webObj = new WebAPSEEObject(reqAg.getOid(),reqAg.getClass().getSimpleName(),newCoord);
 								webAPSEEObjectDAO.daoSave(webObj);
 							}
-						}else if(webObjType.equals(WebAPSEEObject.REQ_GROUP)){
-							reqGr = reqGroupDAO.findReqGroupFromProcessModel(instanceIdent, typeIdent, normalIdent);
+						}else if(webObjType.equals(WebAPSEEObject.REQ_WorkGroup)){
+							reqGr = reqWorkGroupDAO.findReqWorkGroupFromProcessModel(instanceIdent, typeIdent, normalIdent);
 							if(reqGr!=null){
 								webObj = new WebAPSEEObject(reqGr.getOid(),reqGr.getClass().getSimpleName(),newCoord);
 								webAPSEEObjectDAO.daoSave(webObj);
@@ -1345,31 +1345,31 @@ public class TemplateServicesImpl implements TemplateServices {
 						//add to main collection
 						newRequiredPeoples.add(newReqAgent);
 					}
-				}else if(currentReqPeople instanceof ReqGroup){
-					ReqGroup currentReqGroup = (ReqGroup)currentReqPeople;
-					ReqGroup newReqGroup = new ReqGroup();
+				}else if(currentReqPeople instanceof ReqWorkGroup){
+					ReqWorkGroup currentReqWorkGroup = (ReqWorkGroup)currentReqPeople;
+					ReqWorkGroup newReqWorkGroup = new ReqWorkGroup();
 
-					if(currentReqGroup.getTheGroupType()!=null){
-						newReqGroup.insertIntoTheGroupType( currentReqGroup.getTheGroupType() );
-						coordinateKey = newReqGroup.getTheGroupType().getIdent();
+					if(currentReqWorkGroup.getTheWorkGroupType()!=null){
+						newReqWorkGroup.insertIntoTheWorkGroupType( currentReqWorkGroup.getTheWorkGroupType() );
+						coordinateKey = newReqWorkGroup.getTheWorkGroupType().getIdent();
 						}
 
 					if(!!operationType.equals(PROC_DEST)){
-						if(currentReqGroup.getTheGroup()!=null){
-							newReqGroup.insertIntoTheGroup(currentReqGroup.getTheGroup());
-							coordinateKey = coordinateKey + ":" + newReqGroup.getTheGroup().getIdent();
+						if(currentReqWorkGroup.getTheWorkGroup()!=null){
+							newReqWorkGroup.insertIntoTheWorkGroup(currentReqWorkGroup.getTheWorkGroup());
+							coordinateKey = coordinateKey + ":" + newReqWorkGroup.getTheWorkGroup().getIdent();
 							}
 					}
 
 					coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
-					this.addCoordinate(currentReqGroup.getOid(), currentReqGroup.getClass().getSimpleName(), WebAPSEEObject.REQ_GROUP +"+"+coordinateKey, coordinates);
+					this.addCoordinate(currentReqWorkGroup.getOid(), currentReqWorkGroup.getClass().getSimpleName(), WebAPSEEObject.REQ_WorkGroup +"+"+coordinateKey, coordinates);
 					coordinateKey = null;
 
 					//the common attribute normal activity
-					newReqGroup.insertIntoTheNormal(destinationNormal);
+					newReqWorkGroup.insertIntoTheNormal(destinationNormal);
 
 					//add to main collection
-					newRequiredPeoples.add(newReqGroup);
+					newRequiredPeoples.add(newReqWorkGroup);
 				}//end if
 
 			}//END IF

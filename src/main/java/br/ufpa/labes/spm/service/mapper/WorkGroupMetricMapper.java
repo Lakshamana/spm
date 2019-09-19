@@ -1,28 +1,28 @@
 package br.ufpa.labes.spm.service.mapper;
 
 import br.ufpa.labes.spm.domain.*;
-import br.ufpa.labes.spm.service.dto.WorkGroupMetricDTO;
+import br.ufpa.labes.spm.service.dto.WorkWorkGroupMetricDTO;
 
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity {@link WorkGroupMetric} and its DTO {@link WorkGroupMetricDTO}.
+ * Mapper for the entity {@link WorkWorkGroupMetric} and its DTO {@link WorkWorkGroupMetricDTO}.
  */
-@Mapper(componentModel = "spring", uses = {WorkGroupMapper.class})
-public interface WorkGroupMetricMapper extends EntityMapper<WorkGroupMetricDTO, WorkGroupMetric> {
+@Mapper(componentModel = "spring", uses = {WorkWorkGroupMapper.class})
+public interface WorkWorkGroupMetricMapper extends EntityMapper<WorkWorkGroupMetricDTO, WorkWorkGroupMetric> {
 
-    @Mapping(source = "theWorkGroup.id", target = "theWorkGroupId")
-    WorkGroupMetricDTO toDto(WorkGroupMetric workGroupMetric);
+    @Mapping(source = "theWorkWorkGroup.id", target = "theWorkWorkGroupId")
+    WorkWorkGroupMetricDTO toDto(WorkWorkGroupMetric workWorkGroupMetric);
 
-    @Mapping(source = "theWorkGroupId", target = "theWorkGroup")
-    WorkGroupMetric toEntity(WorkGroupMetricDTO workGroupMetricDTO);
+    @Mapping(source = "theWorkWorkGroupId", target = "theWorkWorkGroup")
+    WorkWorkGroupMetric toEntity(WorkWorkGroupMetricDTO workWorkGroupMetricDTO);
 
-    default WorkGroupMetric fromId(Long id) {
+    default WorkWorkGroupMetric fromId(Long id) {
         if (id == null) {
             return null;
         }
-        WorkGroupMetric workGroupMetric = new WorkGroupMetric();
-        workGroupMetric.setId(id);
-        return workGroupMetric;
+        WorkWorkGroupMetric workWorkGroupMetric = new WorkWorkGroupMetric();
+        workWorkGroupMetric.setId(id);
+        return workWorkGroupMetric;
     }
 }

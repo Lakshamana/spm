@@ -9,16 +9,16 @@ import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
-import br.ufpa.labes.spm.repository.interfaces.agent.IGroupDAO;
-import br.ufpa.labes.spm.repository.interfaces.types.IGroupTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IWorkGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IWorkGroupTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.ITypeDAO;
 import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.AgentsDTO;
-import br.ufpa.labes.spm.service.dto.GroupDTO;
+import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
 import br.ufpa.labes.spm.service.dto.GroupsDTO;
 import br.ufpa.labes.spm.service.dto.TypesDTO;
 import br.ufpa.labes.spm.domain.Agent;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.ArtifactType;
 import br.ufpa.labes.spm.domain.GroupType;
 import br.ufpa.labes.spm.domain.Type;
@@ -26,11 +26,11 @@ import br.ufpa.labes.spm.service.interfaces.GroupServices;
 
 public class GroupServicesImpl implements GroupServices {
 
-	private static final String GROUP_CLASS_NAME = Group.class.getSimpleName();
+	private static final String GROUP_CLASS_NAME = WorkGroup.class.getSimpleName();
 
-	IGroupDAO groupDAO;
+	IWorkGroupDAO groupDAO;
 
-	IGroupTypeDAO groupTypeDAO;
+	IWorkGroupTypeDAO groupTypeDAO;
 
 	ITypeDAO typeDAO;
 
@@ -67,10 +67,10 @@ public class GroupServicesImpl implements GroupServices {
 	public GroupsDTO getGroups() {
 		String hql = "SELECT group FROM " + GROUP_CLASS_NAME + " as group";
 		query = groupDAO.getPersistenceContext().createQuery(hql);
-		List<Group> result = query.getResultList();
+		List<WorkGroup> result = query.getResultList();
 
 		GroupsDTO groupsDTO = this.convertGroupsToGroupsDTO(result);
-		for (Group group : result) {
+		for (WorkGroup group : result) {
 			System.out.println(group.getName() + " - " + group.getIdent());
 		}
 		return groupsDTO;
@@ -78,8 +78,8 @@ public class GroupServicesImpl implements GroupServices {
 
 	@Override
 	public GroupDTO saveGroup(GroupDTO groupDTO) {
-		Group group = null;
-		Group superGroup = this.retrieveGroup(groupDTO.getSuperGroup());
+		WorkGroup group = null;
+		WorkGroup superGroup = this.retrieveGroup(groupDTO.getSuperGroup());
 		GroupType theGroupType = (GroupType) typeDAO.retrieveBySecondaryKey(groupDTO.getTheGroupType());
 
 //		group = this.retrieveGroup(groupDTO.getName());
@@ -109,7 +109,7 @@ public class GroupServicesImpl implements GroupServices {
 
 	@Override
 	public Boolean removeGroup(String groupName) {
-		Group group = this.retrieveGroup(groupName);
+		WorkGroup group = this.retrieveGroup(groupName);
 		if(group != null) {
 			for(Agent agent : group.getTheAgent()) {
 				agent.getTheGroup().remove(group);
@@ -125,7 +125,7 @@ public class GroupServicesImpl implements GroupServices {
 		return false;
 	}
 
-	private void updateDependencies(GroupDTO groupDTO, Group group) {
+	private void updateDependencies(GroupDTO groupDTO, WorkGroup group) {
 		if(!groupDTO.getAgents().isEmpty()) {
 			for (String agentName : groupDTO.getAgents()) {
 				Agent agent = getAgentFromDatabase(agentName);
@@ -140,8 +140,8 @@ public class GroupServicesImpl implements GroupServices {
 
 	@Override
 	public GroupDTO getGroup(String groupIdent) {
-//		Group result = this.retrieveGroup(groupIdent);
-		Group result = groupDAO.retrieveBySecondaryKey(groupIdent);
+//		WorkGroup result = this.retrieveGroup(groupIdent);
+		WorkGroup result = groupDAO.retrieveBySecondaryKey(groupIdent);
 		GroupDTO groupDTO = null;
 
 		if(result != null) {
@@ -173,7 +173,7 @@ public class GroupServicesImpl implements GroupServices {
 			query.setParameter("orgFilter", ativoFilter);
 		}
 
-		List<Group> resultado = query.getResultList();
+		List<WorkGroup> resultado = query.getResultList();
 		GroupsDTO groupsDTO = new GroupsDTO(new ArrayList<GroupDTO>());
 		groupsDTO = this.convertGroupsToGroupsDTO(resultado);
 
@@ -220,7 +220,7 @@ public class GroupServicesImpl implements GroupServices {
 	public Boolean removeAgent(String groupName, String agentName) {
 		System.out.println(groupName + " ---------- " + agentName);
 
-		Group group = this.retrieveGroup(groupName);
+		WorkGroup group = this.retrieveGroup(groupName);
 		Agent agent = this.getAgentFromDatabase(agentName);
 
 		System.out.println("group: " + group + ", agent: " + agent);
@@ -249,20 +249,20 @@ public class GroupServicesImpl implements GroupServices {
 		return agent;
 	}
 
-	public Group retrieveGroup(String groupName) {
+	public WorkGroup retrieveGroup(String groupName) {
 		String hql = "SELECT group FROM " + GROUP_CLASS_NAME + " as group where group.name = :name";
 		query = groupDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("name", groupName);
 
-		Group result = null;
+		WorkGroup result = null;
 		if(!query.getResultList().isEmpty()) {
-			result = (Group) query.getResultList().get(0);
+			result = (WorkGroup) query.getResultList().get(0);
 		}
 
 		return result;
 	}
 
-	private GroupDTO convertGroupToGroupDTO(Group group) {
+	private GroupDTO convertGroupToGroupDTO(WorkGroup group) {
 		try {
 
 			GroupDTO groupDTO = new GroupDTO();
@@ -286,11 +286,11 @@ public class GroupServicesImpl implements GroupServices {
 		return null;
 	}
 
-	private Group convertGroupDTOToGroup(GroupDTO groupDTO) {
+	private WorkGroup convertGroupDTOToGroup(GroupDTO groupDTO) {
 		try {
 
-			Group group = new Group();
-			group = (Group) this.converter.getEntity(groupDTO, group);
+			WorkGroup group = new WorkGroup();
+			group = (WorkGroup) this.converter.getEntity(groupDTO, group);
 			return group;
 
 		} catch (ImplementationException e) {
@@ -300,9 +300,9 @@ public class GroupServicesImpl implements GroupServices {
 		return null;
 	}
 
-	private GroupsDTO convertGroupsToGroupsDTO(List<Group> groups) {
+	private GroupsDTO convertGroupsToGroupsDTO(List<WorkGroup> groups) {
 		GroupsDTO groupsDTO = new GroupsDTO(new ArrayList<GroupDTO>());
-		for (Group group : groups) {
+		for (WorkGroup group : groups) {
 			GroupDTO groupDTO = this.convertGroupToGroupDTO(group);
 			groupsDTO.addGroupDTO(groupDTO);
 		}

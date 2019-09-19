@@ -1,9 +1,9 @@
 package br.ufpa.labes.spm.service;
 
-import br.ufpa.labes.spm.domain.ReqWorkGroup;
-import br.ufpa.labes.spm.repository.ReqWorkGroupRepository;
-import br.ufpa.labes.spm.service.dto.ReqWorkGroupDTO;
-import br.ufpa.labes.spm.service.mapper.ReqWorkGroupMapper;
+import br.ufpa.labes.spm.domain.ReqWorkWorkGroup;
+import br.ufpa.labes.spm.repository.ReqWorkWorkGroupRepository;
+import br.ufpa.labes.spm.service.dto.ReqWorkWorkGroupDTO;
+import br.ufpa.labes.spm.service.mapper.ReqWorkWorkGroupMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,70 +16,70 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Service Implementation for managing {@link ReqWorkGroup}.
+ * Service Implementation for managing {@link ReqWorkWorkGroup}.
  */
 @Service
 @Transactional
-public class ReqWorkGroupService {
+public class ReqWorkWorkGroupService {
 
-    private final Logger log = LoggerFactory.getLogger(ReqWorkGroupService.class);
+    private final Logger log = LoggerFactory.getLogger(ReqWorkWorkGroupService.class);
 
-    private final ReqWorkGroupRepository reqWorkGroupRepository;
+    private final ReqWorkWorkGroupRepository reqWorkWorkGroupRepository;
 
-    private final ReqWorkGroupMapper reqWorkGroupMapper;
+    private final ReqWorkWorkGroupMapper reqWorkWorkGroupMapper;
 
-    public ReqWorkGroupService(ReqWorkGroupRepository reqWorkGroupRepository, ReqWorkGroupMapper reqWorkGroupMapper) {
-        this.reqWorkGroupRepository = reqWorkGroupRepository;
-        this.reqWorkGroupMapper = reqWorkGroupMapper;
+    public ReqWorkWorkGroupService(ReqWorkWorkGroupRepository reqWorkWorkGroupRepository, ReqWorkWorkGroupMapper reqWorkWorkGroupMapper) {
+        this.reqWorkWorkGroupRepository = reqWorkWorkGroupRepository;
+        this.reqWorkWorkGroupMapper = reqWorkWorkGroupMapper;
     }
 
     /**
-     * Save a reqWorkGroup.
+     * Save a reqWorkWorkGroup.
      *
-     * @param reqWorkGroupDTO the entity to save.
+     * @param reqWorkWorkGroupDTO the entity to save.
      * @return the persisted entity.
      */
-    public ReqWorkGroupDTO save(ReqWorkGroupDTO reqWorkGroupDTO) {
-        log.debug("Request to save ReqWorkGroup : {}", reqWorkGroupDTO);
-        ReqWorkGroup reqWorkGroup = reqWorkGroupMapper.toEntity(reqWorkGroupDTO);
-        reqWorkGroup = reqWorkGroupRepository.save(reqWorkGroup);
-        return reqWorkGroupMapper.toDto(reqWorkGroup);
+    public ReqWorkWorkGroupDTO save(ReqWorkWorkGroupDTO reqWorkWorkGroupDTO) {
+        log.debug("Request to save ReqWorkWorkGroup : {}", reqWorkWorkGroupDTO);
+        ReqWorkWorkGroup reqWorkWorkGroup = reqWorkWorkGroupMapper.toEntity(reqWorkWorkGroupDTO);
+        reqWorkWorkGroup = reqWorkWorkGroupRepository.save(reqWorkWorkGroup);
+        return reqWorkWorkGroupMapper.toDto(reqWorkWorkGroup);
     }
 
     /**
-     * Get all the reqWorkGroups.
+     * Get all the reqWorkWorkGroups.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<ReqWorkGroupDTO> findAll() {
-        log.debug("Request to get all ReqWorkGroups");
-        return reqWorkGroupRepository.findAll().stream()
-            .map(reqWorkGroupMapper::toDto)
+    public List<ReqWorkWorkGroupDTO> findAll() {
+        log.debug("Request to get all ReqWorkWorkGroups");
+        return reqWorkWorkGroupRepository.findAll().stream()
+            .map(reqWorkWorkGroupMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
     /**
-     * Get one reqWorkGroup by id.
+     * Get one reqWorkWorkGroup by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<ReqWorkGroupDTO> findOne(Long id) {
-        log.debug("Request to get ReqWorkGroup : {}", id);
-        return reqWorkGroupRepository.findById(id)
-            .map(reqWorkGroupMapper::toDto);
+    public Optional<ReqWorkWorkGroupDTO> findOne(Long id) {
+        log.debug("Request to get ReqWorkWorkGroup : {}", id);
+        return reqWorkWorkGroupRepository.findById(id)
+            .map(reqWorkWorkGroupMapper::toDto);
     }
 
     /**
-     * Delete the reqWorkGroup by id.
+     * Delete the reqWorkWorkGroup by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete ReqWorkGroup : {}", id);
-        reqWorkGroupRepository.deleteById(id);
+        log.debug("Request to delete ReqWorkWorkGroup : {}", id);
+        reqWorkWorkGroupRepository.deleteById(id);
     }
 }

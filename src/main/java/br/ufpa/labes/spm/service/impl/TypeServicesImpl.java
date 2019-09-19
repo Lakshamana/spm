@@ -16,7 +16,7 @@ import br.ufpa.labes.spm.repository.interfaces.types.IActivityTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IConnectionTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IEventTypeDAO;
-import br.ufpa.labes.spm.repository.interfaces.types.IGroupTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IWorkGroupTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IKnowledgeTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IMetricTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IPolicyTypeDAO;
@@ -31,7 +31,7 @@ import br.ufpa.labes.spm.domain.ActivityType;
 import br.ufpa.labes.spm.domain.ArtifactType;
 import br.ufpa.labes.spm.domain.ConnectionType;
 import br.ufpa.labes.spm.domain.EventType;
-import br.ufpa.labes.spm.domain.GroupType;
+import br.ufpa.labes.spm.domain.WorkGroupType;
 import br.ufpa.labes.spm.domain.KnowledgeType;
 import br.ufpa.labes.spm.domain.MetricType;
 import br.ufpa.labes.spm.domain.PolicyType;
@@ -48,7 +48,7 @@ public class TypeServicesImpl implements TypeServices{
 	IArtifactTypeDAO artTypeDAO;
 	IActivityTypeDAO actTypeDAO;
 	IToolTypeDAO toolTypeDAO;
-	IGroupTypeDAO grpTypeDAO;
+	IWorkGroupTypeDAO grpTypeDAO;
 	IMetricTypeDAO metTypeDAO;
 	IAbilityTypeDAO abiTypeDAO;
 	IRoleTypeDAO roleTypeDAO;
@@ -66,7 +66,7 @@ public class TypeServicesImpl implements TypeServices{
 		typeClasses.put("ArtifactType", ArtifactType.class);
 		typeClasses.put("ConnectionType", ConnectionType.class);
 		typeClasses.put("EventType", EventType.class);
-		typeClasses.put("GroupType", GroupType.class);
+		typeClasses.put("WorkGroupType", WorkGroupType.class);
 		typeClasses.put("PolicyType", KnowledgeType.class);
 		typeClasses.put("MetricType", MetricType.class);
 		typeClasses.put("PolicyType", PolicyType.class);
@@ -110,7 +110,7 @@ public class TypeServicesImpl implements TypeServices{
 
 		Class<?>[] typeClasses = { AbilityType.class, ActivityType.class,
 				ArtifactType.class, ConnectionType.class, EventType.class,
-				GroupType.class, KnowledgeType.class, MetricType.class,
+				WorkGroupType.class, KnowledgeType.class, MetricType.class,
 				PolicyType.class, ResourceType.class, RoleType.class,
 				ToolType.class };
 
@@ -174,8 +174,8 @@ public class TypeServicesImpl implements TypeServices{
 			return MetricType.class.getSimpleName();
 		else if (type instanceof RoleType)
 			return RoleType.class.getSimpleName();
-		else if (type instanceof GroupType)
-			return GroupType.class.getSimpleName();
+		else if (type instanceof WorkGroupType)
+			return WorkGroupType.class.getSimpleName();
 		else
 			return "";
 	}
@@ -256,22 +256,22 @@ public class TypeServicesImpl implements TypeServices{
 
 					typeDTO = (TypeDTO) converter.getDTO(type, TypeDTO.class);
 
-				} else if (typeClass.equals(GroupType.class.getSimpleName())) {
+				} else if (typeClass.equals(WorkGroupType.class.getSimpleName())) {
 
-					GroupType type = grpTypeDAO.retrieveBySecondaryKey(typeIdent);
+					WorkGroupType type = grpTypeDAO.retrieveBySecondaryKey(typeIdent);
 
 					Converter converter = new ConverterImpl();
 					if (type != null) {
-						type = (GroupType) converter.getEntity(typeDTO, type);
+						type = (WorkGroupType) converter.getEntity(typeDTO, type);
 						typeDTO.setSubtypesNumber(type.getSubType().size());
 					} else {
-						type = (GroupType) converter.getEntity(typeDTO, GroupType.class);
+						type = (WorkGroupType) converter.getEntity(typeDTO, WorkGroupType.class);
 						type = grpTypeDAO.daoSave(type);
 					}
 
 					String superTypeIdent = typeDTO.getSuperTypeIdent();
 					if (superTypeIdent != null && !superTypeIdent.equals("")) {
-						GroupType superType = grpTypeDAO.retrieveBySecondaryKey(superTypeIdent);
+						WorkGroupType superType = grpTypeDAO.retrieveBySecondaryKey(superTypeIdent);
 						type.setSuperType(superType);
 					}
 

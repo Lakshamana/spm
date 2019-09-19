@@ -20,7 +20,7 @@ import br.ufpa.labes.spm.service.dto.MetricDTO;
 import br.ufpa.labes.spm.service.dto.MetricDefinitionDTO;
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Ability;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.Role;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.Connection;
@@ -35,7 +35,7 @@ import br.ufpa.labes.spm.domain.ActivityType;
 import br.ufpa.labes.spm.domain.ArtifactType;
 import br.ufpa.labes.spm.domain.ConnectionType;
 import br.ufpa.labes.spm.domain.EventType;
-import br.ufpa.labes.spm.domain.GroupType;
+import br.ufpa.labes.spm.domain.WorkGroupType;
 import br.ufpa.labes.spm.domain.KnowledgeType;
 import br.ufpa.labes.spm.domain.MetricType;
 import br.ufpa.labes.spm.domain.PolicyType;
@@ -65,7 +65,7 @@ public class MetricServicesImpl implements MetricServices{
 		typeClasses.put("ArtifactType", ArtifactType.class);
 		typeClasses.put("ConnectionType", ConnectionType.class);
 		typeClasses.put("EventType", EventType.class);
-		typeClasses.put("GroupType", GroupType.class);
+		typeClasses.put("WorkGroupType", WorkGroupType.class);
 		//typeClasses.put("PolicyType", KnowledgeType.class);
 		typeClasses.put("MetricType", MetricType.class);
 		//typeClasses.put("PolicyType", PolicyType.class);
@@ -78,7 +78,7 @@ public class MetricServicesImpl implements MetricServices{
 		classes.put("ArtifactType", Artifact.class);
 		classes.put("ConnectionType", Connection.class);
 		classes.put("EventType", Event.class);
-		classes.put("GroupType", Group.class);
+		classes.put("WorkGroupType", WorkGroup.class);
 		//classes.put("Policy", KnowledgeAttribute.class);
 		classes.put("MetricType", Metric.class);
 		//classes.put("Policy", Policy.class);
@@ -321,8 +321,8 @@ public class MetricServicesImpl implements MetricServices{
 					//Event abi = (Event) object;
 					//String typeIdent = abi.getIdent();
 					//strinList.add(typeIdent);
-				}else if (object instanceof Group){
-					Group abi = (Group) object;
+				}else if (object instanceof WorkGroup){
+					WorkGroup abi = (WorkGroup) object;
 					String typeIdent = abi.getName();
 					strinList.add(typeIdent);
 				}else if (object instanceof Resource){

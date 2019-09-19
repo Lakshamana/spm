@@ -41,7 +41,7 @@ import br.ufpa.labes.spm.repository.interfaces.IReportDAO;
 import br.ufpa.labes.spm.repository.interfaces.activities.IDecomposedDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
-import br.ufpa.labes.spm.repository.interfaces.log.ILogDAO;
+import br.ufpa.labes.spm.repository.interfaces.log.ISpmLogDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
 import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IProcessEstimationDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IGraphicCoordinateDAO;
@@ -70,7 +70,7 @@ import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.AgentAffinityAgent;
 import br.ufpa.labes.spm.domain.AgentHasAbility;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.Role;
 import br.ufpa.labes.spm.domain.RoleNeedsAbility;
 import br.ufpa.labes.spm.domain.Artifact;
@@ -109,7 +109,7 @@ import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.PrimitiveParam;
 import br.ufpa.labes.spm.domain.ReqAgent;
 import br.ufpa.labes.spm.domain.ReqAgentRequiresAbility;
-import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 import br.ufpa.labes.spm.domain.RequiredResource;
 import br.ufpa.labes.spm.domain.PolAssociation;
@@ -132,8 +132,8 @@ import br.ufpa.labes.spm.domain.AgentEstimation;
 import br.ufpa.labes.spm.domain.AgentMetric;
 import br.ufpa.labes.spm.domain.ArtifactEstimation;
 import br.ufpa.labes.spm.domain.ArtifactMetric;
-import br.ufpa.labes.spm.domain.GroupEstimation;
-import br.ufpa.labes.spm.domain.GroupMetric;
+import br.ufpa.labes.spm.domain.WorkGroupEstimation;
+import br.ufpa.labes.spm.domain.WorkGroupMetric;
 import br.ufpa.labes.spm.domain.MetricDefinition;
 import br.ufpa.labes.spm.domain.OrganizationEstimation;
 import br.ufpa.labes.spm.domain.OrganizationMetric;
@@ -163,7 +163,7 @@ import br.ufpa.labes.spm.domain.AbilityType;
 import br.ufpa.labes.spm.domain.ActivityType;
 import br.ufpa.labes.spm.domain.ArtifactType;
 import br.ufpa.labes.spm.domain.EventType;
-import br.ufpa.labes.spm.domain.GroupType;
+import br.ufpa.labes.spm.domain.WorkGroupType;
 import br.ufpa.labes.spm.domain.MetricType;
 import br.ufpa.labes.spm.domain.PolicyType;
 import br.ufpa.labes.spm.domain.ResourceType;
@@ -200,7 +200,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	IProcessDAO processDAO;
 
-	ILogDAO logDAO;
+	ISpmLogDAO logDAO;
 
 	IProcessModelDAO processModelDAO;
 
@@ -341,19 +341,19 @@ public class ProjectServicesImpl implements ProjectServices {
 
 					}
 
-				} else if(requiredPeople instanceof ReqGroup){
-					ReqGroup reqGroup = (ReqGroup)requiredPeople;
-					if(reqGroup.getTheGroup() != null) {
-						String group = reqGroup.getTheGroup()!=null ? reqGroup.getTheGroup().getIdent() : "";
-						String groupName = reqGroup.getTheGroup()!=null ? reqGroup.getTheGroup().getName() : "";
-						String groupType = reqGroup.getTheGroupType()!=null ? reqGroup.getTheGroupType().getIdent() : "";
-						processXML.append("<REQGROUP ID=\"" + reqGroup.getOid() + "\">\n");
-						processXML.append("<GROUP>" + group + "</GROUP>\n");
-						processXML.append("<NAME>" + groupName + "</NAME>\n");
-						processXML.append("<GROUPTYPE>" + groupType + "</GROUPTYPE>\n");
-						processXML.append("<NORMAL>" + reqGroup.getTheNormal().getIdent() + "</NORMAL>\n");
-						processXML.append(getPositionTag(reqGroup.getOid(), reqGroup.getClass().getSimpleName()));
-						processXML.append("</REQGROUP>\n");
+				} else if(requiredPeople instanceof ReqWorkGroup){
+					ReqWorkGroup reqWorkGroup = (ReqWorkGroup)requiredPeople;
+					if(reqWorkGroup.getTheWorkGroup() != null) {
+						String WorkGroup = reqWorkGroup.getTheWorkGroup()!=null ? reqWorkGroup.getTheWorkGroup().getIdent() : "";
+						String WorkGroupName = reqWorkGroup.getTheWorkGroup()!=null ? reqWorkGroup.getTheWorkGroup().getName() : "";
+						String WorkGroupType = reqWorkGroup.getTheWorkGroupType()!=null ? reqWorkGroup.getTheWorkGroupType().getIdent() : "";
+						processXML.append("<REQWorkGroup ID=\"" + reqWorkGroup.getOid() + "\">\n");
+						processXML.append("<WorkGroup>" + WorkGroup + "</WorkGroup>\n");
+						processXML.append("<NAME>" + WorkGroupName + "</NAME>\n");
+						processXML.append("<WorkGroupTYPE>" + WorkGroupType + "</WorkGroupTYPE>\n");
+						processXML.append("<NORMAL>" + reqWorkGroup.getTheNormal().getIdent() + "</NORMAL>\n");
+						processXML.append(getPositionTag(reqWorkGroup.getOid(), reqWorkGroup.getClass().getSimpleName()));
+						processXML.append("</REQWorkGroup>\n");
 					}
 				}
 			}
@@ -1270,7 +1270,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 
 	/*
-	 * Type (and subclasses), Ability, Agent, TaskAgenda, Group, Role,
+	 * Type (and subclasses), Ability, Agent, TaskAgenda, WorkGroup, Role,
 	 * Artifact, Project, Organization, System, MetricDefinition,
 	 * Resource (and subclasses), ToolDefinition,
 	 * Subroutine (and classes), ToolParameters, PrimitiveType
@@ -1386,7 +1386,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		this.loadAbility(organizational);
 		this.loadAgent(organizational);
 		this.loadTaskAgenda(organizational);
-		this.loadGroup(organizational);
+		this.loadWorkGroup(organizational);
 		this.loadRole(organizational);
 
 		this.loadResource(organizational);
@@ -1408,7 +1408,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		ElementFilter activityTypeFilter = new ElementFilter(ActivityType.class.getSimpleName());
 		ElementFilter artifactTypeFilter = new ElementFilter(ArtifactType.class.getSimpleName());
 		ElementFilter eventTypeFilter = new ElementFilter(EventType.class.getSimpleName());
-		ElementFilter groupTypeFilter = new ElementFilter(GroupType.class.getSimpleName());
+		ElementFilter WorkGroupTypeFilter = new ElementFilter(WorkGroupType.class.getSimpleName());
 		ElementFilter metricTypeFilter = new ElementFilter(MetricType.class.getSimpleName());
 		ElementFilter policyTypeFilter = new ElementFilter(PolicyType.class.getSimpleName());
 		ElementFilter resourceTypeFilter = new ElementFilter(ResourceType.class.getSimpleName());
@@ -1418,7 +1418,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		AbstractFilter typeFilter = ((AbstractFilter) abilityTypeFilter.or(activityTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(artifactTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or((Filter) eventTypeFilter));
-		typeFilter = ((AbstractFilter) typeFilter.or(groupTypeFilter));
+		typeFilter = ((AbstractFilter) typeFilter.or(WorkGroupTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(metricTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(policyTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(resourceTypeFilter));
@@ -1581,22 +1581,22 @@ public class ProjectServicesImpl implements ProjectServices {
 		}
 	}
 
-	private void loadGroup(Element organizational) {
-		List<Element> groups = organizational.getChildren(Group.class.getSimpleName());
-		Iterator<Element> iter = groups.iterator();
+	private void loadWorkGroup(Element organizational) {
+		List<Element> WorkGroups = organizational.getChildren(WorkGroup.class.getSimpleName());
+		Iterator<Element> iter = WorkGroups.iterator();
 		while (iter.hasNext()) {
 			Element element = (Element) iter.next();
-			Group group = (Group) this.buildOrgObject(element);
-			if(group == null) continue;
+			WorkGroup WorkGroup = (WorkGroup) this.buildOrgObject(element);
+			if(WorkGroup == null) continue;
 			// Setting type...
-			String typeKey = element.getChild("TheGroupType").getAttributeValue("REF");
-			group.insertIntoTheGroupType((GroupType) this.organizational.get(typeKey));
+			String typeKey = element.getChild("TheWorkGroupType").getAttributeValue("REF");
+			WorkGroup.insertIntoTheWorkGroupType((WorkGroupType) this.organizational.get(typeKey));
 
-			// Setting super group...
-			Element superElm = element.getChild("SuperGroup");
+			// Setting super WorkGroup...
+			Element superElm = element.getChild("SuperWorkGroup");
 			if(superElm != null){
 				String superKey = superElm.getAttributeValue("REF");
-				group.insertIntoSuperGroup((Group) this.organizational.get(superKey));
+				WorkGroup.insertIntoSuperWorkGroup((WorkGroup) this.organizational.get(superKey));
 			}
 
 			// Setting agents...
@@ -1607,11 +1607,11 @@ public class ProjectServicesImpl implements ProjectServices {
 				while (iterItens.hasNext()) {
 					Element agentElm = (Element) iterItens.next();
 					String agentKey = agentElm.getValue();
-					group.insertIntoTheAgent((Agent) this.organizational.get(agentKey));
+					WorkGroup.insertIntoTheAgent((Agent) this.organizational.get(agentKey));
 				}
 			}
 
-			this.organizational.put(element.getAttributeValue("KEY"), group);
+			this.organizational.put(element.getAttributeValue("KEY"), WorkGroup);
 		}
 	}
 
@@ -2084,9 +2084,9 @@ public class ProjectServicesImpl implements ProjectServices {
 	private void loadRequiredPeople(Element processComponents, Element organizational){
 
 		ElementFilter reqAgentFilter = new ElementFilter(ReqAgent.class.getSimpleName());
-		ElementFilter reqGroupFilter = new ElementFilter(ReqGroup.class.getSimpleName());
+		ElementFilter reqWorkGroupFilter = new ElementFilter(ReqWorkGroup.class.getSimpleName());
 
-		AbstractFilter requiredPeopleFilter = ((AbstractFilter) reqAgentFilter.or(reqGroupFilter));
+		AbstractFilter requiredPeopleFilter = ((AbstractFilter) reqAgentFilter.or(reqWorkGroupFilter));
 
 		Iterator<Element> iter = processComponents.getDescendants(requiredPeopleFilter);
 		while (iter.hasNext()) {
@@ -2115,27 +2115,27 @@ public class ProjectServicesImpl implements ProjectServices {
 
 				this.processComponents.put(requiredPeopleElm.getAttributeValue("KEY"), reqAgent);
 			}
-			else { //tagName.equals(ReqGroup.class.getSimpleName()
+			else { //tagName.equals(ReqWorkGroup.class.getSimpleName()
 
-				ReqGroup reqGroup = new ReqGroup();
+				ReqWorkGroup reqWorkGroup = new ReqWorkGroup();
 
-				Element groupTypeElm = requiredPeopleElm.getChild("TheGroupType");
-				if(groupTypeElm == null) continue; // Inconsistency handle
-				String groupTypeKey = groupTypeElm.getAttributeValue("REF");
-				reqGroup.insertIntoTheGroupType((GroupType) this.organizational.get(groupTypeKey));
+				Element WorkGroupTypeElm = requiredPeopleElm.getChild("TheWorkGroupType");
+				if(WorkGroupTypeElm == null) continue; // Inconsistency handle
+				String WorkGroupTypeKey = WorkGroupTypeElm.getAttributeValue("REF");
+				reqWorkGroup.insertIntoTheWorkGroupType((WorkGroupType) this.organizational.get(WorkGroupTypeKey));
 
 				String normalKey = requiredPeopleElm.getChild("TheNormal").getAttributeValue("REF");
-				reqGroup.insertIntoTheNormal((Normal) this.processComponents.get(normalKey));
+				reqWorkGroup.insertIntoTheNormal((Normal) this.processComponents.get(normalKey));
 
-				Element groupElm = requiredPeopleElm.getChild("TheGroup");
-				if(groupElm != null){
-					String groupKey = groupElm.getAttributeValue("REF");
-					reqGroup.insertIntoTheGroup((Group) this.organizational.get(groupKey));
+				Element WorkGroupElm = requiredPeopleElm.getChild("TheWorkGroup");
+				if(WorkGroupElm != null){
+					String WorkGroupKey = WorkGroupElm.getAttributeValue("REF");
+					reqWorkGroup.insertIntoTheWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
 				}
 
-				this.persistObject(reqGroup, null);
+				this.persistObject(reqWorkGroup, null);
 
-				this.processComponents.put(requiredPeopleElm.getAttributeValue("KEY"), reqGroup);
+				this.processComponents.put(requiredPeopleElm.getAttributeValue("KEY"), reqWorkGroup);
 			}
 		}
 	}
@@ -2793,14 +2793,14 @@ public class ProjectServicesImpl implements ProjectServices {
 		ElementFilter activityEstFilter = new ElementFilter(ActivityEstimation.class.getSimpleName());
 		ElementFilter agentEstFilter = new ElementFilter(AgentEstimation.class.getSimpleName());
 		ElementFilter artifactEstFilter = new ElementFilter(ArtifactEstimation.class.getSimpleName());
-		ElementFilter groupEstFilter = new ElementFilter(GroupEstimation.class.getSimpleName());
+		ElementFilter WorkGroupEstFilter = new ElementFilter(WorkGroupEstimation.class.getSimpleName());
 		ElementFilter organizationEstFilter = new ElementFilter(OrganizationEstimation.class.getSimpleName());
 		ElementFilter processEstFilter = new ElementFilter(ProcessEstimation.class.getSimpleName());
 		ElementFilter resourceEstFilter = new ElementFilter(ResourceEstimation.class.getSimpleName());
 
 		AbstractFilter estimationFilter = ((AbstractFilter) activityEstFilter.or(agentEstFilter));
 		estimationFilter = ((AbstractFilter) estimationFilter.or(artifactEstFilter));
-		estimationFilter = ((AbstractFilter) estimationFilter.or(groupEstFilter));
+		estimationFilter = ((AbstractFilter) estimationFilter.or(WorkGroupEstFilter));
 		estimationFilter = ((AbstractFilter) estimationFilter.or(organizationEstFilter));
 		estimationFilter = ((AbstractFilter) estimationFilter.or(processEstFilter));
 		estimationFilter = ((AbstractFilter) estimationFilter.or(resourceEstFilter));
@@ -2809,14 +2809,14 @@ public class ProjectServicesImpl implements ProjectServices {
 		ElementFilter activityMetFilter = new ElementFilter(ActivityMetric.class.getSimpleName());
 		ElementFilter agentMetFilter = new ElementFilter(AgentMetric.class.getSimpleName());
 		ElementFilter artifactMetFilter = new ElementFilter(ArtifactMetric.class.getSimpleName());
-		ElementFilter groupMetFilter = new ElementFilter(GroupMetric.class.getSimpleName());
+		ElementFilter WorkGroupMetFilter = new ElementFilter(WorkGroupMetric.class.getSimpleName());
 		ElementFilter organizationMetFilter = new ElementFilter(OrganizationMetric.class.getSimpleName());
 		ElementFilter processMetFilter = new ElementFilter(ProcessMetric.class.getSimpleName());
 		ElementFilter resourceMetFilter = new ElementFilter(ResourceMetric.class.getSimpleName());
 
 		AbstractFilter metricFilter = ((AbstractFilter) activityMetFilter.or(agentMetFilter));
 		metricFilter = ((AbstractFilter) metricFilter.or(artifactMetFilter));
-		metricFilter = ((AbstractFilter) metricFilter.or(groupMetFilter));
+		metricFilter = ((AbstractFilter) metricFilter.or(WorkGroupMetFilter));
 		metricFilter = ((AbstractFilter) metricFilter.or(organizationMetFilter));
 		metricFilter = ((AbstractFilter) metricFilter.or(processMetFilter));
 		metricFilter = ((AbstractFilter) metricFilter.or(resourceMetFilter));
@@ -2873,13 +2873,13 @@ public class ProjectServicesImpl implements ProjectServices {
 
 				this.processComponents.put(key, est);
 			}
-			else if(estElm.getQualifiedName().equals(GroupEstimation.class.getSimpleName())){
-				GroupEstimation est = new GroupEstimation();
+			else if(estElm.getQualifiedName().equals(WorkGroupEstimation.class.getSimpleName())){
+				WorkGroupEstimation est = new WorkGroupEstimation();
 				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
 				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
 
-				String groupKey = estElm.getChild("Group").getAttributeValue("REF");
-				est.insertIntoGroup((Group) this.organizational.get(groupKey));
+				String WorkGroupKey = estElm.getChild("WorkGroup").getAttributeValue("REF");
+				est.insertIntoWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
 
 				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
 				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
@@ -2994,15 +2994,15 @@ public class ProjectServicesImpl implements ProjectServices {
 
 				this.processComponents.put(key, met);
 			}
-			else if(metElm.getQualifiedName().equals(GroupMetric.class.getSimpleName())){
-				GroupMetric met = new GroupMetric();
+			else if(metElm.getQualifiedName().equals(WorkGroupMetric.class.getSimpleName())){
+				WorkGroupMetric met = new WorkGroupMetric();
 				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
 				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
 				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
 				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
 
-				String groupKey = metElm.getChild("Group").getAttributeValue("REF");
-				met.insertIntoGroup((Group) this.organizational.get(groupKey));
+				String WorkGroupKey = metElm.getChild("WorkGroup").getAttributeValue("REF");
+				met.insertIntoWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
 
 				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
 				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
@@ -3976,7 +3976,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		AgentDTO agentDTO = new AgentDTO();
 		try {
 			agentDTO = (AgentDTO) converter.getDTO(agent, AgentDTO.class);
-			if (!agent.getTheAgentPlaysRole().isEmpty()) {
+			if (!agent.getTheAgentPlaysRoles().isEmpty()) {
 				agentDTO.setRoleToAgent(new ArrayList<String>());
 
 				for (AgentPlaysRole agentPlayRole : agent
@@ -3989,9 +3989,9 @@ public class ProjectServicesImpl implements ProjectServices {
 				agentDTO.setRoleToAgent(new ArrayList<String>());
 			}
 
-			agentDTO.setGroupToAgent(new ArrayList<String>());
-			for (Group group : agent.getTheGroup()) {
-				agentDTO.getGroupToAgent().add(group.getName());
+			agentDTO.setWorkGroupToAgent(new ArrayList<String>());
+			for (WorkGroup WorkGroup : agent.getTheWorkGroups()) {
+				agentDTO.getWorkGroupToAgent().add(WorkGroup.getName());
 			}
 
 			agentDTO.setAbilityToAgent(new ArrayList<String>());

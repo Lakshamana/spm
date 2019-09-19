@@ -6,21 +6,21 @@ import javax.persistence.Query;
 
 import org.qrconsult.spm.beans.editor.WebAPSEEVO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
-import br.ufpa.labes.spm.repository.interfaces.agent.IGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IWorkGroupDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IRoleDAO;
 import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
 import br.ufpa.labes.spm.repository.interfaces.resources.IResourceDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
-import br.ufpa.labes.spm.repository.interfaces.types.IGroupTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IWorkGroupTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.Role;
 import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.Resource;
 import br.ufpa.labes.spm.domain.ArtifactType;
-import br.ufpa.labes.spm.domain.GroupType;
+import br.ufpa.labes.spm.domain.WorkGroupType;
 import br.ufpa.labes.spm.domain.ResourceType;
 import br.ufpa.labes.spm.service.interfaces.WebAPSEEVOServices;
 
@@ -29,22 +29,22 @@ public class WebAPSEEVOServicesImpl implements WebAPSEEVOServices {
 
 	private static final String ARTIFACT_CLASS_NAME = Artifact.class.getSimpleName();
 	private static final String AGENT_CLASS_NAME = Agent.class.getSimpleName();
-	private static final String GROUP_CLASS_NAME = Group.class.getSimpleName();
+	private static final String WorkGroup_CLASS_NAME = WorkGroup.class.getSimpleName();
 	private static final String RESOURCE_CLASS_NAME = Resource.class.getSimpleName();
 
 	private static final String ARTIFACTTYPE_CLASS_NAME = ArtifactType.class.getSimpleName();
 	private static final String ROLE_CLASS_NAME = Role.class.getSimpleName();
-	private static final String GROUPTYPE_CLASS_NAME = GroupType.class.getSimpleName();
+	private static final String WorkGroupTYPE_CLASS_NAME = WorkGroupType.class.getSimpleName();
 	private static final String RESOURCETYPE_CLASS_NAME = ResourceType.class.getSimpleName();
 
 	IArtifactDAO artifactDAO;
 	IAgentDAO agentDAO;
-	IGroupDAO groupDAO;
+	IWorkGroupDAO WorkGroupDAO;
 	IResourceDAO resourceDAO;
 
 	IArtifactTypeDAO artifactTypeDAO;
 	IRoleDAO roleDAO;
-	IGroupTypeDAO groupTypeDAO;
+	IWorkGroupTypeDAO WorkGroupTypeDAO;
 	IResourceTypeDAO resourceTypeDAO;
 
 	private Query query;
@@ -55,8 +55,8 @@ public class WebAPSEEVOServicesImpl implements WebAPSEEVOServices {
 			return getArtifactVOList();
 		else if (className.equals("Agent"))
 			return getAgentVOList();
-		else if (className.equals("Group"))
-			return getGroupVOList();
+		else if (className.equals("WorkGroup"))
+			return getWorkGroupVOList();
 		else if (className.equals("Resource"))
 			return getResourceVOList();
 		else
@@ -97,7 +97,7 @@ public class WebAPSEEVOServicesImpl implements WebAPSEEVOServices {
 			webapseeVO.setIdent(agent.getIdent());
 			webapseeVO.setName(agent.getName());
 			//Load roles played by agent
-			Collection<AgentPlaysRole> aprs = agent.getTheAgentPlaysRole();
+			Collection<AgentPlaysRole> aprs = agent.getTheAgentPlaysRoles();
 			String[] roles = new String[aprs.size()];
 			int i=0;
 			for (AgentPlaysRole agentPlaysRole : aprs) {
@@ -114,23 +114,23 @@ public class WebAPSEEVOServicesImpl implements WebAPSEEVOServices {
 		return processXML.toString();
 	}
 
-	private String getGroupVOList(){
-		String hql = "select group from " + GROUP_CLASS_NAME + " as group order by group.ident";
-		query = groupDAO.getPersistenceContext().createQuery(hql);
-		Collection<Group> groups = query.getResultList();
+	private String getWorkGroupVOList(){
+		String hql = "select WorkGroup from " + WorkGroup_CLASS_NAME + " as WorkGroup order by WorkGroup.ident";
+		query = WorkGroupDAO.getPersistenceContext().createQuery(hql);
+		Collection<WorkGroup> WorkGroups = query.getResultList();
 
 		WebAPSEEVO webapseeVO;
 		StringBuffer processXML = new StringBuffer();
-		processXML.append("<GROUPSVO>\n");
-		for(Group group : groups){
+		processXML.append("<WorkGroupSVO>\n");
+		for(WorkGroup WorkGroup : WorkGroups){
 			webapseeVO = new WebAPSEEVO();
-			webapseeVO.setIdent(group.getIdent());
-			webapseeVO.setName(group.getName());
-			webapseeVO.setType(group.getTheGroupType().getIdent());
+			webapseeVO.setIdent(WorkGroup.getIdent());
+			webapseeVO.setName(WorkGroup.getName());
+			webapseeVO.setType(WorkGroup.getTheWorkGroupType().getIdent());
 			processXML.append(webapseeVO.getXMLTag());
 		}
 
-		processXML.append("</GROUPSVO>\n");
+		processXML.append("</WorkGroupSVO>\n");
 		return processXML.toString();
 	}
 
@@ -160,8 +160,8 @@ public class WebAPSEEVOServicesImpl implements WebAPSEEVOServices {
 			return getArtifactTypeVOList();
 		else if (className.equals("Agent"))
 			return getRoleVOList();
-		else if (className.equals("Group"))
-			return getGroupTypeVOList();
+		else if (className.equals("WorkGroup"))
+			return getWorkGroupTypeVOList();
 		else if (className.equals("Resource"))
 			return getResourceTypeVOList();
 		else
@@ -204,21 +204,21 @@ public class WebAPSEEVOServicesImpl implements WebAPSEEVOServices {
 		return processXML.toString();
 	}
 
-	private String getGroupTypeVOList(){
-		String hql = "select grouptype from " + GROUPTYPE_CLASS_NAME + " as grouptype order by grouptype.ident";
-		query = groupTypeDAO.getPersistenceContext().createQuery(hql);
-		Collection<GroupType> groupTypes = query.getResultList();
+	private String getWorkGroupTypeVOList(){
+		String hql = "select WorkGrouptype from " + WorkGroupTYPE_CLASS_NAME + " as WorkGrouptype order by WorkGrouptype.ident";
+		query = WorkGroupTypeDAO.getPersistenceContext().createQuery(hql);
+		Collection<WorkGroupType> WorkGroupTypes = query.getResultList();
 
 		WebAPSEEVO webapseeVO;
 		StringBuffer processXML = new StringBuffer();
-		processXML.append("<GROUPTYPESVO>\n");
-		for(GroupType groupType : groupTypes){
+		processXML.append("<WorkGroupTYPESVO>\n");
+		for(WorkGroupType WorkGroupType : WorkGroupTypes){
 			webapseeVO = new WebAPSEEVO();
-			webapseeVO.setIdent(groupType.getIdent());
+			webapseeVO.setIdent(WorkGroupType.getIdent());
 			processXML.append(webapseeVO.getXMLTag());
 		}
 
-		processXML.append("</GROUPTYPESVO>\n");
+		processXML.append("</WorkGroupTYPESVO>\n");
 		return processXML.toString();
 	}
 

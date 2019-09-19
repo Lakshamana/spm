@@ -1,31 +1,31 @@
 package br.ufpa.labes.spm.service.mapper;
 
 import br.ufpa.labes.spm.domain.*;
-import br.ufpa.labes.spm.service.dto.WorkGroupInstSugDTO;
+import br.ufpa.labes.spm.service.dto.WorkWorkGroupInstSugDTO;
 
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity {@link WorkGroupInstSug} and its DTO {@link WorkGroupInstSugDTO}.
+ * Mapper for the entity {@link WorkWorkGroupInstSug} and its DTO {@link WorkWorkGroupInstSugDTO}.
  */
-@Mapper(componentModel = "spring", uses = {WorkGroupMapper.class, TypeMapper.class})
-public interface WorkGroupInstSugMapper extends EntityMapper<WorkGroupInstSugDTO, WorkGroupInstSug> {
+@Mapper(componentModel = "spring", uses = {WorkWorkGroupMapper.class, TypeMapper.class})
+public interface WorkWorkGroupInstSugMapper extends EntityMapper<WorkWorkGroupInstSugDTO, WorkWorkGroupInstSug> {
 
-    @Mapping(source = "chosenWorkGroup.id", target = "chosenWorkGroupId")
-    @Mapping(source = "workGroupTypeRequired.id", target = "workGroupTypeRequiredId")
-    WorkGroupInstSugDTO toDto(WorkGroupInstSug workGroupInstSug);
+    @Mapping(source = "chosenWorkWorkGroup.id", target = "chosenWorkWorkGroupId")
+    @Mapping(source = "workWorkGroupTypeRequired.id", target = "workWorkGroupTypeRequiredId")
+    WorkWorkGroupInstSugDTO toDto(WorkWorkGroupInstSug workWorkGroupInstSug);
 
-    @Mapping(source = "chosenWorkGroupId", target = "chosenWorkGroup")
-    @Mapping(source = "workGroupTypeRequiredId", target = "workGroupTypeRequired")
-    @Mapping(target = "removeSugWorkGroup", ignore = true)
-    WorkGroupInstSug toEntity(WorkGroupInstSugDTO workGroupInstSugDTO);
+    @Mapping(source = "chosenWorkWorkGroupId", target = "chosenWorkWorkGroup")
+    @Mapping(source = "workWorkGroupTypeRequiredId", target = "workWorkGroupTypeRequired")
+    @Mapping(target = "removeSugWorkWorkGroup", ignore = true)
+    WorkWorkGroupInstSug toEntity(WorkWorkGroupInstSugDTO workWorkGroupInstSugDTO);
 
-    default WorkGroupInstSug fromId(Long id) {
+    default WorkWorkGroupInstSug fromId(Long id) {
         if (id == null) {
             return null;
         }
-        WorkGroupInstSug workGroupInstSug = new WorkGroupInstSug();
-        workGroupInstSug.setId(id);
-        return workGroupInstSug;
+        WorkWorkGroupInstSug workWorkGroupInstSug = new WorkWorkGroupInstSug();
+        workWorkGroupInstSug.setId(id);
+        return workWorkGroupInstSug;
     }
 }

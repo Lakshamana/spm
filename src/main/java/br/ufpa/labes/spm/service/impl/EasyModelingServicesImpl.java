@@ -28,7 +28,7 @@ import br.ufpa.labes.spm.repository.impl.processModels.ProcessModelDAO;
 import br.ufpa.labes.spm.repository.interfaces.activities.IActivityDAO;
 import br.ufpa.labes.spm.repository.interfaces.activities.IDecomposedDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
-import br.ufpa.labes.spm.repository.interfaces.agent.IGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IWorkGroupDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IRoleDAO;
 import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
 import br.ufpa.labes.spm.repository.interfaces.calendar.ICalendarDAO;
@@ -45,7 +45,7 @@ import br.ufpa.labes.spm.repository.interfaces.plainActivities.IInvolvedArtifact
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.INormalDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IParametersDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqAgentDAO;
-import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqWorkGroupDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredResourceDAO;
 import br.ufpa.labes.spm.repository.interfaces.policies.staticPolicies.IPolConditionDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IGraphicCoordinateDAO;
@@ -58,7 +58,7 @@ import br.ufpa.labes.spm.repository.interfaces.taskagenda.IProcessAgendaDAO;
 import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
 import br.ufpa.labes.spm.repository.interfaces.tools.ISubroutineDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
-import br.ufpa.labes.spm.repository.interfaces.types.IGroupTypeDAO;
+import br.ufpa.labes.spm.repository.interfaces.types.IWorkGroupTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
 import br.ufpa.labes.spm.service.dto.CalendarDTO;
 import br.ufpa.labes.spm.exceptions.DAOException;
@@ -88,7 +88,7 @@ import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.Parameters;
 import br.ufpa.labes.spm.domain.ReqAgent;
 import br.ufpa.labes.spm.domain.ReqAgentRequiresAbility;
-import br.ufpa.labes.spm.domain.ReqGroup;
+import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 import br.ufpa.labes.spm.domain.RequiredResource;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
@@ -140,13 +140,13 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	IBranchConCondToMultipleConDAO bctmcDAO;
 	IJoinDAO joinConDAO;
 	IBranchDAO branchConDAO;
-	IGroupTypeDAO groupTypeDAO;
+	IWorkGroupTypeDAO WorkGroupTypeDAO;
 	IRoleDAO roleDAO;
 	IReqAgentDAO reqAgentDAO;
 	IAgentDAO agentDAO;
 	ITaskDAO taskDAO;
-	IGroupDAO groupDAO;
-	IReqGroupDAO reqGroupDAO;
+	IWorkGroupDAO WorkGroupDAO;
+	IReqWorkGroupDAO reqWorkGroupDAO;
 	IResourceTypeDAO resTypeDAO;
 	IRequiredResourceDAO reqResDAO;
 	IResourceDAO resDAO;
@@ -293,17 +293,17 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 							webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
 						}
 					}
-				}else if(webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.REQGROUPNODE){
+				}else if(webAPSEENodePosition.getNodeType() == WebAPSEENodePosition.REQWorkGroupNODE){
 					Collection<String> theReferredObjs = webAPSEENodePosition.getTheReferredObjects();
 					if(theReferredObjs.size()==1){
 						String[] normals = new String[1];
 						theReferredObjs.toArray(normals);
 						String normal = normals[0];
 
-						ReqGroup reqGroup = (ReqGroup) reqGroupDAO.findReqGroupFromProcessModel(webAPSEENodePosition.getInstanceID(), webAPSEENodePosition.getTypeID(), normal);
-						if(reqGroup!=null){
-							theReferredOid = reqGroup.getOid();
-							className = reqGroup.getClass().getSimpleName();
+						ReqWorkGroup reqWorkGroup = (ReqWorkGroup) reqWorkGroupDAO.findReqWorkGroupFromProcessModel(webAPSEENodePosition.getInstanceID(), webAPSEENodePosition.getTypeID(), normal);
+						if(reqWorkGroup!=null){
+							theReferredOid = reqWorkGroup.getOid();
+							className = reqWorkGroup.getClass().getSimpleName();
 							ok = true;
 							webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
 						}
@@ -372,7 +372,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		typesToConvert.put(5, WebAPSEENodePosition.JOINConNODE);
 		typesToConvert.put(6, WebAPSEENodePosition.ACTIVITYNODE);
 		typesToConvert.put(7, WebAPSEENodePosition.ACTIVITYNODE);
-		typesToConvert.put(8, WebAPSEENodePosition.REQGROUPNODE);
+		typesToConvert.put(8, WebAPSEENodePosition.REQWorkGroupNODE);
 
 		return typesToConvert.get(nodeTypeFromFlex);
 	}
@@ -1301,23 +1301,23 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 							WebAPSEEObject.REQ_AGENT + "+" + coordinateKey, coordinates);
 					coordinateKey = null;
 
-				} else if (currentReqPeople instanceof ReqGroup) {
+				} else if (currentReqPeople instanceof ReqWorkGroup) {
 
-					newRequiredPeople = new ReqGroup();
+					newRequiredPeople = new ReqWorkGroup();
 
-					if (((ReqGroup) currentReqPeople).getTheGroupType() != null) {
-						((ReqGroup) newRequiredPeople).insertIntoTheGroupType(((ReqGroup) currentReqPeople).getTheGroupType());
-						coordinateKey = ((ReqGroup) newRequiredPeople).getTheGroupType().getIdent();
+					if (((ReqWorkGroup) currentReqPeople).getTheWorkGroupType() != null) {
+						((ReqWorkGroup) newRequiredPeople).insertIntoTheWorkGroupType(((ReqWorkGroup) currentReqPeople).getTheWorkGroupType());
+						coordinateKey = ((ReqWorkGroup) newRequiredPeople).getTheWorkGroupType().getIdent();
 					}
 
-					if (((ReqGroup) currentReqPeople).getTheGroup() != null) {
-						((ReqGroup) newRequiredPeople).insertIntoTheGroup(((ReqGroup) currentReqPeople).getTheGroup());
-						coordinateKey = coordinateKey + ":" + ((ReqGroup) newRequiredPeople).getTheGroup().getIdent();
+					if (((ReqWorkGroup) currentReqPeople).getTheWorkGroup() != null) {
+						((ReqWorkGroup) newRequiredPeople).insertIntoTheWorkGroup(((ReqWorkGroup) currentReqPeople).getTheWorkGroup());
+						coordinateKey = coordinateKey + ":" + ((ReqWorkGroup) newRequiredPeople).getTheWorkGroup().getIdent();
 					}
 
 					coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
-					this.addCoordinate(((ReqGroup) currentReqPeople).getOid(), ((ReqGroup) currentReqPeople).getClass().getSimpleName(),
-							WebAPSEEObject.REQ_GROUP + "+" + coordinateKey, coordinates);
+					this.addCoordinate(((ReqWorkGroup) currentReqPeople).getOid(), ((ReqWorkGroup) currentReqPeople).getClass().getSimpleName(),
+							WebAPSEEObject.REQ_WorkGroup + "+" + coordinateKey, coordinates);
 					coordinateKey = null;
 
 				}// end if

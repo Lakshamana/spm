@@ -18,7 +18,7 @@ import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentHasAbilityDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentPlaysRoleDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IConfiDAO;
-import br.ufpa.labes.spm.repository.interfaces.agent.IGroupDAO;
+import br.ufpa.labes.spm.repository.interfaces.agent.IWorkGroupDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IRoleDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IRoleNeedsAbilityDAO;
 import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IActivityEstimationDAO;
@@ -34,14 +34,14 @@ import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.AgentHasAbilityDTO;
 import br.ufpa.labes.spm.service.dto.AgentsDTO;
 import br.ufpa.labes.spm.service.dto.ConfigurationDTO;
-import br.ufpa.labes.spm.service.dto.GroupDTO;
+import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
 import br.ufpa.labes.spm.service.dto.RoleDTO;
 import br.ufpa.labes.spm.domain.Ability;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.AgentAffinityAgent;
 import br.ufpa.labes.spm.domain.AgentHasAbility;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
-import br.ufpa.labes.spm.domain.Group;
+import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.Role;
 import br.ufpa.labes.spm.domain.Configuration;
 import br.ufpa.labes.spm.domain.Project;
@@ -70,7 +70,7 @@ public class AgentServicesImpl implements AgentServices {
 
 	private static final String ABILITY_CLASSNAME = Ability.class.getSimpleName();
 
-	private static final String GROUP_CLASSNAME = Group.class.getSimpleName();
+	private static final String WorkGroup_CLASSNAME = WorkGroup.class.getSimpleName();
 
 	private static final String PROCESS_AGENDA_CLASSNAME = ProcessAgenda.class.getName();
 
@@ -92,7 +92,7 @@ public class AgentServicesImpl implements AgentServices {
 
 	IAgentAffinityAgentDAO agentAffinityAgentDAO;
 
-	IGroupDAO groupDAO;
+	IWorkGroupDAO WorkGroupDAO;
 
 	IConfiDAO confiDAO;
 
@@ -267,7 +267,7 @@ public class AgentServicesImpl implements AgentServices {
 
 	private void updateAgentDependencies(Agent agent, AgentDTO agentDTO) {
 		this.saveRoleToAgent(agentDTO);
-		this.saveGroupToAgent(agentDTO);
+		this.saveWorkGroupToAgent(agentDTO);
 
 		if (!agentDTO.getAbilityToAgent().isEmpty()) {
 			for (String abilityName : agentDTO.getAbilityToAgent()) {
@@ -277,7 +277,7 @@ public class AgentServicesImpl implements AgentServices {
 					agentHasAbility.setTheAgent(agent);
 					agentHasAbility.setTheAbility(ability);
 
-					boolean isAgentHasAbility = agent.getTheAgentHasAbility()
+					boolean isAgentHasAbility = agent.getTheAgentHasAbilities()
 							.contains(agentHasAbility);
 
 					if (!isAgentHasAbility) {
@@ -334,19 +334,19 @@ public class AgentServicesImpl implements AgentServices {
 			}
 
 			for (AgentHasAbility agentHasAbility : agent
-					.getTheAgentHasAbility()) {
+					.getTheAgentHasAbilities()) {
 				agentHasAbility.removeFromTheAbility();
 				agentHasAbility.setTheAgent(null);
 				agentHasAbilityDAO.daoDelete(agentHasAbility);
 			}
 
-			for (AgentPlaysRole agentPlaysRole : agent.getTheAgentPlaysRole()) {
+			for (AgentPlaysRole agentPlaysRole : agent.getTheAgentPlaysRoles()) {
 				agentPlaysRole.removeFromTheRole();
 				agentPlaysRole.setTheAgent(null);
 			}
 
-			for (Group group : agent.getTheGroup()) {
-				group.getTheAgent().remove(agent);
+			for (WorkGroup WorkGroup : agent.getTheWorkGroups()) {
+				WorkGroup.getTheAgents().remove(agent);
 			}
 
 			for (AgentAffinityAgent agentAffinityAgent : agent
@@ -363,7 +363,7 @@ public class AgentServicesImpl implements AgentServices {
 				agentAffinityAgentDAO.daoDelete(agentAffinityAgent);
 			}
 
-			agent.setTheGroup(new HashSet<Group>());
+			agent.setTheWorkGroup(new HashSet<WorkGroup>());
 			agent.setFromAgentAffinity(new HashSet<AgentAffinityAgent>());
 			agent.setToAgentAffinity(new HashSet<AgentAffinityAgent>());
 			agent.setTheAgentPlaysRole(new HashSet<AgentPlaysRole>());
@@ -517,23 +517,23 @@ public class AgentServicesImpl implements AgentServices {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<GroupDTO> getGroupToAgent() {
+	public List<WorkGroupDTO> getWorkGroupToAgent() {
 		String hql;
 		Query query;
-		List<Group> result = null;
-		List<GroupDTO> resultDTO = new ArrayList<GroupDTO>();
+		List<WorkGroup> result = null;
+		List<WorkGroupDTO> resultDTO = new ArrayList<WorkGroupDTO>();
 
-		hql = "select grupo from " + GROUP_CLASSNAME + " as grupo";
+		hql = "select grupo from " + WorkGroup_CLASSNAME + " as grupo";
 		query = agentDAO.getPersistenceContext().createQuery(hql);
 		result = query.getResultList();
 		Converter converter = new ConverterImpl();
 
 		if (!result.isEmpty()) {
-			GroupDTO abi = null;
+			WorkGroupDTO abi = null;
 			for (int i = 0; i < result.size(); i++) {
 				try {
-					abi = (GroupDTO) converter.getDTO(result.get(i),
-							GroupDTO.class);
+					abi = (WorkGroupDTO) converter.getDTO(result.get(i),
+							WorkGroupDTO.class);
 					resultDTO.add(abi);
 				} catch (ImplementationException e) {
 					e.printStackTrace();
@@ -561,8 +561,8 @@ public class AgentServicesImpl implements AgentServices {
 				if (role != null) {
 					AgentPlaysRole agentPlaysRole = new AgentPlaysRole(role,
 							agent);
-					if (!agent.getTheAgentPlaysRole().contains(agentPlaysRole)) {
-						agent.getTheAgentPlaysRole().add(agentPlaysRole);
+					if (!agent.getTheAgentPlaysRoles().contains(agentPlaysRole)) {
+						agent.getTheAgentPlaysRoles().add(agentPlaysRole);
 					}
 				}
 			}
@@ -714,19 +714,19 @@ public class AgentServicesImpl implements AgentServices {
 	}
 
 	@Override
-	public AgentDTO saveGroupToAgent(AgentDTO agentDTO) {
+	public AgentDTO saveWorkGroupToAgent(AgentDTO agentDTO) {
 		agent = this.getAgentForName(agentDTO.getName());
 
-		if (!agentDTO.getGroupToAgent().isEmpty()) {
-			for (String groupName : agentDTO.getGroupToAgent()) {
-				Group group = this.getGroupFromName(groupName);
-				if (group != null) {
+		if (!agentDTO.getWorkGroupToAgent().isEmpty()) {
+			for (String WorkGroupName : agentDTO.getWorkGroupToAgent()) {
+				WorkGroup WorkGroup = this.getWorkGroupFromName(WorkGroupName);
+				if (WorkGroup != null) {
 
-					if (!agent.getTheGroup().contains(group)
-							&& !group.getTheAgent().contains(agent)) {
-						agent.getTheGroup().add(group);
-						group.getTheAgent().add(agent);
-						groupDAO.update(group);
+					if (!agent.getTheWorkGroups().contains(WorkGroup)
+							&& !WorkGroup.getTheAgents().contains(agent)) {
+						agent.getTheWorkGroups().add(WorkGroup);
+						WorkGroup.getTheAgents().add(agent);
+						WorkGroupDAO.update(WorkGroup);
 						agentDAO.update(agent);
 					}
 				}
@@ -843,7 +843,7 @@ public class AgentServicesImpl implements AgentServices {
 		Agent agent = this.getAgentForName(agentDTO.getName());
 		List<AgentHasAbility> agentHasAbilitiesToRemove = new ArrayList<AgentHasAbility>();
 
-		for (AgentHasAbility agentHasAbility : agent.getTheAgentHasAbility()) {
+		for (AgentHasAbility agentHasAbility : agent.getTheAgentHasAbilities()) {
 			boolean equalAgents = agentHasAbility.getTheAgent().equals(agent);
 			boolean equalAbilities = agentHasAbility.getTheAbility().getName()
 					.equals(ability.getName());
@@ -857,7 +857,7 @@ public class AgentServicesImpl implements AgentServices {
 		}
 
 		if (!agentHasAbilitiesToRemove.isEmpty()) {
-			agent.getTheAgentHasAbility().removeAll(agentHasAbilitiesToRemove);
+			agent.getTheAgentHasAbilities().removeAll(agentHasAbilitiesToRemove);
 			agentDAO.update(agent);
 
 			ability.getTheAgentHasAbility()
@@ -880,7 +880,7 @@ public class AgentServicesImpl implements AgentServices {
 		Agent agent = this.getAgentForName(agentDTO.getName());
 		List<AgentPlaysRole> agentPlaysRolesToRemove = new ArrayList<AgentPlaysRole>();
 
-		for (AgentPlaysRole agentPlaysRole : agent.getTheAgentPlaysRole()) {
+		for (AgentPlaysRole agentPlaysRole : agent.getTheAgentPlaysRoles()) {
 
 			boolean equalAgents = agentPlaysRole.getTheAgent().equals(agent);
 			boolean equalRoles = agentPlaysRole.getTheRole().equals(role);
@@ -893,8 +893,8 @@ public class AgentServicesImpl implements AgentServices {
 
 		}
 
-		if (!agent.getTheAgentPlaysRole().isEmpty()) {
-			agent.getTheAgentPlaysRole().removeAll(agentPlaysRolesToRemove);
+		if (!agent.getTheAgentPlaysRoles().isEmpty()) {
+			agent.getTheAgentPlaysRoles().removeAll(agentPlaysRolesToRemove);
 			agentDAO.update(agent);
 
 			return true;
@@ -925,12 +925,12 @@ public class AgentServicesImpl implements AgentServices {
 	}
 
 	@Override
-	public Boolean removeGroupAgent(AgentDTO agentDTO, String groupName) {
-		Group group = this.getGroupFromName(groupName);
+	public Boolean removeWorkGroupAgent(AgentDTO agentDTO, String WorkGroupName) {
+		WorkGroup WorkGroup = this.getWorkGroupFromName(WorkGroupName);
 		Agent agent = this.getAgentForName(agentDTO.getName());
 
-		if (agent.getTheGroup().contains(group)) {
-			agent.getTheGroup().remove(group);
+		if (agent.getTheWorkGroups().contains(WorkGroup)) {
+			agent.getTheWorkGroups().remove(WorkGroup);
 			agentDAO.update(agent);
 		}
 
@@ -1043,15 +1043,15 @@ public class AgentServicesImpl implements AgentServices {
 		return names;
 	}
 
-	private Group getGroupFromName(String groupName) {
-		String hql = "SELECT group FROM " + GROUP_CLASSNAME
-				+ " as group where group.name = :name";
-		query = groupDAO.getPersistenceContext().createQuery(hql);
-		query.setParameter("name", groupName);
+	private WorkGroup getWorkGroupFromName(String WorkGroupName) {
+		String hql = "SELECT WorkGroup FROM " + WorkGroup_CLASSNAME
+				+ " as WorkGroup where WorkGroup.name = :name";
+		query = WorkGroupDAO.getPersistenceContext().createQuery(hql);
+		query.setParameter("name", WorkGroupName);
 
-		Group result = null;
+		WorkGroup result = null;
 		if (!query.getResultList().isEmpty()) {
-			result = (Group) query.getResultList().get(0);
+			result = (WorkGroup) query.getResultList().get(0);
 		}
 
 		return result;
@@ -1105,7 +1105,7 @@ public class AgentServicesImpl implements AgentServices {
 			agentDTO = (AgentDTO) converter.getDTO(agent, AgentDTO.class);
 			agentDTO.setRoleToAgent(new ArrayList<String>());
 			agentDTO.setRoleIdentsToAgent(new ArrayList<String>());
-			if (!agent.getTheAgentPlaysRole().isEmpty()) {
+			if (!agent.getTheAgentPlaysRoles().isEmpty()) {
 
 				for (AgentPlaysRole agentPlayRole : agent
 						.getTheAgentPlaysRole()) {
@@ -1142,9 +1142,9 @@ public class AgentServicesImpl implements AgentServices {
 				agentDTO.setWorkingCost(custoDoTrabalho);
 			}
 
-			agentDTO.setGroupToAgent(new ArrayList<String>());
-			for (Group group : agent.getTheGroup()) {
-				agentDTO.getGroupToAgent().add(group.getName());
+			agentDTO.setWorkGroupToAgent(new ArrayList<String>());
+			for (WorkGroup WorkGroup : agent.getTheWorkGroups()) {
+				agentDTO.getWorkGroupToAgent().add(WorkGroup.getName());
 			}
 
 			agentDTO.setAbilityToAgent(new ArrayList<String>());

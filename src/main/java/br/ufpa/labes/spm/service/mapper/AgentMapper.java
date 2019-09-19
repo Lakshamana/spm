@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Agent} and its DTO {@link AgentDTO}.
  */
-@Mapper(componentModel = "spring", uses = {TaskAgendaMapper.class, SpmConfigurationMapper.class, EventMapper.class, ProcessMapper.class, WorkGroupMapper.class, CompanyUnitMapper.class, EmailConfigurationMapper.class})
+@Mapper(componentModel = "spring", uses = {TaskAgendaMapper.class, SpmConfigurationMapper.class, EventMapper.class, ProcessMapper.class, WorkWorkGroupMapper.class, CompanyUnitMapper.class, EmailConfigurationMapper.class})
 public interface AgentMapper extends EntityMapper<AgentDTO, Agent> {
 
     @Mapping(source = "theTaskAgenda.id", target = "theTaskAgendaId")
@@ -35,7 +35,7 @@ public interface AgentMapper extends EntityMapper<AgentDTO, Agent> {
     @Mapping(target = "removeTheManagedOrgUnits", ignore = true)
     @Mapping(source = "theResourceEventId", target = "theResourceEvent")
     @Mapping(target = "removeTheProcesses", ignore = true)
-    @Mapping(target = "removeTheWorkGroups", ignore = true)
+    @Mapping(target = "removeTheWorkWorkGroups", ignore = true)
     @Mapping(target = "removeTheOrgUnits", ignore = true)
     @Mapping(target = "theChatMessage", ignore = true)
     @Mapping(source = "theEmailConfigurationId", target = "theEmailConfiguration")
