@@ -1,6 +1,7 @@
 Group WorkGroup
 Configuration SpmConfiguration
 Join JoinCon
+Branch BranchCon
 BranchAND BranchANDCon
 BranchCond BranchConCond
 BranchCondToActivity BranchConCondToActivity
@@ -11,7 +12,11 @@ System DevelopingSystem
 ReqGroup ReqWorkGroup
 ResourceInstantiationSuggestion ResourceInstSug
 PeopleInstantiationSuggestion PeopleInstSug
+AgentInstantiationSuggestion AgentInstSug
 GroupInstantiationSuggestion WorkGroupInstSug
 GroupEstimation WorkGroupEstimation
 GroupMetric WorkGroupMetric
 GroupType WorkGroupType
+ToolParameters ToolParameter
+Parameters Parameter
+InvolvedArtifacts InvolvedArtifact
