@@ -17,87 +17,90 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/** Service Implementation for managing {@link SpmConfiguration}. */
+/**
+ * Service Implementation for managing {@link SpmConfiguration}.
+ */
 @Service
 @Transactional
 public class SpmConfigurationServiceImpl implements SpmConfigurationService {
 
-  private final Logger log = LoggerFactory.getLogger(SpmConfigurationServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(SpmConfigurationServiceImpl.class);
 
-  private final SpmConfigurationRepository spmConfigurationRepository;
+    private final SpmConfigurationRepository spmConfigurationRepository;
 
-  private final SpmConfigurationMapper spmConfigurationMapper;
+    private final SpmConfigurationMapper spmConfigurationMapper;
 
-  public SpmConfigurationServiceImpl(
-      SpmConfigurationRepository spmConfigurationRepository,
-      SpmConfigurationMapper spmConfigurationMapper) {
-    this.spmConfigurationRepository = spmConfigurationRepository;
-    this.spmConfigurationMapper = spmConfigurationMapper;
-  }
+    public SpmConfigurationServiceImpl(SpmConfigurationRepository spmConfigurationRepository, SpmConfigurationMapper spmConfigurationMapper) {
+        this.spmConfigurationRepository = spmConfigurationRepository;
+        this.spmConfigurationMapper = spmConfigurationMapper;
+    }
 
-  /**
-   * Save a spmConfiguration.
-   *
-   * @param spmConfigurationDTO the entity to save.
-   * @return the persisted entity.
-   */
-  @Override
-  public SpmConfigurationDTO save(SpmConfigurationDTO spmConfigurationDTO) {
-    log.debug("Request to save SpmConfiguration : {}", spmConfigurationDTO);
-    SpmConfiguration spmConfiguration = spmConfigurationMapper.toEntity(spmConfigurationDTO);
-    spmConfiguration = spmConfigurationRepository.save(spmConfiguration);
-    return spmConfigurationMapper.toDto(spmConfiguration);
-  }
+    /**
+     * Save a spmConfiguration.
+     *
+     * @param spmConfigurationDTO the entity to save.
+     * @return the persisted entity.
+     */
+    @Override
+    public SpmConfigurationDTO save(SpmConfigurationDTO spmConfigurationDTO) {
+        log.debug("Request to save SpmConfiguration : {}", spmConfigurationDTO);
+        SpmConfiguration spmConfiguration = spmConfigurationMapper.toEntity(spmConfigurationDTO);
+        spmConfiguration = spmConfigurationRepository.save(spmConfiguration);
+        return spmConfigurationMapper.toDto(spmConfiguration);
+    }
 
-  /**
-   * Get all the spmConfigurations.
-   *
-   * @return the list of entities.
-   */
-  @Override
-  @Transactional(readOnly = true)
-  public List<SpmConfigurationDTO> findAll() {
-    log.debug("Request to get all SpmConfigurations");
-    return spmConfigurationRepository.findAll().stream()
-        .map(spmConfigurationMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
+    /**
+     * Get all the spmConfigurations.
+     *
+     * @return the list of entities.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<SpmConfigurationDTO> findAll() {
+        log.debug("Request to get all SpmConfigurations");
+        return spmConfigurationRepository.findAll().stream()
+            .map(spmConfigurationMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
-  /**
-   * Get all the spmConfigurations where TheAgent is {@code null}.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<SpmConfigurationDTO> findAllWhereTheAgentIsNull() {
-    log.debug("Request to get all spmConfigurations where TheAgent is null");
-    return StreamSupport.stream(spmConfigurationRepository.findAll().spliterator(), false)
-        .filter(spmConfiguration -> spmConfiguration.getTheAgent() == null)
-        .map(spmConfigurationMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
 
-  /**
-   * Get one spmConfiguration by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Override
-  @Transactional(readOnly = true)
-  public Optional<SpmConfigurationDTO> findOne(Long id) {
-    log.debug("Request to get SpmConfiguration : {}", id);
-    return spmConfigurationRepository.findById(id).map(spmConfigurationMapper::toDto);
-  }
 
-  /**
-   * Delete the spmConfiguration by id.
-   *
-   * @param id the id of the entity.
-   */
-  @Override
-  public void delete(Long id) {
-    log.debug("Request to delete SpmConfiguration : {}", id);
-    spmConfigurationRepository.deleteById(id);
-  }
+    /**
+    *  Get all the spmConfigurations where TheAgent is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true) 
+    public List<SpmConfigurationDTO> findAllWhereTheAgentIsNull() {
+        log.debug("Request to get all spmConfigurations where TheAgent is null");
+        return StreamSupport
+            .stream(spmConfigurationRepository.findAll().spliterator(), false)
+            .filter(spmConfiguration -> spmConfiguration.getTheAgent() == null)
+            .map(spmConfigurationMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Get one spmConfiguration by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<SpmConfigurationDTO> findOne(Long id) {
+        log.debug("Request to get SpmConfiguration : {}", id);
+        return spmConfigurationRepository.findById(id)
+            .map(spmConfigurationMapper::toDto);
+    }
+
+    /**
+     * Delete the spmConfiguration by id.
+     *
+     * @param id the id of the entity.
+     */
+    @Override
+    public void delete(Long id) {
+        log.debug("Request to delete SpmConfiguration : {}", id);
+        spmConfigurationRepository.deleteById(id);
+    }
 }

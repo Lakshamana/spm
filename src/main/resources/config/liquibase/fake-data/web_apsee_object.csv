@@ -1,11 +1,11 @@
 id;the_referred_oid;class_name;web_apsee_object_type
-1;58377;Web;CONNECTION
+1;58377;Web;REQ_AGENT
 2;36171;Response payment;CONNECTION
-3;10251;Buckinghamshire Bedfordshire holistic;REQ_RESOURCE
-4;9823;solid state Metal;REQ_AGENT
-5;86169;4th generation auxiliary;CONNECTION
-6;21339;invoice Pizza;REQ_RESOURCE
-7;72705;Michigan Infrastructure Bedfordshire;REQ_RESOURCE
-8;38723;Regional Books optical;REQ_WORKGROUP
-9;70369;Facilitator partnerships;CONNECTION
-10;50108;hard drive Venezuela Australia;REQ_RESOURCE
+3;10251;Buckinghamshire Bedfordshire holistic;REQ_AGENT
+4;9823;solid state Metal;ACTIVITY
+5;86169;4th generation auxiliary;REQ_RESOURCE
+6;21339;invoice Pizza;ACTIVITY
+7;72705;Michigan Infrastructure Bedfordshire;CONNECTION
+8;38723;Regional Books optical;REQ_AGENT
+9;70369;Facilitator partnerships;ACTIVITY
+10;50108;hard drive Venezuela Australia;REQ_AGENT

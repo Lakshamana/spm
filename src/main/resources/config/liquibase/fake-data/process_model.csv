@@ -1,11 +1,11 @@
 id;requirements;pm_status
-1;pink Iceland;INSTANTIATED
-2;Berkshire;ABSTRACT
-3;Rubber Checking Account Car;FAILED
+1;pink Iceland;ENACTING
+2;Berkshire;FAILED
+3;Rubber Checking Account Car;ENACTING
 4;Plaza Handcrafted;INSTANTIATED
-5;incentivize North Dakota River;ABSTRACT
-6;Outdoors Sausages;CANCELED
-7;Personal Loan Account;FAILED
-8;Electronics quantify Credit Card Account;FINISHED
-9;incubate;FAILED
-10;bus Savings Account;MIXED
+5;incentivize North Dakota River;REQUIREMENTS
+6;Outdoors Sausages;FAILED
+7;Personal Loan Account;CANCELED
+8;Electronics quantify Credit Card Account;MIXED
+9;incubate;REQUIREMENTS
+10;bus Savings Account;FAILED

@@ -1,54 +1,59 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/** A DTO for the {@link br.ufpa.labes.spm.domain.ResourceMetric} entity. */
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.ResourceMetric} entity.
+ */
 public class ResourceMetricDTO implements Serializable {
 
-  private Long id;
+    private Long id;
 
-  private Long theResourceId;
 
-  public Long getId() {
-    return id;
-  }
+    private Long theResourceId;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Long getTheResourceId() {
-    return theResourceId;
-  }
-
-  public void setTheResourceId(Long resourceId) {
-    this.theResourceId = resourceId;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+    public Long getId() {
+        return id;
     }
 
-    ResourceMetricDTO resourceMetricDTO = (ResourceMetricDTO) o;
-    if (resourceMetricDTO.getId() == null || getId() == null) {
-      return false;
+    public void setId(Long id) {
+        this.id = id;
     }
-    return Objects.equals(getId(), resourceMetricDTO.getId());
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(getId());
-  }
+    public Long getTheResourceId() {
+        return theResourceId;
+    }
 
-  @Override
-  public String toString() {
-    return "ResourceMetricDTO{" + "id=" + getId() + ", theResource=" + getTheResourceId() + "}";
-  }
+    public void setTheResourceId(Long resourceId) {
+        this.theResourceId = resourceId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ResourceMetricDTO resourceMetricDTO = (ResourceMetricDTO) o;
+        if (resourceMetricDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), resourceMetricDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "ResourceMetricDTO{" +
+            "id=" + getId() +
+            ", theResource=" + getTheResourceId() +
+            "}";
+    }
 }

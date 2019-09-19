@@ -1,8 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
-
-
 import br.ufpa.labes.spm.domain.ResourceType;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -13,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ResourceTypeRepository extends IResourceTypeDAO, JpaRepository<ResourceType, Long> {
+public interface ResourceTypeRepository extends JpaRepository<ResourceType, Long> {
 
 }

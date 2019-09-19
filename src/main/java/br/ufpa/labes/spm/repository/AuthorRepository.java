@@ -1,8 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.people.IAuthorDAO;
-
-
 import br.ufpa.labes.spm.domain.Author;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +14,7 @@ import java.util.Optional;
  * Spring Data  repository for the Author entity.
  */
 @Repository
-public interface AuthorRepository extends IAuthorDAO, JpaRepository<Author, Long> {
+public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     @Query(value = "select distinct author from Author author left join fetch author.authorsFolloweds",
         countQuery = "select count(distinct author) from Author author")

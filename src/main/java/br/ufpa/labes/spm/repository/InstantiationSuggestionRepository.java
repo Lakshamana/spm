@@ -1,8 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.plannerInfo.IInstantiationSuggestionDAO;
-
-
 import br.ufpa.labes.spm.domain.InstantiationSuggestion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +14,7 @@ import java.util.Optional;
  * Spring Data  repository for the InstantiationSuggestion entity.
  */
 @Repository
-public interface InstantiationSuggestionRepository extends IInstantiationSuggestionDAO, JpaRepository<InstantiationSuggestion, Long> {
+public interface InstantiationSuggestionRepository extends JpaRepository<InstantiationSuggestion, Long> {
 
     @Query(value = "select distinct instantiationSuggestion from InstantiationSuggestion instantiationSuggestion left join fetch instantiationSuggestion.sugRsrcs",
         countQuery = "select count(distinct instantiationSuggestion) from InstantiationSuggestion instantiationSuggestion")

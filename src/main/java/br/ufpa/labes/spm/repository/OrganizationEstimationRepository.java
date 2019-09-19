@@ -1,8 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IOrganizationEstimationDAO;
-
-
 import br.ufpa.labes.spm.domain.OrganizationEstimation;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -13,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface OrganizationEstimationRepository extends IOrganizationEstimationDAO, JpaRepository<OrganizationEstimation, Long> {
+public interface OrganizationEstimationRepository extends JpaRepository<OrganizationEstimation, Long> {
 
 }

@@ -1,8 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.tools.IToolDefinitionDAO;
-
-
 import br.ufpa.labes.spm.domain.ToolDefinition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +14,7 @@ import java.util.Optional;
  * Spring Data  repository for the ToolDefinition entity.
  */
 @Repository
-public interface ToolDefinitionRepository extends IToolDefinitionDAO, JpaRepository<ToolDefinition, Long> {
+public interface ToolDefinitionRepository extends JpaRepository<ToolDefinition, Long> {
 
     @Query(value = "select distinct toolDefinition from ToolDefinition toolDefinition left join fetch toolDefinition.theArtifactTypes",
         countQuery = "select count(distinct toolDefinition) from ToolDefinition toolDefinition")

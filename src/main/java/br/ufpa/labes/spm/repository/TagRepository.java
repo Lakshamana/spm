@@ -1,8 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces..ITagDAO;
-
-
 import br.ufpa.labes.spm.domain.Tag;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -13,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface TagRepository extends ITagDAO, JpaRepository<Tag, Long> {
+public interface TagRepository extends JpaRepository<Tag, Long> {
 
 }

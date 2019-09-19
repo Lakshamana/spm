@@ -1,8 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.plannerInfo.IAgentWorkingLoadDAO;
-
-
 import br.ufpa.labes.spm.domain.AgentWorkingLoad;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -13,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AgentWorkingLoadRepository extends IAgentWorkingLoadDAO, JpaRepository<AgentWorkingLoad, Long> {
+public interface AgentWorkingLoadRepository extends JpaRepository<AgentWorkingLoad, Long> {
 
 }

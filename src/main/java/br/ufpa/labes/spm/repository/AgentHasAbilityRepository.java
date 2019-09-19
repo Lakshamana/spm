@@ -1,8 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.agent.IAgentHasAbilityDAO;
-
-
 import br.ufpa.labes.spm.domain.AgentHasAbility;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -13,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AgentHasAbilityRepository extends IAgentHasAbilityDAO, JpaRepository<AgentHasAbility, Long> {
+public interface AgentHasAbilityRepository extends JpaRepository<AgentHasAbility, Long> {
 
 }

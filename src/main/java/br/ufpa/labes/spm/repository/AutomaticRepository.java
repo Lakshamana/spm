@@ -1,8 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.plainActivities.IAutomaticDAO;
-
-
 import br.ufpa.labes.spm.domain.Automatic;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -13,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AutomaticRepository extends IAutomaticDAO, JpaRepository<Automatic, Long> {
+public interface AutomaticRepository extends JpaRepository<Automatic, Long> {
 
 }
