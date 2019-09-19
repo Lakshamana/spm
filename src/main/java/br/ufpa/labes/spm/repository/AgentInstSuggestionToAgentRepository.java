@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.plannerInfo.IAgentInstSuggestionToAgentDAO;
+
+
 import br.ufpa.labes.spm.domain.AgentInstSuggestionToAgent;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AgentInstSuggestionToAgentRepository extends JpaRepository<AgentInstSuggestionToAgent, Long> {
+public interface AgentInstSuggestionToAgentRepository extends IAgentInstSuggestionToAgentDAO, JpaRepository<AgentInstSuggestionToAgent, Long> {
 
 }

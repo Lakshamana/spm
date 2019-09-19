@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.resources.IConsumableDAO;
+
+
 import br.ufpa.labes.spm.domain.Consumable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ConsumableRepository extends JpaRepository<Consumable, Long> {
+public interface ConsumableRepository extends IConsumableDAO, JpaRepository<Consumable, Long> {
 
 }

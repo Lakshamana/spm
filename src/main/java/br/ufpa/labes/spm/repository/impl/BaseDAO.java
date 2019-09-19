@@ -34,11 +34,11 @@ public class BaseDAO<T, PK> implements IBaseDAO<T, PK> {
     this.businessClass = businessClass;
   }
 
-  @Override
-  public T save(T object) {
-    this.getPersistenceContext().persist(object);
-    return object;
-  }
+  // @Override
+  // public T save(T object) {
+  //   this.getPersistenceContext().persist(object);
+  //   return object;
+  // }
 
   @Override
   public T update(T object) {
@@ -163,11 +163,11 @@ public class BaseDAO<T, PK> implements IBaseDAO<T, PK> {
     return this.businessClass;
   }
 
-  @Override
-  public T delete(T object) {
-    this.getPersistenceContext().remove(object);
-    return object;
-  };
+  // @Override
+  // public T delete(T object) {
+  //   this.getPersistenceContext().remove(object);
+  //   return object;
+  // };
 
   @Override
   public EntityManager getPersistenceContext() {

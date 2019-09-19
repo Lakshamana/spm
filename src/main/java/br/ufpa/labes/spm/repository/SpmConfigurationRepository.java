@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces..ISpmConfigurationDAO;
+
+
 import br.ufpa.labes.spm.domain.SpmConfiguration;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface SpmConfigurationRepository extends JpaRepository<SpmConfiguration, Long> {
+public interface SpmConfigurationRepository extends ISpmConfigurationDAO, JpaRepository<SpmConfiguration, Long> {
 
 }

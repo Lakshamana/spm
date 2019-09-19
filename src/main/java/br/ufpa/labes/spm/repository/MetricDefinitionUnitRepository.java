@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces..IMetricDefinitionUnitDAO;
+
+
 import br.ufpa.labes.spm.domain.MetricDefinitionUnit;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface MetricDefinitionUnitRepository extends JpaRepository<MetricDefinitionUnit, Long> {
+public interface MetricDefinitionUnitRepository extends IMetricDefinitionUnitDAO, JpaRepository<MetricDefinitionUnit, Long> {
 
 }

@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.taskagenda.IProcessAgendaDAO;
+
+
 import br.ufpa.labes.spm.domain.ProcessAgenda;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ProcessAgendaRepository extends JpaRepository<ProcessAgenda, Long> {
+public interface ProcessAgendaRepository extends IProcessAgendaDAO, JpaRepository<ProcessAgenda, Long> {
 
 }

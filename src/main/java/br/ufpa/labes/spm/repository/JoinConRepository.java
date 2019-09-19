@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.connections.IJoinConDAO;
+
+
 import br.ufpa.labes.spm.domain.JoinCon;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +17,7 @@ import java.util.Optional;
  * Spring Data  repository for the JoinCon entity.
  */
 @Repository
-public interface JoinConRepository extends JpaRepository<JoinCon, Long> {
+public interface JoinConRepository extends IJoinConDAO, JpaRepository<JoinCon, Long> {
 
     @Query(value = "select distinct joinCon from JoinCon joinCon left join fetch joinCon.fromMultipleCons",
         countQuery = "select count(distinct joinCon) from JoinCon joinCon")

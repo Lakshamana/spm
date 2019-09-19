@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.agent.IAbilityDAO;
+
+
 import br.ufpa.labes.spm.domain.Ability;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AbilityRepository extends JpaRepository<Ability, Long> {
+public interface AbilityRepository extends IAbilityDAO, JpaRepository<Ability, Long> {
 
 }

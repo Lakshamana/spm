@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.connections.ISimpleConDAO;
+
+
 import br.ufpa.labes.spm.domain.SimpleCon;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface SimpleConRepository extends JpaRepository<SimpleCon, Long> {
+public interface SimpleConRepository extends ISimpleConDAO, JpaRepository<SimpleCon, Long> {
 
 }

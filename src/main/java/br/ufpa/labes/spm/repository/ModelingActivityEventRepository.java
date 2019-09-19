@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.log.IModelingActivityEventDAO;
+
+
 import br.ufpa.labes.spm.domain.ModelingActivityEvent;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ModelingActivityEventRepository extends JpaRepository<ModelingActivityEvent, Long> {
+public interface ModelingActivityEventRepository extends IModelingActivityEventDAO, JpaRepository<ModelingActivityEvent, Long> {
 
 }
