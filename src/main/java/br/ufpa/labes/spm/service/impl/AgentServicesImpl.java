@@ -1020,7 +1020,7 @@ public class AgentServicesImpl implements AgentServices {
 			float estimatedTime = activityEstimationDAO.getHoursEstimationForActivity(task.getTheNormal().getIdent());
 			Time estimatedTaskTime = new Time((int) estimatedTime, (int) ((estimatedTime * 60) % 60));
 
-			TaskDTO t = new TaskDTO(task.getOid(), task.getTheNormal().getName(),
+			TaskDTO t = new TaskDTO(task.getId(), task.getTheNormal().getName(),
 					task.getLocalState(), task.getBeginDate(),
 					task.getEndDate(), workingHours,
 					task.getDateDelegatedTo(), task.getDateDelegatedFrom(),

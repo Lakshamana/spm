@@ -288,7 +288,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				String actTypeElem = (actType!=null ? actType.getIdent() : "");
 				String state = normal.getTheEnactionDescription().getState().toUpperCase();
 				processXML.append("<NORMAL ID=\"" + normal.getIdent() + "\" IDENT=\"" + normal.getName() + "\" TYPE=\"" + actTypeElem + "\" STATE=\"" + state + "\">\n");
-				processXML.append(getPositionTag(normal.getOid(), normal.getClass().getSimpleName()));
+				processXML.append(getPositionTag(normal.getId(), normal.getClass().getSimpleName()));
 				processXML.append("</NORMAL>\n");
 
 //				java.lang.System.out.println("------------ Normal -----------");
@@ -309,7 +309,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				String actTypeElem = (actType!=null ? actType.getIdent() : "");
 				String state = decomposed.getTheProcessModel().getPmState().toUpperCase();
 				processXML.append("<DECOMPOSED ID=\"" + decomposed.getIdent() + "\" IDENT=\"" + decomposed.getName() + "\" TYPE=\"" + actTypeElem + "\" STATE=\"" + state + "\">\n");
-				processXML.append(getPositionTag(decomposed.getOid(), decomposed.getClass().getSimpleName()));
+				processXML.append(getPositionTag(decomposed.getId(), decomposed.getClass().getSimpleName()));
 				processXML.append("</DECOMPOSED>\n");
 			}
 		}
@@ -330,12 +330,12 @@ public class ProjectServicesImpl implements ProjectServices {
 					java.lang.System.out.println("agentes" + reqAgent.getTheAgent());
 
 					if(reqAgent.getTheAgent()!=null){
-						processXML.append("<REQAGENT ID=\"" + reqAgent.getOid() + "\">\n");
+						processXML.append("<REQAGENT ID=\"" + reqAgent.getId() + "\">\n");
 						processXML.append("<AGENT>" + (reqAgent.getTheAgent()!=null ? reqAgent.getTheAgent().getIdent() : "") + "</AGENT>\n");
 						processXML.append("<NAME>" + (reqAgent.getTheAgent()!=null ? reqAgent.getTheAgent().getName() : "") + "</NAME>\n");
 						processXML.append("<ROLE>" + (reqAgent.getTheRole()!=null ? reqAgent.getTheRole().getIdent() : "") + "</ROLE>\n");
 						processXML.append("<NORMAL>" + reqAgent.getTheNormal().getIdent() + "</NORMAL>\n");
-						processXML.append(getPositionTag(reqAgent.getOid(), reqAgent.getClass().getSimpleName()));
+						processXML.append(getPositionTag(reqAgent.getId(), reqAgent.getClass().getSimpleName()));
 						processXML.append("</REQAGENT>\n");
 
 
@@ -347,12 +347,12 @@ public class ProjectServicesImpl implements ProjectServices {
 						String WorkGroup = reqWorkGroup.getTheWorkGroup()!=null ? reqWorkGroup.getTheWorkGroup().getIdent() : "";
 						String WorkGroupName = reqWorkGroup.getTheWorkGroup()!=null ? reqWorkGroup.getTheWorkGroup().getName() : "";
 						String WorkGroupType = reqWorkGroup.getTheWorkGroupType()!=null ? reqWorkGroup.getTheWorkGroupType().getIdent() : "";
-						processXML.append("<REQWorkGroup ID=\"" + reqWorkGroup.getOid() + "\">\n");
+						processXML.append("<REQWorkGroup ID=\"" + reqWorkGroup.getId() + "\">\n");
 						processXML.append("<WorkGroup>" + WorkGroup + "</WorkGroup>\n");
 						processXML.append("<NAME>" + WorkGroupName + "</NAME>\n");
 						processXML.append("<WorkGroupTYPE>" + WorkGroupType + "</WorkGroupTYPE>\n");
 						processXML.append("<NORMAL>" + reqWorkGroup.getTheNormal().getIdent() + "</NORMAL>\n");
-						processXML.append(getPositionTag(reqWorkGroup.getOid(), reqWorkGroup.getClass().getSimpleName()));
+						processXML.append(getPositionTag(reqWorkGroup.getId(), reqWorkGroup.getClass().getSimpleName()));
 						processXML.append("</REQWorkGroup>\n");
 					}
 				}
@@ -371,12 +371,12 @@ public class ProjectServicesImpl implements ProjectServices {
 					String resource = requiredResource.getTheResource()!=null ? requiredResource.getTheResource().getIdent() : "";
 					String resourceName = requiredResource.getTheResource()!=null ? requiredResource.getTheResource().getName() : "";
 					String resourceType = requiredResource.getTheResourceType()!=null ? requiredResource.getTheResourceType().getIdent() : "";
-					processXML.append("<REQUIREDRESOURCE ID=\"" + requiredResource.getOid() + "\">\n");
+					processXML.append("<REQUIREDRESOURCE ID=\"" + requiredResource.getId() + "\">\n");
 					processXML.append("<RESOURCE>" + resource + "</RESOURCE>\n");
 					processXML.append("<NAME>" + resourceName + "</NAME>\n");
 					processXML.append("<RESOURCETYPE>" + resourceType + "</RESOURCETYPE>\n");
 					processXML.append("<NORMAL>" + requiredResource.getTheNormal().getIdent() + "</NORMAL>\n");
-					processXML.append(getPositionTag(requiredResource.getOid(), requiredResource.getClass().getSimpleName()));
+					processXML.append(getPositionTag(requiredResource.getId(), requiredResource.getClass().getSimpleName()));
 					processXML.append("</REQUIREDRESOURCE>\n");
 				}
 			}
@@ -446,11 +446,11 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	private String getSequenceTag(SimpleCon simpleCon) throws DAOException{
 		StringBuffer seqXML = new StringBuffer();
-		seqXML.append("<SEQUENCE ID=\"" + simpleCon.getOid() + "\">\n");
+		seqXML.append("<SEQUENCE ID=\"" + simpleCon.getId() + "\">\n");
 		seqXML.append("<DEPENDENCY>" + ((Sequence)simpleCon).getTheDependency().getKindDep() + "</DEPENDENCY>\n");
 		seqXML.append("<TO ID=\"" + simpleCon.getToActivity().getIdent() + "\"/>\n");
 		seqXML.append("<FROM ID=\"" + simpleCon.getFromActivity().getIdent() + "\"/>\n");
-		seqXML.append(getPositionTag(simpleCon.getOid(), simpleCon.getClass().getSimpleName()));
+		seqXML.append(getPositionTag(simpleCon.getId(), simpleCon.getClass().getSimpleName()));
 		seqXML.append("</SEQUENCE>\n");
 
 		return seqXML.toString();
@@ -458,11 +458,11 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	private String getFeedbackTag(SimpleCon simpleCon) throws DAOException{
 		StringBuffer seqXML = new StringBuffer();
-		seqXML.append("<FEEDBACK ID=\"" + simpleCon.getOid() + "\">\n");
+		seqXML.append("<FEEDBACK ID=\"" + simpleCon.getId() + "\">\n");
 		seqXML.append("<CONDITION>" + ((Feedback)simpleCon).getTheCondition().getThePolExpression().toString() + "</CONDITION>\n");
 		seqXML.append("<TO ID=\"" + simpleCon.getToActivity().getIdent() + "\"/>\n");
 		seqXML.append("<FROM ID=\"" + simpleCon.getFromActivity().getIdent() + "\"/>\n");
-		seqXML.append(getPositionTag(simpleCon.getOid(), simpleCon.getClass().getSimpleName()));
+		seqXML.append(getPositionTag(simpleCon.getId(), simpleCon.getClass().getSimpleName()));
 		seqXML.append("</FEEDBACK>\n");
 
 		return seqXML.toString();
@@ -470,7 +470,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	private String getJoinTag(Join joinCon) throws DAOException{
 		StringBuffer joinConXML = new StringBuffer();
-		joinXML.append("<JOIN ID=\"" + joinCon.getOid() + "\">\n");
+		joinXML.append("<JOIN ID=\"" + joinCon.getId() + "\">\n");
 		joinXML.append("<DEPENDENCY>" + joinCon.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
 
 		//TO
@@ -504,7 +504,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		}
 
 		//POSITION
-		joinXML.append(getPositionTag(join.getOid(), joinCon.getClass().getSimpleName()));
+		joinXML.append(getPositionTag(join.getId(), joinCon.getClass().getSimpleName()));
 		joinXML.append("</JOINCon>\n");
 
 		return joinConXML.toString();
@@ -512,7 +512,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	private String getBranchTag(BranchAND branchCon) throws DAOException{
 		StringBuffer branchConXML = new StringBuffer();
-		branchXML.append("<BRANCH ID=\"" + branchCon.getOid() + "\">\n");
+		branchXML.append("<BRANCH ID=\"" + branchCon.getId() + "\">\n");
 		branchXML.append("<DEPENDENCY>" + branchCon.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
 
 		//FROM
@@ -546,7 +546,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		}
 
 		//POSITION
-		branchXML.append(getPositionTag(branch.getOid(), branchCon.getClass().getSimpleName()));
+		branchXML.append(getPositionTag(branch.getId(), branchCon.getClass().getSimpleName()));
 		branchXML.append("</BRANCHCon>\n");
 
 		return branchConXML.toString();
@@ -554,7 +554,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	private String getArtifactConTag(ArtifactCon artifactCon) throws DAOException{
 		StringBuffer artConXML = new StringBuffer();
-		artConXML.append("<ARTIFACTCON ID=\"" + artifactCon.getOid() + "\">\n");
+		artConXML.append("<ARTIFACTCON ID=\"" + artifactCon.getId() + "\">\n");
 		Artifact artifact = artifactCon.getTheArtifact();
 		if(artifact!=null)
 			artConXML.append("<ARTIFACT>" + artifact.getIdent() + "</ARTIFACT>\n");
@@ -589,7 +589,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		}
 
 		//POSITION
-		artConXML.append(getPositionTag(artifactCon.getOid(), artifactCon.getClass().getSimpleName()));
+		artConXML.append(getPositionTag(artifactCon.getId(), artifactCon.getClass().getSimpleName()));
 		artConXML.append("</ARTIFACTCON>\n");
 
 		return artConXML.toString();
@@ -949,7 +949,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 			statistic.setProjectEstimatedCost(custoEstimado);
 			statistic.setProjectRealCost(custoReal);
-			statistic.generateCostLink(project.getOid());
+			statistic.generateCostLink(project.getId());
 			result.add(statistic);
 		}
 		return result;
@@ -1209,7 +1209,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				projectDTO.setEstimatedHours(hours);
 				projectDTO.setEstimatedMinutes(minutes);
 				List<Agent> agents = (List<Agent>) project.getProcessRefered().getTheAgent();
-				projectDTO.setProcess(project.getProcessRefered().getOid().toString());
+				projectDTO.setProcess(project.getProcessRefered().getId().toString());
 				List<String> agentNames = getAgentNames(agents);
 				projectDTO.setAgents(agentNames);
 			} else {
@@ -3384,7 +3384,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			String ref = webapObjXML.getChildText("ReferredOid");
 			Object obj = this.processComponents.get(ref);
 
-			Integer newOid = this.getOid(obj);
+			Integer newOid = this.getId(obj);
 			if(newOid == null) continue;
 
 			wobj.setTheReferredOid(newOid);
@@ -3534,12 +3534,12 @@ public class ProjectServicesImpl implements ProjectServices {
 	 * Auxiliary Methods
 	 */
 
-	private Integer getOid(Object obj){
+	private Integer getId(Object obj){
 		if(obj == null) return null;
 
 		try {
 			Class[] types = null;
-			Method get = obj.getClass().getMethod("getOid", types);
+			Method get = obj.getClass().getMethod("getId", types);
 			Object[] params = null;
 			Integer oid = (Integer) get.invoke(obj, params);
 			return oid;
@@ -3668,7 +3668,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		Object[] parameter = { obj };
 
 		Object[] nullparam = null;
-		Integer oid = (Integer) UtilReflection.invokeMethod(obj, "getOid", nullparam);
+		Integer oid = (Integer) UtilReflection.invokeMethod(obj, "getId", nullparam);
 		Object isPersisted = null;
 
 //		if(oid != null) {

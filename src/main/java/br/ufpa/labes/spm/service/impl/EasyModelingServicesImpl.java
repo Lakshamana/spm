@@ -233,7 +233,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				if(webAPSEENodePosition.getNodeType()==WebAPSEENodePosition.ACTIVITYNODE){
 					Activity act = (Activity) actDAO.retrieveBySecondaryKey(webAPSEENodePosition.getInstanceID());
 					if(act!=null){
-						theReferredOid = act.getOid();
+						theReferredOid = act.getId();
 						className = act.getClass().getSimpleName();
 						ok = true;
 						webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
@@ -258,7 +258,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					con = (Connection) conDAO.retrieveBySecondaryKey(webAPSEENodePosition.getInstanceID());
 					if(con!=null){
 						System.out.print("com n�o nula: ");
-						theReferredOid = con.getOid();
+						theReferredOid = con.getId();
 						className = con.getClass().getSimpleName();
 						ok = true;
 						webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
@@ -269,7 +269,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						ArtifactCon artifactCon = (ArtifactCon) con;
 						System.out.println("ArtifactCon: " + artifactCon);
 						ok = true;
-						theReferredOid = artifactCon.getOid();
+						theReferredOid = artifactCon.getId();
 						className = artifactCon.getClass().getSimpleName();
 						webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
 					}
@@ -285,9 +285,9 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 						ReqAgent reqAg = (ReqAgent) reqAgentDAO.findReqAgentFromProcessModel(webAPSEENodePosition.getInstanceID(), webAPSEENodePosition.getTypeID(), normal);
 						if(reqAg!=null){
-//							System.out.println("caiu no ref id: "+reqAg.getOid());
+//							System.out.println("caiu no ref id: "+reqAg.getId());
 
-							theReferredOid = reqAg.getOid();
+							theReferredOid = reqAg.getId();
 							className = reqAg.getClass().getSimpleName();
 							ok = true;
 							webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
@@ -302,7 +302,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 						ReqWorkGroup reqWorkGroup = (ReqWorkGroup) reqWorkGroupDAO.findReqWorkGroupFromProcessModel(webAPSEENodePosition.getInstanceID(), webAPSEENodePosition.getTypeID(), normal);
 						if(reqWorkGroup!=null){
-							theReferredOid = reqWorkGroup.getOid();
+							theReferredOid = reqWorkGroup.getId();
 							className = reqWorkGroup.getClass().getSimpleName();
 							ok = true;
 							webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
@@ -317,7 +317,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 						RequiredResource reqRes = (RequiredResource) reqResDAO.findRequiredResourceFromProcessModel(webAPSEENodePosition.getInstanceID(), webAPSEENodePosition.getTypeID(), normal);
 						if(reqRes!=null){
-							theReferredOid = reqRes.getOid();
+							theReferredOid = reqRes.getId();
 							className = reqRes.getClass().getSimpleName();
 							ok = true;
 							webAPSEEObj = webAPSEEObjDAO.retrieveWebAPSEEObject(theReferredOid, className);
@@ -486,13 +486,13 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 								e.printStackTrace();
 							}
 							try {
-								this.enactmentLocal.searchForFiredConnections(pmodel.getOid(), "Rule C1.1");
+								this.enactmentLocal.searchForFiredConnections(pmodel.getId(), "Rule C1.1");
 							} catch (WebapseeException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							try {
-								this.enactmentLocal.searchForReadyActivities(pmodel.getOid());
+								this.enactmentLocal.searchForReadyActivities(pmodel.getId());
 							} catch (WebapseeException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -512,13 +512,13 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 							e.printStackTrace();
 						}
 						try {
-							this.enactmentLocal.searchForFiredConnections(pmodel.getOid(), "Rule C1.1");
+							this.enactmentLocal.searchForFiredConnections(pmodel.getId(), "Rule C1.1");
 						} catch (WebapseeException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						try {
-							this.enactmentLocal.searchForReadyActivities(pmodel.getOid());
+							this.enactmentLocal.searchForReadyActivities(pmodel.getId());
 						} catch (WebapseeException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -590,13 +590,13 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 							e.printStackTrace();
 						}
 						try {
-							this.enactmentLocal.searchForFiredConnections(pmodel.getOid(), "Rule C1.2");
+							this.enactmentLocal.searchForFiredConnections(pmodel.getId(), "Rule C1.2");
 						} catch (WebapseeException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						try {
-							this.enactmentLocal.searchForReadyActivities(pmodel.getOid());
+							this.enactmentLocal.searchForReadyActivities(pmodel.getId());
 						} catch (WebapseeException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -616,13 +616,13 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						e.printStackTrace();
 					}
 					try {
-						this.enactmentLocal.searchForFiredConnections(pmodel.getOid(), "Rule C1.2");
+						this.enactmentLocal.searchForFiredConnections(pmodel.getId(), "Rule C1.2");
 					} catch (WebapseeException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					try {
-						this.enactmentLocal.searchForReadyActivities(pmodel.getOid());
+						this.enactmentLocal.searchForReadyActivities(pmodel.getId());
 					} catch (WebapseeException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -1087,7 +1087,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				clone = new Normal();
 				String newIdent = this.generateNewIdent(activity.getIdent(), level_to, this.allActs);
 				clone.setIdent(newIdent);
-				this.addCoordinate(activity.getOid(), activity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+" + newIdent, coordinates);
+				this.addCoordinate(activity.getId(), activity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+" + newIdent, coordinates);
 				this.activitiesTable.put(normal.getIdent(), clone);
 				this.copyNormalProperties((Normal) clone, normal, coordinates);
 			} else if (activity instanceof Decomposed) {
@@ -1095,7 +1095,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				clone = new Decomposed();
 				String newIdent = this.generateNewIdent(activity.getIdent(), level_to, this.allActs);
 				clone.setIdent(newIdent);
-				this.addCoordinate(activity.getOid(), activity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+" + newIdent, coordinates);
+				this.addCoordinate(activity.getId(), activity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+" + newIdent, coordinates);
 				this.activitiesTable.put(decomposed.getIdent(), clone);
 				this.copyDecomposedProperties((Decomposed) clone, decomposed, coordinates);
 			} else if (activity instanceof Automatic) {
@@ -1103,7 +1103,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				clone = new Automatic();
 				String newIdent = this.generateNewIdent(activity.getIdent(), level_to, this.allActs);
 				clone.setIdent(newIdent);
-				this.addCoordinate(activity.getOid(), activity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+" + newIdent, coordinates);
+				this.addCoordinate(activity.getId(), activity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+" + newIdent, coordinates);
 				this.activitiesTable.put(automatic.getIdent(), clone);
 				this.copyAutomaticProperties((Automatic) clone, automatic);
 			}
@@ -1251,7 +1251,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				newRequiredResource.insertIntoTheNormal(destinationNormal);
 
 				coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
-				this.addCoordinate(currentReqResource.getOid(), currentReqResource.getClass().getSimpleName(), WebAPSEEObject.REQ_RESOURCE + "+"
+				this.addCoordinate(currentReqResource.getId(), currentReqResource.getClass().getSimpleName(), WebAPSEEObject.REQ_RESOURCE + "+"
 						+ coordinateKey, coordinates);
 				coordinateKey = null;
 
@@ -1297,7 +1297,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					((ReqAgent) newRequiredPeople).setTheReqAgentRequiresAbility(newReqAgReqAbility);
 
 					coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
-					this.addCoordinate(((ReqAgent) currentReqPeople).getOid(), ((ReqAgent) currentReqPeople).getClass().getSimpleName(),
+					this.addCoordinate(((ReqAgent) currentReqPeople).getId(), ((ReqAgent) currentReqPeople).getClass().getSimpleName(),
 							WebAPSEEObject.REQ_AGENT + "+" + coordinateKey, coordinates);
 					coordinateKey = null;
 
@@ -1316,7 +1316,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}
 
 					coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
-					this.addCoordinate(((ReqWorkGroup) currentReqPeople).getOid(), ((ReqWorkGroup) currentReqPeople).getClass().getSimpleName(),
+					this.addCoordinate(((ReqWorkGroup) currentReqPeople).getId(), ((ReqWorkGroup) currentReqPeople).getClass().getSimpleName(),
 							WebAPSEEObject.REQ_WorkGroup + "+" + coordinateKey, coordinates);
 					coordinateKey = null;
 
@@ -1419,7 +1419,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 				String newActivityIdent = this.generateIdent(currentActivity.getIdent(), level_to);
 
-				this.addCoordinate(currentActivity.getOid(), currentActivity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+"
+				this.addCoordinate(currentActivity.getId(), currentActivity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+"
 						+ newActivityIdent, coordinates);
 
 				if (currentActivity instanceof Normal) {
@@ -1514,7 +1514,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}// end if != null
 
 					newConnection.setIdent(newConnectionIdent);
-					this.addCoordinate(((Sequence) currentConnection).getOid(), ((Sequence) currentConnection).getClass().getSimpleName(),
+					this.addCoordinate(((Sequence) currentConnection).getId(), ((Sequence) currentConnection).getClass().getSimpleName(),
 							WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}// ########################
 				else if (currentConnection instanceof Feedback) {
@@ -1552,7 +1552,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}// end if condition != null
 
 					newConnection.setIdent(newConnectionIdent);
-					this.addCoordinate(((Feedback) currentConnection).getOid(), ((Feedback) currentConnection).getClass().getSimpleName(),
+					this.addCoordinate(((Feedback) currentConnection).getId(), ((Feedback) currentConnection).getClass().getSimpleName(),
 							WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}// ########################
 				else if (currentConnection instanceof ArtifactCon) {
@@ -1592,7 +1592,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
-					this.addCoordinate(((ArtifactCon) currentConnection).getOid(), ((ArtifactCon) currentConnection).getClass().getSimpleName(),
+					this.addCoordinate(((ArtifactCon) currentConnection).getId(), ((ArtifactCon) currentConnection).getClass().getSimpleName(),
 							WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}// ########################
 				else if (currentConnection instanceof BranchCon) {
@@ -1671,7 +1671,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
-					this.addCoordinate(((Branch) currentConnection).getOid(), ((BranchCon) currentConnection).getClass().getSimpleName(),
+					this.addCoordinate(((Branch) currentConnection).getId(), ((BranchCon) currentConnection).getClass().getSimpleName(),
 							WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 
 				} else if (currentConnection instanceof JoinCon) {
@@ -1713,7 +1713,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}// end for
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
-					this.addCoordinate(((Join) currentConnection).getOid(), ((JoinCon) currentConnection).getClass().getSimpleName(),
+					this.addCoordinate(((Join) currentConnection).getId(), ((JoinCon) currentConnection).getClass().getSimpleName(),
 							WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}// end joinCon processing
 

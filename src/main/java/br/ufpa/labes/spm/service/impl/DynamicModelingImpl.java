@@ -229,7 +229,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (actDecomposed != null)
 					decDAO.update(actDecomposed);
 
-				return actNorm.getOid();
+				return actNorm.getId();
 
 			} else {
 
@@ -323,7 +323,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (actDecomposed != null)
 					decDAO.update(actDecomposed);
 
-				return actDec.getOid();
+				return actDec.getId();
 			} else {
 
 				throw new ModelingException(
@@ -413,7 +413,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (actDecomposed != null)
 					decDAO.update(actDecomposed);
 
-				return actAuto.getOid();
+				return actAuto.getId();
 
 			} else {
 				throw new ModelingException(
@@ -437,7 +437,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (actDecomposed != null)
 					decDAO.update(actDecomposed);
 
-				return actAuto.getOid();
+				return actAuto.getId();
 
 			} else {
 				throw new ModelingException(
@@ -513,7 +513,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				actDAO.daoSave(actDecomp);
 
-				return actDecomp.getOid();
+				return actDecomp.getId();
 			} else {
 
 				throw new ModelingException(
@@ -547,7 +547,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				actDAO.daoSave(actDecomp);
 
-				return actDecomp.getOid();
+				return actDecomp.getId();
 			} else {
 				throw new ModelingException(
 						Messages.getString("facades.DynamicModeling.ModelingExcActv") + activity.getIdent() + Messages.getString("facades.DynamicModeling.ModelingExcIsAlrRun")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -617,7 +617,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				actDAO.daoSave(actAuto);
 
-				return actAuto.getOid();
+				return actAuto.getId();
 			} else {
 				throw new ModelingException(
 						Messages.getString("facades.DynamicModeling.ModelingExcActv") + activity.getIdent() + Messages.getString("facades.DynamicModeling.ModelingExcIsAlrRun")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -655,7 +655,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					actDAO.daoSave(actAuto);
 
-					return actAuto.getOid();
+					return actAuto.getId();
 				}
 			}
 		}
@@ -724,7 +724,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					decDAO.daoDelete(actDecomp);
 
-					return actNorm.getOid();
+					return actNorm.getId();
 				}
 			}
 		} else if (activity instanceof Automatic) { // Rule G1.9
@@ -752,7 +752,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				actDAO.daoSave(actNorm);
 
-				return actNorm.getOid();
+				return actNorm.getId();
 			} else {
 				throw new ModelingException(
 						Messages.getString("facades.DynamicModeling.ModelingExcActv") + activity.getIdent() + Messages.getString("facades.DynamicModeling.ModelingExcIsAlrRun")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -849,7 +849,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 
 			if (this.hasInvolvedAgents(actNorm))
-				this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtNewInpArtf"), artifact.getOid(), DynamicModelingImpl.ADD,
+				this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtNewInpArtf"), artifact.getId(), DynamicModelingImpl.ADD,
 						artifact.getClass(), artifact.getIdent(), DynamicModelingImpl.DIRECTION_IN); //$NON-NLS-1$
 
 			// Persistence Operations
@@ -941,7 +941,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 
 			if (this.hasInvolvedAgents(actNorm))
-				this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtNewOutArtf"), artifact.getOid(), DynamicModelingImpl.ADD,
+				this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtNewOutArtf"), artifact.getId(), DynamicModelingImpl.ADD,
 						artifact.getClass(), artifact.getIdent(), DynamicModelingImpl.DIRECTION_OUT); //$NON-NLS-1$
 
 			// Persistence Operations
@@ -991,7 +991,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		autoDAO.update(automatic);
 
-		return automatic.getOid();
+		return automatic.getId();
 	}
 
 
@@ -1029,7 +1029,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		autoDAO.update(automatic);
 
-		return automatic.getOid();
+		return automatic.getId();
 	}
 
 
@@ -1078,8 +1078,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						// Dynamic Changes related code
 						String processState = this.getTheProcess(processModel).getPState();
 						if (processState.equals(Process.ENACTING)) {
-							this.enactmentEngine.searchForFiredConnections(processModel.getOid(), "Rule G1.17-G1.32"); //$NON-NLS-1$
-							this.enactmentEngine.searchForReadyActivities(processModel.getOid()/*
+							this.enactmentEngine.searchForFiredConnections(processModel.getId(), "Rule G1.17-G1.32"); //$NON-NLS-1$
+							this.enactmentEngine.searchForReadyActivities(processModel.getId()/*
 																							 * ,
 																							 * currentSession
 																							 */);
@@ -1113,8 +1113,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				// Dynamic Changes related code
 				String processState = this.getTheProcess(processModel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(processModel.getOid(), "Rule G1.17-G1.32"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(processModel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(processModel.getId(), "Rule G1.17-G1.32"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(processModel.getId()/*
 																					 * ,
 																					 * currentSession
 																					 */);
@@ -1155,8 +1155,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				// Dynamic Changes related code
 				String processState = this.getTheProcess(processModel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(processModel.getOid(), "Rule G1.33-G1.48"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(processModel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(processModel.getId(), "Rule G1.33-G1.48"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(processModel.getId()/*
 																					 * ,
 																					 * currentSession
 																					 */);
@@ -1185,8 +1185,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				// Dynamic Changes related code
 				String processState = this.getTheProcess(processModel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(processModel.getOid(), "Rule G1.49-G1.98");
-					this.enactmentEngine.searchForReadyActivities(processModel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(processModel.getId(), "Rule G1.49-G1.98");
+					this.enactmentEngine.searchForReadyActivities(processModel.getId()/*
 																					 * ,
 																					 * currentSession
 																					 */);
@@ -1211,7 +1211,7 @@ System.out.println("salva :"+pmodel.getPmState());
 	@Override
 	public Integer newArtifactConnection(String level_id) throws DAOException {
 
-		return newArtifactConnection_Internal(level_id).getOid();
+		return newArtifactConnection_Internal(level_id).getId();
 
 	}
 
@@ -1302,13 +1302,13 @@ System.out.println("salva :"+pmodel.getPmState());
 		artifactCon = this.defineType_ArtifactConnection_Internal(artifactCon.getIdent(), type_id);
 		artifactCon = this.defineInstance_ArtifactConnection_Internal(artifactCon.getIdent(), art_id);
 
-		return artifactCon.getOid();
+		return artifactCon.getId();
 	}
 
 
 	@Override
 	public Integer defineType_ArtifactConnection(String con_id, String type) throws DAOException {
-		return defineType_ArtifactConnection_Internal(con_id, type).getOid();
+		return defineType_ArtifactConnection_Internal(con_id, type).getId();
 	}
 
 	private ArtifactCon defineType_ArtifactConnection_Internal(String con_id, String type) throws DAOException { // retorna
@@ -1416,13 +1416,13 @@ System.out.println("salva :"+pmodel.getPmState());
 		artConDAO.update(artifactCon);
 		artTypeDAO.update(newArtifactType);
 
-		return artifactCon.getOid();
+		return artifactCon.getId();
 	}
 
 
 	@Override
 	public Integer defineInstance_ArtifactConnection(String con_id, String artifact_id) throws DAOException, ModelingException {
-		return defineInstance_ArtifactConnection_Internal(con_id, artifact_id).getOid();
+		return defineInstance_ArtifactConnection_Internal(con_id, artifact_id).getId();
 
 	}
 
@@ -1607,13 +1607,13 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Persistence Operations
 		artConDAO.update(artifactCon);
 
-		return artifactCon.getOid();
+		return artifactCon.getId();
 	}
 
 
 	@Override
 	public Integer defineOutput_ArtifactConnection(String con_id, String act_id) throws DAOException, ModelingException, WebapseeException {
-		return defineOutput_ArtifactConnection_Internal(con_id, act_id).getOid();
+		return defineOutput_ArtifactConnection_Internal(con_id, act_id).getId();
 	}
 
 	private ArtifactCon defineOutput_ArtifactConnection_Internal(String con_id, String act_id) throws DAOException, ModelingException,
@@ -1709,7 +1709,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 							if (this.hasInvolvedAgents(actNorm))
 								this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtNewOutArtf"),
-										artifactFromCon.getOid(), DynamicModelingImpl.ADD, artifactFromCon.getClass(), artifactFromCon.getIdent(),
+										artifactFromCon.getId(), DynamicModelingImpl.ADD, artifactFromCon.getClass(), artifactFromCon.getIdent(),
 										DynamicModelingImpl.DIRECTION_OUT); //$NON-NLS-1$
 
 							// Persistence Operations
@@ -1764,7 +1764,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 							if (this.hasInvolvedAgents(actNorm))
 								this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtNewOutArtf"),
-										artifactFromCon.getOid(), DynamicModelingImpl.ADD, artifactFromCon.getClass(), artifactFromCon.getIdent(),
+										artifactFromCon.getId(), DynamicModelingImpl.ADD, artifactFromCon.getClass(), artifactFromCon.getIdent(),
 										DynamicModelingImpl.DIRECTION_OUT); //$NON-NLS-1$
 
 							// Persistence Operations
@@ -1885,7 +1885,7 @@ System.out.println("salva :"+pmodel.getPmState());
 								inv.removeFromOutInvolvedArtifacts();
 
 								if (this.hasInvolvedAgents(actNorm))
-									this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtRemOutArtf"), artifact.getOid(),
+									this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtRemOutArtf"), artifact.getId(),
 											DynamicModelingImpl.DEL, artifact.getClass(), artifact.getIdent(), DynamicModelingImpl.DIRECTION_OUT); //$NON-NLS-1$
 							}
 						}
@@ -1897,7 +1897,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				artConDAO.update(artifactCon);
 				actDAO.update(activity);
 
-				return artifactCon.getOid();
+				return artifactCon.getId();
 
 			} else {
 				throw new ModelingException(
@@ -1914,7 +1914,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	@Override
 	public Integer defineInput_ArtifactConnection_Activity(String con_id, String act_id) throws DAOException, ModelingException {
-		return defineInput_ArtifactConnection_Activity_Internal(con_id, act_id).getOid();
+		return defineInput_ArtifactConnection_Activity_Internal(con_id, act_id).getId();
 	}
 
 	private ArtifactCon defineInput_ArtifactConnection_Activity_Internal(String con_id, String act_id) throws DAOException, ModelingException {// retorna
@@ -2010,7 +2010,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 							if (this.hasInvolvedAgents(actNorm))
 								this.notifyAgents(actNorm, newInputArtifact,
-										artifactFromCon.getOid(), DynamicModelingImpl.ADD, artifactFromCon.getClass(), artifactFromCon.getIdent(),
+										artifactFromCon.getId(), DynamicModelingImpl.ADD, artifactFromCon.getClass(), artifactFromCon.getIdent(),
 										DynamicModelingImpl.DIRECTION_IN); //$NON-NLS-1$
 
 							// Persistence Operations
@@ -2066,7 +2066,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 							if (this.hasInvolvedAgents(actNorm))
 								this.notifyAgents(actNorm, newInputArtifact,
-										artifactFromCon.getOid(), DynamicModelingImpl.ADD, artifactFromCon.getClass(), artifactFromCon.getIdent(),
+										artifactFromCon.getId(), DynamicModelingImpl.ADD, artifactFromCon.getClass(), artifactFromCon.getIdent(),
 										DynamicModelingImpl.DIRECTION_IN); //$NON-NLS-1$
 
 							// Persistence Operations
@@ -2200,7 +2200,7 @@ System.out.println("salva :"+pmodel.getPmState());
 								inv.removeFromInInvolvedArtifacts();
 
 								if (this.hasInvolvedAgents(actNorm))
-									this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtRemInpArtf"), artifact.getOid(),
+									this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtRemInpArtf"), artifact.getId(),
 											DynamicModelingImpl.DEL, artifact.getClass(), artifact.getIdent(), DynamicModelingImpl.DIRECTION_IN); //$NON-NLS-1$
 
 							}
@@ -2213,7 +2213,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				artConDAO.update(artifactCon);
 				actDAO.update(activity);
 
-				return artifactCon.getOid();
+				return artifactCon.getId();
 			} else {
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheArtfConn") //$NON-NLS-1$
 						+ artifactCon.getIdent() + Messages.getString("facades.DynamicModeling.ModelingExcCannBeResolv") //$NON-NLS-1$
@@ -2229,7 +2229,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	@Override
 	public Integer defineInput_ArtifactConnection_Multiple(String con_id, String mcon_id) throws DAOException, ModelingException {
-		return defineInput_ArtifactConnection_Multiple_Internal(con_id, mcon_id).getOid();
+		return defineInput_ArtifactConnection_Multiple_Internal(con_id, mcon_id).getId();
 	}
 
 	private ArtifactCon defineInput_ArtifactConnection_Multiple_Internal(String con_id, String mcon_id) throws DAOException, ModelingException {// retorna
@@ -2317,7 +2317,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 									if (this.hasInvolvedAgents(actNorm))
 										this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtNewInpArtf"),
-												artifact.getOid(), DynamicModelingImpl.ADD, artifact.getClass(), artifact.getIdent(),
+												artifact.getId(), DynamicModelingImpl.ADD, artifact.getClass(), artifact.getIdent(),
 												DynamicModelingImpl.DIRECTION_IN); //$NON-NLS-1$
 								}
 							}
@@ -2409,7 +2409,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			artConDAO.update((ArtifactCon) artCon);
 			multiDAO.update(multipleCon);
 
-			return artifactCon.getOid();
+			return artifactCon.getId();
 		} else {
 			throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheArtfConn") //$NON-NLS-1$
 					+ artifactCon.getIdent() + Messages.getString("facades.DynamicModeling.ModelingExcCannBeResolv") //$NON-NLS-1$
@@ -2989,7 +2989,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 									if (!invAgents.isEmpty())
 										this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtRemInpArtf"), ids,
-												artifact.getOid(), DynamicModelingImpl.DEL, artifact.getClass(), artifact.getIdent(),
+												artifact.getId(), DynamicModelingImpl.DEL, artifact.getClass(), artifact.getIdent(),
 												DynamicModelingImpl.DIRECTION_IN); //$NON-NLS-1$
 								}
 							}
@@ -3050,7 +3050,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 									if (!invAgents.isEmpty())
 										this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgtRemOutArtf"), ids,
-												artifact.getOid(), DynamicModelingImpl.DEL, artifact.getClass(), artifact.getIdent(),
+												artifact.getId(), DynamicModelingImpl.DEL, artifact.getClass(), artifact.getIdent(),
 												DynamicModelingImpl.DIRECTION_OUT); //$NON-NLS-1$
 								}
 							}
@@ -3086,8 +3086,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			// Dynamic Changes related code
 			String processState = this.getTheProcess(pmodel).getPState();
 			if (processState.equals(Process.ENACTING)) {
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G2.27-G2.41"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G2.27-G2.41"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
 																		 * currentSession
 																		 */);
@@ -3114,7 +3114,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		artifactCon = this.defineInstance_ArtifactConnection_Internal(artifactCon.getIdent(), artifact.getIdent());
 		artifactCon = this.defineInput_ArtifactConnection_Activity_Internal(artifactCon.getIdent(), activity.getIdent());
 
-		return artifactCon.getOid();
+		return artifactCon.getId();
 	}
 
 	//Para o Editor em Flex
@@ -3174,7 +3174,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		artifactCon = this.defineType_ArtifactConnection_Internal(artifactCon.getIdent(), artifactType.getIdent());
 		artifactCon = this.defineInput_ArtifactConnection_Activity_Internal(artifactCon.getIdent(), activity.getIdent());
 
-		return artifactCon.getOid();
+		return artifactCon.getId();
 	}
 
 
@@ -3189,7 +3189,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		artifactCon = this.defineInstance_ArtifactConnection_Internal(artifactCon.getIdent(), artifact.getIdent());
 		artifactCon = this.defineInput_ArtifactConnection_Multiple_Internal(artifactCon.getIdent(), multipleCon.getIdent());
 
-		return artifactCon.getOid();
+		return artifactCon.getId();
 	}
 
 
@@ -3202,7 +3202,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		artifactCon = this.defineType_ArtifactConnection_Internal(artifactCon.getIdent(), artifactType.getIdent());
 		artifactCon = this.defineInput_ArtifactConnection_Activity_Internal(artifactCon.getIdent(), multipleCon.getIdent());
 
-		return artifactCon.getOid();
+		return artifactCon.getId();
 	}
 
 
@@ -3218,7 +3218,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		artifactCon = this.defineInstance_ArtifactConnection_Internal(artifactCon.getIdent(), artifact.getIdent());
 		artifactCon = this.defineOutput_ArtifactConnection_Internal(artifactCon.getIdent(), activity.getIdent());
 
-		return artifactCon.getOid();
+		return artifactCon.getId();
 	}
 
 
@@ -3231,7 +3231,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		artifactCon = this.defineType_ArtifactConnection_Internal(artifactCon.getIdent(), artifactType.getIdent());
 		artifactCon = this.defineOutput_ArtifactConnection_Internal(artifactCon.getIdent(), activity.getIdent());
 
-		return artifactCon.getOid();
+		return artifactCon.getId();
 	}
 
 	/**
@@ -3309,8 +3309,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			Process process = this.getTheProcess(pmodel);
 			if (process.getPState().equals(Process.ENACTING)) {
 				// Dynamic Changes related code
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.1"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.1"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
 																		 * currentSession
 																		 */);
@@ -3324,7 +3324,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			// Persistence Operations
 			conDAO.daoSave(seq);
 
-			return seq.getOid();
+			return seq.getId();
 		}
 		// Rule G3.2
 		else if (((!(state_from.equals(Plain.CANCELED) || state_from.equals(ProcessModel.CANCELED)) && !(state_from.equals(Plain.FAILED) || state_from
@@ -3351,8 +3351,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			activity_to.getFromSimpleCon().add(seq);
 
 			// Dynamic Changes related code
-			this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.2"); //$NON-NLS-1$
-			this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+			this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.2"); //$NON-NLS-1$
+			this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																	 * ,
 																	 * currentSession
 																	 */);
@@ -3365,7 +3365,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			conDAO.daoSave(seq);
 
-			return seq.getOid();
+			return seq.getId();
 		}
 		// Rule G3.3
 		else if (((state_from.equals(Plain.FINISHED) || state_from.equals(ProcessModel.FINISHED)) && (!(state_to.equals(Plain.CANCELED) || state_to
@@ -3390,8 +3390,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			activity_to.getFromSimpleCon().add(seq);
 
 			// Dynamic Changes related code
-			this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.3"); //$NON-NLS-1$
-			this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+			this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.3"); //$NON-NLS-1$
+			this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																	 * ,
 																	 * currentSession
 																	 */);
@@ -3404,7 +3404,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			conDAO.daoSave(seq);
 
-			return seq.getOid();
+			return seq.getId();
 		}
 		// Rule G3.4
 		else if (((!(state_from.equals(Plain.CANCELED) || state_from.equals(ProcessModel.CANCELED)) && !(state_from.equals(Plain.FAILED) || state_from
@@ -3431,8 +3431,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			activity_to.getFromSimpleCon().add(seq);
 
 			// Dynamic Changes related code
-			this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.4"); //$NON-NLS-1$
-			this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+			this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.4"); //$NON-NLS-1$
+			this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																	 * ,
 																	 * currentSession
 																	 */);
@@ -3444,7 +3444,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			// Persistence Operations
 
 			conDAO.daoSave(seq);
-			return seq.getOid();
+			return seq.getId();
 		}
 		// Rule G3.5
 		else if (((state_from.equals(Plain.ACTIVE) || state_from.equals(Plain.PAUSED) || state_from.equals(ProcessModel.ENACTING)) && (state_to
@@ -3468,8 +3468,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			activity_to.getFromSimpleCon().add(seq);
 
 			// Dynamic Changes related code
-			this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.5"); //$NON-NLS-1$
-			this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+			this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.5"); //$NON-NLS-1$
+			this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																	 * ,
 																	 * currentSession
 																	 */);
@@ -3482,7 +3482,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			conDAO.daoSave(seq);
 
-			return seq.getOid();
+			return seq.getId();
 		}
 		// Rule G3.6
 		else if ((!(state_from.equals(Plain.CANCELED) || state_from.equals(ProcessModel.CANCELED))
@@ -3513,8 +3513,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			activity_to.getFromSimpleCon().add(seq);
 
 			// Dynamic Changes related code
-			this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.6"); //$NON-NLS-1$
-			this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+			this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.6"); //$NON-NLS-1$
+			this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																	 * ,
 																	 * currentSession
 																	 */);
@@ -3527,7 +3527,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			conDAO.daoSave(seq);
 
-			return seq.getOid();
+			return seq.getId();
 		} else {
 			throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheCombinActvState")); //$NON-NLS-1$
 		}
@@ -3605,7 +3605,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			conDAO.daoSave(feed);
 
-			return feed.getOid();
+			return feed.getId();
 
 		} else if ((!(state_from.equals(Plain.FINISHED) || state_from.equals(ProcessModel.FINISHED))
 				&& !(state_from.equals(Plain.CANCELED) || state_from.equals(ProcessModel.CANCELED)) && !(state_from.equals(Plain.FAILED) || state_from
@@ -3629,7 +3629,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			conDAO.daoSave(feed);
 
-			return feed.getOid();
+			return feed.getId();
 		} else {
 			throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheCombinActvStates")); //$NON-NLS-1$
 		}
@@ -3710,7 +3710,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Persistence Operations
 		conDAO.daoSave(joinANDCon);
 
-		return joinANDCon.getOid();
+		return joinANDCon.getId();
 	}
 
 
@@ -3788,7 +3788,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Persistence Operations
 		conDAO.daoSave(joinConOR);
 
-		return joinConOR.getOid();
+		return joinConOR.getId();
 	}
 
 
@@ -3866,7 +3866,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Persistence Operations
 		conDAO.daoSave(joinConXOR);
 
-		return joinConXOR.getOid();
+		return joinConXOR.getId();
 	}
 
 
@@ -3943,7 +3943,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Persistence Operations
 		conDAO.daoSave(branchANDCon);
 
-		return branchANDCon.getOid();
+		return branchANDCon.getId();
 	}
 
 
@@ -4021,7 +4021,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Persistence Operations
 		conDAO.daoSave(branchConOR);
 
-		return branchConOR.getOid();
+		return branchConOR.getId();
 	}
 
 	/*
@@ -4105,7 +4105,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Persistence Operations
 		conDAO.daoSave(branchConXOR);
 
-		return branchConXOR.getOid();
+		return branchConXOR.getId();
 	}
 
 	/*
@@ -4185,8 +4185,8 @@ System.out.println("salva :"+pmodel.getPmState());
 							ProcessModel pmodel = multipleCon.getTheProcessModel();
 							String processState = this.getTheProcess(pmodel).getPState();
 							if (processState.equals(Process.ENACTING)) {
-								this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.15"); //$NON-NLS-1$
-								this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+								this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.15"); //$NON-NLS-1$
+								this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																						 * ,
 																						 * currentSession
 																						 */);
@@ -4214,8 +4214,8 @@ System.out.println("salva :"+pmodel.getPmState());
 							ProcessModel pmodel = multipleCon.getTheProcessModel();
 							String processState = this.getTheProcess(pmodel).getPState();
 							if (processState.equals(Process.ENACTING)) {
-								this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.15"); //$NON-NLS-1$
-								this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+								this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.15"); //$NON-NLS-1$
+								this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																						 * ,
 																						 * currentSession
 																						 */);
@@ -4246,8 +4246,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			ProcessModel pmodel = multipleCon.getTheProcessModel();
 			String processState = this.getTheProcess(pmodel).getPState();
 			if (processState.equals(Process.ENACTING)) {
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.15"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.15"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
 																		 * currentSession
 																		 */);
@@ -4315,8 +4315,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			ProcessModel pmodel = multipleCon.getTheProcessModel();
 			String processState = this.getTheProcess(pmodel).getPState();
 			if (processState.equals(Process.ENACTING)) {
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.16"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.16"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
 																		 * currentSession
 																		 */);
@@ -4335,8 +4335,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			ProcessModel pmodel = multipleCon.getTheProcessModel();
 			String processState = this.getTheProcess(pmodel).getPState();
 			if (processState.equals(Process.ENACTING)) {
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.16"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.16"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
 																		 * currentSession
 																		 */);
@@ -4420,8 +4420,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						ProcessModel pmodel = multipleCon.getTheProcessModel();
 						String processState = this.getTheProcess(pmodel).getPState();
 						if (processState.equals(Process.ENACTING)) {
-							this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.33"); //$NON-NLS-1$
-							this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.33"); //$NON-NLS-1$
+							this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																					 * ,
 																					 * currentSession
 																					 */);
@@ -4449,8 +4449,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = multipleCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.17"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.17"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																			 * ,
 																			 * currentSession
 																			 */);
@@ -4471,8 +4471,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = multipleCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.17"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.17"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																			 * ,
 																			 * currentSession
 																			 */);
@@ -4490,8 +4490,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = multipleCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.17"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.17"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																			 * ,
 																			 * currentSession
 																			 */);
@@ -4561,8 +4561,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = multipleCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.18"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.18"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																			 * ,
 																			 * currentSession
 																			 */);
@@ -4594,8 +4594,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = multipleCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.34"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.34"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
 																				 * currentSession
 																				 */);
@@ -4615,8 +4615,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			ProcessModel pmodel = multipleCon.getTheProcessModel();
 			String processState = this.getTheProcess(pmodel).getPState();
 			if (processState.equals(Process.ENACTING)) {
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G3.18"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G3.18"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
 																		 * currentSession
 																		 */);
@@ -4695,8 +4695,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = joinCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.1"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.1"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																			 * ,
 																			 * currentSession
 																			 */);
@@ -4720,8 +4720,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Dynamic Changes related code
 				ProcessModel pmodel = joinCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.2"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.2"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
 																		 * currentSession
 																		 */);
@@ -4742,8 +4742,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 						// Dynamic Changes related code
 						ProcessModel pmodel = joinCon.getTheProcessModel();
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.3"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.3"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
 																				 * currentSession
 																				 */);
@@ -4760,8 +4760,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 						// Dynamic Changes related code
 						ProcessModel pmodel = joinCon.getTheProcessModel();
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.4"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.4"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
 																				 * currentSession
 																				 */);
@@ -4780,8 +4780,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = joinCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.5"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.5"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																			 * ,
 																			 * currentSession
 																			 */);
@@ -4810,8 +4810,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = joinCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.6"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.6"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																			 * ,
 																			 * currentSession
 																			 */);
@@ -4825,7 +4825,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				joinDAO.update(joinCon);
 				actDAO.update(activity_to);
 
-				return newWebapseeObjectDTO(toAct.getOid(), toAct.getClass().getName());
+				return newWebapseeObjectDTO(toAct.getId(), toAct.getClass().getName());
 
 			} else if (state.equals(Plain.WAITING) || state.equals(ProcessModel.REQUIREMENTS) || state.equals(ProcessModel.ABSTRACT)
 					|| state.equals(ProcessModel.INSTANTIATED)) {
@@ -4838,8 +4838,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				activity_to.getFromJoin().add(joinCon);
 
 				ProcessModel pmodel = joinCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.7"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.7"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
 																		 * currentSession
 																		 */);
@@ -4852,7 +4852,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				joinDAO.update(joinCon);
 				actDAO.update(activity_to);
 
-				return newWebapseeObjectDTO(toAct.getOid(), toAct.getClass().getName());
+				return newWebapseeObjectDTO(toAct.getId(), toAct.getClass().getName());
 
 			} else if (activity_to instanceof Normal || activity_to instanceof Decomposed) {
 
@@ -4867,8 +4867,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						activity_to.getFromJoin().add(joinCon);
 
 						ProcessModel pmodel = joinCon.getTheProcessModel();
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.8"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.8"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
 																				 * currentSession
 																				 */);
@@ -4881,7 +4881,7 @@ System.out.println("salva :"+pmodel.getPmState());
 						joinDAO.update(joinCon);
 						actDAO.update(activity_to);
 
-						return newWebapseeObjectDTO(toAct.getOid(), toAct.getClass().getName());
+						return newWebapseeObjectDTO(toAct.getId(), toAct.getClass().getName());
 					} else {
 						// Rule G4.9
 
@@ -4893,8 +4893,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						this.makeWaiting(activity_to, "Rule G4.9");
 
 						ProcessModel pmodel = joinCon.getTheProcessModel();
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.9"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.9"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
 																				 * currentSession
 																				 */);
@@ -4907,7 +4907,7 @@ System.out.println("salva :"+pmodel.getPmState());
 						joinDAO.update(joinCon);
 						actDAO.update(activity_to);
 
-						return newWebapseeObjectDTO(toAct.getOid(), toAct.getClass().getName());
+						return newWebapseeObjectDTO(toAct.getId(), toAct.getClass().getName());
 					}
 				}
 			} else if (joinCon.isFired().booleanValue() && !(state.equals(Plain.FAILED) || state.equals(ProcessModel.FAILED))
@@ -4920,8 +4920,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				activity_to.getFromJoin().add(joinCon);
 
 				ProcessModel pmodel = joinCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.10"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.10"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
 																		 * currentSession
 																		 */);
@@ -4934,7 +4934,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				joinDAO.update(joinCon);
 				actDAO.update(activity_to);
 
-				return newWebapseeObjectDTO(toAct.getOid(), toAct.getClass().getName());
+				return newWebapseeObjectDTO(toAct.getId(), toAct.getClass().getName());
 			}
 		} else if ((join.getToMultipleCon() != null) && !this.controlFlow(activity_to, joinCon)) {
 			if ((state.equals("") || state.equals(ProcessModel.REQUIREMENTS)) //$NON-NLS-1$
@@ -4956,8 +4956,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = joinCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.11"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.11"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																			 * ,
 																			 * currentSession
 																			 */);
@@ -4971,7 +4971,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				joinDAO.update(joinCon);
 				actDAO.update(activity_to);
 
-				return newWebapseeObjectDTO(toMulti.getOid(), toMulti.getClass().getName());
+				return newWebapseeObjectDTO(toMulti.getId(), toMulti.getClass().getName());
 			} else if (state.equals(Plain.WAITING) || state.equals(ProcessModel.REQUIREMENTS) || state.equals(ProcessModel.ABSTRACT)) { // ||
 																																		// state.equals(ProcessModel.INSTANTIATED)
 				// Rule G4.12
@@ -4989,8 +4989,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				activity_to.getFromJoin().add(joinCon);
 
 				ProcessModel pmodel = joinCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.12"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.12"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
 																		 * currentSession
 																		 */);
@@ -5003,7 +5003,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				joinDAO.update(joinCon);
 				actDAO.update(activity_to);
 
-				return newWebapseeObjectDTO(toMulti.getOid(), toMulti.getClass().getName());
+				return newWebapseeObjectDTO(toMulti.getId(), toMulti.getClass().getName());
 			} else if (activity_to instanceof Normal || activity_to instanceof Decomposed) {
 
 				if (!joinCon.isFired().booleanValue() && (state.equals(Plain.READY) || state.equals(ProcessModel.INSTANTIATED))) {
@@ -5024,8 +5024,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						activity_to.getFromJoin().add(joinCon);
 
 						ProcessModel pmodel = joinCon.getTheProcessModel();
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.13"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.13"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
 																				 * currentSession
 																				 */);
@@ -5038,7 +5038,7 @@ System.out.println("salva :"+pmodel.getPmState());
 						joinDAO.update(joinCon);
 						actDAO.update(activity_to);
 
-						return newWebapseeObjectDTO(toMulti.getOid(), toMulti.getClass().getName());
+						return newWebapseeObjectDTO(toMulti.getId(), toMulti.getClass().getName());
 					} else {
 						// Rule G4.14
 
@@ -5057,8 +5057,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						this.makeWaiting(activity_to, "Rule G4.14"); //$NON-NLS-1$
 
 						ProcessModel pmodel = joinCon.getTheProcessModel();
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.14"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid()/*
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.14"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
 																				 * currentSession
 																				 */);
@@ -5071,7 +5071,7 @@ System.out.println("salva :"+pmodel.getPmState());
 						joinDAO.update(joinCon);
 						actDAO.update(activity_to);
 
-						return newWebapseeObjectDTO(toMulti.getOid(), toMulti.getClass().getName());
+						return newWebapseeObjectDTO(toMulti.getId(), toMulti.getClass().getName());
 					}
 				}
 			} else if (joinCon.isFired().booleanValue() && !(state.equals(Plain.FAILED) || state.equals(ProcessModel.FAILED))
@@ -5091,15 +5091,15 @@ System.out.println("salva :"+pmodel.getPmState());
 				activity_to.getFromJoin().add(joinCon);
 
 				ProcessModel pmodel = joinCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.15"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.15"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 				this.enactmentEngine.determineProcessModelStates(pmodel);
 
 				// Persistence Operations
 				joinDAO.update(joinCon);
 				actDAO.update(activity_to);
 
-				return newWebapseeObjectDTO(toMulti.getOid(), toMulti.getClass().getName());
+				return newWebapseeObjectDTO(toMulti.getId(), toMulti.getClass().getName());
 			}
 		} else {
 
@@ -5175,8 +5175,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = joinCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.16"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.16"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 				} else if (joinCon.isFired().booleanValue()) {
@@ -5196,8 +5196,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = joinCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.18"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.18"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 				}
@@ -5231,8 +5231,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = joinCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.17"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.17"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 
@@ -5240,7 +5240,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					joinDAO.update(joinCon);
 					multiDAO.update(multipleCon_to);
 
-					return toAct.getOid();
+					return toAct.getId();
 				} else if (joinCon.isFired().booleanValue()) {
 					// Rule G4.19
 
@@ -5261,15 +5261,15 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = joinCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.19"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.19"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 
 					// Persistence Operations
 					joinDAO.update(joinCon);
 					multiDAO.update(multipleCon_to);
-					return toAct.getOid();
+					return toAct.getId();
 				}
 			} else {
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThereControlFlow")); //$NON-NLS-1$
@@ -5309,8 +5309,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = joinCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.20"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.20"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 
@@ -5318,7 +5318,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					joinDAO.update(joinCon);
 					multiDAO.update(multipleCon_to);
 
-					return oldMulti.getOid();
+					return oldMulti.getId();
 				} else if (joinCon.isFired().booleanValue()) {
 					// Rule G4.21
 
@@ -5353,8 +5353,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = joinCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.21"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.21"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 
@@ -5362,7 +5362,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					joinDAO.update(joinCon);
 					multiDAO.update(multipleCon_to);
 
-					return oldMulti.getOid();
+					return oldMulti.getId();
 				}
 			} else {
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThereControlFlow")); //$NON-NLS-1$
@@ -5456,8 +5456,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						ProcessModel pmodel = joinCon.getTheProcessModel();
 						String processState = this.getTheProcess(pmodel).getPState();
 						if (processState.equals(Process.ENACTING)) {
-							this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.28"); //$NON-NLS-1$
-							this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.28"); //$NON-NLS-1$
+							this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 							this.enactmentEngine.determineProcessModelStates(pmodel);
 						}
 					}
@@ -5487,8 +5487,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = joinCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.22"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.22"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 				}
@@ -5532,8 +5532,8 @@ System.out.println("salva :"+pmodel.getPmState());
 							ProcessModel pmodel = joinCon.getTheProcessModel();
 							String processState = this.getTheProcess(pmodel).getPState();
 							if (processState.equals(Process.ENACTING)) {
-								this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.29"); //$NON-NLS-1$
-								this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+								this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.29"); //$NON-NLS-1$
+								this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 								this.enactmentEngine.determineProcessModelStates(pmodel);
 							}
 						}
@@ -5564,8 +5564,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = joinCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.23"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.23"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 				}
@@ -5654,8 +5654,8 @@ System.out.println("salva :"+pmodel.getPmState());
 							ProcessModel pmodel = joinCon.getTheProcessModel();
 							String processState = this.getTheProcess(pmodel).getPState();
 							if (processState.equals(Process.ENACTING)) {
-								this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.31"); //$NON-NLS-1$
-								this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+								this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.31"); //$NON-NLS-1$
+								this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 								this.enactmentEngine.determineProcessModelStates(pmodel);
 							}
 						}
@@ -5675,8 +5675,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						ProcessModel pmodel = joinCon.getTheProcessModel();
 						String processState = this.getTheProcess(pmodel).getPState();
 						if (processState.equals(Process.ENACTING)) {
-							this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.25"); //$NON-NLS-1$
-							this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.25"); //$NON-NLS-1$
+							this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 							this.enactmentEngine.determineProcessModelStates(pmodel);
 						}
 					}
@@ -5707,8 +5707,8 @@ System.out.println("salva :"+pmodel.getPmState());
 							ProcessModel pmodel = joinCon.getTheProcessModel();
 							String processState = this.getTheProcess(pmodel).getPState();
 							if (processState.equals(Process.ENACTING)) {
-								this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.33"); //$NON-NLS-1$
-								this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+								this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.33"); //$NON-NLS-1$
+								this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 								this.enactmentEngine.determineProcessModelStates(pmodel);
 							}
 						}
@@ -5730,8 +5730,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						ProcessModel pmodel = joinCon.getTheProcessModel();
 						String processState = this.getTheProcess(pmodel).getPState();
 						if (processState.equals(Process.ENACTING)) {
-							this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G4.27"); //$NON-NLS-1$
-							this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.27"); //$NON-NLS-1$
+							this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 							this.enactmentEngine.determineProcessModelStates(pmodel);
 						}
 					}
@@ -5813,8 +5813,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = branchCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.2"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.2"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				}
 
@@ -5826,8 +5826,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Dynamic Changes related code
 				ProcessModel pmodel = branchCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.3"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.3"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 				this.enactmentEngine.determineProcessModelStates(pmodel);
 
 			} else if (branch.isFired().booleanValue() && branchCon.getTheDependency().getKindDep().equals("start-start") //$NON-NLS-1$
@@ -5839,8 +5839,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Dynamic Changes related code
 				ProcessModel pmodel = branchCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.4"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.4"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 				this.enactmentEngine.determineProcessModelStates(pmodel);
 			}
 
@@ -5878,8 +5878,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = branchCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.6"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.6"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				}
 
@@ -5887,7 +5887,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				branchDAO.update(branchCon);
 				actDAO.update(activity_from);
 
-				return newWebapseeObjectDTO(((Activity) ret).getOid(), ((Activity) ret).getClass().getName());
+				return newWebapseeObjectDTO(((Activity) ret).getId(), ((Activity) ret).getClass().getName());
 
 			} else if (branchCon.isFired().booleanValue() && (state.equals(Plain.FINISHED) || state.equals(ProcessModel.FINISHED))) {
 				// Rule G5.7
@@ -5911,15 +5911,15 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Dynamic Changes related code
 				ProcessModel pmodel = branchCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.7"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.7"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 				this.enactmentEngine.determineProcessModelStates(pmodel);
 
 				// Persistence Operations
 				branchDAO.update(branchCon);
 				actDAO.update(activity_from);
 
-				return newWebapseeObjectDTO(((Activity) ret).getOid(), ((Activity) ret).getClass().getName());
+				return newWebapseeObjectDTO(((Activity) ret).getId(), ((Activity) ret).getClass().getName());
 
 			} else if (branch.isFired().booleanValue() && branchCon.getTheDependency().getKindDep().equals("start-start") //$NON-NLS-1$
 					&& (state.equals(Plain.ACTIVE) || state.equals(Plain.PAUSED) || state.equals(ProcessModel.ENACTING))) {
@@ -5944,15 +5944,15 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Dynamic Changes related code
 				ProcessModel pmodel = branchCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.8"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.8"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 				this.enactmentEngine.determineProcessModelStates(pmodel);
 
 				// Persistence Operations
 				branchDAO.update(branchCon);
 				actDAO.update(activity_from);
 
-				return newWebapseeObjectDTO(((Activity) ret).getOid(), ((Activity) ret).getClass().getName());
+				return newWebapseeObjectDTO(((Activity) ret).getId(), ((Activity) ret).getClass().getName());
 			}
 		} else if (branch.getFromMultipleConnection() != null && !this.controlFlow(branchCon, activity_from)) {
 
@@ -6003,8 +6003,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = branchCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.10"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.10"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				}
 
@@ -6012,7 +6012,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				branchDAO.update(branchCon);
 				actDAO.update(activity_from);
 
-				return newWebapseeObjectDTO(fromMulti.getOid(), fromMulti.getClass().getName());
+				return newWebapseeObjectDTO(fromMulti.getId(), fromMulti.getClass().getName());
 
 			} else if (branchCon.isFired().booleanValue() && (state.equals(Plain.FINISHED) || state.equals(ProcessModel.FINISHED))) {
 				// Rule G5.11
@@ -6057,15 +6057,15 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Dynamic Changes related code
 				ProcessModel pmodel = branchCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.11"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.11"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 				this.enactmentEngine.determineProcessModelStates(pmodel);
 
 				// Persistence Operations
 				branchDAO.update(branchCon);
 				actDAO.update(activity_from);
 
-				return newWebapseeObjectDTO(fromMulti.getOid(), fromMulti.getClass().getName());
+				return newWebapseeObjectDTO(fromMulti.getId(), fromMulti.getClass().getName());
 
 			} else if (branch.isFired().booleanValue() && branchCon.getTheDependency().getKindDep().equals("start-start") //$NON-NLS-1$
 					&& (state.equals(Plain.ACTIVE) || state.equals(Plain.PAUSED) || state.equals(ProcessModel.ENACTING))) {
@@ -6111,15 +6111,15 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Dynamic Changes related code
 				ProcessModel pmodel = branchCon.getTheProcessModel();
-				this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.12"); //$NON-NLS-1$
-				this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.12"); //$NON-NLS-1$
+				this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 				this.enactmentEngine.determineProcessModelStates(pmodel);
 
 				// Persistence Operations
 				branchDAO.update(branchCon);
 				actDAO.update(activity_from);
 
-				return newWebapseeObjectDTO(fromMulti.getOid(), fromMulti.getClass().getName());
+				return newWebapseeObjectDTO(fromMulti.getId(), fromMulti.getClass().getName());
 			}
 		} else {
 			throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThereControlFlow")); //$NON-NLS-1$
@@ -6205,8 +6205,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = branchCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.13"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.13"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				}
 
@@ -6249,8 +6249,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = branchCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.14"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.14"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				}
 
@@ -6258,7 +6258,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				branchDAO.update(branchCon);
 				multiDAO.update(multipleCon_from);
 
-				return newWebapseeObjectDTO(fromAct.getOid(), fromAct.getClass().getName());
+				return newWebapseeObjectDTO(fromAct.getId(), fromAct.getClass().getName());
 			} else {
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThereControlFlow")); //$NON-NLS-1$
 			}
@@ -6320,8 +6320,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessModel pmodel = branchCon.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getPState();
 				if (processState.equals(Process.ENACTING)) {
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.15"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.15"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				}
 
@@ -6329,7 +6329,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				branchDAO.update(branchCon);
 				multiDAO.update(multipleCon_from);
 
-				return newWebapseeObjectDTO(fromMulti.getOid(), fromMulti.getClass().getName());
+				return newWebapseeObjectDTO(fromMulti.getId(), fromMulti.getClass().getName());
 			} else {
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThereControlFlow")); //$NON-NLS-1$
 			}
@@ -6398,8 +6398,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = branchCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.19"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.19"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 				} else {
@@ -6430,8 +6430,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = branchCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.26"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.26"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 				} else {
@@ -6452,8 +6452,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.20"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.20"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThisActvAlreadyConn")); //$NON-NLS-1$
@@ -6481,8 +6481,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.27"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.27"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThisActvAlreadyConn")); //$NON-NLS-1$
@@ -6502,8 +6502,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.21"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.21"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThisActvAlreadyConn")); //$NON-NLS-1$
@@ -6531,8 +6531,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.28"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.28"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThisActvAlreadyConn")); //$NON-NLS-1$
@@ -6554,8 +6554,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.22"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.22"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThisActvAlreadyConn")); //$NON-NLS-1$
@@ -6585,8 +6585,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.29"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.29"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThisActvAlreadyConn")); //$NON-NLS-1$
@@ -6605,8 +6605,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.23"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.23"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThisActvAlreadyConn")); //$NON-NLS-1$
@@ -6634,8 +6634,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.30"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.30"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThisActvAlreadyConn")); //$NON-NLS-1$
@@ -6713,8 +6713,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					ProcessModel pmodel = branchCon.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getPState();
 					if (processState.equals(Process.ENACTING)) {
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.24"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.24"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
 				} else {
@@ -6747,8 +6747,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						ProcessModel pmodel = branchCon.getTheProcessModel();
 						String processState = this.getTheProcess(pmodel).getPState();
 						if (processState.equals(Process.ENACTING)) {
-							this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.31"); //$NON-NLS-1$
-							this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.31"); //$NON-NLS-1$
+							this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 							this.enactmentEngine.determineProcessModelStates(pmodel);
 						}
 					} else { // is BranchCon
@@ -6765,8 +6765,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						ProcessModel pmodel = branchCon.getTheProcessModel();
 						String processState = this.getTheProcess(pmodel).getPState();
 						if (processState.equals(Process.ENACTING)) {
-							this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.31"); //$NON-NLS-1$
-							this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.31"); //$NON-NLS-1$
+							this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 							this.enactmentEngine.determineProcessModelStates(pmodel);
 						}
 					}
@@ -6791,8 +6791,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.25"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.25"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThisMultConnIsAlreConn")); //$NON-NLS-1$
@@ -6832,8 +6832,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G5.32"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G5.32"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThisMultConnIsAlreConn")); //$NON-NLS-1$
@@ -7192,13 +7192,13 @@ System.out.println("salva :"+pmodel.getPmState());
 								Agent toSend = (Agent) iterAgentToSend.next();
 								ids.add(toSend.getIdent());
 							}
-//							this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActvAdded"), ids, agent.getOid(),
+//							this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActvAdded"), ids, agent.getId(),
 //									DynamicModelingImpl.ADD, agent.getClass(), agent.getIdent(), null); //$NON-NLS-1$
-							this.notifyAgents(actNorm, "facades.DynamicModeling.NotifyAgentActvAdded", ids, agent.getOid(),
+							this.notifyAgents(actNorm, "facades.DynamicModeling.NotifyAgentActvAdded", ids, agent.getId(),
 									DynamicModelingImpl.ADD, agent.getClass(), agent.getIdent(), null); //$NON-NLS-1$
 
-							this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G6.11"); //$NON-NLS-1$
-							this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G6.11"); //$NON-NLS-1$
+							this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 							this.enactmentEngine.determineProcessModelStates(pmodel);
 						}
 
@@ -7232,12 +7232,12 @@ System.out.println("salva :"+pmodel.getPmState());
 						Agent toSend = (Agent) iterAgentToSend.next();
 						ids.add(toSend.getIdent());
 					}
-					this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActvAdded"), ids, agent.getOid(),
+					this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActvAdded"), ids, agent.getId(),
 							DynamicModelingImpl.ADD, agent.getClass(), agent.getIdent(), null); //$NON-NLS-1$
 
 					// Dynamic Changes related code
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G6.12"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G6.12"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 
 					// Persistence Operations
@@ -7269,12 +7269,12 @@ System.out.println("salva :"+pmodel.getPmState());
 						Agent toSend = (Agent) iterAgentToSend.next();
 						ids.add(toSend.getIdent());
 					}
-					this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActvAdded"), ids, agent.getOid(),
+					this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActvAdded"), ids, agent.getId(),
 							DynamicModelingImpl.ADD, agent.getClass(), agent.getIdent(), null); //$NON-NLS-1$
 
 					// Dynamic Changes related code
-					this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G6.13"); //$NON-NLS-1$
-					this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G6.13"); //$NON-NLS-1$
+					this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 					this.enactmentEngine.determineProcessModelStates(pmodel);
 
 					// Persistence Operations
@@ -7386,7 +7386,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							Agent invagent = (Agent) iterInvAgents.next();
 							ids.add(invagent.getIdent());
 						}
-						this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActivityRemoved"), ids, agent.getOid(),
+						this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActivityRemoved"), ids, agent.getId(),
 								DynamicModelingImpl.DEL, agent.getClass(), agent.getIdent(), null); //$NON-NLS-1$
 
 						// Persistence Operations
@@ -7513,8 +7513,8 @@ System.out.println("salva :"+pmodel.getPmState());
 								Agent ag = (Agent) iterAg.next();
 								this.updateAgenda(ag, actNorm, Plain.WAITING, "Rule G6.17"); //$NON-NLS-1$
 							}
-							this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G6.17"); //$NON-NLS-1$
-							this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G6.17"); //$NON-NLS-1$
+							this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 							this.enactmentEngine.determineProcessModelStates(pmodel);
 						}
 
@@ -7545,8 +7545,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 						// Dynamic Changes related code
 						ProcessModel pmodel = actNorm.getTheProcessModel();
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G6.18"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G6.18"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 
 						// Persistence Operations
@@ -7575,8 +7575,8 @@ System.out.println("salva :"+pmodel.getPmState());
 
 						// Dynamic Changes related code
 						ProcessModel pmodel = actNorm.getTheProcessModel();
-						this.enactmentEngine.searchForFiredConnections(pmodel.getOid(), "Rule G6.19"); //$NON-NLS-1$
-						this.enactmentEngine.searchForReadyActivities(pmodel.getOid());
+						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G6.19"); //$NON-NLS-1$
+						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 
 						// Persistence Operations
@@ -7683,7 +7683,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							}
 						}
 
-						this.notifyAgents(actNorm, null, ids, WorkGroup.getOid(),
+						this.notifyAgents(actNorm, null, ids, WorkGroup.getId(),
 								DynamicModelingImpl.DEL, WorkGroup.getClass(), WorkGroup.getIdent(), null); //$NON-NLS-1$
 
 						// Persistence Operations
@@ -7819,7 +7819,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				ReqAgent reqAgent = (ReqAgent) reqP;
 				if (reqAgent.getTheAgent() != null) {
 					if (reqAgent.getTheAgent().getIdent().equals(agent_id)) {
-						return reqAgent.getOid();
+						return reqAgent.getId();
 					}
 				}
 			}
@@ -7856,7 +7856,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				ReqWorkGroup reqWorkGroup = (ReqWorkGroup) reqP;
 				if (reqWorkGroup.getTheWorkGroup() != null) {
 					if (reqWorkGroup.getTheWorkGroup().getIdent().equals(WorkGroup_id)) {
-						return reqWorkGroup.getOid();
+						return reqWorkGroup.getId();
 					}
 				}
 			}
@@ -7892,7 +7892,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			RequiredResource reqR = (RequiredResource) iter.next();
 			if (reqR.getTheResource() != null) {
 				if (reqR.getTheResource().getIdent().equals(resource_id)) {
-					return reqR.getOid();
+					return reqR.getId();
 				}
 			}
 		}
@@ -8008,7 +8008,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			resTypeDAO.update(resourceType);
 			// }
 
-			return reqResource.getOid();
+			return reqResource.getId();
 		} else {
 			throw new ModelingException(
 					"Exception no dynamicModelingActivity " + actNorm.getIdent() + " A atividade já foi finalizada"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -8098,10 +8098,10 @@ System.out.println("salva :"+pmodel.getPmState());
 							resTypeDAO.update(oldResourceType);
 							resTypeDAO.update(newResourceType);
 
-							return reqRes.getOid();
+							return reqRes.getId();
 						}
 					}
-					return reqRes.getOid();
+					return reqRes.getId();
 				} else {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheOldRequiResoType")); //$NON-NLS-1$
 				}
@@ -8298,7 +8298,7 @@ System.out.println("salva :"+pmodel.getPmState());
 								// Persistence Operations
 								actDAO.update(actNorm);
 								resDAO.update(resource);
-								return reqRes.getOid();
+								return reqRes.getId();
 							}
 						}
 					}
@@ -8306,7 +8306,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (!ok) {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheRequiTypeDoesNot")); //$NON-NLS-1$
 				}
-				return reqRes.getOid();
+				return reqRes.getId();
 			} else if (state.equals(Plain.WAITING) || state.equals(Plain.READY) || state.equals(Plain.PAUSED)) {
 
 				while (iter.hasNext()) {
@@ -8329,19 +8329,19 @@ System.out.println("salva :"+pmodel.getPmState());
 							}
 
 							this.notifyAgents(actNorm,
-									"", ids, resource.getOid(), DynamicModelingImpl.ADD, resource.getClass(), resource.getIdent(), null); //$NON-NLS-1$
+									"", ids, resource.getId(), DynamicModelingImpl.ADD, resource.getClass(), resource.getIdent(), null); //$NON-NLS-1$
 							// Persistence Operations
 							actDAO.update(actNorm);
 							resDAO.update(resource);
 
-							return reqRes.getOid();
+							return reqRes.getId();
 						}
 					}
 				}
 				if (!ok) {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheRequiTypeDoesNot")); //$NON-NLS-1$
 				}
-				return reqRes.getOid();
+				return reqRes.getId();
 			} else if (state.equals(Plain.ACTIVE)) {
 				while (iter.hasNext()) {
 					reqRes = (RequiredResource) iter.next();
@@ -8363,13 +8363,13 @@ System.out.println("salva :"+pmodel.getPmState());
 							}
 
 							this.notifyAgents(actNorm,
-									"", ids, resource.getOid(), DynamicModelingImpl.ADD, resource.getClass(), resource.getIdent(), null); //$NON-NLS-1$
+									"", ids, resource.getId(), DynamicModelingImpl.ADD, resource.getClass(), resource.getIdent(), null); //$NON-NLS-1$
 
 							// Persistence Operations
 							actDAO.update(actNorm);
 							resDAO.update(resource);
 
-							return reqRes.getOid();
+							return reqRes.getId();
 						} else {
 							throw new ModelingException(
 									Messages.getString("facades.DynamicModeling.ModelingExcTheResource") + resource.getIdent() + Messages.getString("facades.DynamicModeling.ModelingExcHasNoResoTypeDef")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -8379,7 +8379,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (!ok) {
 					throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcTheRequiTypeDoesNot")); //$NON-NLS-1$
 				}
-				return reqRes.getOid();
+				return reqRes.getId();
 			} else {
 				throw new ModelingException(
 						Messages.getString("facades.DynamicModeling.ModelingExcActv") + actNorm.getIdent() + Messages.getString("facades.DynamicModeling.ModelingExcHasAlreadyFinis")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -8472,7 +8472,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							}
 
 							this.notifyAgents(actNorm,
-									"", ids, resource.getOid(), DynamicModelingImpl.ADD, resource.getClass(), resource.getIdent(), null); //$NON-NLS-1$
+									"", ids, resource.getId(), DynamicModelingImpl.ADD, resource.getClass(), resource.getIdent(), null); //$NON-NLS-1$
 
 							// Persistence Operations
 							actDAO.update(actNorm);
@@ -8502,7 +8502,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							this.notifyAgents(
 									actNorm,
 									Messages.getString("facades.DynamicModeling.DynamicModeling.DaoExcResource") + resource.getIdent()
-											+ Messages.getString("facades.DynamicModeling.NotifyAgentRemoved"), ids, resource.getOid(),
+											+ Messages.getString("facades.DynamicModeling.NotifyAgentRemoved"), ids, resource.getId(),
 									DynamicModelingImpl.DEL, resource.getClass(), resource.getIdent(), null); //$NON-NLS-1$ //$NON-NLS-2$
 
 							// Persistence Operations
@@ -8833,7 +8833,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							Collection ids = new HashSet();
 							ids.add(agent.getIdent());
 
-							this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActvAdded"), ids, agent.getOid(),
+							this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActvAdded"), ids, agent.getId(),
 									DynamicModelingImpl.ADD, agent.getClass(), agent.getIdent(), null); //$NON-NLS-1$
 
 							ProcessModel pmodel = actNorm.getTheProcessModel();
@@ -8846,7 +8846,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 						Collection ids = new HashSet();
 						ids.add(agent.getIdent());
-						this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActvAdded"), ids, agent.getOid(),
+						this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActvAdded"), ids, agent.getId(),
 								DynamicModelingImpl.ADD, agent.getClass(), agent.getIdent(), null); //$NON-NLS-1$
 
 						ProcessModel pmodel = actNorm.getTheProcessModel();
@@ -8861,8 +8861,8 @@ System.out.println("salva :"+pmodel.getPmState());
 		Iterator iterPMs = processModels.iterator();
 		while (iterPMs.hasNext()) {
 			ProcessModel procModel = (ProcessModel) iterPMs.next();
-			this.enactmentEngine.searchForFiredConnections(procModel.getOid(), "Rule Adding Agent to a WorkGroup"); //$NON-NLS-1$
-			this.enactmentEngine.searchForReadyActivities(procModel.getOid());
+			this.enactmentEngine.searchForFiredConnections(procModel.getId(), "Rule Adding Agent to a WorkGroup"); //$NON-NLS-1$
+			this.enactmentEngine.searchForReadyActivities(procModel.getId());
 			this.enactmentEngine.determineProcessModelStates(procModel);
 
 		}
@@ -8960,7 +8960,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							}
 						}
 
-						this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActivityRemoved"), ids, agent.getOid(),
+						this.notifyAgents(actNorm, Messages.getString("facades.DynamicModeling.NotifyAgentActivityRemoved"), ids, agent.getId(),
 								DynamicModelingImpl.DEL, agent.getClass(), agent.getIdent(), null); //$NON-NLS-1$
 					}
 				}
@@ -9150,7 +9150,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Notify the agente of the new state of the task!!
 		String message = "<MESSAGE>" + //$NON-NLS-1$
 				"<ACTIVITYSTATE>" + //$NON-NLS-1$
-				"<OID>" + task.getOid() + "</OID>" + //$NON-NLS-1$ //$NON-NLS-2$
+				"<OID>" + task.getId() + "</OID>" + //$NON-NLS-1$ //$NON-NLS-2$
 				"<CLASS>" + task.getClass().getName() + "</CLASS>" + //$NON-NLS-1$ //$NON-NLS-2$
 				"<ID>" + task.getTheNormal().getIdent() + "</ID>" + //$NON-NLS-1$ //$NON-NLS-2$
 				"<NEWSTATE>" + newState + "</NEWSTATE>" + //$NON-NLS-1$ //$NON-NLS-2$
@@ -9303,7 +9303,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				}
 
 				// Notify the agente of the task!!
-				String message = "<MESSAGE>" + "<NOTIFY>" + "<OID>" + task.getOid() + "</OID>" + "<ID>" + actIdent + "</ID>" + "<TYPE>DEL</TYPE>"
+				String message = "<MESSAGE>" + "<NOTIFY>" + "<OID>" + task.getId() + "</OID>" + "<ID>" + actIdent + "</ID>" + "<TYPE>DEL</TYPE>"
 						+ "<CLASS>" + task.getClass().getName() + "</CLASS>" + "<BY>APSEE_Manager</BY>" + "</NOTIFY>" + "</MESSAGE>";
 				try {
 					if (this.remote == null) {
@@ -10420,7 +10420,7 @@ System.out.println("salva :"+pmodel.getPmState());
 	// seta as informacoes do WebapseeObjectDTO
 	private WebapseeObjectDTO newWebapseeObjectDTO(int oid, String className) {
 		WebapseeObjectDTO webapseeObjectDTO = new WebapseeObjectDTO();
-		webapseeObjectDTO.setOid(oid);
+		webapseeObjectDTO.setId(oid);
 		webapseeObjectDTO.setClassName(className);
 		return webapseeObjectDTO;
 	}

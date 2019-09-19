@@ -34,8 +34,8 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 		configuration = convertConfigurationDTOToConfiguration(confi);
 
 		configuration.setAgent(convertAgentDTOToAgent((AgentDTO) agente));
-		configuration.setOid(confi.getOid());
-		System.out.println("id da confi " +configuration.getOid());
+		configuration.setId(confi.getId());
+		System.out.println("id da confi " +configuration.getId());
 		confiDAO.update(configuration);
 
 		if (configuration != null)
@@ -79,7 +79,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 	private ConfigurationDTO convertConfigurationToConfigurationDTO(Configuration config) {
 		ConfigurationDTO configDTO = new ConfigurationDTO();
 
-		configDTO.setOid(config.getOid());
+		configDTO.setId(config.getId());
 		configDTO.setIdioma(config.getIdioma());
 		configDTO.setFiltro(config.getFiltro());
 		configDTO.setSenhaEmRecuperacao(config.getSenhaEmRecuperacao());
@@ -103,7 +103,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 			return null;
 		} else {
 			Configuration configuration = (Configuration) query.getResultList().get(0);
-			System.out.print("retorno: "+configuration.getAgent()+"filtro:"+configuration.getFiltro()+"oid: "+configuration.getOid());
+			System.out.print("retorno: "+configuration.getAgent()+"filtro:"+configuration.getFiltro()+"oid: "+configuration.getId());
 			return convertConfigurationToConfigurationDTO(configuration);
 		}
 	}

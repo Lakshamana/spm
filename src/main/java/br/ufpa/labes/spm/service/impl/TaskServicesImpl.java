@@ -770,7 +770,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		if (req != null) {
 			String message = "<MESSAGE>" + //$NON-NLS-1$
-					"<NOTIFY>" + "<OID>" + req.getOid() + "</OID>" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					"<NOTIFY>" + "<OID>" + req.getId() + "</OID>" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					"<TYPE>UPT</TYPE>" + //$NON-NLS-1$
 					"<CLASS>" + req.getClass().getName() + "</CLASS>" + //$NON-NLS-1$ //$NON-NLS-2$
 					"<BY>" + from_agent_id + "</BY>" + //$NON-NLS-1$ //$NON-NLS-2$
@@ -940,7 +940,7 @@ public class TaskServicesImpl implements TaskServices {
 		// Notify the agente of the new state of the task!!
 		String message = "<MESSAGE>" + //$NON-NLS-1$
 				"<ACTIVITYSTATE>" + //$NON-NLS-1$
-				"<OID>" + task.getOid() + "</OID>" + //$NON-NLS-1$ //$NON-NLS-2$
+				"<OID>" + task.getId() + "</OID>" + //$NON-NLS-1$ //$NON-NLS-2$
 				"<CLASS>" + task.getClass().getName() + "</CLASS>" + //$NON-NLS-1$ //$NON-NLS-2$
 				"<ID>" + task.getTheNormal().getIdent() + "</ID>" + //$NON-NLS-1$ //$NON-NLS-2$
 				"<NEWSTATE>" + task.getLocalState() + "</NEWSTATE>" + //$NON-NLS-1$ //$NON-NLS-2$
@@ -1720,7 +1720,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		System.out.println("Session reloaded (new session)!");
 		processModel = (ProcessModel) processModelDAO.retrieve(processModel
-				.getOid());
+				.getId());
 		Collection activities = processModel.getTheActivity();
 		Iterator iter = activities.iterator();
 		while (iter.hasNext()) {
@@ -3237,7 +3237,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		String message = "<MESSAGE>" + //$NON-NLS-1$
 				"<NOTIFY>" + //$NON-NLS-1$
-				"<OID>" + activity.getOid() + "</OID>" + //$NON-NLS-1$ //$NON-NLS-2$
+				"<OID>" + activity.getId() + "</OID>" + //$NON-NLS-1$ //$NON-NLS-2$
 				"<TYPE>UPT</TYPE>" + //$NON-NLS-1$
 				"<CLASS>" + activity.getClass().getName() + "</CLASS>" + //$NON-NLS-1$ //$NON-NLS-2$
 				"<BY>Apsee</BY>" + //$NON-NLS-1$
@@ -3261,7 +3261,7 @@ public class TaskServicesImpl implements TaskServices {
 						.next();
 				if (actEstimation != null) {
 					if (greater != null) {
-						if (greater.getOid() < actEstimation.getOid())
+						if (greater.getId() < actEstimation.getId())
 							greater = actEstimation;
 					} else
 						greater = actEstimation;
@@ -3293,7 +3293,7 @@ public class TaskServicesImpl implements TaskServices {
 						.next();
 				if (actMetric != null) {
 					if (greater != null) {
-						if (greater.getOid() < actMetric.getOid())
+						if (greater.getId() < actMetric.getId())
 							greater = actMetric;
 					} else
 						greater = actMetric;

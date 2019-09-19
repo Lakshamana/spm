@@ -112,7 +112,7 @@ public class EditorServicesImpl implements EditorServices {
 		for (Connection conn : connections) {
 			GraphicCoordinate conGP = null;
 			try {
-				webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(conn.getOid(), conn.getClass().getSimpleName());
+				webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(conn.getId(), conn.getClass().getSimpleName());
 			} catch (DAOException e) {
 				webAPSEEObject= null;
 				e.printStackTrace();
@@ -241,7 +241,7 @@ public class EditorServicesImpl implements EditorServices {
 		for (Activity activity : activities) {
 
 			try {
-				webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(activity.getOid(), activity.getClass().getSimpleName());
+				webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(activity.getId(), activity.getClass().getSimpleName());
 			} catch (DAOException e1) {
 				webAPSEEObject= null;
 				e1.printStackTrace();
@@ -265,7 +265,7 @@ public class EditorServicesImpl implements EditorServices {
 					if (requiredPeople instanceof ReqAgent) {
 						ReqAgent reqAg = (ReqAgent) requiredPeople;
 						try {
-							webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(reqAg.getOid(), reqAg.getClass().getSimpleName());
+							webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(reqAg.getId(), reqAg.getClass().getSimpleName());
 						} catch (DAOException e) {
 							webAPSEEObject= null;
 							e.printStackTrace();
@@ -288,7 +288,7 @@ public class EditorServicesImpl implements EditorServices {
 					} else if (requiredPeople instanceof ReqWorkGroup) {
 						ReqWorkGroup reqWorkGroup = (ReqWorkGroup) requiredPeople;
 						try {
-							webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(reqWorkGroup.getOid(), reqWorkGroup.getClass().getSimpleName());
+							webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(reqWorkGroup.getId(), reqWorkGroup.getClass().getSimpleName());
 						} catch (DAOException e) {
 							webAPSEEObject= null;
 							e.printStackTrace();
@@ -314,7 +314,7 @@ public class EditorServicesImpl implements EditorServices {
 					GraphicCoordinate reqRGP = null;
 
 					try {
-						webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(requiredResource.getOid(), requiredResource.getClass().getSimpleName());
+						webAPSEEObject = webAPSEEObjDAO.retrieveWebAPSEEObject(requiredResource.getId(), requiredResource.getClass().getSimpleName());
 					} catch (DAOException e) {
 						webAPSEEObject= null;
 						e.printStackTrace();

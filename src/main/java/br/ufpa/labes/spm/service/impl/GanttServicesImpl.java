@@ -146,7 +146,7 @@ public class GanttServicesImpl implements GanttServices {
 //		System.out.println("id projeto "+ ident[0]);
 //		Project project =  projectDAO.retrieveBySecondaryKey(ident[0]);
 //
-//		CalendarDTO replain = calendarServices.getCalendarForProject(project.getOid());
+//		CalendarDTO replain = calendarServices.getCalendarForProject(project.getId());
 //
 //
 //		easyModelingServices.replanningDates(activityDTO.getIdent(),dateBegin,dateEnd,replain);
@@ -244,7 +244,7 @@ public class GanttServicesImpl implements GanttServices {
 		ProcessModel model = decomposed.getTheReferedProcessModel();
 
 		DecomposedDTO decomposedDTO = new DecomposedDTO();
-		decomposedDTO.setId(decomposed.getOid());
+		decomposedDTO.setId(decomposed.getId());
 		decomposedDTO.setName(decomposed.getName());
 		decomposedDTO.setIdent(decomposed.getIdent());
 
@@ -271,7 +271,7 @@ public class GanttServicesImpl implements GanttServices {
 		ProcessModel model = decomposed.getTheReferedProcessModel();
 
 		DecomposedDTO decomposedDTO = new DecomposedDTO();
-		decomposedDTO.setId(decomposed.getOid());
+		decomposedDTO.setId(decomposed.getId());
 		decomposedDTO.setName(decomposed.getName());
 		decomposedDTO.setIdent(decomposed.getIdent());
 
@@ -300,7 +300,7 @@ public class GanttServicesImpl implements GanttServices {
 //		System.out.println("Begin: " + normal.getPlannedBegin() + " - End: " + normal.getPlannedEnd());
 
 		ActivityDTO activityDTO = new ActivityDTO();
-		activityDTO.setId(normal.getOid());
+		activityDTO.setId(normal.getId());
 		activityDTO.setName(normal.getName());
 		activityDTO.setIdent(normal.getIdent());
 		activityDTO.setBeginDate(normal.getPlannedBegin());

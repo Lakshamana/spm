@@ -95,7 +95,7 @@ public class ArtifactServicesImpl implements ArtifactServices {
 	public ArtifactDTO alreadyExist(String artifactIdent) throws DAOException {
 		Artifact artifact = artifactDAO.retrieveBySecondaryKey(artifactIdent);
 		ArtifactDTO artifactDTO;
-		if(artifact == null || artifact.getOid().equals(null)) {
+		if(artifact == null || artifact.getId().equals(null)) {
 			throw new DAOException("Não Existe");
 		} else {
 			artifactDTO = convertArtifactToArtifactDTO(artifact);

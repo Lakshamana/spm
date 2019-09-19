@@ -116,8 +116,8 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
         this.createTasks(procModel);
         this.logging.registerProcessEvent(process, "ToEnacting", "Rule 1.1"); //$NON-NLS-1$ //$NON-NLS-2$
 
-       	this.searchForFiredConnections (procModel.getOid(), ""); //$NON-NLS-1$
-       	this.searchForReadyActivities (procModel.getOid());
+       	this.searchForFiredConnections (procModel.getId(), ""); //$NON-NLS-1$
+       	this.searchForReadyActivities (procModel.getId());
        	this.determineProcessModelStates(procModel);
 
        	// Persistence Operations
@@ -204,7 +204,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
         if (actState.equals(Plain.READY)) {
         	if (this.isAllRequiredResourceAvailable(actNorm)) {
         		this.allocateAllForActivity(actNorm, true);
-        		this.plainActivityHasStarted (pmodel.getOid());
+        		this.plainActivityHasStarted (pmodel.getId());
         		this.updateAgenda (agent,actNorm, Plain.ACTIVE, "Rule 3.1"); //$NON-NLS-1$
         		EnactionDescription enact = actNorm.getTheEnactionDescription();
         		//TODO enact.setStateWithMessage(Plain.ACTIVE);
@@ -261,8 +261,8 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
         			}
         	}
         }
-        this.searchForFiredConnections(actNorm.getTheProcessModel().getOid(), why);
-        this.searchForReadyActivities(actNorm.getTheProcessModel().getOid());
+        this.searchForFiredConnections(actNorm.getTheProcessModel().getId(), why);
+        this.searchForReadyActivities(actNorm.getTheProcessModel().getId());
         this.determineProcessModelStates(actNorm.getTheProcessModel());
 
        	// Persistence Operations
@@ -381,8 +381,8 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
            	   this.updateAgenda(agent, actNorm, Plain.FINISHED, "Rule 3.7"); //$NON-NLS-1$
           }
    		}
-        this.searchForFiredConnections(pmodel.getOid(), why);
-        this.searchForReadyActivities(pmodel.getOid());
+        this.searchForFiredConnections(pmodel.getId(), why);
+        this.searchForReadyActivities(pmodel.getId());
     	this.determineProcessModelStates(pmodel); // to solve upper propagation problems
 
        	// Persistence Operations
@@ -472,8 +472,8 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
        		}
 		}
 
-		this.searchForFiredConnections(pmodel.getOid(), why);
-    	this.searchForReadyActivities(pmodel.getOid());
+		this.searchForFiredConnections(pmodel.getId(), why);
+    	this.searchForReadyActivities(pmodel.getId());
     }
 
     /**
@@ -649,7 +649,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 
         if(req != null){
         	String message = "<MESSAGE>" +  //$NON-NLS-1$
-        						"<NOTIFY>" + "<OID>" + req.getOid()	+ "</OID>" +  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        						"<NOTIFY>" + "<OID>" + req.getId()	+ "</OID>" +  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         							"<TYPE>UPT</TYPE>" +  //$NON-NLS-1$
         							"<CLASS>" + req.getClass().getName() + "</CLASS>" +  //$NON-NLS-1$ //$NON-NLS-2$
         							"<BY>" + from_agent_id + "</BY>" +  //$NON-NLS-1$ //$NON-NLS-2$
@@ -748,10 +748,10 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					this.failGeneralActivity (activity, true, "Rule 9.9"); //$NON-NLS-1$
 			}
 			else
-				this.searchForReadyActivities (pmodel.getOid());
+				this.searchForReadyActivities (pmodel.getId());
 		}
 
-		this.searchForReadyActivities (pmodel.getOid());
+		this.searchForReadyActivities (pmodel.getId());
 		this.determineProcessModelStates(pmodel);
 
        	// Persistence Operations
@@ -1293,8 +1293,8 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					return;
 				}
 				else{
-					this.searchForFiredConnections(superActDec.getTheProcessModel().getOid(), "Rule 10.x");
-					this.searchForReadyActivities(superActDec.getTheProcessModel().getOid());
+					this.searchForFiredConnections(superActDec.getTheProcessModel().getId(), "Rule 10.x");
+					this.searchForReadyActivities(superActDec.getTheProcessModel().getId());
 					this.determineProcessModelStates(superActDec.getTheProcessModel());
 				}
 			}
@@ -1316,7 +1316,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				System.out.println("Session reloaded (new session)!");
 				ProcessModelDAO dao = new ProcessModelDAO();
 				dao.setSession(currentSession);
-				pmodel = (ProcessModel) dao.findByPrimaryKey(pmodel.getOid());
+				pmodel = (ProcessModel) dao.findByPrimaryKey(pmodel.getId());
 			} catch (DAOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1360,7 +1360,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				Decomposed decomposed = (Decomposed)activity;
 				ProcessModel fragment = decomposed.getTheReferedProcessModel();
 				if(fragment.getPmState().equals(ProcessModel.INSTANTIATED)){
-					this.searchForReadyActivities (fragment.getOid());
+					this.searchForReadyActivities (fragment.getId());
 				}
 			}
 		}
@@ -1813,7 +1813,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
  		// Notify the agente of the new state of the task!!
         String message = "<MESSAGE>" +  //$NON-NLS-1$
         					"<ACTIVITYSTATE>" +  //$NON-NLS-1$
-        						"<OID>" + task.getOid() + "</OID>" +  //$NON-NLS-1$ //$NON-NLS-2$
+        						"<OID>" + task.getId() + "</OID>" +  //$NON-NLS-1$ //$NON-NLS-2$
                                 "<CLASS>" + task.getClass().getName()+ "</CLASS>" + //$NON-NLS-1$ //$NON-NLS-2$
         						"<ID>" + task.getTheNormal().getIdent() + "</ID>" +  //$NON-NLS-1$ //$NON-NLS-2$
         						"<NEWSTATE>" + task.getLocalState() + "</NEWSTATE>" +  //$NON-NLS-1$ //$NON-NLS-2$
@@ -2072,13 +2072,13 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
             				}
         			}
         		}
-        		this.processModelHasStarted(parentModel.getOid(), why);
+        		this.processModelHasStarted(parentModel.getId(), why);
         	}
         	else
         		this.logging.registerProcessModelEvent (pmodel, "ToEnacting", "Rule 4.6"); //$NON-NLS-1$ //$NON-NLS-2$
     	}
-    	this.searchForFiredConnections (parentModel.getOid(), why);
-        this.searchForReadyActivities (parentModel.getOid());
+    	this.searchForFiredConnections (parentModel.getId(), why);
+        this.searchForReadyActivities (parentModel.getId());
     }
 
     /**
@@ -2094,18 +2094,18 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				//TODO procModel.setPmStateWithMessage(ProcessModel.ENACTING);
 				this.logging.registerProcessModelEvent (procModel, "ToEnacting", "Rule 4.5"); //$NON-NLS-1$ //$NON-NLS-2$
 				ProcessModel parentModel = procModel.getTheDecomposed().getTheProcessModel();
-				this.processModelHasStarted (parentModel.getOid(), why);
+				this.processModelHasStarted (parentModel.getId(), why);
 			}
-			this.searchForFiredConnections (procModel.getOid(), why);
-			this.searchForReadyActivities (procModel.getOid());
+			this.searchForFiredConnections (procModel.getId(), why);
+			this.searchForReadyActivities (procModel.getId());
 		}
 		else{
 			if (procModel.getPmState().equals (ProcessModel.INSTANTIATED)) {
 				//TODO procModel.setPmStateWithMessage(ProcessModel.ENACTING);
 				this.logging.registerProcessModelEvent (procModel,"ToEnacting", "Rule 4.7"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
-			this.searchForFiredConnections (procModel.getOid(), ""); //$NON-NLS-1$
-			this.searchForReadyActivities (procModel.getOid());
+			this.searchForFiredConnections (procModel.getId(), ""); //$NON-NLS-1$
+			this.searchForReadyActivities (procModel.getId());
 		}
 	}
 
@@ -2540,14 +2540,14 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
        				}
        			}
         		else {
-        		    this.searchForFiredConnections (parentModel.getOid(),why);
-        		    this.searchForReadyActivities (parentModel.getOid());
+        		    this.searchForFiredConnections (parentModel.getId(),why);
+        		    this.searchForReadyActivities (parentModel.getId());
         		}
        		}
 		}
 		else {
-		    this.searchForFiredConnections (parentModel.getOid(),why);
-		    this.searchForReadyActivities (parentModel.getOid());
+		    this.searchForFiredConnections (parentModel.getId(),why);
+		    this.searchForReadyActivities (parentModel.getId());
 		}
 	}
 
@@ -4215,7 +4215,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 
 		String message = "<MESSAGE>" +  //$NON-NLS-1$
 							"<NOTIFY>" +  //$NON-NLS-1$
-								"<OID>" + activity.getOid()	+ "</OID>" +  //$NON-NLS-1$ //$NON-NLS-2$
+								"<OID>" + activity.getId()	+ "</OID>" +  //$NON-NLS-1$ //$NON-NLS-2$
 								"<TYPE>UPT</TYPE>" +  //$NON-NLS-1$
 								"<CLASS>" + activity.getClass().getName() + "</CLASS>" +  //$NON-NLS-1$ //$NON-NLS-2$
 								"<BY>Apsee</BY>" +  //$NON-NLS-1$
@@ -4251,7 +4251,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				ActivityEstimation actEstimation = (ActivityEstimation) iterActEstimations.next();
 				if(actEstimation != null){
 					if(greater != null){
-						if(greater.getOid() < actEstimation.getOid())
+						if(greater.getId() < actEstimation.getId())
 							greater = actEstimation;
 					}else greater = actEstimation;
 					//temp.add(actEstimation);
@@ -4279,7 +4279,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				ActivityMetric actMetric = (ActivityMetric) iterActMetrics.next();
 				if(actMetric != null){
 					if(greater != null){
-						if(greater.getOid() < actMetric.getOid())
+						if(greater.getId() < actMetric.getId())
 							greater = actMetric;
 					}else greater = actMetric;
 					//temp.add(actMetric);
@@ -4397,8 +4397,8 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 
 			//this.rollbackProcessModelState(activity.getTheProcessModel());
 
-			this.searchForFiredConnections (activity.getTheProcessModel().getOid(), ""); //$NON-NLS-1$
-	       	this.searchForReadyActivities (activity.getTheProcessModel().getOid());
+			this.searchForFiredConnections (activity.getTheProcessModel().getId(), ""); //$NON-NLS-1$
+	       	this.searchForReadyActivities (activity.getTheProcessModel().getId());
 	       	this.determineProcessModelStates(activity.getTheProcessModel());
 
 		} else if ((state.equals(Plain.ACTIVE)
@@ -4415,8 +4415,8 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 
 			//this.rollbackProcessModelState(activity.getTheProcessModel());
 
-			this.searchForFiredConnections (activity.getTheProcessModel().getOid(), ""); //$NON-NLS-1$
-	       	this.searchForReadyActivities (activity.getTheProcessModel().getOid());
+			this.searchForFiredConnections (activity.getTheProcessModel().getId(), ""); //$NON-NLS-1$
+	       	this.searchForReadyActivities (activity.getTheProcessModel().getId());
 	       	this.determineProcessModelStates(activity.getTheProcessModel());
 		}
 

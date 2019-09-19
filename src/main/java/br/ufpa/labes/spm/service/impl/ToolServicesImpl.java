@@ -85,7 +85,7 @@ public class ToolServicesImpl implements ToolServices {
 		toolDTO = this.convertToolToToolDTO(tool);
 		toolDTO.setTheArtifactType(artifactTypeNames);
 
-		// System.out.println("----> Tool Oid: " + toolDTO.getOid() + "; Name: "
+		// System.out.println("----> Tool Oid: " + toolDTO.getId() + "; Name: "
 		// + toolDTO.getName() + "; Artifacts: " +
 		// toolDTO.getTheArtifactType().size());
 

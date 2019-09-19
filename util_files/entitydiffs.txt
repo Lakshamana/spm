@@ -1,0 +1,17 @@
+Group WorkGroup
+Configuration SpmConfiguration
+Join JoinCon
+BranchAND BranchANDCon
+BranchCond BranchConCond
+BranchCondToActivity BranchConCondToActivity
+BranchCondToMultipleCon BranchConCondToMultipleCon
+Log SpmLog
+Repository VCSRepository
+System DevelopingSystem
+ReqGroup ReqWorkGroup
+ResourceInstantiationSuggestion ResourceInstSug
+PeopleInstantiationSuggestion PeopleInstSug
+GroupInstantiationSuggestion WorkGroupInstSug
+GroupEstimation WorkGroupEstimation
+GroupMetric WorkGroupMetric
+GroupType WorkGroupType

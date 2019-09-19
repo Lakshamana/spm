@@ -356,7 +356,7 @@ public class TemplateServicesImpl implements TemplateServices {
 
 				String newActivityIdent = currentActivity.getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 
-				this.addCoordinate(currentActivity.getOid(), currentActivity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+" + newActivityIdent, coordinates);
+				this.addCoordinate(currentActivity.getId(), currentActivity.getClass().getSimpleName(), WebAPSEEObject.ACTIVITY + "+" + newActivityIdent, coordinates);
 
 				if(currentActivity instanceof Normal){
 					newActivity = new Normal();
@@ -487,13 +487,13 @@ public class TemplateServicesImpl implements TemplateServices {
 					if(webObjType.equals(WebAPSEEObject.ACTIVITY)){
 						act = (Activity) activityDAO.retrieveBySecondaryKey(webObjKey);
 						if(act!=null){
-							webObj = new WebAPSEEObject(act.getOid(),act.getClass().getSimpleName(),newCoord);
+							webObj = new WebAPSEEObject(act.getId(),act.getClass().getSimpleName(),newCoord);
 							webAPSEEObjectDAO.daoSave(webObj);
 						}
 					}else if(webObjType.equals(WebAPSEEObject.CONNECTION)){
 						con = (Connection) connectionDAO.retrieveBySecondaryKey(webObjKey);
 						if(con!=null){
-							webObj = new WebAPSEEObject(con.getOid(),con.getClass().getSimpleName(),newCoord);
+							webObj = new WebAPSEEObject(con.getId(),con.getClass().getSimpleName(),newCoord);
 							webAPSEEObjectDAO.daoSave(webObj);
 						}
 					}else{
@@ -516,19 +516,19 @@ public class TemplateServicesImpl implements TemplateServices {
 						if(webObjType.equals(WebAPSEEObject.REQ_AGENT)){
 							reqAg = reqAgentDAO.findReqAgentFromProcessModel(instanceIdent, typeIdent, normalIdent);
 							if(reqAg!=null){
-								webObj = new WebAPSEEObject(reqAg.getOid(),reqAg.getClass().getSimpleName(),newCoord);
+								webObj = new WebAPSEEObject(reqAg.getId(),reqAg.getClass().getSimpleName(),newCoord);
 								webAPSEEObjectDAO.daoSave(webObj);
 							}
 						}else if(webObjType.equals(WebAPSEEObject.REQ_WorkGroup)){
 							reqGr = reqWorkGroupDAO.findReqWorkGroupFromProcessModel(instanceIdent, typeIdent, normalIdent);
 							if(reqGr!=null){
-								webObj = new WebAPSEEObject(reqGr.getOid(),reqGr.getClass().getSimpleName(),newCoord);
+								webObj = new WebAPSEEObject(reqGr.getId(),reqGr.getClass().getSimpleName(),newCoord);
 								webAPSEEObjectDAO.daoSave(webObj);
 							}
 						}else if(webObjType.equals(WebAPSEEObject.REQ_RESOURCE)){
 							reqRes = reqResourceDAO.findRequiredResourceFromProcessModel(instanceIdent, typeIdent, normalIdent);
 							if(reqRes!=null){
-								webObj = new WebAPSEEObject(reqRes.getOid(),reqRes.getClass().getSimpleName(),newCoord);
+								webObj = new WebAPSEEObject(reqRes.getId(),reqRes.getClass().getSimpleName(),newCoord);
 								webAPSEEObjectDAO.daoSave(webObj);
 							}
 						}
@@ -864,7 +864,7 @@ public class TemplateServicesImpl implements TemplateServices {
 						}//end if
 					}//end if != null
 					newConnection.setIdent(newConnectionIdent);
-					this.addCoordinate(((Sequence)currentConnection).getOid(), ((Sequence)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
+					this.addCoordinate(((Sequence)currentConnection).getId(), ((Sequence)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}//########################
 				else if(currentConnection instanceof Feedback){
 					newConnection = new Feedback();
@@ -901,7 +901,7 @@ public class TemplateServicesImpl implements TemplateServices {
 					}//end if condition != null
 
 					newConnection.setIdent(newConnectionIdent);
-					this.addCoordinate(((Feedback)currentConnection).getOid(), ((Feedback)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
+					this.addCoordinate(((Feedback)currentConnection).getId(), ((Feedback)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 
 				}//########################
 				else if(currentConnection instanceof ArtifactCon){
@@ -968,7 +968,7 @@ public class TemplateServicesImpl implements TemplateServices {
 
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
-					this.addCoordinate(((ArtifactCon)currentConnection).getOid(), ((ArtifactCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
+					this.addCoordinate(((ArtifactCon)currentConnection).getId(), ((ArtifactCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 
 				}//########################
 				else if(currentConnection instanceof BranchCon){
@@ -1048,7 +1048,7 @@ public class TemplateServicesImpl implements TemplateServices {
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
 
-					this.addCoordinate(((Branch)currentConnection).getOid(), ((BranchCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
+					this.addCoordinate(((Branch)currentConnection).getId(), ((BranchCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}
 				else if(currentConnection instanceof JoinCon){
 					newConnection = new JoinCon();
@@ -1089,7 +1089,7 @@ public class TemplateServicesImpl implements TemplateServices {
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
 
-					this.addCoordinate(((Join)currentConnection).getOid(), ((JoinCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
+					this.addCoordinate(((Join)currentConnection).getId(), ((JoinCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}//end joinCon processing
 
 				//about conection type
@@ -1336,7 +1336,7 @@ public class TemplateServicesImpl implements TemplateServices {
 						newReqAgReqAbility = copyReqAgentReqAbility(currentReqAg.getTheReqAgentRequiresAbility(),newReqAgent);
 						newReqAgent.setTheReqAgentRequiresAbility(newReqAgReqAbility);
 
-						this.addCoordinate(currentReqAg.getOid(), currentReqAg.getClass().getSimpleName(), WebAPSEEObject.REQ_AGENT +"+"+ coordinateKey, coordinates);
+						this.addCoordinate(currentReqAg.getId(), currentReqAg.getClass().getSimpleName(), WebAPSEEObject.REQ_AGENT +"+"+ coordinateKey, coordinates);
 						coordinateKey = null;
 
 						//the common attribute normal activity
@@ -1362,7 +1362,7 @@ public class TemplateServicesImpl implements TemplateServices {
 					}
 
 					coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
-					this.addCoordinate(currentReqWorkGroup.getOid(), currentReqWorkGroup.getClass().getSimpleName(), WebAPSEEObject.REQ_WorkGroup +"+"+coordinateKey, coordinates);
+					this.addCoordinate(currentReqWorkGroup.getId(), currentReqWorkGroup.getClass().getSimpleName(), WebAPSEEObject.REQ_WorkGroup +"+"+coordinateKey, coordinates);
 					coordinateKey = null;
 
 					//the common attribute normal activity
@@ -1442,7 +1442,7 @@ public class TemplateServicesImpl implements TemplateServices {
 
 				newRequiredResource.insertIntoTheNormal(destinationNormal);
 				coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
-				this.addCoordinate(currentReqResource.getOid(), currentReqResource.getClass().getSimpleName(), WebAPSEEObject.REQ_RESOURCE +"+"+coordinateKey, coordinates);
+				this.addCoordinate(currentReqResource.getId(), currentReqResource.getClass().getSimpleName(), WebAPSEEObject.REQ_RESOURCE +"+"+coordinateKey, coordinates);
 				coordinateKey = null;
 
 				//add to Main Collection

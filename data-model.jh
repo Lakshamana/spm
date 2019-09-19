@@ -330,18 +330,12 @@ relationship OneToOne {
 }
 
 //package calendar -------------------------------------------
-
-entity CalendarDay {
-    day String
-}
-
 entity Calendar {
     name String
 }
 
 relationship OneToMany {
-    Calendar{notWorkingDays} to CalendarDay{theCalendar},
-    Calendar{project} to Project{theCalendar}
+    Project{theCalendar} to Calendar{project}
 }
 
 //package chat -------------------------------------------
