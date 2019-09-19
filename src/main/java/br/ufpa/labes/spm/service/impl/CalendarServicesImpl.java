@@ -35,7 +35,7 @@ public class CalendarServicesImpl implements CalendarServices  {
 
 			calendar = this.convertCalendarDTOToCalendar(calendarDTO);
 			calendar.setProject(project);
-			calendarDAO.save(calendar);
+			calendarDAO.daoSave(calendar);
 			calendar = null;
 		} catch (Exception e) {
 			e.printStackTrace();

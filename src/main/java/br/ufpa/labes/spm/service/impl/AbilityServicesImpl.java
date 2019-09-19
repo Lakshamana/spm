@@ -86,7 +86,7 @@ public class AbilityServicesImpl  implements AbilityServices{
 				ability = (Ability) converter.getEntity(abilityDTO, Ability.class);
 				ability.setTheAbilityType(abiType);
 
-				abilityDAO.save(ability);
+				abilityDAO.daoSave(ability);
 
 				String newIdent = abilityDAO.generateIdent(ability.getName(), ability);
 				ability.setIdent(newIdent);
@@ -112,10 +112,10 @@ public class AbilityServicesImpl  implements AbilityServices{
 		if(ability != null){
 			if(!ability.getTheRoleNeedsAbility().isEmpty() ){
 				for (RoleNeedsAbility role : ability.getTheRoleNeedsAbility()) {
-					roleNeedsDAO.delete(role);
+					roleNeedsDAO.daoDelete(role);
 				}
 			}
-			abilityDAO.delete(ability);
+			abilityDAO.daoDelete(ability);
 			return true;
 		}
 		else{

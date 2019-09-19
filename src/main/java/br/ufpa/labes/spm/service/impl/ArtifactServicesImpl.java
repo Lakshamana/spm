@@ -122,7 +122,7 @@ public class ArtifactServicesImpl implements ArtifactServices {
 				if(artifact == null) {
 					artifact = (Artifact) converter.getEntity(artifactDTO, Artifact.class);
 					artifact.setTheArtifactType(artifactType);
-					artifactDAO.save(artifact);
+					artifactDAO.daoSave(artifact);
 
 					String newIdent = artifactDAO.generateIdent(artifact.getName(), artifact);
 					System.out.println("new ident: " + newIdent);
@@ -136,7 +136,7 @@ public class ArtifactServicesImpl implements ArtifactServices {
 					artifact.setTheArtifactType(artifactType);
 					artifact.setPathName(artifactDTO.getPathName());
 					artifact.setIsTemplate(artifactDTO.isIsTemplate());
-					artifact.setIsActive(artifactDTO.isIsActive());
+					artifact.setIsActive(artifactDTO.isActive());
 				}
 
 				for (Artifact derived : artifact.getDerivedTo()) { //Quebrar todas as

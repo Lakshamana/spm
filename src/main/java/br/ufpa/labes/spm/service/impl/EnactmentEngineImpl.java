@@ -4636,7 +4636,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 
 		if (resource instanceof Exclusive){
 			Exclusive exc = (Exclusive)resource;
-			if (exc.getState().equals(Exclusive.LOCKED)){
+			if (exc.getExclusiveStatus().equals(Exclusive.LOCKED)){
 				exc.setState(Exclusive.AVAILABLE);
 				this.logging.registerResourceEvent(exc, actNorm, "ToAvailable", "Rule 12.7"); //$NON-NLS-1$ //$NON-NLS-2$
 			}

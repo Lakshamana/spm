@@ -86,7 +86,7 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 						metricDefinition = (MetricDefinition) converter.getEntity(metricDefinitionDTO, MetricDefinition.class);
 						metricDefinition.setUnits(metricDefinitionDTO.getUnits());
 						metricDefinition.setMetricType( abiType );
-						metricDefinition = metricDefinitionDAO.save(metricDefinition);
+						metricDefinition = metricDefinitionDAO.daoSave(metricDefinition);
 						metricDefinitionDTO = (MetricDefinitionDTO) converter.getDTO(metricDefinition, MetricDefinitionDTO.class);
 						metricDefinitionDTO.setMetricType(abiType.getIdent());
 						System.out.println("MeAqui5:"+metricDefinitionDTO.getMetricType());

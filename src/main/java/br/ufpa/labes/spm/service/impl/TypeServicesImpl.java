@@ -197,7 +197,7 @@ public class TypeServicesImpl implements TypeServices{
 						typeDTO.setSubtypesNumber(type.getSubType().size());
 					} else {
 						type = (ActivityType) converter.getEntity(typeDTO, ActivityType.class);
-						type = actTypeDAO.save(type);
+						type = actTypeDAO.daoSave(type);
 					}
 
 					String superTypeIdent = typeDTO.getSuperTypeIdent();
@@ -220,7 +220,7 @@ public class TypeServicesImpl implements TypeServices{
 							typeDTO.setSubtypesNumber(type.getSubType().size());
 						} else {
 							type = (ArtifactType) converter.getEntity(typeDTO, ArtifactType.class);
-							type = artTypeDAO.save(type);
+							type = artTypeDAO.daoSave(type);
 						}
 
 						String superTypeIdent = typeDTO.getSuperTypeIdent();
@@ -243,7 +243,7 @@ public class TypeServicesImpl implements TypeServices{
 						typeDTO.setSubtypesNumber(type.getSubType().size());
 					} else {
 						type = (AbilityType) converter.getEntity(typeDTO, AbilityType.class);
-						type = abiTypeDAO.save(type);
+						type = abiTypeDAO.daoSave(type);
 					}
 
 					String superTypeIdent = typeDTO.getSuperTypeIdent();
@@ -266,7 +266,7 @@ public class TypeServicesImpl implements TypeServices{
 						typeDTO.setSubtypesNumber(type.getSubType().size());
 					} else {
 						type = (GroupType) converter.getEntity(typeDTO, GroupType.class);
-						type = grpTypeDAO.save(type);
+						type = grpTypeDAO.daoSave(type);
 					}
 
 					String superTypeIdent = typeDTO.getSuperTypeIdent();
@@ -289,7 +289,7 @@ public class TypeServicesImpl implements TypeServices{
 						typeDTO.setSubtypesNumber(type.getSubType().size());
 					} else {
 						type = (RoleType) converter.getEntity(typeDTO, RoleType.class);
-						type = roleTypeDAO.save(type);
+						type = roleTypeDAO.daoSave(type);
 					}
 
 					String superTypeIdent = typeDTO.getSuperTypeIdent();
@@ -312,7 +312,7 @@ public class TypeServicesImpl implements TypeServices{
 						typeDTO.setSubtypesNumber(type.getSubType().size());
 					} else {
 						type = (ResourceType) converter.getEntity(typeDTO, ResourceType.class);
-						type = resTypeDAO.save(type);
+						type = resTypeDAO.daoSave(type);
 					}
 
 					String superTypeIdent = typeDTO.getSuperTypeIdent();
@@ -335,7 +335,7 @@ public class TypeServicesImpl implements TypeServices{
 						typeDTO.setSubtypesNumber(type.getSubType().size());
 					} else {
 						type = (ToolType) converter.getEntity(typeDTO, ToolType.class);
-						type = toolTypeDAO.save(type);
+						type = toolTypeDAO.daoSave(type);
 					}
 
 					String superTypeIdent = typeDTO.getSuperTypeIdent();
@@ -358,7 +358,7 @@ public class TypeServicesImpl implements TypeServices{
 						typeDTO.setSubtypesNumber(type.getSubType().size());
 					} else {
 						type = (MetricType) converter.getEntity(typeDTO, MetricType.class);
-						type = metTypeDAO.save(type);
+						type = metTypeDAO.daoSave(type);
 					}
 
 					String superTypeIdent = typeDTO.getSuperTypeIdent();
@@ -385,7 +385,7 @@ public class TypeServicesImpl implements TypeServices{
 	public Boolean removeType(String typeIdent) {
 		Type type = typeDAO.retrieveBySecondaryKey(typeIdent);
 		if(type != null) {
-			typeDAO.delete(type);
+			typeDAO.daoDelete(type);
 			return true;
 		} else {
 			return false;

@@ -128,7 +128,7 @@ public class ResourceServicesImpl implements ResourceServices{
 				resource = (Resource) converter.getEntity(resourceDTO, Resource.class);
 				resource.setTheResourceType(resourceType);
 				resource.setBelongsTo(belongsTo);
-				resourceDAO.save(resource);
+				resourceDAO.daoSave(resource);
 
 				String newIdent = resourceDAO.generateIdent(resource.getName(), resource);
 				resource.setIdent(newIdent);
@@ -163,7 +163,7 @@ public class ResourceServicesImpl implements ResourceServices{
 		Resource resource = resourceDAO.retrieveBySecondaryKey(resourceDTO.getIdent());
 		System.out.println("aqui " + resource);
 		if (resource != null){
-			resourceDAO.delete(resource);
+			resourceDAO.daoDelete(resource);
 			return true;
 		}
 		else return false;

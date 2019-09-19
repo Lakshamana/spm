@@ -70,7 +70,7 @@ public class ToolServicesImpl implements ToolServices {
 			updateTool(tool, toolDTO);
 		} else {
 			tool = this.convertToolDTOToTool(toolDTO);
-			toolDAO.save(tool);
+			toolDAO.daoSave(tool);
 
 			String newIdent = toolDAO.generateIdent(tool.getName(), tool);
 			tool.setIdent(newIdent);
@@ -192,7 +192,7 @@ public class ToolServicesImpl implements ToolServices {
 
 			toolDAO.update(tool);
 
-			toolDAO.delete(tool);
+			toolDAO.daoDelete(tool);
 			return true;
 		}
 		return false;

@@ -66,7 +66,7 @@ public class RepositoryImpl implements RepositoryServices{
 					repository.getTheStructure().setRootElement((Node) converter.getEntity(repositoryDTO.getTheStructure().getRootElement(), Node.class));
 					repository.getTheStructure().getRootElement().setChildren(convertNodes(repositoryDTO.getTheStructure().getRootElement().getChildren(), repositoryDTO.getTheStructure().getRootElement()));
 				}
-				repository = repositoryDAO.save(repository);
+				repository = repositoryDAO.daoSave(repository);
 
 			} else {
 				if (repositoryDTO.getTheStructure() != null){
@@ -128,7 +128,7 @@ public class RepositoryImpl implements RepositoryServices{
 		}
 
 		if(re != null){
-			repositoryDAO.delete(re);
+			repositoryDAO.daoDelete(re);
 			return true;
 		}
 		else{

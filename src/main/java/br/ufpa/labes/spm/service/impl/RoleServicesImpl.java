@@ -196,7 +196,7 @@ public class RoleServicesImpl implements RoleServices {
 							role.setSubordinate(roleSub);
 						}
 						role.setTheRoleType(roleType);
-						role = roleDAO.save(role);
+						role = roleDAO.daoSave(role);
 					}
 					roleDTO = (RoleDTO) converter.getDTO(role, RoleDTO.class);
 				} else {
@@ -234,7 +234,7 @@ public class RoleServicesImpl implements RoleServices {
 
 				if (!lisaux.isEmpty()) {
 					for (RoleNeedsAbility roleNeedsAbility : lisaux) {
-						roleNeedsDAO.delete(roleNeedsAbility);
+						roleNeedsDAO.daoDelete(roleNeedsAbility);
 					}
 				}
 
@@ -286,11 +286,11 @@ public class RoleServicesImpl implements RoleServices {
 			if (role.getTheRoleNeedsAbility() != null) {
 				Collection<RoleNeedsAbility> re = role.getTheRoleNeedsAbility();
 				for (RoleNeedsAbility ro : re) {
-					roleNeedsDAO.delete(ro);
+					roleNeedsDAO.daoDelete(ro);
 				}
 			}
 			System.out.println("re2");
-			roleDAO.delete(role);
+			roleDAO.daoDelete(role);
 			return true;
 		} else {
 			System.out.println("re3");
@@ -472,7 +472,7 @@ public class RoleServicesImpl implements RoleServices {
 				boolean re = false;
 				if (!lisaux.isEmpty()) {
 					for (RoleNeedsAbility roleNeedsAbility : lisaux) {
-						roleNeedsDAO.delete(roleNeedsAbility);
+						roleNeedsDAO.daoDelete(roleNeedsAbility);
 					}
 				}
 				role = (Role) converter.getEntity(roleDTO, role);

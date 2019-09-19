@@ -94,7 +94,7 @@ public class HelpServicesImpl  implements HelpServices{
 					helpTopicDTO.setIdent(String.valueOf(n));
 
 					helpTopic = (HelpTopic) converter.getEntity(helpTopicDTO, HelpTopic.class);
-					helpTopicDAO.save(helpTopic);
+					helpTopicDAO.daoSave(helpTopic);
 
 					String newIdent = ConversorDeIdent.de(helpTopic.getId()+ " " + helpTopic.getTitle()).para(new SemCaracteresEspeciais())
 							.para(new TrocaEspacoPorPonto())
@@ -120,7 +120,7 @@ public class HelpServicesImpl  implements HelpServices{
 					HelpTopic helpTopic = (HelpTopic) converter.getEntity(helpTopicDTO, HelpTopic.class);
 					helpTopic.setFather(father);
 					father.getSessions().add(helpTopic);
-					helpTopicDAO.save(father);
+					helpTopicDAO.daoSave(father);
 					return helpTopicDTO;
 				} catch (ImplementationException e) {
 					e.printStackTrace();
@@ -132,7 +132,7 @@ public class HelpServicesImpl  implements HelpServices{
 			helpTopic.setTitle(helpTopicDTO.getTitle());
 			helpTopic.setContent(helpTopicDTO.getContent());
 			helpTopic.setTokenRelated(helpTopicDTO.getTokenRelated());
-			helpTopic = helpTopicDAO.save(helpTopic);
+			helpTopic = helpTopicDAO.daoSave(helpTopic);
 			try {
 				return (HelpTopicDTO) converter.getDTO(helpTopic, HelpTopicDTO.class);
 			} catch (ImplementationException e) {

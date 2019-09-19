@@ -52,7 +52,7 @@ public class DriverServicesImpl  implements DriverServices {
 
 			driver = this.convertDriverDTOToDriver(driverDTO);
 			driver.setCompany(company);
-			driverDAO.save(driver);
+			driverDAO.daoSave(driver);
 			driver = null;
 		} catch (Exception e) {
 			e.printStackTrace();

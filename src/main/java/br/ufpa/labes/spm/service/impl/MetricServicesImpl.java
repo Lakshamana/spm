@@ -114,7 +114,7 @@ public class MetricServicesImpl implements MetricServices{
 						metric = (Metric) converter.getEntity(metricDTO, Metric.class);
 						//metricDefinition.setUnits(metricDefinitionDTO.getUnits());
 						//metricDefinition.setMetricType( abiType );
-						metric = metricDAO.save(metric);
+						metric = metricDAO.daoSave(metric);
 						metricDTO = (MetricDTO) converter.getDTO(metric, MetricDTO.class);
 						System.out.println("MeAqui5");
 					}

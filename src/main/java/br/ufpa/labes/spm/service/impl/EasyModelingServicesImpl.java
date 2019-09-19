@@ -327,10 +327,10 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				if(ok){
 					if(webAPSEEObj==null){
 						graphicCoord = updateGraphicCoordinate(webAPSEENodePosition, new GraphicCoordinate(), processIdent);
-						graphicCoord = (GraphicCoordinate) grapDAO.save(graphicCoord);
+						graphicCoord = (GraphicCoordinate) grapDAO.daoSave(graphicCoord);
 						webAPSEEObj = new WebAPSEEObject(theReferredOid, className, graphicCoord);
 						System.out.println("caiu no ok"+webAPSEEObj.getTheReferredOid());
-						webAPSEEObjDAO.save(webAPSEEObj);
+						webAPSEEObjDAO.daoSave(webAPSEEObj);
 
 
 					}else{

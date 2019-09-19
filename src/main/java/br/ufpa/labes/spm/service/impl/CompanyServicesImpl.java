@@ -46,10 +46,10 @@ public class CompanyServicesImpl implements CompanyServices{
 			if(company == null) {
 				company = (Company) converter.getEntity(companyDTO, Company.class);
 				company.setTheOrganizationalUnits(converterUnidades(companyDTO.getTheOrganizationalUnits(), null, company));
-				companyDAO.save(company);
+				companyDAO.daoSave(company);
 			} else {
 				for (CompanyUnit companyUnit : company.getTheOrganizationalUnits()) {
-					companyUnitDAO.delete(companyUnit);
+					companyUnitDAO.daoDelete(companyUnit);
 				}
 				company.setTheOrganizationalUnits(new ArrayList<CompanyUnit>());
 				company.setIdent(companyDTO.getIdent());
@@ -183,7 +183,7 @@ public class CompanyServicesImpl implements CompanyServices{
 	public Boolean removeCompany(String ident) {
 		Company company = companyDAO.retrieveBySecondaryKey(ident);
 		if (company != null){
-			companyDAO.delete(company);
+			companyDAO.daoDelete(company);
 			return true;
 		}
 		else return false;

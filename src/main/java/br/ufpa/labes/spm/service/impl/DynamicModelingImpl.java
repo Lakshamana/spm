@@ -509,9 +509,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Persistence Operations
 
-				normDAO.delete(actNorm);
+				normDAO.daoDelete(actNorm);
 
-				actDAO.save(actDecomp);
+				actDAO.daoSave(actDecomp);
 
 				return actDecomp.getOid();
 			} else {
@@ -543,9 +543,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Persistence Operations
 
-				autoDAO.delete(actAuto);
+				autoDAO.daoDelete(actAuto);
 
-				actDAO.save(actDecomp);
+				actDAO.daoSave(actDecomp);
 
 				return actDecomp.getOid();
 			} else {
@@ -613,9 +613,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Persistence Operations
 
-				normDAO.delete(actNorm);
+				normDAO.daoDelete(actNorm);
 
-				actDAO.save(actAuto);
+				actDAO.daoSave(actAuto);
 
 				return actAuto.getOid();
 			} else {
@@ -651,9 +651,9 @@ System.out.println("salva :"+pmodel.getPmState());
 					this.copyActivityRelationships(actDecomp, actAuto);
 					// Persistence Operations
 
-					decDAO.delete(actDecomp);
+					decDAO.daoDelete(actDecomp);
 
-					actDAO.save(actAuto);
+					actDAO.daoSave(actAuto);
 
 					return actAuto.getOid();
 				}
@@ -720,9 +720,9 @@ System.out.println("salva :"+pmodel.getPmState());
 					this.copyActivityRelationships(actDecomp, actNorm);
 
 					// Persistence Operations
-					actDAO.save(actNorm);
+					actDAO.daoSave(actNorm);
 
-					decDAO.delete(actDecomp);
+					decDAO.daoDelete(actDecomp);
 
 					return actNorm.getOid();
 				}
@@ -748,9 +748,9 @@ System.out.println("salva :"+pmodel.getPmState());
 				// Persistence Operations
 
 				AutomaticDAO autoDAO = new AutomaticDAO();
-				autoDAO.delete(actAuto);
+				autoDAO.daoDelete(actAuto);
 
-				actDAO.save(actNorm);
+				actDAO.daoSave(actNorm);
 
 				return actNorm.getOid();
 			} else {
@@ -1073,7 +1073,7 @@ System.out.println("salva :"+pmodel.getPmState());
 						processModel.getTheActivity().remove(actDec);
 
 						// Remove from the model
-						decDAO.delete(actDec);
+						decDAO.daoDelete(actDec);
 
 						// Dynamic Changes related code
 						String processState = this.getTheProcess(processModel).getPState();
@@ -1108,7 +1108,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Remove from the model
 
-				decDAO.delete(actDec);
+				decDAO.daoDelete(actDec);
 
 				// Dynamic Changes related code
 				String processState = this.getTheProcess(processModel).getPState();
@@ -1139,18 +1139,18 @@ System.out.println("salva :"+pmodel.getPmState());
 				Subroutine subr = actAuto.getTheSubroutine();
 				if (subr != null) {
 
-					subDAO.delete(subr);
+					subDAO.daoDelete(subr);
 				}
 
 				Collection parameters = actAuto.getTheParameters();
 				Iterator iterParam = parameters.iterator();
 				while (iterParam.hasNext()) {
 					Parameters param = (Parameters) iterParam.next();
-					paramDAO.delete(param);
+					paramDAO.daoDelete(param);
 				}
 
 				// Remove from the model
-				autoDAO.delete(actAuto);
+				autoDAO.daoDelete(actAuto);
 
 				// Dynamic Changes related code
 				String processState = this.getTheProcess(processModel).getPState();
@@ -1180,7 +1180,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				// Remove from the model
 
-				normDAO.delete(actNorm);
+				normDAO.daoDelete(actNorm);
 
 				// Dynamic Changes related code
 				String processState = this.getTheProcess(processModel).getPState();
@@ -1285,7 +1285,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		pmodel.getTheConnection().add(artifactCon);
 
 		// Persistence Operations
-		artConDAO.save(artifactCon);
+		artConDAO.daoSave(artifactCon);
 		if (actDecomposed != null)
 			decDAO.update(actDecomposed);
 
@@ -1568,7 +1568,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							inInvArt.removeFromTheArtifactType();
 							inInvArt.removeFromInInvolvedArtifacts();
 
-							invArtDAO.delete(inInvArt);
+							invArtDAO.daoDelete(inInvArt);
 							break;
 						}
 					}
@@ -1596,7 +1596,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							outInvArt.removeFromTheArtifactType();
 							outInvArt.removeFromInInvolvedArtifacts();
 
-							invArtDAO.delete(outInvArt);
+							invArtDAO.daoDelete(outInvArt);
 							break;
 						}
 					}
@@ -1790,7 +1790,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 					ArtifactCon newArtifactCon = new ArtifactCon();
 					newArtifactCon.setIdent(actDec.getIdent());
-					newArtifactCon = (ArtifactCon) artConDAO.save(newArtifactCon);
+					newArtifactCon = (ArtifactCon) artConDAO.daoSave(newArtifactCon);
 
 					newArtifactCon.setTheArtifact(artifactFromCon);
 					newArtifactCon.setTheArtifactType(artifactFromCon.getTheArtifactType());
@@ -2095,7 +2095,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 						ArtifactCon newArtifactCon = new ArtifactCon();
 						newArtifactCon.setIdent(actDec.getIdent());
-						newArtifactCon = (ArtifactCon) artConDAO.save(newArtifactCon);
+						newArtifactCon = (ArtifactCon) artConDAO.daoSave(newArtifactCon);
 
 						newArtifactCon.setTheArtifactType(artifactTypeFromCon);
 						artifactTypeFromCon.getTheArtifactCon().add(newArtifactCon);
@@ -2557,7 +2557,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (polCondition != null) {
 
 					feedback.removeFromTheCondition();
-					polConditionDAO.delete(polCondition);
+					polConditionDAO.daoDelete(polCondition);
 				}
 			} else if (connection instanceof JoinCon) {
 				Join join = (JoinCon) connection;
@@ -2674,7 +2674,7 @@ System.out.println("salva :"+pmodel.getPmState());
 											// Removing BranchConCondToMultiplecon
 											// from Model
 
-											bctmcDAO.delete(bctmc);
+											bctmcDAO.daoDelete(bctmc);
 										}
 									}
 								}
@@ -2764,7 +2764,7 @@ System.out.println("salva :"+pmodel.getPmState());
 										// Removing BranchConCondToMultiplecon from
 										// Model
 
-										bctmcDAO.delete(bctmc);
+										bctmcDAO.daoDelete(bctmc);
 									}
 								}
 							}
@@ -3081,7 +3081,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			connection.setTheProcessModel(null);
 
 			// Persistence Operations
-			conDAO.delete(connection);
+			conDAO.daoDelete(connection);
 
 			// Dynamic Changes related code
 			String processState = this.getTheProcess(pmodel).getPState();
@@ -3322,7 +3322,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 
 			// Persistence Operations
-			conDAO.save(seq);
+			conDAO.daoSave(seq);
 
 			return seq.getOid();
 		}
@@ -3363,7 +3363,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			// Persistence Operations
 
-			conDAO.save(seq);
+			conDAO.daoSave(seq);
 
 			return seq.getOid();
 		}
@@ -3402,7 +3402,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			// Persistence Operations
 
-			conDAO.save(seq);
+			conDAO.daoSave(seq);
 
 			return seq.getOid();
 		}
@@ -3443,7 +3443,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			// Persistence Operations
 
-			conDAO.save(seq);
+			conDAO.daoSave(seq);
 			return seq.getOid();
 		}
 		// Rule G3.5
@@ -3480,7 +3480,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			// Persistence Operations
 
-			conDAO.save(seq);
+			conDAO.daoSave(seq);
 
 			return seq.getOid();
 		}
@@ -3525,7 +3525,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			// Persistence Operations
 
-			conDAO.save(seq);
+			conDAO.daoSave(seq);
 
 			return seq.getOid();
 		} else {
@@ -3603,7 +3603,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			// Persistence Operations
 
-			conDAO.save(feed);
+			conDAO.daoSave(feed);
 
 			return feed.getOid();
 
@@ -3627,7 +3627,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			// Persistence Operations
 
-			conDAO.save(feed);
+			conDAO.daoSave(feed);
 
 			return feed.getOid();
 		} else {
@@ -3708,7 +3708,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		dep.setTheMultipleCon(joinANDCon);
 
 		// Persistence Operations
-		conDAO.save(joinANDCon);
+		conDAO.daoSave(joinANDCon);
 
 		return joinANDCon.getOid();
 	}
@@ -3786,7 +3786,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		dep.setTheMultipleCon(joinConOR);
 
 		// Persistence Operations
-		conDAO.save(joinConOR);
+		conDAO.daoSave(joinConOR);
 
 		return joinConOR.getOid();
 	}
@@ -3864,7 +3864,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		dep.setTheMultipleCon(joinConXOR);
 
 		// Persistence Operations
-		conDAO.save(joinConXOR);
+		conDAO.daoSave(joinConXOR);
 
 		return joinConXOR.getOid();
 	}
@@ -3941,7 +3941,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		dep.setTheMultipleCon(branchANDCon);
 
 		// Persistence Operations
-		conDAO.save(branchANDCon);
+		conDAO.daoSave(branchANDCon);
 
 		return branchANDCon.getOid();
 	}
@@ -4019,7 +4019,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		dep.setTheMultipleCon(branchConOR);
 
 		// Persistence Operations
-		conDAO.save(branchConOR);
+		conDAO.daoSave(branchConOR);
 
 		return branchConOR.getOid();
 	}
@@ -4103,7 +4103,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		dep.setTheMultipleCon(branchConXOR);
 
 		// Persistence Operations
-		conDAO.save(branchConXOR);
+		conDAO.daoSave(branchConXOR);
 
 		return branchConXOR.getOid();
 	}
@@ -5992,7 +5992,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 								// Removing from the model
 
-								bctmcDAO.delete(bctmc);
+								bctmcDAO.daoDelete(bctmc);
 								break;
 							}
 						}
@@ -6047,7 +6047,7 @@ System.out.println("salva :"+pmodel.getPmState());
 								activity_from.getToBranch().add(branchCon);
 
 								// Removing from the model
-								bctmcDAO.delete(bctmc);
+								bctmcDAO.daoDelete(bctmc);
 
 								break;
 							}
@@ -6101,7 +6101,7 @@ System.out.println("salva :"+pmodel.getPmState());
 								activity_from.getToBranch().add(branchCon);
 
 								// Removing from the model
-								bctmcDAO.delete(bctmc);
+								bctmcDAO.daoDelete(bctmc);
 
 								break;
 							}
@@ -6289,7 +6289,7 @@ System.out.println("salva :"+pmodel.getPmState());
 								bctmcs.remove(bctmc);
 
 								// Removing from the model
-								bctmcDAO.delete(bctmc);
+								bctmcDAO.daoDelete(bctmc);
 							}
 						}
 					}
@@ -7055,7 +7055,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					actDAO.update(actNorm);
 					roleDAO.update(role);
 
-					reqAgentDAO.delete(reqAgent);
+					reqAgentDAO.daoDelete(reqAgent);
 
 					break;
 				}
@@ -7092,7 +7092,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					actDAO.update(actNorm);
 					roleDAO.update(role);
 
-					reqAgentDAO.delete(reqAgent);
+					reqAgentDAO.daoDelete(reqAgent);
 					break;
 				}
 			}
@@ -7763,7 +7763,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					actDAO.update(actNorm);
 					groupTypeDAO.update(groupType);
 
-					reqGroupDAO.delete(reqGroup);
+					reqGroupDAO.daoDelete(reqGroup);
 					break;
 				}
 			}
@@ -7779,7 +7779,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					actDAO.update(actNorm);
 					groupTypeDAO.update(groupType);
 
-					reqGroupDAO.delete(reqGroup);
+					reqGroupDAO.daoDelete(reqGroup);
 					break;
 				}
 			}
@@ -8183,7 +8183,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				actDAO.update(actNorm);
 				resTypeDAO.update(resourceType);
 
-				reqResDAO.delete(reqRes);
+				reqResDAO.daoDelete(reqRes);
 			}
 
 		} else if (!(state.equals(Plain.FAILED) || state.equals(Plain.FINISHED) || state.equals(Plain.CANCELED))) { // Rules
@@ -8211,7 +8211,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				actDAO.update(actNorm);
 				resTypeDAO.update(resourceType);
 
-				reqResDAO.delete(reqRes);
+				reqResDAO.daoDelete(reqRes);
 			}
 		} else {
 			throw new ModelingException(
@@ -9297,7 +9297,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				String actIdent = task.getTheNormal().getIdent();
 
 				try {
-					taskDAO.delete(task);
+					taskDAO.daoDelete(task);
 				} catch (Exception/* DAOException */e) {
 					e.printStackTrace();
 				}
@@ -9808,7 +9808,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			// Deleting simple connection from the database
 
 			try {
-				simpleDAO.delete(conn);
+				simpleDAO.daoDelete(conn);
 			} catch (Exception/* DAOException */e) {
 				e.printStackTrace();
 			}
@@ -9850,7 +9850,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			// Deleting simple connection from the database
 
 			try {
-				branchConCondToActivityDAO.delete(toDelete);
+				branchConCondToActivityDAO.daoDelete(toDelete);
 			} catch (Exception/* DAOException */e) {
 				e.printStackTrace();
 			}
@@ -9884,7 +9884,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			// Deleting simple connection from the database
 
 			try {
-				simpleDAO.delete(conn);
+				simpleDAO.daoDelete(conn);
 			} catch (Exception/* DAOException */e) {
 				e.printStackTrace();
 			}

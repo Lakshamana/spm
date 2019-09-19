@@ -864,7 +864,7 @@ public class TaskServicesImpl implements TaskServices {
 			task.setTheProcessAgenda(processAgenda);
 			processAgenda.getTheTask().add(task);
 
-			task = (Task) taskDAO.save(task);
+			task = (Task) taskDAO.daoSave(task);
 
 			returnTask = task;
 		}

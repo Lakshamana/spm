@@ -117,7 +117,7 @@ public class TemplateServicesImpl implements TemplateServices {
 		template.setIdent(ident);
 		ProcessModel processModel = new ProcessModel();
 		template.insertIntoTheInstances(processModel);
-		templateDAO.save(template);
+		templateDAO.daoSave(template);
 
 		return true;
 	}
@@ -164,7 +164,7 @@ public class TemplateServicesImpl implements TemplateServices {
 			newTemplate.setIdent(version_id);
 			//Copy relationships in common with Old Template
 			Hashtable<String, String> coordinates = copyServices.copyProcessModelData(template.getTheProcessModel(),newTemplate.getTheProcessModel(),template_id,newTemplate.getIdent(), CopyProcessServiceImpl.NEW_VERS_TEMP, artifactsIdents);
-			newTemplate = (Template)templateDAO.save(newTemplate);
+			newTemplate = (Template)templateDAO.daoSave(newTemplate);
 
 			//Make relationships of Template versioning
 			Description desc = new Description();
@@ -173,14 +173,14 @@ public class TemplateServicesImpl implements TemplateServices {
 			desc.setWhy(why);
 			desc.setDate(new Date());
 
-			desc = (Description)descriptionDAO.save(desc);
+			desc = (Description)descriptionDAO.daoSave(desc);
 
 			template.insertIntoTheDerivedVersionDescriptions(desc);
 			newTemplate.setTheOriginalVersionDescription(desc);
 			template.setTemplateState(Template.PENDING);
 
-			templateDAO.save(newTemplate);
-			templateDAO.save(template);
+			templateDAO.daoSave(newTemplate);
+			templateDAO.daoSave(template);
 
 			copyServices.saveCoordinates(coordinates, version_id);
 			return newTemplate.getIdent();
@@ -233,9 +233,9 @@ public class TemplateServicesImpl implements TemplateServices {
 
 			//Copy relationships in common with Process
 			Hashtable<String, String> coordinates = copyServices.copyProcessModelData(process.getTheProcessModel(),template.getTheProcessModel(),process_id,template.getIdent(), CopyProcessServiceImpl.PROC_DEST, artifactsIdents);
-			template = (Template)templateDAO.save(template);
+			template = (Template)templateDAO.daoSave(template);
 
-			templateDAO.save(template);
+			templateDAO.daoSave(template);
 			copyServices.saveCoordinates(coordinates, template_id);
 
 		}else if(state.equalsIgnoreCase(Template.DRAFT) || state.equalsIgnoreCase(Template.OUTDATED)|| state.equalsIgnoreCase(Template.DEFINED)||state.equalsIgnoreCase(Template.PENDING)||state.equalsIgnoreCase(Template.NOT_STARTED)){
@@ -292,7 +292,7 @@ public class TemplateServicesImpl implements TemplateServices {
 		Hashtable<String, String> coordinates;
 		// now invoke a recursive method to copy the process model data
 		coordinates = copyProcessModelData(rootPM,destinationTemplate.getTheProcessModel(),oldTemplateIdent,newTemplateIdent, COPY_TEMP);
-		templateDAO.save(destinationTemplate);
+		templateDAO.daoSave(destinationTemplate);
 
 		this.saveCoordinates(coordinates, newTemplateIdent);
 		return true;
@@ -488,13 +488,13 @@ public class TemplateServicesImpl implements TemplateServices {
 						act = (Activity) activityDAO.retrieveBySecondaryKey(webObjKey);
 						if(act!=null){
 							webObj = new WebAPSEEObject(act.getOid(),act.getClass().getSimpleName(),newCoord);
-							webAPSEEObjectDAO.save(webObj);
+							webAPSEEObjectDAO.daoSave(webObj);
 						}
 					}else if(webObjType.equals(WebAPSEEObject.CONNECTION)){
 						con = (Connection) connectionDAO.retrieveBySecondaryKey(webObjKey);
 						if(con!=null){
 							webObj = new WebAPSEEObject(con.getOid(),con.getClass().getSimpleName(),newCoord);
-							webAPSEEObjectDAO.save(webObj);
+							webAPSEEObjectDAO.daoSave(webObj);
 						}
 					}else{
 						StringTokenizer webObjTokenizer = new StringTokenizer(webObjKey,":");
@@ -517,19 +517,19 @@ public class TemplateServicesImpl implements TemplateServices {
 							reqAg = reqAgentDAO.findReqAgentFromProcessModel(instanceIdent, typeIdent, normalIdent);
 							if(reqAg!=null){
 								webObj = new WebAPSEEObject(reqAg.getOid(),reqAg.getClass().getSimpleName(),newCoord);
-								webAPSEEObjectDAO.save(webObj);
+								webAPSEEObjectDAO.daoSave(webObj);
 							}
 						}else if(webObjType.equals(WebAPSEEObject.REQ_GROUP)){
 							reqGr = reqGroupDAO.findReqGroupFromProcessModel(instanceIdent, typeIdent, normalIdent);
 							if(reqGr!=null){
 								webObj = new WebAPSEEObject(reqGr.getOid(),reqGr.getClass().getSimpleName(),newCoord);
-								webAPSEEObjectDAO.save(webObj);
+								webAPSEEObjectDAO.daoSave(webObj);
 							}
 						}else if(webObjType.equals(WebAPSEEObject.REQ_RESOURCE)){
 							reqRes = reqResourceDAO.findRequiredResourceFromProcessModel(instanceIdent, typeIdent, normalIdent);
 							if(reqRes!=null){
 								webObj = new WebAPSEEObject(reqRes.getOid(),reqRes.getClass().getSimpleName(),newCoord);
-								webAPSEEObjectDAO.save(webObj);
+								webAPSEEObjectDAO.daoSave(webObj);
 							}
 						}
 					}
@@ -556,7 +556,7 @@ public class TemplateServicesImpl implements TemplateServices {
 			//Copy relationships in common with Process
 			Hashtable<String, String> coordinates =  copyServices.copyProcessModelData(decomposed.getTheReferedProcessModel(),template.getTheProcessModel(),dec_id,template.getIdent(), CopyProcessServiceImpl.DEC_DEST, null);
 
-			template = (Template)templateDAO.save(template);
+			template = (Template)templateDAO.daoSave(template);
 
 			copyServices.saveCoordinates(coordinates, template_id);
 		}else System.out.println(Messages.getString("srcReuse.TempManag.TemplatesServices.templExecADecomp")+" "+state+" "+Messages.getString("srcReuse.TempManag.TemplatesServices.templExecCannBeDist")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -606,14 +606,14 @@ public class TemplateServicesImpl implements TemplateServices {
 
 			//Copy relationships in common with Process
 			Hashtable<String, String> coordinates = copyServices.copyProcessModelData(template.getTheProcessModel(),instance.getTheProcessModel(),template_id,instance.getIdent(), CopyProcessServiceImpl.PROC_INST, artifactsIdents);
-			instance = (Process)processDAO.save(instance);
+			instance = (Process)processDAO.daoSave(instance);
 
 			//Create Project for the instance
 			Project project = new Project();
 			project.setIdent(instance_id);
 			project.setName(instance_id);
 
-			project = (Project) projectDAO.save(project);
+			project = (Project) projectDAO.daoSave(project);
 			project.setProcessRefered(instance);
 			projectDAO.update(project);
 
@@ -627,8 +627,8 @@ public class TemplateServicesImpl implements TemplateServices {
 			pmodel.setTheOrigin(template);
 			template.insertIntoTheInstances(pmodel);
 
-			processModelDAO.save(pmodel);
-			templateDAO.save(template);
+			processModelDAO.daoSave(pmodel);
+			templateDAO.daoSave(template);
 			copyServices.saveCoordinates(coordinates, instance_id);
 		}
 	}
@@ -776,7 +776,7 @@ public class TemplateServicesImpl implements TemplateServices {
 				templateDAO.update(oldTemplate);
 			}
 
-			templateDAO.save(template);
+			templateDAO.daoSave(template);
 			return true;
 		}else {
 			return false;

@@ -185,7 +185,7 @@ public class SystemServicesImpl implements SystemServices{
 							system.setTheProject(lisAbi);
 						}
 						system.setTheOrganization(organize);
-						system =  systemDAO.save(system);
+						system =  systemDAO.daoSave(system);
 					}
 					java.lang.System.out.println("passei aqui 6");
 					systemDTO = (SystemDTO) converter.getDTO(system, SystemDTO.class);
@@ -221,12 +221,12 @@ public class SystemServicesImpl implements SystemServices{
 			if(system.getTheProject() != null){
 				Collection<Project> re = system.getTheProject();
 				for (Project ro : re) {
-					//roleNeedsDAO.delete(ro);
+					//roleNeedsDAO.daoDelete(ro);
 					ro.setTheSystem(null);
 				}
 			}
 			java.lang.System.out.println("re2");
-			systemDAO.delete(system);
+			systemDAO.daoDelete(system);
 			return true;
 		}
 		else{
@@ -328,7 +328,7 @@ public class SystemServicesImpl implements SystemServices{
 			if(system.getTheProject() != null){
 				Collection<Project> re = system.getTheProject();
 				for (Project ro : re) {
-					//roleNeedsDAO.delete(ro);
+					//roleNeedsDAO.daoDelete(ro);
 					ro.setTheSystem(null);
 				}
 			}

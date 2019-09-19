@@ -666,7 +666,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 		if(project == null) {
 			project = this.convertDTOToProject(projectDTO);
-			projectDAO.save(project);
+			projectDAO.daoSave(project);
 		} else {
 			project = this.convertProjectDTOToProject(dto, project);
 			project = updateProjectFromDTO(projectDTO, project);
@@ -701,7 +701,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 		process.setTheAgent(agents);
 		process.setIdent(project.getIdent());
-		processDAO.save(process);
+		processDAO.daoSave(process);
 		project.setProcessRefered(process);
 	}
 
@@ -798,7 +798,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	public ProjectDTO executeProcess(String projectName) throws DAOException, WebapseeException {
 		Project project = this.getProjectFromName(projectName);
 //		project.getProcessRefered().setPState(Process.ENACTING);
-//		projectDAO.save(project);
+//		projectDAO.daoSave(project);
 
 		Process process = project.getProcessRefered();
 		enactmentEngineLocal.executeProcess(process.getIdent());
@@ -3396,8 +3396,8 @@ public class ProjectServicesImpl implements ProjectServices {
 			gc.setY(Integer.valueOf(graphCoordXML.getChildText("Y")));
 
 			// Persistence operations
-			this.webAPSEEObjDAO.save(wobj);
-			this.graphicCoordDAO.save(gc);
+			this.webAPSEEObjDAO.daoSave(wobj);
+			this.graphicCoordDAO.daoSave(gc);
 		}
 	}
 
@@ -3699,7 +3699,7 @@ public class ProjectServicesImpl implements ProjectServices {
 //		if(oid == null)
 //			UtilReflection.invokeMethod(dao, "save", parameter);
 //		else
-//			UtilReflection.invokeMethod(dao, "update", parameter); // It must be the save operation since ConnectionDAO.save() is needed
+//			UtilReflection.invokeMethod(dao, "update", parameter); // It must be the save operation since ConnectionDAO.daoSave() is needed
 //
 		if(obj instanceof Connection){
 			String ident = ((Connection)obj).getIdent();

@@ -31,7 +31,7 @@ public class AccountServicesImpl implements AccountServices {
 			String name, String gender, String email, String interests, String city, String country) throws SPMException {
 		if (checkUsernameAvailability(username)) {
 			User user = new User(username, password);
-			userDao.save(user);
+			userDAO.daoSave(user);
 
 			Person person = new Person(user);
 			person.setName(name);
@@ -41,7 +41,7 @@ public class AccountServicesImpl implements AccountServices {
 			person.setCity(city);
 			person.setCountry(country);
 
-			return personDao.save(person);
+			return personDAO.daoSave(person);
 		}
 		else {
 			throw new SPMBusinessException("Username already exists.");
@@ -55,7 +55,7 @@ public class AccountServicesImpl implements AccountServices {
 
 		if (checkUsernameAvailability(username)) {
 			User user = new User(username, password);
-			userDao.save(user);
+			userDAO.daoSave(user);
 
 			Organization organization = new Organization(user);
 			organization.setName(name);
@@ -65,7 +65,7 @@ public class AccountServicesImpl implements AccountServices {
 			organization.setCity(city);
 			organization.setCountry(country);
 
-			return organizationDao.save(organization);
+			return organizationDAO.daoSave(organization);
 		}
 		else {
 			throw new SPMBusinessException("Username already exists.");
@@ -103,7 +103,7 @@ public class AccountServicesImpl implements AccountServices {
 	public Person deletePerson(String uid) throws SPMException {
 		try {
 			Person person = personDao.retrieve(uid);
-			return personDao.delete(person);
+			return personDAO.daoDelete(person);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
 		}
@@ -113,7 +113,7 @@ public class AccountServicesImpl implements AccountServices {
 	public Organization deleteOrganization(String uid) throws SPMException {
 		try {
 			Organization organization = organizationDao.retrieve(uid);
-			return organizationDao.delete(organization);
+			return organizationDAO.daoDelete(organization);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
 		}

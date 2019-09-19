@@ -182,12 +182,12 @@ public class AgentServicesImpl implements AgentServices {
 			agentDTO.setArtifactMngPassword(Md5.getMd5Digest(agentDTO.getArtifactMngPassword()));
 
 			agent = this.convertAgentDTOToAgent(agentDTO);
-			agentDAO.save(agent);
+			agentDAO.daoSave(agent);
 
 			TaskAgenda theTaskAgenda = new TaskAgenda();
 			agent.setTheTaskAgenda(theTaskAgenda);
 			theTaskAgenda.setTheAgent(agent);
-			taskAgendaDAO.save(theTaskAgenda);
+			taskAgendaDAO.daoSave(theTaskAgenda);
 
 			String newIdent = agentDAO.generateIdent(agent.getName(), agent);
 			agent.setIdent(newIdent);
@@ -201,7 +201,7 @@ public class AgentServicesImpl implements AgentServices {
 			configuration.setIdioma(config.getIdioma());
 			configuration.setSenhaEmRecuperacao(false);
 
-			confiDAO.save(configuration);
+			confiDAO.daoSave(configuration);
 		}
 
 
@@ -260,7 +260,7 @@ public class AgentServicesImpl implements AgentServices {
 		agent.setArtifactMngPassword(agentDTO.getArtifactMngPassword());
 		agent.setEMail(agentDTO.getEMail());
 		agent.setCostHour(agentDTO.getCostHour());
-		agent.setIsActive(agentDTO.isIsActive());
+		agent.setIsActive(agentDTO.isActive());
 		agent.setDescription(agentDTO.getDescription());
 		agent.setUpload(agentDTO.getUpload());
 	}
@@ -325,19 +325,19 @@ public class AgentServicesImpl implements AgentServices {
 			if(!query.getResultList().isEmpty()) {
 				Configuration config = query.getResultList().get(0);
 				config.setAgent(null);
-				confiDAO.delete(config);
+				confiDAO.daoDelete(config);
 			}
 			if(!query2.getResultList().isEmpty()) {
 				TaskAgenda taskAgenda = query2.getResultList().get(0);
 				taskAgenda.setTheAgent(null);
-				taskAgendaDAO.delete(taskAgenda);
+				taskAgendaDAO.daoDelete(taskAgenda);
 			}
 
 			for (AgentHasAbility agentHasAbility : agent
 					.getTheAgentHasAbility()) {
 				agentHasAbility.removeFromTheAbility();
 				agentHasAbility.setTheAgent(null);
-				agentHasAbilityDAO.delete(agentHasAbility);
+				agentHasAbilityDAO.daoDelete(agentHasAbility);
 			}
 
 			for (AgentPlaysRole agentPlaysRole : agent.getTheAgentPlaysRole()) {
@@ -353,14 +353,14 @@ public class AgentServicesImpl implements AgentServices {
 					.getFromAgentAffinity()) {
 				agentAffinityAgent.removeFromFromAffinity();
 				agentAffinityAgent.setToAffinity(null);
-				agentAffinityAgentDAO.delete(agentAffinityAgent);
+				agentAffinityAgentDAO.daoDelete(agentAffinityAgent);
 			}
 
 			for (AgentAffinityAgent agentAffinityAgent : agent
 					.getToAgentAffinity()) {
 				agentAffinityAgent.removeFromToAffinity();
 				agentAffinityAgent.setFromAffinity(null);
-				agentAffinityAgentDAO.delete(agentAffinityAgent);
+				agentAffinityAgentDAO.daoDelete(agentAffinityAgent);
 			}
 
 			agent.setTheGroup(new HashSet<Group>());
@@ -369,7 +369,7 @@ public class AgentServicesImpl implements AgentServices {
 			agent.setTheAgentPlaysRole(new HashSet<AgentPlaysRole>());
 			agent.setTheAgentHasAbility(new HashSet<AgentHasAbility>());
 
-			agentDAO.delete(agent);
+			agentDAO.daoDelete(agent);
 			return true;
 		}
 
@@ -852,7 +852,7 @@ public class AgentServicesImpl implements AgentServices {
 				agentHasAbilitiesToRemove.add(agentHasAbility);
 				// agentHasAbility.setTheAbility(null);
 				// agentHasAbility.setTheAgent(null);
-				agentHasAbilityDAO.delete(agentHasAbility);
+				agentHasAbilityDAO.daoDelete(agentHasAbility);
 			}
 		}
 
@@ -888,7 +888,7 @@ public class AgentServicesImpl implements AgentServices {
 				agentPlaysRolesToRemove.add(agentPlaysRole);
 				agentPlaysRole.setTheAgent(null);
 				agentPlaysRole.setTheRole(null);
-				agentPlaysRoleDAO.delete(agentPlaysRole);
+				agentPlaysRoleDAO.daoDelete(agentPlaysRole);
 			}
 
 		}
@@ -915,8 +915,8 @@ public class AgentServicesImpl implements AgentServices {
 				|| agent.getToAgentAffinity().contains(agentAffinityAgent)) {
 			agentAffinityAgent.removeFromFromAffinity();
 			agentAffinityAgent.removeFromToAffinity();
-			agentAffinityAgentDAO.delete(agentAffinityAgent);
-			agentAffinityAgentDAO.delete(inverseAgentAffinityAgent);
+			agentAffinityAgentDAO.daoDelete(agentAffinityAgent);
+			agentAffinityAgentDAO.daoDelete(inverseAgentAffinityAgent);
 
 			return true;
 		}

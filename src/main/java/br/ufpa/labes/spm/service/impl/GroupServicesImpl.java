@@ -90,7 +90,7 @@ public class GroupServicesImpl implements GroupServices {
 
 		} else {
 			group = this.convertGroupDTOToGroup(groupDTO);
-			groupDAO.save(group);
+			groupDAO.daoSave(group);
 
 			String newIdent = groupDAO.generateIdent(group.getName(), group);
 			group.setIdent(newIdent);
@@ -118,7 +118,7 @@ public class GroupServicesImpl implements GroupServices {
 
 			groupDAO.update(group);
 
-			groupDAO.delete(group);
+			groupDAO.daoDelete(group);
 			return true;
 		}
 

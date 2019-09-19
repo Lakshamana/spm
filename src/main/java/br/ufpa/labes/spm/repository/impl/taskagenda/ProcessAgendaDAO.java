@@ -49,7 +49,7 @@ public class ProcessAgendaDAO extends BaseDAO<ProcessAgenda, Integer> implements
       task.setTheProcessAgenda(pAgenda);
       pAgenda.getTheTasks().add(task);
 
-      task = (Task) taskDAO.save(task);
+      task = (Task) taskDAO.daoSave(task);
 
       //
       // System.out.println("Error on save Task: ProcessAgenda.addTask("+

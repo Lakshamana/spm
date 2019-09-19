@@ -9,11 +9,11 @@ import br.ufpa.labes.spm.util.SortCriteria;
 
 public interface IBaseDAO<T, PK> {
 
-  // public T save(T object);
+  public T daoSave(T object);
 
   public T update(T object);
 
-  // public T delete(T object);
+  public T daoDelete(T object);
 
   public T retrieve(PK key);
 

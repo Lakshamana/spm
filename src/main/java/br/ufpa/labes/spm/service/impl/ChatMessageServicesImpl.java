@@ -35,7 +35,7 @@ public class ChatMessageServicesImpl implements ChatMessageServices {
 		System.out.println(encontrouAgente);
 		if(encontrouAgente) {
 			message.setDe(agenteMsg);
-			messageDAO.save(message);
+			messageDAO.daoSave(message);
 		}
 	}
 
