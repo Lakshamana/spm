@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.connections.IArtifactConDAO;
-
 
 import br.ufpa.labes.spm.domain.ArtifactCon;
 import org.springframework.data.domain.Page;
@@ -17,7 +15,7 @@ import java.util.Optional;
  * Spring Data  repository for the ArtifactCon entity.
  */
 @Repository
-public interface ArtifactConRepository extends IArtifactConDAO, JpaRepository<ArtifactCon, Long> {
+public interface ArtifactConRepository extends JpaRepository<ArtifactCon, Long> {
 
     @Query(value = "select distinct artifactCon from ArtifactCon artifactCon left join fetch artifactCon.toMultipleCons",
         countQuery = "select count(distinct artifactCon) from ArtifactCon artifactCon")

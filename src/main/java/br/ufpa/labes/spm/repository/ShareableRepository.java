@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.resources.IShareableDAO;
-
 
 import br.ufpa.labes.spm.domain.Shareable;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ShareableRepository extends IShareableDAO, JpaRepository<Shareable, Long> {
+public interface ShareableRepository extends JpaRepository<Shareable, Long> {
 
 }

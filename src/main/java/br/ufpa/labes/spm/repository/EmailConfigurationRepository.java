@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.agent.IEmailConfigurationDAO;
-
 
 import br.ufpa.labes.spm.domain.EmailConfiguration;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface EmailConfigurationRepository extends IEmailConfigurationDAO, JpaRepository<EmailConfiguration, Long> {
+public interface EmailConfigurationRepository extends JpaRepository<EmailConfiguration, Long> {
 
 }

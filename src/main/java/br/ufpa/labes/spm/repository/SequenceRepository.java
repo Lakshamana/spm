@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.connections.ISequenceDAO;
-
 
 import br.ufpa.labes.spm.domain.Sequence;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface SequenceRepository extends ISequenceDAO, JpaRepository<Sequence, Long> {
+public interface SequenceRepository extends JpaRepository<Sequence, Long> {
 
 }

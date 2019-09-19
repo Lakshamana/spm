@@ -1,9 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces..ICustomAuditEventDAO;
-
-
-import br.ufpa.labes.spm.repository.interfaces..ICustomAuditEventDAO;
 
 
 import br.ufpa.labes.spm.config.Constants;

@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.assets.IRelationshipKindDAO;
-
 
 import br.ufpa.labes.spm.domain.RelationshipKind;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface RelationshipKindRepository extends IRelationshipKindDAO, JpaRepository<RelationshipKind, Long> {
+public interface RelationshipKindRepository extends JpaRepository<RelationshipKind, Long> {
 
 }

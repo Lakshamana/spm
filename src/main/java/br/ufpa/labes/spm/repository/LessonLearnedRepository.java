@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces..ILessonLearnedDAO;
-
 
 import br.ufpa.labes.spm.domain.LessonLearned;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface LessonLearnedRepository extends ILessonLearnedDAO, JpaRepository<LessonLearned, Long> {
+public interface LessonLearnedRepository extends JpaRepository<LessonLearned, Long> {
 
 }

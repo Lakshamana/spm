@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.resources.IReservationDAO;
-
 
 import br.ufpa.labes.spm.domain.Reservation;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ReservationRepository extends IReservationDAO, JpaRepository<Reservation, Long> {
+public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
 }

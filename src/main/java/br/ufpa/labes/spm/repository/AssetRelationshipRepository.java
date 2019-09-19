@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces..IAssetRelationshipDAO;
-
 
 import br.ufpa.labes.spm.domain.AssetRelationship;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AssetRelationshipRepository extends IAssetRelationshipDAO, JpaRepository<AssetRelationship, Long> {
+public interface AssetRelationshipRepository extends JpaRepository<AssetRelationship, Long> {
 
 }

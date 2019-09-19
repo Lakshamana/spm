@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.plannerInfo.IActivityInstantiatedDAO;
-
 
 import br.ufpa.labes.spm.domain.ActivityInstantiated;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ActivityInstantiatedRepository extends IActivityInstantiatedDAO, JpaRepository<ActivityInstantiated, Long> {
+public interface ActivityInstantiatedRepository extends JpaRepository<ActivityInstantiated, Long> {
 
 }

@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.ICompanyUnitDAO;
-
 
 import br.ufpa.labes.spm.domain.CompanyUnit;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CompanyUnitRepository extends ICompanyUnitDAO, JpaRepository<CompanyUnit, Long> {
+public interface CompanyUnitRepository extends JpaRepository<CompanyUnit, Long> {
 
 }

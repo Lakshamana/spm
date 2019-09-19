@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces..IAgentInstSugDAO;
-
 
 import br.ufpa.labes.spm.domain.AgentInstSug;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AgentInstSugRepository extends IAgentInstSugDAO, JpaRepository<AgentInstSug, Long> {
+public interface AgentInstSugRepository extends JpaRepository<AgentInstSug, Long> {
 
 }

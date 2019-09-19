@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces..IPluginDAO;
-
 
 import br.ufpa.labes.spm.domain.Plugin;
 import org.springframework.data.domain.Page;
@@ -17,7 +15,7 @@ import java.util.Optional;
  * Spring Data  repository for the Plugin entity.
  */
 @Repository
-public interface PluginRepository extends IPluginDAO, JpaRepository<Plugin, Long> {
+public interface PluginRepository extends JpaRepository<Plugin, Long> {
 
     @Query(value = "select distinct plugin from Plugin plugin left join fetch plugin.users",
         countQuery = "select count(distinct plugin) from Plugin plugin")

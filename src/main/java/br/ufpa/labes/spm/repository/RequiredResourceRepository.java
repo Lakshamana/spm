@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredResourceDAO;
-
 
 import br.ufpa.labes.spm.domain.RequiredResource;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface RequiredResourceRepository extends IRequiredResourceDAO, JpaRepository<RequiredResource, Long> {
+public interface RequiredResourceRepository extends JpaRepository<RequiredResource, Long> {
 
 }

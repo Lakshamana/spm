@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-import br.ufpa.labes.spm.repository.interfaces.types.IWorkGroupTypeDAO;
-
 
 import br.ufpa.labes.spm.domain.WorkGroupType;
 import org.springframework.data.jpa.repository.*;
@@ -13,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface WorkGroupTypeRepository extends IWorkGroupTypeDAO, JpaRepository<WorkGroupType, Long> {
+public interface WorkGroupTypeRepository extends JpaRepository<WorkGroupType, Long> {
 
 }
