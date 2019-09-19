@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "metric_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MetricType implements Serializable {
+public class MetricType extends Type implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces..IAuthorStatDAO;
+
+
 import br.ufpa.labes.spm.domain.AuthorStat;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AuthorStatRepository extends JpaRepository<AuthorStat, Long> {
+public interface AuthorStatRepository extends IAuthorStatDAO, JpaRepository<AuthorStat, Long> {
 
 }

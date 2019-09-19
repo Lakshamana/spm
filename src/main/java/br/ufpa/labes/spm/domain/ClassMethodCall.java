@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "class_method_call")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ClassMethodCall implements Serializable {
+public class ClassMethodCall extends Subroutine implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

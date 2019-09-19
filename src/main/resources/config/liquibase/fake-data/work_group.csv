@@ -1,4 +1,4 @@
-id;ident;name;description;is_active
+id;ident;name;description;active
 1;Fantastic Fresh Salad;Steel Avon Visionary;../fake-data/blob/hipster.txt;true
 2;PCI SAS;Interactions;../fake-data/blob/hipster.txt;true
 3;navigate repurpose;Buckinghamshire;../fake-data/blob/hipster.txt;false

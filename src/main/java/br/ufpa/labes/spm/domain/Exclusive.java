@@ -16,7 +16,7 @@ import br.ufpa.labes.spm.domain.enumeration.ExclusiveStatus;
 @Entity
 @Table(name = "exclusive")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Exclusive implements Serializable {
+public class Exclusive extends Resource implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "agenda_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class AgendaEvent implements Serializable {
+public class AgendaEvent extends Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -62,8 +62,8 @@ public class ResourceResourceIT {
     private static final Float UPDATED_COST = 2F;
     private static final Float SMALLER_COST = 1F - 1F;
 
-    private static final Boolean DEFAULT_IS_ACTIVE = false;
-    private static final Boolean UPDATED_IS_ACTIVE = true;
+    private static final Boolean DEFAULT_ACTIVE = false;
+    private static final Boolean UPDATED_ACTIVE = true;
 
     @Autowired
     private ResourceRepository resourceRepository;
@@ -120,7 +120,7 @@ public class ResourceResourceIT {
             .mtbfUnitTime(DEFAULT_MTBF_UNIT_TIME)
             .currency(DEFAULT_CURRENCY)
             .cost(DEFAULT_COST)
-            .isActive(DEFAULT_IS_ACTIVE);
+            .active(DEFAULT_ACTIVE);
         return resource;
     }
     /**
@@ -138,7 +138,7 @@ public class ResourceResourceIT {
             .mtbfUnitTime(UPDATED_MTBF_UNIT_TIME)
             .currency(UPDATED_CURRENCY)
             .cost(UPDATED_COST)
-            .isActive(UPDATED_IS_ACTIVE);
+            .active(UPDATED_ACTIVE);
         return resource;
     }
 
@@ -170,7 +170,7 @@ public class ResourceResourceIT {
         assertThat(testResource.getMtbfUnitTime()).isEqualTo(DEFAULT_MTBF_UNIT_TIME);
         assertThat(testResource.getCurrency()).isEqualTo(DEFAULT_CURRENCY);
         assertThat(testResource.getCost()).isEqualTo(DEFAULT_COST);
-        assertThat(testResource.isIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testResource.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
     @Test
@@ -212,7 +212,7 @@ public class ResourceResourceIT {
             .andExpect(jsonPath("$.[*].mtbfUnitTime").value(hasItem(DEFAULT_MTBF_UNIT_TIME.toString())))
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())))
             .andExpect(jsonPath("$.[*].cost").value(hasItem(DEFAULT_COST.doubleValue())))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
     @Test
@@ -233,7 +233,7 @@ public class ResourceResourceIT {
             .andExpect(jsonPath("$.mtbfUnitTime").value(DEFAULT_MTBF_UNIT_TIME.toString()))
             .andExpect(jsonPath("$.currency").value(DEFAULT_CURRENCY.toString()))
             .andExpect(jsonPath("$.cost").value(DEFAULT_COST.doubleValue()))
-            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
     @Test
@@ -264,7 +264,7 @@ public class ResourceResourceIT {
             .mtbfUnitTime(UPDATED_MTBF_UNIT_TIME)
             .currency(UPDATED_CURRENCY)
             .cost(UPDATED_COST)
-            .isActive(UPDATED_IS_ACTIVE);
+            .active(UPDATED_ACTIVE);
         ResourceDTO resourceDTO = resourceMapper.toDto(updatedResource);
 
         restResourceMockMvc.perform(put("/api/resources")
@@ -283,7 +283,7 @@ public class ResourceResourceIT {
         assertThat(testResource.getMtbfUnitTime()).isEqualTo(UPDATED_MTBF_UNIT_TIME);
         assertThat(testResource.getCurrency()).isEqualTo(UPDATED_CURRENCY);
         assertThat(testResource.getCost()).isEqualTo(UPDATED_COST);
-        assertThat(testResource.isIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testResource.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 
     @Test

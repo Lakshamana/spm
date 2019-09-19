@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.resources.IExclusiveDAO;
+
+
 import br.ufpa.labes.spm.domain.Exclusive;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ExclusiveRepository extends JpaRepository<Exclusive, Long> {
+public interface ExclusiveRepository extends IExclusiveDAO, JpaRepository<Exclusive, Long> {
 
 }

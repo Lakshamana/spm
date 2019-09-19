@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "process_model_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ProcessModelEvent implements Serializable {
+public class ProcessModelEvent extends Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -14,7 +14,7 @@ import br.ufpa.labes.spm.domain.enumeration.ConsumableStatus;
 @Entity
 @Table(name = "consumable")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Consumable implements Serializable {
+public class Consumable extends Resource implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

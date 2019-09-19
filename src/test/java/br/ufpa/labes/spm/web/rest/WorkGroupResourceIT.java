@@ -48,8 +48,8 @@ public class WorkGroupResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final Boolean DEFAULT_IS_ACTIVE = false;
-    private static final Boolean UPDATED_IS_ACTIVE = true;
+    private static final Boolean DEFAULT_ACTIVE = false;
+    private static final Boolean UPDATED_ACTIVE = true;
 
     @Autowired
     private WorkGroupRepository workGroupRepository;
@@ -102,7 +102,7 @@ public class WorkGroupResourceIT {
             .ident(DEFAULT_IDENT)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
-            .isActive(DEFAULT_IS_ACTIVE);
+            .active(DEFAULT_ACTIVE);
         return workGroup;
     }
     /**
@@ -116,7 +116,7 @@ public class WorkGroupResourceIT {
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .isActive(UPDATED_IS_ACTIVE);
+            .active(UPDATED_ACTIVE);
         return workGroup;
     }
 
@@ -144,7 +144,7 @@ public class WorkGroupResourceIT {
         assertThat(testWorkGroup.getIdent()).isEqualTo(DEFAULT_IDENT);
         assertThat(testWorkGroup.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testWorkGroup.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testWorkGroup.isIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testWorkGroup.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
     @Test
@@ -182,7 +182,7 @@ public class WorkGroupResourceIT {
             .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
     @Test
@@ -199,7 +199,7 @@ public class WorkGroupResourceIT {
             .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
     @Test
@@ -226,7 +226,7 @@ public class WorkGroupResourceIT {
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .isActive(UPDATED_IS_ACTIVE);
+            .active(UPDATED_ACTIVE);
         WorkGroupDTO workGroupDTO = workGroupMapper.toDto(updatedWorkGroup);
 
         restWorkGroupMockMvc.perform(put("/api/work-groups")
@@ -241,7 +241,7 @@ public class WorkGroupResourceIT {
         assertThat(testWorkGroup.getIdent()).isEqualTo(UPDATED_IDENT);
         assertThat(testWorkGroup.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testWorkGroup.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testWorkGroup.isIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testWorkGroup.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 
     @Test

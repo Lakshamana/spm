@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.calendar.ICalendarDAO;
+
+
 import br.ufpa.labes.spm.domain.Calendar;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CalendarRepository extends JpaRepository<Calendar, Long> {
+public interface CalendarRepository extends ICalendarDAO, JpaRepository<Calendar, Long> {
 
 }

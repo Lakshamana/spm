@@ -63,8 +63,8 @@ public class AgentResourceIT {
     private static final Integer UPDATED_TIPO_USER = 2;
     private static final Integer SMALLER_TIPO_USER = 1 - 1;
 
-    private static final Boolean DEFAULT_IS_ACTIVE = false;
-    private static final Boolean UPDATED_IS_ACTIVE = true;
+    private static final Boolean DEFAULT_ACTIVE = false;
+    private static final Boolean UPDATED_ACTIVE = true;
 
     private static final Boolean DEFAULT_ONLINE = false;
     private static final Boolean UPDATED_ONLINE = true;
@@ -135,7 +135,7 @@ public class AgentResourceIT {
             .costHour(DEFAULT_COST_HOUR)
             .passwordHash(DEFAULT_PASSWORD_HASH)
             .tipoUser(DEFAULT_TIPO_USER)
-            .isActive(DEFAULT_IS_ACTIVE)
+            .active(DEFAULT_ACTIVE)
             .online(DEFAULT_ONLINE)
             .photoURL(DEFAULT_PHOTO_URL)
             .upload(DEFAULT_UPLOAD);
@@ -155,7 +155,7 @@ public class AgentResourceIT {
             .costHour(UPDATED_COST_HOUR)
             .passwordHash(UPDATED_PASSWORD_HASH)
             .tipoUser(UPDATED_TIPO_USER)
-            .isActive(UPDATED_IS_ACTIVE)
+            .active(UPDATED_ACTIVE)
             .online(UPDATED_ONLINE)
             .photoURL(UPDATED_PHOTO_URL)
             .upload(UPDATED_UPLOAD);
@@ -189,7 +189,7 @@ public class AgentResourceIT {
         assertThat(testAgent.getCostHour()).isEqualTo(DEFAULT_COST_HOUR);
         assertThat(testAgent.getPasswordHash()).isEqualTo(DEFAULT_PASSWORD_HASH);
         assertThat(testAgent.getTipoUser()).isEqualTo(DEFAULT_TIPO_USER);
-        assertThat(testAgent.isIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
+        assertThat(testAgent.isActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testAgent.isOnline()).isEqualTo(DEFAULT_ONLINE);
         assertThat(testAgent.getPhotoURL()).isEqualTo(DEFAULT_PHOTO_URL);
         assertThat(testAgent.getUpload()).isEqualTo(DEFAULT_UPLOAD);
@@ -233,7 +233,7 @@ public class AgentResourceIT {
             .andExpect(jsonPath("$.[*].costHour").value(hasItem(DEFAULT_COST_HOUR.doubleValue())))
             .andExpect(jsonPath("$.[*].passwordHash").value(hasItem(DEFAULT_PASSWORD_HASH.toString())))
             .andExpect(jsonPath("$.[*].tipoUser").value(hasItem(DEFAULT_TIPO_USER)))
-            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].online").value(hasItem(DEFAULT_ONLINE.booleanValue())))
             .andExpect(jsonPath("$.[*].photoURL").value(hasItem(DEFAULT_PHOTO_URL.toString())))
             .andExpect(jsonPath("$.[*].upload").value(hasItem(DEFAULT_UPLOAD.toString())));
@@ -289,7 +289,7 @@ public class AgentResourceIT {
             .andExpect(jsonPath("$.costHour").value(DEFAULT_COST_HOUR.doubleValue()))
             .andExpect(jsonPath("$.passwordHash").value(DEFAULT_PASSWORD_HASH.toString()))
             .andExpect(jsonPath("$.tipoUser").value(DEFAULT_TIPO_USER))
-            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.online").value(DEFAULT_ONLINE.booleanValue()))
             .andExpect(jsonPath("$.photoURL").value(DEFAULT_PHOTO_URL.toString()))
             .andExpect(jsonPath("$.upload").value(DEFAULT_UPLOAD.toString()));
@@ -322,7 +322,7 @@ public class AgentResourceIT {
             .costHour(UPDATED_COST_HOUR)
             .passwordHash(UPDATED_PASSWORD_HASH)
             .tipoUser(UPDATED_TIPO_USER)
-            .isActive(UPDATED_IS_ACTIVE)
+            .active(UPDATED_ACTIVE)
             .online(UPDATED_ONLINE)
             .photoURL(UPDATED_PHOTO_URL)
             .upload(UPDATED_UPLOAD);
@@ -343,7 +343,7 @@ public class AgentResourceIT {
         assertThat(testAgent.getCostHour()).isEqualTo(UPDATED_COST_HOUR);
         assertThat(testAgent.getPasswordHash()).isEqualTo(UPDATED_PASSWORD_HASH);
         assertThat(testAgent.getTipoUser()).isEqualTo(UPDATED_TIPO_USER);
-        assertThat(testAgent.isIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
+        assertThat(testAgent.isActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testAgent.isOnline()).isEqualTo(UPDATED_ONLINE);
         assertThat(testAgent.getPhotoURL()).isEqualTo(UPDATED_PHOTO_URL);
         assertThat(testAgent.getUpload()).isEqualTo(UPDATED_UPLOAD);

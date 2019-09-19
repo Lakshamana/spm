@@ -34,8 +34,8 @@ public class WorkGroup implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "is_active")
-    private Boolean isActive;
+    @Column(name = "active")
+    private Boolean active;
 
     @OneToMany(mappedBy = "theWorkGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -123,17 +123,17 @@ public class WorkGroup implements Serializable {
         this.description = description;
     }
 
-    public Boolean isIsActive() {
-        return isActive;
+    public Boolean isActive() {
+        return active;
     }
 
-    public WorkGroup isActive(Boolean isActive) {
-        this.isActive = isActive;
+    public WorkGroup active(Boolean active) {
+        this.active = active;
         return this;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Set<ReqWorkGroup> getTheReqWorkGroups() {
@@ -361,7 +361,7 @@ public class WorkGroup implements Serializable {
             ", ident='" + getIdent() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", isActive='" + isIsActive() + "'" +
+            ", active='" + isActive() + "'" +
             "}";
     }
 }

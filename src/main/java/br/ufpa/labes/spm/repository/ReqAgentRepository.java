@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqAgentDAO;
+
+
 import br.ufpa.labes.spm.domain.ReqAgent;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ReqAgentRepository extends JpaRepository<ReqAgent, Long> {
+public interface ReqAgentRepository extends IReqAgentDAO, JpaRepository<ReqAgent, Long> {
 
 }

@@ -44,8 +44,8 @@ public class Artifact implements Serializable {
     @Column(name = "is_template")
     private Boolean isTemplate;
 
-    @Column(name = "is_active")
-    private Boolean isActive;
+    @Column(name = "active")
+    private Boolean active;
 
     @OneToMany(mappedBy = "theArtifact")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -195,17 +195,17 @@ public class Artifact implements Serializable {
         this.isTemplate = isTemplate;
     }
 
-    public Boolean isIsActive() {
-        return isActive;
+    public Boolean isActive() {
+        return active;
     }
 
-    public Artifact isActive(Boolean isActive) {
-        this.isActive = isActive;
+    public Artifact active(Boolean active) {
+        this.active = active;
         return this;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Set<InvolvedArtifact> getTheInvolvedArtifacts() {
@@ -488,7 +488,7 @@ public class Artifact implements Serializable {
             ", fileName='" + getFileName() + "'" +
             ", latestVersion='" + getLatestVersion() + "'" +
             ", isTemplate='" + isIsTemplate() + "'" +
-            ", isActive='" + isIsActive() + "'" +
+            ", active='" + isActive() + "'" +
             "}";
     }
 }

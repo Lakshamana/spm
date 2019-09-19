@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "script")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Script implements Serializable {
+public class Script extends Subroutine implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

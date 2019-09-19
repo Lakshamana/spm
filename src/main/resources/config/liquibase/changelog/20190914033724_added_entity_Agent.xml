@@ -40,7 +40,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="is_active" type="boolean">
+            <column name="active" type="boolean">
                 <constraints nullable="true" />
             </column>
 
@@ -131,7 +131,7 @@
             <column name="cost_hour" type="numeric"/>
             <column name="password_hash" type="string"/>
             <column name="tipo_user" type="numeric"/>
-            <column name="is_active" type="boolean"/>
+            <column name="active" type="boolean"/>
             <column name="online" type="boolean"/>
             <column name="photo_url" type="string"/>
             <column name="upload" type="string"/>

@@ -23,7 +23,7 @@ public class AgentDTO implements Serializable {
 
     private Integer tipoUser;
 
-    private Boolean isActive;
+    private Boolean active;
 
     private Boolean online;
 
@@ -102,12 +102,12 @@ public class AgentDTO implements Serializable {
         this.tipoUser = tipoUser;
     }
 
-    public Boolean isIsActive() {
-        return isActive;
+    public Boolean isActive() {
+        return active;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Boolean isOnline() {
@@ -221,7 +221,7 @@ public class AgentDTO implements Serializable {
             ", costHour=" + getCostHour() +
             ", passwordHash='" + getPasswordHash() + "'" +
             ", tipoUser=" + getTipoUser() +
-            ", isActive='" + isIsActive() + "'" +
+            ", active='" + isActive() + "'" +
             ", online='" + isOnline() + "'" +
             ", photoURL='" + getPhotoURL() + "'" +
             ", upload='" + getUpload() + "'" +

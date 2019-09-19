@@ -26,7 +26,7 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "isActive",
+            "fieldName": "active",
             "fieldType": "Boolean"
         },
         {

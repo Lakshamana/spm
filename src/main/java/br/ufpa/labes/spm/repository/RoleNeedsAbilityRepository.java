@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.agent.IRoleNeedsAbilityDAO;
+
+
 import br.ufpa.labes.spm.domain.RoleNeedsAbility;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface RoleNeedsAbilityRepository extends JpaRepository<RoleNeedsAbility, Long> {
+public interface RoleNeedsAbilityRepository extends IRoleNeedsAbilityDAO, JpaRepository<RoleNeedsAbility, Long> {
 
 }

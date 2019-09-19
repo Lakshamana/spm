@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "event_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class EventType implements Serializable {
+public class EventType extends Type implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

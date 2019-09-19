@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces..IWorkGroupInstSugDAO;
+
+
 import br.ufpa.labes.spm.domain.WorkGroupInstSug;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +17,7 @@ import java.util.Optional;
  * Spring Data  repository for the WorkGroupInstSug entity.
  */
 @Repository
-public interface WorkGroupInstSugRepository extends JpaRepository<WorkGroupInstSug, Long> {
+public interface WorkGroupInstSugRepository extends IWorkGroupInstSugDAO, JpaRepository<WorkGroupInstSug, Long> {
 
     @Query(value = "select distinct workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.sugWorkGroups",
         countQuery = "select count(distinct workGroupInstSug) from WorkGroupInstSug workGroupInstSug")

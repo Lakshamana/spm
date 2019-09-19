@@ -3,6 +3,9 @@ package br.ufpa.labes.spm.repository;
 import br.ufpa.labes.spm.repository.interfaces..IPersistenceAuditEventDAO;
 
 
+import br.ufpa.labes.spm.repository.interfaces..IPersistenceAuditEventDAO;
+
+
 import br.ufpa.labes.spm.domain.PersistentAuditEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +15,7 @@ import java.time.Instant;
 import java.util.List;
 
 /** Spring Data JPA repository for the {@link PersistentAuditEvent} entity. */
-public interface PersistenceAuditEventRepository extends IPersistenceAuditEventDAO, JpaRepository<PersistentAuditEvent, Long> {
+public interface PersistenceAuditEventRepository extends IPersistenceAuditEventDAO, IPersistenceAuditEventDAO, JpaRepository<PersistentAuditEvent, Long> {
 
   List<PersistentAuditEvent> findByPrincipal(String principal);
 

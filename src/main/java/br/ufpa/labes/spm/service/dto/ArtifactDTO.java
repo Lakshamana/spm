@@ -23,7 +23,7 @@ public class ArtifactDTO implements Serializable {
 
     private Boolean isTemplate;
 
-    private Boolean isActive;
+    private Boolean active;
 
 
     private Long theArtifactTypeId;
@@ -98,12 +98,12 @@ public class ArtifactDTO implements Serializable {
         this.isTemplate = isTemplate;
     }
 
-    public Boolean isIsActive() {
-        return isActive;
+    public Boolean isActive() {
+        return active;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Long getTheArtifactTypeId() {
@@ -170,7 +170,7 @@ public class ArtifactDTO implements Serializable {
             ", fileName='" + getFileName() + "'" +
             ", latestVersion='" + getLatestVersion() + "'" +
             ", isTemplate='" + isIsTemplate() + "'" +
-            ", isActive='" + isIsActive() + "'" +
+            ", active='" + isActive() + "'" +
             ", theArtifactType=" + getTheArtifactTypeId() +
             ", derivedFrom=" + getDerivedFromId() +
             ", theVCSRepository=" + getTheVCSRepositoryId() +

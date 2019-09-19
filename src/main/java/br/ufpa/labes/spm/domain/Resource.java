@@ -1,4 +1,8 @@
 package br.ufpa.labes.spm.domain;
+
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -16,6 +20,7 @@ import java.util.Set;
 @Entity
 @Table(name = "resource")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Resource implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,8 +51,8 @@ public class Resource implements Serializable {
     @Column(name = "cost")
     private Float cost;
 
-    @Column(name = "is_active")
-    private Boolean isActive;
+    @Column(name = "active")
+    private Boolean active;
 
     @ManyToOne
     @JsonIgnoreProperties("theResources")
@@ -190,17 +195,17 @@ public class Resource implements Serializable {
         this.cost = cost;
     }
 
-    public Boolean isIsActive() {
-        return isActive;
+    public Boolean isActive() {
+        return active;
     }
 
-    public Resource isActive(Boolean isActive) {
-        this.isActive = isActive;
+    public Resource active(Boolean active) {
+        this.active = active;
         return this;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Resource getBelongsTo() {
@@ -457,7 +462,7 @@ public class Resource implements Serializable {
             ", mtbfUnitTime='" + getMtbfUnitTime() + "'" +
             ", currency='" + getCurrency() + "'" +
             ", cost=" + getCost() +
-            ", isActive='" + isIsActive() + "'" +
+            ", active='" + isActive() + "'" +
             "}";
     }
 }

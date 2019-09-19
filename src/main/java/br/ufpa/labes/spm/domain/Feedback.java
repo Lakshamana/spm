@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "feedback")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Feedback implements Serializable {
+public class Feedback extends SimpleCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "work_group_inst_sug")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class WorkGroupInstSug implements Serializable {
+public class WorkGroupInstSug extends PeopleInstSug implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

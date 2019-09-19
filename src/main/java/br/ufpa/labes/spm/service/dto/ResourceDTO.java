@@ -25,7 +25,7 @@ public class ResourceDTO implements Serializable {
 
     private Float cost;
 
-    private Boolean isActive;
+    private Boolean active;
 
 
     private Long belongsToId;
@@ -96,12 +96,12 @@ public class ResourceDTO implements Serializable {
         this.cost = cost;
     }
 
-    public Boolean isIsActive() {
-        return isActive;
+    public Boolean isActive() {
+        return active;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Long getBelongsToId() {
@@ -152,7 +152,7 @@ public class ResourceDTO implements Serializable {
             ", mtbfUnitTime='" + getMtbfUnitTime() + "'" +
             ", currency='" + getCurrency() + "'" +
             ", cost=" + getCost() +
-            ", isActive='" + isIsActive() + "'" +
+            ", active='" + isActive() + "'" +
             ", belongsTo=" + getBelongsToId() +
             ", theResourceType=" + getTheResourceTypeId() +
             "}";

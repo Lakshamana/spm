@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "req_agent")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ReqAgent implements Serializable {
+public class ReqAgent extends RequiredPeople implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -1,4 +1,4 @@
-id;ident;name;description;mtbf_time;mtbf_unit_time;currency;cost;is_active
+id;ident;name;description;mtbf_time;mtbf_unit_time;currency;cost;active
 1;Incredible Soft Pants;Handmade Cotton Pants Islands;../fake-data/blob/hipster.txt;72273;withdrawal;Solutions architect quantifying;84232;false
 2;Kids primary;Awesome Ergonomic Rubber Cheese interfaces;../fake-data/blob/hipster.txt;54803;Saint Kitts and Nevis wireless Denar;Steel Danish Krone Credit Card Account;74225;false
 3;deposit;Regional hack;../fake-data/blob/hipster.txt;90822;quantify;systems reboot;85258;true

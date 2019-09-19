@@ -1,11 +1,11 @@
 id;exclusive_status;unit_of_cost
 1;AVAILABLE;transmitting
-2;DEFECT;migration dynamic Bedfordshire
-3;LOCKED;South Georgia and the South Sandwich Islands
+2;LOCKED;migration dynamic Bedfordshire
+3;AVAILABLE;South Georgia and the South Sandwich Islands
 4;AVAILABLE;Silver copying RSS
-5;AVAILABLE;Som Fish
+5;DEFECT;Som Fish
 6;LOCKED;Sports firewall application
-7;LOCKED;Grocery Fish
-8;LOCKED;Cross-group Cote d'Ivoire
+7;DEFECT;Grocery Fish
+8;DEFECT;Cross-group Cote d'Ivoire
 9;LOCKED;morph
 10;AVAILABLE;Intranet Personal Loan Account Massachusetts

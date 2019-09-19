@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IPrimitiveParamDAO;
+
+
 import br.ufpa.labes.spm.domain.PrimitiveParam;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface PrimitiveParamRepository extends JpaRepository<PrimitiveParam, Long> {
+public interface PrimitiveParamRepository extends IPrimitiveParamDAO, JpaRepository<PrimitiveParam, Long> {
 
 }

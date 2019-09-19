@@ -1,4 +1,4 @@
-id;ident;name;email;cost_hour;password_hash;tipo_user;is_active;online;photo_url;upload
+id;ident;name;email;cost_hour;password_hash;tipo_user;active;online;photo_url;upload
 1;User-centric Gloves;Mauritania;Guido97@hotmail.com;25391;Exclusive Moroccan Dirham card;14808;false;true;mission-critical;Berkshire Small Plastic Pants Investor
 2;Canadian Dollar;Berkshire Designer;Larry76@gmail.com;36965;Re-contextualized;80313;false;false;Orchestrator deliver;Licensed hacking installation
 3;Argentine Peso;Kentucky Algerian Dinar Clothing;Raleigh_Fahey@yahoo.com;9617;Quality;39757;false;true;hacking Forint bandwidth;Global

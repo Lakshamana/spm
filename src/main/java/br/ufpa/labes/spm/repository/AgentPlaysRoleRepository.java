@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.repository;
 
+import br.ufpa.labes.spm.repository.interfaces.agent.IAgentPlaysRoleDAO;
+
+
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AgentPlaysRoleRepository extends JpaRepository<AgentPlaysRole, Long> {
+public interface AgentPlaysRoleRepository extends IAgentPlaysRoleDAO, JpaRepository<AgentPlaysRole, Long> {
 
 }

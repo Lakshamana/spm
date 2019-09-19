@@ -17,7 +17,7 @@ public class WorkGroupDTO implements Serializable {
     @Lob
     private String description;
 
-    private Boolean isActive;
+    private Boolean active;
 
 
     private Long theWorkGroupTypeId;
@@ -56,12 +56,12 @@ public class WorkGroupDTO implements Serializable {
         this.description = description;
     }
 
-    public Boolean isIsActive() {
-        return isActive;
+    public Boolean isActive() {
+        return active;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Long getTheWorkGroupTypeId() {
@@ -108,7 +108,7 @@ public class WorkGroupDTO implements Serializable {
             ", ident='" + getIdent() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", isActive='" + isIsActive() + "'" +
+            ", active='" + isActive() + "'" +
             ", theWorkGroupType=" + getTheWorkGroupTypeId() +
             ", superWorkGroup=" + getSuperWorkGroupId() +
             "}";

@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "artifact_param")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ArtifactParam implements Serializable {
+public class ArtifactParam extends Parameter implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

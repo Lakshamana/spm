@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "tool_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ToolType implements Serializable {
+public class ToolType extends Type implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

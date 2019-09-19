@@ -42,8 +42,8 @@ public class Agent implements Serializable {
     @Column(name = "tipo_user")
     private Integer tipoUser;
 
-    @Column(name = "is_active")
-    private Boolean isActive;
+    @Column(name = "active")
+    private Boolean active;
 
     @Column(name = "online")
     private Boolean online;
@@ -247,17 +247,17 @@ public class Agent implements Serializable {
         this.tipoUser = tipoUser;
     }
 
-    public Boolean isIsActive() {
-        return isActive;
+    public Boolean isActive() {
+        return active;
     }
 
-    public Agent isActive(Boolean isActive) {
-        this.isActive = isActive;
+    public Agent active(Boolean active) {
+        this.active = active;
         return this;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Boolean isOnline() {
@@ -866,7 +866,7 @@ public class Agent implements Serializable {
             ", costHour=" + getCostHour() +
             ", passwordHash='" + getPasswordHash() + "'" +
             ", tipoUser=" + getTipoUser() +
-            ", isActive='" + isIsActive() + "'" +
+            ", active='" + isActive() + "'" +
             ", online='" + isOnline() + "'" +
             ", photoURL='" + getPhotoURL() + "'" +
             ", upload='" + getUpload() + "'" +

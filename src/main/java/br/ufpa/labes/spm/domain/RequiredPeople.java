@@ -15,6 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "required_people")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class RequiredPeople implements Serializable {
 
     private static final long serialVersionUID = 1L;

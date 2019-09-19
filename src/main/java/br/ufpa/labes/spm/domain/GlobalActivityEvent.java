@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "global_activity_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class GlobalActivityEvent implements Serializable {
+public class GlobalActivityEvent extends Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
