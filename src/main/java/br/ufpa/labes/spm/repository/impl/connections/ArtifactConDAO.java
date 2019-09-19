@@ -15,7 +15,7 @@ public class ArtifactConDAO extends BaseDAO<ArtifactCon, Integer> implements IAr
   }
 
   @Override
-  public ArtifactCon save(ArtifactCon conn) {
+  public ArtifactCon daoSave(ArtifactCon conn) {
     super.daoSave(conn);
     String ident = conn.getIdent() + "." + conn.getId();
     conn.setIdent(ident);
