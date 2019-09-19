@@ -7,7 +7,7 @@ import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
 import br.ufpa.labes.spm.domain.WebAPSEEObject;
 
-public interface IWebAPSEEObjectDAO extends IBaseDAO<WebAPSEEObject, String> {
+public interface IWebAPSEEObjectDAO extends IBaseDAO<WebAPSEEObject, Long> {
 
   public WebAPSEEObject retrieveWebAPSEEObject(Integer theReferredOid, String className)
       throws DAOException;

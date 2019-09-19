@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.resources.IConsumableDAO;
 import br.ufpa.labes.spm.domain.Consumable;
 
-public class ConsumableDAO extends BaseDAO<Consumable, String> implements IConsumableDAO {
+public class ConsumableDAO extends BaseDAO<Consumable, Long> implements IConsumableDAO {
 
   protected ConsumableDAO(Class<Consumable> businessClass) {
     super(businessClass);

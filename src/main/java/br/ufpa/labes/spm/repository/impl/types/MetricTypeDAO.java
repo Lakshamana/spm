@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IMetricTypeDAO;
 import br.ufpa.labes.spm.domain.MetricType;
 
-public class MetricTypeDAO extends BaseDAO<MetricType, String> implements IMetricTypeDAO {
+public class MetricTypeDAO extends BaseDAO<MetricType, Long> implements IMetricTypeDAO {
 
   protected MetricTypeDAO(Class<MetricType> businessClass) {
     super(businessClass);

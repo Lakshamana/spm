@@ -10,7 +10,7 @@ import br.ufpa.labes.spm.domain.Asset;
 import br.ufpa.labes.spm.domain.AssetRelationship;
 // import org.qrconsult.spm.vo.AssetCatalog;
 
-public class AssetDAO extends BaseDAO<Asset, String> implements IAssetDAO {
+public class AssetDAO extends BaseDAO<Asset, Long> implements IAssetDAO {
 
   public AssetDAO() {
     super(Asset.class);

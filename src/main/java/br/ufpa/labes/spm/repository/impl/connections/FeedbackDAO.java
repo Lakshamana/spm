@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.connections.IFeedbackDAO;
 import br.ufpa.labes.spm.domain.Feedback;
 
-public class FeedbackDAO extends BaseDAO<Feedback, String> implements IFeedbackDAO {
+public class FeedbackDAO extends BaseDAO<Feedback, Long> implements IFeedbackDAO {
 
   protected FeedbackDAO(Class<Feedback> businessClass) {
     super(businessClass);

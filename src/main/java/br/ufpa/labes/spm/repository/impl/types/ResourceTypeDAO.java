@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
 import br.ufpa.labes.spm.domain.ResourceType;
 
-public class ResourceTypeDAO extends BaseDAO<ResourceType, String> implements IResourceTypeDAO {
+public class ResourceTypeDAO extends BaseDAO<ResourceType, Long> implements IResourceTypeDAO {
 
   protected ResourceTypeDAO(Class<ResourceType> businessClass) {
     super(businessClass);

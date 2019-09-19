@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.tools.IToolDefinitionDAO;
 import br.ufpa.labes.spm.domain.ToolDefinition;
 
-public class ToolDefinitionDAO extends BaseDAO<ToolDefinition, String>
+public class ToolDefinitionDAO extends BaseDAO<ToolDefinition, Long>
     implements IToolDefinitionDAO {
 
   protected ToolDefinitionDAO(Class<ToolDefinition> businessClass) {

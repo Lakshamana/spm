@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IConnectionTypeDAO;
 import br.ufpa.labes.spm.domain.ConnectionType;
 
-public class ConnectionTypeDAO extends BaseDAO<ConnectionType, String>
+public class ConnectionTypeDAO extends BaseDAO<ConnectionType, Long>
     implements IConnectionTypeDAO {
 
   protected ConnectionTypeDAO(Class<ConnectionType> businessClass) {

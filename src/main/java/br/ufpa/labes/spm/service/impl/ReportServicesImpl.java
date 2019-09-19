@@ -279,12 +279,12 @@ public class ReportServicesImpl implements ReportServices {
 
 	@Override
 	public List<RequirementItem> generateRequirementItemReport(String params) {
-		/*SystemDAO systemDAO = new SystemDAO();
+		/*SystemDAO systemDAO = new DevelopingSystemDAO();
 
 		System system;
 		system = null;
 
-		system = (System) systemDAO.retrieveBySecondaryKey(params.getParams().get(RequirementListBySystemReportParam.SYSTEM).getName());
+		system = (System) DevelopingsystemDAO.retrieveBySecondaryKey(params.getParams().get(RequirementListBySystemReportParam.SYSTEM).getName());
 		Collection<Requirement> requirementsColl = null;*/
 
 		return null;

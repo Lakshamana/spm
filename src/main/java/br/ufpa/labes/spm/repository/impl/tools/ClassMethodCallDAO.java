@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.tools.IClassMethodCallDAO;
 import br.ufpa.labes.spm.domain.ClassMethodCall;
 
-public class ClassMethodCallDAO extends BaseDAO<ClassMethodCall, String>
+public class ClassMethodCallDAO extends BaseDAO<ClassMethodCall, Long>
     implements IClassMethodCallDAO {
 
   protected ClassMethodCallDAO(Class<ClassMethodCall> businessClass) {

@@ -10,7 +10,7 @@ import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
 import br.ufpa.labes.spm.domain.WebAPSEEObject;
 
-public class WebAPSEEObjectDAO extends BaseDAO<WebAPSEEObject, String>
+public class WebAPSEEObjectDAO extends BaseDAO<WebAPSEEObject, Long>
     implements IWebAPSEEObjectDAO {
 
   public WebAPSEEObjectDAO() {

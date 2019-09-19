@@ -6,7 +6,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.ICompanyDAO;
 import br.ufpa.labes.spm.domain.Company;
 
-public class CompanyDAO extends BaseDAO<Company, String> implements ICompanyDAO {
+public class CompanyDAO extends BaseDAO<Company, Long> implements ICompanyDAO {
 
   protected CompanyDAO(Class<Company> businessClass) {
     super(businessClass);

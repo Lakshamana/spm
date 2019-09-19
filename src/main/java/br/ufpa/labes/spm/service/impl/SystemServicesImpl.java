@@ -11,10 +11,10 @@ import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.ICompanyDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
-import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.ISystemDAO;
+import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IDevelopingSystemDAO;
 import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.ProjectDTO;
-import br.ufpa.labes.spm.service.dto.SystemDTO;
+import br.ufpa.labes.spm.service.dto.DevelopingSystemDTO;
 import br.ufpa.labes.spm.service.dto.SystemsDTO;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.AgentAffinityAgent;
@@ -23,19 +23,19 @@ import br.ufpa.labes.spm.domain.AgentPlaysRole;
 import br.ufpa.labes.spm.domain.Group;
 import br.ufpa.labes.spm.domain.Company;
 import br.ufpa.labes.spm.domain.Project;
-import br.ufpa.labes.spm.domain.System;
+import br.ufpa.labes.spm.domain.DevelopingSystem;
 import br.ufpa.labes.spm.service.interfaces.ProjectServices;
 import br.ufpa.labes.spm.service.interfaces.SystemServices;
 
 
 public class SystemServicesImpl implements SystemServices{
 
-	private static final String SYSTEM_CLASSNAME = System.class.getSimpleName();
+	private static final String SYSTEM_CLASSNAME = DevelopingSystem.class.getSimpleName();
 
 
 	IProjectDAO projectDAO;
 
-	ISystemDAO systemDAO;
+	IDevelopingSystemDAO DevelopingsystemDAO;
 
 	ICompanyDAO comDAO;
 
@@ -43,30 +43,30 @@ public class SystemServicesImpl implements SystemServices{
 
 	ProjectServices projectServicesImpl =null;
 
-	public System getSystemForName(String nome){
+	public DevelopingSystem getSystemForName(String nome){
 		String hql;
 		Query query;
-		List<System> result = null;
+		List<DevelopingSystem> result = null;
 
 
-		hql = "select system from "+System.class.getSimpleName()+" as system where system.name = :sysname";
-		query = systemDAO.getPersistenceContext().createQuery(hql);
+		hql = "select system from "+DevelopingSystem.class.getSimpleName()+" as system where system.name = :sysname";
+		query = DevelopingsystemDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("sysname", nome);
 
 		result = query.getResultList();
 
 		if(!result.isEmpty()){
-			System sys = result.get(0);
+			DevelopingSystem sys = result.get(0);
 			return sys;
 		}else{
 			return null;
 		}
 	}
 
-	private SystemDTO convertSystemToSystemDTO(System system) {
-		SystemDTO systemDTO = new SystemDTO();
+	private DevelopingSystemDTO convertSystemToSystemDTO(DevelopingSystem system) {
+		DevelopingSystemDTO systemDTO = new DevelopingSystemDTO();
 		try {
-			systemDTO = (SystemDTO) converter.getDTO(system, SystemDTO.class);
+			systemDTO = (DevelopingSystemDTO) converter.getDTO(system, DevelopingSystemDTO.class);
 			return systemDTO;
 
 		} catch (ImplementationException e) {
@@ -77,17 +77,17 @@ public class SystemServicesImpl implements SystemServices{
 
 
 	@Override
-	public SystemDTO getSystem(String nameSystem) {
+	public DevelopingSystemDTO getSystem(String nameSystem) {
 		String hql;
 		Query query;
-		List<System> result = null;
+		List<DevelopingSystem> result = null;
 		List<Project> abis = new ArrayList<Project>();
 		List<ProjectDTO> abisDTO = new ArrayList<ProjectDTO>();
-		SystemDTO systemDTO = null;
+		DevelopingSystemDTO systemDTO = null;
 		ProjectDTO abi = null;
 
-		hql = "select role from "+System.class.getSimpleName()+" as role where role.name = :rolname";
-		query = systemDAO.getPersistenceContext().createQuery(hql);
+		hql = "select role from "+DevelopingSystem.class.getSimpleName()+" as role where role.name = :rolname";
+		query = DevelopingsystemDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("rolname", nameSystem);
 		result = query.getResultList();
 		Collection<Project> lis = result.get(0).getTheProject();
@@ -113,7 +113,7 @@ public class SystemServicesImpl implements SystemServices{
 		}
 
 		try {
-			systemDTO = (SystemDTO) converter.getDTO(result.get(0), SystemDTO.class);
+			systemDTO = (DevelopingSystemDTO) converter.getDTO(result.get(0), DevelopingSystemDTO.class);
 			if(abis != null){
 				systemDTO.setProjetos(abisDTO);
 			}
@@ -126,7 +126,7 @@ public class SystemServicesImpl implements SystemServices{
 	}
 
 	@Override
-	public SystemDTO saveSystem(SystemDTO systemDTO) {
+	public DevelopingSystemDTO saveSystem(DevelopingSystemDTO systemDTO) {
 		Converter converter = new ConverterImpl();
 		java.lang.System.out.println("passei aqui antes");
 		try {
@@ -136,19 +136,19 @@ public class SystemServicesImpl implements SystemServices{
 			if (orgSystem != null && !orgSystem.equals("") && systemName != null && !systemName.equals("")){
 				Company organize =  comDAO.retrieveBySecondaryKey(orgSystem);
 				java.lang.System.out.println(organize.getAddress()+"trse");
-				System system = this.getSystemForName(systemName);
+				DevelopingSystem system = this.getSystemForName(systemName);
 				if(organize != null ){
 					java.lang.System.out.println("passei aqui 1");
 					if(system != null ){
 						java.lang.System.out.println("passei aqui 2");
-						system = (System) converter.getEntity(systemDTO, system);
+						system = (DevelopingSystem) converter.getEntity(systemDTO, system);
 						java.lang.System.out.println("Projetos: "  + systemDTO.getProjetos());
 
 						for (Project project : system.getTheProject()) { //Quebrar todas as
 							project.setTheSystem(null);
 						}											  //anteriormente, pra salvar
 						system.setTheProject(null);
-						systemDAO.update(system);
+						DevelopingsystemDAO.update(system);
 						java.lang.System.out.println("tamanho: " + systemDTO.getProjetos().size());
 
 						if(!systemDTO.getProjetos().isEmpty()){
@@ -163,12 +163,12 @@ public class SystemServicesImpl implements SystemServices{
 							system.setTheProject(lisAbi);
 						}
 						system.setTheOrganization(organize);
-						system = systemDAO.update(system);
+						system = DevelopingsystemDAO.update(system);
 						java.lang.System.out.println("passei aqui 4");
 					}else{
 
 						java.lang.System.out.println("passei aqui 5");
-						system = (System) converter.getEntity(systemDTO, System.class);
+						system = (DevelopingSystem) converter.getEntity(systemDTO, DevelopingSystem.class);
 
 						if(systemDTO.getProjetos() != null && !systemDTO.getProjetos().isEmpty() ){
 							Collection<Project> lisAbi = new ArrayList<Project>();
@@ -185,10 +185,10 @@ public class SystemServicesImpl implements SystemServices{
 							system.setTheProject(lisAbi);
 						}
 						system.setTheOrganization(organize);
-						system =  systemDAO.daoSave(system);
+						system =  DevelopingsystemDAO.daoSave(system);
 					}
 					java.lang.System.out.println("passei aqui 6");
-					systemDTO = (SystemDTO) converter.getDTO(system, SystemDTO.class);
+					systemDTO = (DevelopingSystemDTO) converter.getDTO(system, DevelopingSystemDTO.class);
 				}else{
 					java.lang.System.out.println("passei aqui 7");
 					return null;
@@ -207,16 +207,16 @@ public class SystemServicesImpl implements SystemServices{
 	}
 
 	@Override
-	public Boolean removeSystem(SystemDTO systemDTO) {
+	public Boolean removeSystem(DevelopingSystemDTO systemDTO) {
 		String hql;
 		Query query;
 		java.lang.System.out.println("re1"+systemDTO.getName());
-		hql = "select system from "+System.class.getSimpleName()+" as system where system.name = :abiname";
-		query = systemDAO.getPersistenceContext().createQuery(hql);
+		hql = "select system from "+DevelopingSystem.class.getSimpleName()+" as system where system.name = :abiname";
+		query = DevelopingsystemDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("abiname", systemDTO.getName());
-		List<System> result = query.getResultList();
+		List<DevelopingSystem> result = query.getResultList();
 		java.lang.System.out.println("re1");
-		System system = result.get(0);
+		DevelopingSystem system = result.get(0);
 		if(system != null){
 			if(system.getTheProject() != null){
 				Collection<Project> re = system.getTheProject();
@@ -226,7 +226,7 @@ public class SystemServicesImpl implements SystemServices{
 				}
 			}
 			java.lang.System.out.println("re2");
-			systemDAO.daoDelete(system);
+			DevelopingsystemDAO.daoDelete(system);
 			return true;
 		}
 		else{
@@ -242,14 +242,14 @@ public class SystemServicesImpl implements SystemServices{
 		List<String> resultList = null;
 
 		if(domain != null){
-			hql = "select system.name from " + System.class.getSimpleName() + " as system where system.name like :termo and system.ident = :domain";
-			query = systemDAO.getPersistenceContext().createQuery(hql);
+			hql = "select system.name from " + DevelopingSystem.class.getSimpleName() + " as system where system.name like :termo and system.ident = :domain";
+			query = DevelopingsystemDAO.getPersistenceContext().createQuery(hql);
 			query.setParameter("domain", domain);
 			query.setParameter("termo", "%"+ term + "%");
 			resultList = query.getResultList();
 		}else{
-			hql = "select system.name from " +System.class.getSimpleName() + " as system where system.name like :termo";
-			query = systemDAO.getPersistenceContext().createQuery(hql);
+			hql = "select system.name from " +DevelopingSystem.class.getSimpleName() + " as system where system.name like :termo";
+			query = DevelopingsystemDAO.getPersistenceContext().createQuery(hql);
 			query.setParameter("termo", "%"+ term + "%");
 			resultList = query.getResultList();
 		}
@@ -283,8 +283,8 @@ public class SystemServicesImpl implements SystemServices{
 	public SystemsDTO getSystems() {
 		String hql;
 		Query query;
-		hql = "select name from "+System.class.getSimpleName();
-		query = systemDAO.getPersistenceContext().createQuery(hql);
+		hql = "select name from "+DevelopingSystem.class.getSimpleName();
+		query = DevelopingsystemDAO.getPersistenceContext().createQuery(hql);
 
 		List<String> systems = new ArrayList<String>();
 		systems = query.getResultList();
@@ -297,15 +297,15 @@ public class SystemServicesImpl implements SystemServices{
 		systemsDTO.setNomeProjetos(list1);
 
 		hql = "SELECT system FROM " + SYSTEM_CLASSNAME + " AS system";
-		query = systemDAO.getPersistenceContext().createQuery(hql);
-		List<System> result = query.getResultList();
+		query = DevelopingsystemDAO.getPersistenceContext().createQuery(hql);
+		List<DevelopingSystem> result = query.getResultList();
 
 		java.lang.System.out.println("result: " + result);
 		java.lang.System.out.println(converter);
 		java.lang.System.out.println(systemsDTO.getSystemsDTO());
 
 
-		for (System system2 : result) {
+		for (DevelopingSystem system2 : result) {
 			systemsDTO.getSystemsDTO().add(convertSystemToSystemDTO(system2));
 		}
 
@@ -314,16 +314,16 @@ public class SystemServicesImpl implements SystemServices{
 
 
 	@Override
-	public Boolean removeProjectToSystem(SystemDTO systemDTO) {
+	public Boolean removeProjectToSystem(DevelopingSystemDTO systemDTO) {
 		String hql;
 		Query query;
 		java.lang.System.out.println("re1"+systemDTO.getName());
-		hql = "select system from "+System.class.getSimpleName()+" as system where system.name = :abiname";
-		query = systemDAO.getPersistenceContext().createQuery(hql);
+		hql = "select system from "+DevelopingSystem.class.getSimpleName()+" as system where system.name = :abiname";
+		query = DevelopingsystemDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("abiname", systemDTO.getName());
-		List<System> result = query.getResultList();
+		List<DevelopingSystem> result = query.getResultList();
 		java.lang.System.out.println("re1");
-		System system = result.get(0);
+		DevelopingSystem system = result.get(0);
 		if(system != null){
 			if(system.getTheProject() != null){
 				Collection<Project> re = system.getTheProject();
@@ -334,7 +334,7 @@ public class SystemServicesImpl implements SystemServices{
 			}
 			java.lang.System.out.println("re2");
 			system.setTheProject(null);
-			systemDAO.update(system);
+			DevelopingsystemDAO.update(system);
 			return true;
 		}
 		else{

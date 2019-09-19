@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IAbilityTypeDAO;
 import br.ufpa.labes.spm.domain.AbilityType;
 
-public class AbilityTypeDAO extends BaseDAO<AbilityType, String> implements IAbilityTypeDAO {
+public class AbilityTypeDAO extends BaseDAO<AbilityType, Long> implements IAbilityTypeDAO {
 
   protected AbilityTypeDAO(Class<AbilityType> businessClass) {
     super(businessClass);

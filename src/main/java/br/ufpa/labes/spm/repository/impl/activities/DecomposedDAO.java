@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.activities.IDecomposedDAO;
 import br.ufpa.labes.spm.domain.Decomposed;
 
-public class DecomposedDAO extends BaseDAO<Decomposed, String> implements IDecomposedDAO {
+public class DecomposedDAO extends BaseDAO<Decomposed, Long> implements IDecomposedDAO {
 
   protected DecomposedDAO(Class<Decomposed> businessClass) {
     super(businessClass);

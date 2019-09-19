@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModels.ITemplateDAO;
 import br.ufpa.labes.spm.domain.Template;
 
-public class TemplateDAO extends BaseDAO<Template, String> implements ITemplateDAO {
+public class TemplateDAO extends BaseDAO<Template, Long> implements ITemplateDAO {
 
   protected TemplateDAO(Class<Template> businessClass) {
     super(businessClass);

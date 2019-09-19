@@ -5,6 +5,6 @@ import java.util.List;
 import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.domain.Project;
 
-public interface IProjectDAO extends IBaseDAO<Project, String> {
+public interface IProjectDAO extends IBaseDAO<Project, Long> {
   public List<Project> findAll();
 }

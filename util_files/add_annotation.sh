@@ -8,8 +8,18 @@ for c in $classes; do
   super=`echo I"$c"DAO`
   package=`find interfaces/ -iname "$super".java | cut -d'/' -f2`
 
-  # sed -ri "/package/ s/(package .*)/\1\n\nimport br.ufpa.labes.spm.repository.interfaces.$package.$super;\n/" $class_path
-  sed -ri "/public interface/ s/public interface "$c"Repository extends $super, (.*)/public interface "$c"Repository extends \1/" $class_path
+  if [[ package != '' ]]; then
+    package=".$package"
+  fi
+
+  if [[ $c == 'Parameters' ]]; then
+   c='Parameter'
+  elif [[ $c == 'Parameters' ]]; then
+   c='Parameter'
+  fi
+
+  sed -rn "/package/ s/(package .*)/\1\n\nimport br.ufpa.labes.spm.repository.interfaces$package.$super;\n/p" $class_path
+  # sed -rn "/public interface/ s/public interface "$c"Repository extends $super, (.*)/public interface "$c"Repository extends \1/p" $class_path
 done
 
 echo 'Finish adding inheritance...'

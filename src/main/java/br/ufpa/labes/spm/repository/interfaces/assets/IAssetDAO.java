@@ -7,7 +7,7 @@ import br.ufpa.labes.spm.domain.Asset;
 import br.ufpa.labes.spm.domain.AssetRelationship;
 // import org.qrconsult.spm.vo.AssetCatalog;
 
-public interface IAssetDAO extends IBaseDAO<Asset, String> {
+public interface IAssetDAO extends IBaseDAO<Asset, Long> {
 
   public List<AssetRelationship> retrieveRelatedAssetsTo(String assetUid);
 

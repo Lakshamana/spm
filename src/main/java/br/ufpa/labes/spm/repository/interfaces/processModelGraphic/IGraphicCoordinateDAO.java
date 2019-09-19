@@ -6,7 +6,7 @@ import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
 
-public interface IGraphicCoordinateDAO extends IBaseDAO<GraphicCoordinate, String> {
+public interface IGraphicCoordinateDAO extends IBaseDAO<GraphicCoordinate, Long> {
 
   public Collection<GraphicCoordinate> getProcessCoordinates(String processId) throws DAOException;
 }
