@@ -17,7 +17,7 @@ public class ConnectionDAO extends BaseDAO<Connection, String> implements IConne
   @Override
   public Connection save(Connection conn) {
 
-    super.save(conn);
+    super.daoSave(conn);
     String ident = conn.getIdent() + "." + conn.getId();
     conn.setIdent(ident);
     this.update(conn);
