@@ -1,5 +1,6 @@
 package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Lob;
 
@@ -21,6 +22,18 @@ public class RoleDTO implements Serializable {
     private Long subordinateId;
 
     private Long theRoleTypeId;
+
+    @IgnoreMapping
+    private String superType;
+
+    @IgnoreMapping
+    private List<AbilityDTO> abilityToRole;
+
+    @IgnoreMapping
+    private Integer nivelAbility;
+
+    @IgnoreMapping
+    private List<AgentDTO> agentToRole;
 
     public Long getId() {
         return id;
@@ -102,4 +115,36 @@ public class RoleDTO implements Serializable {
             ", theRoleType=" + getTheRoleTypeId() +
             "}";
     }
+
+  public String getSuperType() {
+    return superType;
+  }
+
+  public void setSuperType(String superType) {
+    this.superType = superType;
+  }
+
+  public List<AbilityDTO> getAbilityToRole() {
+    return abilityToRole;
+  }
+
+  public void setAbilityToRole(List<AbilityDTO> abilityToRole) {
+    this.abilityToRole = abilityToRole;
+  }
+
+  public Integer getNivelAbility() {
+    return nivelAbility;
+  }
+
+  public void setNivelAbility(Integer nivelAbility) {
+    this.nivelAbility = nivelAbility;
+  }
+
+  public List<AgentDTO> getAgentToRole() {
+    return agentToRole;
+  }
+
+  public void setAgentToRole(List<AgentDTO> agentToRole) {
+    this.agentToRole = agentToRole;
+  }
 }

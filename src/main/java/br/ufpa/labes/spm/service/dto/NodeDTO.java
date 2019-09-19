@@ -1,5 +1,8 @@
 package br.ufpa.labes.spm.service.dto;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -15,8 +18,21 @@ public class NodeDTO implements Serializable {
 
     private String serviceFileId;
 
-
     private Long theNodeId;
+
+    @IgnoreMapping
+    private StructureDTO theStructureDTO;
+
+    @IgnoreMapping
+      private List<NodeDTO> children;
+
+
+      public NodeDTO() {
+        super();
+        this.children = new ArrayList<NodeDTO>();
+      this.setIdent("");
+
+    }
 
     public Long getId() {
         return id;
@@ -89,4 +105,20 @@ public class NodeDTO implements Serializable {
             ", theNode=" + getTheNodeId() +
             "}";
     }
+
+  public StructureDTO getTheStructureDTO() {
+    return theStructureDTO;
+  }
+
+  public void setTheStructureDTO(StructureDTO theStructureDTO) {
+    this.theStructureDTO = theStructureDTO;
+  }
+
+  public List<NodeDTO> getChildren() {
+    return children;
+  }
+
+  public void setChildren(List<NodeDTO> children) {
+    this.children = children;
+  }
 }

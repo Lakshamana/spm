@@ -437,7 +437,7 @@ public class CriticalPathMethod {
 					    succ.addAll(this.getSuccessors(multi.getTheMultipleCon()));
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchConCondToActivity) iterAct.next();
+					BranchConCondToActivity act = (BranchConCondToActivity) iterAct.next();
 					if(act.getTheActivity() != null)
 					    succ.add(act.getTheActivity());
 				}

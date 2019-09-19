@@ -1,5 +1,9 @@
 package br.ufpa.labes.spm.service.dto;
+
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
+
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import br.ufpa.labes.spm.domain.enumeration.ProcessStatus;
 
@@ -14,12 +18,26 @@ public class ProcessDTO implements Serializable {
 
     private ProcessStatus pStatus;
 
+    @IgnoreMapping
+    private List<String> tasks;
+
+    @IgnoreMapping
+    private List<String> tasksIdents;
+    @IgnoreMapping
+    private ActivitysDTO activitys;
 
     private Long theProcessModelId;
 
     private Long theActivityTypeId;
 
     private Long theEmailConfigurationId;
+
+    public ProcessDTO() {}
+
+    public ProcessDTO(String ident, String pState, List<String> tasks) {
+      this.ident = ident;
+      this.pStatus = ProcessStatus.valueOf(pState);
+    }
 
     public Long getId() {
         return id;
@@ -101,4 +119,28 @@ public class ProcessDTO implements Serializable {
             ", theEmailConfiguration=" + getTheEmailConfigurationId() +
             "}";
     }
+
+  public List<String> getTasks() {
+    return tasks;
+  }
+
+  public void setTasks(List<String> tasks) {
+    this.tasks = tasks;
+  }
+
+  public List<String> getTasksIdents() {
+    return tasksIdents;
+  }
+
+  public void setTasksIdents(List<String> tasksIdents) {
+    this.tasksIdents = tasksIdents;
+  }
+
+  public ActivitysDTO getActivitys() {
+    return activitys;
+  }
+
+  public void setActivitys(ActivitysDTO activitys) {
+    this.activitys = activitys;
+  }
 }

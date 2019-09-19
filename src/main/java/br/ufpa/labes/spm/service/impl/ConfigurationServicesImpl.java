@@ -28,7 +28,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 	private static final String CONFIG_CLASSNAME = Configuration.class.getSimpleName();
 	private Query query;
 	public boolean perfilSave(ConfigurationDTO confi,AgentDTO agente) {
-		System.out.println("Chegou no perfil"+confi.getIdioma()+"agente"+agente.getOid());
+		System.out.println("Chegou no perfil"+confi.getIdioma()+"agente"+agente.getId());
 
 		Configuration configuration = new Configuration();
 		configuration = convertConfigurationDTOToConfiguration(confi);

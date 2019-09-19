@@ -17,8 +17,12 @@ public class TypeDTO implements Serializable {
 
     private Boolean userDefined;
 
-
-    private Long superTypeId;
+    @IgnoreMapping
+    private String superTypeIdent;
+    @IgnoreMapping
+    private Integer subtypesNumber;
+    @IgnoreMapping
+    private String rootType;
 
     public Long getId() {
         return id;
@@ -52,14 +56,6 @@ public class TypeDTO implements Serializable {
         this.userDefined = userDefined;
     }
 
-    public Long getSuperTypeId() {
-        return superTypeId;
-    }
-
-    public void setSuperTypeId(Long typeId) {
-        this.superTypeId = typeId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -91,4 +87,32 @@ public class TypeDTO implements Serializable {
             ", superType=" + getSuperTypeId() +
             "}";
     }
+
+  public Boolean getUserDefined() {
+    return userDefined;
+  }
+
+  public String getSuperTypeIdent() {
+    return superTypeIdent;
+  }
+
+  public void setSuperTypeIdent(String superTypeIdent) {
+    this.superTypeIdent = superTypeIdent;
+  }
+
+  public Integer getSubtypesNumber() {
+    return subtypesNumber;
+  }
+
+  public void setSubtypesNumber(Integer subtypesNumber) {
+    this.subtypesNumber = subtypesNumber;
+  }
+
+  public String getRootType() {
+    return rootType;
+  }
+
+  public void setRootType(String rootType) {
+    this.rootType = rootType;
+  }
 }

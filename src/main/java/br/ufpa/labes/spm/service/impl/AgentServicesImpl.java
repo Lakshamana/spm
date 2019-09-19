@@ -27,7 +27,7 @@ import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskAgendaDAO;
 import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IRoleTypeDAO;
 import br.ufpa.labes.spm.service.dto.TaskDTO;
-import br.ufpa.labes.spm.service.dto.Time;
+import br.ufpa.labes.spm.service.dto.dashboard.Time;
 import br.ufpa.labes.spm.service.dto.AbilityDTO;
 import br.ufpa.labes.spm.service.dto.AgentAffinityAgentDTO;
 import br.ufpa.labes.spm.service.dto.AgentDTO;
@@ -221,7 +221,7 @@ public class AgentServicesImpl implements AgentServices {
 			if (agent != null) {
 				agentDTO.setPassword(Md5.getMd5Digest(agentDTO.getPassword()));
 				System.out.println("nova senha: "+agentDTO.getPassword());
-				agent.setPassword(agentDTO.getPassword());
+				agent.setPasswordHash(Md5.getMd5Digest(agentDTO.getPassword()));
 				updateAgent(agent, agentDTO);
 				agentDAO.update(agent);
 
@@ -256,11 +256,11 @@ public class AgentServicesImpl implements AgentServices {
 	}
 
 	private void updateAgent(Agent agent, AgentDTO agentDTO) {
-		agent.setPassword(agentDTO.getPassword());
+		agent.setPasswordHash(Md5.getMd5Digest(agentDTO.getPassword()));
 		agent.setArtifactMngPassword(agentDTO.getArtifactMngPassword());
-		agent.setEMail(agentDTO.getEMail());
+		agent.setEmail(agentDTO.getEmail());
 		agent.setCostHour(agentDTO.getCostHour());
-		agent.setIsActive(agentDTO.isActive());
+		agent.setActive(agentDTO.isActive());
 		agent.setDescription(agentDTO.getDescription());
 		agent.setUpload(agentDTO.getUpload());
 	}

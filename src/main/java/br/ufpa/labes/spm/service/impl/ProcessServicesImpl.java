@@ -107,7 +107,7 @@ public class ProcessServicesImpl implements ProcessServices {
 	}
 
 	private boolean isProcessFinished(Process process) {
-		return process.getPState().equals(Process.FINISHED);
+		return process.getpStatus().name().equals(Process.FINISHED);
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class ProcessServicesImpl implements ProcessServices {
 		Collection<Activity> result = null;
 		if(process != null && process.getTheProcessModel() != null) {
 			ProcessModel model = process.getTheProcessModel();
-			result = model.getTheActivity();
+			result = model.getTheActivities();
 		} else {
 			result = new ArrayList<Activity>();
 		}
@@ -160,7 +160,7 @@ public class ProcessServicesImpl implements ProcessServices {
 		List<ActivityDTO> activities = new ArrayList<ActivityDTO>();
 		decomposed.setName(activity.getName());
 		decomposed.setIdent(activity.getIdent());
-		for (Activity a : activity.getTheReferedProcessModel().getTheActivity()) {
+		for (Activity a : activity.getTheReferedProcessModel().getTheActivities()) {
 			if(a instanceof Decomposed) {
 				Decomposed dd = (Decomposed) a;
 				DecomposedDTO decomposedDTO = this.convertDecomposedToDecomposedDTO(dd);

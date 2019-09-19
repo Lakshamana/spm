@@ -9,6 +9,7 @@ public class ProcessAgendaDTO implements Serializable {
 
     private Long id;
 
+    private tasks;
 
     private Long theTaskAgendaId;
 

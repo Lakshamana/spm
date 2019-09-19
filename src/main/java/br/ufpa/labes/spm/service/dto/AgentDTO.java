@@ -1,4 +1,5 @@
 package br.ufpa.labes.spm.service.dto;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,48 +10,57 @@ import java.util.Objects;
  */
 public class AgentDTO implements Serializable {
 
-    private Long id;
+  private Long id;
 
-    private String ident;
+  private String ident;
 
-    private String name;
+  private String name;
 
-    private String email;
+  private String email;
 
-    private Float costHour;
+  private Float costHour;
 
-    private String passwordHash;
+  private String passwordHash;
 
-    private Integer tipoUser;
+  private Integer tipoUser;
 
-    private Boolean active;
+  private Boolean active;
 
-    private Boolean online;
+  private Boolean online;
 
-    private String photoURL;
+  private String photoURL;
 
-    private String upload;
+  private String upload;
 
+  private String password;
 
-    private Long theTaskAgendaId;
+  private Long theTaskAgendaId;
 
-    private Long configurationId;
+  private Long configurationId;
 
-    private Long theResourceEventId;
+  private Long theResourceEventId;
 
-    private Set<ProcessDTO> theProcesses = new HashSet<>();
+  private Set<ProcessDTO> theProcesses = new HashSet<>();
 
-    private Set<WorkGroupDTO> theWorkGroups = new HashSet<>();
+  private Set<WorkGroupDTO> theWorkGroups = new HashSet<>();
 
-    private Set<CompanyUnitDTO> theOrgUnits = new HashSet<>();
+  private Set<CompanyUnitDTO> theOrgUnits = new HashSet<>();
 
-    private Long theEmailConfigurationId;
+  private Long theEmailConfigurationId;
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public void setId(Long id) {
         this.id = id;
     }
 
