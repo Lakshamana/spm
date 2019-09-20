@@ -10,7 +10,7 @@ import javax.persistence.TypedQuery;
 
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
-import org.qrconsult.spm.converter.exception.ImplementationException;
+import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.resources.IResourceDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IResourceTypeDAO;
 import br.ufpa.labes.spm.service.dto.ResourceDTO;
@@ -202,7 +202,7 @@ public class ResourceServicesImpl implements ResourceServices{
 				resourceDTO.setBelongsTo(resource.getBelongsTo().getName());
 			if (resource.getTheResourceType() != null)
 				resourceDTO.setTheResourceType(resource.getTheResourceType().getIdent());
-			for (Resource require : resource.getRequires()) {
+			for (Resource require : resource.getTheRequiredResources()) {
 				resourceDTO.getRequires().add(require.getName());
 			}
 		} catch (ImplementationException e) {

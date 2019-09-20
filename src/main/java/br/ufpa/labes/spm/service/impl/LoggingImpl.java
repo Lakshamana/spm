@@ -1,5 +1,6 @@
 package br.ufpa.labes.spm.service.impl;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -10,7 +11,7 @@ import br.ufpa.labes.spm.domain.BranchCon;
 import br.ufpa.labes.spm.domain.JoinCon;
 import br.ufpa.labes.spm.domain.AgendaEvent;
 import br.ufpa.labes.spm.domain.GlobalActivityEvent;
-import br.ufpa.labes.spm.domain.Log;
+import br.ufpa.labes.spm.domain.SpmLog;
 import br.ufpa.labes.spm.domain.ModelingActivityEvent;
 import br.ufpa.labes.spm.domain.ProcessEvent;
 import br.ufpa.labes.spm.domain.ProcessModelEvent;
@@ -41,16 +42,16 @@ public class LoggingImpl implements Logging {
 
 		ModelingActivityEvent event = new ModelingActivityEvent();
 		event.setTheActivity (activity);
-		event.setWhy (why);
-		event.setWhen (new Date());
+		event.setWhy(why);
+		event.setWhen(LocalDate.now());
 		event.setIsCreatedByApsee (new Boolean (true));
 		event.getTheCatalogEvents().setDescription (what);
 		event.setTheEventType(type);
-		type.getTheEvent().add (event);
-		Log log = this.getTheProcess(activity.getTheProcessModel()).getTheLog();
+		type.getTheEventss().add(event);
+		SpmLog log = this.getTheProcess(activity.getTheProcessModel()).getTheLog();
 		event.setTheLog(log);
-		log.getTheEvent().add(event);
-		activity.getTheModelingActivityEvent().add (event);
+		log.getTheEvents().add(event);
+		activity.getTheModelingActivityEvents().add(event);
 
 		EventNotification.getInstance().notifyEvent( event );
 	}
@@ -65,17 +66,17 @@ public class LoggingImpl implements Logging {
 		type.setDescription("This is an enactment event. Automatically generated.");
 
 		GlobalActivityEvent event = new GlobalActivityEvent();
-		Log log = this.getTheProcess(activity.getTheProcessModel()).getTheLog();
+		SpmLog log = this.getTheProcess(activity.getTheProcessModel()).getTheLog();
 		event.setTheLog(log);
-		log.getTheEvent().add(event);
+		log.getTheEvents().add(event);
 		event.setThePlain(activity);
 		event.setWhy (why);
-		event.setWhen (new Date());
+		event.setWhen (LocalDate.now());
 		event.setIsCreatedByApsee (new Boolean (true));
 		event.getTheCatalogEvents().setDescription (what);
 		event.setTheEventType(type);
-		type.getTheEvent().add (event);
-		activity.getTheGlobalActivityEvent().add (event);
+		type.getTheEvents().add (event);
+		activity.getTheGlobalActivityEvents().add (event);
 
 		EventNotification.getInstance().notifyEvent( event );
 	}
@@ -92,13 +93,13 @@ public class LoggingImpl implements Logging {
 		ProcessEvent event = new ProcessEvent();
 		event.setTheProcess(process);
 		event.setTheLog(process.getTheLog());
-		process.getTheLog().getTheEvent().add(event);
+		process.getTheLog().getTheEvents().add(event);
 		event.setWhy (why);
-		event.setWhen (new Date());
+		event.setWhen (LocalDate.now());
 		event.setIsCreatedByApsee (new Boolean (true));
 		event.getTheCatalogEvents().setDescription (what);
 		event.setTheEventType(type);
-		type.getTheEvent().add (event);
+		type.getTheEvents().add (event);
 		process.getTheProcessEvent().add (event);
 
 		EventNotification.getInstance().notifyEvent( event );
@@ -108,21 +109,21 @@ public class LoggingImpl implements Logging {
 	 * @see org.qrconsult.spm.services.impl.Logging#registerBranchEvent(org.qrconsult.spm.model.connections.BranchCon, java.lang.String)
 	 */
 	@Override
-	public void registerBranchEvent(Branch branchCon, String why){
+	public void registerBranchEvent(BranchCon branchCon, String why){
 /*		EventType type = new EventType();
 		type.setIdent("Enactment Event" + Math.random()*10+ System.currentTimeMillis());
 		type.setDescription("This is an enactment event. Automatically generated.");
 
 		ConnectionEvent event = new ConnectionEvent();
-		Log log = this.getTheProcess(branchCon.getTheProcessModel()).getTheLog();
+		SpmLog log = this.getTheProcess(branchCon.getTheProcessModel()).getTheLog();
 		event.setTheLog(log);
-		log.getTheEvent().add(event);
+		log.getTheEvents().add(event);
 		event.setWhy (why);
-		event.setWhen (new Date());
+		event.setWhen (LocalDate.now());
 		event.setIsCreatedByApsee (new Boolean (true));
 		event.getTheCatalogEvents().setDescription ("Fired");
 		event.setTheEventType(type);
-		type.getTheEvent().add(event);
+		type.getTheEvents().add(event);
 		branchCon.getTheProcessModel().getProcessModelEvent.add (event);
 */
 	}
@@ -131,21 +132,21 @@ public class LoggingImpl implements Logging {
 	 * @see org.qrconsult.spm.services.impl.Logging#registerJoinEvent(org.qrconsult.spm.model.connections.JoinCon, java.lang.String)
 	 */
 	@Override
-	public void registerJoinEvent(Join joinCon, String why){
+	public void registerJoinEvent(JoinCon joinCon, String why){
 /*		EventType type = new EventType();
 		type.setIdent("Enactment Event" + Math.random()*10+ System.currentTimeMillis());
 		type.setDescription("This is an enactment event. Automatically generated.");
 
 		ConnectionEvent event = new ConnectionEvent();
-		Log log = this.getTheProcess(joinCon.getTheProcessModel()).getTheLog();
+		SpmLog log = this.getTheProcess(joinCon.getTheProcessModel()).getTheLog();
 		event.setTheLog(log);
-		log.getTheEvent().add(event);
+		log.getTheEvents().add(event);
 		event.setWhy (why);
-		event.setWhen (new Date());
+		event.setWhen (LocalDate.now());
 		event.setIsCreatedByApsee (new Boolean (true));
 		event.getTheCatalogEvents().setDescription ("Fired");
 		event.setTheEventType(type);
-		type.getTheEvent().add(event);
+		type.getTheEvents().add(event);
 		joinCon.theProcessModelEvent.add (event);
 */
 	}
@@ -161,15 +162,15 @@ public class LoggingImpl implements Logging {
 
 		ProcessModelEvent event = new ProcessModelEvent();
 		event.setTheProcessModel(model);
-  		Log log = this.getTheProcess(model).getTheLog();
+  		SpmLog log = this.getTheProcess(model).getTheLog();
        	event.setTheLog(log);
-       	log.getTheEvent().add(event);
+       	log.getTheEvents().add(event);
        	event.setWhy (why);
-       	event.setWhen (new Date());
+       	event.setWhen (LocalDate.now());
        	event.setIsCreatedByApsee (new Boolean (true));
        	event.getTheCatalogEvents().setDescription (what);
        	event.setTheEventType(type);
-       	type.getTheEvent().add(event);
+       	type.getTheEvents().add(event);
        	model.getTheProcessModelEvent().add (event);
 
        	EventNotification.getInstance().notifyEvent( event );
@@ -188,17 +189,17 @@ public class LoggingImpl implements Logging {
 		event.setTheResource(resource);
 		if(actNorm != null){
 		    event.setTheNormal(actNorm);
-			Log log = this.getTheProcess(actNorm.getTheProcessModel()).getTheLog();
+			SpmLog log = this.getTheProcess(actNorm.getTheProcessModel()).getTheLog();
 			event.setTheLog(log);
-			log.getTheEvent().add(event);
+			log.getTheEvents().add(event);
 
 		}
 		event.setWhy (why);
-		event.setWhen (new Date());
+		event.setWhen (LocalDate.now());
 		event.setIsCreatedByApsee (new Boolean (false));
 		event.getTheCatalogEvents().setDescription (what);
 		event.setTheEventType(type);
-		type.getTheEvent().add (event);
+		type.getTheEvents().add (event);
 		resource.getTheResourceEvent().add (event);
 
 		EventNotification.getInstance().notifyEvent( event );
@@ -215,16 +216,16 @@ public class LoggingImpl implements Logging {
 
 		AgendaEvent agEvent = new AgendaEvent();
 		agEvent.setIsCreatedByApsee(new Boolean(false));
-		Log log = this.getTheProcess(task.getTheNormal().getTheProcessModel()).getTheLog();
+		SpmLog log = this.getTheProcess(task.getTheNormal().getTheProcessModel()).getTheLog();
 		agEvent.setTheLog(log);
-		log.getTheEvent().add(agEvent);
+		log.getTheEvents().add(agEvent);
 		agEvent.setWhen(new Date());
 		agEvent.setWhy(why);
 		agEvent.getTheCatalogEvents().setDescription(what);
 		agEvent.getTheCatalogEvents().setTheAgendaEvent(agEvent);
 		agEvent.setTheTask(task);
 		agEvent.setTheEventType(type);
-		type.getTheEvent().add(agEvent);
+		type.getTheEvents().add(agEvent);
 		task.getTheAgendaEvent().add(agEvent);
 
 		EventNotification.getInstance().notifyEvent( agEvent );

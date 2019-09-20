@@ -7,7 +7,7 @@ import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
-import org.qrconsult.spm.converter.exception.ImplementationException;
+import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IWorkGroupDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IWorkGroupTypeDAO;
@@ -77,7 +77,7 @@ public class GroupServicesImpl implements GroupServices {
 	}
 
 	@Override
-	public GroupDTO saveGroup(GroupDTO groupDTO) {
+	public WorkGroupDTO saveGroup(WorkGroupDTO groupDTO) {
 		WorkGroup group = null;
 		WorkGroup superGroup = this.retrieveGroup(groupDTO.getSuperGroup());
 		GroupType theGroupType = (GroupType) typeDAO.retrieveBySecondaryKey(groupDTO.getTheGroupType());
@@ -111,10 +111,10 @@ public class GroupServicesImpl implements GroupServices {
 	public Boolean removeGroup(String groupName) {
 		WorkGroup group = this.retrieveGroup(groupName);
 		if(group != null) {
-			for(Agent agent : group.getTheAgent()) {
-				agent.getTheGroup().remove(group);
+			for(Agent agent : group.getTheAgentss()) {
+				agent.getTheWorkGroups().remove(group);
 			}
-			group.getTheAgent().clear();
+			group.getTheAgentss().clear();
 
 			groupDAO.update(group);
 
@@ -125,24 +125,24 @@ public class GroupServicesImpl implements GroupServices {
 		return false;
 	}
 
-	private void updateDependencies(GroupDTO groupDTO, WorkGroup group) {
+	private void updateDependencies(WorkGroupDTO groupDTO, WorkGroup group) {
 		if(!groupDTO.getAgents().isEmpty()) {
 			for (String agentName : groupDTO.getAgents()) {
 				Agent agent = getAgentFromDatabase(agentName);
 
-				if(!agent.getTheGroup().contains(group) && !group.getTheAgent().contains(agent)) {
-					agent.getTheGroup().add(group);
-					group.getTheAgent().add(agent);
+				if(!agent.getTheWorkGroups().contains(group) && !group.getTheAgents().contains(agent)) {
+					agent.getTheWorkGroups().add(group);
+					group.getTheAgents().add(agent);
 				}
 			}
 		}
 	}
 
 	@Override
-	public GroupDTO getGroup(String groupIdent) {
+	public WorkGroupDTO getGroup(String groupIdent) {
 //		WorkGroup result = this.retrieveGroup(groupIdent);
 		WorkGroup result = groupDAO.retrieveBySecondaryKey(groupIdent);
-		GroupDTO groupDTO = null;
+		WorkGroupDTO groupDTO = null;
 
 		if(result != null) {
 			groupDTO = this.convertGroupToGroupDTO(result);
@@ -153,7 +153,7 @@ public class GroupServicesImpl implements GroupServices {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public GroupsDTO getGroups(String searchTerm, String typeFilter, Boolean ativoFilter) {
+	public WorksGroupsDTO getWorkGroups(String searchTerm, String typeFilter, Boolean ativoFilter) {
 		String activeFilter = (ativoFilter == null) ? "" : " and group.isActive is :orgFilter" ;
 
 		String hql;
@@ -174,7 +174,7 @@ public class GroupServicesImpl implements GroupServices {
 		}
 
 		List<WorkGroup> resultado = query.getResultList();
-		GroupsDTO groupsDTO = new GroupsDTO(new ArrayList<GroupDTO>());
+		GroupsDTO groupsDTO = new GroupsDTO(new ArrayList<WorkGroupDTO>());
 		groupsDTO = this.convertGroupsToGroupsDTO(resultado);
 
 		return groupsDTO;
@@ -226,8 +226,8 @@ public class GroupServicesImpl implements GroupServices {
 		System.out.println("group: " + group + ", agent: " + agent);
 
 		if((group != null) && (agent != null)) {
-			group.getTheAgent().remove(agent);
-			agent.getTheGroup().remove(group);
+			group.getTheAgents().remove(agent);
+			agent.getTheWorkGroups().remove(group);
 
 			this.agenteDAO.update(agent);
 			this.groupDAO.update(group);
@@ -262,18 +262,18 @@ public class GroupServicesImpl implements GroupServices {
 		return result;
 	}
 
-	private GroupDTO convertGroupToGroupDTO(WorkGroup group) {
+	private WorkGroupDTO convertGroupToGroupDTO(WorkGroup group) {
 		try {
 
-			GroupDTO groupDTO = new GroupDTO();
-			groupDTO = (GroupDTO) this.converter.getDTO(group, GroupDTO.class);
+			WorkGroupDTO groupDTO = new WorkGroupDTO();
+			groupDTO = (WorkGroupDTO) this.converter.getDTO(group, WorkGroupDTO.class);
 			String superGroup = (group.getSuperGroup() != null) ? group.getSuperGroup().getName() : "";
 			String theGroupType = (group.getTheGroupType() != null) ? group.getTheGroupType().getIdent() : "";
 			groupDTO.setSuperGroup(superGroup);
 			groupDTO.setTheGroupType(theGroupType);
 
 			groupDTO.setAgents(new ArrayList<String>());
-			for (Agent agent : group.getTheAgent()) {
+			for (Agent agent : group.getTheAgents()) {
 				groupDTO.getAgents().add(agent.getName());
 			}
 
@@ -286,7 +286,7 @@ public class GroupServicesImpl implements GroupServices {
 		return null;
 	}
 
-	private WorkGroup convertGroupDTOToGroup(GroupDTO groupDTO) {
+	private WorkGroup convertGroupDTOToGroup(WorkGroupDTO groupDTO) {
 		try {
 
 			WorkGroup group = new WorkGroup();
@@ -301,20 +301,20 @@ public class GroupServicesImpl implements GroupServices {
 	}
 
 	private GroupsDTO convertGroupsToGroupsDTO(List<WorkGroup> groups) {
-		GroupsDTO groupsDTO = new GroupsDTO(new ArrayList<GroupDTO>());
+		GroupsDTO groupsDTO = new GroupsDTO(new ArrayList<WorkGroupDTO>());
 		for (WorkGroup group : groups) {
-			GroupDTO groupDTO = this.convertGroupToGroupDTO(group);
+			WorkGroupDTO groupDTO = this.convertGroupToGroupDTO(group);
 			groupsDTO.addGroupDTO(groupDTO);
 		}
 
 		return groupsDTO;
 	}
 
-	private List<String> getGroupSubordinados(GroupsDTO groupsDTO, GroupDTO groupDTO) {
+	private List<String> getGroupSubordinados(GroupsDTO groupsDTO, WorkGroupDTO groupDTO) {
 		List<String> subordinados = new ArrayList<String>();
 
 		for (int j = 0; j < groupsDTO.size(); j++) {
-			GroupDTO subordinadoGroupDTO = groupsDTO.getGroupDTO(j);
+			WorkGroupDTO subordinadoGroupDTO = groupsDTO.getGroupDTO(j);
 			boolean isSubordinadoAoGrupo = (subordinadoGroupDTO.getSuperGroup() != null)
 					? subordinadoGroupDTO.getSuperGroup().equals(groupDTO.getName()) : false;
 			System.out.println(groupDTO.getName() + " <----> " + groupDTO.getSuperGroup() + " ==> " + isSubordinadoAoGrupo);

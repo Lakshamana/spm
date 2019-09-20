@@ -92,7 +92,7 @@ import br.ufpa.labes.spm.domain.AgendaEvent;
 import br.ufpa.labes.spm.domain.CatalogEvents;
 import br.ufpa.labes.spm.domain.ConnectionEvent;
 import br.ufpa.labes.spm.domain.GlobalActivityEvent;
-import br.ufpa.labes.spm.domain.Log;
+import br.ufpa.labes.spm.domain.SpmLog;
 import br.ufpa.labes.spm.domain.ModelingActivityEvent;
 import br.ufpa.labes.spm.domain.ProcessEvent;
 import br.ufpa.labes.spm.domain.ProcessModelEvent;
@@ -395,15 +395,15 @@ public class ProjectServicesImpl implements ProjectServices {
 				processXML.append(getArtifactConTag(artifactCon));
 			}
 
-			Collection<BranchAND> fromBranch = activity.getFromBranchANDCon();
-			for (Iterator<BranchAND> iterator2 = fromBranchCon.iterator(); iterator2.hasNext();) {
-				BranchAND branchAND = (BranchANDCon) iterator2.next();
+			Collection<BranchANDCon> fromBranch = activity.getFromBranchANDCon();
+			for (Iterator<BranchANDCon> iterator2 = fromBranchCon.iterator(); iterator2.hasNext();) {
+				BranchANDCon branchAND = (BranchANDCon) iterator2.next();
 				processXML.append(getBranchTag(branchANDCon));
 			}
 
-			Collection<Join> fromJoin = activity.getFromJoinCon();
-			for (Iterator<Join> iterator2 = fromJoinCon.iterator(); iterator2.hasNext();) {
-				Join join = (JoinCon) iterator2.next();
+			Collection<JoinCon> fromJoin = activity.getFromJoinCon();
+			for (Iterator<JoinCon> iterator2 = fromJoinCon.iterator(); iterator2.hasNext();) {
+				JoinCon join = (JoinCon) iterator2.next();
 				processXML.append(getJoinTag(joinCon));
 			}
 
@@ -422,15 +422,15 @@ public class ProjectServicesImpl implements ProjectServices {
 				processXML.append(getArtifactConTag(artifactCon2));
 			}
 
-			Collection<Branch> toBranch = activity.getToBranchCon();
-			for (Iterator<Branch> iterator2 = toBranchCon.iterator(); iterator2.hasNext();) {
-				Branch branch = (BranchCon) iterator2.next();
-				processXML.append(getBranchTag((BranchAND)branchCon));
+			Collection<BranchCon> toBranch = activity.getToBranchCon();
+			for (Iterator<BranchCon> iterator2 = toBranchCon.iterator(); iterator2.hasNext();) {
+				BranchCon branch = (BranchCon) iterator2.next();
+				processXML.append(getBranchTag((BranchANDCon)branchCon));
 			}
 
-			Collection<Join> toJoin = activity.getToJoinCon();
-			for (Iterator<Join> iterator2 = toJoinCon.iterator(); iterator2.hasNext();) {
-				Join join = (JoinCon) iterator2.next();
+			Collection<JoinCon> toJoin = activity.getToJoinCon();
+			for (Iterator<JoinCon> iterator2 = toJoinCon.iterator(); iterator2.hasNext();) {
+				JoinCon join = (JoinCon) iterator2.next();
 				processXML.append(getJoinTag(joinCon));
 			}
 
@@ -468,7 +468,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		return seqXML.toString();
 	}
 
-	private String getJoinTag(Join joinCon) throws DAOException{
+	private String getJoinTag(JoinCon joinCon) throws DAOException{
 		StringBuffer joinConXML = new StringBuffer();
 		joinXML.append("<JOIN ID=\"" + joinCon.getId() + "\">\n");
 		joinXML.append("<DEPENDENCY>" + joinCon.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
@@ -510,7 +510,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		return joinConXML.toString();
 	}
 
-	private String getBranchTag(BranchAND branchCon) throws DAOException{
+	private String getBranchTag(BranchANDCon branchCon) throws DAOException{
 		StringBuffer branchConXML = new StringBuffer();
 		branchXML.append("<BRANCH ID=\"" + branchCon.getId() + "\">\n");
 		branchXML.append("<DEPENDENCY>" + branchCon.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
@@ -1198,7 +1198,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			projectDTO = (ProjectDTO) converter.getDTO(project, ProjectDTO.class);
 			if(project.getProcessRefered() != null) {
 				projectDTO.setProcessRefered(project.getProcessRefered().getIdent());
-				projectDTO.setpState(project.getProcessRefered().getPState());
+				projectDTO.setpState(project.getProcessRefered().getpStatus().name());
 
 				float time = processEstimationDAO.getHoursEstimationForProject(project.getIdent());
 //				int hours = (int) time;
@@ -1227,7 +1227,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	private ProcessDTO convertProcessToProcessDTO(Process process) {
 		ProcessDTO processDTO = new ProcessDTO();
 		processDTO.setIdent(process.getIdent());
-		processDTO.setPState(process.getPState());
+		processDTO.setPState(process.getpStatus().name());
 
 		if(process.getTheProcessModel() != null) {
 			process.getTheProcessModel().getTheActivity();
@@ -1281,7 +1281,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	/*
 	 * Process, ProcessModel, Activity (and subclasses), EnactionDescription, Dependency,
 	 * RequiredPeople (and subclasses), RequiredResource, Reservation, InvolvedArtifacts,
-	 * Connection (and subclasses), Log, Event (and subclasses), CatalogEvent,
+	 * Connection (and subclasses), SpmLog, Event (and subclasses), CatalogEvent,
 	 * Parameter (and subclasses), Metric, Estimation, ProcessAgenda, Task
 	 */
 	private Hashtable<String, Object> processComponents; // Process objects that must be in the resulting XML file <CanonicalClassName_Oid, Object Reference>
@@ -1965,8 +1965,8 @@ public class ProjectServicesImpl implements ProjectServices {
 			}
 		}
 
-		// Setting Log into the hash table
-		String logKey = processComponents.getChild(Log.class.getSimpleName()).getAttributeValue("KEY");
+		// Setting SpmLog into the hash table
+		String logKey = processComponents.getChild(SpmLog.class.getSimpleName()).getAttributeValue("KEY");
 		this.processComponents.put(logKey, process.getTheLog());
 
 		this.processComponents.put(processElm.getAttributeValue("KEY"), process);
@@ -2307,7 +2307,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				this.processComponents.put(key, feedback);
 			}
 			else if(connection instanceof BranchANDCon){
-				BranchAND branchAND = (BranchANDCon) connection;
+				BranchANDCon branchAND = (BranchANDCon) connection;
 
 				Element fromActivityElm = connectionElm.getChild("FromActivity");
 				if(fromActivityElm != null){
@@ -2346,11 +2346,11 @@ public class ProjectServicesImpl implements ProjectServices {
 					}
 				}
 
-				branchAND = (BranchAND) this.persistObject(branchANDCon, null);
+				branchAND = (BranchANDCon) this.persistObject(branchANDCon, null);
 				this.processComponents.put(key, branchANDCon);
 			}
 			else if(connection instanceof BranchConCond){
-				BranchCond branchCond = (BranchConCond) connection;
+				BranchConCond branchCond = (BranchConCond) connection;
 
 				Element fromActivityElm = connectionElm.getChild("FromActivity");
 				if(fromActivityElm != null){
@@ -2373,11 +2373,11 @@ public class ProjectServicesImpl implements ProjectServices {
 				// Not needed! It'll be settled by the associative class
 				// branchCond.insertIntoTheBranchConCondToMultipleCon(null);
 
-				branchCond = (BranchCond) this.persistObject(branchConCond, null);
+				branchCond = (BranchConCond) this.persistObject(branchConCond, null);
 				this.processComponents.put(key, branchConCond);
 			}
 			else if(connection instanceof JoinCon){
-				Join join = (JoinCon) connection;
+				JoinCon join = (JoinCon) connection;
 
 				Element fromActivities = connectionElm.getChild("FromActivity");
 				if(fromActivities != null){
@@ -2416,7 +2416,7 @@ public class ProjectServicesImpl implements ProjectServices {
 					joinCon.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(toRef));
 				}
 
-				join = (Join) this.persistObject(joinCon, null);
+				join = (JoinCon) this.persistObject(joinCon, null);
 				this.processComponents.put(key, joinCon);
 			}
 		}
@@ -2566,7 +2566,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
 				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((Log) this.processComponents.get(logKey));
+				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
 				String taskKey = eventElm.getChild("TheTask").getAttributeValue("REF");
 				event.insertIntoTheTask((Task) this.processComponents.get(taskKey));
@@ -2585,7 +2585,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
 				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((Log) this.processComponents.get(logKey));
+				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
 				this.persistObject(event, null);
 				this.processComponents.put(key, event);
@@ -2601,7 +2601,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
 				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((Log) this.processComponents.get(logKey));
+				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
 				String actKey = eventElm.getChild("ThePlain").getAttributeValue("REF");
 				event.insertIntoTheActivity((Plain) this.processComponents.get(actKey));
@@ -2620,7 +2620,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
 				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((Log) this.processComponents.get(logKey));
+				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
 				String actKey = eventElm.getChild("TheActivity").getAttributeValue("REF");
 				event.insertIntoTheActivity((Activity) this.processComponents.get(actKey));
@@ -2645,7 +2645,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
 				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((Log) this.processComponents.get(logKey));
+				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
 				String processKey = eventElm.getChild("TheProcess").getAttributeValue("REF");
 				event.insertIntoTheProcess((Process) this.processComponents.get(processKey));
@@ -2664,7 +2664,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
 				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((Log) this.processComponents.get(logKey));
+				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
 				String procModelKey = eventElm.getChild("TheProcessModel").getAttributeValue("REF");
 				event.insertIntoTheProcessModel((ProcessModel) this.processComponents.get(procModelKey));
@@ -2683,7 +2683,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
 				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((Log) this.processComponents.get(logKey));
+				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
 				Element normElm = eventElm.getChild("TheNormal");
 				if(normElm != null){
@@ -3447,7 +3447,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			Element branchCondElm = bctaElm.getChild("TheBranchConCond");
 			String branchCondKey = branchConCondElm.getAttributeValue("REF");
 
-			BranchCond branchCond = (BranchCond) this.processComponents.get(branchConCondKey);
+			BranchConCond branchCond = (BranchConCond) this.processComponents.get(branchConCondKey);
 
 			Element actElm = bctaElm.getChild("TheActivity");
 			String actKey = actElm.getAttributeValue("REF");
@@ -3478,16 +3478,16 @@ public class ProjectServicesImpl implements ProjectServices {
 			Element branchCondElm = bctmElm.getChild("TheBranchConCond");
 			String branchCondKey = branchConCondElm.getAttributeValue("REF");
 
-			BranchCond branchCond = (BranchCond) this.processComponents.get(branchConCondKey);
+			BranchConCond branchCond = (BranchConCond) this.processComponents.get(branchConCondKey);
 
 			Element mcElm = bctmElm.getChild("TheMultipleCon");
 			String mcKey = mcElm.getAttributeValue("REF");
 
 			MultipleCon multipleCon = (MultipleCon) this.processComponents.get(mcKey);
 
-			if(!this.isAssociativeExists(BranchCondToMultipleCon.class, branchConCond, multipleCon)){
+			if(!this.isAssociativeExists(BranchConCondToMultipleCon.class, branchConCond, multipleCon)){
 
-				BranchCondToMultipleCon bctm = new BranchConCondToMultipleCon();
+				BranchConCondToMultipleCon bctm = new BranchConCondToMultipleCon();
 				bctm.insertIntoTheBranchCond(branchConCond);
 				bctm.insertIntoTheMultipleCon(multipleCon);
 

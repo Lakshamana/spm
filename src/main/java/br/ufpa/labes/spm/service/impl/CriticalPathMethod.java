@@ -1,5 +1,6 @@
 package br.ufpa.labes.spm.service.impl;
 
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 
 import java.util.Collection;
@@ -123,7 +124,7 @@ public class CriticalPathMethod {
 	}
 
 	private void mapActivitiesFromProcessModel(ProcessModel pModel) throws DAOException {
-		Collection acts = pModel.getTheActivity();
+		Collection acts = pModel.getTheActivities();
 
 		for (Iterator iterator = acts.iterator(); iterator.hasNext();) {
 			Activity act = (Activity) iterator.next();
@@ -147,7 +148,7 @@ public class CriticalPathMethod {
 	}
 
 	private void verifyCandidateToFinal(Normal normalAct) {
-		Date planEnd = normalAct.getPlannedEnd();
+		Date planEnd = Date.from(normalAct.getPlannedEnd().atStartOfDay().toInstant(ZoneOffset.UTC));
 
 		if(this.lastFinish == null){
 			this.lastFinish = planEnd;
@@ -286,7 +287,7 @@ public class CriticalPathMethod {
 				Date beforeActPlannedEnd = null;
 
 				if(beforeAct instanceof Normal){
-					beforeActPlannedEnd = ( ( Normal ) beforeAct).getPlannedEnd();
+					beforeActPlannedEnd = Date.from(( ( Normal ) beforeAct).getPlannedEnd().atStartOfDay().toInstant(ZoneOffset.UTC));
 				}else if(beforeAct instanceof Decomposed){
 					beforeActPlannedEnd =
 						this.getLatestPlannedEndFromProcessModel(
@@ -340,16 +341,16 @@ public class CriticalPathMethod {
 
 				if (obj instanceof Sequence) {
 					Sequence seq = (Sequence) obj;
-					Activity toAct = seq.getToActivity();
+					Activity toAct = seq.getToActivities();
 					if (toAct != null) connTo.add(obj);
 				}
 			}
 		}
 
-		if(act.getToJoinCon() != null)
-		    connTo.addAll(act.getToJoinCon());
-		if(act.getToBranchCon() != null)
-		    connTo.addAll(act.getToBranchCon());
+		if(act.getToJoinCons() != null)
+		    connTo.addAll(act.getToJoinCons());
+		if(act.getToBranchCons() != null)
+		    connTo.addAll(act.getToBranchCons());
 
 		boolean isEmpty = true;
 		for (Iterator<Path> iterator = connTo.iterator(); iterator.hasNext();) {
@@ -367,7 +368,7 @@ public class CriticalPathMethod {
 		Collection connFrom = new ArrayList();
 
 		//Ignore Feedback connection
-		Collection fromSimpleCon = act.getFromSimpleCon();
+		Collection fromSimpleCon = act.getFromSimpleCons();
 		if( (fromSimpleCon != null) || (! (fromSimpleCon.isEmpty()) )){
 			for(Object obj: fromSimpleCon){
 				if(obj == null) continue;
@@ -402,21 +403,21 @@ public class CriticalPathMethod {
 		return (isEmpty)? null: connFrom;
 	}
 
-	private Collection getSuccessors(org.qrconsult.spm.model.connections.Connection conn){
+	private Collection getSuccessors(Connection conn){
 		Collection succ = new LinkedList();
 		if(conn instanceof Sequence){
 			Sequence seq = (Sequence)conn;
-			if(seq.getToActivity() != null)
-			    succ.add(seq.getToActivity());
+			if(seq.getToActivities() != null)
+			    succ.add(seq.getToActivities());
 		}
 		else if (conn instanceof BranchCon) {
-			Branch branch = (BranchCon)conn;
+			BranchCon branch = (BranchCon)conn;
 			if(branch instanceof BranchANDCon){
-				BranchAND bAND = (BranchAND)branchCon;
-				if(bAND.getToActivity() != null)
-				    succ.addAll(bAND.getToActivity());
-				if(bAND.getToMultipleCon() != null){
-					Collection multis = bAND.getToMultipleCon();
+				BranchANDCon bAND = (BranchANDCon) branch;
+				if(bAND.getToActivities() != null)
+				    succ.addAll(bAND.getToActivities());
+				if(bAND.getToMultipleCons() != null){
+					Collection multis = bAND.getToMultipleCons();
 					Iterator iterMultis = multis.iterator();
 					while (iterMultis.hasNext()) {
 						MultipleCon multi = (MultipleCon) iterMultis.next();
@@ -426,13 +427,13 @@ public class CriticalPathMethod {
 				}
 			}
 			else{
-				BranchCond bCond = (BranchCond)branchCon;
-				Collection bctmc = bCond.getTheBranchConCondToMultipleCon();
-				Collection atbc = bCond.getTheBranchConCondToActivity();
+				BranchConCond bCond = (BranchConCond)branch;
+				Collection bctmc = bCond.getTheBranchConCondToMultipleCons();
+				Collection atbc = bCond.getTheBranchConCondToActivities();
 				Iterator iterMulti = bctmc.iterator(),
 						 iterAct = atbc.iterator();
 				while (iterMulti.hasNext()) {
-					BranchCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
+					BranchConCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
 					if(multi.getTheMultipleCon() != null)
 					    succ.addAll(this.getSuccessors(multi.getTheMultipleCon()));
 				}
@@ -444,9 +445,9 @@ public class CriticalPathMethod {
 			}
 		}
 		else if (conn instanceof JoinCon) {
-			Join join = (JoinCon)conn;
-			if(joinCon.getToActivity() != null)
-			    succ.add(joinCon.getToActivity());
+			JoinCon join = (JoinCon)conn;
+			if(joinCon.getToActivities() != null)
+			    succ.add(joinCon.getToActivities());
 			if(joinCon.getToMultipleCon() != null)
 			    succ.addAll(this.getSuccessors(joinCon.getToMultipleCon()));
 		}
@@ -462,24 +463,24 @@ public class CriticalPathMethod {
 				pred.add(act);
 
 		} else if (conn instanceof BranchCon) {
-			Branch branch = (BranchCon) conn;
-			Activity act = branchCon.getFromActivity();
+			BranchCon branch = (BranchCon) conn;
+			Activity act = branch.getFromActivity();
 			if (act != null)
 				pred.add(act);
-			MultipleCon multi = branchCon.getFromMultipleConnection();
+			MultipleCon multi = branch.getFromMultipleCon();
 			if (multi != null)
 				pred.add(multi);
 		} else if (conn instanceof JoinCon) {
-			Join join = (JoinCon) conn;
-			pred.addAll(joinCon.getFromActivity());
-			pred.addAll(joinCon.getFromMultipleCon());
+			JoinCon join = (JoinCon) conn;
+			pred.addAll(join.getFromActivities());
+			pred.addAll(join.getFromMultipleCons());
 		}
 		return pred;
 	}
 	private Collection<Activity> getFirstActsFromPModel(ProcessModel pModel) throws DAOException {
 		Collection<Activity> ret = new HashSet<Activity>();
 
-		Collection acts = pModel.getTheActivity();
+		Collection acts = pModel.getTheActivities();
 
 		for(Object obj: acts){
 			if(obj != null){
@@ -518,7 +519,7 @@ public class CriticalPathMethod {
 	}
 
 	public Date getLatestPlannedEndFromProcessModel(ProcessModel pModel){
-		Collection actsFromPModel = pModel.getTheActivity();
+		Collection actsFromPModel = pModel.getTheActivities();
 
 		Date lastFinishFromPModel = null;
 
@@ -532,7 +533,7 @@ public class CriticalPathMethod {
 			if(act instanceof Normal){
 				Normal normalAct = (Normal) act;
 
-				planEnd = normalAct.getPlannedEnd();
+				planEnd = Date.from(normalAct.getPlannedEnd().atStartOfDay().toInstant(ZoneOffset.UTC));
 
 			}else if(act instanceof Decomposed){
 				Decomposed decAct = (Decomposed)act;

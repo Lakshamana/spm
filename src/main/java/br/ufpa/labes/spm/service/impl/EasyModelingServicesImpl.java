@@ -2,6 +2,7 @@ package br.ufpa.labes.spm.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -453,7 +454,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		this.initHashtable(pmodel);
 
 		String processIdent = process.getIdent();
-		String processState = process.getPState();
+		String processState = process.getpStatus().name();
 		if (processIdent.equals(level_to_copy)) {
 
 			if (processState.equals(Process.NOT_STARTED) || processState.equals(Process.ENACTING)) {
@@ -766,7 +767,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 		String processIdent = process.getIdent();
 		if (processIdent.equals(level_to_copy)) {
-			String processState = process.getPState();
+			String processState = process.getpStatus().name();
 
 			if (processState.equals(Process.NOT_STARTED) || processState.equals(Process.ENACTING)) {
 
@@ -1130,10 +1131,10 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		destinationNormal.setName(sourceNormal.getName());
 		destinationNormal.setScript(sourceNormal.getScript());
 
-		destinationNormal.setStaticOk(sourceNormal.getStaticOk());
+		// destinationNormal.setStaticOk(sourceNormal.getStaticOk());
 		destinationNormal.setRequirements(sourceNormal.getRequirements());
 
-		destinationNormal.setDelegable(sourceNormal.getDelegable());
+		destinationNormal.setDelegable(sourceNormal.isDelegable());
 		destinationNormal.setAutoAllocable(sourceNormal.getAutoAllocable());
 
 		// about reservations
@@ -1617,10 +1618,10 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					else if (currentConnection instanceof BranchConCond) {
 						newConnection = new BranchConCond();
 
-						((BranchCond) newConnection).setKindBranch(((BranchCond) currentConnection).getKindBranchCon());
+						((BranchConCond) newConnection).setKindBranch(((BranchConCond) currentConnection).getKindBranchCon());
 
 						// ToActivity
-						Collection toActivities = ((BranchCond) currentConnection).getTheBranchConCondToActivity();
+						Collection toActivities = ((BranchConCond) currentConnection).getTheBranchConCondToActivity();
 						for (Iterator<BranchConCondToActivity> toActivityIterator = toActivities.iterator(); toActivityIterator.hasNext();) {
 							BranchConCondToActivity currentToAct = toActivityIterator.next();
 							if (currentToAct != null) {
@@ -1641,18 +1642,18 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 								}// end if condition != null
 
 								// add current element to newBranchConCond object
-								((BranchCond) newConnection).insertIntoTheBranchCondToActivity(newBranchConCondToAct);
+								((BranchConCond) newConnection).insertIntoTheBranchCondToActivity(newBranchConCondToAct);
 							}// end if != null
 						}// end for
 
 						// ###########
 
-						// ((BranchCond)currentConnection).getKindBranchCon();
+						// ((BranchConCond)currentConnection).getKindBranchCon();
 
 						// ##########
 
 					}// end if common atribute for all branchCon connections
-						// ((Branch)newConnection).setFired(((BranchCon)currentConnection).getFired());
+						// ((BranchCon)newConnection).setFired(((BranchCon)currentConnection).getFired());
 
 					// about dependency
 					if (((BranchCon) currentConnection).getTheDependency() != null) {
@@ -1671,7 +1672,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
-					this.addCoordinate(((Branch) currentConnection).getId(), ((BranchCon) currentConnection).getClass().getSimpleName(),
+					this.addCoordinate(((BranchCon) currentConnection).getId(), ((BranchCon) currentConnection).getClass().getSimpleName(),
 							WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 
 				} else if (currentConnection instanceof JoinCon) {
@@ -1680,7 +1681,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					// ((JoinCon)newConnection).setFired(
 					// ((JoinCon)currentConnection).getFired() );
 
-					((Join) newConnection).setKindJoin(((Join) currentConnection).getKindJoinCon());
+					((JoinCon) newConnection).setKindJoin(((JoinCon) currentConnection).getKindJoinCon());
 
 					// about dependency
 					if (((JoinCon) currentConnection).getTheDependency() != null) {
@@ -1713,7 +1714,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}// end for
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
-					this.addCoordinate(((Join) currentConnection).getId(), ((JoinCon) currentConnection).getClass().getSimpleName(),
+					this.addCoordinate(((JoinCon) currentConnection).getId(), ((JoinCon) currentConnection).getClass().getSimpleName(),
 							WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}// end joinCon processing
 
@@ -1780,21 +1781,21 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						}// end if != null
 					}// end for
 				} else if (currentPostConnection instanceof BranchConCond) {
-					Collection toMultipleCon = ((BranchCond) currentPostConnection).getTheBranchConCondToMultipleCon();
+					Collection toMultipleCon = ((BranchConCond) currentPostConnection).getTheBranchConCondToMultipleCon();
 					for (Iterator<BranchConCondToMultipleCon> toMultipleIterator = toMultipleCon.iterator(); toMultipleIterator.hasNext();) {
 						BranchConCondToMultipleCon currentToMult = toMultipleIterator.next();
 						if (currentToMult != null) {
-							BranchCondToMultipleCon newBranchCondToMult = new BranchConCondToMultipleCon();
+							BranchConCondToMultipleCon newBranchCondToMult = new BranchConCondToMultipleCon();
 							if (currentToMult.getTheMultipleCon() != null) {
 								String multipleIdent = currentToMult.getTheMultipleCon().getIdent();
 								MultipleCon newToMultipleCon = (MultipleCon) connectionTable.get(multipleIdent);
 								if (newToMultipleCon != null) {
-									((BranchCondToMultipleCon) newBranchConCondToMult).insertIntoTheMultipleCon(newToMultipleCon);
+									((BranchConCondToMultipleCon) newBranchConCondToMult).insertIntoTheMultipleCon(newToMultipleCon);
 								}// end if
 							}// end if != null
 								// about conditions
 								// newBranchConCondToMult.setCondition(currentToMult.getCondition());
-							((BranchCond) alreadyCreatedConnection).insertIntoTheBranchCondToMultipleCon(newBranchConCondToMult);
+							((BranchConCond) alreadyCreatedConnection).insertIntoTheBranchCondToMultipleCon(newBranchConCondToMult);
 						}// end if != null
 					}// end for
 				}// end if
@@ -2211,17 +2212,17 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				if (greaterPredecessor != null) {
 					newPlannedBegin = new Date(greaterPredecessor.getTime() + MILLIS_PER_DAY);
 				} else {
-					newPlannedBegin = new Date(predNormal.getPlannedEnd().getTime() + MILLIS_PER_DAY);
+					newPlannedBegin = new Date(predNormal.getPlannedEnd().toEpochDay() + MILLIS_PER_DAY);
 				}
 				newPlannedBegin = this.moveFromWeekendToMonday(newPlannedBegin);
 //calculateUtilsDays(calculateUtilsDays,replanningDates);
 				//Chamar metodo que calcula as datas válidas de inicio e fim da atividade de acordo com o Calendário do projeto
 
-				normal.setPlannedBegin(newPlannedBegin);
+				normal.setPlannedBegin(LocalDate.ofEpochDay(newPlannedBegin.getTime()));
 
 				int oldHowLong = Math.round(normal.getHowLong().floatValue());
-				Date newPlannedEnd = new Date(this.plannedEnd(normal.getPlannedBegin().getTime(), oldHowLong));
-				normal.setPlannedEnd(newPlannedEnd);
+				Date newPlannedEnd = new Date(this.plannedEnd(normal.getPlannedBegin().toEpochDay(), oldHowLong));
+				normal.setPlannedEnd(LocalDate.ofEpochDay(newPlannedEnd.getTime()));
 
 				// Exception handling...
 				// Begin should not be after than end!
@@ -2574,7 +2575,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 			long newHowLong = normal.getHowLong().longValue();
 			if (normal.getPlannedBegin() != null && normal.getPlannedEnd() != null)
-				newHowLong = this.businessDays(normal.getPlannedBegin().getTime(), normal.getPlannedEnd().getTime());
+				newHowLong = this.businessDays(normal.getPlannedBegin().toEpochDay(), normal.getPlannedEnd().toEpochDay());
 
 			normal.setHowLong(new Float(Math.round(newHowLong)));
 
@@ -2653,9 +2654,9 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			if (seq.getToActivity() != null)
 				succ.add(seq.getToActivity());
 		} else if (conn instanceof BranchCon) {
-			Branch branch = (BranchCon) conn;
+			BranchCon branch = (BranchCon) conn;
 			if (branch instanceof BranchANDCon) {
-				BranchAND bAND = (BranchAND) branchCon;
+				BranchANDCon bAND = (BranchANDCon) branchCon;
 				if (bAND.getToActivity() != null)
 					succ.addAll(bAND.getToActivity());
 				if (bAND.getToMultipleCon() != null) {
@@ -2668,12 +2669,12 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}
 				}
 			} else {
-				BranchCond bCond = (BranchCond) branchCon;
+				BranchConCond bCond = (BranchConCond) branchCon;
 				Collection bctmc = bCond.getTheBranchConCondToMultipleCon();
 				Collection atbc = bCond.getTheBranchConCondToActivity();
 				Iterator iterMulti = bctmc.iterator(), iterAct = atbc.iterator();
 				while (iterMulti.hasNext()) {
-					BranchCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
+					BranchConCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
 					if (multi.getTheMultipleCon() != null)
 						succ.addAll(this.getSuccessors(multi.getTheMultipleCon()));
 				}
@@ -2684,7 +2685,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				}
 			}
 		} else if (conn instanceof JoinCon) {
-			Join join = (JoinCon) conn;
+			JoinCon join = (JoinCon) conn;
 			if (joinCon.getToActivity() != null)
 				succ.add(joinCon.getToActivity());
 			if (joinCon.getToMultipleCon() != null)
@@ -2705,13 +2706,13 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			if (seq.getFromActivity() != null)
 				pred.add(seq.getFromActivity());
 		} else if (conn instanceof BranchCon) {
-			Branch branch = (BranchCon) conn;
+			BranchCon branch = (BranchCon) conn;
 			if (branchCon.getFromActivity() != null)
 				pred.add(branchCon.getFromActivity());
 			if (branchCon.getFromMultipleConnection() != null)
 				pred.addAll(this.getPredecessors(branchCon.getFromMultipleConnection()));
 		} else if (conn instanceof JoinCon) {
-			Join join = (JoinCon) conn;
+			JoinCon join = (JoinCon) conn;
 			if (joinCon.getFromActivity() != null)
 				pred.addAll(joinCon.getFromActivity());
 			if (joinCon.getFromMultipleCon() != null) {

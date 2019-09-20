@@ -138,7 +138,7 @@ public class TaskServicesImpl implements TaskServices {
 		// checks related to the state of the system
 
 		Process process = (Process) proc;
-		if (!process.getPState().equals(Process.NOT_STARTED)) {
+		if (!process.getpStatus().name().equals(Process.NOT_STARTED)) {
 			//        	throw new UserException(Messages.getString("facades.EnactmentEngine.UserExcProcess") +processId+ Messages.getString("facades.EnactmentEngine.UserExcIsAlreEnac")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
@@ -314,7 +314,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		// now start the implementation of the rules
 
-		String actState = actNorm.getTheEnactionDescription().getState();
+		String actState = actNorm.getTheEnactionDescription().getExclusiveStatus().name()();
 
 		if (actState.equals(Plain.READY)) {
 			if (this.isAllRequiredResourceAvailable(actNorm)) {
@@ -359,7 +359,7 @@ public class TaskServicesImpl implements TaskServices {
 		while (iterC.hasNext()) {
 			Connection conn = (Connection) iterC.next();
 			if (conn instanceof JoinCon) {
-				Join join = (JoinCon) conn;
+				JoinCon join = (JoinCon) conn;
 				String dep = joinCon.getTheDependency().getKindDep();
 				if (join.getKindJoinCon().equals("OR")) { //$NON-NLS-1$
 					if (dep.equals("start-start")) { //$NON-NLS-1$
@@ -428,7 +428,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		// now start the implementation of the rules
 
-		if (actNorm.getTheEnactionDescription().getState().equals(Plain.ACTIVE)
+		if (actNorm.getTheEnactionDescription().getExclusiveStatus().name()().equals(Plain.ACTIVE)
 				&& !this.isActivityPaused(actNorm)
 				&& this.isLastToPause(agent, actNorm)) {
 
@@ -509,7 +509,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		// now start the implementation of the rules
 		String why = "";
-		String state = actNorm.getTheEnactionDescription().getState();
+		String state = actNorm.getTheEnactionDescription().getExclusiveStatus().name()();
 
 		if (state.equals(Plain.ACTIVE)) {
 
@@ -547,7 +547,7 @@ public class TaskServicesImpl implements TaskServices {
 						while (iterC.hasNext()) {
 							Connection conn = (Connection) iterC.next();
 							if (conn instanceof JoinCon) {
-								Join join = (JoinCon) conn;
+								JoinCon join = (JoinCon) conn;
 								String dep = joinCon.getTheDependency()
 										.getKindDep();
 								if (join.getKindJoinCon().equals("OR")) { //$NON-NLS-1$
@@ -613,7 +613,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		// now start the implementation of the rules
 		String why = "";
-		String state = actNorm.getTheEnactionDescription().getState();
+		String state = actNorm.getTheEnactionDescription().getExclusiveStatus().name()();
 		if (state.equals(Plain.ACTIVE)) {
 
 			if (!this.canFinish(actNorm)) {
@@ -641,7 +641,7 @@ public class TaskServicesImpl implements TaskServices {
 				while (iterC.hasNext()) {
 					Connection conn = (Connection) iterC.next();
 					if (conn instanceof JoinCon) {
-						Join join = (JoinCon) conn;
+						JoinCon join = (JoinCon) conn;
 						String dep = joinCon.getTheDependency().getKindDep();
 						if (join.getKindJoinCon().equals("OR")) { //$NON-NLS-1$
 							if (dep.equals("end-start") || //$NON-NLS-1$
@@ -734,7 +734,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		// now start the implementation of the rules
 
-		String state = actNorm.getTheEnactionDescription().getState();
+		String state = actNorm.getTheEnactionDescription().getExclusiveStatus().name()();
 		RequiredPeople req = null;
 		if (state.equals(Plain.WAITING) && this.hasInvolvedAgents(actNorm)) {
 			req = this.delegateTaskToAgent(from_agent, actNorm, to_agent);
@@ -994,7 +994,7 @@ public class TaskServicesImpl implements TaskServices {
 			} else if (act instanceof Automatic) {
 				Automatic automatic = (Automatic) act;
 				types[n] = "Automatic"; //$NON-NLS-1$
-				states[n] = automatic.getTheEnactionDescription().getState();
+				states[n] = automatic.getTheEnactionDescription().getExclusiveStatus().name()();
 			} else if (act instanceof Normal) {
 				Normal normal = (Normal) act;
 				Collection reqPeople = normal.getTheRequiredPeople();
@@ -1012,7 +1012,7 @@ public class TaskServicesImpl implements TaskServices {
 					types[n] = "NormalWithAgent"; //$NON-NLS-1$
 				else
 					types[n] = "NormalWithoutAgent"; //$NON-NLS-1$
-				states[n] = normal.getTheEnactionDescription().getState();
+				states[n] = normal.getTheEnactionDescription().getExclusiveStatus().name()();
 			} else {
 				types[n] = "Undefined"; //$NON-NLS-1$
 				states[n] = "Undefined"; //$NON-NLS-1$
@@ -1276,7 +1276,7 @@ public class TaskServicesImpl implements TaskServices {
 				MultipleCon multi = (MultipleCon) conn;
 				Dependency dep = null;
 				if (multi instanceof JoinCon) {
-					Join join = (JoinCon) multi;
+					JoinCon join = (JoinCon) multi;
 					Collection preds = this.getPredecessors(joinCon);
 					Iterator iterPreds = preds.iterator();
 					while (iterPreds.hasNext()) {
@@ -1286,7 +1286,7 @@ public class TaskServicesImpl implements TaskServices {
 					}
 					dep = joinCon.getTheDependency();
 				} else if (multi instanceof BranchCon) {
-					Branch branch = (BranchCon) multi;
+					BranchCon branch = (BranchCon) multi;
 					Collection preds = this.getPredecessors(branchCon);
 					Iterator iterPreds = preds.iterator();
 					while (iterPreds.hasNext()) {
@@ -1305,7 +1305,7 @@ public class TaskServicesImpl implements TaskServices {
 					Iterator iterActsFrom = actsFrom.iterator();
 					while (iterActsFrom.hasNext()) {
 						Activity actFrom = (Activity) iterActsFrom.next();
-						String state = this.getState(actFrom);
+						String state = this.getExclusiveStatus().name()(actFrom);
 						boolean isPlain = actFrom instanceof Plain;
 						depOk = this.isDepSatisfiedToFinish(depType, state,
 								isPlain);
@@ -1338,7 +1338,7 @@ public class TaskServicesImpl implements TaskServices {
 		String state;
 		if (isPlain) {
 			Plain plain = (Plain) fromAct;
-			state = plain.getTheEnactionDescription().getState();
+			state = plain.getTheEnactionDescription().getExclusiveStatus().name()();
 		} else {
 			Decomposed dec = (Decomposed) fromAct;
 			state = dec.getTheReferedProcessModel().getPmState();
@@ -1423,7 +1423,7 @@ public class TaskServicesImpl implements TaskServices {
 			if (activity.equals(act))
 				continue;
 
-			String state = this.getState(activity);
+			String state = this.getExclusiveStatus().name()(activity);
 			if (!(state.equals(Plain.FINISHED) || state
 					.equals(ProcessModel.FINISHED))
 					&& !(state.equals(Plain.FAILED) || state
@@ -1449,7 +1449,7 @@ public class TaskServicesImpl implements TaskServices {
 			if (conn instanceof Sequence) { // Rule 4.2 NAC-04
 				Sequence seq = (Sequence) conn;
 				Activity from = seq.getFromActivity();
-				String state = this.getState(from);
+				String state = this.getExclusiveStatus().name()(from);
 				if (seq.getTheDependency().getKindDep().equals("end-end")
 						&& (!(state.equals(Plain.FINISHED) || state
 								.equals(ProcessModel.FINISHED)))) {
@@ -1457,7 +1457,7 @@ public class TaskServicesImpl implements TaskServices {
 					break;
 				}
 			} else if (conn instanceof BranchANDCon) { // Rule 4.2 NAC-01
-				BranchAND bAND = (BranchANDCon) conn;
+				BranchANDCon bAND = (BranchANDCon) conn;
 				if (!bAND.isFired().booleanValue()
 						&& bAND.getTheDependency().getKindDep()
 								.equals("end-end")) {
@@ -1465,7 +1465,7 @@ public class TaskServicesImpl implements TaskServices {
 					break;
 				}
 			} else if (conn instanceof BranchConCond) {
-				BranchCond bCond = (BranchConCond) conn;
+				BranchConCond bCond = (BranchConCond) conn;
 				if (bCond.getTheDependency().getKindDep().equals("end-end")) {
 					if (!bCond.isFired().booleanValue()) { // Rule 4.2 NAC-02
 						ret = false;
@@ -1488,7 +1488,7 @@ public class TaskServicesImpl implements TaskServices {
 					}
 				}
 			} else if (conn instanceof JoinCon) { // Rule 4.2 NAC-01
-				Join join = (JoinCon) conn;
+				JoinCon join = (JoinCon) conn;
 				if (!joinCon.isFired().booleanValue()
 						&& joinCon.getTheDependency().getKindDep()
 								.equals("end-end")) { //$NON-NLS-1$
@@ -1521,7 +1521,7 @@ public class TaskServicesImpl implements TaskServices {
 				while (iterC.hasNext()) {
 					Connection conn = (Connection) iterC.next();
 					if (conn instanceof JoinCon) {
-						Join join = (JoinCon) conn;
+						JoinCon join = (JoinCon) conn;
 						String dep = joinCon.getTheDependency().getKindDep();
 						if (join.getKindJoinCon().equals("OR")) { //$NON-NLS-1$
 							if (dep.equals("start-start")) { //$NON-NLS-1$
@@ -1734,7 +1734,7 @@ public class TaskServicesImpl implements TaskServices {
 				Normal normal = (Normal) activity;
 				EnactionDescription enact = normal.getTheEnactionDescription();
 
-				if (enact.getState().equals(Plain.WAITING)) {
+				if (enact.getExclusiveStatus().name()().equals(Plain.WAITING)) {
 					// setar ready somente se nao tiver delegated
 					enact.setStateWithMessage(Plain.READY);
 					this.changeTasksState(normal, Plain.READY);
@@ -1746,7 +1746,7 @@ public class TaskServicesImpl implements TaskServices {
 				Automatic automatic = (Automatic) activity;
 				EnactionDescription enact = automatic
 						.getTheEnactionDescription();
-				if (enact.getState().equals(Plain.WAITING)) {
+				if (enact.getExclusiveStatus().name()().equals(Plain.WAITING)) {
 					enact.setStateWithMessage(Plain.READY);
 					this.logging.registerGlobalActivityEvent(automatic,
 							"ToReady", "Rule 2.3"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -1793,7 +1793,7 @@ public class TaskServicesImpl implements TaskServices {
 					continue;
 				Activity activityFrom = simplecon.getFromActivity();
 				boolean isPlain = activityFrom instanceof Plain;
-				String state = getState(activityFrom);
+				String state = getExclusiveStatus().name()(activityFrom);
 				Sequence sequence = (Sequence) simplecon;
 				String kindDep = sequence.getTheDependency().getKindDep();
 				if (!isDepSatisfiedToBegin(kindDep, state, isPlain)) {
@@ -1809,7 +1809,7 @@ public class TaskServicesImpl implements TaskServices {
 			Collection connections = activity.getFromBranchANDCon();
 			Iterator iter = connections.iterator();
 			while (iter.hasNext()) {
-				Branch branch = (BranchCon) iter.next();
+				BranchCon branch = (BranchCon) iter.next();
 				String kindDep = branchCon.getTheDependency().getKindDep();
 				if ((kindDep.equals("start-start") || //$NON-NLS-1$
 						kindDep.equals("end-start")) && //$NON-NLS-1$
@@ -1827,7 +1827,7 @@ public class TaskServicesImpl implements TaskServices {
 			Iterator iter = connections.iterator();
 			while (iter.hasNext()) {
 				BranchCondToActivity bcta = (BranchConCondToActivity) iter.next();
-				BranchCond branch = bcta.getTheBranchConCond();
+				BranchConCond branch = bcta.getTheBranchConCond();
 				String kindDep = branchCon.getTheDependency().getKindDep();
 				if ((kindDep.equals("start-start") || //$NON-NLS-1$
 				kindDep.equals("end-start"))) { //$NON-NLS-1$
@@ -1850,7 +1850,7 @@ public class TaskServicesImpl implements TaskServices {
 			Collection connections = activity.getFromJoinCon();
 			Iterator iter = connections.iterator();
 			while (iter.hasNext()) {
-				Join join = (JoinCon) iter.next();
+				JoinCon join = (JoinCon) iter.next();
 				String kindDep = joinCon.getTheDependency().getKindDep();
 				if ((kindDep.equals("start-start") || //$NON-NLS-1$
 						kindDep.equals("end-start")) && //$NON-NLS-1$
@@ -1869,30 +1869,30 @@ public class TaskServicesImpl implements TaskServices {
 	 * the BranchCon is an Activity. Applies to the Rules 6.13, 6.14, 6.15, 6.16
 	 * 7.13, 7.14, 7.15
 	 */
-	private void cancelBranchSuccessor(Activity act, Branch branchCon) {
+	private void cancelBranchSuccessor(Activity act, BranchCon branchCon) {
 
-		String state = this.getState(act);
+		String state = this.getExclusiveStatus().name()(act);
 		if (!(state.equals(Plain.FAILED) && state.equals(ProcessModel.FAILED))) {
 			if (act instanceof Plain) {
 				if (branch instanceof BranchANDCon) {
 					this.cancelGeneralActivity(act, true, "Rule 6.13"); //$NON-NLS-1$
 				} else {
-					BranchCond bCond = (BranchCond) branchCon;
+					BranchConCond bCond = (BranchConCond) branchCon;
 					String depType = bCond.getTheDependency().getKindDep();
 					if (!this.isConditionSatisfied(bCond, act)) {
 						if (depType.equals("start-start") || depType.equals("end-start")) { //$NON-NLS-1$ //$NON-NLS-2$
-							if (this.getState(act).equals(Plain.WAITING)) {
+							if (this.getExclusiveStatus().name()(act).equals(Plain.WAITING)) {
 								this.cancelGeneralActivity(act, true,
 										"Rule 7.13"); //$NON-NLS-1$
 							}
 						} else if (depType.equals("end-end")) { //$NON-NLS-1$
-							if (this.getState(act).equals(Plain.WAITING)
-									|| this.getState(act).equals(Plain.READY)) {
+							if (this.getExclusiveStatus().name()(act).equals(Plain.WAITING)
+									|| this.getExclusiveStatus().name()(act).equals(Plain.READY)) {
 								this.cancelGeneralActivity(act, true,
 										"Rule 7.14"); //$NON-NLS-1$
-							} else if (!this.getState(act)
+							} else if (!this.getExclusiveStatus().name()(act)
 									.equals(Plain.WAITING)
-									&& !this.getState(act).equals(Plain.READY)) {
+									&& !this.getExclusiveStatus().name()(act).equals(Plain.READY)) {
 								this.cancelGeneralActivity(act, true,
 										"Rule 7.15"); //$NON-NLS-1$
 							}
@@ -1948,7 +1948,7 @@ public class TaskServicesImpl implements TaskServices {
 			} else if (conn instanceof MultipleCon) {
 				MultipleCon multi = (MultipleCon) conn;
 				if (multi instanceof JoinCon) {
-					Join join = (JoinCon) multi;
+					JoinCon join = (JoinCon) multi;
 					Activity actJoin = joinCon.getToActivity();
 					MultipleCon multJoin = joinCon.getToMultipleCon();
 					if (actJoinCon != null)
@@ -1956,9 +1956,9 @@ public class TaskServicesImpl implements TaskServices {
 					else if (multJoinCon != null)
 						this.cancelJoinSuccessor(multJoin, joinCon);
 				} else if (multi instanceof BranchCon) {
-					Branch branch = (BranchCon) multi;
+					BranchCon branch = (BranchCon) multi;
 					if (branch instanceof BranchANDCon) {
-						BranchAND branchAND = (BranchAND) branchCon;
+						BranchANDCon branchAND = (BranchANDCon) branchCon;
 						Collection acts = branchANDCon.getToActivity();
 						Collection mults = branchANDCon.getToMultipleCon();
 						Iterator iterActs = acts.iterator();
@@ -1972,7 +1972,7 @@ public class TaskServicesImpl implements TaskServices {
 							this.cancelBranchSuccessor(mult, branchANDCon);
 						}
 					} else {
-						BranchCond branchCond = (BranchCond) branchCon;
+						BranchConCond branchCond = (BranchConCond) branchCon;
 						Collection acts = branchConCond
 								.getTheBranchConCondToActivity();
 						Collection mults = branchConCond
@@ -1986,7 +1986,7 @@ public class TaskServicesImpl implements TaskServices {
 						}
 						Iterator iterTheMults = mults.iterator();
 						while (iterTheMults.hasNext()) {
-							BranchCondToMultipleCon mult = (BranchConCondToMultipleCon) iterTheMults
+							BranchConCondToMultipleCon mult = (BranchConCondToMultipleCon) iterTheMults
 									.next();
 							this.cancelBranchConSuccessor(
 									mult.getTheMultipleCon(), branchConCond);
@@ -2004,7 +2004,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		boolean canceled;
 
-		String state = actPlain.getTheEnactionDescription().getState();
+		String state = actPlain.getTheEnactionDescription().getExclusiveStatus().name()();
 		if (state.equals(Plain.FAILED) || state.equals(Plain.CANCELED)) {
 			canceled = false;
 		} else {
@@ -2061,7 +2061,7 @@ public class TaskServicesImpl implements TaskServices {
 			Iterator iter = activities.iterator();
 			while (iter.hasNext()) {
 				Activity act = (Activity) iter.next();
-				String actState = this.getState(act);
+				String actState = this.getExclusiveStatus().name()(act);
 				if (!(actState.equals(Plain.CANCELED) || actState
 						.equals(ProcessModel.CANCELED))
 						&& !(actState.equals(Plain.FAILED) || actState
@@ -2080,22 +2080,22 @@ public class TaskServicesImpl implements TaskServices {
 	private void cancelMultConnTargets(MultipleCon multiconn) {
 
 		if (multiconn instanceof BranchCon) {
-			Branch branch = (BranchCon) multiconn;
+			BranchCon branch = (BranchCon) multiconn;
 			Collection succ = new LinkedList();
 			if (branch instanceof BranchANDCon) {
-				BranchAND bAND = (BranchAND) branchCon;
+				BranchANDCon bAND = (BranchANDCon) branchCon;
 				if (bAND.getToActivity() != null)
 					succ.addAll(bAND.getToActivity());
 				if (bAND.getToMultipleCon() != null)
 					succ.addAll(bAND.getToMultipleCon());
 			} else {
-				BranchCond bCond = (BranchCond) branchCon;
+				BranchConCond bCond = (BranchConCond) branchCon;
 				Collection bctmc = bCond.getTheBranchConCondToMultipleCon();
 				Collection atbc = bCond.getTheBranchConCondToActivity();
 				Iterator iterMulti = bctmc.iterator(), iterAct = atbc
 						.iterator();
 				while (iterMulti.hasNext()) {
-					BranchCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti
+					BranchConCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti
 							.next();
 					if (multi.getTheMultipleCon() != null)
 						succ.add(multi.getTheMultipleCon());
@@ -2113,7 +2113,7 @@ public class TaskServicesImpl implements TaskServices {
 				this.cancelBranch(branchCon, obj);
 			}
 		} else if (multiconn instanceof JoinCon) {
-			Join join = (JoinCon) multiconn;
+			JoinCon join = (JoinCon) multiconn;
 			this.cancelJoin(joinCon);
 		}
 	}
@@ -2122,7 +2122,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * Cancells a BranchCon connection. Applies to the Rules 6.13, 6.14, 6.15,
 	 * 6.16, 6.17, 6.18, 6.29, 6.30
 	 */
-	private void cancelBranch(Branch branchCon, Object obj) {
+	private void cancelBranch(BranchCon branchCon, Object obj) {
 
 		if (obj instanceof Activity) {
 			Activity act = (Activity) obj;
@@ -2148,7 +2148,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * Cancells a JoinCon connection. Applies to the Rules 6.7, 6.12 6.20, 6.21,
 	 * 6.22, 6.23, 6.24, 6.25, 6.26, 6.27, 6.28.
 	 */
-	private void cancelJoin(Join joinCon) {
+	private void cancelJoin(JoinCon joinCon) {
 
 		String joinType = join.getKindJoinCon();
 		Activity act = joinCon.getToActivity();
@@ -2182,7 +2182,7 @@ public class TaskServicesImpl implements TaskServices {
 	private void cancelSimpleSuccessor(Activity act, Sequence sequence) {
 
 		String depType = sequence.getTheDependency().getKindDep();
-		String state = this.getState(act);
+		String state = this.getExclusiveStatus().name()(act);
 		if (depType.equals("end-start") || depType.equals("end-end")) { //$NON-NLS-1$ //$NON-NLS-2$
 			if (!(state.equals(Plain.FAILED) || state
 					.equals(ProcessModel.FAILED)))
@@ -2210,10 +2210,10 @@ public class TaskServicesImpl implements TaskServices {
 	 * JoinCon is an Activity. Applies to the Rules 6.5, 6.20, 6.8, 6.22 6.9, 6.23,
 	 * 6.6, 6.21, 6.10, 6.24, 6.11, 6.25
 	 */
-	private void cancelJoinSuccessor(Activity act, Join joinCon) {
+	private void cancelJoinSuccessor(Activity act, JoinCon joinCon) {
 
 		// String why = "";
-		String state = this.getState(act);
+		String state = this.getExclusiveStatus().name()(act);
 		String joinType = join.getKindJoinCon();
 		// String depType = joinCon.getTheDependency().getKindDep();
 
@@ -2227,7 +2227,7 @@ public class TaskServicesImpl implements TaskServices {
 				Object obj = (Object) iter.next();
 				if (obj instanceof Activity) {
 					Activity activity = (Activity) obj;
-					String actState = this.getState(activity);
+					String actState = this.getExclusiveStatus().name()(activity);
 					if ((!actState.equals(Plain.FAILED) && !actState
 							.equals(Plain.CANCELED))
 							|| (!actState.equals(ProcessModel.FAILED) && !actState
@@ -2270,7 +2270,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * Cancells the successor of a JoinCon Connection, when the predecessor of the
 	 * JoinCon is an Multiple Connection.
 	 */
-	private void cancelJoinSuccessor(MultipleCon mult, Join joinCon) {
+	private void cancelJoinSuccessor(MultipleCon mult, JoinCon joinCon) {
 
 		String joinType = join.getKindJoinCon();
 		String depType = joinCon.getTheDependency().getKindDep();
@@ -2285,7 +2285,7 @@ public class TaskServicesImpl implements TaskServices {
 				Object obj = (Object) iter.next();
 				if (obj instanceof Activity) {
 					Activity activity = (Activity) obj;
-					String actState = this.getState(activity);
+					String actState = this.getExclusiveStatus().name()(activity);
 					if ((!actState.equals(Plain.FAILED) && !actState
 							.equals(Plain.CANCELED))
 							|| (!actState.equals(ProcessModel.FAILED) && !actState
@@ -2312,7 +2312,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * Cancells the successor of a BranchCon Connection, when the predecessor of
 	 * the BranchCon is an Multiple Connection.
 	 */
-	private void cancelBranchSuccessor(MultipleCon mult, Branch branchCon) {
+	private void cancelBranchSuccessor(MultipleCon mult, BranchCon branchCon) {
 
 		// String depType = branchCon.getTheDependency().getKindDep();
 		boolean canCancel = true;
@@ -2322,7 +2322,7 @@ public class TaskServicesImpl implements TaskServices {
 			Object obj = (Object) iter.next();
 			if (obj instanceof Activity) {
 				Activity activity = (Activity) obj;
-				String actState = this.getState(activity);
+				String actState = this.getExclusiveStatus().name()(activity);
 				if ((!actState.equals(Plain.FAILED) && !actState
 						.equals(Plain.CANCELED))
 						|| (!actState.equals(ProcessModel.FAILED) && !actState
@@ -2387,7 +2387,7 @@ public class TaskServicesImpl implements TaskServices {
 		Iterator iterActs = activities.iterator();
 		while (iterActs.hasNext()) {
 			Activity activity = (Activity) iterActs.next();
-			String state = this.getState(activity);
+			String state = this.getExclusiveStatus().name()(activity);
 			if (!(state.equals(Plain.FAILED) || state
 					.equals(ProcessModel.FAILED))) {
 				return finish;
@@ -2408,7 +2408,7 @@ public class TaskServicesImpl implements TaskServices {
 			} else if (conn instanceof MultipleCon) {
 				MultipleCon multi = (MultipleCon) conn;
 				if (multi instanceof JoinCon) {
-					Join join = (JoinCon) multi;
+					JoinCon join = (JoinCon) multi;
 					Activity actJoin = joinCon.getToActivity();
 					MultipleCon multJoin = joinCon.getToMultipleCon();
 					if (actJoinCon != null)
@@ -2416,9 +2416,9 @@ public class TaskServicesImpl implements TaskServices {
 					else if (multJoinCon != null)
 						this.failJoinSuccessor(multJoin, joinCon);
 				} else if (multi instanceof BranchCon) {
-					Branch branch = (BranchCon) multi;
+					BranchCon branch = (BranchCon) multi;
 					if (branch instanceof BranchANDCon) {
-						BranchAND branchAND = (BranchAND) branchCon;
+						BranchANDCon branchAND = (BranchANDCon) branchCon;
 						Collection acts = branchANDCon.getToActivity();
 						Collection mults = branchANDCon.getToMultipleCon();
 						Iterator iterActs = acts.iterator();
@@ -2432,7 +2432,7 @@ public class TaskServicesImpl implements TaskServices {
 							this.failBranchSuccessor(mult, branchANDCon);
 						}
 					} else {
-						BranchCond branchCond = (BranchCond) branchCon;
+						BranchConCond branchCond = (BranchConCond) branchCon;
 						Collection acts = branchConCond
 								.getTheBranchConCondToActivity();
 						Collection mults = branchConCond
@@ -2446,7 +2446,7 @@ public class TaskServicesImpl implements TaskServices {
 						}
 						Iterator iterTheMults = mults.iterator();
 						while (iterTheMults.hasNext()) {
-							BranchCondToMultipleCon mult = (BranchConCondToMultipleCon) iterTheMults
+							BranchConCondToMultipleCon mult = (BranchConCondToMultipleCon) iterTheMults
 									.next();
 							this.failBranchConSuccessor(mult.getTheMultipleCon(),
 									branchConCond);
@@ -2464,7 +2464,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		boolean failed;
 
-		String state = actPlain.getTheEnactionDescription().getState();
+		String state = actPlain.getTheEnactionDescription().getExclusiveStatus().name()();
 		if (state.equals(Plain.CANCELED)) {
 			failed = false;
 		} else if ((state.equals(Plain.FINISHED) || state.equals(Plain.FAILED))
@@ -2525,7 +2525,7 @@ public class TaskServicesImpl implements TaskServices {
 			Iterator iter = activities.iterator();
 			while (iter.hasNext()) {
 				Activity act = (Activity) iter.next();
-				String actState = this.getState(act);
+				String actState = this.getExclusiveStatus().name()(act);
 				if (!(actState.equals(Plain.CANCELED) || actState
 						.equals(ProcessModel.CANCELED))
 						&& !(actState.equals(Plain.FAILED) || actState
@@ -2544,22 +2544,22 @@ public class TaskServicesImpl implements TaskServices {
 	private void failMultConnTargets(MultipleCon multiconn) {
 
 		if (multiconn instanceof BranchCon) {
-			Branch branch = (BranchCon) multiconn;
+			BranchCon branch = (BranchCon) multiconn;
 			Collection succ = new LinkedList();
 			if (branch instanceof BranchANDCon) {
-				BranchAND bAND = (BranchAND) branchCon;
+				BranchANDCon bAND = (BranchANDCon) branchCon;
 				if (bAND.getToActivity() != null)
 					succ.addAll(bAND.getToActivity());
 				if (bAND.getToMultipleCon() != null)
 					succ.addAll(bAND.getToMultipleCon());
 			} else {
-				BranchCond bCond = (BranchCond) branchCon;
+				BranchConCond bCond = (BranchConCond) branchCon;
 				Collection bctmc = bCond.getTheBranchConCondToMultipleCon();
 				Collection atbc = bCond.getTheBranchConCondToActivity();
 				Iterator iterMulti = bctmc.iterator(), iterAct = atbc
 						.iterator();
 				while (iterMulti.hasNext()) {
-					BranchCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti
+					BranchConCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti
 							.next();
 					if (multi.getTheMultipleCon() != null)
 						succ.add(multi.getTheMultipleCon());
@@ -2577,7 +2577,7 @@ public class TaskServicesImpl implements TaskServices {
 				this.failBranch(branchCon, obj);
 			}
 		} else if (multiconn instanceof JoinCon) {
-			Join join = (JoinCon) multiconn;
+			JoinCon join = (JoinCon) multiconn;
 			this.failJoin(joinCon);
 		}
 	}
@@ -2586,7 +2586,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * Fails a BranchCon connection. Applies to the Rules 5.13, 5.14, 5.15, 5.16,
 	 * 5.17, 5.27, 5.28,
 	 */
-	private void failBranch(Branch branchCon, Object obj) {
+	private void failBranch(BranchCon branchCon, Object obj) {
 
 		if (obj instanceof Activity) {
 			Activity act = (Activity) obj;
@@ -2613,7 +2613,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * Fails a JoinCon connection. Applies to the Rules 5.18, 5.19, 5.20, 5.21,
 	 * 5.22, 5.23, 5.24, 5.25, 5.26
 	 */
-	private void failJoin(Join joinCon) {
+	private void failJoin(JoinCon joinCon) {
 
 		Activity act = joinCon.getToActivity();
 		MultipleCon multi = joinCon.getToMultipleCon();
@@ -2648,7 +2648,7 @@ public class TaskServicesImpl implements TaskServices {
 	private void failSimpleSuccessor(Activity act, Sequence sequence) {
 
 		String depType = sequence.getTheDependency().getKindDep();
-		String state = this.getState(act);
+		String state = this.getExclusiveStatus().name()(act);
 		if (depType.equals("end-start") || depType.equals("end-end")) { //$NON-NLS-1$ //$NON-NLS-2$
 			if (!(state.equals(Plain.CANCELED) || state
 					.equals(ProcessModel.CANCELED)))
@@ -2663,9 +2663,9 @@ public class TaskServicesImpl implements TaskServices {
 	 * Fails the successor of a JoinCon Connection, when the predecessor of the
 	 * JoinCon is an Activity. Applies to the Rules 5.4, 5.5, 5.7, 5.8, 5.9, 5.10
 	 */
-	private void failJoinSuccessor(Activity act, Join joinCon) {
+	private void failJoinSuccessor(Activity act, JoinCon joinCon) {
 
-		String state = this.getState(act);
+		String state = this.getExclusiveStatus().name()(act);
 		String joinType = join.getKindJoinCon();
 		String depType = joinCon.getTheDependency().getKindDep();
 
@@ -2679,7 +2679,7 @@ public class TaskServicesImpl implements TaskServices {
 				Object obj = (Object) iter.next();
 				if (obj instanceof Activity) {
 					Activity activity = (Activity) obj;
-					String actState = this.getState(activity);
+					String actState = this.getExclusiveStatus().name()(activity);
 					if ((!actState.equals(Plain.FAILED) && !actState
 							.equals(Plain.CANCELED))
 							|| (!actState.equals(ProcessModel.FAILED) && !actState
@@ -2723,9 +2723,9 @@ public class TaskServicesImpl implements TaskServices {
 	 * Fails the successor of a JoinCon Connection, when the predecessor of the
 	 * JoinCon is an Multiple Connection. Applies to the Rule 5.6, 5.11, 5.12,
 	 */
-	private void failJoinSuccessor(MultipleCon mult, Join joinCon) {
+	private void failJoinSuccessor(MultipleCon mult, JoinCon joinCon) {
 
-		// String state = this.getState(act);
+		// String state = this.getExclusiveStatus().name()(act);
 		String joinType = join.getKindJoinCon();
 		String depType = joinCon.getTheDependency().getKindDep();
 
@@ -2739,7 +2739,7 @@ public class TaskServicesImpl implements TaskServices {
 				Object obj = (Object) iter.next();
 				if (obj instanceof Activity) {
 					Activity activity = (Activity) obj;
-					String actState = this.getState(activity);
+					String actState = this.getExclusiveStatus().name()(activity);
 					if ((!actState.equals(Plain.FAILED) && !actState
 							.equals(Plain.CANCELED))
 							|| (!actState.equals(ProcessModel.FAILED) && !actState
@@ -2767,9 +2767,9 @@ public class TaskServicesImpl implements TaskServices {
 	 * Fails the successor of a BranchCon Connection, when the predecessor of the
 	 * BranchCon is an Activity. Applies to the Rules 5.13, 5.14, 5.15,
 	 */
-	private void failBranchSuccessor(Activity act, Branch branchCon) {
+	private void failBranchSuccessor(Activity act, BranchCon branchCon) {
 
-		String state = this.getState(act);
+		String state = this.getExclusiveStatus().name()(act);
 		String depType = branchCon.getTheDependency().getKindDep();
 		boolean canFail = true;
 		Collection predec = this.getPredecessors(branchCon);
@@ -2778,7 +2778,7 @@ public class TaskServicesImpl implements TaskServices {
 			Object obj = (Object) iter.next();
 			if (obj instanceof Activity) {
 				Activity activity = (Activity) obj;
-				String actState = this.getState(activity);
+				String actState = this.getExclusiveStatus().name()(activity);
 				if ((!actState.equals(Plain.FAILED) && !actState
 						.equals(Plain.CANCELED))
 						|| (!actState.equals(ProcessModel.FAILED) && !actState
@@ -2813,7 +2813,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * Fails the successor of a BranchCon Connection, when the predecessor of the
 	 * BranchCon is an Multiple Connection.
 	 */
-	private void failBranchSuccessor(MultipleCon mult, Branch branchCon) {
+	private void failBranchSuccessor(MultipleCon mult, BranchCon branchCon) {
 
 		String depType = branchCon.getTheDependency().getKindDep();
 		boolean canFail = true;
@@ -2823,7 +2823,7 @@ public class TaskServicesImpl implements TaskServices {
 			Object obj = (Object) iter.next();
 			if (obj instanceof Activity) {
 				Activity activity = (Activity) obj;
-				String actState = this.getState(activity);
+				String actState = this.getExclusiveStatus().name()(activity);
 				if ((!actState.equals(Plain.FAILED) && !actState
 						.equals(Plain.CANCELED))
 						|| (!actState.equals(ProcessModel.FAILED) && !actState
@@ -2853,7 +2853,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		String why = "";
 		ProcessModel parentModel = act.getTheProcessModel();
-		String state = this.getState(act);
+		String state = this.getExclusiveStatus().name()(act);
 		String modState = parentModel.getPmState();
 
 		if (modState.equals(ProcessModel.ENACTING)) {
@@ -2891,7 +2891,7 @@ public class TaskServicesImpl implements TaskServices {
 						while (iterC.hasNext()) {
 							Connection conn = (Connection) iterC.next();
 							if (conn instanceof JoinCon) {
-								Join join = (JoinCon) conn;
+								JoinCon join = (JoinCon) conn;
 								String dep = joinCon.getTheDependency()
 										.getKindDep();
 								if (join.getKindJoinCon().equals("OR")) { //$NON-NLS-1$
@@ -3037,15 +3037,15 @@ public class TaskServicesImpl implements TaskServices {
 				MultipleCon multi = (MultipleCon) conn;
 				multi.setFired(new Boolean(false));
 				if (multi instanceof JoinCon) {
-					Join join = (JoinCon) multi;
+					JoinCon join = (JoinCon) multi;
 					if (joinCon.getToActivity() != null)
 						succ.add(joinCon.getToActivity());
 				} else if (multi instanceof BranchANDCon) {
-					BranchAND branchAnd = (BranchANDCon) multi;
+					BranchANDCon branchAnd = (BranchANDCon) multi;
 					if (branchAndCon.getToActivity() != null)
 						succ.addAll(branchAndCon.getToActivity());
 				} else if (multi instanceof BranchConCond) {
-					BranchCond branchCond = (BranchConCond) multi;
+					BranchConCond branchCond = (BranchConCond) multi;
 					Collection acts = branchCond.getTheBranchConCondToActivity();
 					Iterator iter2 = acts.iterator();
 					while (iter2.hasNext()) {
@@ -3063,7 +3063,7 @@ public class TaskServicesImpl implements TaskServices {
 			String state;
 			if (activity instanceof Plain) {
 				Plain plain = (Plain) activity;
-				state = plain.getTheEnactionDescription().getState();
+				state = plain.getTheEnactionDescription().getExclusiveStatus().name()();
 				activity = plain;
 			} else {
 				Decomposed dec = (Decomposed) activity;
@@ -3106,7 +3106,7 @@ public class TaskServicesImpl implements TaskServices {
 	private boolean redoNormalActivity(Normal actNorm) {
 
 		boolean redone = false;
-		String state = actNorm.getTheEnactionDescription().getState();
+		String state = actNorm.getTheEnactionDescription().getExclusiveStatus().name()();
 
 		if (!state.equals(Plain.WAITING) && !state.equals("")) { //$NON-NLS-1$
 			redone = true;
@@ -3172,7 +3172,7 @@ public class TaskServicesImpl implements TaskServices {
 		if (activity instanceof Plain) {
 			Plain plain = (Plain) activity;
 			EnactionDescription enaction = plain.getTheEnactionDescription();
-			String oldState = enaction.getState();
+			String oldState = enaction.getExclusiveStatus().name()();
 			Date oldBegin = enaction.getActualBegin();
 			Date oldEnd = enaction.getActualEnd();
 			plain.getTheEnactionDescription().setActualBegin(null);
@@ -3390,7 +3390,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		Process process = (Process) processDAO.retrieveBySecondaryKey(activity
 				.getIdent().substring(0, activity.getIdent().indexOf(".")));
-		String pState = process.getPState();
+		String pState = process.getpStatus().name();
 		if (pState.equals(Process.NOT_STARTED)) {
 			// throw new
 			// WebapseeException(Messages.getString("facades.EnactmentEngine.WAExcRedoNotEnactActivity"));
@@ -3407,7 +3407,7 @@ public class TaskServicesImpl implements TaskServices {
 		}
 
 		// Now we start the implementation of the rules
-		String state = this.getState(activity);
+		String state = this.getExclusiveStatus().name()(activity);
 
 		if (state.equals(Plain.WAITING)
 				|| state.equals(ProcessModel.REQUIREMENTS)
@@ -3459,7 +3459,7 @@ public class TaskServicesImpl implements TaskServices {
 			while (iter.hasNext()) {
 				Activity activity = (Activity) iter.next();
 				if (activity != null) {
-					String actState = this.getState(activity);
+					String actState = this.getExclusiveStatus().name()(activity);
 					if (actState.equals(Plain.ACTIVE)
 							|| actState.equals(Plain.PAUSED)
 							|| actState.equals(Plain.FINISHED)
@@ -3518,21 +3518,21 @@ public class TaskServicesImpl implements TaskServices {
 			if (seq.getToActivity() != null)
 				succ.add(seq.getToActivity());
 		} else if (conn instanceof BranchCon) {
-			Branch branch = (BranchCon) conn;
+			BranchCon branch = (BranchCon) conn;
 			if (branch instanceof BranchANDCon) {
-				BranchAND bAND = (BranchAND) branchCon;
+				BranchANDCon bAND = (BranchANDCon) branchCon;
 				if (bAND.getToActivity() != null)
 					succ.addAll(bAND.getToActivity());
 				if (bAND.getToMultipleCon() != null)
 					succ.addAll(bAND.getToMultipleCon());
 			} else {
-				BranchCond bCond = (BranchCond) branchCon;
+				BranchConCond bCond = (BranchConCond) branchCon;
 				Collection bctmc = bCond.getTheBranchConCondToMultipleCon();
 				Collection atbc = bCond.getTheBranchConCondToActivity();
 				Iterator iterMulti = bctmc.iterator(), iterAct = atbc
 						.iterator();
 				while (iterMulti.hasNext()) {
-					BranchCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti
+					BranchConCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti
 							.next();
 					if (multi.getTheMultipleCon() != null)
 						succ.add(multi.getTheMultipleCon());
@@ -3545,7 +3545,7 @@ public class TaskServicesImpl implements TaskServices {
 				}
 			}
 		} else if (conn instanceof JoinCon) {
-			Join join = (JoinCon) conn;
+			JoinCon join = (JoinCon) conn;
 			if (joinCon.getToActivity() != null)
 				succ.add(joinCon.getToActivity());
 			if (joinCon.getToMultipleCon() != null)
@@ -3569,7 +3569,7 @@ public class TaskServicesImpl implements TaskServices {
 	private boolean redoAutomaticActivity(Automatic actAutom) {
 
 		boolean redone = false;
-		String state = actAutom.getTheEnactionDescription().getState();
+		String state = actAutom.getTheEnactionDescription().getExclusiveStatus().name()();
 
 		if (!state.equals(Plain.WAITING)) {
 			redone = true;
@@ -3691,7 +3691,7 @@ public class TaskServicesImpl implements TaskServices {
 				Connection conn = (Connection) iterfroms.next();
 
 				if (conn instanceof BranchANDCon) { // Rule 4.2 NAC-01
-					BranchAND bAND = (BranchANDCon) conn;
+					BranchANDCon bAND = (BranchANDCon) conn;
 					if (!bAND.isFired().booleanValue()
 							&& bAND.getTheDependency().getKindDep()
 									.equals("end-end")) {
@@ -3699,7 +3699,7 @@ public class TaskServicesImpl implements TaskServices {
 						break;
 					}
 				} else if (conn instanceof BranchConCond) {
-					BranchCond bCond = (BranchConCond) conn;
+					BranchConCond bCond = (BranchConCond) conn;
 					if (bCond.getTheDependency().getKindDep().equals("end-end")) {
 						if (!bCond.isFired().booleanValue()) { // Rule 4.2
 																// NAC-02
@@ -3724,7 +3724,7 @@ public class TaskServicesImpl implements TaskServices {
 						}
 					}
 				} else if (conn instanceof JoinCon) { // Rule 4.2 NAC-01
-					Join join = (JoinCon) conn;
+					JoinCon join = (JoinCon) conn;
 					if (!joinCon.isFired().booleanValue()
 							&& joinCon.getTheDependency().getKindDep()
 									.equals("end-end")) {
@@ -3736,7 +3736,7 @@ public class TaskServicesImpl implements TaskServices {
 				else if (conn instanceof Sequence) { // Rule 4.2 NAC-04
 					Sequence seq = (Sequence) conn;
 					Activity from = seq.getFromActivity();
-					String state = this.getState(from);
+					String state = this.getExclusiveStatus().name()(from);
 					if (seq.getTheDependency().getKindDep().equals("end-end")
 							&& (!(state.equals(Plain.FINISHED) || state
 									.equals(ProcessModel.FINISHED)))) {
@@ -3751,7 +3751,7 @@ public class TaskServicesImpl implements TaskServices {
 			Iterator iter = acts.iterator();
 			while (iter.hasNext()) {
 				Activity activity = (Activity) iter.next();
-				String state = this.getState(activity);
+				String state = this.getExclusiveStatus().name()(activity);
 				if (!(state.equals(Plain.FINISHED)
 						|| state.equals(ProcessModel.FINISHED)
 						|| state.equals(Plain.FAILED)
@@ -3809,7 +3809,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		if (resource instanceof Exclusive) {
 			Exclusive exc = (Exclusive) resource;
-			if (exc.getState().equals(Exclusive.LOCKED)) {
+			if (exc.getExclusiveStatus().name()().equals(Exclusive.LOCKED)) {
 				exc.setState(Exclusive.AVAILABLE);
 				this.logging.registerResourceEvent(exc, actNorm,
 						"ToAvailable", "Rule 12.7"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -3843,7 +3843,7 @@ public class TaskServicesImpl implements TaskServices {
 						continue;
 					Activity activityFrom = simplecon.getFromActivity();
 					boolean isPlain = activityFrom instanceof Plain;
-					String state = getState(activityFrom);
+					String state = getExclusiveStatus().name()(activityFrom);
 					Sequence sequence = (Sequence) simplecon;
 					String kindDep = sequence.getTheDependency().getKindDep();
 					if (!isDepSatisfiedToBegin(kindDep, state, isPlain)) {
@@ -3859,7 +3859,7 @@ public class TaskServicesImpl implements TaskServices {
 				Collection connections = actDec.getFromBranchANDCon();
 				Iterator iter = connections.iterator();
 				while (iter.hasNext()) {
-					Branch branch = (BranchCon) iter.next();
+					BranchCon branch = (BranchCon) iter.next();
 					String kindDep = branchCon.getTheDependency().getKindDep();
 					if ((kindDep.equals("start-start") || //$NON-NLS-1$
 							kindDep.equals("end-start")) && //$NON-NLS-1$
@@ -3878,7 +3878,7 @@ public class TaskServicesImpl implements TaskServices {
 				while (iter.hasNext()) {
 					BranchCondToActivity bcta = (BranchConCondToActivity) iter
 							.next();
-					BranchCond branch = bcta.getTheBranchConCond();
+					BranchConCond branch = bcta.getTheBranchConCond();
 					String kindDep = branchCon.getTheDependency().getKindDep();
 					if ((kindDep.equals("start-start") || //$NON-NLS-1$
 					kindDep.equals("end-start"))) { //$NON-NLS-1$
@@ -3900,7 +3900,7 @@ public class TaskServicesImpl implements TaskServices {
 				Collection connections = actDec.getFromJoinCon();
 				Iterator iter = connections.iterator();
 				while (iter.hasNext()) {
-					Join join = (JoinCon) iter.next();
+					JoinCon join = (JoinCon) iter.next();
 					String kindDep = joinCon.getTheDependency().getKindDep();
 					if ((kindDep.equals("start-start") || //$NON-NLS-1$
 							kindDep.equals("end-start")) && //$NON-NLS-1$
@@ -4055,7 +4055,7 @@ public class TaskServicesImpl implements TaskServices {
 		Resource resource = reqResource.getTheResource();
 		if (resource instanceof Exclusive) {
 			Exclusive exclusive = (Exclusive) resource;
-			if (exclusive.getState().equals(Exclusive.AVAILABLE)) {
+			if (exclusive.getExclusiveStatus().name()().equals(Exclusive.AVAILABLE)) {
 				boolean isReserved = this.isExclResourceReserved(exclusive,
 						actNorm.getPlannedBegin(), actNorm.getPlannedEnd());
 				if (!isReserved) {
@@ -4064,11 +4064,11 @@ public class TaskServicesImpl implements TaskServices {
 			}
 		} else if (resource instanceof Shareable) {
 			Shareable shareable = (Shareable) resource;
-			if (shareable.getState().equals(Shareable.AVAILABLE))
+			if (shareable.getExclusiveStatus().name()().equals(Shareable.AVAILABLE))
 				isAvailable = true;
 		} else if (resource instanceof Consumable) {
 			Consumable consumable = (Consumable) resource;
-			if (consumable.getState().equals(Consumable.AVAILABLE)) {
+			if (consumable.getExclusiveStatus().name()().equals(Consumable.AVAILABLE)) {
 				float needed = reqResource.getAmountNeeded().floatValue();
 				float total = consumable.getTotalQuantity().floatValue();
 				float used = consumable.getAmountUsed().floatValue();
@@ -4193,7 +4193,7 @@ public class TaskServicesImpl implements TaskServices {
 				if (multiplecon.isFired().booleanValue())
 					continue;
 				if (multiplecon instanceof JoinCon) {
-					Join join = (JoinCon) multiplecon;
+					JoinCon join = (JoinCon) multiplecon;
 					String dep = joinCon.getTheDependency().getKindDep();
 					if (this.isJoinSatisfied(joinCon)) {
 						joinCon.setFired(new Boolean(true));
@@ -4340,7 +4340,7 @@ public class TaskServicesImpl implements TaskServices {
 						fired = true;
 					}
 				} else if (multiplecon instanceof BranchCon) {
-					Branch branch = (BranchCon) multiplecon;
+					BranchCon branch = (BranchCon) multiplecon;
 					String dep = branchCon.getTheDependency().getKindDep();
 					if (this.isBranchSatisfied(branchCon)) {
 						branchCon.setFired(new Boolean(true));
@@ -4364,7 +4364,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * Analises if the JoinCon is satisfied according to the logical operator and
 	 * the predecessors.
 	 */
-	private boolean isJoinSatisfied(Join joinCon) {
+	private boolean isJoinSatisfied(JoinCon joinCon) {
 		boolean satisfied;
 
 		String kindJoin = join.getKindJoinCon();
@@ -4375,7 +4375,7 @@ public class TaskServicesImpl implements TaskServices {
 		Activity toActivity = joinCon.getToActivity();
 		String toState = ""; //$NON-NLS-1$
 		if (toActivity != null) {
-			toState = this.getState(toActivity);
+			toState = this.getExclusiveStatus().name()(toActivity);
 		}
 
 		// Rules 8.1, 8.2, 8.3, 8.10 and NACs
@@ -4385,7 +4385,7 @@ public class TaskServicesImpl implements TaskServices {
 			while (iter.hasNext()) {
 				Activity activity = (Activity) iter.next();
 				boolean isPlain = activity instanceof Plain;
-				String state = this.getState(activity);
+				String state = this.getExclusiveStatus().name()(activity);
 				if (toState.equals(Plain.WAITING)
 						|| toState.equals(Plain.READY)
 						|| toState.equals(ProcessModel.INSTANTIATED)) {
@@ -4412,7 +4412,7 @@ public class TaskServicesImpl implements TaskServices {
 					if (!multiplecon.isFired().booleanValue()) {
 						if (multiplecon instanceof BranchConCond)
 							satisfied = !this.isConditionSatisfied(
-									(BranchCond) multiplecon, joinCon);
+									(BranchConCond) multiplecon, joinCon);
 						else
 							satisfied = false;
 						break;
@@ -4426,7 +4426,7 @@ public class TaskServicesImpl implements TaskServices {
 			while (iter.hasNext()) {
 				Activity activity = (Activity) iter.next();
 				boolean isPlain = activity instanceof Plain;
-				String state = this.getState(activity);
+				String state = this.getExclusiveStatus().name()(activity);
 				if (toState.equals(Plain.WAITING)
 						|| toState.equals(Plain.READY)
 						|| toState.equals(ProcessModel.INSTANTIATED)) {
@@ -4449,7 +4449,7 @@ public class TaskServicesImpl implements TaskServices {
 					if (multiplecon.isFired().booleanValue()) {
 						if (multiplecon instanceof BranchConCond)
 							satisfied = this.isConditionSatisfied(
-									(BranchCond) multiplecon, joinCon);
+									(BranchConCond) multiplecon, joinCon);
 						else
 							satisfied = true;
 						break;
@@ -4463,7 +4463,7 @@ public class TaskServicesImpl implements TaskServices {
 			while (iter.hasNext()) {
 				Activity activity = (Activity) iter.next();
 				boolean isPlain = activity instanceof Plain;
-				String state = this.getState(activity);
+				String state = this.getExclusiveStatus().name()(activity);
 				if (toState.equals(Plain.WAITING)
 						|| toState.equals(Plain.READY)
 						|| toState.equals(ProcessModel.INSTANTIATED)) {
@@ -4498,7 +4498,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * Analises if the BranchCon is satisfied according to the logical operator and
 	 * the predecessors.
 	 */
-	private boolean isBranchSatisfied(Branch branchCon) {
+	private boolean isBranchSatisfied(BranchCon branchCon) {
 
 		boolean satisfied;
 
@@ -4507,7 +4507,7 @@ public class TaskServicesImpl implements TaskServices {
 
 		if (activity != null) {
 			boolean isPlain = activity instanceof Plain;
-			String state = this.getState(activity);
+			String state = this.getExclusiveStatus().name()(activity);
 			String kindDep = branchCon.getTheDependency().getKindDep();
 			satisfied = this.isDepSatisfiedToBegin(kindDep, state, isPlain);
 		} else if (multiplecon != null) {
@@ -4530,13 +4530,13 @@ public class TaskServicesImpl implements TaskServices {
 			if (seq.getFromActivity() != null)
 				pred.add(seq.getFromActivity());
 		} else if (conn instanceof BranchCon) {
-			Branch branch = (BranchCon) conn;
+			BranchCon branch = (BranchCon) conn;
 			if (branchCon.getFromActivity() != null)
 				pred.add(branchCon.getFromActivity());
 			if (branchCon.getFromMultipleConnection() != null)
 				pred.add(branchCon.getFromMultipleConnection());
 		} else if (conn instanceof JoinCon) {
-			Join join = (JoinCon) conn;
+			JoinCon join = (JoinCon) conn;
 			if (joinCon.getFromActivity() != null)
 				pred.addAll(joinCon.getFromActivity());
 			if (joinCon.getFromMultipleCon() != null)
@@ -4548,11 +4548,11 @@ public class TaskServicesImpl implements TaskServices {
 	/**
 	 * Returns the state of an Activity, even if it is Plain or Decomposed.
 	 */
-	private String getState(Activity activity) {
+	private String getExclusiveStatus().name()(Activity activity) {
 		String state;
 		if (activity instanceof Plain) {
 			Plain plain = (Plain) activity;
-			state = plain.getTheEnactionDescription().getState();
+			state = plain.getTheEnactionDescription().getExclusiveStatus().name()();
 		} else { // decomposed
 			Decomposed decomposed = (Decomposed) activity;
 			state = decomposed.getTheReferedProcessModel().getPmState();
@@ -4633,7 +4633,7 @@ public class TaskServicesImpl implements TaskServices {
 	 * 7.6, 7.11, Evaluates the conditions of the BranchCones if the successor is
 	 * an Activity.
 	 */
-	private boolean isConditionSatisfied(BranchCond branchConcond,
+	private boolean isConditionSatisfied(BranchConCond branchConcond,
 			Activity activity) {
 
 		boolean satisfied = false;
@@ -4654,13 +4654,13 @@ public class TaskServicesImpl implements TaskServices {
 	 * 7.11, 7.12, Evaluates the conditions of the BranchCones if the successor is
 	 * a Multiple Connection.
 	 */
-	private boolean isConditionSatisfied(BranchCond branchConcond,
+	private boolean isConditionSatisfied(BranchConCond branchConcond,
 			MultipleCon multipleCon) {
 		boolean satisfied = false;
 		Collection conditions = branchcond.getTheBranchConCondToMultipleCon();
 		Iterator iter = conditions.iterator();
 		while (iter.hasNext()) {
-			BranchCondToMultipleCon condition = (BranchConCondToMultipleCon) iter
+			BranchConCondToMultipleCon condition = (BranchConCondToMultipleCon) iter
 					.next();
 			if (condition.getTheMultipleCon().equals(multipleCon)) {
 				satisfied = this.conditionValue(condition.getTheCondition());

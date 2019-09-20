@@ -204,7 +204,7 @@ public class TemplateServicesImpl implements TemplateServices {
 		System.out.println("estado :"+s[0]);
 		Process process = (Process)processDAO.retrieveBySecondaryKey(process_id);
 
-		String state = process.getPState();
+		String state = process.getpStatus().name();
 		System.out.println("estado :"+state);
 
 		if(state.equalsIgnoreCase(Process.FINISHED) || state.equalsIgnoreCase(Process.ENACTING)){
@@ -993,10 +993,10 @@ public class TemplateServicesImpl implements TemplateServices {
 					else if(currentConnection instanceof BranchConCond){
 						newConnection = new BranchConCond();
 
-						((BranchCond)newConnection).setKindBranch( ((BranchCond)currentConnection).getKindBranchCon());
+						((BranchConCond)newConnection).setKindBranch( ((BranchConCond)currentConnection).getKindBranchCon());
 
 						//	ToActivity
-						Collection toActivities = ((BranchCond)currentConnection).getTheBranchConCondToActivity();
+						Collection toActivities = ((BranchConCond)currentConnection).getTheBranchConCondToActivity();
 						for(Iterator<BranchConCondToActivity> toActivityIterator = toActivities.iterator(); toActivityIterator.hasNext();){
 							BranchConCondToActivity currentToAct = toActivityIterator.next();
 							if(currentToAct!=null){
@@ -1017,18 +1017,18 @@ public class TemplateServicesImpl implements TemplateServices {
 								}//end if condition != null
 
 								//add current element to newBranchConCond object
-								((BranchCond)newConnection).insertIntoTheBranchCondToActivity(newBranchConCondToAct);
+								((BranchConCond)newConnection).insertIntoTheBranchCondToActivity(newBranchConCondToAct);
 							}//end if != null
 						}//end for
 
 						//###########
 
-						//	((BranchCond)currentConnection).getKindBranchCon();
+						//	((BranchConCond)currentConnection).getKindBranchCon();
 
 						//##########
 
 
-					}//end if common atribute for all branch connections ((Branch)newConnection).setFired(((BranchCon)currentConnection).getFired());
+					}//end if common atribute for all branch connections ((BranchCon)newConnection).setFired(((BranchCon)currentConnection).getFired());
 
 					//about dependency
 					if( ((BranchCon)currentConnection).getTheDependency() !=null){
@@ -1048,14 +1048,14 @@ public class TemplateServicesImpl implements TemplateServices {
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
 
-					this.addCoordinate(((Branch)currentConnection).getId(), ((BranchCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
+					this.addCoordinate(((BranchCon)currentConnection).getId(), ((BranchCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}
 				else if(currentConnection instanceof JoinCon){
 					newConnection = new JoinCon();
 					//simple attributes
-					//((Join)newConnection).setFired( ((JoinCon)currentConnection).getFired() );
+					//((JoinCon)newConnection).setFired( ((JoinCon)currentConnection).getFired() );
 
-					((Join)newConnection).setKindJoin(((Join)currentConnection).getKindJoinCon());
+					((JoinCon)newConnection).setKindJoin(((JoinCon)currentConnection).getKindJoinCon());
 
 					//about dependency
 					if( ((JoinCon)currentConnection).getTheDependency() !=null){
@@ -1089,7 +1089,7 @@ public class TemplateServicesImpl implements TemplateServices {
 					newConnection.setIdent(newConnectionIdent);
 					postProcessingCollection.add(currentConnection);
 
-					this.addCoordinate(((Join)currentConnection).getId(), ((JoinCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
+					this.addCoordinate(((JoinCon)currentConnection).getId(), ((JoinCon)currentConnection).getClass().getSimpleName(), WebAPSEEObject.CONNECTION + "+" + newConnectionIdent, coordinates);
 				}//end joinCon processing
 
 				//about conection type
@@ -1154,21 +1154,21 @@ public class TemplateServicesImpl implements TemplateServices {
 						}//end if != null
 					}//end for
 				}else if(currentPostConnection instanceof BranchConCond){
-					Collection toMultipleCon = ((BranchCond)currentPostConnection).getTheBranchConCondToMultipleCon();
+					Collection toMultipleCon = ((BranchConCond)currentPostConnection).getTheBranchConCondToMultipleCon();
 					for(Iterator<BranchConCondToMultipleCon> toMultipleIterator = toMultipleCon.iterator();toMultipleIterator.hasNext();){
 						BranchConCondToMultipleCon currentToMult = toMultipleIterator.next();
 						if(currentToMult!=null){
-							BranchCondToMultipleCon newBranchCondToMult = new BranchConCondToMultipleCon();
+							BranchConCondToMultipleCon newBranchCondToMult = new BranchConCondToMultipleCon();
 							if(currentToMult.getTheMultipleCon()!=null){
 								String multipleIdent = currentToMult.getTheMultipleCon().getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 								MultipleCon newToMultipleCon = (MultipleCon) connectionTable.get(multipleIdent);
 								if(newToMultipleCon!=null){
-									((BranchCondToMultipleCon)newBranchConCondToMult).insertIntoTheMultipleCon(newToMultipleCon);
+									((BranchConCondToMultipleCon)newBranchConCondToMult).insertIntoTheMultipleCon(newToMultipleCon);
 								}//end if
 							}//end if != null
 							// about conditions
 //							newBranchConCondToMult.setCondition(currentToMult.getCondition());
-							((BranchCond)alreadyCreatedConnection).insertIntoTheBranchCondToMultipleCon(newBranchConCondToMult);
+							((BranchConCond)alreadyCreatedConnection).insertIntoTheBranchCondToMultipleCon(newBranchConCondToMult);
 						}//end if != null
 					}//end for
 				}//end if
@@ -1247,7 +1247,7 @@ public class TemplateServicesImpl implements TemplateServices {
 		destinationNormal.setHowLongUnit(sourceNormal.getHowLongUnit());
 		destinationNormal.setName(sourceNormal.getName());
 		destinationNormal.setScript(sourceNormal.getScript());
-		destinationNormal.setDelegable(sourceNormal.getDelegable());
+		destinationNormal.setDelegable(sourceNormal.isDelegable());
 		destinationNormal.setAutoAllocable(sourceNormal.getAutoAllocable());
 
 		if(!operationType.equals(PROC_DEST)){

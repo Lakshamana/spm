@@ -105,7 +105,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 
         // checks related to the state of the system
 
-        if(!process.getPState().equals(Process.NOT_STARTED)){
+        if(!process.getpStatus().name().equals(Process.NOT_STARTED)){
         	throw new UserException(Messages.getString("facades.EnactmentEngine.UserExcProcess") +process_id+ Messages.getString("facades.EnactmentEngine.UserExcIsAlreEnac")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
@@ -245,7 +245,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
         while (iterC.hasNext()) {
         	Connection conn = (Connection) iterC.next();
         	if (conn instanceof JoinCon){
-        		Join join = (JoinCon)conn;
+        		JoinCon join = (JoinCon)conn;
         		String dep = joinCon.getTheDependency().getKindDep();
         		if (join.getKindJoinCon().equals("OR")){ //$NON-NLS-1$
         			if (dep.equals("start-start")){ //$NON-NLS-1$
@@ -348,7 +348,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                     while (iterC.hasNext()) {
             			Connection conn = (Connection) iterC.next();
             			if (conn instanceof JoinCon){
-            				Join join = (JoinCon)conn;
+            				JoinCon join = (JoinCon)conn;
             				String dep = joinCon.getTheDependency().getKindDep();
                 			if (join.getKindJoinCon().equals("OR")){ //$NON-NLS-1$
                 				if (dep.equals("end-start") || //$NON-NLS-1$
@@ -442,7 +442,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 while (iterC.hasNext()) {
         			Connection conn = (Connection) iterC.next();
         			if (conn instanceof JoinCon){
-        				Join join = (JoinCon)conn;
+        				JoinCon join = (JoinCon)conn;
         				String dep = joinCon.getTheDependency().getKindDep();
             			if (join.getKindJoinCon().equals("OR")){ //$NON-NLS-1$
             				if (dep.equals("end-start") || //$NON-NLS-1$
@@ -1398,7 +1398,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
         		if (multiplecon.isFired().booleanValue())
 	        		continue;
 	        	if (multiplecon instanceof JoinCon) {
-	        		Join join = (JoinCon)multiplecon;
+	        		JoinCon join = (JoinCon)multiplecon;
 	        		String dep = joinCon.getTheDependency().getKindDep();
 	        		if (this.isJoinSatisfied (joinCon)) {
 	        			joinCon.setFired (new Boolean (true));
@@ -1530,7 +1530,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	        		}
 	        	}
 	        	else if (multiplecon instanceof BranchCon) {
-	        		Branch branch = (BranchCon)multiplecon;
+	        		BranchCon branch = (BranchCon)multiplecon;
 	        		String dep = branchCon.getTheDependency().getKindDep();
 	        		if (this.isBranchSatisfied (branchCon)) {
 	        			branchCon.setFired (new Boolean (true));
@@ -2057,7 +2057,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 while (iterC.hasNext()) {
         			Connection conn = (Connection) iterC.next();
         			if (conn instanceof JoinCon){
-        				Join join = (JoinCon)conn;
+        				JoinCon join = (JoinCon)conn;
         				String dep = joinCon.getTheDependency().getKindDep();
             			if (join.getKindJoinCon().equals("OR")){ //$NON-NLS-1$
             				if(dep.equals("start-start")){ //$NON-NLS-1$
@@ -2215,7 +2215,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				Collection connections = actDec.getFromBranchANDCon();
 				Iterator iter = connections.iterator();
 				while (iter.hasNext()) {
-					Branch branch = (BranchCon) iter.next();
+					BranchCon branch = (BranchCon) iter.next();
 					String kindDep = branchCon.getTheDependency().getKindDep();
 					if ((kindDep.equals ("start-start") || //$NON-NLS-1$
 						kindDep.equals ("end-start"))   && //$NON-NLS-1$
@@ -2233,7 +2233,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				Iterator iter = connections.iterator();
 				while (iter.hasNext()) {
 					BranchCondToActivity bcta = (BranchConCondToActivity)iter.next();
-					BranchCond branch = bcta.getTheBranchConCond();
+					BranchConCond branch = bcta.getTheBranchConCond();
 					String kindDep = branchCon.getTheDependency().getKindDep();
 					if ((kindDep.equals ("start-start") || //$NON-NLS-1$
 						kindDep.equals ("end-start") )){   //$NON-NLS-1$
@@ -2256,7 +2256,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				Collection connections = actDec.getFromJoinCon();
 				Iterator iter = connections.iterator();
 				while (iter.hasNext()) {
-					Join join = (JoinCon) iter.next();
+					JoinCon join = (JoinCon) iter.next();
 					String kindDep = joinCon.getTheDependency().getKindDep();
 					if ((kindDep.equals ("start-start") || //$NON-NLS-1$
 						kindDep.equals ("end-start")) && //$NON-NLS-1$
@@ -2316,7 +2316,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			Collection connections = activity.getFromBranchANDCon();
 			Iterator iter = connections.iterator();
 			while (iter.hasNext()) {
-				Branch branch = (BranchCon) iter.next();
+				BranchCon branch = (BranchCon) iter.next();
 				String kindDep = branchCon.getTheDependency().getKindDep();
 				if ((kindDep.equals ("start-start") || //$NON-NLS-1$
 					kindDep.equals ("end-start"))   && //$NON-NLS-1$
@@ -2334,7 +2334,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			Iterator iter = connections.iterator();
 			while (iter.hasNext()) {
 				BranchCondToActivity bcta = (BranchConCondToActivity)iter.next();
-				BranchCond branch = bcta.getTheBranchConCond();
+				BranchConCond branch = bcta.getTheBranchConCond();
 				String kindDep = branchCon.getTheDependency().getKindDep();
 				if ((kindDep.equals ("start-start") || //$NON-NLS-1$
 					kindDep.equals ("end-start") )){   //$NON-NLS-1$
@@ -2358,7 +2358,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			Collection connections = activity.getFromJoinCon();
 			Iterator iter = connections.iterator();
 			while (iter.hasNext()) {
-				Join join = (JoinCon) iter.next();
+				JoinCon join = (JoinCon) iter.next();
 				String kindDep = joinCon.getTheDependency().getKindDep();
 				if ((kindDep.equals ("start-start") || //$NON-NLS-1$
 					kindDep.equals ("end-start")) && //$NON-NLS-1$
@@ -2504,7 +2504,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
        					while (iterC.hasNext()) {
        						Connection conn = (Connection) iterC.next();
        						if (conn instanceof JoinCon){
-       							Join join = (JoinCon)conn;
+       							JoinCon join = (JoinCon)conn;
        							String dep = joinCon.getTheDependency().getKindDep();
        							if (join.getKindJoinCon().equals("OR")){ //$NON-NLS-1$
        								if (dep.equals("end-start") || //$NON-NLS-1$
@@ -2592,7 +2592,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				MultipleCon multi = (MultipleCon)conn;
 				Dependency dep = null;
 				if (multi instanceof JoinCon) {
-					Join join = (JoinCon)multi;
+					JoinCon join = (JoinCon)multi;
 					Collection preds = this.getPredecessors(joinCon);
 					Iterator iterPreds = preds.iterator();
 					while (iterPreds.hasNext()) {
@@ -2602,7 +2602,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					dep = joinCon.getTheDependency();
 				}
 				else if (multi instanceof BranchCon) {
-					Branch branch = (BranchCon)multi;
+					BranchCon branch = (BranchCon)multi;
 					Collection preds = this.getPredecessors(branchCon);
 					Iterator iterPreds = preds.iterator();
 					while (iterPreds.hasNext()) {
@@ -2690,7 +2690,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 }
             }
             else if(conn instanceof BranchANDCon){ // Rule 4.2 NAC-01
-                BranchAND bAND = (BranchANDCon)conn;
+                BranchANDCon bAND = (BranchANDCon)conn;
                 if(!bAND.isFired().booleanValue()
                    && bAND.getTheDependency().getKindDep().equals("end-end")){
                     ret = false;
@@ -2698,7 +2698,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 }
             }
             else if(conn instanceof BranchConCond){
-                BranchCond bCond = (BranchConCond)conn;
+                BranchConCond bCond = (BranchConCond)conn;
                 if(bCond.getTheDependency().getKindDep().equals("end-end")){
                    if(!bCond.isFired().booleanValue()){ // Rule 4.2 NAC-02
                        ret = false;
@@ -2720,7 +2720,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 }
             }
             else if(conn instanceof JoinCon){ // Rule 4.2 NAC-01
-                Join join = (JoinCon)conn;
+                JoinCon join = (JoinCon)conn;
                 if(!joinCon.isFired().booleanValue()
                    && joinCon.getTheDependency().getKindDep().equals("end-end")){ //$NON-NLS-1$
                    ret = false;
@@ -2766,7 +2766,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 Connection conn = (Connection) iterfroms.next();
 
                 if(conn instanceof BranchANDCon){ // Rule 4.2 NAC-01
-                    BranchAND bAND = (BranchANDCon)conn;
+                    BranchANDCon bAND = (BranchANDCon)conn;
                     if(!bAND.isFired().booleanValue()
                        && bAND.getTheDependency().getKindDep().equals("end-end")){
                         ret = false;
@@ -2774,7 +2774,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                     }
                 }
                 else if(conn instanceof BranchConCond){
-                    BranchCond bCond = (BranchConCond)conn;
+                    BranchConCond bCond = (BranchConCond)conn;
                     if(bCond.getTheDependency().getKindDep().equals("end-end")){
                        if(!bCond.isFired().booleanValue()){ // Rule 4.2 NAC-02
                            ret = false;
@@ -2797,7 +2797,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                     }
                 }
                 else if(conn instanceof JoinCon){ // Rule 4.2 NAC-01
-                    Join join = (JoinCon)conn;
+                    JoinCon join = (JoinCon)conn;
                     if(!joinCon.isFired().booleanValue()
                        && joinCon.getTheDependency().getKindDep().equals("end-end")){
                        ret = false;
@@ -2920,7 +2920,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			else if (conn instanceof MultipleCon) {
 				MultipleCon multi = (MultipleCon)conn;
 				if (multi instanceof JoinCon) {
-					Join join = (JoinCon)multi;
+					JoinCon join = (JoinCon)multi;
 					Activity actJoin = joinCon.getToActivity();
 					MultipleCon multJoin = joinCon.getToMultipleCon();
 					if(actJoinCon != null)
@@ -2929,9 +2929,9 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 						this.failJoinSuccessor(multJoin, joinCon/*, currentSession*/);
 				}
 				else if (multi instanceof BranchCon) {
-					Branch branch = (BranchCon)multi;
+					BranchCon branch = (BranchCon)multi;
 					if(branch instanceof BranchANDCon){
-						BranchAND branchAND = (BranchAND)branchCon;
+						BranchANDCon branchAND = (BranchANDCon)branchCon;
 						Collection acts = branchANDCon.getToActivity();
 						Collection mults = branchANDCon.getToMultipleCon();
 						Iterator iterActs = acts.iterator();
@@ -2946,7 +2946,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 						}
 					}
 					else {
-						BranchCond branchCond = (BranchCond)branchCon;
+						BranchConCond branchCond = (BranchConCond)branchCon;
 						Collection acts = branchCond.getTheBranchConCondToActivity();
 						Collection mults = branchCond.getTheBranchConCondToMultipleCon();
 						Iterator iterTheActs = acts.iterator();
@@ -2956,7 +2956,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 						}
 						Iterator iterTheMults = mults.iterator();
 						while (iterTheMults.hasNext()) {
-							BranchCondToMultipleCon mult = (BranchConCondToMultipleCon) iterTheMults.next();
+							BranchConCondToMultipleCon mult = (BranchConCondToMultipleCon) iterTheMults.next();
 							this.failBranchSuccessor(mult.getTheMultipleCon(), branchConCond);
 						}
 					}
@@ -3054,23 +3054,23 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			throws WebapseeException {
 
 		if (multiconn instanceof BranchCon) {
-			Branch branch = (BranchCon)multiconn;
+			BranchCon branch = (BranchCon)multiconn;
 			Collection succ = new LinkedList();
 			if(branch instanceof BranchANDCon){
-				BranchAND bAND = (BranchAND)branchCon;
+				BranchANDCon bAND = (BranchANDCon)branchCon;
                 if(bAND.getToActivity() != null)
                     succ.addAll(bAND.getToActivity());
                 if(bAND.getToMultipleCon() != null)
                     succ.addAll(bAND.getToMultipleCon());
 			}
 			else{
-				BranchCond bCond = (BranchCond)branchCon;
+				BranchConCond bCond = (BranchConCond)branchCon;
 				Collection bctmc = bCond.getTheBranchConCondToMultipleCon();
 				Collection atbc = bCond.getTheBranchConCondToActivity();
 				Iterator iterMulti = bctmc.iterator(),
 						 iterAct = atbc.iterator();
 				while (iterMulti.hasNext()) {
-					BranchCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
+					BranchConCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
                     if(multi.getTheMultipleCon() != null)
                         succ.add(multi.getTheMultipleCon());
 				}
@@ -3087,7 +3087,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			}
 		}
 		else if (multiconn instanceof JoinCon) {
-			Join join = (JoinCon)multiconn;
+			JoinCon join = (JoinCon)multiconn;
 			this.failJoin (joinCon);
 		}
 	}
@@ -3097,7 +3097,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * Applies to the Rules 5.13, 5.14, 5.15,
 	 * 5.16, 5.17, 5.27, 5.28,
 	 */
-	private void failBranch (Branch branchCon, Object obj/*, Session currentSession*/)
+	private void failBranch (BranchCon branchCon, Object obj/*, Session currentSession*/)
 		throws WebapseeException {
 
 		if (obj instanceof Activity) {
@@ -3130,7 +3130,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * 5.20, 5.21, 5.22, 5.23, 5.24,
 	 * 5.25, 5.26
 	 */
-	private void failJoin (Join joinCon/*, Session currentSession*/) throws WebapseeException {
+	private void failJoin (JoinCon joinCon/*, Session currentSession*/) throws WebapseeException {
 
 		Activity act = joinCon.getToActivity();
 		MultipleCon multi = joinCon.getToMultipleCon();
@@ -3186,7 +3186,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * 5.9, 5.10
 	 */
 	private void failJoinConSuccessor
-		(Activity act, Join joinCon/*, Session currentSession*/)
+		(Activity act, JoinCon joinCon/*, Session currentSession*/)
 			throws WebapseeException {
 
 		String state = this.getState(act);
@@ -3248,7 +3248,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * Applies to the Rule 5.6, 5.11, 5.12,
 	 */
 	private void failJoinConSuccessor
-	(MultipleCon mult, Join joinCon/*, Session currentSession*/)
+	(MultipleCon mult, JoinCon joinCon/*, Session currentSession*/)
 		throws WebapseeException {
 
 		//String state = this.getState(act);
@@ -3294,7 +3294,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * Applies to the Rules 5.13, 5.14, 5.15,
 	 */
 	private void failBranchConSuccessor
-		(Activity act, Branch branchCon/*, Session currentSession*/)
+		(Activity act, BranchCon branchCon/*, Session currentSession*/)
 			throws WebapseeException {
 
 		String state = this.getState(act);
@@ -3342,7 +3342,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * predecessor of the BranchCon is an Multiple Connection.
 	 */
 	private void failBranchConSuccessor
-	(MultipleCon mult, Branch branchCon/*, Session currentSession*/)
+	(MultipleCon mult, BranchCon branchCon/*, Session currentSession*/)
 		throws WebapseeException {
 
 		String depType = branchCon.getTheDependency().getKindDep();
@@ -3419,7 +3419,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			else if (conn instanceof MultipleCon) {
 				MultipleCon multi = (MultipleCon)conn;
 				if (multi instanceof JoinCon) {
-					Join join = (JoinCon)multi;
+					JoinCon join = (JoinCon)multi;
 					Activity actJoin = joinCon.getToActivity();
 					MultipleCon multJoin = joinCon.getToMultipleCon();
 					if(actJoinCon != null)
@@ -3428,9 +3428,9 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 						this.cancelJoinSuccessor(multJoin, joinCon);
 				}
 				else if (multi instanceof BranchCon) {
-					Branch branch = (BranchCon)multi;
+					BranchCon branch = (BranchCon)multi;
 					if(branch instanceof BranchANDCon){
-						BranchAND branchAND = (BranchAND)branchCon;
+						BranchANDCon branchAND = (BranchANDCon)branchCon;
 						Collection acts = branchANDCon.getToActivity();
 						Collection mults = branchANDCon.getToMultipleCon();
 						Iterator iterActs = acts.iterator();
@@ -3445,7 +3445,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 						}
 					}
 					else {
-						BranchCond branchCond = (BranchCond)branchCon;
+						BranchConCond branchCond = (BranchConCond)branchCon;
 						Collection acts = branchCond.getTheBranchConCondToActivity();
 						Collection mults = branchCond.getTheBranchConCondToMultipleCon();
 						Iterator iterTheActs = acts.iterator();
@@ -3455,7 +3455,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 						}
 						Iterator iterTheMults = mults.iterator();
 						while (iterTheMults.hasNext()) {
-							BranchCondToMultipleCon mult = (BranchConCondToMultipleCon) iterTheMults.next();
+							BranchConCondToMultipleCon mult = (BranchConCondToMultipleCon) iterTheMults.next();
 							this.cancelBranchSuccessor(mult.getTheMultipleCon(), branchConCond);
 						}
 					}
@@ -3544,23 +3544,23 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			throws WebapseeException {
 
 		if (multiconn instanceof BranchCon) {
-			Branch branch = (BranchCon)multiconn;
+			BranchCon branch = (BranchCon)multiconn;
 			Collection succ = new LinkedList();
 			if(branch instanceof BranchANDCon){
-				BranchAND bAND = (BranchAND)branchCon;
+				BranchANDCon bAND = (BranchANDCon)branchCon;
                 if(bAND.getToActivity() != null)
                     succ.addAll(bAND.getToActivity());
                 if(bAND.getToMultipleCon() != null)
                     succ.addAll(bAND.getToMultipleCon());
 			}
 			else{
-				BranchCond bCond = (BranchCond)branchCon;
+				BranchConCond bCond = (BranchConCond)branchCon;
 				Collection bctmc = bCond.getTheBranchConCondToMultipleCon();
 				Collection atbc = bCond.getTheBranchConCondToActivity();
 				Iterator iterMulti = bctmc.iterator(),
 						 iterAct = atbc.iterator();
 				while (iterMulti.hasNext()) {
-					BranchCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
+					BranchConCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
 					if(multi.getTheMultipleCon() != null)
 					    succ.add(multi.getTheMultipleCon());
 				}
@@ -3577,7 +3577,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			}
 		}
 		else if (multiconn instanceof JoinCon) {
-			Join join = (JoinCon)multiconn;
+			JoinCon join = (JoinCon)multiconn;
 			this.cancelJoin (joinCon);
 		}
 	}
@@ -3587,7 +3587,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * Applies to the Rules 6.13, 6.14,
 	 * 6.15, 6.16, 6.17, 6.18, 6.29, 6.30
 	 */
-	private void cancelBranch (Branch branchCon, Object obj/*, Session currentSession*/)
+	private void cancelBranch (BranchCon branchCon, Object obj/*, Session currentSession*/)
 		throws WebapseeException {
 
 		if (obj instanceof Activity) {
@@ -3618,7 +3618,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * 6.20, 6.21, 6.22, 6.23, 6.24,
 	 * 6.25, 6.26, 6.27, 6.28.
 	 */
-	private void cancelJoin (Join joinCon/*, Session currentSession*/) throws WebapseeException {
+	private void cancelJoin (JoinCon joinCon/*, Session currentSession*/) throws WebapseeException {
 
 		String joinType = join.getKindJoinCon();
 		Activity act = joinCon.getToActivity();
@@ -3685,7 +3685,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * 6.9, 6.23, 6.6, 6.21, 6.10, 6.24, 6.11, 6.25
 	 */
 	private void cancelJoinConSuccessor
-		(Activity act, Join joinCon/*, Session currentSession*/)
+		(Activity act, JoinCon joinCon/*, Session currentSession*/)
 			throws WebapseeException {
 
 		//String why = "";
@@ -3748,7 +3748,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * 7.13, 7.14, 7.15
 	 */
 	private void cancelBranchConSuccessor
-		(Activity act, Branch branchCon/*, Session currentSession*/)
+		(Activity act, BranchCon branchCon/*, Session currentSession*/)
 			throws WebapseeException {
 
 		String state = this.getState(act);
@@ -3758,7 +3758,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					this.cancelGeneralActivity (act, true, "Rule 6.13"); //$NON-NLS-1$
 				}
 				else{
-					BranchCond bCond = (BranchCond)branchCon;
+					BranchConCond bCond = (BranchConCond)branchCon;
 					String depType = bCond.getTheDependency().getKindDep();
 					if (!this.isConditionSatisfied(bCond, act)){
 						if(depType.equals("start-start")||depType.equals("end-start")){ //$NON-NLS-1$ //$NON-NLS-2$
@@ -3796,7 +3796,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * predecessor of the BranchCon is an Multiple Connection.
 	 */
 	private void cancelBranchConSuccessor
-	(MultipleCon mult, Branch branchCon/*, Session currentSession*/)
+	(MultipleCon mult, BranchCon branchCon/*, Session currentSession*/)
 		throws WebapseeException {
 
 		//String depType = branchCon.getTheDependency().getKindDep();
@@ -3832,7 +3832,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * predecessor of the JoinCon is an Multiple Connection.
 	 */
 	private void cancelJoinConSuccessor
-	(MultipleCon mult, Join joinCon/*, Session currentSession*/)
+	(MultipleCon mult, JoinCon joinCon/*, Session currentSession*/)
 		throws WebapseeException {
 
 		String joinType = join.getKindJoinCon();
@@ -4010,17 +4010,17 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				MultipleCon multi = (MultipleCon)conn;
 				multi.setFired(new Boolean(false));
 				if(multi instanceof JoinCon){
-					Join join = (JoinCon)multi;
+					JoinCon join = (JoinCon)multi;
 					if(joinCon.getToActivity() != null)
 					    succ.add(joinCon.getToActivity());
 				}
 				else if(multi instanceof BranchANDCon){
-					BranchAND branchAnd = (BranchANDCon)multi;
+					BranchANDCon branchAnd = (BranchANDCon)multi;
 					if(branchAndCon.getToActivity() != null)
 					    succ.addAll(branchAndCon.getToActivity());
 				}
 				else if (multi instanceof BranchConCond){
-					BranchCond branchCond = (BranchConCond)multi;
+					BranchConCond branchCond = (BranchConCond)multi;
 					Collection acts = branchCond.getTheBranchConCondToActivity();
 					Iterator iter2 = acts.iterator();
 					while (iter2.hasNext()) {
@@ -4367,7 +4367,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
         }
 
         Process process = this.processDAO.retrieveBySecondaryKey(activity.getIdent().substring(0, activity.getIdent().indexOf(".")));
-        String pState = process.getPState();
+        String pState = process.getpStatus().name();
         if(pState.equals(Process.NOT_STARTED)){
         	throw new WebapseeException(Messages.getString("facades.EnactmentEngine.WAExcRedoNotEnactActivity"));
 		}
@@ -4680,7 +4680,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
         Resource resource = reqResource.getTheResource();
         if (resource instanceof Exclusive) {
             Exclusive exclusive = (Exclusive) resource;
-            if (exclusive.getState().equals(Exclusive.AVAILABLE)) {
+            if (exclusive.getExclusiveStatus().name().equals(Exclusive.AVAILABLE)) {
                 boolean isReserved = this.isExclResourceReserved(exclusive,
                         actNorm.getPlannedBegin(), actNorm.getPlannedEnd());
                 if (!isReserved){
@@ -4876,7 +4876,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
      * the successor is an Activity.
      */
 	private boolean isConditionSatisfied
-			(BranchCond branchConcond, Activity activity) throws WebapseeException{
+			(BranchConCond branchConcond, Activity activity) throws WebapseeException{
 
 		boolean satisfied = false;
 		Collection conditions = branchcond.getTheBranchConCondToActivity();
@@ -4899,12 +4899,12 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
      * Evaluates the conditions of the BranchCones if
      * the successor is a Multiple Connection.
      */
-	private boolean isConditionSatisfied (BranchCond branchConcond, MultipleCon multipleCon) throws WebapseeException{
+	private boolean isConditionSatisfied (BranchConCond branchConcond, MultipleCon multipleCon) throws WebapseeException{
 		boolean satisfied = false;
 		Collection conditions = branchcond.getTheBranchConCondToMultipleCon();
 		Iterator iter = conditions.iterator();
 		while (iter.hasNext()) {
-			BranchCondToMultipleCon condition = (BranchConCondToMultipleCon) iter.next();
+			BranchConCondToMultipleCon condition = (BranchConCondToMultipleCon) iter.next();
 			if (condition.getTheMultipleCon().equals(multipleCon)) {
 				satisfied = this.conditionValue(condition.getTheCondition());
 				break;
@@ -4917,7 +4917,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * Analises if the JoinCon is satisfied according to
 	 * the logical operator and the predecessors.
 	 */
-	private boolean isJoinSatisfied (Join joinCon) throws WebapseeException {
+	private boolean isJoinSatisfied (JoinCon joinCon) throws WebapseeException {
 	    boolean satisfied;
 
 	    String kindJoin = join.getKindJoinCon();
@@ -4967,7 +4967,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 	MultipleCon multiplecon = (MultipleCon)iter.next();
                 	if (! multiplecon.isFired().booleanValue()) {
                 		if(multiplecon instanceof BranchConCond)
-                 		   satisfied = !this.isConditionSatisfied((BranchCond)multiplecon, joinCon);
+                 		   satisfied = !this.isConditionSatisfied((BranchConCond)multiplecon, joinCon);
                  		else
                  			satisfied = false;
                 		break;
@@ -5005,7 +5005,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 	MultipleCon multiplecon = (MultipleCon)iter.next();
                 	if (multiplecon.isFired().booleanValue()) {
                 		if(multiplecon instanceof BranchConCond)
-                		   satisfied = this.isConditionSatisfied((BranchCond)multiplecon, joinCon);
+                		   satisfied = this.isConditionSatisfied((BranchConCond)multiplecon, joinCon);
                 		else
                 			satisfied = true;
                 		break;
@@ -5040,7 +5040,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                     MultipleCon multiplecon = (MultipleCon)iter.next();
                     if (multiplecon.isFired().booleanValue()){
                 		if(multiplecon instanceof BranchConCond)
-                 		   if(this.isConditionSatisfied((BranchCond)multiplecon, joinCon))
+                 		   if(this.isConditionSatisfied((BranchConCond)multiplecon, joinCon))
                  		   		trueCount++;
                     }
             }
@@ -5055,7 +5055,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 	 * Analises if the BranchCon is satisfied according to
 	 * the logical operator and the predecessors.
 	 */
-	private boolean isBranchSatisfied (Branch branchCon) {
+	private boolean isBranchSatisfied (BranchCon branchCon) {
 
 	    boolean satisfied;
 
@@ -5128,22 +5128,22 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			    succ.add(seq.getToActivity());
 		}
 		else if (conn instanceof BranchCon) {
-			Branch branch = (BranchCon)conn;
+			BranchCon branch = (BranchCon)conn;
 			if(branch instanceof BranchANDCon){
-				BranchAND bAND = (BranchAND)branchCon;
+				BranchANDCon bAND = (BranchANDCon)branchCon;
 				if(bAND.getToActivity() != null)
 				    succ.addAll(bAND.getToActivity());
 				if(bAND.getToMultipleCon() != null)
 				    succ.addAll(bAND.getToMultipleCon());
 			}
 			else{
-				BranchCond bCond = (BranchCond)branchCon;
+				BranchConCond bCond = (BranchConCond)branchCon;
 				Collection bctmc = bCond.getTheBranchConCondToMultipleCon();
 				Collection atbc = bCond.getTheBranchConCondToActivity();
 				Iterator iterMulti = bctmc.iterator(),
 						 iterAct = atbc.iterator();
 				while (iterMulti.hasNext()) {
-					BranchCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
+					BranchConCondToMultipleCon multi = (BranchConCondToMultipleCon) iterMulti.next();
 					if(multi.getTheMultipleCon() != null)
 					    succ.add(multi.getTheMultipleCon());
 				}
@@ -5155,7 +5155,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			}
 		}
 		else if (conn instanceof JoinCon) {
-			Join join = (JoinCon)conn;
+			JoinCon join = (JoinCon)conn;
 			if(joinCon.getToActivity() != null)
 			    succ.add(joinCon.getToActivity());
 			if(joinCon.getToMultipleCon() != null)
@@ -5177,14 +5177,14 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                 pred.add(seq.getFromActivity());
 		}
 		else if (conn instanceof BranchCon) {
-			Branch branch = (BranchCon)conn;
+			BranchCon branch = (BranchCon)conn;
             if(branchCon.getFromActivity() != null)
                 pred.add(branchCon.getFromActivity());
             if(branchCon.getFromMultipleConnection() != null)
                 pred.add(branchCon.getFromMultipleConnection());
 		}
 		else if (conn instanceof JoinCon) {
-			Join join = (JoinCon)conn;
+			JoinCon join = (JoinCon)conn;
             if(joinCon.getFromActivity() != null)
                 pred.addAll(joinCon.getFromActivity());
             if(joinCon.getFromMultipleCon() != null)

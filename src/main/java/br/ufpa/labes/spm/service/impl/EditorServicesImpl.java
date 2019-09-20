@@ -141,7 +141,7 @@ public class EditorServicesImpl implements EditorServices {
 			} else if (conn instanceof MultipleCon) {
 				// JOINCon
 				if (conn instanceof JoinCon) {
-					Join jCon = (JoinCon) conn;
+					JoinCon jCon = (JoinCon) conn;
 					connectionsBuffer.append("<JOINCon ID=\"").append(jCon.getIdent()).append("\">");
 					if (jCon.getTheDependency() != null)
 						connectionsBuffer.append("<DEPENDENCY>").append(jCon.getTheDependency().getKindDep()).append("</DEPENDENCY>");
@@ -172,7 +172,7 @@ public class EditorServicesImpl implements EditorServices {
 
 					connectionsBuffer.append("</JOINCon>");
 				} else if (conn instanceof BranchANDCon) {
-					BranchAND bCon = (BranchANDCon) conn;
+					BranchANDCon bCon = (BranchANDCon) conn;
 					connectionsBuffer.append("<BRANCHANDCon ID=\"").append(bCon.getIdent()).append("\">");
 					if (bCon.getTheDependency() != null)
 						connectionsBuffer.append("<DEPENDENCY>").append(bCon.getTheDependency().getKindDep()).append("</DEPENDENCY>");

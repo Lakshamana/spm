@@ -150,7 +150,7 @@ public class TypeServicesImpl implements TypeServices{
 			if(type != null) {
 				Converter converter = new ConverterImpl();
 				TypeDTO typeDTO = (TypeDTO) converter.getDTO(type, TypeDTO.class);
-				typeDTO.setSubtypesNumber(type.getSubType().size());
+				typeDTO.setSubtypesNumber(type.getSubTypes().size());
 				typeDTO.setSuperTypeIdent(type.getSuperType()!=null ? type.getSuperType().getIdent() : "");
 				typeDTO.setRootType(getInstanceOfType(type));
 				return typeDTO;
@@ -194,7 +194,7 @@ public class TypeServicesImpl implements TypeServices{
 					Converter converter = new ConverterImpl();
 					if (type != null) {
 						type = (ActivityType) converter.getEntity(typeDTO, type);
-						typeDTO.setSubtypesNumber(type.getSubType().size());
+						typeDTO.setSubtypesNumber(type.getSubTypes().size());
 					} else {
 						type = (ActivityType) converter.getEntity(typeDTO, ActivityType.class);
 						type = actTypeDAO.daoSave(type);
@@ -217,7 +217,7 @@ public class TypeServicesImpl implements TypeServices{
 						Converter converter = new ConverterImpl();
 						if (type != null) {
 							type = (ArtifactType) converter.getEntity(typeDTO, type);
-							typeDTO.setSubtypesNumber(type.getSubType().size());
+							typeDTO.setSubtypesNumber(type.getSubTypes().size());
 						} else {
 							type = (ArtifactType) converter.getEntity(typeDTO, ArtifactType.class);
 							type = artTypeDAO.daoSave(type);
@@ -240,7 +240,7 @@ public class TypeServicesImpl implements TypeServices{
 					Converter converter = new ConverterImpl();
 					if (type != null) {
 						type = (AbilityType) converter.getEntity(typeDTO, type);
-						typeDTO.setSubtypesNumber(type.getSubType().size());
+						typeDTO.setSubtypesNumber(type.getSubTypes().size());
 					} else {
 						type = (AbilityType) converter.getEntity(typeDTO, AbilityType.class);
 						type = abiTypeDAO.daoSave(type);
@@ -263,7 +263,7 @@ public class TypeServicesImpl implements TypeServices{
 					Converter converter = new ConverterImpl();
 					if (type != null) {
 						type = (WorkGroupType) converter.getEntity(typeDTO, type);
-						typeDTO.setSubtypesNumber(type.getSubType().size());
+						typeDTO.setSubtypesNumber(type.getSubTypes().size());
 					} else {
 						type = (WorkGroupType) converter.getEntity(typeDTO, WorkGroupType.class);
 						type = grpTypeDAO.daoSave(type);
@@ -286,7 +286,7 @@ public class TypeServicesImpl implements TypeServices{
 					Converter converter = new ConverterImpl();
 					if (type != null) {
 						type = (RoleType) converter.getEntity(typeDTO, type);
-						typeDTO.setSubtypesNumber(type.getSubType().size());
+						typeDTO.setSubtypesNumber(type.getSubTypes().size());
 					} else {
 						type = (RoleType) converter.getEntity(typeDTO, RoleType.class);
 						type = roleTypeDAO.daoSave(type);
@@ -309,7 +309,7 @@ public class TypeServicesImpl implements TypeServices{
 					Converter converter = new ConverterImpl();
 					if (type != null) {
 						type = (ResourceType) converter.getEntity(typeDTO, type);
-						typeDTO.setSubtypesNumber(type.getSubType().size());
+						typeDTO.setSubtypesNumber(type.getSubTypes().size());
 					} else {
 						type = (ResourceType) converter.getEntity(typeDTO, ResourceType.class);
 						type = resTypeDAO.daoSave(type);
@@ -332,7 +332,7 @@ public class TypeServicesImpl implements TypeServices{
 					Converter converter = new ConverterImpl();
 					if (type != null) {
 						type = (ToolType) converter.getEntity(typeDTO, type);
-						typeDTO.setSubtypesNumber(type.getSubType().size());
+						typeDTO.setSubtypesNumber(type.getSubTypes().size());
 					} else {
 						type = (ToolType) converter.getEntity(typeDTO, ToolType.class);
 						type = toolTypeDAO.daoSave(type);
@@ -355,7 +355,7 @@ public class TypeServicesImpl implements TypeServices{
 					Converter converter = new ConverterImpl();
 					if (type != null) {
 						type = (MetricType) converter.getEntity(typeDTO, type);
-						typeDTO.setSubtypesNumber(type.getSubType().size());
+						typeDTO.setSubtypesNumber(type.getSubTypes().size());
 					} else {
 						type = (MetricType) converter.getEntity(typeDTO, MetricType.class);
 						type = metTypeDAO.daoSave(type);

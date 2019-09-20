@@ -24,9 +24,9 @@ public interface Logging {
 	public abstract void registerProcessEvent(Process process, String what,
 			String why);
 
-	public abstract void registerBranchEvent(Branch branchCon, String why);
+	public abstract void registerBranchEvent(BranchCon branchCon, String why);
 
-	public abstract void registerJoinEvent(Join joinCon, String why);
+	public abstract void registerJoinEvent(JoinCon joinCon, String why);
 
 	public abstract void registerProcessModelEvent(ProcessModel model,
 			String what, String why);

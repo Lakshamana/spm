@@ -35,7 +35,7 @@ relationship OneToMany {
 
 relationship ManyToMany {
     Activity{toJoinCon} to JoinCon{fromActivity},
-    Activity{toBranchANDCon} to BranchANDCon{fromActivity},
+    Activity{fromBranchANDCon} to BranchANDCon{toActivity},
     Activity{fromArtifactCon} to ArtifactCon{toActivity},
     Activity{toArtifactCon} to ArtifactCon{fromActivity}
 }

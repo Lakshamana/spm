@@ -91,7 +91,7 @@ public class ProcessServicesImpl implements ProcessServices {
 		List<ProcessDTO> processes = new ArrayList<ProcessDTO>();
 
 		for (ProcessAgenda processAgenda : procs) {
-			ProcessDTO processDTO = new ProcessDTO(processAgenda.getTheProcess().getIdent(), processAgenda.getTheProcess().getPState(), this.getTasksFromProcess(processAgenda));
+			ProcessDTO processDTO = new ProcessDTO(processAgenda.getTheProcess().getIdent(), processAgenda.getTheProcess().getpStatus().name(), this.getTasksFromProcess(processAgenda));
 			processDTO.setTasksIdents(this.getTasksIdentsFromProcess(processAgenda));
 			if(processes.contains(processDTO)) {
 				int index = processes.indexOf(processDTO);
@@ -221,8 +221,8 @@ public class ProcessServicesImpl implements ProcessServices {
 			projectDTO = (ProjectDTO) converter.getDTO(project, ProjectDTO.class);
 			if(project.getProcessRefered() != null) {
 				projectDTO.setProcessRefered(project.getProcessRefered().getIdent());
-				projectDTO.setpState(project.getProcessRefered().getPState());
-				List<Agent> agents = (List<Agent>) project.getProcessRefered().getTheAgent();
+				projectDTO.setpState(project.getProcessRefered().getpStatus().name());
+				List<Agent> agents = (List<Agent>) project.getProcessRefered().getTheAgents();
 
 				List<String> agentNames = getAgentNames(agents);
 				projectDTO.setAgents(agentNames);

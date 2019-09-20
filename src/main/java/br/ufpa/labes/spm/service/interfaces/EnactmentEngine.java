@@ -104,7 +104,7 @@ public interface EnactmentEngine {
 	 * This method is called by the Process Manager to fail an Activity. It will
 	 * set the Activity state to Failed and will propagate the fail for the
 	 * successors according to their state, in case of an Activity. And, fail
-	 * the Connections in case of a Multiple Connection (Branch or JoinCon). In
+	 * the Connections in case of a Multiple Connection (BranchCon or JoinCon). In
 	 * this method there is a particular situation also. When an Activity fail,
 	 * if it's a Feedback Connection source and the condition of the Feedback
 	 * Connection is satisfied (true), then, Feedback will be executed till the
@@ -121,7 +121,7 @@ public interface EnactmentEngine {
 	 * This method is called by the Process Manager to cancel an Activity. It
 	 * will set the Activity state to Canceled and will propagate the cancel for
 	 * the successors according to their state, in case of an Activity. And,
-	 * cancel the Connections in case of a Multiple Connection (Branch or JoinCon).
+	 * cancel the Connections in case of a Multiple Connection (BranchCon or JoinCon).
 	 * To Cancel an Activity it should be Waiting or Ready.
 	 *
 	 * @return void
