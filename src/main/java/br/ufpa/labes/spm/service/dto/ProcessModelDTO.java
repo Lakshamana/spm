@@ -1,82 +1,49 @@
 package br.ufpa.labes.spm.service.dto;
-import java.io.Serializable;
-import java.util.Objects;
-import br.ufpa.labes.spm.domain.enumeration.ProcessModelStatus;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.ProcessModel} entity.
- */
-public class ProcessModelDTO implements Serializable {
+import java.util.List;
 
-    private Long id;
+import br.ufpa.labes.spm.service.dto.TemplateDTO;
 
-    private String requirements;
+public class ProcessModelDTO {
 
-    private ProcessModelStatus pmStatus;
+	private String pmState;
 
+	private String theProcess;
 
-    private Long theOriginId;
+	private TemplateDTO theOrigin;
 
-    public Long getId() {
-        return id;
-    }
+	private List<String> theActivity;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getPmState() {
+		return pmState;
+	}
 
-    public String getRequirements() {
-        return requirements;
-    }
+	public void setPmState(String pmState) {
+		this.pmState = pmState;
+	}
 
-    public void setRequirements(String requirements) {
-        this.requirements = requirements;
-    }
+	public String getTheProcess() {
+		return theProcess;
+	}
 
-    public ProcessModelStatus getPmStatus() {
-        return pmStatus;
-    }
+	public void setTheProcess(String theProcess) {
+		this.theProcess = theProcess;
+	}
 
-    public void setPmStatus(ProcessModelStatus pmStatus) {
-        this.pmStatus = pmStatus;
-    }
+	public TemplateDTO getTheOrigin() {
+		return theOrigin;
+	}
 
-    public Long getTheOriginId() {
-        return theOriginId;
-    }
+	public void setTheOrigin(TemplateDTO theOrigin) {
+		this.theOrigin = theOrigin;
+	}
 
-    public void setTheOriginId(Long templateId) {
-        this.theOriginId = templateId;
-    }
+	public List<String> getTheActivity() {
+		return theActivity;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	public void setTheActivity(List<String> theActivity) {
+		this.theActivity = theActivity;
+	}
 
-        ProcessModelDTO processModelDTO = (ProcessModelDTO) o;
-        if (processModelDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), processModelDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "ProcessModelDTO{" +
-            "id=" + getId() +
-            ", requirements='" + getRequirements() + "'" +
-            ", pmStatus='" + getPmStatus() + "'" +
-            ", theOrigin=" + getTheOriginId() +
-            "}";
-    }
 }

@@ -1,180 +1,168 @@
 package br.ufpa.labes.spm.service.dto;
-import java.io.Serializable;
-import java.util.Objects;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Artifact} entity.
- */
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+
+@SuppressWarnings("serial")
 public class ArtifactDTO implements Serializable {
 
-    private Long id;
+	private Integer oid;
+	private String ident;
+	private String description;
+	private String name;
+	private Boolean isTemplate;
+	private Boolean isActive;
+	private String pathName;
+	private String fileName;
+	@IgnoreMapping
+	private String localVersion;
+	@IgnoreMapping
+	private String remoteVersion;
+	@IgnoreMapping
+	private String theArtifactType;
+	@IgnoreMapping
+	private Collection<String> possess;
+	@IgnoreMapping
+	private List<String> derivedTo;
 
-    private String ident;
+	public ArtifactDTO() {
+		this.oid = null;
+		this.ident = "";
+		this.description = "";
+		this.name = "";
+		this.pathName = "";
+		this.possess = new ArrayList<String>();
+		this.derivedTo = new ArrayList<String>();
+	}
 
-    private String name;
+	public Integer getOid() {
+		return oid;
+	}
+	public void setOid(Integer oid) {
+		this.oid = oid;
+	}
+	public String getIdent() {
+		return ident;
+	}
+	public void setIdent(String ident) {
+		this.ident = ident;
+	}
+	public String getRemoteVersion() {
+		return remoteVersion;
+	}
+	public void setRemoteVersion(String remoteVersion) {
+		this.remoteVersion = remoteVersion;
+	}
 
-    private String description;
+	public String getLocalVersion() {
+		return localVersion;
+	}
+	public void setLocalVersion(String localVersion) {
+		this.localVersion = localVersion;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    private String pathName;
+	public String getPathName() {
+		return pathName;
+	}
 
-    private String fileName;
+	public void setPathName(String pathName) {
+		this.pathName = pathName;
+	}
 
-    private String latestVersion;
+	public Boolean isIsTemplate() {
+		return isTemplate;
+	}
 
-    private Boolean isTemplate;
+	public void setIsTemplate(Boolean isTemplate) {
+		this.isTemplate = isTemplate;
+	}
 
-    private Boolean active;
+	public Boolean isIsActive() {
+		return isActive;
+	}
 
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 
-    private Long theArtifactTypeId;
+	public Collection<String> getPossess() {
+		return possess;
+	}
 
-    private Long derivedFromId;
+	public void setPossess(Collection<String> possess) {
+		this.possess = possess;
+	}
 
-    private Long theVCSRepositoryId;
+	public Collection<String> getDerivedTo() {
+		return derivedTo;
+	}
 
-    private Long theProjectId;
+	public void setDerivedTo(List<String> derivedTo) {
+		this.derivedTo = derivedTo;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public String getTheArtifactType() {
+		return theArtifactType;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setTheArtifactType(String theArtifactType) {
+		this.theArtifactType = theArtifactType;
+	}
 
-    public String getIdent() {
-        return ident;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((theArtifactType == null) ? 0 : theArtifactType.hashCode());
+		return result;
+	}
 
-    public void setIdent(String ident) {
-        this.ident = ident;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ArtifactDTO other = (ArtifactDTO) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (theArtifactType == null) {
+			if (other.theArtifactType != null)
+				return false;
+		} else if (!theArtifactType.equals(other.theArtifactType))
+			return false;
+		return true;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getFileName() {
+		return fileName;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getPathName() {
-        return pathName;
-    }
-
-    public void setPathName(String pathName) {
-        this.pathName = pathName;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getLatestVersion() {
-        return latestVersion;
-    }
-
-    public void setLatestVersion(String latestVersion) {
-        this.latestVersion = latestVersion;
-    }
-
-    public Boolean isIsTemplate() {
-        return isTemplate;
-    }
-
-    public void setIsTemplate(Boolean isTemplate) {
-        this.isTemplate = isTemplate;
-    }
-
-    public Boolean isActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public Long getTheArtifactTypeId() {
-        return theArtifactTypeId;
-    }
-
-    public void setTheArtifactTypeId(Long artifactTypeId) {
-        this.theArtifactTypeId = artifactTypeId;
-    }
-
-    public Long getDerivedFromId() {
-        return derivedFromId;
-    }
-
-    public void setDerivedFromId(Long artifactId) {
-        this.derivedFromId = artifactId;
-    }
-
-    public Long getTheVCSRepositoryId() {
-        return theVCSRepositoryId;
-    }
-
-    public void setTheVCSRepositoryId(Long vCSRepositoryId) {
-        this.theVCSRepositoryId = vCSRepositoryId;
-    }
-
-    public Long getTheProjectId() {
-        return theProjectId;
-    }
-
-    public void setTheProjectId(Long projectId) {
-        this.theProjectId = projectId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        ArtifactDTO artifactDTO = (ArtifactDTO) o;
-        if (artifactDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), artifactDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "ArtifactDTO{" +
-            "id=" + getId() +
-            ", ident='" + getIdent() + "'" +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", pathName='" + getPathName() + "'" +
-            ", fileName='" + getFileName() + "'" +
-            ", latestVersion='" + getLatestVersion() + "'" +
-            ", isTemplate='" + isIsTemplate() + "'" +
-            ", active='" + isActive() + "'" +
-            ", theArtifactType=" + getTheArtifactTypeId() +
-            ", derivedFrom=" + getDerivedFromId() +
-            ", theVCSRepository=" + getTheVCSRepositoryId() +
-            ", theProject=" + getTheProjectId() +
-            "}";
-    }
 }

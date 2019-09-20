@@ -1,145 +1,254 @@
 package br.ufpa.labes.spm.service.dto;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Objects;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Activity} entity.
- */
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+
+@SuppressWarnings("serial")
 public class ActivityDTO implements Serializable {
 
-    private Long id;
+	private String ident;
+	private String state;
+	private Double hoursWorked;
+	private Date beginDate;
+	private Date endDate;
 
-    private String ident;
+	private String agentIdent;
+	private String agentName;
+	private String name;
+	private String percentCompleted;
+	private String duration;
+	private String script;
+	private String plannedBegin;
+	private String plannedEnd;
+	private String actualBegin;
+	private String actualEnd;
+	private boolean isDelegable;
+	private int id;
+	private String parent;
 
-    private String name;
+	@IgnoreMapping
+	private List<String> reqAgents;
 
+	public ActivityDTO() {
+		this.hoursWorked = 0.0;
+		this.beginDate = new Date();
+		this.endDate = new Date();
+		this.reqAgents = new ArrayList<String>();
+	}
 
-    private Long theActivityTypeId;
+	public ActivityDTO(String ident, String state, Double hoursWorked,
+			Date beginDate, Date endDate) {
+		this.ident = ident;
+		this.state = state;
+		this.hoursWorked = hoursWorked;
+		this.beginDate = beginDate;
+		this.endDate = endDate;
+		this.reqAgents = new ArrayList<String>();
+	}
 
-    private Set<JoinConDTO> toJoinCons = new HashSet<>();
+	public ActivityDTO(String name, String ident, String state, Double hoursWorked,
+			Date beginDate, Date endDate) {
+		this.name = name;
+		this.ident = ident;
+		this.state = state;
+		this.hoursWorked = hoursWorked;
+		this.beginDate = beginDate;
+		this.endDate = endDate;
+		this.reqAgents = new ArrayList<String>();
+	}
 
-    private Set<BranchANDConDTO> toBranchANDCons = new HashSet<>();
+	public String getIdent() {
+		return ident;
+	}
 
-    private Set<ArtifactConDTO> fromArtifactCons = new HashSet<>();
+	public void setIdent(String ident) {
+		this.ident = ident;
+	}
 
-    private Set<ArtifactConDTO> toArtifactCons = new HashSet<>();
+	public String getState() {
+		return state;
+	}
 
-    private Long theAncestorActitvityId;
+	public void setState(String state) {
+		this.state = state;
+	}
 
-    private Long theProcessModelId;
+	public Double getHoursWorked() {
+		return hoursWorked;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setHoursWorked(Double hoursWorked) {
+		this.hoursWorked = hoursWorked;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Date getBeginDate() {
+		return beginDate;
+	}
 
-    public String getIdent() {
-        return ident;
-    }
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
 
-    public void setIdent(String ident) {
-        this.ident = ident;
-    }
+	public Date getEndDate() {
+		return endDate;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getAgentIdent() {
+		return agentIdent;
+	}
 
-    public Long getTheActivityTypeId() {
-        return theActivityTypeId;
-    }
+	public void setAgentIdent(String agentIdent) {
+		this.agentIdent = agentIdent;
+	}
 
-    public void setTheActivityTypeId(Long activityTypeId) {
-        this.theActivityTypeId = activityTypeId;
-    }
+	public String getAgentName() {
+		return agentName;
+	}
 
-    public Set<JoinConDTO> getToJoinCons() {
-        return toJoinCons;
-    }
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
 
-    public void setToJoinCons(Set<JoinConDTO> joinCons) {
-        this.toJoinCons = joinCons;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Set<BranchANDConDTO> getToBranchANDCons() {
-        return toBranchANDCons;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setToBranchANDCons(Set<BranchANDConDTO> branchANDCons) {
-        this.toBranchANDCons = branchANDCons;
-    }
+	public String getPercentCompleted() {
+		return percentCompleted;
+	}
 
-    public Set<ArtifactConDTO> getFromArtifactCons() {
-        return fromArtifactCons;
-    }
+	public void setPercentCompleted(String percentCompleted) {
+		this.percentCompleted = percentCompleted;
+	}
 
-    public void setFromArtifactCons(Set<ArtifactConDTO> artifactCons) {
-        this.fromArtifactCons = artifactCons;
-    }
+	public String getDuration() {
+		return duration;
+	}
 
-    public Set<ArtifactConDTO> getToArtifactCons() {
-        return toArtifactCons;
-    }
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
 
-    public void setToArtifactCons(Set<ArtifactConDTO> artifactCons) {
-        this.toArtifactCons = artifactCons;
-    }
+	public String getScript() {
+		return script;
+	}
 
-    public Long getTheAncestorActitvityId() {
-        return theAncestorActitvityId;
-    }
+	public void setScript(String script) {
+		this.script = script;
+	}
 
-    public void setTheAncestorActitvityId(Long activityId) {
-        this.theAncestorActitvityId = activityId;
-    }
+	public String getPlannedBegin() {
+		return plannedBegin;
+	}
 
-    public Long getTheProcessModelId() {
-        return theProcessModelId;
-    }
+	public void setPlannedBegin(String plannedBegin) {
+		this.plannedBegin = plannedBegin;
+	}
 
-    public void setTheProcessModelId(Long processModelId) {
-        this.theProcessModelId = processModelId;
-    }
+	public String getPlannedEnd() {
+		return plannedEnd;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	public void setPlannedEnd(String plannedEnd) {
+		this.plannedEnd = plannedEnd;
+	}
 
-        ActivityDTO activityDTO = (ActivityDTO) o;
-        if (activityDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), activityDTO.getId());
-    }
+	public String getActualBegin() {
+		return actualBegin;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
+	public void setActualBegin(String actualBegin) {
+		this.actualBegin = actualBegin;
+	}
 
-    @Override
-    public String toString() {
-        return "ActivityDTO{" +
-            "id=" + getId() +
-            ", ident='" + getIdent() + "'" +
-            ", name='" + getName() + "'" +
-            ", theActivityType=" + getTheActivityTypeId() +
-            ", theAncestorActitvity=" + getTheAncestorActitvityId() +
-            ", theProcessModel=" + getTheProcessModelId() +
-            "}";
-    }
+	public String getActualEnd() {
+		return actualEnd;
+	}
+
+	public void setActualEnd(String actualEnd) {
+		this.actualEnd = actualEnd;
+	}
+
+	public boolean isDelegable() {
+		return isDelegable;
+	}
+
+	public void setDelegable(boolean isDelegable) {
+		this.isDelegable = isDelegable;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
+
+	@XmlTransient
+	public List<String> getReqAgents() {
+		return reqAgents;
+	}
+
+	public void setReqAgents(List<String> reqAgents) {
+		this.reqAgents = reqAgents;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ident == null) ? 0 : ident.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ActivityDTO other = (ActivityDTO) obj;
+		if (ident == null) {
+			if (other.ident != null)
+				return false;
+		} else if (!ident.equals(other.ident))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "agentIdent:" + agentIdent
+				+ ", agentName:" + agentName + ", ident:" + ident + ", name:"
+				+ name + ", state:" + state + ", percentCompleted:"
+				+ percentCompleted + ", duration:" + duration + ", script:"
+				+ script + ", plannedBegin:" + plannedBegin + ", plannedEnd:"
+				+ plannedEnd + ", actualBegin:" + actualBegin + ", actualEnd:"
+				+ actualEnd + ", isDelegable:" + isDelegable + "";
+	}
 }

@@ -3,122 +3,99 @@ package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Node} entity.
- */
-public class NodeDTO implements Serializable {
+import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 
-    private Long id;
+@SuppressWarnings("serial")
+public class NodeDTO implements Serializable{
+	private Integer oid;
 
-    private String ident;
+	private String ident;
 
-    private String data;
 
-    private String serviceFileId;
+	private String data;
 
-    private Long theNodeId;
-
-    @IgnoreMapping
+	@IgnoreMapping
     private StructureDTO theStructureDTO;
 
-    @IgnoreMapping
-      private List<NodeDTO> children;
+	@IgnoreMapping
+    private List<NodeDTO> children;
 
 
-      public NodeDTO() {
-        super();
-        this.children = new ArrayList<NodeDTO>();
-      this.setIdent("");
+    public NodeDTO() {
+    	super();
+    	this.children = new ArrayList<NodeDTO>();
+		this.setIdent("");
 
-    }
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Integer getOid() {
+		return oid;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setOid(Integer oid) {
+		this.oid = oid;
+	}
 
-    public String getIdent() {
-        return ident;
-    }
+	public String getIdent() {
+		return ident;
+	}
 
-    public void setIdent(String ident) {
-        this.ident = ident;
-    }
+	public void setIdent(String ident) {
+		this.ident = ident;
+	}
 
-    public String getData() {
-        return data;
-    }
+	public List<NodeDTO> getChildren() {
+		return children;
+	}
 
-    public void setData(String data) {
-        this.data = data;
-    }
+	public void setChildren(List<NodeDTO> children) {
+		this.children = children;
+	}
 
-    public String getServiceFileId() {
-        return serviceFileId;
-    }
+	public String getData() {
+		return data;
+	}
 
-    public void setServiceFileId(String serviceFileId) {
-        this.serviceFileId = serviceFileId;
-    }
+	public void setData(String data) {
+		this.data = data;
+	}
 
-    public Long getTheNodeId() {
-        return theNodeId;
-    }
+	public StructureDTO getTheStructureDTO() {
+		return theStructureDTO;
+	}
 
-    public void setTheNodeId(Long nodeId) {
-        this.theNodeId = nodeId;
-    }
+	public void setTheStructureDTO(StructureDTO theStructureDTO) {
+		this.theStructureDTO = theStructureDTO;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	@Override
+	public String toString() {
+		return "NodeDTO [ident=" + ident + ", children=" + children + "]";
+	}
 
-        NodeDTO nodeDTO = (NodeDTO) o;
-        if (nodeDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), nodeDTO.getId());
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ident == null) ? 0 : ident.hashCode());
+		return result;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "NodeDTO{" +
-            "id=" + getId() +
-            ", ident='" + getIdent() + "'" +
-            ", data='" + getData() + "'" +
-            ", serviceFileId='" + getServiceFileId() + "'" +
-            ", theNode=" + getTheNodeId() +
-            "}";
-    }
-
-  public StructureDTO getTheStructureDTO() {
-    return theStructureDTO;
-  }
-
-  public void setTheStructureDTO(StructureDTO theStructureDTO) {
-    this.theStructureDTO = theStructureDTO;
-  }
-
-  public List<NodeDTO> getChildren() {
-    return children;
-  }
-
-  public void setChildren(List<NodeDTO> children) {
-    this.children = children;
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NodeDTO other = (NodeDTO) obj;
+		if (ident == null) {
+			if (other.ident != null)
+				return false;
+		} else if (!ident.equals(other.ident))
+			return false;
+		return true;
+	}
 }

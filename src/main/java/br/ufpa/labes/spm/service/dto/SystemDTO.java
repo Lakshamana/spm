@@ -1,25 +1,24 @@
 package br.ufpa.labes.spm.service.dto;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.service.dto.ProjectDTO;
 
 
 @SuppressWarnings("serial")
-public class AbilityDTO implements Serializable{
+public class SystemDTO implements Serializable{
 	private Integer oid;
+
 	private String ident;
-	@IgnoreMapping
-	private String abilityType;
+
 	private String name;
+
 	private String description;
 
-	public AbilityDTO() {
-		this.oid = null;
-		this.ident = " ";
-		this.name = " ";
-		this.description = " ";
-	}
+	@IgnoreMapping
+	private Collection<ProjectDTO> projetos;
 
 	public Integer getOid() {
 		return oid;
@@ -53,12 +52,12 @@ public class AbilityDTO implements Serializable{
 		this.description = description;
 	}
 
-	public String getAbilityType() {
-		return abilityType;
+	public Collection<ProjectDTO> getProjetos() {
+		return projetos;
 	}
 
-	public void setAbilityType(String abilityType) {
-		this.abilityType = abilityType;
+	public void setProjetos(Collection<ProjectDTO> projetos) {
+		this.projetos = projetos;
 	}
 
 
