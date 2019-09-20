@@ -25,7 +25,7 @@ import br.ufpa.labes.spm.domain.Company;
 import br.ufpa.labes.spm.domain.Project;
 import br.ufpa.labes.spm.domain.DevelopingSystem;
 import br.ufpa.labes.spm.service.interfaces.ProjectServices;
-import br.ufpa.labes.spm.service.interfaces.SystemDTO;
+import br.ufpa.labes.spm.service.interfaces.DevelopingSystemDTO;
 import br.ufpa.labes.spm.service.interfaces.SystemServices;
 
 public class SystemServicesImpl implements SystemServices {
@@ -396,19 +396,19 @@ public class SystemServicesImpl implements SystemServices {
   }
 
   @Override
-  public SystemDTO getSystem(String nameSystem) {
+  public DevelopingSystemDTO getSystem(String nameSystem) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public SystemDTO saveSystem(SystemDTO systemDTO) {
+  public DevelopingSystemDTO saveSystem(DevelopingSystemDTO systemDTO) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public Boolean removeSystem(SystemDTO systemDTO) {
+  public Boolean removeSystem(DevelopingSystemDTO systemDTO) {
     // TODO Auto-generated method stub
     return null;
   }

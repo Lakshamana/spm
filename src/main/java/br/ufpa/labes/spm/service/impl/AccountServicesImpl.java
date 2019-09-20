@@ -21,10 +21,10 @@ import br.ufpa.labes.spm.util.SortCriteria;
 
 public class AccountServicesImpl implements AccountServices {
 
-	IUserDAO userDao;
-	IAuthorDAO authorDao;
-	IPersonDAO personDao;
-	IOrganizationDAO organizationDao;
+	IUserDAO userDAO;
+	IAuthorDAO authorDAO;
+	IPersonDAO personDAO;
+	IOrganizationDAO organizationDAO;
 
 	@Override
 	public Person createPerson(String username, String password,
@@ -75,7 +75,7 @@ public class AccountServicesImpl implements AccountServices {
 	@Override
 	public boolean checkUsernameAvailability(String username) throws SPMException {
 		try {
-			return userDao.retrieve(username) == null;
+			return userDAO.retrieve(username) == null;
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
 		}
@@ -84,7 +84,7 @@ public class AccountServicesImpl implements AccountServices {
 	@Override
 	public Person retrievePerson(String uid) throws SPMException {
 		try {
-			return personDao.retrieve(uid);
+			return personDAO.retrieve(uid);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
 		}
@@ -93,7 +93,7 @@ public class AccountServicesImpl implements AccountServices {
 	@Override
 	public Organization retrieveOrganization(String uid) throws SPMException {
 		try {
-			return organizationDao.retrieve(uid);
+			return organizationDAO.retrieve(uid);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
 		}
@@ -102,7 +102,7 @@ public class AccountServicesImpl implements AccountServices {
 	@Override
 	public Person deletePerson(String uid) throws SPMException {
 		try {
-			Person person = personDao.retrieve(uid);
+			Person person = personDAO.retrieve(uid);
 			return personDAO.daoDelete(person);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
@@ -112,7 +112,7 @@ public class AccountServicesImpl implements AccountServices {
 	@Override
 	public Organization deleteOrganization(String uid) throws SPMException {
 		try {
-			Organization organization = organizationDao.retrieve(uid);
+			Organization organization = organizationDAO.retrieve(uid);
 			return organizationDAO.daoDelete(organization);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
@@ -122,7 +122,7 @@ public class AccountServicesImpl implements AccountServices {
 	@Override
 	public void updatePerson(Person person) throws SPMException {
 		try {
-			personDao.update(person);
+			personDAO.update(person);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
 		}
@@ -131,7 +131,7 @@ public class AccountServicesImpl implements AccountServices {
 	@Override
 	public void updateOrganization(Organization organization) throws SPMException {
 		try {
-			organizationDao.update(organization);
+			organizationDAO.update(organization);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
 		}
@@ -140,7 +140,7 @@ public class AccountServicesImpl implements AccountServices {
 	@Override
 	public List<Author> searchAuthor(Author searchCriteria) throws SPMException {
 		try {
-			return authorDao.retrieveByCriteria(searchCriteria);
+			return authorDAO.retrieveByCriteria(searchCriteria);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
 		}
@@ -150,7 +150,7 @@ public class AccountServicesImpl implements AccountServices {
 	public List<Author> searchAuthor(Author searchCriteria,
 			SortCriteria sortCriteria) throws SPMException {
 		try {
-			return authorDao.retrieveByCriteria(searchCriteria, sortCriteria);
+			return authorDAO.retrieveByCriteria(searchCriteria, sortCriteria);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
 		}
@@ -159,7 +159,7 @@ public class AccountServicesImpl implements AccountServices {
 	@Override
 	public List<Author> searchAuthor(Author searchCriteria, SortCriteria sortCriteria, PagingContext paging) throws SPMException {
 		try {
-			return authorDao.retrieveByCriteria(searchCriteria, sortCriteria, paging);
+			return authorDAO.retrieveByCriteria(searchCriteria, sortCriteria, paging);
 		} catch (Exception e) {
 			throw new SPMInfraException(e);
 		}
@@ -168,13 +168,13 @@ public class AccountServicesImpl implements AccountServices {
 	@Override
 	public boolean sendMessageToAuthor(String fromUid, String toUid, String message) throws SPMException {
 		try {
-			Author fromAuthor = authorDao.retrieve(fromUid);
-			Author toAuthor = authorDao.retrieve(toUid);
+			Author fromAuthor = authorDAO.retrieve(fromUid);
+			Author toAuthor = authorDAO.retrieve(toUid);
 
 			fromAuthor.sendMessageTo(toAuthor, message);
 
-			authorDao.update(fromAuthor);
-			authorDao.update(toAuthor);
+			authorDAO.update(fromAuthor);
+			authorDAO.update(toAuthor);
 
 			return true;
 		} catch (Exception e) {

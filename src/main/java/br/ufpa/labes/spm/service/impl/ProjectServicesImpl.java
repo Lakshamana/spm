@@ -158,7 +158,7 @@ import br.ufpa.labes.spm.domain.PrimitiveType;
 import br.ufpa.labes.spm.domain.Script;
 import br.ufpa.labes.spm.domain.Subroutine;
 import br.ufpa.labes.spm.domain.ToolDefinition;
-import br.ufpa.labes.spm.domain.ToolParameters;
+import br.ufpa.labes.spm.domain.ToolParameter;
 import br.ufpa.labes.spm.domain.AbilityType;
 import br.ufpa.labes.spm.domain.ActivityType;
 import br.ufpa.labes.spm.domain.ArtifactType;
@@ -1273,7 +1273,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	 * Type (and subclasses), Ability, Agent, TaskAgenda, WorkGroup, Role,
 	 * Artifact, Project, Organization, System, MetricDefinition,
 	 * Resource (and subclasses), ToolDefinition,
-	 * Subroutine (and classes), ToolParameters, PrimitiveType
+	 * Subroutine (and classes), ToolParameter, PrimitiveType
 	 *
 	 */
 	private Hashtable<String, Object> organizational; // Organizational objects that must be in the resulting XML file <CanonicalClassName_Oid, Object Reference>
@@ -1282,7 +1282,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	 * Process, ProcessModel, Activity (and subclasses), EnactionDescription, Dependency,
 	 * RequiredPeople (and subclasses), RequiredResource, Reservation, InvolvedArtifacts,
 	 * Connection (and subclasses), Log, Event (and subclasses), CatalogEvent,
-	 * Parameters (and subclasses), Metric, Estimation, ProcessAgenda, Task
+	 * Parameter (and subclasses), Metric, Estimation, ProcessAgenda, Task
 	 */
 	private Hashtable<String, Object> processComponents; // Process objects that must be in the resulting XML file <CanonicalClassName_Oid, Object Reference>
 
@@ -1709,11 +1709,11 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	private void loadToolParameters(Element organizational) {
-		List<Element> toolParameters = organizational.getChildren(ToolParameters.class.getSimpleName());
+		List<Element> toolParameters = organizational.getChildren(ToolParameter.class.getSimpleName());
 		Iterator<Element> iter = toolParameters.iterator();
 		while (iter.hasNext()) {
 			Element element = (Element) iter.next();
-			ToolParameters toolParams = new ToolParameters();
+			ToolParameter toolParams = new ToolParameter();
 			toolParams.setLabel(element.getChildText("Label"));
 			toolParams.setSeparatorSymbol(element.getChildText("SeparatorSymbol"));
 

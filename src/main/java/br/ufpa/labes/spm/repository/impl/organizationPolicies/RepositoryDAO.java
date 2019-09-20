@@ -7,7 +7,7 @@ import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IRepositoryD
 import br.ufpa.labes.spm.domain.VCSRepository;
 import br.ufpa.labes.spm.domain.Structure;
 
-public class RepositoryDAO extends BaseDAO<VCSRepository, Long> implements IRepositoryDAO {
+public class RepositoryDAO extends BaseDAO<VCSRepository, String> implements IRepositoryDAO {
   protected RepositoryDAO(Class<VCSRepository> businessClass) {
     super(businessClass);
   }

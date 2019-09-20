@@ -56,7 +56,7 @@ import br.ufpa.labes.spm.domain.Project;
 import br.ufpa.labes.spm.domain.Automatic;
 import br.ufpa.labes.spm.domain.InvolvedArtifacts;
 import br.ufpa.labes.spm.domain.Normal;
-import br.ufpa.labes.spm.domain.Parameters;
+import br.ufpa.labes.spm.domain.Parameter;
 import br.ufpa.labes.spm.domain.ReqAgent;
 import br.ufpa.labes.spm.domain.ReqAgentRequiresAbility;
 import br.ufpa.labes.spm.domain.ReqWorkGroup;
@@ -70,7 +70,7 @@ import br.ufpa.labes.spm.domain.ProcessModel;
 import br.ufpa.labes.spm.domain.Template;
 import br.ufpa.labes.spm.domain.Reservation;
 import br.ufpa.labes.spm.domain.Subroutine;
-import br.ufpa.labes.spm.domain.ToolParameters;
+import br.ufpa.labes.spm.domain.ToolParameter;
 import org.qrconsult.spm.process.impl.CopyProcessServiceImpl;
 import org.qrconsult.spm.process.interfaces.CopyProcessServices;
 import br.ufpa.labes.spm.service.interfaces.DynamicModeling;
@@ -410,7 +410,7 @@ public class TemplateServicesImpl implements TemplateServices {
 		newAutomatic.setTheArtifact(currentAutomatic.getTheArtifact());
 
 		//about parameters
-		Collection<Parameters> newParameters = null;
+		Collection<Parameter> newParameters = null;
 		newParameters = copyAutomaticParameters(currentAutomatic.getTheParameters(),newAutomatic);
 		newAutomatic.setTheParameters(newParameters);
 
@@ -423,7 +423,7 @@ public class TemplateServicesImpl implements TemplateServices {
 			newSubRoutine.insertIntoTheAutomatic(newAutomatic);
 
 			//need to copy a new ToolParameter
-			Collection<ToolParameters> newToolParameters = null;
+			Collection<ToolParameter> newToolParameters = null;
 			newToolParameters = copySubroutineToolParameters(currentAutomatic.getTheSubroutine().getTheToolParameters(),newSubRoutine);
 			newSubRoutine.setTheToolParameters(newToolParameters);
 		}//end if
@@ -1192,14 +1192,14 @@ public class TemplateServicesImpl implements TemplateServices {
 		return connectionsToResult;
 	}
 
-	private Collection<ToolParameters> copySubroutineToolParameters(Collection theToolParameters, Subroutine newSubRoutine) {
-		Collection<ToolParameters> newParameters = new LinkedList<ToolParameters>();
+	private Collection<ToolParameter> copySubroutineToolParameters(Collection theToolParameters, Subroutine newSubRoutine) {
+		Collection<ToolParameter> newParameters = new LinkedList<ToolParameter>();
 
-		for(Iterator<ToolParameters> paramIterator= theToolParameters.iterator();paramIterator.hasNext();){
-			ToolParameters currentParameter = paramIterator.next();
+		for(Iterator<ToolParameter> paramIterator= theToolParameters.iterator();paramIterator.hasNext();){
+			ToolParameter currentParameter = paramIterator.next();
 			if(currentParameter!=null){
-				ToolParameters newParameter = null;
-					newParameter = new ToolParameters();
+				ToolParameter newParameter = null;
+					newParameter = new ToolParameter();
 					newParameter.insertIntoTheSubroutine(newSubRoutine);
 
 					newParameter.setLabel(currentParameter.getLabel());
@@ -1219,13 +1219,13 @@ public class TemplateServicesImpl implements TemplateServices {
 		return newParameters;
 	}
 
-	private Collection<Parameters> copyAutomaticParameters(Collection theParameters, Automatic newAutomatic) {
-		Collection<Parameters> newParameters = new LinkedList<Parameters>();
-		for(Iterator<Parameters> paramIterator= theParameters.iterator();paramIterator.hasNext();){
-			Parameters currentParameter = paramIterator.next();
+	private Collection<Parameter> copyAutomaticParameters(Collection theParameters, Automatic newAutomatic) {
+		Collection<Parameter> newParameters = new LinkedList<Parameter>();
+		for(Iterator<Parameter> paramIterator= theParameters.iterator();paramIterator.hasNext();){
+			Parameter currentParameter = paramIterator.next();
 			if(currentParameter!=null){
-				Parameters newParameter = null;
-					newParameter = new Parameters();
+				Parameter newParameter = null;
+					newParameter = new Parameter();
 					newParameter.insertIntoTheAutomatic(newAutomatic);
 					newParameter.setDescription(currentParameter.getDescription());
 				//add to main collection

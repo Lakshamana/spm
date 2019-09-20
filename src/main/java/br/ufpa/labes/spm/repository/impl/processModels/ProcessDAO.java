@@ -12,7 +12,7 @@ import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.service.util.SimpleActivityQueryResult;
 
-public class ProcessDAO extends BaseDAO<Process, Long> implements IProcessDAO {
+public class ProcessDAO extends BaseDAO<Process, String> implements IProcessDAO {
 
   protected ProcessDAO(Class<Process> businessClass) {
     super(businessClass);

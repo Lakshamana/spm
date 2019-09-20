@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.interfaces.IBaseDAO;
 import br.ufpa.labes.spm.service.dto.SimpleArtifactDescriptorDTO;
 import br.ufpa.labes.spm.domain.Artifact;
 
-public interface IArtifactDAO extends IBaseDAO<Artifact, Long> {
+public interface IArtifactDAO extends IBaseDAO<Artifact, String> {
 
   public Object[] getArtifactsIdentsFromProcessModelWithoutTemplates(String ident);
 

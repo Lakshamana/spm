@@ -8,7 +8,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.assets.ITagStatsDAO;
 import br.ufpa.labes.spm.domain.TagStats;
 
-public class TagStatsDAO extends BaseDAO<TagStats, Long> implements ITagStatsDAO {
+public class TagStatsDAO extends BaseDAO<TagStats, String> implements ITagStatsDAO {
 
   protected TagStatsDAO() {
     super(TagStats.class);

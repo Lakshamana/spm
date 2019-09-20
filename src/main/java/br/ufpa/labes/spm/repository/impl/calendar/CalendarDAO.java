@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.calendar.ICalendarDAO;
 import br.ufpa.labes.spm.domain.Calendar;
 
-public class CalendarDAO extends BaseDAO<Calendar, Long> implements ICalendarDAO {
+public class CalendarDAO extends BaseDAO<Calendar, String> implements ICalendarDAO {
 
   protected CalendarDAO(Class<Calendar> businessClass) {
     super(businessClass);

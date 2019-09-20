@@ -13,7 +13,7 @@ import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactCon;
 import br.ufpa.labes.spm.domain.InvolvedArtifact;
 
-public class ArtifactDAO extends BaseDAO<Artifact, Long> implements IArtifactDAO {
+public class ArtifactDAO extends BaseDAO<Artifact, String> implements IArtifactDAO {
 
   protected ArtifactDAO(Class<Artifact> businessClass) {
     super(businessClass);

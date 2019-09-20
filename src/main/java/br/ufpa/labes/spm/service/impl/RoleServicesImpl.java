@@ -9,7 +9,7 @@ import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
-import org.qrconsult.spm.converter.exception.ImplementationException;
+import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAbilityDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentPlaysRoleDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IRoleDAO;
@@ -66,9 +66,9 @@ public class RoleServicesImpl implements RoleServices {
 		query.setParameter("rolname", nameRole);
 		result = query.getResultList();
 		Collection<RoleNeedsAbility> lis = result.get(0)
-				.getTheRoleNeedsAbility();
+				.getTheRoleNeedsAbilities();
 		Collection<AgentPlaysRole> lisaux = result.get(0)
-				.getTheAgentPlaysRole();
+				.getTheAgentPlaysRoles();
 
 		for (RoleNeedsAbility roleNeedsAbility : lis) {
 			abis.add(roleNeedsAbility.getTheAbility());
@@ -230,7 +230,7 @@ public class RoleServicesImpl implements RoleServices {
 					&& (roleDTO.getAbilityToRole() != null) && role != null) {
 
 				Collection<RoleNeedsAbility> lisaux = new ArrayList<RoleNeedsAbility>();
-				lisaux = role.getTheRoleNeedsAbility();
+				lisaux = role.getTheRoleNeedsAbilities();
 
 				if (!lisaux.isEmpty()) {
 					for (RoleNeedsAbility roleNeedsAbility : lisaux) {
@@ -283,8 +283,8 @@ public class RoleServicesImpl implements RoleServices {
 		System.out.println("re1");
 		Role role = result.get(0);
 		if (role != null) {
-			if (role.getTheRoleNeedsAbility() != null) {
-				Collection<RoleNeedsAbility> re = role.getTheRoleNeedsAbility();
+			if (role.getTheRoleNeedsAbilities() != null) {
+				Collection<RoleNeedsAbility> re = role.getTheRoleNeedsAbilities();
 				for (RoleNeedsAbility ro : re) {
 					roleNeedsDAO.daoDelete(ro);
 				}
@@ -468,7 +468,7 @@ public class RoleServicesImpl implements RoleServices {
 					&& (roleDTO.getAbilityToRole() != null) && role != null) {
 
 				Collection<RoleNeedsAbility> lisaux = new ArrayList<RoleNeedsAbility>();
-				lisaux = role.getTheRoleNeedsAbility();
+				lisaux = role.getTheRoleNeedsAbilities();
 				boolean re = false;
 				if (!lisaux.isEmpty()) {
 					for (RoleNeedsAbility roleNeedsAbility : lisaux) {
@@ -489,7 +489,7 @@ public class RoleServicesImpl implements RoleServices {
 					System.out.println("passei aqui remove3");
 				}
 				System.out.println("passei aqui remove4");
-				role.setTheRoleNeedsAbility(lisAbi);
+				role.setTheRoleNeedsAbilities(lisAbi);
 				role = roleDAO.update(role);
 				System.out.println("passei aqui remove5");
 			} else {

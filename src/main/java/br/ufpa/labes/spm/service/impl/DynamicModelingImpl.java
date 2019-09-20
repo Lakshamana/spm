@@ -73,7 +73,7 @@ import br.ufpa.labes.spm.domain.Automatic;
 import br.ufpa.labes.spm.domain.EnactionDescription;
 import br.ufpa.labes.spm.domain.InvolvedArtifacts;
 import br.ufpa.labes.spm.domain.Normal;
-import br.ufpa.labes.spm.domain.Parameters;
+import br.ufpa.labes.spm.domain.Parameter;
 import br.ufpa.labes.spm.domain.ReqAgent;
 import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.domain.RequiredPeople;
@@ -982,7 +982,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		Iterator iter = parameters.iterator();
 		while (iter.hasNext()) {
-			Parameters param = (Parameters) iter.next();
+			Parameter param = (Parameter) iter.next();
 			param.setTheAutomatic(automatic);
 			automatic.getTheParameters().add(param);
 		}
@@ -1021,7 +1021,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		cmc.setTheAutomatic(automatic);
 		Iterator iter = parameters.iterator();
 		while (iter.hasNext()) {
-			Parameters param = (Parameters) iter.next();
+			Parameter param = (Parameter) iter.next();
 			param.setTheAutomatic(automatic);
 		}
 
@@ -1145,7 +1145,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				Collection parameters = actAuto.getTheParameters();
 				Iterator iterParam = parameters.iterator();
 				while (iterParam.hasNext()) {
-					Parameters param = (Parameters) iterParam.next();
+					Parameter param = (Parameter) iterParam.next();
 					paramDAO.daoDelete(param);
 				}
 

@@ -55,27 +55,27 @@ public interface DynamicModeling {
 			ModelingException;
 
 	/**
-	 * Rule G1.12 and G1.13 The Activity in Parameters must be a Normal
+	 * Rule G1.12 and G1.13 The Activity in Parameter must be a Normal
 	 * activity!
 	 */
 	public void defineInputArtifact(String act_id, String art_id)
 			throws DAOException, ModelingException;
 
 	/**
-	 * Rule G1.14 and G1.15 The Activity in Parameters must be a Normal
+	 * Rule G1.14 and G1.15 The Activity in Parameter must be a Normal
 	 * activity!
 	 */
 	public void defineOutputArtifact(String act_id, String art_id)
 			throws DAOException, ModelingException;
 
 	/**
-	 * Rule G1.16 The Activity in Parameters must be an Automatic activity!
+	 * Rule G1.16 The Activity in Parameter must be an Automatic activity!
 	 */
 	public Integer defineAutomatic(String auto_id, Script script,
 			Collection parameters) throws DAOException;
 
 	/**
-	 * Rule G1.16 The Activity in Parameters must be an Automatic activity!
+	 * Rule G1.16 The Activity in Parameter must be an Automatic activity!
 	 */
 	public Integer defineAutomatic(String auto_id,
 			ClassMethodCall cmc, Collection parameters) throws DAOException;
@@ -334,19 +334,19 @@ public interface DynamicModeling {
 			String to_con_id) throws DAOException, WebapseeException;
 
 	/**
-	 * Rules G6.1 and G6.2 The Activity in Parameters must be a Normal activity!
+	 * Rules G6.1 and G6.2 The Activity in Parameter must be a Normal activity!
 	 */
 	public void addRequiredRole(String act_id, String role_id)
 			throws DAOException, ModelingException;
 
 	/**
-	 * Rules G6.3 and G6.4 The Activity in Parameters must be a Normal activity!
+	 * Rules G6.3 and G6.4 The Activity in Parameter must be a Normal activity!
 	 */
 	public void addRequiredWorkGroupType(String act_id, String g_type)
 			throws DAOException, ModelingException;
 
 	/**
-	 * Rules G6.5, G6.6, G6.7 G6.8, G6.9 and G6.10 The Activity in Parameters
+	 * Rules G6.5, G6.6, G6.7 G6.8, G6.9 and G6.10 The Activity in Parameter
 	 * must be a Normal activity!
 	 */
 	public void removeRequiredRole(String act_id, String role_id)
@@ -355,13 +355,13 @@ public interface DynamicModeling {
 	/**
 	 * Rules G6.11, G6.12 and G6.13 Rules G6.14, G6.15 and G6.16 are not
 	 * applicable! WARNING: This Method contains Dynamic Changes related code!
-	 * The Activity in Parameters must be a Normal activity!
+	 * The Activity in Parameter must be a Normal activity!
 	 */
 	public boolean defineRequiredAgent(String act_id, String role_id,
 			String ag_id) throws DAOException, WebapseeException;
 
 	/**
-	 * Rules G6.30 and G6.31 The Activity in Parameters must be a Normal
+	 * Rules G6.30 and G6.31 The Activity in Parameter must be a Normal
 	 * activity!
 	 */
 	public void removeRequiredAgent(String act_id, String ag_id)
@@ -370,13 +370,13 @@ public interface DynamicModeling {
 	/**
 	 * Rules G6.17, G6.18, G6.19 Rules G6.20, G6.21, G6.22 and G6.23 are not
 	 * applicable. WARNING: This Method contains Dynamic Changes related code!
-	 * The Activity in Parameters must be a Normal activity!
+	 * The Activity in Parameter must be a Normal activity!
 	 */
 	public void defineRequiredWorkGroup(String act_id, String WorkGroup_id)
 			throws DAOException, WebapseeException;
 
 	/**
-	 * Rules G6.32 and G6.33 The Activity in Parameters must be a Normal
+	 * Rules G6.32 and G6.33 The Activity in Parameter must be a Normal
 	 * activity!
 	 */
 	public void removeRequiredWorkGroup(String act_id, String WorkGroup_id)
@@ -384,7 +384,7 @@ public interface DynamicModeling {
 
 	/**
 	 * Rules G6.24, G6.25, G6.26 and G6.27 Rules G6.28 and G6.29 are not
-	 * applicable! The Activity in Parameters must be a Normal activity!
+	 * applicable! The Activity in Parameter must be a Normal activity!
 	 */
 	public void removeRequiredWorkGroupType(String act_id, String g_type)
 			throws DAOException;
@@ -416,13 +416,13 @@ public interface DynamicModeling {
 			ModelingException;
 
 	/**
-	 * Rules G7.1 and G7.2 The Activity in Parameters must be a Normal activity!
+	 * Rules G7.1 and G7.2 The Activity in Parameter must be a Normal activity!
 	 */
 	public Integer addRequiredResourceType(String act_id,
 			String resType_id) throws DAOException, ModelingException;
 
 	/**
-	 * Rules G7.3 and G7.4 The Activity in Parameters must be a Normal activity!
+	 * Rules G7.3 and G7.4 The Activity in Parameter must be a Normal activity!
 	 */
 	public Integer changeRequiredResourceType(String act_id,
 			String oldResType_id, String newResType_id) throws DAOException,
@@ -430,21 +430,21 @@ public interface DynamicModeling {
 
 	/**
 	 * Rules G7.5, G7.6, G7.7 and G7.8 Rules G7.9 and G7.10 are not applicable!
-	 * The Activity in Parameters must be a Normal activity!
+	 * The Activity in Parameter must be a Normal activity!
 	 */
 	public void removeRequiredResourceType(String act_id,
 			String resType_id) throws DAOException, ModelingException;
 
 	/**
 	 * Rules G7.11, G7.12, G7.13 Rules G7.14, G7.15 and G7.16 are not
-	 * applicable! The Activity in Parameters must be a Normal activity!
+	 * applicable! The Activity in Parameter must be a Normal activity!
 	 */
 	public Integer defineRequiredResource(String act_id,
 			String res_id, float amount_needed) throws DAOException,
 			ModelingException, WebapseeException;
 
 	/**
-	 * Rules G7.17, G7.18 and G7.19 The Activity in Parameters must be a Normal
+	 * Rules G7.17, G7.18 and G7.19 The Activity in Parameter must be a Normal
 	 * activity!
 	 */
 	public void removeRequiredResource(String act_id, String res_id)

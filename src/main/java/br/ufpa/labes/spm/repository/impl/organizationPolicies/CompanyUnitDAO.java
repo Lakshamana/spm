@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.ICompanyUnitDAO;
 import br.ufpa.labes.spm.domain.CompanyUnit;
 
-public class CompanyUnitDAO extends BaseDAO<CompanyUnit, Long> implements ICompanyUnitDAO {
+public class CompanyUnitDAO extends BaseDAO<CompanyUnit, String> implements ICompanyUnitDAO {
 
   protected CompanyUnitDAO(Class<CompanyUnit> businessClass) {
     super(businessClass);

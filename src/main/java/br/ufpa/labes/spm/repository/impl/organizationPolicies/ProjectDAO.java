@@ -8,7 +8,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
 import br.ufpa.labes.spm.domain.Project;
 
-public class ProjectDAO extends BaseDAO<Project, Long> implements IProjectDAO {
+public class ProjectDAO extends BaseDAO<Project, String> implements IProjectDAO {
 
   protected ProjectDAO(Class<Project> businessClass) {
     super(businessClass);

@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IWorkGroupTypeDAO;
 import br.ufpa.labes.spm.domain.WorkGroupType;
 
-public class WorkGroupTypeDAO extends BaseDAO<WorkGroupType, Long> implements IWorkGroupTypeDAO {
+public class WorkGroupTypeDAO extends BaseDAO<WorkGroupType, String> implements IWorkGroupTypeDAO {
 
   protected WorkGroupTypeDAO(Class<WorkGroupType> businessClass) {
     super(businessClass);

@@ -8,7 +8,7 @@ import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IGraphicCoord
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
 
-public class GraphicCoordinateDAO extends BaseDAO<GraphicCoordinate, Long>
+public class GraphicCoordinateDAO extends BaseDAO<GraphicCoordinate, String>
     implements IGraphicCoordinateDAO {
 
   protected GraphicCoordinateDAO(Class<GraphicCoordinate> businessClass) {

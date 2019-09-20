@@ -4,7 +4,7 @@ import br.ufpa.labes.spm.repository.impl.BaseDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
 import br.ufpa.labes.spm.domain.ArtifactType;
 
-public class ArtifactTypeDAO extends BaseDAO<ArtifactType, Long> implements IArtifactTypeDAO {
+public class ArtifactTypeDAO extends BaseDAO<ArtifactType, String> implements IArtifactTypeDAO {
 
   protected ArtifactTypeDAO(Class<ArtifactType> businessClass) {
     super(businessClass);
