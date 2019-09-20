@@ -83,11 +83,11 @@ public class CompanyUnitDTO implements Serializable {
 		this.theAgent = theAgent;
 	}
 
-	public Integer getOid() {
+	public Integer getId() {
 		return oid;
 	}
 
-	public void setOid(Integer oid) {
+	public void setId\(Long oid) {
 		this.oid = oid;
 	}
 

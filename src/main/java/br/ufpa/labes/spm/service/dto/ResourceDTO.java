@@ -52,11 +52,11 @@ public class ResourceDTO implements Serializable{
 		possess = new ArrayList<String>();
 	}
 
-	public Integer getOid() {
+	public Integer getId() {
 		return oid;
 	}
 
-	public void setOid(Integer oid) {
+	public void setId\(Long oid) {
 		this.oid = oid;
 	}
 

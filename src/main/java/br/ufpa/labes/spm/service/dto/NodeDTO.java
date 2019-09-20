@@ -29,11 +29,11 @@ public class NodeDTO implements Serializable{
 
 	}
 
-	public Integer getOid() {
+	public Integer getId() {
 		return oid;
 	}
 
-	public void setOid(Integer oid) {
+	public void setId\(Long oid) {
 		this.oid = oid;
 	}
 

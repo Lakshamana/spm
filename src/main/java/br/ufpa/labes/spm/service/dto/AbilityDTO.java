@@ -21,11 +21,11 @@ public class AbilityDTO implements Serializable{
 		this.description = " ";
 	}
 
-	public Integer getOid() {
+	public Integer getId() {
 		return oid;
 	}
 
-	public void setOid(Integer oid) {
+	public void setId\(Long oid) {
 		this.oid = oid;
 	}
 

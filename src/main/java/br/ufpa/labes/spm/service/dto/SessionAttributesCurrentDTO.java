@@ -1,4 +1,4 @@
-package org.qrconsult.spm.dtos;
+package br.ufpa.labes.spm.service.dto;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ public class SessionAttributesCurrentDTO implements Serializable {
 	private String processId;
 	private String titleHelpTopic;
 	private String contentHelpTopic;
-	
+
 	public String getProcessId() {
 		return processId;
 	}
