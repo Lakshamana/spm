@@ -34,7 +34,7 @@ public class ChatMessageServicesImpl implements ChatMessageServices {
 		boolean encontrouAgente = !(new Agent().equals(agenteMsg));
 		System.out.println(encontrouAgente);
 		if(encontrouAgente) {
-			message.setDe(agenteMsg);
+			message.setFromAgent(agenteMsg);
 			messageDAO.daoSave(message);
 		}
 	}

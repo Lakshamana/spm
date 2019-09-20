@@ -12,13 +12,13 @@ import org.mapstruct.*;
 public interface AgentMapper extends EntityMapper<AgentDTO, Agent> {
 
     @Mapping(source = "theTaskAgenda.id", target = "theTaskAgendaId")
-    @Mapping(source = "configuration.id", target = "configurationId")
+    @Mapping(source = "spmconfiguration.id", target = "configurationId")
     @Mapping(source = "theResourceEvent.id", target = "theResourceEventId")
     @Mapping(source = "theEmailConfiguration.id", target = "theEmailConfigurationId")
     AgentDTO toDto(Agent agent);
 
     @Mapping(source = "theTaskAgendaId", target = "theTaskAgenda")
-    @Mapping(source = "configurationId", target = "configuration")
+    @Mapping(source = "configurationId", target = "spmconfiguration")
     @Mapping(target = "delegates", ignore = true)
     @Mapping(target = "removeDelegates", ignore = true)
     @Mapping(target = "isDelegatedFors", ignore = true)

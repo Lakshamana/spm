@@ -9,7 +9,7 @@ import br.ufpa.labes.spm.service.dto.ProjectDTO;
 
 @SuppressWarnings("serial")
 public class SystemDTO implements Serializable{
-	private Integer oid;
+	private Long oid;
 
 	private String ident;
 
@@ -24,7 +24,7 @@ public class SystemDTO implements Serializable{
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

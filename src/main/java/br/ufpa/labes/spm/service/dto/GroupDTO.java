@@ -9,7 +9,7 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 @SuppressWarnings("serial")
 public class GroupDTO implements Serializable {
 
-	private Integer oid;
+	private Long oid;
 	private String ident;
 	private String description;
 	private String name;
@@ -32,7 +32,7 @@ public class GroupDTO implements Serializable {
 	public Integer getId() {
 		return oid;
 	}
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 	public String getIdent() {

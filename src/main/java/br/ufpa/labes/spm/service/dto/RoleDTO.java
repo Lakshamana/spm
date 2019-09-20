@@ -13,7 +13,7 @@ public class RoleDTO implements Serializable{
 	 *
 	 */
 
-	private Integer oid;
+	private Long oid;
 
 	private String ident;
 
@@ -54,7 +54,7 @@ public class RoleDTO implements Serializable{
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

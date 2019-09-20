@@ -2,14 +2,14 @@ package br.ufpa.labes.spm.service.dto;
 
 public class WebapseeObjectDTO {
 
-	private Integer oid;
+	private Long oid;
 	private String className;
 
 
 	public Integer getId() {
 		return oid;
 	}
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 	public String getClassName() {

@@ -5,7 +5,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class EmailDTO implements Serializable {
 
-	private Integer oid;
+	private Long oid;
 
 	private String serverHost;
 
@@ -51,7 +51,7 @@ public class EmailDTO implements Serializable {
 	}
 
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

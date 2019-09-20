@@ -10,7 +10,7 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 @SuppressWarnings("serial")
 public class ArtifactDTO implements Serializable {
 
-	private Integer oid;
+	private Long oid;
 	private String ident;
 	private String description;
 	private String name;
@@ -42,7 +42,7 @@ public class ArtifactDTO implements Serializable {
 	public Integer getId() {
 		return oid;
 	}
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 	public String getIdent() {

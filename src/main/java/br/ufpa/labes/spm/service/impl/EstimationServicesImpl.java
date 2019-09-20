@@ -10,7 +10,7 @@ import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
-import org.qrconsult.spm.converter.exception.ImplementationException;
+import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IEstimationDAO;
 import br.ufpa.labes.spm.repository.interfaces.processKnowledge.IMetricDefinitionDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.ITypeDAO;

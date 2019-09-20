@@ -8,7 +8,7 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
 public class ToolDTO implements Serializable {
-	private Integer oid;
+	private Long oid;
 
 	private String ident;
 
@@ -37,7 +37,7 @@ public class ToolDTO implements Serializable {
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

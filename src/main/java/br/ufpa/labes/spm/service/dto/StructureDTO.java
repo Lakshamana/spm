@@ -6,7 +6,7 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
 public class StructureDTO implements Serializable{
-	private Integer oid;
+	private Long oid;
 
 	@IgnoreMapping
     private RepositoryDTO theRepository;
@@ -23,7 +23,7 @@ public class StructureDTO implements Serializable{
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

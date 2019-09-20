@@ -9,7 +9,7 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
 public class CompanyUnitDTO implements Serializable {
-	private Integer oid;
+	private Long oid;
 	private String ident;
 	private String name;
 	private String description;
@@ -87,7 +87,7 @@ public class CompanyUnitDTO implements Serializable {
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

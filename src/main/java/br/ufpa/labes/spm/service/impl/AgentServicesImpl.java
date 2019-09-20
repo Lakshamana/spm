@@ -11,7 +11,7 @@ import javax.persistence.TypedQuery;
 
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
-import org.qrconsult.spm.converter.exception.ImplementationException;
+import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAbilityDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentAffinityAgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
@@ -43,7 +43,7 @@ import br.ufpa.labes.spm.domain.AgentHasAbility;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
 import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.Role;
-import br.ufpa.labes.spm.domain.Configuration;
+import br.ufpa.labes.spm.domain.SpmConfiguration;
 import br.ufpa.labes.spm.domain.Project;
 import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.domain.ProcessAgenda;
@@ -195,13 +195,13 @@ public class AgentServicesImpl implements AgentServices {
 
 			getPerfilAgentePadrao(agent.getIdent());
 
-			Configuration configuration = new Configuration();
-			configuration.setFiltro("ID,teste,teste");
-			configuration.setAgent(agentRetorno);
-			configuration.setIdioma(config.getIdioma());
-			configuration.setSenhaEmRecuperacao(false);
+			SpmConfiguration spmconfiguration = new SpmConfiguration();
+			spmconfiguration.setFiltro("ID,teste,teste");
+			spmconfiguration.setAgent(agentRetorno);
+			spmconfiguration.setIdioma(config.getIdioma());
+			spmconfiguration.setSenhaEmRecuperacao(false);
 
-			confiDAO.daoSave(configuration);
+			confiDAO.daoSave(spmconfiguration);
 		}
 
 
@@ -313,8 +313,8 @@ public class AgentServicesImpl implements AgentServices {
 	public Boolean removeAgent(String agentIdent) {
 //		Agent agent = this.getAgentForName(nameAgent);
 		Agent agent = agentDAO.retrieveBySecondaryKey(agentIdent);
-		String hql = "SELECT c FROM " + Configuration.class.getSimpleName() + " AS c WHERE c.agent.ident = :ident";
-		TypedQuery<Configuration> query = confiDAO.getPersistenceContext().createQuery(hql, Configuration.class);
+		String hql = "SELECT c FROM " + SpmConfiguration.class.getSimpleName() + " AS c WHERE c.agent.ident = :ident";
+		TypedQuery<SpmConfiguration> query = confiDAO.getPersistenceContext().createQuery(hql, SpmConfiguration.class);
 		query.setParameter("ident", agentIdent);
 
 		hql = "SELECT ta FROM " + TaskAgenda.class.getSimpleName() + " AS ta WHERE ta.theAgent.ident = :ident";
@@ -323,7 +323,7 @@ public class AgentServicesImpl implements AgentServices {
 
 		if (agent != null) {
 			if(!query.getResultList().isEmpty()) {
-				Configuration config = query.getResultList().get(0);
+				SpmConfiguration config = query.getResultList().get(0);
 				config.setAgent(null);
 				confiDAO.daoDelete(config);
 			}
@@ -911,10 +911,10 @@ public class AgentServicesImpl implements AgentServices {
 				agentDTO.getName(), affinityName);
 		Agent agent = this.getAgentForName(agentDTO.getName());
 
-		if (agent.getFromAgentAffinity().contains(agentAffinityAgent)
-				|| agent.getToAgentAffinity().contains(agentAffinityAgent)) {
-			agentAffinityAgent.removeFromFromAffinity();
-			agentAffinityAgent.removeFromToAffinity();
+		if (agent.getFromAgentAffinities().contains(agentAffinityAgent)
+				|| agent.getToAgentAffinities().contains(agentAffinityAgent)) {
+			agentAffinityAgent.removeFromFromAffinities();
+			agentAffinityAgent.removeFromToAffinities();
 			agentAffinityAgentDAO.daoDelete(agentAffinityAgent);
 			agentAffinityAgentDAO.daoDelete(inverseAgentAffinityAgent);
 

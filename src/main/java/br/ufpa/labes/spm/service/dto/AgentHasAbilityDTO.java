@@ -7,7 +7,7 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 @SuppressWarnings("serial")
 public class AgentHasAbilityDTO implements Serializable {
 
-	private Integer oid;
+	private Long oid;
 
 	private Integer degree;
 	@IgnoreMapping
@@ -29,7 +29,7 @@ public class AgentHasAbilityDTO implements Serializable {
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

@@ -15,7 +15,7 @@ import br.ufpa.labes.spm.service.dto.TaskDTO;
 @XmlRootElement(name="agent")
 public class AgentDTO implements Serializable {
 
-	private Integer oid;
+	private Long oid;
 
 	private String ident;
 
@@ -72,7 +72,7 @@ public class AgentDTO implements Serializable {
 	}
 
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

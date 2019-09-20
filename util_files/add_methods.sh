@@ -41,10 +41,21 @@ for m in $models; do
     new=$ename
   fi
 
+  file="$newdir/$new.java"
+
   # 3.1
+  old_methods=`sed -rn "s/public (.*) (.*)\((.*)\) \{/\r\2/p" "$m"`
+  new_methods=`sed -rn "s/public (.*) (.*)\((.*)\) \{/\r\2/p" $file`
 
   # 3.2
+  for m in $old_methods; do
+    lookup=`echo $old_methods | grep -w "$ename"`
+    if [[ $lookup != '' ]]; then
+      # retrieve for method in old class
+      input=`sed -n "/$lookup/, /}/ p" "$m"`
 
-  cp $m "$newdir/$target.java"
-  # echo 'cp' $m "$newdir/$target.java"
+      # then add it to the new class
+      sed -ri "s/\}$/`echo $test`\n\}/" $file
+    fi
+  done
 done

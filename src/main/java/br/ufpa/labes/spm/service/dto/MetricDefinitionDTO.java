@@ -10,7 +10,7 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 @SuppressWarnings("serial")
 public class MetricDefinitionDTO implements Serializable{
 
-	private Integer oid;
+	private Long oid;
 
 
 	private String name;
@@ -53,7 +53,7 @@ public class MetricDefinitionDTO implements Serializable{
 	}
 
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

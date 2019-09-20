@@ -11,5 +11,5 @@ public interface ConfigurationServices {
 
 	public SpmConfigurationDTO getPerfil(Integer oid);
 
-	public SpmConfigurationDTO updateConfiguration(Integer agentOid, SpmConfigurationDTO configuration);
+	public SpmConfigurationDTO updateConfiguration(Integer agentOid, SpmConfigurationDTO spmconfiguration);
 }

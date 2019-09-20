@@ -12,7 +12,7 @@ import br.ufpa.labes.spm.service.dto.Time;
 @SuppressWarnings("serial")
 @XmlRootElement(name="task")
 public class TaskDTO implements Serializable {
-	private Integer oid;//
+	private Long oid;//
 
 	private String name;
 
@@ -61,7 +61,7 @@ public class TaskDTO implements Serializable {
 
 	public TaskDTO() {}
 
-	public TaskDTO(Integer oid, String name, String localState, Date beginDate,
+	public TaskDTO(Long oid, String name, String localState, Date beginDate,
 			Date endDate, Float workingHours, Date dateDelegatedTo,
 			Date dateDelegatedFrom, String theNormal) {
 		this.oid = oid;
@@ -75,7 +75,7 @@ public class TaskDTO implements Serializable {
 		this.theNormal = theNormal;
 	}
 
-	public TaskDTO(Integer oid, String name, String localState, Date beginDate,
+	public TaskDTO(Long oid, String name, String localState, Date beginDate,
 			Date endDate, Float workingHours, Date dateDelegatedTo,
 			Date dateDelegatedFrom, Float howLong, String howLongUnit,
 			Date plannedBegin, Date plannedEnd, String script,
@@ -101,7 +101,7 @@ public class TaskDTO implements Serializable {
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

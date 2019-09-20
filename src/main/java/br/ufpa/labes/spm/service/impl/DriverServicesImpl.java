@@ -9,7 +9,7 @@ import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
-import org.qrconsult.spm.converter.exception.ImplementationException;
+import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.driver.IDriverDAO;
 import br.ufpa.labes.spm.service.dto.DriverDTO;
 import br.ufpa.labes.spm.service.dto.SpmConfigurationDTO;

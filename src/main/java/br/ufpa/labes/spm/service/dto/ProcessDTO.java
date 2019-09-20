@@ -8,7 +8,7 @@ import br.ufpa.labes.spm.service.dto.ActivitysDTO;
 
 @SuppressWarnings("serial")
 public class ProcessDTO implements Serializable{
-	private Integer oid;
+	private Long oid;
 	private String ident;
 	private String pState;
 	@IgnoreMapping
@@ -30,7 +30,7 @@ public class ProcessDTO implements Serializable{
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

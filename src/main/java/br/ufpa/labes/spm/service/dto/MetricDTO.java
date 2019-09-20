@@ -11,7 +11,7 @@ public class MetricDTO implements Serializable{
 
 
 
-	private Integer oid;
+	private Long oid;
 
 
 	private Float value;
@@ -46,7 +46,7 @@ public class MetricDTO implements Serializable{
 	}
 
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

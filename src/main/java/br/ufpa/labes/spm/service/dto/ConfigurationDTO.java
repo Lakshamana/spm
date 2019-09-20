@@ -12,7 +12,7 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 @XmlRootElement(name="config")
 public class ConfigurationDTO implements Serializable {
 
-	private Integer oid;
+	private Long oid;
 
 	private String filtro;
 	@IgnoreMapping
@@ -38,7 +38,7 @@ public class ConfigurationDTO implements Serializable {
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

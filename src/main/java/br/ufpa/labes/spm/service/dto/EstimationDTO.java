@@ -8,7 +8,7 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 
 public class EstimationDTO implements Serializable{
 
-	private Integer oid;
+	private Long oid;
 	private Float value;
 	private String unit;
 	@IgnoreMapping
@@ -28,7 +28,7 @@ public class EstimationDTO implements Serializable{
 	}
 
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

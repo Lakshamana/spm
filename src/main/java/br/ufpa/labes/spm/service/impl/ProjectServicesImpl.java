@@ -36,7 +36,7 @@ import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
-import org.qrconsult.spm.converter.exception.ImplementationException;
+import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.IReportDAO;
 import br.ufpa.labes.spm.repository.interfaces.activities.IDecomposedDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;

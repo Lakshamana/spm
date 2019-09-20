@@ -7,7 +7,7 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 @SuppressWarnings("serial")
 public class TypeDTO implements Serializable {
 
-	private Integer oid;
+	private Long oid;
 	private String ident;
 	private String description;
 	private Boolean userDefined;
@@ -32,7 +32,7 @@ public class TypeDTO implements Serializable {
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

@@ -10,14 +10,14 @@ import org.qrconsult.spm.converter.annotations.IgnoreMapping;
 @SuppressWarnings("serial")
 public class RepositoryDTO implements Serializable {
 
-	private Integer oid;
+	private Long oid;
 	private String ident;
 	private String controlVersionSystem;
 	public Integer getId() {
 		return oid;
 	}
 
-	public void setId\(Long oid) {
+	public void setId(Long oid) {
 		this.oid = oid;
 	}
 

@@ -14,7 +14,7 @@ import org.qrconsult.spm.beans.ArtifactMngDownload;
 import org.qrconsult.spm.beans.ArtifactMngParamDownload;
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
-import org.qrconsult.spm.converter.exception.ImplementationException;
+import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.INodeDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IRepositoryDAO;

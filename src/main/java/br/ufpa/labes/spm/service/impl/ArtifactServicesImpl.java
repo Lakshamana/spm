@@ -10,7 +10,7 @@ import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
-import org.qrconsult.spm.converter.exception.ImplementationException;
+import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.IProjectDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.IArtifactTypeDAO;
@@ -136,7 +136,7 @@ public class ArtifactServicesImpl implements ArtifactServices {
 					artifact.setTheArtifactType(artifactType);
 					artifact.setPathName(artifactDTO.getPathName());
 					artifact.setIsTemplate(artifactDTO.isIsTemplate());
-					artifact.setIsActive(artifactDTO.isActive());
+					artifact.setActive(artifactDTO.isIsActive());
 				}
 
 				for (Artifact derived : artifact.getDerivedTo()) { //Quebrar todas as

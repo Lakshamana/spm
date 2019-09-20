@@ -4,13 +4,13 @@ import javax.persistence.Query;
 
 import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
-import org.qrconsult.spm.converter.exception.ImplementationException;
+import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IConfiDAO;
 import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.SpmConfigurationDTO;
 import br.ufpa.labes.spm.domain.Agent;
-import br.ufpa.labes.spm.domain.Configuration;
+import br.ufpa.labes.spm.domain.SpmConfiguration;
 import br.ufpa.labes.spm.service.interfaces.AgentServices;
 import br.ufpa.labes.spm.service.interfaces.ConfigurationServices;
 
@@ -22,34 +22,34 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 
 	AgentServices agentServices;
 
-	Configuration confiAtual = new Configuration();
+	SpmConfiguration confiAtual = new SpmConfiguration();
 	Converter converter = new ConverterImpl();
 
-	private static final String CONFIG_CLASSNAME = Configuration.class.getSimpleName();
+	private static final String CONFIG_CLASSNAME = SpmConfiguration.class.getSimpleName();
 	private Query query;
 	public boolean perfilSave(SpmConfigurationDTO confi,AgentDTO agente) {
 		System.out.println("Chegou no perfil"+confi.getIdioma()+"agente"+agente.getId());
 
-		Configuration configuration = new Configuration();
-		configuration = convertConfigurationDTOToConfiguration(confi);
+		SpmConfiguration spmconfiguration = new SpmConfiguration();
+		spmconfiguration = convertConfigurationDTOToConfiguration(confi);
 
-		configuration.setAgent(convertAgentDTOToAgent((AgentDTO) agente));
-		configuration.setId(confi.getId());
-		System.out.println("id da confi " +configuration.getId());
-		confiDAO.update(configuration);
+		spmconfiguration.setAgent(convertAgentDTOToAgent((AgentDTO) agente));
+		spmconfiguration.setId(confi.getId());
+		System.out.println("id da confi " +spmconfiguration.getId());
+		confiDAO.update(spmconfiguration);
 
-		if (configuration != null)
+		if (spmconfiguration != null)
 			return true;
 		else
 			return false;
 
 	}
 
-	private Configuration convertConfigurationDTOToConfiguration(SpmConfigurationDTO configurationDTO) {
+	private SpmConfiguration convertConfigurationDTOToConfiguration(SpmConfigurationDTO configurationDTO) {
 		System.out.println("caiu na conversão");
 		try {
-			Configuration config = new Configuration();
-			config = (Configuration) converter.getEntity(configurationDTO, Configuration.class);
+			SpmConfiguration config = new SpmConfiguration();
+			config = (SpmConfiguration) converter.getEntity(configurationDTO, SpmConfiguration.class);
 			config.setSenhaEmRecuperacao(configurationDTO.getSenhaEmRecuperacao());
 
 			return config;
@@ -76,7 +76,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 		return null;
 	}
 
-	private SpmConfigurationDTO convertConfigurationToConfigurationDTO(Configuration config) {
+	private SpmConfigurationDTO convertConfigurationToConfigurationDTO(SpmConfiguration config) {
 		SpmConfigurationDTO configDTO = new SpmConfigurationDTO();
 
 		configDTO.setId(config.getId());
@@ -93,27 +93,27 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 
 		query = confiDAO
 				.getPersistenceContext()
-				.createQuery("SELECT configuration FROM "
+				.createQuery("SELECT spmconfiguration FROM "
 								+ CONFIG_CLASSNAME
-								+ " AS configuration "
-								+ "WHERE configuration.agent.oid = :agent_oid");
+								+ " AS spmconfiguration "
+								+ "WHERE spmconfiguration.agent.oid = :agent_oid");
 		query.setParameter("agent_oid", agent_oid);
 		if(query.getResultList().isEmpty()) {
 			System.out.print("nulo");
 			return null;
 		} else {
-			Configuration configuration = (Configuration) query.getResultList().get(0);
-			System.out.print("retorno: "+configuration.getAgent()+"filtro:"+configuration.getFiltro()+"oid: "+configuration.getId());
-			return convertConfigurationToConfigurationDTO(configuration);
+			SpmConfiguration spmconfiguration = (SpmConfiguration) query.getResultList().get(0);
+			System.out.print("retorno: "+spmconfiguration.getAgent()+"filtro:"+spmconfiguration.getFiltro()+"oid: "+spmconfiguration.getId());
+			return convertConfigurationToConfigurationDTO(spmconfiguration);
 		}
 	}
 
 	@Override
-	public SpmConfigurationDTO updateConfiguration(Integer agentOid, SpmConfigurationDTO configuration) {
+	public SpmConfigurationDTO updateConfiguration(Integer agentOid, SpmConfigurationDTO spmconfiguration) {
 		SpmConfigurationDTO perfil = this.getPerfil(agentOid);
 
-		atualizarPefil(perfil, configuration);
-		Configuration config = convertConfigurationDTOToConfiguration(perfil);
+		atualizarPefil(perfil, spmconfiguration);
+		SpmConfiguration config = convertConfigurationDTOToConfiguration(perfil);
 		Agent agent = agentDAO.retrieve(agentOid);
 		config.setAgent(agent);
 
@@ -125,11 +125,11 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 
 
 	private SpmConfigurationDTO atualizarPefil(SpmConfigurationDTO fromDB,
-			SpmConfigurationDTO configuration) {
-		fromDB.setGraficoDeCustos(configuration.getGraficoDeCustos());
-		fromDB.setGraficoDeEsforco(configuration.getGraficoDeEsforco());
-		fromDB.setGraficoDeDesempenho(configuration.getGraficoDeDesempenho());
-		fromDB.setGraficoDeTarefas(configuration.getGraficoDeTarefas());
+			SpmConfigurationDTO spmconfiguration) {
+		fromDB.setGraficoDeCustos(spmconfiguration.getGraficoDeCustos());
+		fromDB.setGraficoDeEsforco(spmconfiguration.getGraficoDeEsforco());
+		fromDB.setGraficoDeDesempenho(spmconfiguration.getGraficoDeDesempenho());
+		fromDB.setGraficoDeTarefas(spmconfiguration.getGraficoDeTarefas());
 
 		return fromDB;
 	}
