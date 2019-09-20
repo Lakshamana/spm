@@ -55,7 +55,7 @@ for m in $models; do
       input=`sed -n "/$lookup/, /}/ p" "$m"`
 
       # then add it to the new class
-      sed -ri "s/\}$/`echo $test`\n\}/" $file
+      sed -ri "s/\}$/`echo -e $test`\n\}/" $file
     fi
   done
 done
