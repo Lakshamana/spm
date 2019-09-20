@@ -93,7 +93,7 @@ public interface DynamicModeling {
 	public Integer newArtifactConnection(String level_id)
 			throws DAOException;
 
-	public Integer newArtifactConnection(String level_id, String art_id)
+	public Long newArtifactConnection(String level_id, String art_id)
 			throws DAOException, ModelingException;
 
 	/**

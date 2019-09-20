@@ -276,7 +276,7 @@ public class MetricDefinitionServicesImpl implements MetricDefinitionServices{
 		query = metricDefinitionDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("rolname", nameMetricDefinition);
 		result = query.getResultList();
-		//Collection<RoleNeedsAbility> lis = result.get(0).getTheRoleNeedsAbility();
+		//Collection<RoleNeedsAbility> lis = result.get(0).getTheRoleNeedsAbilities();
 		//Collection<AgentPlaysRole> lisaux = result.get(0).getTheAgentPlaysRole();
 
 		/*for (RoleNeedsAbility roleNeedsAbility : lis) {

@@ -3,7 +3,7 @@ package br.ufpa.labes.spm.service.interfaces;
 import javax.ejb.Remote;
 
 import br.ufpa.labes.spm.service.dto.DriverDTO;
-import br.ufpa.labes.spm.service.dto.ConfigurationDTO;
+import br.ufpa.labes.spm.service.dto.SpmConfigurationDTO;
 import br.ufpa.labes.spm.service.dto.CompanyDTO;
 
 @Remote

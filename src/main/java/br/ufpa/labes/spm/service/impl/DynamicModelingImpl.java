@@ -27,7 +27,7 @@ import br.ufpa.labes.spm.repository.interfaces.connections.ISimpleConDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IAutomaticDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IInvolvedArtifactsDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.INormalDAO;
-import br.ufpa.labes.spm.repository.interfaces.plainActivities.IParametersDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IParameterDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqAgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqWorkGroupDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredResourceDAO;
@@ -71,7 +71,7 @@ import br.ufpa.labes.spm.domain.SimpleCon;
 import br.ufpa.labes.spm.domain.ModelingActivityEvent;
 import br.ufpa.labes.spm.domain.Automatic;
 import br.ufpa.labes.spm.domain.EnactionDescription;
-import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.InvolvedArtifact;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.Parameter;
 import br.ufpa.labes.spm.domain.ReqAgent;
@@ -123,7 +123,7 @@ public class DynamicModelingImpl implements DynamicModeling {
 	IArtifactDAO artDAO;
 	IProcessModelDAO pmodelDAO;
 	ISubroutineDAO subDAO;
-	IParametersDAO paramDAO;
+	IParameterDAO paramDAO;
 	IArtifactConDAO artConDAO;
 	IArtifactTypeDAO artTypeDAO;
 	IInvolvedArtifactsDAO invArtDAO;
@@ -131,8 +131,8 @@ public class DynamicModelingImpl implements DynamicModeling {
 	IConnectionDAO conDAO;
 	IPolConditionDAO polConditionDAO;
 	IBranchConCondToMultipleConDAO bctmcDAO;
-	IJoinDAO joinConDAO;
-	IBranchDAO branchConDAO;
+	IJoinConDAO joinConDAO;
+	IBranchConDAO branchConDAO;
 	IWorkGroupTypeDAO WorkGroupTypeDAO;
 	IRoleDAO roleDAO;
 	IReqAgentDAO reqAgentDAO;
@@ -144,7 +144,7 @@ public class DynamicModelingImpl implements DynamicModeling {
 	IRequiredResourceDAO reqResDAO;
 	IResourceDAO resDAO;
 	IConsumableDAO consumableDAO;
-	IBranchCondToActivityDAO branchConCondToActivityDAO;
+	IBranchConCondToActivityDAO branchConCondToActivityDAO;
 	ISimpleConDAO simpleDAO;
 	IProcessAgendaDAO pAgendaDAO;
 
@@ -811,7 +811,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		if (state.equals("")) { // Rule G1.12 //$NON-NLS-1$
 			if (!this.hasTheFromArtifact(actNorm, artifact)) {
 
-				InvolvedArtifacts inv = new InvolvedArtifacts();
+				InvolvedArtifact inv = new InvolvedArtifact();
 				inv.setTheArtifact(artifact);
 				artifact.getTheInvolvedArtifacts().add(inv);
 				inv.setInInvolvedArtifacts(actNorm);
@@ -834,7 +834,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			if (!this.hasTheFromArtifact(actNorm, artifact)) {
 
-				InvolvedArtifacts inv = new InvolvedArtifacts();
+				InvolvedArtifact inv = new InvolvedArtifact();
 				inv.setTheArtifact(artifact);
 				artifact.getTheInvolvedArtifacts().add(inv);
 				inv.setInInvolvedArtifacts(actNorm);
@@ -901,7 +901,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		if (state.equals("")) { // Rule G1.14 //$NON-NLS-1$
 			if (!this.hasTheToArtifact(actNorm, artifact)) {
 
-				InvolvedArtifacts inv = new InvolvedArtifacts();
+				InvolvedArtifact inv = new InvolvedArtifact();
 
 				inv.setTheArtifact(artifact);
 				artifact.getTheInvolvedArtifacts().add(inv);
@@ -925,7 +925,7 @@ System.out.println("salva :"+pmodel.getPmState());
 																													// G1.15
 			if (!this.hasTheToArtifact(actNorm, artifact)) {
 
-				InvolvedArtifacts inv = new InvolvedArtifacts();
+				InvolvedArtifact inv = new InvolvedArtifact();
 
 				inv.setTheArtifact(artifact);
 				artifact.getTheInvolvedArtifacts().add(inv);
@@ -1294,7 +1294,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 
 	@Override
-	public Integer newArtifactConnection(String level_id, String art_id) throws DAOException, ModelingException {// retorna
+	public Long newArtifactConnection(String level_id, String art_id) throws DAOException, ModelingException {// retorna
 		Artifact artifactAux = (Artifact) artDAO.retrieveBySecondaryKey(art_id);
 		String type_id = artifactAux.getTheArtifactType().getIdent();
 
@@ -1307,7 +1307,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 
 	@Override
-	public Integer defineType_ArtifactConnection(String con_id, String type) throws DAOException {
+	public Long defineType_ArtifactConnection(String con_id, String type) throws DAOException {
 		return defineType_ArtifactConnection_Internal(con_id, type).getId();
 	}
 
@@ -1559,7 +1559,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				Collection inInvArts = toNormal.getInvolvedArtifactToNormal();
 				Iterator iterInInvArts = inInvArts.iterator();
 				while (iterInInvArts.hasNext()) {
-					InvolvedArtifacts inInvArt = (InvolvedArtifacts) iterInInvArts.next();
+					InvolvedArtifact inInvArt = (InvolvedArtifact) iterInInvArts.next();
 					if (inInvArt != null) {
 						Artifact artFromInv = inInvArt.getTheArtifact();
 						if (artFromInv != null && artFromInv.equals(artifact)) {
@@ -1587,7 +1587,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				Collection outInvArts = fromNormal.getInvolvedArtifactFromNormal();
 				Iterator iterOutInvArts = outInvArts.iterator();
 				while (iterOutInvArts.hasNext()) {
-					InvolvedArtifacts outInvArt = (InvolvedArtifacts) iterOutInvArts.next();
+					InvolvedArtifact outInvArt = (InvolvedArtifact) iterOutInvArts.next();
 					if (outInvArt != null) {
 						Artifact artFromInv = outInvArt.getTheArtifact();
 						if (artFromInv != null && artFromInv.equals(artifact)) {
@@ -1671,7 +1671,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							artifactCon.getFromActivity().add(actNorm);
 							actNorm.getToArtifactCon().add(artifactCon);
 
-							InvolvedArtifacts invArt = new InvolvedArtifacts();
+							InvolvedArtifact invArt = new InvolvedArtifact();
 
 							if (artifactFromCon != null) {
 								invArt.setTheArtifact(artifactFromCon);
@@ -1695,7 +1695,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							artifactCon.getFromActivity().add(actNorm);
 							actNorm.getToArtifactCon().add(artifactCon);
 
-							InvolvedArtifacts invArt = new InvolvedArtifacts();
+							InvolvedArtifact invArt = new InvolvedArtifact();
 
 							if (artifactFromCon != null) {
 								invArt.setTheArtifact(artifactFromCon);
@@ -1727,7 +1727,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							artifactCon.getFromActivity().add(actNorm);
 							actNorm.getToArtifactCon().add(artifactCon);
 
-							InvolvedArtifacts invArt = new InvolvedArtifacts();
+							InvolvedArtifact invArt = new InvolvedArtifact();
 
 							if (artifactFromCon != null) {
 								invArt.setTheArtifact(artifactFromCon);
@@ -1751,7 +1751,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							artifactCon.getFromActivity().add(actNorm);
 							actNorm.getToArtifactCon().add(artifactCon);
 
-							InvolvedArtifacts invArt = new InvolvedArtifacts();
+							InvolvedArtifact invArt = new InvolvedArtifact();
 
 							if (artifactFromCon != null) {
 								invArt.setTheArtifact(artifactFromCon);
@@ -1873,9 +1873,9 @@ System.out.println("salva :"+pmodel.getPmState());
 						if (this.hasTheToArtifact(actNorm, artifactCon.getTheArtifact())) {
 							Collection invArts = actNorm.getInvolvedArtifactFromNormal();
 							Iterator iter = invArts.iterator();
-							InvolvedArtifacts inv = null;
+							InvolvedArtifact inv = null;
 							while (iter.hasNext()) {
-								InvolvedArtifacts aux = (InvolvedArtifacts) iter.next();
+								InvolvedArtifact aux = (InvolvedArtifact) iter.next();
 								if (aux.getTheArtifact().equals(artifact)) {
 									inv = aux;
 									break;
@@ -1972,7 +1972,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							artifactCon.getToActivity().add(actNorm);
 							actNorm.getFromArtifactCon().add(artifactCon);
 
-							InvolvedArtifacts invArt = new InvolvedArtifacts();
+							InvolvedArtifact invArt = new InvolvedArtifact();
 
 							if (artifactFromCon != null) {
 								invArt.setTheArtifact(artifactFromCon);
@@ -1996,7 +1996,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							artifactCon.getToActivity().add(actNorm);
 							actNorm.getFromArtifactCon().add(artifactCon);
 
-							InvolvedArtifacts invArt = new InvolvedArtifacts();
+							InvolvedArtifact invArt = new InvolvedArtifact();
 
 							if (artifactFromCon != null) {
 								invArt.setTheArtifact(artifactFromCon);
@@ -2028,7 +2028,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							artifactCon.getToActivity().add(actNorm);
 							actNorm.getFromArtifactCon().add(artifactCon);
 
-							InvolvedArtifacts invArt = new InvolvedArtifacts();
+							InvolvedArtifact invArt = new InvolvedArtifact();
 
 							if (artifactFromCon != null) {
 								invArt.setTheArtifact(artifactFromCon);
@@ -2052,7 +2052,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							artifactCon.getToActivity().add(actNorm);
 							actNorm.getFromArtifactCon().add(artifactCon);
 
-							InvolvedArtifacts invArt = new InvolvedArtifacts();
+							InvolvedArtifact invArt = new InvolvedArtifact();
 
 							if (artifactFromCon != null) {
 								invArt.setTheArtifact(artifactFromCon);
@@ -2188,9 +2188,9 @@ System.out.println("salva :"+pmodel.getPmState());
 						if (this.hasTheFromArtifact(actNorm, artifactCon.getTheArtifact())) {
 							Collection invArts = actNorm.getInvolvedArtifactToNormal();
 							Iterator iter = invArts.iterator();
-							InvolvedArtifacts inv = null;
+							InvolvedArtifact inv = null;
 							while (iter.hasNext()) {
-								InvolvedArtifacts aux = (InvolvedArtifacts) iter.next();
+								InvolvedArtifact aux = (InvolvedArtifact) iter.next();
 								if (aux.getTheArtifact().equals(artifact)) {
 									inv = aux;
 									break;
@@ -2292,7 +2292,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							if (!this.hasTheFromArtifact(actNorm, artifact)) {
 								String state = actNorm.getTheEnactionDescription().getState();
 								if (state.equals("")) { // Rule G.22 //$NON-NLS-1$
-									InvolvedArtifacts invArt = new InvolvedArtifacts();
+									InvolvedArtifact invArt = new InvolvedArtifact();
 									invArt.setInInvolvedArtifacts(actNorm);
 									actNorm.getInvolvedArtifactToNormal().add(invArt);
 									if (artifact != null) {
@@ -2305,7 +2305,7 @@ System.out.println("salva :"+pmodel.getPmState());
 								} else if (!state.equals(Plain.FINISHED) && !state.equals(Plain.FAILED) && !state.equals(Plain.CANCELED)) { // Rule
 																																			// G2.23
 
-									InvolvedArtifacts invArt = new InvolvedArtifacts();
+									InvolvedArtifact invArt = new InvolvedArtifact();
 									invArt.setInInvolvedArtifacts(actNorm);
 									actNorm.getInvolvedArtifactToNormal().add(invArt);
 									if (artifact != null) {
@@ -2563,27 +2563,27 @@ System.out.println("salva :"+pmodel.getPmState());
 				JoinCon join = (JoinCon) connection;
 
 				// Deleting Successors and Predecessors instances of Activity
-				Activity to = joinCon.getToActivity();
+				Activity to = join.getToActivity();
 				if (to != null) {
 					String state = this.getState(to);
 					if (to instanceof Normal) { // Rule G2.37
 						if (state.equals("") //$NON-NLS-1$
 								|| state.equals(Plain.WAITING) || state.equals(Plain.READY)) {
-							to.getFromJoin().remove(joinCon);
-							joinCon.setToActivity(null);
+							to.getFromJoin().remove(join);
+							join.setToActivity(null);
 						}
 					} else if (to instanceof Automatic) { // Rule G2.38
 						if (state.equals("") //$NON-NLS-1$
 								|| state.equals(Plain.WAITING)) {
-							to.getFromJoin().remove(joinCon);
-							joinCon.setToActivity(null);
+							to.getFromJoin().remove(join);
+							join.setToActivity(null);
 						}
 					} else if (to instanceof Decomposed) { // Rule G2.39
-						to.getFromJoin().remove(joinCon);
-						joinCon.setToActivity(null);
+						to.getFromJoin().remove(join);
+						join.setToActivity(null);
 					}
 				}
-				Collection froms = joinCon.getFromActivity();
+				Collection froms = join.getFromActivity();
 				Iterator iterFroms = froms.iterator();
 
 				// Auxiliar Collection
@@ -2602,39 +2602,39 @@ System.out.println("salva :"+pmodel.getPmState());
 						if (from instanceof Normal) { // Rule G2.34
 							if (state.equals("") //$NON-NLS-1$
 									|| state.equals(Plain.WAITING) || state.equals(Plain.READY)) {
-								from.getToJoin().remove(joinCon);
-								joinCon.getFromActivity().remove(from);
+								from.getToJoin().remove(join);
+								join.getFromActivity().remove(from);
 							}
 						} else if (from instanceof Automatic) { // Rule G2.35
 							if (state.equals("") //$NON-NLS-1$
 									|| state.equals(Plain.WAITING)) {
-								from.getToJoin().remove(joinCon);
-								joinCon.getFromActivity().remove(from);
+								from.getToJoin().remove(join);
+								join.getFromActivity().remove(from);
 							}
 						} else if (from instanceof Decomposed) { // Rule G2.36
-							from.getToJoin().remove(joinCon);
-							joinCon.getFromActivity().remove(from);
+							from.getToJoin().remove(join);
+							join.getFromActivity().remove(from);
 						}
 					}
 				}
 
 				// Deleting Successors and Predecessors instances of Multiple
 				// Connection
-				MultipleCon toMC = joinCon.getToMultipleCon();
+				MultipleCon toMC = join.getToMultipleCon();
 				if (toMC != null) { // Rule G2.40
 					if (!toMC.isFired().booleanValue()) {
 						if (toMC instanceof JoinCon) {
 							JoinCon toJoin = (JoinCon) toMC;
-							toJoin.getFromMultipleCon().remove(joinCon);
-							joinCon.setToMultipleCon(null);
+							toJoin.getFromMultipleCon().remove(join);
+							join.setToMultipleCon(null);
 						} else { // is BranchCon
 							BranchCon toBranch = (BranchCon) toMC;
 							toBranchCon.setFromMultipleConnection(null);
-							joinCon.setToMultipleCon(null);
+							join.setToMultipleCon(null);
 						}
 					}
 				}
-				Collection fromsMC = joinCon.getFromMultipleCon();
+				Collection fromsMC = join.getFromMultipleCon();
 				Iterator iterFromsMC = fromsMC.iterator();
 				// Auxiliar Collection
 				Collection aux2 = new HashSet();
@@ -2657,7 +2657,7 @@ System.out.println("salva :"+pmodel.getPmState());
 								BranchCon fromBranch = (BranchCon) fromMC;
 								if (fromBranch instanceof BranchANDCon) {
 									BranchANDCon fromBranchAND = (BranchANDCon) fromBranchCon;
-									fromBranchAND.getToMultipleCon().remove(joinCon);
+									fromBranchAND.getToMultipleCon().remove(join);
 									join.getFromMultipleCon().remove(fromBranchANDCon);
 								} else { // is BranchConCond
 									BranchConCond fromBranchCond = (BranchConCond) fromBranchCon;
@@ -2665,7 +2665,7 @@ System.out.println("salva :"+pmodel.getPmState());
 									Iterator iterFromBCTMCs = fromBCTMCs.iterator();
 									while (iterFromBCTMCs.hasNext()) {
 										BranchConCondToMultipleCon bctmc = (BranchConCondToMultipleCon) iterFromBCTMCs.next();
-										if (bctmc.getTheMultipleCon().equals(joinCon)) {
+										if (bctmc.getTheMultipleCon().equals(join)) {
 											join.getFromMultipleCon().remove(fromBranchConCond);
 											bctmc.setTheBranchConCond(null);
 											bctmc.setTheMultipleCon(null);
@@ -2685,7 +2685,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			} else if (connection instanceof BranchANDCon) {
 				BranchANDCon branchAND = (BranchANDCon) connection;
 
-				Collection tos = branchANDCon.getToActivity();
+				Collection tos = branchAND.getToActivity();
 				Iterator iterTos = tos.iterator();
 				// Auxiliar Collection
 				Collection aux = new HashSet();
@@ -2703,60 +2703,60 @@ System.out.println("salva :"+pmodel.getPmState());
 						if (to instanceof Normal) { // Rule G2.37
 							if (state.equals("") //$NON-NLS-1$
 									|| state.equals(Plain.WAITING) || state.equals(Plain.READY)) {
-								to.getFromBranchAND().remove(branchANDCon);
-								branchANDCon.getToActivity().remove(to);
+								to.getFromBranchAND().remove(branchAND);
+								branchAND.getToActivity().remove(to);
 							}
 						} else if (to instanceof Automatic) { // Rule G2.38
 							if (state.equals("") //$NON-NLS-1$
 									|| state.equals(Plain.WAITING)) {
-								to.getFromBranchAND().remove(branchANDCon);
-								branchANDCon.getToActivity().remove(to);
+								to.getFromBranchAND().remove(branchAND);
+								branchAND.getToActivity().remove(to);
 							}
 						} else if (to instanceof Decomposed) { // Rule G2.39
-							to.getFromBranchAND().remove(branchANDCon);
-							branchANDCon.getToActivity().remove(to);
+							to.getFromBranchAND().remove(branchAND);
+							branchAND.getToActivity().remove(to);
 						}
 					}
 				}
-				Activity from = branchANDCon.getFromActivity();
+				Activity from = branchAND.getFromActivity();
 				if (from != null) {
 					String state = this.getState(from);
 					if (from instanceof Normal) { // Rule G2.34
 						if (state.equals("") //$NON-NLS-1$
 								|| state.equals(Plain.WAITING) || state.equals(Plain.READY))
-							from.getToBranch().remove(branchANDCon);
+							from.getToBranch().remove(branchAND);
 					} else if (from instanceof Automatic) { // Rule G2.35
 						if (state.equals("") //$NON-NLS-1$
 								|| state.equals(Plain.WAITING))
-							from.getToBranch().remove(branchANDCon);
+							from.getToBranch().remove(branchAND);
 					} else if (from instanceof Decomposed) // Rule G2.36
-						from.getToBranch().remove(branchANDCon);
+						from.getToBranch().remove(branchAND);
 				}
 
 				// Deleting Successors and Predecessors instances of Multiple
 				// Connection
 
-				MultipleCon fromMC = branchANDCon.getFromMultipleConnection();
+				MultipleCon fromMC = branchAND.getFromMultipleConnection();
 				if (fromMC != null) { // Rule G2.40
 					if (!fromMC.isFired().booleanValue()) {
 						if (fromMC instanceof JoinCon) {
 							JoinCon fromJoin = (JoinCon) fromMC;
 							fromJoinCon.setToMultipleCon(null);
-							branchANDCon.setFromMultipleConnection(null);
+							branchAND.setFromMultipleConnection(null);
 						} else { // is BranchCon
 							BranchCon fromBranch = (BranchCon) fromMC;
 							if (fromBranch instanceof BranchANDCon) {
 								BranchANDCon fromBranchAND = (BranchANDCon) fromBranchCon;
-								fromBranchAND.getToMultipleCon().remove(branchANDCon);
-								branchANDCon.setFromMultipleConnection(null);
+								fromBranchAND.getToMultipleCon().remove(branchAND);
+								branchAND.setFromMultipleConnection(null);
 							} else { // is BranchConCond
 								BranchConCond fromBranchCond = (BranchConCond) fromBranchCon;
 								Collection fromBCTMCs = fromBranchCond.getTheBranchConCondToMultipleCon();
 								Iterator iterFromBCTMCs = fromBCTMCs.iterator();
 								while (iterFromBCTMCs.hasNext()) {
 									BranchConCondToMultipleCon bctmc = (BranchConCondToMultipleCon) iterFromBCTMCs.next();
-									if (bctmc.getTheMultipleCon().equals(branchANDCon)) {
-										branchANDCon.setFromMultipleConnection(null);
+									if (bctmc.getTheMultipleCon().equals(branchAND)) {
+										branchAND.setFromMultipleConnection(null);
 										bctmc.setTheBranchConCond(null);
 										bctmc.setTheMultipleCon(null);
 										fromBranchCond.getTheBranchConCondToMultipleCon().remove(bctmc);
@@ -2771,7 +2771,7 @@ System.out.println("salva :"+pmodel.getPmState());
 						}
 					}
 				}
-				Collection tosMC = branchANDCon.getToMultipleCon();
+				Collection tosMC = branchAND.getToMultipleCon();
 				Iterator iterTosMC = tosMC.iterator();
 				// Auxiliar Collection
 				Collection aux2 = new HashSet();
@@ -2789,7 +2789,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							if (toMC instanceof JoinCon) {
 								JoinCon toJoin = (JoinCon) toMC;
 								branchAND.getToMultipleCon().remove(toJoinCon);
-								toJoin.getFromMultipleCon().remove(branchANDCon);
+								toJoin.getFromMultipleCon().remove(branchAND);
 							} else { // is BranchCon
 								BranchCon toBranch = (BranchCon) toMC;
 								toBranchCon.setFromMultipleConnection(null);
@@ -2844,24 +2844,24 @@ System.out.println("salva :"+pmodel.getPmState());
 						}
 					}
 				}
-				Activity from = branchConCond.getFromActivity();
+				Activity from = branchCond.getFromActivity();
 				if (from != null) {
 					String state = this.getState(from);
 					if (from instanceof Normal) { // Rule G2.34
 						if (state.equals("") //$NON-NLS-1$
 								|| state.equals(Plain.WAITING) || state.equals(Plain.READY)) {
-							from.getToBranch().remove(branchConCond);
-							branchConCond.setFromActivity(null);
+							from.getToBranch().remove(branchCond);
+							branchCond.setFromActivity(null);
 						}
 					} else if (from instanceof Automatic) { // Rule G2.35
 						if (state.equals("") //$NON-NLS-1$
 								|| state.equals(Plain.WAITING)) {
-							from.getToBranch().remove(branchConCond);
-							branchConCond.setFromActivity(null);
+							from.getToBranch().remove(branchCond);
+							branchCond.setFromActivity(null);
 						}
 					} else if (from instanceof Decomposed) { // Rule G2.36
-						from.getToBranch().remove(branchConCond);
-						branchConCond.setFromActivity(null);
+						from.getToBranch().remove(branchCond);
+						branchCond.setFromActivity(null);
 					}
 				}
 
@@ -2903,28 +2903,28 @@ System.out.println("salva :"+pmodel.getPmState());
 						}
 					}
 				}
-				MultipleCon fromMC = branchConCond.getFromMultipleConnection();
+				MultipleCon fromMC = branchCond.getFromMultipleConnection();
 				if (fromMC != null) {
 					boolean fired = fromMC.isFired().booleanValue();
 					if (!fired) { // Rule G2.41
 						if (fromMC instanceof JoinCon) {
 							JoinCon fromJoin = (JoinCon) fromMC;
 							fromJoinCon.setToMultipleCon(null);
-							branchConCond.setFromMultipleConnection(null);
+							branchCond.setFromMultipleConnection(null);
 						} else { // is BranchCon
 							BranchCon fromBranch = (BranchCon) fromMC;
 							if (fromBranch instanceof BranchANDCon) {
 								BranchANDCon fromBranchAND = (BranchANDCon) fromBranchCon;
-								fromBranchAND.getToMultipleCon().remove(branchConCond);
-								branchConCond.setFromMultipleConnection(null);
+								fromBranchAND.getToMultipleCon().remove(branchCond);
+								branchCond.setFromMultipleConnection(null);
 							} else {// is BranchConCond
 								BranchConCond fromBranchCond = (BranchConCond) fromBranchCon;
 								Collection branchCondToMultipleCons = fromBranchCond.getTheBranchConCondToMultipleCon();
 								Iterator iterBranchCondToMultipleCons = branchConCondToMultipleCons.iterator();
 								while (iterBranchConCondToMultipleCons.hasNext()) {
 									BranchConCondToMultipleCon branchCondToMultipleCon = (BranchConCondToMultipleCon) iterBranchConCondToMultipleCons.next();
-									if (branchCondToMultipleCon.getTheBranchCond().equals(branchConCond)) {
-										branchConCond.setFromMultipleConnection(null);
+									if (branchCondToMultipleCon.getTheBranchCond().equals(branchCond)) {
+										branchCond.setFromMultipleConnection(null);
 										branchCondToMultipleCon.setTheBranchConCond(null);
 										branchConCondToMultipleCon.setTheMultipleCon(null);
 										fromBranchCond.getTheBranchCondToActivity().remove(branchConCondToMultipleCon);
@@ -2961,9 +2961,9 @@ System.out.println("salva :"+pmodel.getPmState());
 							if (this.hasTheFromArtifact(actNorm, artifact)) {
 								Collection invArts = actNorm.getInvolvedArtifactToNormal();
 								Iterator iter = invArts.iterator();
-								InvolvedArtifacts inv = null;
+								InvolvedArtifact inv = null;
 								while (iter.hasNext()) {
-									InvolvedArtifacts auxInv = (InvolvedArtifacts) iter.next();
+									InvolvedArtifact auxInv = (InvolvedArtifact) iter.next();
 									if (auxInv != null) {
 										if (auxInv.getTheArtifact() != null) {
 
@@ -3021,10 +3021,10 @@ System.out.println("salva :"+pmodel.getPmState());
 
 								Collection invArts = actNorm.getInvolvedArtifactFromNormal();
 								Iterator iter = invArts.iterator();
-								InvolvedArtifacts inv = null;
+								InvolvedArtifact inv = null;
 								while (iter.hasNext()) {
 
-									InvolvedArtifacts auxInv = (InvolvedArtifacts) iter.next();
+									InvolvedArtifact auxInv = (InvolvedArtifact) iter.next();
 									if (auxInv != null) {
 										if (auxInv.getTheArtifact() != null) {
 
@@ -3931,19 +3931,19 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		BranchANDCon branchAND = new BranchANDCon();
 
-		branchANDCon.setIdent(level_id);
-		branchANDCon.setFired(new Boolean(false));
+		branchAND.setIdent(level_id);
+		branchAND.setFired(new Boolean(false));
 
-		branchANDCon.setTheProcessModel(pmodel);
-		pmodel.getTheConnection().add(branchANDCon);
+		branchAND.setTheProcessModel(pmodel);
+		pmodel.getTheConnection().add(branchAND);
 
-		branchANDCon.setTheDependency(dep);
-		dep.setTheMultipleCon(branchANDCon);
+		branchAND.setTheDependency(dep);
+		dep.setTheMultipleCon(branchAND);
 
 		// Persistence Operations
-		conDAO.daoSave(branchANDCon);
+		conDAO.daoSave(branchAND);
 
-		return branchANDCon.getId();
+		return branchAND.getId();
 	}
 
 
@@ -4159,7 +4159,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (multipleCon instanceof JoinCon) {
 					JoinCon join = (JoinCon) multipleCon;
 					join.getFromMultipleCon().remove(fromBranchANDCon);
-					fromBranchAND.getToMultipleCon().remove(joinCon);
+					fromBranchAND.getToMultipleCon().remove(join);
 				} else {
 					BranchCon branch = (BranchCon) multipleCon;
 					branchCon.setFromMultipleConnection(null);
@@ -4175,7 +4175,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					Iterator iter2 = fromBCTMCs.iterator();
 					while (iter2.hasNext()) {
 						BranchConCondToMultipleCon fromBCTMC = (BranchConCondToMultipleCon) iter2.next();
-						if (fromBCTMC.getTheMultipleCon().equals(joinCon)) {
+						if (fromBCTMC.getTheMultipleCon().equals(join)) {
 							fromBCTMC.setTheMultipleCon(null);
 							fromBCTMC.setTheBranchConCond(null);
 							fromBCTMCs.remove(fromBCTMC);
@@ -4328,8 +4328,8 @@ System.out.println("salva :"+pmodel.getPmState());
 		} else if (multipleCon instanceof JoinCon) {
 			JoinCon join = (JoinCon) multipleCon;
 
-			activity_from.getToJoin().remove(joinCon);
-			joinCon.getFromActivity().remove(activity_from);
+			activity_from.getToJoin().remove(join);
+			join.getFromActivity().remove(activity_from);
 
 			// Dynamic Changes related code
 			ProcessModel pmodel = multipleCon.getTheProcessModel();
@@ -4437,7 +4437,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				BranchANDCon branchAND = (BranchANDCon) branchCon;
 				if (multipleCon_to instanceof JoinCon) {
 					JoinCon joinTo = (JoinCon) multipleCon_to;
-					joinTo.getFromMultipleCon().remove(branchANDCon);
+					joinTo.getFromMultipleCon().remove(branchAND);
 					branchAND.getToMultipleCon().remove(joinConTo);
 				} else { // is BranchCon
 					BranchCon branchTo = (BranchCon) multipleCon_to;
@@ -4465,7 +4465,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			if (multipleCon_to instanceof BranchCon) {
 				BranchCon toBranch = (BranchCon) multipleCon_to;
 				toBranchCon.setFromMultipleConnection(null);
-				joinCon.setToMultipleCon(null);
+				join.setToMultipleCon(null);
 
 				// Dynamic Changes related code
 				ProcessModel pmodel = multipleCon.getTheProcessModel();
@@ -4483,8 +4483,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				}
 			} else if (multipleCon_to instanceof JoinCon) {
 				JoinCon toJoin = (JoinCon) multipleCon_to;
-				toJoin.getFromMultipleCon().remove(joinCon);
-				joinCon.setToMultipleCon(null);
+				toJoin.getFromMultipleCon().remove(join);
+				join.setToMultipleCon(null);
 
 				// Dynamic Changes related code
 				ProcessModel pmodel = multipleCon.getTheProcessModel();
@@ -4554,8 +4554,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			BranchCon branch = (BranchCon) multipleCon;
 			if (branch instanceof BranchANDCon) {
 				BranchANDCon branchAND = (BranchANDCon) branchCon;
-				branchANDCon.getToActivity().remove(activity_to);
-				activity_to.getToBranch().remove(branchANDCon);
+				branchAND.getToActivity().remove(activity_to);
+				activity_to.getToBranch().remove(branchAND);
 
 				// Dynamic Changes related code
 				ProcessModel pmodel = multipleCon.getTheProcessModel();
@@ -4608,8 +4608,8 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 		} else if (multipleCon instanceof JoinCon) {
 			JoinCon join = (JoinCon) multipleCon;
-			joinCon.setToActivity(activity_to);
-			activity_to.getFromJoin().remove(joinCon);
+			join.setToActivity(activity_to);
+			activity_to.getFromJoin().remove(join);
 
 			// Dynamic Changes related code
 			ProcessModel pmodel = multipleCon.getTheProcessModel();
@@ -4682,17 +4682,17 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		String state = this.getState(activity_to);
 
-		Collection suc = this.getSuccessors(joinCon);
+		Collection suc = this.getSuccessors(join);
 		suc.remove(null);
-		if (suc.isEmpty() && !this.controlFlow(activity_to, joinCon)) {
+		if (suc.isEmpty() && !this.controlFlow(activity_to, join)) {
 
-			if (!joinCon.isFired().booleanValue() && (state.equals("") || state.equals(ProcessModel.REQUIREMENTS))) { // Rule G4.1 //$NON-NLS-1$
+			if (!join.isFired().booleanValue() && (state.equals("") || state.equals(ProcessModel.REQUIREMENTS))) { // Rule G4.1 //$NON-NLS-1$
 
-				joinCon.setToActivity(activity_to);
-				activity_to.getFromJoin().add(joinCon);
+				join.setToActivity(activity_to);
+				activity_to.getFromJoin().add(join);
 
 				// Dynamic Changes related code
-				ProcessModel pmodel = joinCon.getTheProcessModel();
+				ProcessModel pmodel = join.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getpStatus().name();
 				if (processState.equals(Process.ENACTING)) {
 					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.1"); //$NON-NLS-1$
@@ -4711,15 +4711,15 @@ System.out.println("salva :"+pmodel.getPmState());
 																	// state.equals(ProcessModel.INSTANTIATED)
 				// Rule G4.2
 
-				joinCon.setToActivity(activity_to);
-				activity_to.getFromJoin().add(joinCon);
+				join.setToActivity(activity_to);
+				activity_to.getFromJoin().add(join);
 
 				if (activity_to instanceof Decomposed) {
 					this.makeDecomposedWaiting(((Decomposed) activity_to).getTheReferedProcessModel(), "Rule G4.2");
 				}
 
 				// Dynamic Changes related code
-				ProcessModel pmodel = joinCon.getTheProcessModel();
+				ProcessModel pmodel = join.getTheProcessModel();
 				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.2"); //$NON-NLS-1$
 				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
@@ -4732,16 +4732,16 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			} else if (activity_to instanceof Normal || activity_to instanceof Decomposed) {
 
-				if (!joinCon.isFired().booleanValue() && (state.equals(Plain.READY) || state.equals(ProcessModel.INSTANTIATED))) {
+				if (!join.isFired().booleanValue() && (state.equals(Plain.READY) || state.equals(ProcessModel.INSTANTIATED))) {
 
-					if (joinCon.getTheDependency().getKindDep().equals("end-end")) { //$NON-NLS-1$
+					if (join.getTheDependency().getKindDep().equals("end-end")) { //$NON-NLS-1$
 						// Rule G4.3
 
-						joinCon.setToActivity(activity_to);
-						activity_to.getFromJoin().add(joinCon);
+						join.setToActivity(activity_to);
+						activity_to.getFromJoin().add(join);
 
 						// Dynamic Changes related code
-						ProcessModel pmodel = joinCon.getTheProcessModel();
+						ProcessModel pmodel = join.getTheProcessModel();
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.3"); //$NON-NLS-1$
 						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
@@ -4755,11 +4755,11 @@ System.out.println("salva :"+pmodel.getPmState());
 						// Rule G4.4
 
 						this.makeWaiting(activity_to, "Rule G4.4");
-						joinCon.setToActivity(activity_to);
-						activity_to.getFromJoin().add(joinCon);
+						join.setToActivity(activity_to);
+						activity_to.getFromJoin().add(join);
 
 						// Dynamic Changes related code
-						ProcessModel pmodel = joinCon.getTheProcessModel();
+						ProcessModel pmodel = join.getTheProcessModel();
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.4"); //$NON-NLS-1$
 						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
@@ -4771,15 +4771,15 @@ System.out.println("salva :"+pmodel.getPmState());
 																			 */);
 					}
 
-				} else if (joinCon.isFired().booleanValue() && !(state.equals(Plain.FAILED) || state.equals(ProcessModel.FAILED))
+				} else if (join.isFired().booleanValue() && !(state.equals(Plain.FAILED) || state.equals(ProcessModel.FAILED))
 						&& !(state.equals(Plain.CANCELED) || state.equals(ProcessModel.CANCELED))) {
 					// Rule G4.5
 
-					joinCon.setToActivity(activity_to);
-					activity_to.getFromJoin().add(joinCon);
+					join.setToActivity(activity_to);
+					activity_to.getFromJoin().add(join);
 
 					// Dynamic Changes related code
-					ProcessModel pmodel = joinCon.getTheProcessModel();
+					ProcessModel pmodel = join.getTheProcessModel();
 					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.5"); //$NON-NLS-1$
 					this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																			 * ,
@@ -4793,21 +4793,21 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 
 			// Persistence Operations
-			joinDAO.update(joinCon);
+			joinDAO.update(join);
 			actDAO.update(activity_to);
 
-		} else if ((join.getToActivity() != null) && !this.controlFlow(activity_to, joinCon)) {
+		} else if ((join.getToActivity() != null) && !this.controlFlow(activity_to, join)) {
 			if ((state.equals("") || state.equals(ProcessModel.REQUIREMENTS)) //$NON-NLS-1$
-					&& !joinCon.isFired().booleanValue()) {
+					&& !join.isFired().booleanValue()) {
 				// Rule G4.6
 
-				Activity toAct = joinCon.getToActivity();
+				Activity toAct = join.getToActivity();
 
-				toAct.getFromJoin().remove(joinCon);
-				joinCon.setToActivity(activity_to);
-				activity_to.getFromJoin().add(joinCon);
+				toAct.getFromJoin().remove(join);
+				join.setToActivity(activity_to);
+				activity_to.getFromJoin().add(join);
 
-				ProcessModel pmodel = joinCon.getTheProcessModel();
+				ProcessModel pmodel = join.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getpStatus().name();
 				if (processState.equals(Process.ENACTING)) {
 					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.6"); //$NON-NLS-1$
@@ -4822,7 +4822,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				}
 
 				// Persistence Operations
-				joinDAO.update(joinCon);
+				joinDAO.update(join);
 				actDAO.update(activity_to);
 
 				return newWebapseeObjectDTO(toAct.getId(), toAct.getClass().getName());
@@ -4831,13 +4831,13 @@ System.out.println("salva :"+pmodel.getPmState());
 					|| state.equals(ProcessModel.INSTANTIATED)) {
 				// Rule G4.7
 
-				Activity toAct = joinCon.getToActivity();
+				Activity toAct = join.getToActivity();
 
-				toAct.getFromJoin().remove(joinCon);
-				joinCon.setToActivity(activity_to);
-				activity_to.getFromJoin().add(joinCon);
+				toAct.getFromJoin().remove(join);
+				join.setToActivity(activity_to);
+				activity_to.getFromJoin().add(join);
 
-				ProcessModel pmodel = joinCon.getTheProcessModel();
+				ProcessModel pmodel = join.getTheProcessModel();
 				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.7"); //$NON-NLS-1$
 				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
@@ -4849,24 +4849,24 @@ System.out.println("salva :"+pmodel.getPmState());
 																	 */);
 
 				// Persistence Operations
-				joinDAO.update(joinCon);
+				joinDAO.update(join);
 				actDAO.update(activity_to);
 
 				return newWebapseeObjectDTO(toAct.getId(), toAct.getClass().getName());
 
 			} else if (activity_to instanceof Normal || activity_to instanceof Decomposed) {
 
-				if (!joinCon.isFired().booleanValue() && (state.equals(Plain.READY) || state.equals(ProcessModel.INSTANTIATED))) {
+				if (!join.isFired().booleanValue() && (state.equals(Plain.READY) || state.equals(ProcessModel.INSTANTIATED))) {
 
-					if (joinCon.getTheDependency().getKindDep().equals("end-end")) { //$NON-NLS-1$
+					if (join.getTheDependency().getKindDep().equals("end-end")) { //$NON-NLS-1$
 						// Rule G4.8
 
-						Activity toAct = joinCon.getToActivity();
-						toAct.getFromJoin().remove(joinCon);
-						joinCon.setToActivity(activity_to);
-						activity_to.getFromJoin().add(joinCon);
+						Activity toAct = join.getToActivity();
+						toAct.getFromJoin().remove(join);
+						join.setToActivity(activity_to);
+						activity_to.getFromJoin().add(join);
 
-						ProcessModel pmodel = joinCon.getTheProcessModel();
+						ProcessModel pmodel = join.getTheProcessModel();
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.8"); //$NON-NLS-1$
 						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
@@ -4878,21 +4878,21 @@ System.out.println("salva :"+pmodel.getPmState());
 																			 */);
 
 						// Persistence Operations
-						joinDAO.update(joinCon);
+						joinDAO.update(join);
 						actDAO.update(activity_to);
 
 						return newWebapseeObjectDTO(toAct.getId(), toAct.getClass().getName());
 					} else {
 						// Rule G4.9
 
-						Activity toAct = joinCon.getToActivity();
-						toAct.getFromJoin().remove(joinCon);
-						joinCon.setToActivity(activity_to);
-						activity_to.getFromJoin().add(joinCon);
+						Activity toAct = join.getToActivity();
+						toAct.getFromJoin().remove(join);
+						join.setToActivity(activity_to);
+						activity_to.getFromJoin().add(join);
 
 						this.makeWaiting(activity_to, "Rule G4.9");
 
-						ProcessModel pmodel = joinCon.getTheProcessModel();
+						ProcessModel pmodel = join.getTheProcessModel();
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.9"); //$NON-NLS-1$
 						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
@@ -4904,22 +4904,22 @@ System.out.println("salva :"+pmodel.getPmState());
 																			 */);
 
 						// Persistence Operations
-						joinDAO.update(joinCon);
+						joinDAO.update(join);
 						actDAO.update(activity_to);
 
 						return newWebapseeObjectDTO(toAct.getId(), toAct.getClass().getName());
 					}
 				}
-			} else if (joinCon.isFired().booleanValue() && !(state.equals(Plain.FAILED) || state.equals(ProcessModel.FAILED))
+			} else if (join.isFired().booleanValue() && !(state.equals(Plain.FAILED) || state.equals(ProcessModel.FAILED))
 					&& !(state.equals(Plain.CANCELED) || state.equals(ProcessModel.CANCELED))) {
 				// Rule G4.10
 
-				Activity toAct = joinCon.getToActivity();
-				toAct.getFromJoin().remove(joinCon);
-				joinCon.setToActivity(activity_to);
-				activity_to.getFromJoin().add(joinCon);
+				Activity toAct = join.getToActivity();
+				toAct.getFromJoin().remove(join);
+				join.setToActivity(activity_to);
+				activity_to.getFromJoin().add(join);
 
-				ProcessModel pmodel = joinCon.getTheProcessModel();
+				ProcessModel pmodel = join.getTheProcessModel();
 				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.10"); //$NON-NLS-1$
 				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
@@ -4931,29 +4931,29 @@ System.out.println("salva :"+pmodel.getPmState());
 																	 */);
 
 				// Persistence Operations
-				joinDAO.update(joinCon);
+				joinDAO.update(join);
 				actDAO.update(activity_to);
 
 				return newWebapseeObjectDTO(toAct.getId(), toAct.getClass().getName());
 			}
-		} else if ((join.getToMultipleCon() != null) && !this.controlFlow(activity_to, joinCon)) {
+		} else if ((join.getToMultipleCon() != null) && !this.controlFlow(activity_to, join)) {
 			if ((state.equals("") || state.equals(ProcessModel.REQUIREMENTS)) //$NON-NLS-1$
-					&& !joinCon.isFired().booleanValue()) {
+					&& !join.isFired().booleanValue()) {
 				// Rule G4.11
-				MultipleCon toMulti = joinCon.getToMultipleCon();
+				MultipleCon toMulti = join.getToMultipleCon();
 				if (toMulti instanceof JoinCon) {
 					JoinCon toJoin = (JoinCon) toMulti;
-					toJoin.getFromMultipleCon().remove(joinCon);
+					toJoin.getFromMultipleCon().remove(join);
 				} else { // is BranchCon
 					BranchCon toBranch = (BranchCon) toMulti;
 					toBranchCon.setFromMultipleConnection(null);
 				}
 
-				joinCon.setToMultipleCon(null);
-				joinCon.setToActivity(activity_to);
-				activity_to.getFromJoin().add(joinCon);
+				join.setToMultipleCon(null);
+				join.setToActivity(activity_to);
+				activity_to.getFromJoin().add(join);
 
-				ProcessModel pmodel = joinCon.getTheProcessModel();
+				ProcessModel pmodel = join.getTheProcessModel();
 				String processState = this.getTheProcess(pmodel).getpStatus().name();
 				if (processState.equals(Process.ENACTING)) {
 					this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.11"); //$NON-NLS-1$
@@ -4968,7 +4968,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				}
 
 				// Persistence Operations
-				joinDAO.update(joinCon);
+				joinDAO.update(join);
 				actDAO.update(activity_to);
 
 				return newWebapseeObjectDTO(toMulti.getId(), toMulti.getClass().getName());
@@ -4976,19 +4976,19 @@ System.out.println("salva :"+pmodel.getPmState());
 																																		// state.equals(ProcessModel.INSTANTIATED)
 				// Rule G4.12
 
-				MultipleCon toMulti = joinCon.getToMultipleCon();
+				MultipleCon toMulti = join.getToMultipleCon();
 				if (toMulti instanceof JoinCon) {
 					JoinCon toJoin = (JoinCon) toMulti;
-					toJoin.getFromMultipleCon().remove(joinCon);
+					toJoin.getFromMultipleCon().remove(join);
 				} else { // is BranchCon
 					BranchCon toBranch = (BranchCon) toMulti;
 					toBranchCon.setFromMultipleConnection(null);
 				}
-				joinCon.setToMultipleCon(null);
-				joinCon.setToActivity(activity_to);
-				activity_to.getFromJoin().add(joinCon);
+				join.setToMultipleCon(null);
+				join.setToActivity(activity_to);
+				activity_to.getFromJoin().add(join);
 
-				ProcessModel pmodel = joinCon.getTheProcessModel();
+				ProcessModel pmodel = join.getTheProcessModel();
 				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.12"); //$NON-NLS-1$
 				this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																		 * ,
@@ -5000,30 +5000,30 @@ System.out.println("salva :"+pmodel.getPmState());
 																	 */);
 
 				// Persistence Operations
-				joinDAO.update(joinCon);
+				joinDAO.update(join);
 				actDAO.update(activity_to);
 
 				return newWebapseeObjectDTO(toMulti.getId(), toMulti.getClass().getName());
 			} else if (activity_to instanceof Normal || activity_to instanceof Decomposed) {
 
-				if (!joinCon.isFired().booleanValue() && (state.equals(Plain.READY) || state.equals(ProcessModel.INSTANTIATED))) {
+				if (!join.isFired().booleanValue() && (state.equals(Plain.READY) || state.equals(ProcessModel.INSTANTIATED))) {
 
-					if (joinCon.getTheDependency().getKindDep().equals("end-end")) { //$NON-NLS-1$
+					if (join.getTheDependency().getKindDep().equals("end-end")) { //$NON-NLS-1$
 						// Rule G4.13
 
-						MultipleCon toMulti = joinCon.getToMultipleCon();
+						MultipleCon toMulti = join.getToMultipleCon();
 						if (toMulti instanceof JoinCon) {
 							JoinCon toJoin = (JoinCon) toMulti;
-							toJoin.getFromMultipleCon().remove(joinCon);
+							toJoin.getFromMultipleCon().remove(join);
 						} else { // is BranchCon
 							BranchCon toBranch = (BranchCon) toMulti;
 							toBranchCon.setFromMultipleConnection(null);
 						}
-						joinCon.setToMultipleCon(null);
-						joinCon.setToActivity(activity_to);
-						activity_to.getFromJoin().add(joinCon);
+						join.setToMultipleCon(null);
+						join.setToActivity(activity_to);
+						activity_to.getFromJoin().add(join);
 
-						ProcessModel pmodel = joinCon.getTheProcessModel();
+						ProcessModel pmodel = join.getTheProcessModel();
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.13"); //$NON-NLS-1$
 						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
@@ -5035,28 +5035,28 @@ System.out.println("salva :"+pmodel.getPmState());
 																			 */);
 
 						// Persistence Operations
-						joinDAO.update(joinCon);
+						joinDAO.update(join);
 						actDAO.update(activity_to);
 
 						return newWebapseeObjectDTO(toMulti.getId(), toMulti.getClass().getName());
 					} else {
 						// Rule G4.14
 
-						MultipleCon toMulti = joinCon.getToMultipleCon();
+						MultipleCon toMulti = join.getToMultipleCon();
 						if (toMulti instanceof JoinCon) {
 							JoinCon toJoin = (JoinCon) toMulti;
-							toJoin.getFromMultipleCon().remove(joinCon);
+							toJoin.getFromMultipleCon().remove(join);
 						} else { // is BranchCon
 							BranchCon toBranch = (BranchCon) toMulti;
 							toBranchCon.setFromMultipleConnection(null);
 						}
-						joinCon.setToMultipleCon(null);
-						joinCon.setToActivity(activity_to);
-						activity_to.getFromJoin().add(joinCon);
+						join.setToMultipleCon(null);
+						join.setToActivity(activity_to);
+						activity_to.getFromJoin().add(join);
 
 						this.makeWaiting(activity_to, "Rule G4.14"); //$NON-NLS-1$
 
-						ProcessModel pmodel = joinCon.getTheProcessModel();
+						ProcessModel pmodel = join.getTheProcessModel();
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.14"); //$NON-NLS-1$
 						this.enactmentEngine.searchForReadyActivities(pmodel.getId()/*
 																				 * ,
@@ -5068,35 +5068,35 @@ System.out.println("salva :"+pmodel.getPmState());
 																			 */);
 
 						// Persistence Operations
-						joinDAO.update(joinCon);
+						joinDAO.update(join);
 						actDAO.update(activity_to);
 
 						return newWebapseeObjectDTO(toMulti.getId(), toMulti.getClass().getName());
 					}
 				}
-			} else if (joinCon.isFired().booleanValue() && !(state.equals(Plain.FAILED) || state.equals(ProcessModel.FAILED))
+			} else if (join.isFired().booleanValue() && !(state.equals(Plain.FAILED) || state.equals(ProcessModel.FAILED))
 					&& !(state.equals(Plain.CANCELED) || state.equals(ProcessModel.CANCELED))) {
 				// Rule 4.15
 
-				MultipleCon toMulti = joinCon.getToMultipleCon();
+				MultipleCon toMulti = join.getToMultipleCon();
 				if (toMulti instanceof JoinCon) {
 					JoinCon toJoin = (JoinCon) toMulti;
-					toJoin.getFromMultipleCon().remove(joinCon);
+					toJoin.getFromMultipleCon().remove(join);
 				} else { // is BranchCon
 					BranchCon toBranch = (BranchCon) toMulti;
 					toBranchCon.setFromMultipleConnection(null);
 				}
-				joinCon.setToMultipleCon(null);
-				joinCon.setToActivity(activity_to);
-				activity_to.getFromJoin().add(joinCon);
+				join.setToMultipleCon(null);
+				join.setToActivity(activity_to);
+				activity_to.getFromJoin().add(join);
 
-				ProcessModel pmodel = joinCon.getTheProcessModel();
+				ProcessModel pmodel = join.getTheProcessModel();
 				this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.15"); //$NON-NLS-1$
 				this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 				this.enactmentEngine.determineProcessModelStates(pmodel);
 
 				// Persistence Operations
-				joinDAO.update(joinCon);
+				joinDAO.update(join);
 				actDAO.update(activity_to);
 
 				return newWebapseeObjectDTO(toMulti.getId(), toMulti.getClass().getName());
@@ -5153,47 +5153,47 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		// Now we start the implementation of the rules
 
-		Collection suc = this.getSuccessors(joinCon);
+		Collection suc = this.getSuccessors(join);
 		suc.remove(null);
 		if (suc.isEmpty()) {
 
-			if (!this.controlFlow(multipleCon_to, joinCon)) {
-				if (!joinCon.isFired().booleanValue() && !multipleCon_to.isFired().booleanValue()) {
+			if (!this.controlFlow(multipleCon_to, join)) {
+				if (!join.isFired().booleanValue() && !multipleCon_to.isFired().booleanValue()) {
 					// Rule G4.16
 
 					if (multipleCon_to instanceof JoinCon) {
 						JoinCon toJoin = (JoinCon) multipleCon_to;
-						toJoin.getFromMultipleCon().add(joinCon);
+						toJoin.getFromMultipleCon().add(join);
 						join.setToMultipleCon(toJoinCon);
 					} else { // is BranchCon
 						BranchCon toBranch = (BranchCon) multipleCon_to;
-						toBranch.setFromMultipleConnection(joinCon);
+						toBranch.setFromMultipleConnection(join);
 						join.setToMultipleCon(toBranchCon);
 					}
 
 					// Dynamic Changes related code
-					ProcessModel pmodel = joinCon.getTheProcessModel();
+					ProcessModel pmodel = join.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getpStatus().name();
 					if (processState.equals(Process.ENACTING)) {
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.16"); //$NON-NLS-1$
 						this.enactmentEngine.searchForReadyActivities(pmodel.getId());
 						this.enactmentEngine.determineProcessModelStates(pmodel);
 					}
-				} else if (joinCon.isFired().booleanValue()) {
+				} else if (join.isFired().booleanValue()) {
 					// Rule G4.18
 
 					if (multipleCon_to instanceof JoinCon) {
 						JoinCon toJoin = (JoinCon) multipleCon_to;
-						toJoin.getFromMultipleCon().add(joinCon);
+						toJoin.getFromMultipleCon().add(join);
 						join.setToMultipleCon(toJoinCon);
 					} else { // is BranchCon
 						BranchCon toBranch = (BranchCon) multipleCon_to;
-						toBranch.setFromMultipleConnection(joinCon);
+						toBranch.setFromMultipleConnection(join);
 						join.setToMultipleCon(toBranchCon);
 					}
 
 					// Dynamic Changes related code
-					ProcessModel pmodel = joinCon.getTheProcessModel();
+					ProcessModel pmodel = join.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getpStatus().name();
 					if (processState.equals(Process.ENACTING)) {
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.18"); //$NON-NLS-1$
@@ -5202,33 +5202,33 @@ System.out.println("salva :"+pmodel.getPmState());
 					}
 				}
 				// Persistence Operations
-				joinDAO.update(joinCon);
+				joinDAO.update(join);
 				multiDAO.update(multipleCon_to);
 
 			} else {
 
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThereControlFlow")); //$NON-NLS-1$
 			}
-		} else if (joinCon.getToActivity() != null) {
-			if (!this.controlFlow(multipleCon_to, joinCon)) {
-				if (!joinCon.isFired().booleanValue() && !multipleCon_to.isFired().booleanValue()) {
+		} else if (join.getToActivity() != null) {
+			if (!this.controlFlow(multipleCon_to, join)) {
+				if (!join.isFired().booleanValue() && !multipleCon_to.isFired().booleanValue()) {
 					// Rule G4.17
 
-					Activity toAct = joinCon.getToActivity();
-					toAct.getFromJoin().remove(joinCon);
-					joinCon.setToActivity(null);
+					Activity toAct = join.getToActivity();
+					toAct.getFromJoin().remove(join);
+					join.setToActivity(null);
 					if (multipleCon_to instanceof JoinCon) {
 						JoinCon toJoin = (JoinCon) multipleCon_to;
-						toJoin.getFromMultipleCon().add(joinCon);
+						toJoin.getFromMultipleCon().add(join);
 						join.setToMultipleCon(toJoinCon);
 					} else { // is BranchCon
 						BranchCon toBranch = (BranchCon) multipleCon_to;
-						toBranch.setFromMultipleConnection(joinCon);
+						toBranch.setFromMultipleConnection(join);
 						join.setToMultipleCon(toBranchCon);
 					}
 
 					// Dynamic Changes related code
-					ProcessModel pmodel = joinCon.getTheProcessModel();
+					ProcessModel pmodel = join.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getpStatus().name();
 					if (processState.equals(Process.ENACTING)) {
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.17"); //$NON-NLS-1$
@@ -5237,28 +5237,28 @@ System.out.println("salva :"+pmodel.getPmState());
 					}
 
 					// Persistence Operations
-					joinDAO.update(joinCon);
+					joinDAO.update(join);
 					multiDAO.update(multipleCon_to);
 
 					return toAct.getId();
-				} else if (joinCon.isFired().booleanValue()) {
+				} else if (join.isFired().booleanValue()) {
 					// Rule G4.19
 
-					Activity toAct = joinCon.getToActivity();
-					toAct.getFromJoin().remove(joinCon);
-					joinCon.setToActivity(null);
+					Activity toAct = join.getToActivity();
+					toAct.getFromJoin().remove(join);
+					join.setToActivity(null);
 					if (multipleCon_to instanceof JoinCon) {
 						JoinCon toJoin = (JoinCon) multipleCon_to;
-						toJoin.getFromMultipleCon().add(joinCon);
+						toJoin.getFromMultipleCon().add(join);
 						join.setToMultipleCon(toJoinCon);
 					} else { // is BranchCon
 						BranchCon toBranch = (BranchCon) multipleCon_to;
-						toBranch.setFromMultipleConnection(joinCon);
+						toBranch.setFromMultipleConnection(join);
 						join.setToMultipleCon(toBranchCon);
 					}
 
 					// Dynamic Changes related code
-					ProcessModel pmodel = joinCon.getTheProcessModel();
+					ProcessModel pmodel = join.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getpStatus().name();
 					if (processState.equals(Process.ENACTING)) {
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.19"); //$NON-NLS-1$
@@ -5267,46 +5267,46 @@ System.out.println("salva :"+pmodel.getPmState());
 					}
 
 					// Persistence Operations
-					joinDAO.update(joinCon);
+					joinDAO.update(join);
 					multiDAO.update(multipleCon_to);
 					return toAct.getId();
 				}
 			} else {
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThereControlFlow")); //$NON-NLS-1$
 			}
-		} else if (joinCon.getToMultipleCon() != null) {
-			if (!this.controlFlow(multipleCon_to, joinCon)) {
-				if (!joinCon.isFired().booleanValue() && !multipleCon_to.isFired().booleanValue()) {
+		} else if (join.getToMultipleCon() != null) {
+			if (!this.controlFlow(multipleCon_to, join)) {
+				if (!join.isFired().booleanValue() && !multipleCon_to.isFired().booleanValue()) {
 					// Rule G4.20
-					MultipleCon oldMulti = joinCon.getToMultipleCon();
+					MultipleCon oldMulti = join.getToMultipleCon();
 
 					if (multipleCon_to instanceof JoinCon) {
 						JoinCon toJoin = (JoinCon) multipleCon_to;
 
 						if (oldMulti instanceof JoinCon) {
 							JoinCon oldJoin = (JoinCon) oldMulti;
-							oldJoin.getFromMultipleCon().remove(joinCon);
+							oldJoin.getFromMultipleCon().remove(join);
 						} else { // is BranchCon
 							BranchCon oldBranch = (BranchCon) multipleCon_to;
 							oldBranchCon.setFromMultipleConnection(null);
 						}
-						toJoin.getFromMultipleCon().add(joinCon);
+						toJoin.getFromMultipleCon().add(join);
 						join.setToMultipleCon(toJoinCon);
 					} else { // is BranchCon
 						BranchCon toBranch = (BranchCon) multipleCon_to;
 						if (oldMulti instanceof JoinCon) {
 							JoinCon oldJoin = (JoinCon) oldMulti;
-							oldJoin.getFromMultipleCon().remove(joinCon);
+							oldJoin.getFromMultipleCon().remove(join);
 						} else { // is BranchCon
 							BranchCon oldBranch = (BranchCon) multipleCon_to;
 							oldBranchCon.setFromMultipleConnection(null);
 						}
-						toBranch.setFromMultipleConnection(joinCon);
+						toBranch.setFromMultipleConnection(join);
 						join.setToMultipleCon(toBranchCon);
 					}
 
 					// Dynamic Changes related code
-					ProcessModel pmodel = joinCon.getTheProcessModel();
+					ProcessModel pmodel = join.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getpStatus().name();
 					if (processState.equals(Process.ENACTING)) {
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.20"); //$NON-NLS-1$
@@ -5315,42 +5315,42 @@ System.out.println("salva :"+pmodel.getPmState());
 					}
 
 					// Persistence Operations
-					joinDAO.update(joinCon);
+					joinDAO.update(join);
 					multiDAO.update(multipleCon_to);
 
 					return oldMulti.getId();
-				} else if (joinCon.isFired().booleanValue()) {
+				} else if (join.isFired().booleanValue()) {
 					// Rule G4.21
 
-					MultipleCon oldMulti = joinCon.getToMultipleCon();
+					MultipleCon oldMulti = join.getToMultipleCon();
 
 					if (multipleCon_to instanceof JoinCon) {
 						JoinCon toJoin = (JoinCon) multipleCon_to;
 
 						if (oldMulti instanceof JoinCon) {
 							JoinCon oldJoin = (JoinCon) oldMulti;
-							oldJoin.getFromMultipleCon().remove(joinCon);
+							oldJoin.getFromMultipleCon().remove(join);
 						} else { // is BranchCon
 							BranchCon oldBranch = (BranchCon) multipleCon_to;
 							oldBranchCon.setFromMultipleConnection(null);
 						}
-						toJoin.getFromMultipleCon().add(joinCon);
+						toJoin.getFromMultipleCon().add(join);
 						join.setToMultipleCon(toJoinCon);
 					} else { // is BranchCon
 						BranchCon toBranch = (BranchCon) multipleCon_to;
 						if (oldMulti instanceof JoinCon) {
 							JoinCon oldJoin = (JoinCon) oldMulti;
-							oldJoin.getFromMultipleCon().remove(joinCon);
+							oldJoin.getFromMultipleCon().remove(join);
 						} else { // is BranchCon
 							BranchCon oldBranch = (BranchCon) multipleCon_to;
 							oldBranchCon.setFromMultipleConnection(null);
 						}
-						toBranch.setFromMultipleConnection(joinCon);
+						toBranch.setFromMultipleConnection(join);
 						join.setToMultipleCon(toBranchCon);
 					}
 
 					// Dynamic Changes related code
-					ProcessModel pmodel = joinCon.getTheProcessModel();
+					ProcessModel pmodel = join.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getpStatus().name();
 					if (processState.equals(Process.ENACTING)) {
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.21"); //$NON-NLS-1$
@@ -5359,7 +5359,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					}
 
 					// Persistence Operations
-					joinDAO.update(joinCon);
+					joinDAO.update(join);
 					multiDAO.update(multipleCon_to);
 
 					return oldMulti.getId();
@@ -5416,9 +5416,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		// Now we start the implementation of the rules
 
-		if (!this.isInPredecessors(multipleCon_from, join) && !this.controlFlow(joinCon, multipleCon_from)) {
+		if (!this.isInPredecessors(multipleCon_from, join) && !this.controlFlow(join, multipleCon_from)) {
 
-			if ((!joinCon.isFired().booleanValue())) {
+			if ((!join.isFired().booleanValue())) {
 
 				if (join.getKindJoinCon().equals("XOR")) { //$NON-NLS-1$
 					// Rule G4.28
@@ -5435,25 +5435,25 @@ System.out.println("salva :"+pmodel.getPmState());
 					if (!has) {
 						if (multipleCon_from instanceof JoinCon) {
 							JoinCon fromJoin = (JoinCon) multipleCon_from;
-							fromJoin.setToMultipleCon(joinCon);
+							fromJoin.setToMultipleCon(join);
 							join.getFromMultipleCon().add(fromJoinCon);
 						} else { // is BranchCon
 							BranchCon fromBranch = (BranchCon) multipleCon_from;
 							if (fromBranch instanceof BranchANDCon) {
 								BranchANDCon fromBranchAND = (BranchANDCon) fromBranchCon;
-								fromBranchAND.getToMultipleCon().add(joinCon);
+								fromBranchAND.getToMultipleCon().add(join);
 								join.getFromMultipleCon().add(fromBranchANDCon);
 							} else { // is BranchConCond
 								BranchConCond fromBranchCond = (BranchConCond) fromBranchCon;
 								BranchConCondToMultipleCon bctmc = new BranchConCondToMultipleCon();
 								bctmc.setTheBranchCond(fromBranchConCond);
-								bctmc.setTheMultipleCon(joinCon);
+								bctmc.setTheMultipleCon(join);
 								fromBranchCond.getTheBranchConCondToMultipleCon().add(bctmc);
 								join.getFromMultipleCon().add(fromBranchConCond);
 							}
 						}
 						// Dynamic Changes related code
-						ProcessModel pmodel = joinCon.getTheProcessModel();
+						ProcessModel pmodel = join.getTheProcessModel();
 						String processState = this.getTheProcess(pmodel).getpStatus().name();
 						if (processState.equals(Process.ENACTING)) {
 							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.28"); //$NON-NLS-1$
@@ -5465,26 +5465,26 @@ System.out.println("salva :"+pmodel.getPmState());
 					// Rule G4.22
 					if (multipleCon_from instanceof JoinCon) {
 						JoinCon fromJoin = (JoinCon) multipleCon_from;
-						fromJoin.setToMultipleCon(joinCon);
+						fromJoin.setToMultipleCon(join);
 						join.getFromMultipleCon().add(fromJoinCon);
 					} else { // is BranchCon
 						BranchCon fromBranch = (BranchCon) multipleCon_from;
 						if (fromBranch instanceof BranchANDCon) {
 							BranchANDCon fromBranchAND = (BranchANDCon) fromBranchCon;
-							fromBranchAND.getToMultipleCon().add(joinCon);
+							fromBranchAND.getToMultipleCon().add(join);
 							join.getFromMultipleCon().add(fromBranchANDCon);
 						} else { // is BranchConCond
 							BranchConCond fromBranchCond = (BranchConCond) fromBranchCon;
 							BranchConCondToMultipleCon bctmc = new BranchConCondToMultipleCon();
 							bctmc.setTheBranchCond(fromBranchConCond);
-							bctmc.setTheMultipleCon(joinCon);
+							bctmc.setTheMultipleCon(join);
 							fromBranchCond.getTheBranchConCondToMultipleCon().add(bctmc);
 							join.getFromMultipleCon().add(fromBranchConCond);
 						}
 					}
 
 					// Dynamic Changes related code
-					ProcessModel pmodel = joinCon.getTheProcessModel();
+					ProcessModel pmodel = join.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getpStatus().name();
 					if (processState.equals(Process.ENACTING)) {
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.22"); //$NON-NLS-1$
@@ -5507,29 +5507,29 @@ System.out.println("salva :"+pmodel.getPmState());
 							}
 						}
 						if (!has) {
-							joinCon.setFired(new Boolean(false));
+							join.setFired(new Boolean(false));
 							if (multipleCon_from instanceof JoinCon) {
 								JoinCon fromJoin = (JoinCon) multipleCon_from;
-								fromJoin.setToMultipleCon(joinCon);
+								fromJoin.setToMultipleCon(join);
 								join.getFromMultipleCon().add(fromJoinCon);
 							} else { // is BranchCon
 								BranchCon fromBranch = (BranchCon) multipleCon_from;
 								if (fromBranch instanceof BranchANDCon) {
 									BranchANDCon fromBranchAND = (BranchANDCon) fromBranchCon;
-									fromBranchAND.getToMultipleCon().add(joinCon);
+									fromBranchAND.getToMultipleCon().add(join);
 									join.getFromMultipleCon().add(fromBranchANDCon);
 								} else { // is BranchConCond
 									BranchConCond fromBranchCond = (BranchConCond) fromBranchCon;
 									BranchConCondToMultipleCon bctmc = new BranchConCondToMultipleCon();
 									bctmc.setTheBranchCond(fromBranchConCond);
-									bctmc.setTheMultipleCon(joinCon);
+									bctmc.setTheMultipleCon(join);
 									fromBranchCond.getTheBranchConCondToMultipleCon().add(bctmc);
 									join.getFromMultipleCon().add(fromBranchConCond);
 								}
 							}
 
 							// Dynamic Changes related code
-							ProcessModel pmodel = joinCon.getTheProcessModel();
+							ProcessModel pmodel = join.getTheProcessModel();
 							String processState = this.getTheProcess(pmodel).getpStatus().name();
 							if (processState.equals(Process.ENACTING)) {
 								this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.29"); //$NON-NLS-1$
@@ -5542,26 +5542,26 @@ System.out.println("salva :"+pmodel.getPmState());
 					// Rule G4.23
 					if (multipleCon_from instanceof JoinCon) {
 						JoinCon fromJoin = (JoinCon) multipleCon_from;
-						fromJoin.setToMultipleCon(joinCon);
+						fromJoin.setToMultipleCon(join);
 						join.getFromMultipleCon().add(fromJoinCon);
 					} else { // is BranchCon
 						BranchCon fromBranch = (BranchCon) multipleCon_from;
 						if (fromBranch instanceof BranchANDCon) {
 							BranchANDCon fromBranchAND = (BranchANDCon) fromBranchCon;
-							fromBranchAND.getToMultipleCon().add(joinCon);
+							fromBranchAND.getToMultipleCon().add(join);
 							join.getFromMultipleCon().add(fromBranchANDCon);
 						} else { // is BranchConCond
 							BranchConCond fromBranchCond = (BranchConCond) fromBranchCon;
 							BranchConCondToMultipleCon bctmc = new BranchConCondToMultipleCon();
 							bctmc.setTheBranchCond(fromBranchConCond);
-							bctmc.setTheMultipleCon(joinCon);
+							bctmc.setTheMultipleCon(join);
 							fromBranchCond.getTheBranchConCondToMultipleCon().add(bctmc);
 							join.getFromMultipleCon().add(fromBranchConCond);
 						}
 					}
 
 					// Dynamic Changes related code
-					ProcessModel pmodel = joinCon.getTheProcessModel();
+					ProcessModel pmodel = join.getTheProcessModel();
 					String processState = this.getTheProcess(pmodel).getpStatus().name();
 					if (processState.equals(Process.ENACTING)) {
 						this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.23"); //$NON-NLS-1$
@@ -5572,7 +5572,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 
 			// Persistence Operations
-			joinDAO.update(joinCon);
+			joinDAO.update(join);
 			multiDAO.update(multipleCon_from);
 
 		} else {
@@ -5626,9 +5626,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		String state = this.getState(activity_from);
 
-		if (!this.isInPredecessors(activity_from, join) && !this.controlFlow(joinCon, activity_from)) {
+		if (!this.isInPredecessors(activity_from, join) && !this.controlFlow(join, activity_from)) {
 
-			if ((!joinCon.isFired().booleanValue())) {
+			if ((!join.isFired().booleanValue())) {
 
 				if (join.getKindJoinCon().equals("XOR")) { //$NON-NLS-1$
 					Collection preds = this.getConnectionsFrom(activity_from);
@@ -5647,11 +5647,11 @@ System.out.println("salva :"+pmodel.getPmState());
 																										// G4.31
 								&& !(state.equals(Plain.CANCELED) || state.equals(ProcessModel.CANCELED)))) {
 
-							joinCon.getFromActivity().add(activity_from);
-							activity_from.getToJoin().add(joinCon);
+							join.getFromActivity().add(activity_from);
+							activity_from.getToJoin().add(join);
 
 							// Dynamic Changes related code
-							ProcessModel pmodel = joinCon.getTheProcessModel();
+							ProcessModel pmodel = join.getTheProcessModel();
 							String processState = this.getTheProcess(pmodel).getpStatus().name();
 							if (processState.equals(Process.ENACTING)) {
 								this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.31"); //$NON-NLS-1$
@@ -5668,11 +5668,11 @@ System.out.println("salva :"+pmodel.getPmState());
 																									// G4.25
 							&& !(state.equals(Plain.CANCELED) || state.equals(ProcessModel.CANCELED)))) {
 
-						joinCon.getFromActivity().add(activity_from);
-						activity_from.getToJoin().add(joinCon);
+						join.getFromActivity().add(activity_from);
+						activity_from.getToJoin().add(join);
 
 						// Dynamic Changes related code
-						ProcessModel pmodel = joinCon.getTheProcessModel();
+						ProcessModel pmodel = join.getTheProcessModel();
 						String processState = this.getTheProcess(pmodel).getpStatus().name();
 						if (processState.equals(Process.ENACTING)) {
 							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.25"); //$NON-NLS-1$
@@ -5698,13 +5698,13 @@ System.out.println("salva :"+pmodel.getPmState());
 																									// G4.32
 								|| (state.equals(Plain.ACTIVE) && state.equals(ProcessModel.ENACTING) // Rule
 																										// G4.33
-										&& state.equals(Plain.PAUSED) && joinCon.getTheDependency().getKindDep().equals("start-start"))) { //$NON-NLS-1$
+										&& state.equals(Plain.PAUSED) && join.getTheDependency().getKindDep().equals("start-start"))) { //$NON-NLS-1$
 
-							joinCon.getFromActivity().add(activity_from);
-							activity_from.getToJoin().add(joinCon);
+							join.getFromActivity().add(activity_from);
+							activity_from.getToJoin().add(join);
 
 							// Dynamic Changes related code
-							ProcessModel pmodel = joinCon.getTheProcessModel();
+							ProcessModel pmodel = join.getTheProcessModel();
 							String processState = this.getTheProcess(pmodel).getpStatus().name();
 							if (processState.equals(Process.ENACTING)) {
 								this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.33"); //$NON-NLS-1$
@@ -5721,13 +5721,13 @@ System.out.println("salva :"+pmodel.getPmState());
 																								// G4.26
 							|| (state.equals(Plain.ACTIVE) && state.equals(ProcessModel.ENACTING) // Rule
 																									// G4.27
-									&& state.equals(Plain.PAUSED) && joinCon.getTheDependency().getKindDep().equals("start-start"))) { //$NON-NLS-1$
+									&& state.equals(Plain.PAUSED) && join.getTheDependency().getKindDep().equals("start-start"))) { //$NON-NLS-1$
 
-						joinCon.getFromActivity().add(activity_from);
-						activity_from.getToJoin().add(joinCon);
+						join.getFromActivity().add(activity_from);
+						activity_from.getToJoin().add(join);
 
 						// Dynamic Changes related code
-						ProcessModel pmodel = joinCon.getTheProcessModel();
+						ProcessModel pmodel = join.getTheProcessModel();
 						String processState = this.getTheProcess(pmodel).getpStatus().name();
 						if (processState.equals(Process.ENACTING)) {
 							this.enactmentEngine.searchForFiredConnections(pmodel.getId(), "Rule G4.27"); //$NON-NLS-1$
@@ -5738,7 +5738,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				}
 			}
 			// Persistence Operations
-			joinDAO.update(joinCon);
+			joinDAO.update(join);
 			actDAO.update(activity_from);
 
 		} else {
@@ -5859,15 +5859,15 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				if (branch instanceof BranchANDCon) {
 					BranchANDCon branchAND = (BranchANDCon) branchCon;
-					Activity fromAct = branchANDCon.getFromActivity();
-					fromAct.getToBranch().remove(branchANDCon);
+					Activity fromAct = branchAND.getFromActivity();
+					fromAct.getToBranch().remove(branchAND);
 
 					ret = fromAct;
 
 				} else {
 					BranchConCond branchCond = (BranchConCond) branchCon;
-					Activity fromAct = branchConCond.getFromActivity();
-					fromAct.getToBranch().remove(branchConCond);
+					Activity fromAct = branchCond.getFromActivity();
+					fromAct.getToBranch().remove(branchCond);
 
 					ret = fromAct;
 				}
@@ -5894,15 +5894,15 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				if (branch instanceof BranchANDCon) {
 					BranchANDCon branchAND = (BranchANDCon) branchCon;
-					Activity fromAct = branchANDCon.getFromActivity();
-					fromAct.getToBranch().remove(branchANDCon);
+					Activity fromAct = branchAND.getFromActivity();
+					fromAct.getToBranch().remove(branchAND);
 
 					ret = fromAct;
 
 				} else {
 					BranchConCond branchCond = (BranchConCond) branchCon;
-					Activity fromAct = branchConCond.getFromActivity();
-					fromAct.getToBranch().remove(branchConCond);
+					Activity fromAct = branchCond.getFromActivity();
+					fromAct.getToBranch().remove(branchCond);
 
 					ret = fromAct;
 				}
@@ -5927,15 +5927,15 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				if (branch instanceof BranchANDCon) {
 					BranchANDCon branchAND = (BranchANDCon) branchCon;
-					Activity fromAct = branchANDCon.getFromActivity();
-					fromAct.getToBranch().remove(branchANDCon);
+					Activity fromAct = branchAND.getFromActivity();
+					fromAct.getToBranch().remove(branchAND);
 
 					ret = fromAct;
 
 				} else {
 					BranchConCond branchCond = (BranchConCond) branchCon;
-					Activity fromAct = branchConCond.getFromActivity();
-					fromAct.getToBranch().remove(branchConCond);
+					Activity fromAct = branchCond.getFromActivity();
+					fromAct.getToBranch().remove(branchCond);
 
 					ret = fromAct;
 				}
@@ -8985,13 +8985,13 @@ System.out.println("salva :"+pmodel.getPmState());
 		if (source == null)
 			return null;
 
-		source.setIsActive(false);
+		source.setActive(false);
 
 		WorkGroup destiny = new WorkGroup();
 		destiny.setIdent(newWorkGroupId);
 		destiny.setName(newWorkGroupId);
 		destiny.setDescription(source.getDescription());
-		destiny.setIsActive(true);
+		destiny.setActive(true);
 
 		// destiny.setSubWorkGroups(null);
 		// destiny.setSuperWorkGroup(null);
@@ -9017,7 +9017,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			ProcessAgenda procAg = new ProcessAgenda();
 			Process pro = this.getTheProcess(actNorm.getTheProcessModel());
 			procAg.setTheProcess(pro);
-			pro.getTheProcessAgenda().add(procAg);
+			pro.getTheProcessAgendas().add(procAg);
 			procAg.setTheTaskAgenda(taskAgenda);
 			procAgendas.add(procAg);
 			pAgendaDAO.addTask(procAg, actNorm);
@@ -9035,7 +9035,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				ProcessAgenda procAg = new ProcessAgenda();
 				Process pro = this.getTheProcess(actNorm.getTheProcessModel());
 				procAg.setTheProcess(pro);
-				pro.getTheProcessAgenda().add(procAg);
+				pro.getTheProcessAgendas().add(procAg);
 				procAg.setTheTaskAgenda(taskAgenda);
 				procAgendas.add(procAg);
 				pAgendaDAO.addTask(procAg, actNorm);
@@ -9166,7 +9166,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} catch(Exception e) {}
 	}
 
 	private void notifyAgents(Normal actNorm, String msg, Integer oid, String messageType, Class classe, String identObj, String direction) {
@@ -9366,7 +9366,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		Collection involvedFrom = actNorm.getInvolvedArtifactToNormal();
 		Iterator iter = involvedFrom.iterator();
 		while (iter.hasNext()) {
-			InvolvedArtifacts invArt = (InvolvedArtifacts) iter.next();
+			InvolvedArtifact invArt = (InvolvedArtifact) iter.next();
 			if (invArt.getTheArtifact() != null) {
 				if (invArt.getTheArtifact().equals(artifact)) {
 					has = true;
@@ -9385,7 +9385,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		Collection involvedTo = actNorm.getInvolvedArtifactFromNormal();
 		Iterator iter = involvedTo.iterator();
 		while (iter.hasNext()) {
-			InvolvedArtifacts invArt = (InvolvedArtifacts) iter.next();
+			InvolvedArtifact invArt = (InvolvedArtifact) iter.next();
 			if (invArt.getTheArtifact() != null) {
 				if (invArt.getTheArtifact().equals(artifact)) {
 					has = true;
@@ -9410,7 +9410,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				Activity toActivity = (Activity) iterToActivities.next();
 				if (toActivity != null && toActivity instanceof Normal) {
 
-					InvolvedArtifacts invArt = new InvolvedArtifacts();
+					InvolvedArtifact invArt = new InvolvedArtifact();
 					invArt.insertIntoTheArtifact(artifact);
 					invArt.insertIntoTheArtifactType(type);
 					invArt.insertIntoInInvolvedArtifacts((Normal) toActivity);
@@ -9424,7 +9424,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				Activity fromActivity = (Activity) iterFromActivities.next();
 				if (fromActivity != null && fromActivity instanceof Normal) {
 
-					InvolvedArtifacts invArt = new InvolvedArtifacts();
+					InvolvedArtifact invArt = new InvolvedArtifact();
 					invArt.insertIntoTheArtifact(artifact);
 					invArt.insertIntoTheArtifactType(type);
 					invArt.insertIntoOutInvolvedArtifacts((Normal) fromActivity);
@@ -9442,7 +9442,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					Collection invArts = toNormal.getInvolvedArtifactToNormal();
 					Iterator iterInvArts = invArts.iterator();
 					while (iterInvArts.hasNext()) {
-						InvolvedArtifacts invArt = (InvolvedArtifacts) iterInvArts.next();
+						InvolvedArtifact invArt = (InvolvedArtifact) iterInvArts.next();
 						Artifact art = invArt.getTheArtifact();
 						if (art != null && art.equals(oldArtifact)) {
 							oldArtifact.removeFromTheInvolvedArtifacts(invArt);
@@ -9464,7 +9464,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					Collection invArts = fromNormal.getInvolvedArtifactFromNormal();
 					Iterator iterInvArts = invArts.iterator();
 					while (iterInvArts.hasNext()) {
-						InvolvedArtifacts invArt = (InvolvedArtifacts) iterInvArts.next();
+						InvolvedArtifact invArt = (InvolvedArtifact) iterInvArts.next();
 						Artifact art = invArt.getTheArtifact();
 						if (art != null && art.equals(oldArtifact)) {
 							oldArtifact.removeFromTheInvolvedArtifacts(invArt);
@@ -9495,7 +9495,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				}
 			} else if (con instanceof BranchANDCon) {
 				BranchANDCon branchAND = (BranchANDCon) con;
-				if (branchANDCon.getToActivity().contains(act2)) {
+				if (branchAND.getToActivity().contains(act2)) {
 					has = true;
 					break;
 				}
@@ -9514,8 +9514,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					break;
 			} else if (con instanceof JoinCon) {
 				JoinCon join = (JoinCon) con;
-				if (joinCon.getToActivity() != null) {
-					if (joinCon.getToActivity().equals(act2)) {
+				if (join.getToActivity() != null) {
+					if (join.getToActivity().equals(act2)) {
 						has = true;
 						break;
 					}
@@ -9535,19 +9535,19 @@ System.out.println("salva :"+pmodel.getPmState());
 			Connection con = (Connection) iter.next();
 			if (con instanceof BranchANDCon) {
 				BranchANDCon branchAND = (BranchANDCon) con;
-				if (branchANDCon.equals(multi)) {
+				if (branchAND.equals(multi)) {
 					are = true;
 					break;
 				}
 			} else if (con instanceof BranchConCond) {
 				BranchConCond branchCond = (BranchConCond) con;
-				if (branchConCond.equals(multi)) {
+				if (branchCond.equals(multi)) {
 					are = true;
 					break;
 				}
 			} else if (con instanceof JoinCon) {
 				JoinCon join = (JoinCon) con;
-				if (joinCon.equals(multi)) {
+				if (join.equals(multi)) {
 					are = true;
 					break;
 				}
@@ -9568,19 +9568,19 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			if (con instanceof BranchANDCon) {
 				BranchANDCon branchAND = (BranchANDCon) con;
-				if (branchANDCon.equals(multi)) {
+				if (branchAND.equals(multi)) {
 					are = true;
 					break;
 				}
 			} else if (con instanceof BranchConCond) {
 				BranchConCond branchCond = (BranchConCond) con;
-				if (branchConCond.equals(multi)) {
+				if (branchCond.equals(multi)) {
 					are = true;
 					break;
 				}
 			} else if (con instanceof JoinCon) {
 				JoinCon join = (JoinCon) con;
-				if (joinCon.equals(multi)) {
+				if (join.equals(multi)) {
 					are = true;
 					break;
 				}
@@ -9600,13 +9600,13 @@ System.out.println("salva :"+pmodel.getPmState());
 				MultipleCon multi = (MultipleCon) obj;
 				if (multi instanceof BranchANDCon) {
 					BranchANDCon branchAND = (BranchANDCon) multi;
-					if (branchANDCon.equals(multi2)) {
+					if (branchAND.equals(multi2)) {
 						are = true;
 						break;
 					}
 				} else if (multi instanceof BranchConCond) {
 					BranchConCond branchCond = (BranchConCond) multi;
-					if (branchConCond.equals(multi2)) {
+					if (branchCond.equals(multi2)) {
 						are = true;
 						break;
 					}
@@ -9614,7 +9614,7 @@ System.out.println("salva :"+pmodel.getPmState());
 						break;
 				} else if (multi instanceof JoinCon) {
 					JoinCon join = (JoinCon) multi;
-					if (joinCon.equals(multi2)) {
+					if (join.equals(multi2)) {
 						are = true;
 						break;
 					}
@@ -9630,9 +9630,9 @@ System.out.println("salva :"+pmodel.getPmState());
 	private Collection getConnectionsFrom(Activity act) {
 
 		Collection connFrom = new ArrayList();
-		connFrom.addAll(act.getFromSimpleCon());
-		connFrom.addAll(act.getFromJoinCon());
-		connFrom.addAll(act.getFromBranchANDCon());
+		connFrom.addAll(act.getFromSimpleCons());
+		connFrom.addAll(act.getFromJoinCons());
+		connFrom.addAll(act.getFromBranchANDCons());
 		Collection bctas = act.getTheBranchConCondToActivity();
 		Iterator iterBctas = bctas.iterator();
 		while (iterBctas.hasNext()) {
@@ -9650,9 +9650,9 @@ System.out.println("salva :"+pmodel.getPmState());
 	private Collection getConnectionsTo(Activity act) {
 
 		Collection connTo = new ArrayList();
-		connTo.addAll(act.getToSimpleCon());
-		connTo.addAll(act.getToJoinCon());
-		connTo.addAll(act.getToBranchCon());
+		connTo.addAll(act.getToSimpleCons());
+		connTo.addAll(act.getToJoinCons());
+		connTo.addAll(act.getToBranchCons());
 		return connTo;
 	}
 
@@ -9695,11 +9695,11 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 		} else if (conn instanceof JoinCon) {
 			JoinCon join = (JoinCon) conn;
-			Activity activity = joinCon.getToActivity();
+			Activity activity = join.getToActivity();
 			if (activity != null) {
 				succ.add(activity);
 			}
-			MultipleCon multipleCon = joinCon.getToMultipleCon();
+			MultipleCon multipleCon = join.getToMultipleCon();
 			if (multipleCon != null) {
 				succ.add(multipleCon);
 			}
@@ -9730,8 +9730,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				pred.add(multi);
 		} else if (conn instanceof JoinCon) {
 			JoinCon join = (JoinCon) conn;
-			pred.addAll(joinCon.getFromActivity());
-			pred.addAll(joinCon.getFromMultipleCon());
+			pred.addAll(join.getFromActivity());
+			pred.addAll(join.getFromMultipleCon());
 		}
 		return pred;
 	}
@@ -9767,16 +9767,16 @@ System.out.println("salva :"+pmodel.getPmState());
 															 */) {
 
 		// Removing connections to...
-		Collection branchesTo = act.getToBranchCon();
+		Collection branchesTo = act.getToBranchCons();
 		Iterator iterBranchTo = branchConesTo.iterator();
 		while (iterBranchConTo.hasNext()) {
 			BranchCon branchTo = (BranchCon) iterBranchConTo.next();
 			if (branchTo instanceof BranchANDCon) {
 				BranchANDCon branchAND = (BranchANDCon) branchConTo;
-				branchANDCon.setFromActivity(null);
+				branchAND.setFromActivity(null);
 			} else {
 				BranchConCond branchCond = (BranchConCond) branchConTo;
-				branchConCond.setFromActivity(null);
+				branchCond.setFromActivity(null);
 			}
 		}
 

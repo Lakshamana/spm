@@ -44,7 +44,7 @@ import br.ufpa.labes.spm.repository.interfaces.connections.ISimpleConDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IAutomaticDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IInvolvedArtifactsDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.INormalDAO;
-import br.ufpa.labes.spm.repository.interfaces.plainActivities.IParametersDAO;
+import br.ufpa.labes.spm.repository.interfaces.plainActivities.IParameterDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqAgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IReqWorkGroupDAO;
 import br.ufpa.labes.spm.repository.interfaces.plainActivities.IRequiredResourceDAO;
@@ -84,7 +84,7 @@ import br.ufpa.labes.spm.domain.Sequence;
 import br.ufpa.labes.spm.domain.SimpleCon;
 import br.ufpa.labes.spm.domain.Automatic;
 import br.ufpa.labes.spm.domain.EnactionDescription;
-import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.InvolvedArtifact;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.Parameter;
 import br.ufpa.labes.spm.domain.ReqAgent;
@@ -131,16 +131,15 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	IGraphicCoordinateDAO coordDAO;
 	IProcessModelDAO pmodelDAO;
 	ISubroutineDAO subDAO;
-	IParametersDAO paramDAO;
+	IParameterDAO paramDAO;
 	IArtifactConDAO artConDAO;
 	IArtifactTypeDAO artTypeDAO;
 	IInvolvedArtifactsDAO invArtDAO;
 	IMultipleConDAO multiDAO;
 	IConnectionDAO conDAO;
-	IPolConditionDAO polConditionDAO;
 	IBranchConCondToMultipleConDAO bctmcDAO;
-	IJoinDAO joinConDAO;
-	IBranchDAO branchConDAO;
+	IJoinConDAO joinConDAO;
+	IBranchConDAO branchConDAO;
 	IWorkGroupTypeDAO WorkGroupTypeDAO;
 	IRoleDAO roleDAO;
 	IReqAgentDAO reqAgentDAO;
@@ -152,7 +151,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	IRequiredResourceDAO reqResDAO;
 	IResourceDAO resDAO;
 	IConsumableDAO consumableDAO;
-	IBranchCondToActivityDAO branchConCondToActivityDAO;
+	IBranchConCondToActivityDAO branchConCondToActivityDAO;
 	ISimpleConDAO simpleDAO;
 	IProcessAgendaDAO pAgendaDAO;
 	IWebAPSEEObjectDAO webAPSEEObjDAO;
@@ -1143,11 +1142,11 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		destinationNormal.setTheReservation(newReservations);
 		// about involved artifacts
 		// involved to
-		Collection<InvolvedArtifacts> newInvolvedArtifactsToNormal = null;
+		Collection<InvolvedArtifact> newInvolvedArtifactsToNormal = null;
 		newInvolvedArtifactsToNormal = copyInvolvedArtifacts(sourceNormal.getInvolvedArtifactToNormal(), destinationNormal, TO_INVOLVED);
 		destinationNormal.setInvolvedArtifactToNormal(newInvolvedArtifactsToNormal);
 		// involved from
-		Collection<InvolvedArtifacts> newInvolvedArtifactsFromNormal = null;
+		Collection<InvolvedArtifact> newInvolvedArtifactsFromNormal = null;
 		newInvolvedArtifactsFromNormal = copyInvolvedArtifacts(sourceNormal.getInvolvedArtifactFromNormal(), destinationNormal, FROM_INVOLVED);
 		destinationNormal.setInvolvedArtifactFromNormal(newInvolvedArtifactsFromNormal);
 		// about requied Resources
@@ -1196,14 +1195,14 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	private Map<Integer, Integer> typesToConvert;
 
 
-	private Collection<InvolvedArtifacts> copyInvolvedArtifacts(Collection<InvolvedArtifacts> currentInvolvedArtifacts, Normal newNormalReference,
+	private Collection<InvolvedArtifact> copyInvolvedArtifacts(Collection<InvolvedArtifact> currentInvolvedArtifacts, Normal newNormalReference,
 			int kindRelationship) {
 
-		Collection<InvolvedArtifacts> newInvolvedArtifacts = new HashSet<InvolvedArtifacts>();
-		for (Iterator<InvolvedArtifacts> involvedIterator = currentInvolvedArtifacts.iterator(); involvedIterator.hasNext();) {
-			InvolvedArtifacts currentInvolved = involvedIterator.next();
+		Collection<InvolvedArtifact> newInvolvedArtifacts = new HashSet<InvolvedArtifact>();
+		for (Iterator<InvolvedArtifact> involvedIterator = currentInvolvedArtifacts.iterator(); involvedIterator.hasNext();) {
+			InvolvedArtifact currentInvolved = involvedIterator.next();
 			if (currentInvolved != null) {
-				InvolvedArtifacts newInvolved = new InvolvedArtifacts();
+				InvolvedArtifact newInvolved = new InvolvedArtifact();
 				if (currentInvolved.getTheArtifactType() != null) {
 					newInvolved.insertIntoTheArtifactType(currentInvolved.getTheArtifactType());
 				}

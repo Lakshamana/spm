@@ -12,7 +12,7 @@ import org.qrconsult.spm.converter.core.ConverterImpl;
 import org.qrconsult.spm.converter.exception.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.driver.IDriverDAO;
 import br.ufpa.labes.spm.service.dto.DriverDTO;
-import br.ufpa.labes.spm.service.dto.ConfigurationDTO;
+import br.ufpa.labes.spm.service.dto.SpmConfigurationDTO;
 import br.ufpa.labes.spm.service.dto.CompanyDTO;
 import br.ufpa.labes.spm.domain.Driver;
 import br.ufpa.labes.spm.domain.Company;

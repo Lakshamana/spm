@@ -104,7 +104,7 @@ import br.ufpa.labes.spm.domain.Organization;
 import br.ufpa.labes.spm.domain.ArtifactParam;
 import br.ufpa.labes.spm.domain.Automatic;
 import br.ufpa.labes.spm.domain.EnactionDescription;
-import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.InvolvedArtifact;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.PrimitiveParam;
 import br.ufpa.labes.spm.domain.ReqAgent;
@@ -1280,7 +1280,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	/*
 	 * Process, ProcessModel, Activity (and subclasses), EnactionDescription, Dependency,
-	 * RequiredPeople (and subclasses), RequiredResource, Reservation, InvolvedArtifacts,
+	 * RequiredPeople (and subclasses), RequiredResource, Reservation, InvolvedArtifact,
 	 * Connection (and subclasses), SpmLog, Event (and subclasses), CatalogEvent,
 	 * Parameter (and subclasses), Metric, Estimation, ProcessAgenda, Task
 	 */
@@ -2172,12 +2172,12 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	private void loadInvolvedArtifacts(Element processComponents, Element organizational) {
 
-		List<Element> involvedArtifacts = processComponents.getChildren(InvolvedArtifacts.class.getSimpleName());
+		List<Element> involvedArtifacts = processComponents.getChildren(InvolvedArtifact.class.getSimpleName());
 		Iterator<Element> iter = involvedArtifacts.iterator();
 		while (iter.hasNext()) {
 			Element invArtElm = (Element) iter.next();
 
-			InvolvedArtifacts invArt = new InvolvedArtifacts();
+			InvolvedArtifact invArt = new InvolvedArtifact();
 
 			Element artTypeElm = invArtElm.getChild("TheArtifactType");
 			if(artTypeElm == null) continue; // Inconsistency handle

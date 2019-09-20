@@ -8,7 +8,7 @@ import org.qrconsult.spm.converter.exception.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IConfiDAO;
 import br.ufpa.labes.spm.service.dto.AgentDTO;
-import br.ufpa.labes.spm.service.dto.ConfigurationDTO;
+import br.ufpa.labes.spm.service.dto.SpmConfigurationDTO;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.Configuration;
 import br.ufpa.labes.spm.service.interfaces.AgentServices;
@@ -27,7 +27,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 
 	private static final String CONFIG_CLASSNAME = Configuration.class.getSimpleName();
 	private Query query;
-	public boolean perfilSave(ConfigurationDTO confi,AgentDTO agente) {
+	public boolean perfilSave(SpmConfigurationDTO confi,AgentDTO agente) {
 		System.out.println("Chegou no perfil"+confi.getIdioma()+"agente"+agente.getId());
 
 		Configuration configuration = new Configuration();
@@ -45,7 +45,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 
 	}
 
-	private Configuration convertConfigurationDTOToConfiguration(ConfigurationDTO configurationDTO) {
+	private Configuration convertConfigurationDTOToConfiguration(SpmConfigurationDTO configurationDTO) {
 		System.out.println("caiu na conversão");
 		try {
 			Configuration config = new Configuration();
@@ -76,8 +76,8 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 		return null;
 	}
 
-	private ConfigurationDTO convertConfigurationToConfigurationDTO(Configuration config) {
-		ConfigurationDTO configDTO = new ConfigurationDTO();
+	private SpmConfigurationDTO convertConfigurationToConfigurationDTO(Configuration config) {
+		SpmConfigurationDTO configDTO = new SpmConfigurationDTO();
 
 		configDTO.setId(config.getId());
 		configDTO.setIdioma(config.getIdioma());
@@ -89,7 +89,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 	}
 
 	@Override
-	public ConfigurationDTO getPerfil(Integer agent_oid) {
+	public SpmConfigurationDTO getPerfil(Integer agent_oid) {
 
 		query = confiDAO
 				.getPersistenceContext()
@@ -109,8 +109,8 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 	}
 
 	@Override
-	public ConfigurationDTO updateConfiguration(Integer agentOid, ConfigurationDTO configuration) {
-		ConfigurationDTO perfil = this.getPerfil(agentOid);
+	public SpmConfigurationDTO updateConfiguration(Integer agentOid, SpmConfigurationDTO configuration) {
+		SpmConfigurationDTO perfil = this.getPerfil(agentOid);
 
 		atualizarPefil(perfil, configuration);
 		Configuration config = convertConfigurationDTOToConfiguration(perfil);
@@ -124,8 +124,8 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 
 
 
-	private ConfigurationDTO atualizarPefil(ConfigurationDTO fromDB,
-			ConfigurationDTO configuration) {
+	private SpmConfigurationDTO atualizarPefil(SpmConfigurationDTO fromDB,
+			SpmConfigurationDTO configuration) {
 		fromDB.setGraficoDeCustos(configuration.getGraficoDeCustos());
 		fromDB.setGraficoDeEsforco(configuration.getGraficoDeEsforco());
 		fromDB.setGraficoDeDesempenho(configuration.getGraficoDeDesempenho());

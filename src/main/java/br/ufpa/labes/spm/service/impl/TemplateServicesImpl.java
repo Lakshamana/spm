@@ -54,7 +54,7 @@ import br.ufpa.labes.spm.domain.MultipleCon;
 import br.ufpa.labes.spm.domain.Sequence;
 import br.ufpa.labes.spm.domain.Project;
 import br.ufpa.labes.spm.domain.Automatic;
-import br.ufpa.labes.spm.domain.InvolvedArtifacts;
+import br.ufpa.labes.spm.domain.InvolvedArtifact;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.Parameter;
 import br.ufpa.labes.spm.domain.ReqAgent;
@@ -1280,11 +1280,11 @@ public class TemplateServicesImpl implements TemplateServices {
 		destinationNormal.setTheReservation(newReservations);
 		//about involved artifacts
 		//involved to
-		Collection<InvolvedArtifacts> newInvolvedArtifactsToNormal = null;
+		Collection<InvolvedArtifact> newInvolvedArtifactsToNormal = null;
 		newInvolvedArtifactsToNormal = copyInvolvedArtifacts(sourceNormal.getInvolvedArtifactToNormal(),destinationNormal,TO_INVOLVED, current_level);
 		destinationNormal.setInvolvedArtifactToNormal(newInvolvedArtifactsToNormal);
 		//involved from
-		Collection<InvolvedArtifacts> newInvolvedArtifactsFromNormal = null;
+		Collection<InvolvedArtifact> newInvolvedArtifactsFromNormal = null;
 		newInvolvedArtifactsFromNormal = copyInvolvedArtifacts(sourceNormal.getInvolvedArtifactFromNormal(),destinationNormal,FROM_INVOLVED, current_level);
 		destinationNormal.setInvolvedArtifactFromNormal(newInvolvedArtifactsFromNormal);
 		//about requied Resources
@@ -1492,13 +1492,13 @@ public class TemplateServicesImpl implements TemplateServices {
 	 * @return
 	 * @throws DAOException
 	 */
-	private Collection<InvolvedArtifacts> copyInvolvedArtifacts(Collection<InvolvedArtifacts> currentInvolvedArtifacts,Normal newNormalReference,int kindRelationship, String current_level) throws DAOException {
+	private Collection<InvolvedArtifact> copyInvolvedArtifacts(Collection<InvolvedArtifact> currentInvolvedArtifacts,Normal newNormalReference,int kindRelationship, String current_level) throws DAOException {
 
-		Collection<InvolvedArtifacts> newInvolvedArtifacts = new HashSet<InvolvedArtifacts>();
-		for(Iterator<InvolvedArtifacts> involvedIterator= currentInvolvedArtifacts.iterator();involvedIterator.hasNext();){
-			InvolvedArtifacts currentInvolved = involvedIterator.next();
+		Collection<InvolvedArtifact> newInvolvedArtifacts = new HashSet<InvolvedArtifact>();
+		for(Iterator<InvolvedArtifact> involvedIterator= currentInvolvedArtifacts.iterator();involvedIterator.hasNext();){
+			InvolvedArtifact currentInvolved = involvedIterator.next();
 			if(currentInvolved!=null){
-				InvolvedArtifacts newInvolved = new InvolvedArtifacts();
+				InvolvedArtifact newInvolved = new InvolvedArtifact();
 				if(currentInvolved.getTheArtifactType()!=null){
 					newInvolved.insertIntoTheArtifactType(currentInvolved.getTheArtifactType());
 				}

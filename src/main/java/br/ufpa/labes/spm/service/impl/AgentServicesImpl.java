@@ -33,7 +33,7 @@ import br.ufpa.labes.spm.service.dto.AgentAffinityAgentDTO;
 import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.AgentHasAbilityDTO;
 import br.ufpa.labes.spm.service.dto.AgentsDTO;
-import br.ufpa.labes.spm.service.dto.ConfigurationDTO;
+import br.ufpa.labes.spm.service.dto.SpmConfigurationDTO;
 import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
 import br.ufpa.labes.spm.service.dto.RoleDTO;
 import br.ufpa.labes.spm.domain.Ability;
@@ -167,7 +167,7 @@ public class AgentServicesImpl implements AgentServices {
 	}
 
 	@Override
-	public AgentDTO saveAgent(AgentDTO agentDTO,ConfigurationDTO config) {
+	public AgentDTO saveAgent(AgentDTO agentDTO,SpmConfigurationDTO config) {
 		agent = new Agent();
 
 //		agent = this.getAgentForName(agentDTO.getName());

@@ -110,8 +110,8 @@ public class AbilityServicesImpl  implements AbilityServices{
 	public Boolean removeAbility( String ident ){
 		Ability ability = abilityDAO.retrieveBySecondaryKey(ident);
 		if(ability != null){
-			if(!ability.getTheRoleNeedsAbility().isEmpty() ){
-				for (RoleNeedsAbility role : ability.getTheRoleNeedsAbility()) {
+			if(!ability.getTheRoleNeedsAbilities().isEmpty() ){
+				for (RoleNeedsAbility role : ability.getTheRoleNeedsAbilities()) {
 					roleNeedsDAO.daoDelete(role);
 				}
 			}

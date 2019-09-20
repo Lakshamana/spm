@@ -2,14 +2,14 @@ package br.ufpa.labes.spm.service.interfaces;
 
 
 import br.ufpa.labes.spm.service.dto.AgentDTO;
-import br.ufpa.labes.spm.service.dto.ConfigurationDTO;
+import br.ufpa.labes.spm.service.dto.SpmConfigurationDTO;
 
 @Remote
 public interface ConfigurationServices {
 
-	public boolean perfilSave(ConfigurationDTO confi,AgentDTO agent);
+	public boolean perfilSave(SpmConfigurationDTO confi,AgentDTO agent);
 
-	public ConfigurationDTO getPerfil(Integer oid);
+	public SpmConfigurationDTO getPerfil(Integer oid);
 
-	public ConfigurationDTO updateConfiguration(Integer agentOid, ConfigurationDTO configuration);
+	public SpmConfigurationDTO updateConfiguration(Integer agentOid, SpmConfigurationDTO configuration);
 }
