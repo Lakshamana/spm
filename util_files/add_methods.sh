@@ -26,8 +26,8 @@ newdir='src/main/java/br/ufpa/labes/spm/domain'
 diffs='util_files/entitydiffs.txt'
 
 # 2.
-# models=`find "$olddir" -regextype posix-extended -regex '(.*).java' | sed -e '/policies/d' -e '/IPersistent/d' -e '/help/d' -e '/knowledge/d'`
-models="$olddir/connections/Branch.java"
+models=`find "$olddir" -regextype posix-extended -regex '(.*).java' | sed -e '/policies/d' -e '/IPersistent/d' -e '/help/d' -e '/knowledge/d'`
+# models="$olddir/connections/Branch.java"
 
 # 3.
 for m in $models; do
@@ -47,24 +47,24 @@ for m in $models; do
 
   if test -f $file; then
     # 3.1
-    old_methods=`sed -rn "s/public (.*) (.*).*\((.*)\).*\{/\2/p" "$m" | sed -r '/(get|set)Oid/d'`
-    new_methods=`sed -rn "s/public (.*) (.*).*\((.*)\).*\{/\2/p" "$file"`
+    old_methods=`sed -rn "s/public (.*) (.*).*\(.*\).*\{/\2/p" "$m" | sed -r '/(get|set)Oid/d'`
+    new_methods=`sed -rn "s/public (.*) (.*).*\(.*\).*\{/\2/p" "$file"`
 
-    echo olds: $old_methods
-    echo news: $new_methods
+    # echo olds: $old_methods
+    # echo news: $new_methods
 
     # 3.2
     inputs=''
     for mthd in $old_methods; do
       found=`echo "$new_methods" | grep -w "$mthd"`
-      # echo found: $found
+      # echo method: $mthd
       if [[ $found == '' ]]; then
         # retrieve for method in old class
-        space=`sed -rn "s/([ ]*)public .* $mthd.*/\1/p" "$m"`
-        input=`sed -n "/$mthd/, /^$space}/p" "$m" | tr '\n' "\\n"`
-        # echo "$input"
+        space=`sed -rn "s/([ ]*)public .* $mthd.*\(.*\).*\{/\1/p" "$m"`
+        input=`sed -rn "/public .* $mthd.*\(.*\).*\{/, /^$space\}/p" "$m"`
         # then add it to the new class
-        inputs+="$input\\n\\n"
+        inputs+="$input\n\n"
+        # echo -e input: "$input"
       fi
     done
 
@@ -72,6 +72,6 @@ for m in $models; do
     # echo -e "$inputs"
     sed -i "s/^}$//" $file
     echo -e "$inputs" >> $file
-    echo -e '\n\n}' >> $file
+    echo -e '}' >> $file
   fi
 done
