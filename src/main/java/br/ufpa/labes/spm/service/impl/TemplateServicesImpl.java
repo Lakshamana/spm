@@ -1000,13 +1000,13 @@ public class TemplateServicesImpl implements TemplateServices {
 						for(Iterator<BranchConCondToActivity> toActivityIterator = toActivities.iterator(); toActivityIterator.hasNext();){
 							BranchConCondToActivity currentToAct = toActivityIterator.next();
 							if(currentToAct!=null){
-								BranchCondToActivity newBranchCondToAct = new BranchConCondToActivity();
+								BranchConCondToActivity newBranchCondToAct = new BranchConCondToActivity();
 
 								if(currentToAct.getTheActivity()!=null){
 									String actIdent = currentToAct.getTheActivity().getIdent().replaceFirst(oldProcessIdent,newProcessIdent);
 									Activity newToAct = activitiesTable.get(actIdent);
 									if(newToAct!=null){
-										newToAct.insertIntoTheBranchCondToActivity(newBranchConCondToAct);
+										newToAct.insertIntoTheBranchConCondToActivity(newBranchConCondToAct);
 									}//end if
 								}//end if != null
 
@@ -1017,7 +1017,7 @@ public class TemplateServicesImpl implements TemplateServices {
 								}//end if condition != null
 
 								//add current element to newBranchConCond object
-								((BranchConCond)newConnection).insertIntoTheBranchCondToActivity(newBranchConCondToAct);
+								((BranchConCond)newConnection).insertIntoTheBranchConCondToActivity(newBranchConCondToAct);
 							}//end if != null
 						}//end for
 

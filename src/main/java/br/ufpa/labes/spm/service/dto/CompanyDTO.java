@@ -30,7 +30,7 @@ public class CompanyDTO implements Serializable{
 	@IgnoreMapping
 	private Collection<String> organizationEstimation;
 	@IgnoreMapping
-	private List<CompanyUnitDTO> theOrganizationalUnits;
+	private List<CompanyUnitDTO> theCompanyUnits;
 	public CompanyDTO(){
 		ident = "";
 		cnpj = "";
@@ -46,7 +46,7 @@ public class CompanyDTO implements Serializable{
 		theSystem = new ArrayList<String>();
 		organizationMetric = new ArrayList<String>();
 		organizationEstimation = new ArrayList<String>();
-		setTheOrganizationalUnits(new ArrayList<CompanyUnitDTO>());
+		setTheCompanyUnits(new ArrayList<CompanyUnitDTO>());
 	}
 
 	public Integer getId() {
@@ -179,11 +179,11 @@ public class CompanyDTO implements Serializable{
 		return true;
 	}
 
-	public List<CompanyUnitDTO> getTheOrganizationalUnits() {
-		return theOrganizationalUnits;
+	public List<CompanyUnitDTO> getTheCompanyUnits() {
+		return theCompanyUnits;
 	}
 
-	public void setTheOrganizationalUnits(List<CompanyUnitDTO> theOrganizationalUnits) {
-		this.theOrganizationalUnits = theOrganizationalUnits;
+	public void setTheCompanyUnits(List<CompanyUnitDTO> theCompanyUnits) {
+		this.theCompanyUnits = theCompanyUnits;
 	}
 }

@@ -1474,7 +1474,7 @@ public class TaskServicesImpl implements TaskServices {
 						Collection bctas = bCond.getTheBranchConCondToActivity();
 						Iterator iterBctas = bctas.iterator();
 						while (iterBctas.hasNext()) {
-							BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas
+							BranchConCondToActivity bcta = (BranchConCondToActivity) iterBctas
 									.next();
 							if (bcta.getTheActivity().equals(actDec)
 									&& !this.conditionValue(bcta
@@ -1826,7 +1826,7 @@ public class TaskServicesImpl implements TaskServices {
 			Collection connections = activity.getTheBranchConCondToActivity();
 			Iterator iter = connections.iterator();
 			while (iter.hasNext()) {
-				BranchCondToActivity bcta = (BranchConCondToActivity) iter.next();
+				BranchConCondToActivity bcta = (BranchConCondToActivity) iter.next();
 				BranchConCond branch = bcta.getTheBranchConCond();
 				String kindDep = branchCon.getTheDependency().getKindDep();
 				if ((kindDep.equals("start-start") || //$NON-NLS-1$
@@ -1979,7 +1979,7 @@ public class TaskServicesImpl implements TaskServices {
 								.getTheBranchConCondToMultipleCon();
 						Iterator iterTheActs = acts.iterator();
 						while (iterTheActs.hasNext()) {
-							BranchCondToActivity act = (BranchConCondToActivity) iterTheActs
+							BranchConCondToActivity act = (BranchConCondToActivity) iterTheActs
 									.next();
 							this.cancelBranchConSuccessor(act.getTheActivity(),
 									branchCon);
@@ -2101,7 +2101,7 @@ public class TaskServicesImpl implements TaskServices {
 						succ.add(multi.getTheMultipleCon());
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchConCondToActivity) iterAct
+					BranchConCondToActivity act = (BranchConCondToActivity) iterAct
 							.next();
 					if (act.getTheActivity() != null)
 						succ.add(act.getTheActivity());
@@ -2439,7 +2439,7 @@ public class TaskServicesImpl implements TaskServices {
 								.getTheBranchConCondToMultipleCon();
 						Iterator iterTheActs = acts.iterator();
 						while (iterTheActs.hasNext()) {
-							BranchCondToActivity act = (BranchConCondToActivity) iterTheActs
+							BranchConCondToActivity act = (BranchConCondToActivity) iterTheActs
 									.next();
 							this.failBranchConSuccessor(act.getTheActivity(),
 									branchCon);
@@ -2565,7 +2565,7 @@ public class TaskServicesImpl implements TaskServices {
 						succ.add(multi.getTheMultipleCon());
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchConCondToActivity) iterAct
+					BranchConCondToActivity act = (BranchConCondToActivity) iterAct
 							.next();
 					if (act.getTheActivity() != null)
 						succ.add(act.getTheActivity());
@@ -3049,7 +3049,7 @@ public class TaskServicesImpl implements TaskServices {
 					Collection acts = branchCond.getTheBranchConCondToActivity();
 					Iterator iter2 = acts.iterator();
 					while (iter2.hasNext()) {
-						BranchCondToActivity actToBC = (BranchConCondToActivity) iter2
+						BranchConCondToActivity actToBC = (BranchConCondToActivity) iter2
 								.next();
 						if (actToBC.getTheActivity() != null)
 							succ.add(actToBC.getTheActivity());
@@ -3538,7 +3538,7 @@ public class TaskServicesImpl implements TaskServices {
 						succ.add(multi.getTheMultipleCon());
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchConCondToActivity) iterAct
+					BranchConCondToActivity act = (BranchConCondToActivity) iterAct
 							.next();
 					if (act.getTheActivity() != null)
 						succ.add(act.getTheActivity());
@@ -3710,7 +3710,7 @@ public class TaskServicesImpl implements TaskServices {
 									.getTheBranchConCondToActivity();
 							Iterator iterBctas = bctas.iterator();
 							while (iterBctas.hasNext()) {
-								BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas
+								BranchConCondToActivity bcta = (BranchConCondToActivity) iterBctas
 										.next();
 								if (bcta.getTheActivity().equals(actDec)
 										&& !this.conditionValue(bcta
@@ -3782,7 +3782,7 @@ public class TaskServicesImpl implements TaskServices {
 		Collection bctas = act.getTheBranchConCondToActivity();
 		Iterator iterBctas = bctas.iterator();
 		while (iterBctas.hasNext()) {
-			BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
+			BranchConCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
 			if (bcta.getTheBranchConCond() != null)
 				connFrom.add(bcta.getTheBranchConCond());
 		}
@@ -3876,7 +3876,7 @@ public class TaskServicesImpl implements TaskServices {
 				Collection connections = actDec.getTheBranchConCondToActivity();
 				Iterator iter = connections.iterator();
 				while (iter.hasNext()) {
-					BranchCondToActivity bcta = (BranchConCondToActivity) iter
+					BranchConCondToActivity bcta = (BranchConCondToActivity) iter
 							.next();
 					BranchConCond branch = bcta.getTheBranchConCond();
 					String kindDep = branchCon.getTheDependency().getKindDep();
@@ -4640,7 +4640,7 @@ public class TaskServicesImpl implements TaskServices {
 		Collection conditions = branchcond.getTheBranchConCondToActivity();
 		Iterator iter = conditions.iterator();
 		while (iter.hasNext()) {
-			BranchCondToActivity condition = (BranchConCondToActivity) iter.next();
+			BranchConCondToActivity condition = (BranchConCondToActivity) iter.next();
 			if (condition.getTheActivity().equals(activity)) {
 				satisfied = this.conditionValue(condition.getTheCondition());
 				break;

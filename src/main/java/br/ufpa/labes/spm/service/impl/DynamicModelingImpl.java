@@ -2806,14 +2806,14 @@ System.out.println("salva :"+pmodel.getPmState());
 				// Auxiliar Collection
 				Collection aux = new HashSet();
 				while (iterBctas.hasNext()) {
-					BranchCondToActivity to = (BranchConCondToActivity) iterBctas.next();
+					BranchConCondToActivity to = (BranchConCondToActivity) iterBctas.next();
 					if (to != null) {
 						aux.add(to);
 					}
 				}
 				Iterator iterAux = aux.iterator();
 				while (iterAux.hasNext()) {
-					BranchCondToActivity bcta = (BranchConCondToActivity) iterAux.next();
+					BranchConCondToActivity bcta = (BranchConCondToActivity) iterAux.next();
 					Activity to = bcta.getTheActivity();
 					if (to != null) {
 						String state = this.getState(to);
@@ -2927,7 +2927,7 @@ System.out.println("salva :"+pmodel.getPmState());
 										branchCond.setFromMultipleConnection(null);
 										branchCondToMultipleCon.setTheBranchConCond(null);
 										branchConCondToMultipleCon.setTheMultipleCon(null);
-										fromBranchCond.getTheBranchCondToActivity().remove(branchConCondToMultipleCon);
+										fromBranchCond.getTheBranchConCondToActivity().remove(branchConCondToMultipleCon);
 
 									}
 								}
@@ -4578,7 +4578,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				Iterator iter = aTBCs.iterator();
 				BranchConCondToActivity aTBC = null;
 				while (iter.hasNext()) {
-					BranchCondToActivity aux = (BranchConCondToActivity) iter.next();
+					BranchConCondToActivity aux = (BranchConCondToActivity) iter.next();
 					if (aux.getTheActivity().equals(activity_to)) {
 						aTBC = aux;
 						break;
@@ -6412,19 +6412,19 @@ System.out.println("salva :"+pmodel.getPmState());
 				Iterator iter = actsTBC.iterator();
 				boolean has = false;
 				while (iter.hasNext()) {
-					BranchCondToActivity aTBC = (BranchConCondToActivity) iter.next();
+					BranchConCondToActivity aTBC = (BranchConCondToActivity) iter.next();
 					if (aTBC.getTheActivity().equals(activity_to)) {
 						has = true;
 						break;
 					}
 				}
 				if (!has) {
-					BranchCondToActivity activityToBranchCond = new BranchConCondToActivity();
+					BranchConCondToActivity activityToBranchCond = new BranchConCondToActivity();
 					// activityToBranchConCond.setCondition(condition);
 					activityToBranchCond.setTheBranchConCond(bCond);
 					activityToBranchConCond.setTheActivity(activity_to);
-					activity_to.getTheBranchCondToActivity().add(activityToBranchConCond);
-					bCond.getTheBranchCondToActivity().add(activityToBranchConCond);
+					activity_to.getTheBranchConCondToActivity().add(activityToBranchConCond);
+					bCond.getTheBranchConCondToActivity().add(activityToBranchConCond);
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
@@ -6465,19 +6465,19 @@ System.out.println("salva :"+pmodel.getPmState());
 				Iterator iter = actsTBC.iterator();
 				boolean has = false;
 				while (iter.hasNext()) {
-					BranchCondToActivity aTBC = (BranchConCondToActivity) iter.next();
+					BranchConCondToActivity aTBC = (BranchConCondToActivity) iter.next();
 					if (aTBC.getTheActivity().equals(activity_to)) {
 						has = true;
 						break;
 					}
 				}
 				if (!has) {
-					BranchCondToActivity activityToBranchCond = new BranchConCondToActivity();
+					BranchConCondToActivity activityToBranchCond = new BranchConCondToActivity();
 					// activityToBranchConCond.setCondition(condition);
 					activityToBranchCond.setTheBranchConCond(bCond);
 					activityToBranchConCond.setTheActivity(activity_to);
-					activity_to.getTheBranchCondToActivity().add(activityToBranchConCond);
-					bCond.getTheBranchCondToActivity().add(activityToBranchConCond);
+					activity_to.getTheBranchConCondToActivity().add(activityToBranchConCond);
+					bCond.getTheBranchConCondToActivity().add(activityToBranchConCond);
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
@@ -6515,19 +6515,19 @@ System.out.println("salva :"+pmodel.getPmState());
 				Iterator iter = actsTBC.iterator();
 				boolean has = false;
 				while (iter.hasNext()) {
-					BranchCondToActivity aTBC = (BranchConCondToActivity) iter.next();
+					BranchConCondToActivity aTBC = (BranchConCondToActivity) iter.next();
 					if (aTBC.getTheActivity().equals(activity_to)) {
 						has = true;
 						break;
 					}
 				}
 				if (!has) {
-					BranchCondToActivity activityToBranchCond = new BranchConCondToActivity();
+					BranchConCondToActivity activityToBranchCond = new BranchConCondToActivity();
 					// activityToBranchConCond.setCondition(condition);
 					activityToBranchCond.setTheBranchConCond(bCond);
 					activityToBranchConCond.setTheActivity(activity_to);
-					activity_to.getTheBranchCondToActivity().add(activityToBranchConCond);
-					bCond.getTheBranchCondToActivity().add(activityToBranchConCond);
+					activity_to.getTheBranchConCondToActivity().add(activityToBranchConCond);
+					bCond.getTheBranchConCondToActivity().add(activityToBranchConCond);
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
@@ -6567,19 +6567,19 @@ System.out.println("salva :"+pmodel.getPmState());
 				Iterator iter = actsTBC.iterator();
 				boolean has = false;
 				while (iter.hasNext()) {
-					BranchCondToActivity aTBC = (BranchConCondToActivity) iter.next();
+					BranchConCondToActivity aTBC = (BranchConCondToActivity) iter.next();
 					if (aTBC.getTheActivity().equals(activity_to)) {
 						has = true;
 						break;
 					}
 				}
 				if (!has) {
-					BranchCondToActivity activityToBranchCond = new BranchConCondToActivity();
+					BranchConCondToActivity activityToBranchCond = new BranchConCondToActivity();
 					// activityToBranchConCond.setCondition(condition);
 					activityToBranchCond.setTheBranchConCond(bCond);
 					activityToBranchConCond.setTheActivity(activity_to);
-					activity_to.getTheBranchCondToActivity().add(activityToBranchConCond);
-					bCond.getTheBranchCondToActivity().add(activityToBranchConCond);
+					activity_to.getTheBranchConCondToActivity().add(activityToBranchConCond);
+					bCond.getTheBranchConCondToActivity().add(activityToBranchConCond);
 
 					this.makeWaiting(activity_to, "Rule G5.29"); //$NON-NLS-1$
 
@@ -6618,19 +6618,19 @@ System.out.println("salva :"+pmodel.getPmState());
 				Iterator iter = actsTBC.iterator();
 				boolean has = false;
 				while (iter.hasNext()) {
-					BranchCondToActivity aTBC = (BranchConCondToActivity) iter.next();
+					BranchConCondToActivity aTBC = (BranchConCondToActivity) iter.next();
 					if (aTBC.getTheActivity().equals(activity_to)) {
 						has = true;
 						break;
 					}
 				}
 				if (!has) {
-					BranchCondToActivity activityToBranchCond = new BranchConCondToActivity();
+					BranchConCondToActivity activityToBranchCond = new BranchConCondToActivity();
 					// activityToBranchConCond.setCondition(condition);
 					activityToBranchCond.setTheBranchConCond(bCond);
 					activityToBranchConCond.setTheActivity(activity_to);
-					activity_to.getTheBranchCondToActivity().add(activityToBranchConCond);
-					bCond.getTheBranchCondToActivity().add(activityToBranchConCond);
+					activity_to.getTheBranchConCondToActivity().add(activityToBranchConCond);
+					bCond.getTheBranchConCondToActivity().add(activityToBranchConCond);
 
 					// Dynamic Changes related code
 					ProcessModel pmodel = branchCon.getTheProcessModel();
@@ -9504,7 +9504,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				Collection col = branchCond.getTheBranchConCondToActivity();
 				Iterator iter2 = col.iterator();
 				while (iter2.hasNext()) {
-					BranchCondToActivity atbc = (BranchConCondToActivity) iter2.next();
+					BranchConCondToActivity atbc = (BranchConCondToActivity) iter2.next();
 					if (atbc.getTheActivity().equals(act2)) {
 						has = true;
 						break;
@@ -9636,7 +9636,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		Collection bctas = act.getTheBranchConCondToActivity();
 		Iterator iterBctas = bctas.iterator();
 		while (iterBctas.hasNext()) {
-			BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
+			BranchConCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
 			if (bcta.getTheBranchConCond() != null)
 				connFrom.add(bcta.getTheBranchConCond());
 		}
@@ -9687,7 +9687,7 @@ System.out.println("salva :"+pmodel.getPmState());
 						succ.add(multipleCon);
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchConCondToActivity) iterAct.next();
+					BranchConCondToActivity act = (BranchConCondToActivity) iterAct.next();
 					Activity activity = act.getTheActivity();
 					if (activity != null)
 						succ.add(activity);
@@ -9836,7 +9836,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		Collection bctas = act.getTheBranchConCondToActivity();
 		Iterator iterBCTAs = bctas.iterator();
 		while (iterBCTAs.hasNext()) {
-			BranchCondToActivity branchCondToActivity = (BranchConCondToActivity) iterBCTAs.next();
+			BranchConCondToActivity branchCondToActivity = (BranchConCondToActivity) iterBCTAs.next();
 			bctaToDelete.add(branchConCondToActivity);
 		}
 
@@ -9844,7 +9844,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		Iterator iterBctasToDelete = bctaToDelete.iterator();
 		while (iterBctasToDelete.hasNext()) {
-			BranchCondToActivity toDelete = (BranchConCondToActivity) iterBctasToDelete.next();
+			BranchConCondToActivity toDelete = (BranchConCondToActivity) iterBctasToDelete.next();
 			toDelete.removeFromTheBranchConCond();
 
 			// Deleting simple connection from the database
@@ -9967,13 +9967,13 @@ System.out.println("salva :"+pmodel.getPmState());
 			Collection temp = new HashSet();
 
 			Collection branchCondToActivitys = actFrom.getTheBranchConCondToActivity();
-			Iterator iterBranchCondToActivitys = branchConCondToActivitys.iterator();
+			Iterator iterBranchConCondToActivitys = branchConCondToActivitys.iterator();
 			while (iterBranchConCondToActivitys.hasNext()) {
-				BranchCondToActivity branchCondToActivity = (BranchCondToActivity) iterBranchConCondToActivitys.next();
+				BranchConCondToActivity branchCondToActivity = (BranchConCondToActivity) iterBranchConCondToActivitys.next();
 				temp.add(branchConCondToActivity);
-				// actFrom.getTheBranchCondToActivity().remove(branchConCondToActivity);
+				// actFrom.getTheBranchConCondToActivity().remove(branchConCondToActivity);
 				branchConCondToActivity.setTheActivity(actTo);
-				actTo.getTheBranchCondToActivity().add(branchConCondToActivity);
+				actTo.getTheBranchConCondToActivity().add(branchConCondToActivity);
 			}
 			actFrom.getTheBranchConCondToActivity().removeAll(temp);
 		}

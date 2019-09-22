@@ -1288,7 +1288,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	/*
 	 * AgentAffinityAgent, AgentHasAbility, AgentPlaysRole, RoleNeedsAbility,
-	 * ArtifactTask, BranchCondToActivity, BranchConCondToMultipleCon,
+	 * ArtifactTask, BranchConCondToActivity, BranchConCondToMultipleCon,
 	 * ReqAgentRequiresAbility
 	 */
 	private Hashtable<String, Object> associatives; // Associative objects that must be in the resulting XML file <CanonicalClassName_Oid, Object Reference>
@@ -1746,7 +1746,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	 */
 	private void loadOrgAssociatives(Element associatives) {
 		/*
-		 * ArtifactTask, BranchCondToActivity, BranchConCondToMultipleCon,
+		 * ArtifactTask, BranchConCondToActivity, BranchConCondToMultipleCon,
 		 * ReqAgentRequiresAbility
 		 */
 		List<Element> aaas = associatives.getChildren(AgentAffinityAgent.class.getSimpleName());
@@ -3454,9 +3454,9 @@ public class ProjectServicesImpl implements ProjectServices {
 
 			Activity activity = (Activity) this.processComponents.get(actKey);
 
-			if(!this.isAssociativeExists(BranchCondToActivity.class, branchConCond, activity)){
+			if(!this.isAssociativeExists(BranchConCondToActivity.class, branchConCond, activity)){
 
-				BranchCondToActivity bcta = new BranchConCondToActivity();
+				BranchConCondToActivity bcta = new BranchConCondToActivity();
 				bcta.insertIntoTheBranchCond(branchConCond);
 				bcta.insertIntoTheActivity(activity);
 

@@ -2232,7 +2232,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 				Collection connections = actDec.getTheBranchConCondToActivity();
 				Iterator iter = connections.iterator();
 				while (iter.hasNext()) {
-					BranchCondToActivity bcta = (BranchConCondToActivity)iter.next();
+					BranchConCondToActivity bcta = (BranchConCondToActivity)iter.next();
 					BranchConCond branch = bcta.getTheBranchConCond();
 					String kindDep = branchCon.getTheDependency().getKindDep();
 					if ((kindDep.equals ("start-start") || //$NON-NLS-1$
@@ -2333,7 +2333,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 			Collection connections = activity.getTheBranchConCondToActivity();
 			Iterator iter = connections.iterator();
 			while (iter.hasNext()) {
-				BranchCondToActivity bcta = (BranchConCondToActivity)iter.next();
+				BranchConCondToActivity bcta = (BranchConCondToActivity)iter.next();
 				BranchConCond branch = bcta.getTheBranchConCond();
 				String kindDep = branchCon.getTheDependency().getKindDep();
 				if ((kindDep.equals ("start-start") || //$NON-NLS-1$
@@ -2708,7 +2708,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                        Collection bctas = bCond.getTheBranchConCondToActivity();
                        Iterator iterBctas = bctas.iterator();
                        while (iterBctas.hasNext()) {
-                           BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
+                           BranchConCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
                            if(bcta.getTheActivity().equals(actDec)
                                && !this.conditionValue(bcta.getTheCondition())){
                                ret = false;
@@ -2784,7 +2784,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                            Collection bctas = bCond.getTheBranchConCondToActivity();
                            Iterator iterBctas = bctas.iterator();
                            while (iterBctas.hasNext()) {
-                               BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
+                               BranchConCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
                                if(bcta.getTheActivity().equals(actDec)
                                    && !this.conditionValue(bcta.getTheCondition())){
                                    ret = false;
@@ -2951,7 +2951,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 						Collection mults = branchCond.getTheBranchConCondToMultipleCon();
 						Iterator iterTheActs = acts.iterator();
 						while (iterTheActs.hasNext()) {
-							BranchCondToActivity act = (BranchConCondToActivity) iterTheActs.next();
+							BranchConCondToActivity act = (BranchConCondToActivity) iterTheActs.next();
 							this.failBranchSuccessor (act.getTheActivity(), branchCon);
 						}
 						Iterator iterTheMults = mults.iterator();
@@ -3075,7 +3075,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
                         succ.add(multi.getTheMultipleCon());
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchConCondToActivity) iterAct.next();
+					BranchConCondToActivity act = (BranchConCondToActivity) iterAct.next();
                     if(act.getTheActivity() != null)
                         succ.add(act.getTheActivity());
 				}
@@ -3450,7 +3450,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 						Collection mults = branchCond.getTheBranchConCondToMultipleCon();
 						Iterator iterTheActs = acts.iterator();
 						while (iterTheActs.hasNext()) {
-							BranchCondToActivity act = (BranchConCondToActivity) iterTheActs.next();
+							BranchConCondToActivity act = (BranchConCondToActivity) iterTheActs.next();
 							this.cancelBranchSuccessor (act.getTheActivity(), branchCon);
 						}
 						Iterator iterTheMults = mults.iterator();
@@ -3565,7 +3565,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					    succ.add(multi.getTheMultipleCon());
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchConCondToActivity) iterAct.next();
+					BranchConCondToActivity act = (BranchConCondToActivity) iterAct.next();
 					if(act.getTheActivity() != null)
 					    succ.add(act.getTheActivity());
 				}
@@ -4024,7 +4024,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					Collection acts = branchCond.getTheBranchConCondToActivity();
 					Iterator iter2 = acts.iterator();
 					while (iter2.hasNext()) {
-						BranchCondToActivity actToBC = (BranchConCondToActivity) iter2.next();
+						BranchConCondToActivity actToBC = (BranchConCondToActivity) iter2.next();
 						if(actToBC.getTheActivity() != null)
 						    succ.add(actToBC.getTheActivity());
 					}
@@ -5108,7 +5108,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 		Collection bctas = act.getTheBranchConCondToActivity();
 		Iterator iterBctas = bctas.iterator();
 		while (iterBctas.hasNext()) {
-		    BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
+		    BranchConCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
 		    if(bcta.getTheBranchConCond() != null)
 		       connFrom.add(bcta.getTheBranchConCond());
 		}
@@ -5148,7 +5148,7 @@ public class EnactmentEngineImpl implements EnactmentEngine, EnactmentEngineLoca
 					    succ.add(multi.getTheMultipleCon());
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchConCondToActivity) iterAct.next();
+					BranchConCondToActivity act = (BranchConCondToActivity) iterAct.next();
 					if(act.getTheActivity() != null)
 					    succ.add(act.getTheActivity());
 				}

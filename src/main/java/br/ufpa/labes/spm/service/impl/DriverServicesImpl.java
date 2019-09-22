@@ -33,12 +33,12 @@ import br.ufpa.labes.spm.service.interfaces.DriverServices;
 
 public class DriverServicesImpl  implements DriverServices {
 
-   IDriverDAO driverDAO;
+  IDriverDAO driverDAO;
 	private Query query;
 	Converter converter = new ConverterImpl();
 	private static final String DRIVER_CLASSNAME = Driver.class.getName();
-    private Driver driver;
-   private Company company;
+  private Driver driver;
+  private Company company;
  //  private GoogleAuthorizationCodeFlow flow;
   // private  HttpTransport httpTransport;
    //private JsonFactory jsonFactory;

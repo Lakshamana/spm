@@ -334,14 +334,14 @@ public class CriticalPathMethod {
 		Collection connTo = new LinkedList();
 
 		//Ignore Feedback connection
-		Collection toSimpleCon = act.getToSimpleCon();
+		Collection toSimpleCon = act.getToSimpleCons();
 		if(toSimpleCon != null){
 		    for(Object obj: toSimpleCon){
 				if(obj == null) continue;
 
 				if (obj instanceof Sequence) {
 					Sequence seq = (Sequence) obj;
-					Activity toAct = seq.getToActivities();
+					Activity toAct = seq.getToActivity();
 					if (toAct != null) connTo.add(obj);
 				}
 			}
@@ -381,12 +381,12 @@ public class CriticalPathMethod {
 			}
 		}
 
-		connFrom.addAll(act.getFromJoinCon());
-		connFrom.addAll(act.getFromBranchANDCon());
-		Collection bctas = act.getTheBranchConCondToActivity();
+		connFrom.addAll(act.getFromJoinCons());
+		connFrom.addAll(act.getFromBranchANDCons());
+		Collection bctas = act.getTheBranchConCondToActivities();
 		Iterator iterBctas = bctas.iterator();
 		while (iterBctas.hasNext()) {
-			BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
+			BranchConCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
 			if (bcta.getTheBranchConCond() != null)
 				connFrom.add(bcta.getTheBranchConCond());
 		}
@@ -407,8 +407,8 @@ public class CriticalPathMethod {
 		Collection succ = new LinkedList();
 		if(conn instanceof Sequence){
 			Sequence seq = (Sequence)conn;
-			if(seq.getToActivities() != null)
-			    succ.add(seq.getToActivities());
+			if(seq.getToActivity() != null)
+			    succ.add(seq.getToActivity());
 		}
 		else if (conn instanceof BranchCon) {
 			BranchCon branch = (BranchCon)conn;

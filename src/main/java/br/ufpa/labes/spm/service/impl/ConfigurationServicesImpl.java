@@ -33,7 +33,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 		SpmConfiguration spmconfiguration = new SpmConfiguration();
 		spmconfiguration = convertConfigurationDTOToConfiguration(confi);
 
-		spmconfiguration.setAgent(convertAgentDTOToAgent((AgentDTO) agente));
+		spmconfiguration.setTheAgent(convertAgentDTOToAgent((AgentDTO) agente));
 		spmconfiguration.setId(confi.getId());
 		System.out.println("id da confi " +spmconfiguration.getId());
 		confiDAO.update(spmconfiguration);
@@ -50,7 +50,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 		try {
 			SpmConfiguration config = new SpmConfiguration();
 			config = (SpmConfiguration) converter.getEntity(configurationDTO, SpmConfiguration.class);
-			config.setSenhaEmRecuperacao(configurationDTO.getSenhaEmRecuperacao());
+			config.setSenhaEmRecuperacao(configurationDTO.isSenhaEmRecuperacao());
 
 			return config;
 		} catch (ImplementationException e) {
@@ -82,8 +82,8 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 		configDTO.setId(config.getId());
 		configDTO.setIdioma(config.getIdioma());
 		configDTO.setFiltro(config.getFiltro());
-		configDTO.setSenhaEmRecuperacao(config.getSenhaEmRecuperacao());
-		configDTO.setAgent(config.getAgent().getName());
+		configDTO.setSenhaEmRecuperacao(config.isSenhaEmRecuperacao());
+		configDTO.setTheAgent(config.getTheAgent().getName());
 
 		return configDTO;
 	}
@@ -103,7 +103,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 			return null;
 		} else {
 			SpmConfiguration spmconfiguration = (SpmConfiguration) query.getResultList().get(0);
-			System.out.print("retorno: "+spmconfiguration.getAgent()+"filtro:"+spmconfiguration.getFiltro()+"oid: "+spmconfiguration.getId());
+			System.out.print("retorno: "+spmconfiguration.getTheAgent()+"filtro:"+spmconfiguration.getFiltro()+"oid: "+spmconfiguration.getId());
 			return convertConfigurationToConfigurationDTO(spmconfiguration);
 		}
 	}
@@ -115,7 +115,7 @@ public class ConfigurationServicesImpl implements ConfigurationServices {
 		atualizarPefil(perfil, spmconfiguration);
 		SpmConfiguration config = convertConfigurationDTOToConfiguration(perfil);
 		Agent agent = agentDAO.retrieve(agentOid);
-		config.setAgent(agent);
+		config.setTheAgent(agent);
 
 		confiDAO.update(config);
 

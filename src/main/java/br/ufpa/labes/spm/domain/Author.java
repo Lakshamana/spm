@@ -510,4 +510,19 @@ public class Author implements Serializable {
             ", photoURL='" + getPhotoURL() + "'" +
             "}";
     }
+
+    public void sendMessageTo(Author author, String msg) {
+      Message message = new Message(this, msg, author);
+
+      author.receivedMessages.add(message);
+      this.sentMessages.add(message);
+    }
+
+    public int getReceivedMessagesCount() {
+      return this.receivedMessages.size();
+    }
+
+    public int getSentMessagesCount() {
+      return this.sentMessages.size();
+    }
 }

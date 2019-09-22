@@ -104,4 +104,16 @@ public class AgentAffinityAgent implements Serializable {
             ", degree=" + getDegree() +
             "}";
     }
+
+    public void removeFromFromAffinity() {
+      if (this.fromAffinity != null) {
+        this.fromAffinity.removeToAgentAffinity(this);
+      }
+    }
+
+    public void removeFromToAffinity() {
+      if (this.toAffinity != null) {
+        this.toAffinity.removeToAgentAffinity(this);
+      }
+    }
 }

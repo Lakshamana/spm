@@ -1156,8 +1156,8 @@ entity Plugin {
     jsonConfigFile String required
 }
 
-relationship ManyToMany {
-    Plugin{user(login)} to User{theUserPlugins}
+relationship ManyToOne {
+    Plugin{theCompany} to User{thePlugins}
 }
 
 // Services

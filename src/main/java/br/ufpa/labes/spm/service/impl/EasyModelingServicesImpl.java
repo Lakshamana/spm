@@ -1624,13 +1624,13 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						for (Iterator<BranchConCondToActivity> toActivityIterator = toActivities.iterator(); toActivityIterator.hasNext();) {
 							BranchConCondToActivity currentToAct = toActivityIterator.next();
 							if (currentToAct != null) {
-								BranchCondToActivity newBranchCondToAct = new BranchConCondToActivity();
+								BranchConCondToActivity newBranchCondToAct = new BranchConCondToActivity();
 
 								if (currentToAct.getTheActivity() != null) {
 									String actIdent = currentToAct.getTheActivity().getIdent();
 									Activity newToAct = activitiesTable.get(actIdent);
 									if (newToAct != null) {
-										newToAct.insertIntoTheBranchCondToActivity(newBranchConCondToAct);
+										newToAct.insertIntoTheBranchConCondToActivity(newBranchConCondToAct);
 									}// end if
 								}// end if != null
 
@@ -1641,7 +1641,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 								}// end if condition != null
 
 								// add current element to newBranchConCond object
-								((BranchConCond) newConnection).insertIntoTheBranchCondToActivity(newBranchConCondToAct);
+								((BranchConCond) newConnection).insertIntoTheBranchConCondToActivity(newBranchConCondToAct);
 							}// end if != null
 						}// end for
 
@@ -2678,7 +2678,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						succ.addAll(this.getSuccessors(multi.getTheMultipleCon()));
 				}
 				while (iterAct.hasNext()) {
-					BranchCondToActivity act = (BranchConCondToActivity) iterAct.next();
+					BranchConCondToActivity act = (BranchConCondToActivity) iterAct.next();
 					if (act.getTheActivity() != null)
 						succ.add(act.getTheActivity());
 				}
@@ -2756,7 +2756,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		Collection bctas = act.getTheBranchConCondToActivity();
 		Iterator iterBctas = bctas.iterator();
 		while (iterBctas.hasNext()) {
-			BranchCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
+			BranchConCondToActivity bcta = (BranchConCondToActivity) iterBctas.next();
 			if (bcta.getTheBranchConCond() != null)
 				connFrom.add(bcta.getTheBranchConCond());
 		}

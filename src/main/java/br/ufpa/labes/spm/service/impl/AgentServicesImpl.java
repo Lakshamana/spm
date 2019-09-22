@@ -197,7 +197,7 @@ public class AgentServicesImpl implements AgentServices {
 
 			SpmConfiguration spmconfiguration = new SpmConfiguration();
 			spmconfiguration.setFiltro("ID,teste,teste");
-			spmconfiguration.setAgent(agentRetorno);
+			spmconfiguration.setTheAgent(agentRetorno);
 			spmconfiguration.setIdioma(config.getIdioma());
 			spmconfiguration.setSenhaEmRecuperacao(false);
 
@@ -257,11 +257,11 @@ public class AgentServicesImpl implements AgentServices {
 
 	private void updateAgent(Agent agent, AgentDTO agentDTO) {
 		agent.setPasswordHash(Md5.getMd5Digest(agentDTO.getPassword()));
-		agent.setArtifactMngPassword(agentDTO.getArtifactMngPassword());
+		// agent.setArtifactMngPassword(agentDTO.getArtifactMngPassword());
 		agent.setEmail(agentDTO.getEmail());
 		agent.setCostHour(agentDTO.getCostHour());
 		agent.setActive(agentDTO.isActive());
-		agent.setDescription(agentDTO.getDescription());
+		// agent.setDescription(agentDTO.getDescription());
 		agent.setUpload(agentDTO.getUpload());
 	}
 
@@ -294,7 +294,7 @@ public class AgentServicesImpl implements AgentServices {
 					AgentAffinityAgent agAffinity = this.getAffinityByName(
 							agentName, agentDTO.getName());
 
-					boolean isAgentHasAffinity = agent.getToAgentAffinity()
+					boolean isAgentHasAffinity = agent.getToAgentAffinities()
 							.contains(agAffinity);
 
 					if (!isAgentHasAffinity) {
@@ -324,7 +324,7 @@ public class AgentServicesImpl implements AgentServices {
 		if (agent != null) {
 			if(!query.getResultList().isEmpty()) {
 				SpmConfiguration config = query.getResultList().get(0);
-				config.setAgent(null);
+				config.setTheAgent(null);
 				confiDAO.daoDelete(config);
 			}
 			if(!query2.getResultList().isEmpty()) {
@@ -350,24 +350,24 @@ public class AgentServicesImpl implements AgentServices {
 			}
 
 			for (AgentAffinityAgent agentAffinityAgent : agent
-					.getFromAgentAffinity()) {
+					.getFromAgentAffinities()) {
 				agentAffinityAgent.removeFromFromAffinity();
 				agentAffinityAgent.setToAffinity(null);
 				agentAffinityAgentDAO.daoDelete(agentAffinityAgent);
 			}
 
 			for (AgentAffinityAgent agentAffinityAgent : agent
-					.getToAgentAffinity()) {
+					.getToAgentAffinities()) {
 				agentAffinityAgent.removeFromToAffinity();
 				agentAffinityAgent.setFromAffinity(null);
 				agentAffinityAgentDAO.daoDelete(agentAffinityAgent);
 			}
 
-			agent.setTheWorkGroup(new HashSet<WorkGroup>());
-			agent.setFromAgentAffinity(new HashSet<AgentAffinityAgent>());
-			agent.setToAgentAffinity(new HashSet<AgentAffinityAgent>());
-			agent.setTheAgentPlaysRole(new HashSet<AgentPlaysRole>());
-			agent.setTheAgentHasAbility(new HashSet<AgentHasAbility>());
+			agent.setTheWorkGroups(new HashSet<WorkGroup>());
+			agent.setFromAgentAffinities(new HashSet<AgentAffinityAgent>());
+			agent.setToAgentAffinities(new HashSet<AgentAffinityAgent>());
+			agent.setTheAgentPlaysRoles(new HashSet<AgentPlaysRole>());
+			agent.setTheAgentHasAbilities(new HashSet<AgentHasAbility>());
 
 			agentDAO.daoDelete(agent);
 			return true;
@@ -860,7 +860,7 @@ public class AgentServicesImpl implements AgentServices {
 			agent.getTheAgentHasAbilities().removeAll(agentHasAbilitiesToRemove);
 			agentDAO.update(agent);
 
-			ability.getTheAgentHasAbility()
+			ability.getTheAgentHasAbilities()
 					.removeAll(agentHasAbilitiesToRemove);
 			abilityDAO.update(ability);
 		}
@@ -913,8 +913,8 @@ public class AgentServicesImpl implements AgentServices {
 
 		if (agent.getFromAgentAffinities().contains(agentAffinityAgent)
 				|| agent.getToAgentAffinities().contains(agentAffinityAgent)) {
-			agentAffinityAgent.removeFromFromAffinities();
-			agentAffinityAgent.removeFromToAffinities();
+			agentAffinityAgent.removeFromFromAffinity();
+			agentAffinityAgent.removeFromToAffinity();
 			agentAffinityAgentDAO.daoDelete(agentAffinityAgent);
 			agentAffinityAgentDAO.daoDelete(inverseAgentAffinityAgent);
 
@@ -1108,7 +1108,7 @@ public class AgentServicesImpl implements AgentServices {
 			if (!agent.getTheAgentPlaysRoles().isEmpty()) {
 
 				for (AgentPlaysRole agentPlayRole : agent
-						.getTheAgentPlaysRole()) {
+						.getTheAgentPlaysRoles()) {
 					agentDTO.getRoleToAgent().add(
 							agentPlayRole.getTheRole().getName());
 					agentDTO.getRoleIdentsToAgent().add(
@@ -1124,7 +1124,7 @@ public class AgentServicesImpl implements AgentServices {
 				TaskAgenda theTaskAgenda = agent.getTheTaskAgenda();
 				if((theTaskAgenda != null) && (theTaskAgenda.getTheProcessAgenda() != null)) {
 					for (ProcessAgenda agenda : theTaskAgenda.getTheProcessAgenda()) {
-						List<TaskDTO> agentTasks = this.convertTasksToTasksDTO(agent.getIdent(), agenda.getTheTask());
+						List<TaskDTO> agentTasks = this.convertTasksToTasksDTO(agent.getIdent(), agenda.getTheTasks());
 						agentDTO.getTasks().addAll(agentTasks);
 						//custo
 						for(TaskDTO task : agentDTO.getTasks()) {
@@ -1149,7 +1149,7 @@ public class AgentServicesImpl implements AgentServices {
 
 			agentDTO.setAbilityToAgent(new ArrayList<String>());
 			for (AgentHasAbility agentHasAbility : agent
-					.getTheAgentHasAbility()) {
+					.getTheAgentHasAbilities()) {
 				String abilityName = agentHasAbility.getTheAbility().getName();
 
 				agentDTO.getAbilityToAgent().add(abilityName);
@@ -1157,7 +1157,7 @@ public class AgentServicesImpl implements AgentServices {
 
 			agentDTO.setAfinityToAgent(new ArrayList<String>());
 			for (AgentAffinityAgent agentAffinityAgent : agent
-					.getFromAgentAffinity()) {
+					.getFromAgentAffinities()) {
 				String fromAffinityName = agentAffinityAgent.getFromAffinity()
 						.getName();
 

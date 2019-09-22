@@ -2,11 +2,15 @@ package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Query;
 
-import org.qrconsult.spm.converter.core.Converter;
 import org.qrconsult.spm.converter.core.ConverterImpl;
+
+import br.ufpa.labes.spm.domain.Agent;
+import br.ufpa.labes.spm.domain.Company;
+import br.ufpa.labes.spm.domain.CompanyUnit;
 import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.ICompanyDAO;
@@ -14,9 +18,6 @@ import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.ICompanyUnit
 import br.ufpa.labes.spm.service.dto.CompaniesDTO;
 import br.ufpa.labes.spm.service.dto.CompanyDTO;
 import br.ufpa.labes.spm.service.dto.CompanyUnitDTO;
-import br.ufpa.labes.spm.domain.Agent;
-import br.ufpa.labes.spm.domain.Company;
-import br.ufpa.labes.spm.domain.CompanyUnit;
 import br.ufpa.labes.spm.service.interfaces.CompanyServices;
 
 public class CompanyServicesImpl implements CompanyServices{
@@ -37,7 +38,7 @@ public class CompanyServicesImpl implements CompanyServices{
 	public CompanyDTO saveCompany(CompanyDTO companyDTO) {
 		try {
 			Company company = null;
-			System.out.println("Unidades: " + companyDTO.getTheOrganizationalUnits());
+			System.out.println("Unidades: " + companyDTO.getTheCompanyUnits());
 			String hql = "SELECT o FROM " + COMPANY_CLASS_NAME + " o WHERE o.ident = '" + companyDTO.getIdent() + "'";
 			query = companyDAO.getPersistenceContext().createQuery(hql);
 			if(query.getResultList().size() == SINGLE_RESULT) {
@@ -45,13 +46,13 @@ public class CompanyServicesImpl implements CompanyServices{
 			}
 			if(company == null) {
 				company = (Company) converter.getEntity(companyDTO, Company.class);
-				company.setTheOrganizationalUnits(converterUnidades(companyDTO.getTheOrganizationalUnits(), null, company));
+				company.setTheCompanyUnits(converterUnidades(companyDTO.getTheCompanyUnits(), null, company));
 				companyDAO.daoSave(company);
 			} else {
-				for (CompanyUnit companyUnit : company.getTheOrganizationalUnits()) {
+				for (CompanyUnit companyUnit : company.getTheCompanyUnits()) {
 					companyUnitDAO.daoDelete(companyUnit);
 				}
-				company.setTheOrganizationalUnits(new ArrayList<CompanyUnit>());
+				company.setTheCompanyUnits(new Set<CompanyUnit>());
 				company.setIdent(companyDTO.getIdent());
 				company.setFantasyName(companyDTO.getFantasyName());
 //				company.setCnpj(company.getCnpj());
@@ -61,7 +62,7 @@ public class CompanyServicesImpl implements CompanyServices{
 				company.setAcronym(companyDTO.getAcronym());
 				company.setAddress(companyDTO.getAddress());
 				company.setDescription(companyDTO.getDescription());
-				company.setTheOrganizationalUnits(converterUnidades(companyDTO.getTheOrganizationalUnits(), null, company));
+				company.setTheCompanyUnits(converterUnidades(companyDTO.getTheCompanyUnits(), null, company));
 			}
 			companyDAO.update(company);
 		} catch (ImplementationException e) {
@@ -70,7 +71,7 @@ public class CompanyServicesImpl implements CompanyServices{
 		return companyDTO;
 	}
 
-	private List<CompanyUnit> converterUnidades(List<CompanyUnitDTO> unidadesDTO, CompanyUnit theCommand, Company company) throws ImplementationException {
+	private Set<CompanyUnit> converterUnidades(List<CompanyUnitDTO> unidadesDTO, CompanyUnit theCommand, Company company) throws ImplementationException {
 		List<CompanyUnit> unidades = new ArrayList<CompanyUnit>();
 		for (CompanyUnitDTO unidadeDTO : unidadesDTO) {
 
@@ -82,7 +83,7 @@ public class CompanyServicesImpl implements CompanyServices{
 			for (String agentName : unidadeDTO.getTheUnitAgents()) {
 				Agent agent = agentDAO.retrieveBySecondaryKey(agentName);
 				agent.getTheOrgUnits().add(companyUnit);
-				companyUnit.getTheUnitAgents().add(agent);
+				companyUnit.getTheAgents().add(agent);
 			}
 
 			if (unidadeDTO.getTheSubordinates().size() != 0)
@@ -123,7 +124,7 @@ public class CompanyServicesImpl implements CompanyServices{
 		try {
 			companyDTO = (CompanyDTO) converter.getDTO(company, CompanyDTO.class);
 
-			for (CompanyUnit companyUnit : company.getTheOrganizationalUnits()) {
+			for (CompanyUnit companyUnit : company.getTheCompanyUnits()) {
 				String hql = "SELECT o.theUnitAgents FROM " + COMPANY_UNIT_CLASS_NAME + " o WHERE o.ident = '" + companyUnit.getIdent() + "'";
 				query = companyDAO.getPersistenceContext().createQuery(hql);
 				List<Agent> agents = query.getResultList();
@@ -139,7 +140,7 @@ public class CompanyServicesImpl implements CompanyServices{
 
 				if (companyUnit.getTheCommand() != null)
 					comUnitDTO.setTheCommand((CompanyUnitDTO) converter.getDTO(companyUnit.getTheCommand(), CompanyUnitDTO.class));
-				companyDTO.getTheOrganizationalUnits().add(comUnitDTO);
+				companyDTO.getTheCompanyUnits().add(comUnitDTO);
 			}
 
 		} catch (ImplementationException e) {

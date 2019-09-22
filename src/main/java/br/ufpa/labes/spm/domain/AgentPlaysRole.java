@@ -105,4 +105,10 @@ public class AgentPlaysRole implements Serializable {
             ", sinceDate='" + getSinceDate() + "'" +
             "}";
     }
+
+    public void removeFromTheRole() {
+      if (this.theRole != null) {
+        this.theRole.removeTheAgentPlaysRole(this);
+      }
+    }
 }
