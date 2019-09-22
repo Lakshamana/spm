@@ -20,3 +20,5 @@ GroupType WorkGroupType
 ToolParameters ToolParameter
 Parameters Parameter
 InvolvedArtifacts InvolvedArtifact
+AuthorStats AuthorStat
+AssetStats AssetStat

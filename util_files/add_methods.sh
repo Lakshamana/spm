@@ -26,15 +26,16 @@ newdir='src/main/java/br/ufpa/labes/spm/domain'
 diffs='util_files/entitydiffs.txt'
 
 # 2.
-models=`find "$olddir" -regextype posix-extended -regex '(.*).java' | sed -e '/policies/d' -e '/IPersistent/d' -e '/help/d' -e '/knowledge/d'`
+# models=`find "$olddir" -regextype posix-extended -regex '(.*).java' | sed -e '/policies/d' -e '/IPersistent/d' -e '/help/d' -e '/knowledge/d'`
+models="$olddir/connections/Branch.java"
 
 # 3.
 for m in $models; do
   new=''
-
   ename=`echo "$m" | cut -d/ -f13 | sed -r 's/(.*).java/\1/'`
   # package=`echo "$m" | cut -d/ -f12`
   seek=`cat "$diffs" | grep -w "$ename" | awk '{print $2}'`
+
   if [[ $seek != '' ]]; then
     new=$seek
   else
@@ -42,20 +43,35 @@ for m in $models; do
   fi
 
   file="$newdir/$new.java"
+  echo entity: $m
 
-  # 3.1
-  old_methods=`sed -rn "s/public (.*) (.*)\((.*)\) \{/\r\2/p" "$m"`
-  new_methods=`sed -rn "s/public (.*) (.*)\((.*)\) \{/\r\2/p" $file`
+  if test -f $file; then
+    # 3.1
+    old_methods=`sed -rn "s/public (.*) (.*).*\((.*)\).*\{/\2/p" "$m" | sed -r '/(get|set)Oid/d'`
+    new_methods=`sed -rn "s/public (.*) (.*).*\((.*)\).*\{/\2/p" "$file"`
 
-  # 3.2
-  for m in $old_methods; do
-    lookup=`echo $old_methods | grep -w "$ename"`
-    if [[ $lookup != '' ]]; then
-      # retrieve for method in old class
-      input=`sed -n "/$lookup/, /}/ p" "$m"`
+    echo olds: $old_methods
+    echo news: $new_methods
 
-      # then add it to the new class
-      sed -ri "s/\}$/`echo -e $test`\n\}/" $file
-    fi
-  done
+    # 3.2
+    inputs=''
+    for mthd in $old_methods; do
+      found=`echo "$new_methods" | grep -w "$mthd"`
+      # echo found: $found
+      if [[ $found == '' ]]; then
+        # retrieve for method in old class
+        space=`sed -rn "s/([ ]*)public .* $mthd.*/\1/p" "$m"`
+        input=`sed -n "/$mthd/, /^$space}/p" "$m" | tr '\n' "\\n"`
+        # echo "$input"
+        # then add it to the new class
+        inputs+="$input\\n\\n"
+      fi
+    done
+
+    # add input methods to new class
+    # echo -e "$inputs"
+    sed -i "s/^}$//" $file
+    echo -e "$inputs" >> $file
+    echo -e '\n\n}' >> $file
+  fi
 done

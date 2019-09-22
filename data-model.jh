@@ -1,7 +1,8 @@
 //package activities -------------------------------------------
 entity Activity {
     ident String,
-    name String
+    name String,
+    isVersion Boolean
 }
 //Plain state enum
 enum PlainStatus {
@@ -21,7 +22,7 @@ relationship ManyToOne {
 }
 
 relationship OneToMany {
-    Activity{theModelingActivityEvent} to Event{theActivity},
+    Activity{theModelingActivityEvent} to ModelingActivityEvent{theActivity},
     Activity{hasVersions} to Activity{theAncestorActitvity},
     Activity{fromSimpleCon} to SimpleCon{fromActivity},
     Activity{toSimpleCon} to SimpleCon{toActivity},
@@ -141,7 +142,7 @@ entity RoleNeedsAbility {
 relationship ManyToOne {
     Ability{theAbilityType} to AbilityType{theAbility}
 
-    Agent{theResourceEvent} to Event{theRequestorAgent}, // O agente solicita um recurso
+    Agent{theResourceEvent} to ResourceEvent{theRequestorAgent}, // O agente solicita um recurso
 
     AgentAffinityAgent{fromAffinity} to Agent{fromAgentAffinity},
     AgentAffinityAgent{toAffinity} to Agent{toAgentAffinity},
@@ -169,7 +170,7 @@ relationship OneToMany {
 
     Agent{delegates} to Task{delegatedFrom},
     Agent{isDelegatedFor} to Task{delegatedTo},
-    Agent{theModelingActivityEvent} to Event{theAgent},
+    Agent{theModelingActivityEvent} to ModelingActivityEvent{theAgent},
     Agent{theReqAgent} to ReqAgent{theAgent},
     Agent{theAgentMetric} to AgentMetric{theAgent},
     Agent{theAgentEstimation} to AgentEstimation{theAgent},
@@ -577,7 +578,7 @@ entity DevelopingSystem {
 
 relationship ManyToOne {
     CompanyUnit{theOrganization} to Company{theCompanyUnit},
-    CompanyUnit{theCommand} to CompanyUnit{theCompanyUnit},
+    CompanyUnit{theCommand} to CompanyUnit{theSubordinates},
 
     Project{processRefered} to Process{theProject},
     Project{theSystem} to DevelopingSystem{theProject},
@@ -738,13 +739,13 @@ relationship ManyToOne {
     AgentInstSug{theRole} to Role{theAgentInstSug},
     AgentInstSug{chosenAgent} to Agent{theAgentInstSug},
 
-    AgentInstSuggestionToAgent{theInstAgSug} to PeopleInstSug{theAgentInstSugToAgent},
+    AgentInstSuggestionToAgent{theInstAgSug} to AgentInstSug{suggestedAgent},
     AgentInstSuggestionToAgent{theAgent} to Agent{theAgentInstSugToAgent},
 
     AgentWorkingLoad{theAgent} to Agent{theAgentWorkingLoad},
 
     WorkGroupInstSug{chosenWorkGroup} to WorkGroup{sugToChosenWorkGroup},
-    WorkGroupInstSug{workGroupTypeRequired} to Type{sugToReqWorkGroup},
+    WorkGroupInstSug{workGroupTypeRequired} to WorkGroupType{sugToReqWorkGroup},
 
     InstantiationSuggestion{theActivityInstantiated} to ActivityInstantiated{theInstSug},
 
