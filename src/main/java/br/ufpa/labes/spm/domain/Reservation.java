@@ -122,4 +122,24 @@ public class Reservation implements Serializable {
             ", toDate='" + getToDate() + "'" +
             "}";
     }
+
+    public void removeFromTheNormal(){
+      if (this.theNormal!=null){
+        this.theNormal.removeTheReservation(this);
+      }
+    }
+
+    public void insertIntoTheNormal(Normal theNormal){
+      theNormal.addTheReservation(this);
+    }
+
+    public void removeFromTheExclusive(){
+      if (this.theExclusive!=null){
+        this.theExclusive.removeTheReservation(this);
+      }
+    }
+
+    public void insertIntoTheExclusive(Exclusive theExclusive){
+      theExclusive.addTheReservation(this);
+    }
 }

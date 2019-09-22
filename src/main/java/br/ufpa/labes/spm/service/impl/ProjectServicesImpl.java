@@ -2200,7 +2200,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			Element artifactElm = invArtElm.getChild("TheArtifact");
 			if(artifactElm != null){
 				String artifactKey = artifactElm.getAttributeValue("REF");
-				invArt.insertIntoTheArtifact((Artifact) this.organizational.get(artifactKey));
+				invArt.insertIntoTheArtifacts((Artifact) this.organizational.get(artifactKey));
 			}
 
 			this.persistObject(invArt, null);
@@ -2261,7 +2261,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 				Element artElm = connectionElm.getChild("TheArtifact");
 				if(artElm != null){
-					artifactCon.insertIntoTheArtifact((Artifact) this.organizational.get(artElm.getAttributeValue("REF")));
+					artifactCon.insertIntoTheArtifacts((Artifact) this.organizational.get(artElm.getAttributeValue("REF")));
 				}
 
 				artifactCon = (ArtifactCon) this.persistObject(artifactCon, null);
@@ -3346,7 +3346,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				Element artElm = paramElm.getChild("TheArtifact");
 				if(artElm != null){
 					String artKey = artElm.getAttributeValue("REF");
-					artParam.insertIntoTheArtifact((Artifact) this.organizational.get(artKey));
+					artParam.insertIntoTheArtifacts((Artifact) this.organizational.get(artKey));
 				}
 
 				this.persistObject(artParam, null);
@@ -3426,7 +3426,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(!this.isAssociativeExists(ArtifactTask.class, artifact, task)){
 
 				ArtifactTask artTask = new ArtifactTask();
-				artTask.insertIntoTheArtifact(artifact);
+				artTask.insertIntoTheArtifacts(artifact);
 				artTask.insertIntoTheTask(task);
 				artTask.setInWorkspaceVersion(artTaskElm.getChildText("InWorkspaceVersion"));
 				artTask.setOutWorkspaceVersion(artTaskElm.getChildText("OutWorkspaceVersion"));

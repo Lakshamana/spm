@@ -221,7 +221,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				actNorm.setIdent(level_id + "." + new_id); //$NON-NLS-1$
 				actNorm.setName(new_id);
 				actNorm.setTheProcessModel(pmodel);
-				pmodel.getTheActivity().add(actNorm);
+				pmodel.getTheActivities().add(actNorm);
 
 				// Persistence Operations
 
@@ -312,7 +312,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				actDec.setIdent(level_id + "." + new_id); //$NON-NLS-1$
 				actDec.setName(new_id);
 				actDec.setTheProcessModel(pmodel);
-				pmodel.getTheActivity().add(actDec);
+				pmodel.getTheActivities().add(actDec);
 
 				ProcessModel refProcModel = actDec.getTheReferedProcessModel();
 				refProcModel.setTheDecomposed(actDec);
@@ -405,7 +405,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				actAuto.setIdent(level_id + "." + new_id); //$NON-NLS-1$
 				actAuto.setName(new_id);
 				actAuto.setTheProcessModel(pmodel);
-				pmodel.getTheActivity().add(actAuto);
+				pmodel.getTheActivities().add(actAuto);
 
 				// Persistence Operations
 
@@ -429,7 +429,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				actAuto.setName(new_id);
 				actAuto.getTheEnactionDescription().setStateWithMessage(Plain.WAITING);
 				actAuto.setTheProcessModel(pmodel);
-				pmodel.getTheActivity().add(actAuto);
+				pmodel.getTheActivities().add(actAuto);
 
 				// Persistence Operations
 
@@ -485,7 +485,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (this.hasInvolvedAgents(actNorm)) {
 					actNorm.setTheRequiredPeople(new HashSet());
 				}
-				Collection set = actNorm.getTheRequiredResource();
+				Collection set = actNorm.getTheRequiredResources();
 				set.remove(null);
 				if (!set.isEmpty()) {
 					this.releaseResourcesFromActivity(actNorm);
@@ -591,7 +591,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (this.hasInvolvedAgents(actNorm)) {
 					actNorm.setTheRequiredPeople(new HashSet());
 				}
-				Collection set = actNorm.getTheRequiredResource();
+				Collection set = actNorm.getTheRequiredResources();
 				set.remove(null);
 
 				if (!set.isEmpty()) {
@@ -630,7 +630,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcActv") + activity.getIdent() //$NON-NLS-1$
 						+ Messages.getString("facades.DynamicModeling.ModelingExcHasNoRefProcMod")); //$NON-NLS-1$
 			} else {
-				Collection set = pmodel.getTheActivity();
+				Collection set = pmodel.getTheActivities();
 				set.remove(null);
 
 				if (!set.isEmpty()) {
@@ -700,7 +700,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcActv") + activity.getIdent() //$NON-NLS-1$
 						+ Messages.getString("facades.DynamicModeling.ModelingExcHasNoRefProcMod")); //$NON-NLS-1$
 			} else {
-				Collection set = pmodel.getTheActivity();
+				Collection set = pmodel.getTheActivities();
 				set.remove(null);
 
 				if (!set.isEmpty()) {
@@ -1067,10 +1067,10 @@ System.out.println("salva :"+pmodel.getPmState());
 				String state = referedProcessModel.getPmState();
 				if (state.equals(ProcessModel.REQUIREMENTS) || state.equals(ProcessModel.ABSTRACT) || state.equals(ProcessModel.INSTANTIATED)) {
 
-					Collection set = referedProcessModel.getTheActivity();
+					Collection set = referedProcessModel.getTheActivities();
 					if (set.isEmpty()) {
 						this.removeAllConnectionsFromActivity(actDec);
-						processModel.getTheActivity().remove(actDec);
+						processModel.getTheActivities().remove(actDec);
 
 						// Remove from the model
 						decDAO.daoDelete(actDec);
@@ -1089,7 +1089,7 @@ System.out.println("salva :"+pmodel.getPmState());
 																					 */);
 						}
 					} else {
-						Collection acts = actDec.getTheReferedProcessModel().getTheActivity();
+						Collection acts = actDec.getTheReferedProcessModel().getTheActivities();
 						Iterator iterActivity = acts.iterator();
 						while (iterActivity.hasNext()) {
 							deleteActivity(((Activity) iterActivity.next()).getIdent());
@@ -1104,7 +1104,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			} else {
 				// equals to empty process model
 				this.removeAllConnectionsFromActivity(actDec/* , currentSession */);
-				processModel.getTheActivity().remove(actDec);
+				processModel.getTheActivities().remove(actDec);
 
 				// Remove from the model
 
@@ -1133,7 +1133,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				this.removeAllConnectionsFromActivity(actAuto/* , currentSession */);
 
-				processModel.getTheActivity().remove(actAuto);
+				processModel.getTheActivities().remove(actAuto);
 				actAuto.setTheProcessModel(null);
 				// Remove from the model
 				Subroutine subr = actAuto.getTheSubroutine();
@@ -1468,7 +1468,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			if (artifactTypeFromCon == null) {
 				// Rule G2.5
-				artifactCon.insertIntoTheArtifact(artifact);
+				artifactCon.insertIntoTheArtifacts(artifact);
 				ArtifactType type = artifact.getTheArtifactType();
 				artifactCon.insertIntoTheArtifactType(type);
 
@@ -1478,7 +1478,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					|| this.isSubType(artifact.getTheArtifactType(), artifactTypeFromCon)) {
 
 				// Rule G2.7
-				artifactCon.insertIntoTheArtifact(artifact);
+				artifactCon.insertIntoTheArtifacts(artifact);
 
 				this.createInvolvedArtifacts(artifactCon, artifact, artifactFromCon, artifactTypeFromCon);
 
@@ -1492,7 +1492,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			if (artifactTypeFromCon == null) {
 				// Rule G2.6
 				artifactFromCon.removeFromTheArtifactCon(artifactCon);
-				artifactCon.insertIntoTheArtifact(artifact);
+				artifactCon.insertIntoTheArtifacts(artifact);
 				ArtifactType type = artifact.getTheArtifactType();
 				artifactCon.insertIntoTheArtifactType(type);
 
@@ -1502,7 +1502,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					|| this.isSubType(artifact.getTheArtifactType(), artifactTypeFromCon)) {
 				// Rule G2.8
 				artifactFromCon.removeFromTheArtifactCon(artifactCon);
-				artifactCon.insertIntoTheArtifact(artifact);
+				artifactCon.insertIntoTheArtifacts(artifact);
 
 				this.createInvolvedArtifacts(artifactCon, artifact, artifactFromCon, artifactTypeFromCon);
 
@@ -1549,7 +1549,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		artifact.removeFromTheArtifactCon(artifactCon);
 
 		// Removing from normal activities their input artifacts
-		Collection<Activity> toActivities = artifactCon.getToActivity();
+		Collection<Activity> toActivities = artifactCon.getToActivities();
 		Iterator iterToActivities = toActivities.iterator();
 		while (iterToActivities.hasNext()) {
 			Activity toActivity = (Activity) iterToActivities.next();
@@ -1963,14 +1963,14 @@ System.out.println("salva :"+pmodel.getPmState());
 			if (activity instanceof Normal) {
 				Normal actNorm = (Normal) activity;
 
-				if (!actNorm.getFromArtifactCon().contains(artifactCon)) {
+				if (!actNorm.getFromArtifactCons().contains(artifactCon)) {
 //					String newInputArtifact = Messages.getString("facades.DynamicModeling.NotifyAgtNewInpArtf");
 					String newInputArtifact = "Notify Agent - New Input Artifact";
 					if (!this.hasTheFromArtifact(actNorm, artifactFromCon)) {
 
 						if (state.equals("")) { // Rule G2.10 //$NON-NLS-1$
-							artifactCon.getToActivity().add(actNorm);
-							actNorm.getFromArtifactCon().add(artifactCon);
+							artifactCon.getToActivities().add(actNorm);
+							actNorm.getFromArtifactCons().add(artifactCon);
 
 							InvolvedArtifact invArt = new InvolvedArtifact();
 
@@ -1993,8 +1993,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						} else if (state.equals(Plain.WAITING) || state.equals(Plain.READY) || state.equals(Plain.ACTIVE)
 								|| state.equals(Plain.PAUSED)) { // Rule G2.11
 
-							artifactCon.getToActivity().add(actNorm);
-							actNorm.getFromArtifactCon().add(artifactCon);
+							artifactCon.getToActivities().add(actNorm);
+							actNorm.getFromArtifactCons().add(artifactCon);
 
 							InvolvedArtifact invArt = new InvolvedArtifact();
 
@@ -2025,8 +2025,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						// in involved artifact.
 
 						if (state.equals("")) { // Rule G2.12 //$NON-NLS-1$
-							artifactCon.getToActivity().add(actNorm);
-							actNorm.getFromArtifactCon().add(artifactCon);
+							artifactCon.getToActivities().add(actNorm);
+							actNorm.getFromArtifactCons().add(artifactCon);
 
 							InvolvedArtifact invArt = new InvolvedArtifact();
 
@@ -2049,8 +2049,8 @@ System.out.println("salva :"+pmodel.getPmState());
 						} else if (state.equals(Plain.WAITING) || state.equals(Plain.READY) || state.equals(Plain.ACTIVE)
 								|| state.equals(Plain.PAUSED)) { // Rule G2.13
 
-							artifactCon.getToActivity().add(actNorm);
-							actNorm.getFromArtifactCon().add(artifactCon);
+							artifactCon.getToActivities().add(actNorm);
+							actNorm.getFromArtifactCons().add(artifactCon);
 
 							InvolvedArtifact invArt = new InvolvedArtifact();
 
@@ -2085,10 +2085,10 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				ProcessModel procModel = actDec.getTheProcessModel();
 				if (!state.equals(ProcessModel.FINISHED) && !state.equals(ProcessModel.CANCELED) && !state.equals(ProcessModel.FAILED)
-						&& (procModel != null) && !actDec.getFromArtifactCon().contains(artifactCon)) {
+						&& (procModel != null) && !actDec.getFromArtifactCons().contains(artifactCon)) {
 
-					actDec.getFromArtifactCon().add(artifactCon);
-					artifactCon.getToActivity().add(actDec);
+					actDec.getFromArtifactCons().add(artifactCon);
+					artifactCon.getToActivities().add(actDec);
 
 					ProcessModel refProcModel = actDec.getTheReferedProcessModel();
 					if ((refProcModel != null) && !refProcModel.getTheConnection().contains(artifactCon)) {
@@ -2173,8 +2173,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				&& (!state.equals(Plain.FAILED) || !state.equals(ProcessModel.FAILED))
 				&& (!state.equals(Plain.FINISHED) || !state.equals(ProcessModel.FINISHED))) {
 
-			Collection artifactConnections = activity.getFromArtifactCon();
-			Collection toactivities = artifactCon.getToActivity();
+			Collection artifactConnections = activity.getFromArtifactCons();
+			Collection toactivities = artifactCon.getToActivities();
 
 			if (artifactConnections.contains(artifactCon) || toactivities.contains(activity)) {
 
@@ -2274,9 +2274,9 @@ System.out.println("salva :"+pmodel.getPmState());
 		Artifact artifact = artifactCon.getTheArtifact();
 		ArtifactType artifactType = artifactCon.getTheArtifactType();
 
-		if (!multipleCon.getFromArtifactCon().contains(artifactCon) || !artifactCon.getToMultipleCon().contains(multipleCon)) {
+		if (!multipleCon.getFromArtifactCons().contains(artifactCon) || !artifactCon.getToMultipleCon().contains(multipleCon)) {
 
-			multipleCon.getFromArtifactCon().add(artifactCon); // Rule G2.21
+			multipleCon.getFromArtifactCons().add(artifactCon); // Rule G2.21
 			artifactCon.getToMultipleCon().add(multipleCon);
 
 			Collection suc = this.getSuccessors(multipleCon);
@@ -2400,9 +2400,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		// Now we start the implementation of the rules
 
-		if (multipleCon.getFromArtifactCon().contains(artifactCon) || artifactCon.getToMultipleCon().contains(multipleCon)) {
+		if (multipleCon.getFromArtifactCons().contains(artifactCon) || artifactCon.getToMultipleCon().contains(multipleCon)) {
 
-			multipleCon.getFromArtifactCon().remove(artifactCon);
+			multipleCon.getFromArtifactCons().remove(artifactCon);
 			artifactCon.getToMultipleCon().remove(multipleCon);
 
 			// Persistence Operations
@@ -2451,7 +2451,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			if (connection instanceof Sequence) {
 				Sequence sequence = (Sequence) connection;
 
-				Activity to = sequence.getToActivity();
+				Activity to = sequence.getToActivities();
 				if (to != null) {
 					String state = this.getState(to);
 					if (to instanceof Normal) { // Rule G2.31
@@ -2503,7 +2503,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			} else if (connection instanceof Feedback) {
 				Feedback feedback = (Feedback) connection;
 
-				Activity to = feedback.getToActivity();
+				Activity to = feedback.getToActivities();
 				if (to != null) {
 					String state = this.getState(to);
 					if (to instanceof Normal) { // Rule G2.31
@@ -2563,7 +2563,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				JoinCon join = (JoinCon) connection;
 
 				// Deleting Successors and Predecessors instances of Activity
-				Activity to = join.getToActivity();
+				Activity to = join.getToActivities();
 				if (to != null) {
 					String state = this.getState(to);
 					if (to instanceof Normal) { // Rule G2.37
@@ -2685,7 +2685,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			} else if (connection instanceof BranchANDCon) {
 				BranchANDCon branchAND = (BranchANDCon) connection;
 
-				Collection tos = branchAND.getToActivity();
+				Collection tos = branchAND.getToActivities();
 				Iterator iterTos = tos.iterator();
 				// Auxiliar Collection
 				Collection aux = new HashSet();
@@ -2704,17 +2704,17 @@ System.out.println("salva :"+pmodel.getPmState());
 							if (state.equals("") //$NON-NLS-1$
 									|| state.equals(Plain.WAITING) || state.equals(Plain.READY)) {
 								to.getFromBranchAND().remove(branchAND);
-								branchAND.getToActivity().remove(to);
+								branchAND.getToActivities().remove(to);
 							}
 						} else if (to instanceof Automatic) { // Rule G2.38
 							if (state.equals("") //$NON-NLS-1$
 									|| state.equals(Plain.WAITING)) {
 								to.getFromBranchAND().remove(branchAND);
-								branchAND.getToActivity().remove(to);
+								branchAND.getToActivities().remove(to);
 							}
 						} else if (to instanceof Decomposed) { // Rule G2.39
 							to.getFromBranchAND().remove(branchAND);
-							branchAND.getToActivity().remove(to);
+							branchAND.getToActivities().remove(to);
 						}
 					}
 				}
@@ -2814,7 +2814,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				Iterator iterAux = aux.iterator();
 				while (iterAux.hasNext()) {
 					BranchConCondToActivity bcta = (BranchConCondToActivity) iterAux.next();
-					Activity to = bcta.getTheActivity();
+					Activity to = bcta.getTheActivities();
 					if (to != null) {
 						String state = this.getState(to);
 						if (to instanceof Normal) { // Rule G2.37
@@ -2938,7 +2938,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			} else if (connection instanceof ArtifactCon) {
 				ArtifactCon artifactCon = (ArtifactCon) connection;
 
-				Collection actsTo = artifactCon.getToActivity();
+				Collection actsTo = artifactCon.getToActivities();
 				Iterator iterActsTo = actsTo.iterator();
 				// Auxiliar Collection
 				Collection aux = new HashSet();
@@ -2951,8 +2951,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				Iterator iterAux = aux.iterator();
 				while (iterAux.hasNext()) {
 					Activity act = (Activity) iterAux.next();
-					act.getFromArtifactCon().remove(artifactCon);
-					artifactCon.getToActivity().remove(act);
+					act.getFromArtifactCons().remove(artifactCon);
+					artifactCon.getToActivities().remove(act);
 
 					if (act instanceof Normal) {
 						Normal actNorm = (Normal) act;
@@ -3073,7 +3073,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				while (iterAux3.hasNext()) {
 					MultipleCon multiTo = (MultipleCon) iterAux3.next();
 					artifactCon.getToMultipleCon().remove(multiTo);
-					multiTo.getFromArtifactCon().remove(artifactCon);
+					multiTo.getFromArtifactCons().remove(artifactCon);
 				}
 			}
 
@@ -3135,11 +3135,11 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		activity = actDAO.retrieveBySecondaryKey(activityIdent);
 		System.out.println("------------ From");
-		for (ArtifactCon con : activity.getFromArtifactCon()) {
+		for (ArtifactCon con : activity.getFromArtifactCons()) {
 			System.out.println(con.getTheArtifact().getIdent());
 		}
 		System.out.println("------------ To");
-		for (ArtifactCon con : activity.getToArtifactCon()) {
+		for (ArtifactCon con : activity.getToArtifactCons()) {
 			System.out.println(con.getTheArtifact().getIdent());
 		}
 
@@ -4554,7 +4554,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			BranchCon branch = (BranchCon) multipleCon;
 			if (branch instanceof BranchANDCon) {
 				BranchANDCon branchAND = (BranchANDCon) branchCon;
-				branchAND.getToActivity().remove(activity_to);
+				branchAND.getToActivities().remove(activity_to);
 				activity_to.getToBranch().remove(branchAND);
 
 				// Dynamic Changes related code
@@ -4579,7 +4579,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				BranchConCondToActivity aTBC = null;
 				while (iter.hasNext()) {
 					BranchConCondToActivity aux = (BranchConCondToActivity) iter.next();
-					if (aux.getTheActivity().equals(activity_to)) {
+					if (aux.getTheActivities().equals(activity_to)) {
 						aTBC = aux;
 						break;
 					}
@@ -4796,12 +4796,12 @@ System.out.println("salva :"+pmodel.getPmState());
 			joinDAO.update(join);
 			actDAO.update(activity_to);
 
-		} else if ((join.getToActivity() != null) && !this.controlFlow(activity_to, join)) {
+		} else if ((join.getToActivities() != null) && !this.controlFlow(activity_to, join)) {
 			if ((state.equals("") || state.equals(ProcessModel.REQUIREMENTS)) //$NON-NLS-1$
 					&& !join.isFired().booleanValue()) {
 				// Rule G4.6
 
-				Activity toAct = join.getToActivity();
+				Activity toAct = join.getToActivities();
 
 				toAct.getFromJoin().remove(join);
 				join.setToActivity(activity_to);
@@ -4831,7 +4831,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					|| state.equals(ProcessModel.INSTANTIATED)) {
 				// Rule G4.7
 
-				Activity toAct = join.getToActivity();
+				Activity toAct = join.getToActivities();
 
 				toAct.getFromJoin().remove(join);
 				join.setToActivity(activity_to);
@@ -4861,7 +4861,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					if (join.getTheDependency().getKindDep().equals("end-end")) { //$NON-NLS-1$
 						// Rule G4.8
 
-						Activity toAct = join.getToActivity();
+						Activity toAct = join.getToActivities();
 						toAct.getFromJoin().remove(join);
 						join.setToActivity(activity_to);
 						activity_to.getFromJoin().add(join);
@@ -4885,7 +4885,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					} else {
 						// Rule G4.9
 
-						Activity toAct = join.getToActivity();
+						Activity toAct = join.getToActivities();
 						toAct.getFromJoin().remove(join);
 						join.setToActivity(activity_to);
 						activity_to.getFromJoin().add(join);
@@ -4914,7 +4914,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					&& !(state.equals(Plain.CANCELED) || state.equals(ProcessModel.CANCELED))) {
 				// Rule G4.10
 
-				Activity toAct = join.getToActivity();
+				Activity toAct = join.getToActivities();
 				toAct.getFromJoin().remove(join);
 				join.setToActivity(activity_to);
 				activity_to.getFromJoin().add(join);
@@ -5209,12 +5209,12 @@ System.out.println("salva :"+pmodel.getPmState());
 
 				throw new ModelingException(Messages.getString("facades.DynamicModeling.ModelingExcThereControlFlow")); //$NON-NLS-1$
 			}
-		} else if (join.getToActivity() != null) {
+		} else if (join.getToActivities() != null) {
 			if (!this.controlFlow(multipleCon_to, join)) {
 				if (!join.isFired().booleanValue() && !multipleCon_to.isFired().booleanValue()) {
 					// Rule G4.17
 
-					Activity toAct = join.getToActivity();
+					Activity toAct = join.getToActivities();
 					toAct.getFromJoin().remove(join);
 					join.setToActivity(null);
 					if (multipleCon_to instanceof JoinCon) {
@@ -5244,7 +5244,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				} else if (join.isFired().booleanValue()) {
 					// Rule G4.19
 
-					Activity toAct = join.getToActivity();
+					Activity toAct = join.getToActivities();
 					toAct.getFromJoin().remove(join);
 					join.setToActivity(null);
 					if (multipleCon_to instanceof JoinCon) {
@@ -6389,9 +6389,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			if (branch instanceof BranchANDCon) { // Rule G5.19
 				BranchANDCon bAND = (BranchANDCon) branchCon;
-				Collection acts = bAND.getToActivity();
+				Collection acts = bAND.getToActivities();
 				if (!acts.contains(activity_to)) {
-					bAND.getToActivity().add(activity_to);
+					bAND.getToActivities().add(activity_to);
 					activity_to.getFromBranchANDCon().add(bAND);
 
 					// Dynamic Changes related code
@@ -6413,7 +6413,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				boolean has = false;
 				while (iter.hasNext()) {
 					BranchConCondToActivity aTBC = (BranchConCondToActivity) iter.next();
-					if (aTBC.getTheActivity().equals(activity_to)) {
+					if (aTBC.getTheActivities().equals(activity_to)) {
 						has = true;
 						break;
 					}
@@ -6445,9 +6445,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			if (branch instanceof BranchANDCon) { // Rule G5.20
 				BranchANDCon bAND = (BranchANDCon) branchCon;
-				Collection acts = bAND.getToActivity();
+				Collection acts = bAND.getToActivities();
 				if (!acts.contains(activity_to)) {
-					bAND.getToActivity().add(activity_to);
+					bAND.getToActivities().add(activity_to);
 					activity_to.getFromBranchANDCon().add(bAND);
 
 					// Dynamic Changes related code
@@ -6466,7 +6466,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				boolean has = false;
 				while (iter.hasNext()) {
 					BranchConCondToActivity aTBC = (BranchConCondToActivity) iter.next();
-					if (aTBC.getTheActivity().equals(activity_to)) {
+					if (aTBC.getTheActivities().equals(activity_to)) {
 						has = true;
 						break;
 					}
@@ -6495,9 +6495,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			if (branch instanceof BranchANDCon) { // Rule G5.21
 				BranchANDCon bAND = (BranchANDCon) branchCon;
-				Collection acts = bAND.getToActivity();
+				Collection acts = bAND.getToActivities();
 				if (!acts.contains(activity_to)) {
-					bAND.getToActivity().add(activity_to);
+					bAND.getToActivities().add(activity_to);
 					activity_to.getFromBranchANDCon().add(bAND);
 
 					// Dynamic Changes related code
@@ -6516,7 +6516,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				boolean has = false;
 				while (iter.hasNext()) {
 					BranchConCondToActivity aTBC = (BranchConCondToActivity) iter.next();
-					if (aTBC.getTheActivity().equals(activity_to)) {
+					if (aTBC.getTheActivities().equals(activity_to)) {
 						has = true;
 						break;
 					}
@@ -6545,9 +6545,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			if (branch instanceof BranchANDCon) { // Rule G5.22
 				BranchANDCon bAND = (BranchANDCon) branchCon;
-				Collection acts = bAND.getToActivity();
+				Collection acts = bAND.getToActivities();
 				if (!acts.contains(activity_to)) {
-					bAND.getToActivity().add(activity_to);
+					bAND.getToActivities().add(activity_to);
 					activity_to.getFromBranchANDCon().add(bAND);
 
 					this.makeWaiting(activity_to, "Rule G5.22"); //$NON-NLS-1$
@@ -6568,7 +6568,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				boolean has = false;
 				while (iter.hasNext()) {
 					BranchConCondToActivity aTBC = (BranchConCondToActivity) iter.next();
-					if (aTBC.getTheActivity().equals(activity_to)) {
+					if (aTBC.getTheActivities().equals(activity_to)) {
 						has = true;
 						break;
 					}
@@ -6598,9 +6598,9 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			if (branch instanceof BranchANDCon) { // Rule G5.23
 				BranchANDCon bAND = (BranchANDCon) branchCon;
-				Collection acts = bAND.getToActivity();
+				Collection acts = bAND.getToActivities();
 				if (!acts.contains(activity_to)) {
-					bAND.getToActivity().add(activity_to);
+					bAND.getToActivities().add(activity_to);
 					activity_to.getFromBranchANDCon().add(bAND);
 
 					// Dynamic Changes related code
@@ -6619,7 +6619,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				boolean has = false;
 				while (iter.hasNext()) {
 					BranchConCondToActivity aTBC = (BranchConCondToActivity) iter.next();
-					if (aTBC.getTheActivity().equals(activity_to)) {
+					if (aTBC.getTheActivities().equals(activity_to)) {
 						has = true;
 						break;
 					}
@@ -7886,7 +7886,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 
 		Normal normalAux = (Normal) normDAO.retrieveBySecondaryKey(normal_id);
-		Collection reqResource = normalAux.getTheRequiredResource();
+		Collection reqResource = normalAux.getTheRequiredResources();
 		Iterator iter = reqResource.iterator();
 		while (iter.hasNext()) {
 			RequiredResource reqR = (RequiredResource) iter.next();
@@ -7999,9 +7999,9 @@ System.out.println("salva :"+pmodel.getPmState());
 			// if (!this.hasTheRequiredResourceType(actNorm, resourceType)) {
 			reqResource = new RequiredResource();
 			reqResource.setTheNormal(actNorm);
-			actNorm.getTheRequiredResource().add(reqResource);
+			actNorm.getTheRequiredResources().add(reqResource);
 			reqResource.setTheResourceType(resourceType);
-			resourceType.getTheRequiredResource().add(reqResource);
+			resourceType.getTheRequiredResources().add(reqResource);
 
 			// Persistence Operations
 			actDAO.update(actNorm);
@@ -8084,14 +8084,14 @@ System.out.println("salva :"+pmodel.getPmState());
 						|| state.equals(Plain.CANCELED) || state.equals(Plain.FINISHED))) {
 			if (!this.hasTheRequiredResourceType(actNorm, newResourceType)) {
 				if (this.hasTheRequiredResourceType(actNorm, oldResourceType)) {
-					Collection reqRess = actNorm.getTheRequiredResource();
+					Collection reqRess = actNorm.getTheRequiredResources();
 					Iterator iter = reqRess.iterator();
 					while (iter.hasNext()) {
 						reqRes = (RequiredResource) iter.next();
 						if (reqRes.getTheResourceType().equals(oldResourceType)) {
-							oldResourceType.getTheRequiredResource().remove(reqRes);
+							oldResourceType.getTheRequiredResources().remove(reqRes);
 							reqRes.setTheResourceType(newResourceType);
-							newResourceType.getTheRequiredResource().add(reqRes);
+							newResourceType.getTheRequiredResources().add(reqRes);
 
 							// Persistence Operations
 							actDAO.update(actNorm);
@@ -8160,7 +8160,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		String state = actNorm.getTheEnactionDescription().getState();
 
 		if (state.equals("")) { // Rules G7.5 and G7.7 //$NON-NLS-1$
-			Collection reqRess = actNorm.getTheRequiredResource();
+			Collection reqRess = actNorm.getTheRequiredResources();
 			RequiredResource reqRes = null;
 			boolean find = false;
 			Iterator iter = reqRess.iterator();
@@ -8174,10 +8174,10 @@ System.out.println("salva :"+pmodel.getPmState());
 				}
 			}
 			if (find) {
-				actNorm.getTheRequiredResource().remove(reqRes);
+				actNorm.getTheRequiredResources().remove(reqRes);
 				reqRes.setTheNormal(null);
 				reqRes.setTheResourceType(null);
-				resourceType.getTheRequiredResource().remove(reqRes);
+				resourceType.getTheRequiredResources().remove(reqRes);
 
 				// Persistence Operations
 				actDAO.update(actNorm);
@@ -8190,7 +8190,7 @@ System.out.println("salva :"+pmodel.getPmState());
 																													// G7.6
 																													// and
 																													// G7.8
-			Collection reqRess = actNorm.getTheRequiredResource();
+			Collection reqRess = actNorm.getTheRequiredResources();
 			RequiredResource reqRes = null;
 			boolean find = false;
 			Iterator iter = reqRess.iterator();
@@ -8202,10 +8202,10 @@ System.out.println("salva :"+pmodel.getPmState());
 				}
 			}
 			if (find) {
-				actNorm.getTheRequiredResource().remove(reqRes);
+				actNorm.getTheRequiredResources().remove(reqRes);
 				reqRes.setTheNormal(null);
 				reqRes.setTheResourceType(null);
-				resourceType.getTheRequiredResource().remove(reqRes);
+				resourceType.getTheRequiredResources().remove(reqRes);
 
 				// Persistence Operations
 				actDAO.update(actNorm);
@@ -8264,7 +8264,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Now we start the implementation of the rules
 
 		String state = actNorm.getTheEnactionDescription().getState();
-		Collection reqRess = actNorm.getTheRequiredResource();
+		Collection reqRess = actNorm.getTheRequiredResources();
 
 		// Test for the agent is already allocated to the activity.
 		Iterator iterExcp = reqRess.iterator();
@@ -8292,7 +8292,7 @@ System.out.println("salva :"+pmodel.getPmState());
 							if (reqRes.getTheResource() == null) { // Rule G7.11
 								reqRes.setAmountNeeded(new Float(amount_needed));
 								reqRes.setTheResource(resource);
-								resource.getTheRequiredResource().add(reqRes);
+								resource.getTheRequiredResources().add(reqRes);
 
 								ok = true;
 								// Persistence Operations
@@ -8316,7 +8316,7 @@ System.out.println("salva :"+pmodel.getPmState());
 																																				// G7.12
 							reqRes.setAmountNeeded(new Float(amount_needed));
 							reqRes.setTheResource(resource);
-							resource.getTheRequiredResource().add(reqRes);
+							resource.getTheRequiredResources().add(reqRes);
 
 							ok = true;
 
@@ -8350,7 +8350,7 @@ System.out.println("salva :"+pmodel.getPmState());
 																																				// G7.13
 							reqRes.setAmountNeeded(new Float(amount_needed));
 							reqRes.setTheResource(resource);
-							resource.getTheRequiredResource().add(reqRes);
+							resource.getTheRequiredResources().add(reqRes);
 							this.allocateResource(reqRes, resource, false);
 
 							ok = true;
@@ -8434,7 +8434,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// Now we start the implementation of the rules
 
 		String state = actNorm.getTheEnactionDescription().getState();
-		Collection reqRess = actNorm.getTheRequiredResource();
+		Collection reqRess = actNorm.getTheRequiredResources();
 		Iterator iter = reqRess.iterator();
 
 		if (this.hasTheResource(actNorm, resource)) {
@@ -8444,7 +8444,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					if (reqRes.getTheResource() != null) {
 						if (reqRes.getTheResource().equals(resource)) {
 							reqRes.setTheResource(null);
-							resource.getTheRequiredResource().remove(reqRes);
+							resource.getTheRequiredResources().remove(reqRes);
 							reqRes.setAmountNeeded(new Float(0));
 
 							// Persistence Operations
@@ -8460,7 +8460,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					if (reqRes.getTheResource() != null) {
 						if (reqRes.getTheResource().equals(resource)) {
 							reqRes.setTheResource(null);
-							resource.getTheRequiredResource().remove(reqRes);
+							resource.getTheRequiredResources().remove(reqRes);
 							reqRes.setAmountNeeded(new Float(0));
 
 							Collection ids = new HashSet();
@@ -8487,7 +8487,7 @@ System.out.println("salva :"+pmodel.getPmState());
 					if (reqRes.getTheResource() != null) {
 						if (reqRes.getTheResource().equals(resource)) {
 							reqRes.setTheResource(null);
-							resource.getTheRequiredResource().remove(reqRes);
+							resource.getTheRequiredResources().remove(reqRes);
 							reqRes.setAmountNeeded(new Float(0));
 							this.releaseResourceFromActivity(actNorm, resource);
 
@@ -8566,7 +8566,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		String state = actNorm.getTheEnactionDescription().getState();
 
-		Collection reqResources = actNorm.getTheRequiredResource();
+		Collection reqResources = actNorm.getTheRequiredResources();
 		Iterator iterRes = reqResources.iterator();
 		while (iterRes.hasNext()) {
 			RequiredResource reqRes = (RequiredResource) iterRes.next();
@@ -8996,7 +8996,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		// destiny.setSubWorkGroups(null);
 		// destiny.setSuperWorkGroup(null);
 
-		destiny.setTheAgent(null);
+		destiny.setTheAgents(null);
 		destiny.setTheWorkGroupType(source.getTheWorkGroupType());
 		// destiny.setTheReqWorkGroup(theReqWorkGroup);
 
@@ -9262,7 +9262,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		boolean ret = false;
 
-		Collection agPlaysRoles = ag.getTheAgentPlaysRole();
+		Collection agPlaysRoles = ag.getTheAgentPlaysRoles();
 		Iterator iter = agPlaysRoles.iterator();
 		while (iter.hasNext()) {
 			AgentPlaysRole agPR = (AgentPlaysRole) iter.next();
@@ -9346,7 +9346,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			agenda.setTheProcess(proc);
 			TaskAgenda taskAgenda = agent.getTheTaskAgenda();
 			taskAgenda.getTheProcessAgenda().add(agenda);
-			proc.getTheProcessAgenda().add(agenda);
+			proc.getTheProcessAgendas().add(agenda);
 		}
 		Task task = pAgendaDAO.addTask(agenda, actNorm);
 		task.setLocalState(state);
@@ -9363,7 +9363,7 @@ System.out.println("salva :"+pmodel.getPmState());
 	private boolean hasTheFromArtifact(Normal actNorm, Artifact artifact) {
 
 		boolean has = false;
-		Collection involvedFrom = actNorm.getInvolvedArtifactToNormal();
+		Collection involvedFrom = actNorm.getTheInvolvedArtifactToNormals();
 		Iterator iter = involvedFrom.iterator();
 		while (iter.hasNext()) {
 			InvolvedArtifact invArt = (InvolvedArtifact) iter.next();
@@ -9382,7 +9382,7 @@ System.out.println("salva :"+pmodel.getPmState());
 	 */
 	private boolean hasTheToArtifact(Normal actNorm, Artifact artifact) {
 		boolean has = false;
-		Collection involvedTo = actNorm.getInvolvedArtifactFromNormal();
+		Collection involvedTo = actNorm.getTheInvolvedArtifactsFromNormals();
 		Iterator iter = involvedTo.iterator();
 		while (iter.hasNext()) {
 			InvolvedArtifact invArt = (InvolvedArtifact) iter.next();
@@ -9404,28 +9404,28 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		if (oldArtifact == null) {
 			// Attributing to normal activities their input artifacts
-			Collection<Activity> toActivities = artifactCon.getToActivity();
+			Collection<Activity> toActivities = artifactCon.getToActivities();
 			Iterator iterToActivities = toActivities.iterator();
 			while (iterToActivities.hasNext()) {
 				Activity toActivity = (Activity) iterToActivities.next();
 				if (toActivity != null && toActivity instanceof Normal) {
 
 					InvolvedArtifact invArt = new InvolvedArtifact();
-					invArt.insertIntoTheArtifact(artifact);
+					invArt.insertIntoTheArtifacts(artifact);
 					invArt.insertIntoTheArtifactType(type);
 					invArt.insertIntoInInvolvedArtifacts((Normal) toActivity);
 				}
 			}
 
 			// Attributing to normal activities their output artifacts
-			Collection<Activity> fromActivities = artifactCon.getFromActivity();
+			Collection<Activity> fromActivities = artifactCon.getFromActivities();
 			Iterator iterFromActivities = fromActivities.iterator();
 			while (iterFromActivities.hasNext()) {
 				Activity fromActivity = (Activity) iterFromActivities.next();
 				if (fromActivity != null && fromActivity instanceof Normal) {
 
 					InvolvedArtifact invArt = new InvolvedArtifact();
-					invArt.insertIntoTheArtifact(artifact);
+					invArt.insertIntoTheArtifacts(artifact);
 					invArt.insertIntoTheArtifactType(type);
 					invArt.insertIntoOutInvolvedArtifacts((Normal) fromActivity);
 				}
@@ -9433,20 +9433,20 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		} else {//
 			// Attributing to normal activities their input artifacts
-			Collection<Activity> toActivities = artifactCon.getToActivity();
+			Collection<Activity> toActivities = artifactCon.getToActivities();
 			Iterator iterToActivities = toActivities.iterator();
 			while (iterToActivities.hasNext()) {
 				Activity toActivity = (Activity) iterToActivities.next();
 				if (toActivity != null && toActivity instanceof Normal) {
 					Normal toNormal = (Normal) toActivity;
-					Collection invArts = toNormal.getInvolvedArtifactToNormal();
+					Collection invArts = toNormal.getTheInvolvedArtifactToNormals();
 					Iterator iterInvArts = invArts.iterator();
 					while (iterInvArts.hasNext()) {
 						InvolvedArtifact invArt = (InvolvedArtifact) iterInvArts.next();
 						Artifact art = invArt.getTheArtifact();
 						if (art != null && art.equals(oldArtifact)) {
-							oldArtifact.removeFromTheInvolvedArtifacts(invArt);
-							invArt.insertIntoTheArtifact(artifact);
+							oldArtifact.removeTheInvolvedArtifacts(invArt);
+							invArt.insertIntoTheArtifacts(artifact);
 							break;
 						}
 					}
@@ -9454,21 +9454,21 @@ System.out.println("salva :"+pmodel.getPmState());
 			}
 
 			// Attributing to normal activities their output artifacts
-			Collection<Activity> fromActivities = artifactCon.getFromActivity();
+			Collection<Activity> fromActivities = artifactCon.getFromActivities();
 			Iterator iterFromActivities = fromActivities.iterator();
 			while (iterFromActivities.hasNext()) {
 				Activity fromActivity = (Activity) iterFromActivities.next();
 				if (fromActivity != null && fromActivity instanceof Normal) {
 
 					Normal fromNormal = (Normal) fromActivity;
-					Collection invArts = fromNormal.getInvolvedArtifactFromNormal();
+					Collection invArts = fromNormal.getTheInvolvedArtifactsFromNormals();
 					Iterator iterInvArts = invArts.iterator();
 					while (iterInvArts.hasNext()) {
 						InvolvedArtifact invArt = (InvolvedArtifact) iterInvArts.next();
 						Artifact art = invArt.getTheArtifact();
 						if (art != null && art.equals(oldArtifact)) {
-							oldArtifact.removeFromTheInvolvedArtifacts(invArt);
-							invArt.insertIntoTheArtifact(artifact);
+							oldArtifact.removeTheInvolvedArtifacts(invArt);
+              invArt.insertIntoTheArtifacts(artifact);
 							break;
 						}
 					}
@@ -9495,7 +9495,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				}
 			} else if (con instanceof BranchANDCon) {
 				BranchANDCon branchAND = (BranchANDCon) con;
-				if (branchAND.getToActivity().contains(act2)) {
+				if (branchAND.getToActivities().contains(act2)) {
 					has = true;
 					break;
 				}
@@ -9505,7 +9505,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				Iterator iter2 = col.iterator();
 				while (iter2.hasNext()) {
 					BranchConCondToActivity atbc = (BranchConCondToActivity) iter2.next();
-					if (atbc.getTheActivity().equals(act2)) {
+					if (atbc.getTheActivities().equals(act2)) {
 						has = true;
 						break;
 					}
@@ -9514,8 +9514,8 @@ System.out.println("salva :"+pmodel.getPmState());
 					break;
 			} else if (con instanceof JoinCon) {
 				JoinCon join = (JoinCon) con;
-				if (join.getToActivity() != null) {
-					if (join.getToActivity().equals(act2)) {
+				if (join.getToActivities() != null) {
+					if (join.getToActivities().equals(act2)) {
 						has = true;
 						break;
 					}
@@ -9673,7 +9673,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			if (branch instanceof BranchANDCon) {
 				BranchANDCon bAND = (BranchANDCon) branchCon;
-				succ.addAll(bAND.getToActivity());
+				succ.addAll(bAND.getToActivities());
 				succ.addAll(bAND.getToMultipleCon());
 			} else if (branch instanceof BranchConCond) {
 				BranchConCond bCond = (BranchConCond) branchCon;
@@ -9688,14 +9688,14 @@ System.out.println("salva :"+pmodel.getPmState());
 				}
 				while (iterAct.hasNext()) {
 					BranchConCondToActivity act = (BranchConCondToActivity) iterAct.next();
-					Activity activity = act.getTheActivity();
+					Activity activity = act.getTheActivities();
 					if (activity != null)
 						succ.add(activity);
 				}
 			}
 		} else if (conn instanceof JoinCon) {
 			JoinCon join = (JoinCon) conn;
-			Activity activity = join.getToActivity();
+			Activity activity = join.getToActivities();
 			if (activity != null) {
 				succ.add(activity);
 			}
@@ -9795,7 +9795,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 			simpleTo.removeFromTheProcessModel();
 
-			Activity actTo = simpleTo.getToActivity();
+			Activity actTo = simpleTo.getToActivities();
 			actTo.removeFromFromSimpleCon(simpleTo);
 
 			connsToDelete.add(simpleTo);
@@ -9828,7 +9828,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		Iterator iterBranchANDFrom = branchConesANDFrom.iterator();
 		while (iterBranchANDConFrom.hasNext()) {
 			BranchANDCon branchANDFrom = (BranchANDCon) iterBranchANDConFrom.next();
-			branchANDConFrom.getToActivity().remove(act);
+			branchANDConFrom.getToActivities().remove(act);
 		}
 
 		Collection bctaToDelete = new HashSet();
@@ -9892,12 +9892,12 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		connsToDelete.clear();
 
-		Collection artConsFrom = act.getFromArtifactCon();
+		Collection artConsFrom = act.getFromArtifactCons();
 		Iterator iterArtFrom = artConsFrom.iterator();
 		while (iterArtFrom.hasNext()) {
 			ArtifactCon artConFrom = (ArtifactCon) iterArtFrom.next();
 
-			artConFrom.getToActivity().remove(act);
+			artConFrom.getToActivities().remove(act);
 		}
 	}
 
@@ -9905,48 +9905,48 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	private void copyActivityRelationships(Activity actFrom, Activity actTo) {
 
-		if (actFrom.getActivityEstimation() != null) {
+		if (actFrom.getTheActivityEstimations() != null) {
 			Collection temp = new HashSet();
 
-			Collection actEstimations = actFrom.getActivityEstimation();
+			Collection actEstimations = actFrom.getTheActivityEstimations();
 			Iterator iterActEstimations = actEstimations.iterator();
 			while (iterActEstimations.hasNext()) {
 				ActivityEstimation actEstimation = (ActivityEstimation) iterActEstimations.next();
 				temp.add(actEstimation);
 				// actFrom.getActivityEstimation().remove(actEstimation);
-				actEstimation.setActivity(actTo);
-				actTo.getActivityEstimation().add(actEstimation);
+				actEstimation.setTheActivity(actTo);
+				actTo.getTheActivityEstimations().add(actEstimation);
 			}
-			actFrom.getActivityEstimation().removeAll(temp);
+			actFrom.getTheActivityEstimations().removeAll(temp);
 		}
-		if (actFrom.getActivityMetric() != null) {
+		if (actFrom.getActivityMetrics() != null) {
 			Collection temp = new HashSet();
 
-			Collection actMetrics = actFrom.getActivityMetric();
+			Collection actMetrics = actFrom.getActivityMetrics();
 			Iterator iterActMetrics = actMetrics.iterator();
 			while (iterActMetrics.hasNext()) {
 				ActivityMetric actMetric = (ActivityMetric) iterActMetrics.next();
 				temp.add(actMetric);
 				// actFrom.getActivityMetric().remove(actMetric);
-				actMetric.setActivity(actTo);
-				actTo.getActivityMetric().add(actMetric);
+				actMetric.setTheActivity(actTo);
+				actTo.getTheActivityMetrics().add(actMetric);
 			}
-			actFrom.getActivityMetric().removeAll(temp);
+			actFrom.getTheActivityMetrics().removeAll(temp);
 		}
-		if (actFrom.getFromArtifactCon() != null) {
+		if (actFrom.getFromArtifactCons() != null) {
 			Collection temp = new HashSet();
 
-			Collection fromArtifactCons = actFrom.getFromArtifactCon();
+			Collection fromArtifactCons = actFrom.getFromArtifactCons();
 			Iterator iterFromArtifactCons = fromArtifactCons.iterator();
 			while (iterFromArtifactCons.hasNext()) {
 				ArtifactCon fromArtifactCon = (ArtifactCon) iterFromArtifactCons.next();
 				temp.add(fromArtifactCon);
-				// actFrom.getFromArtifactCon().remove(fromArtifactCon);
-				fromArtifactCon.getToActivity().remove(actFrom);
-				fromArtifactCon.getToActivity().add(actTo);
-				actTo.getFromArtifactCon().add(fromArtifactCon);
+				// actFrom.getFromArtifactCons().remove(fromArtifactCon);
+				fromArtifactCon.getToActivities().remove(actFrom);
+				fromArtifactCon.getToActivities().add(actTo);
+				actTo.getFromArtifactCons().add(fromArtifactCon);
 			}
-			actFrom.getFromArtifactCon().removeAll(temp);
+			actFrom.getFromArtifactCons().removeAll(temp);
 		}
 		if (actFrom.getFromBranchANDCon() != null) {
 			Collection temp = new HashSet();
@@ -9957,8 +9957,8 @@ System.out.println("salva :"+pmodel.getPmState());
 				BranchANDCon fromBranchAND = (BranchANDCon) iterFromBranchANDCons.next();
 				temp.add(fromBranchANDCon);
 				// actFrom.getFromBranchAND().remove(fromBranchANDCon);
-				fromBranchANDCon.getToActivity().remove(actFrom);
-				fromBranchANDCon.getToActivity().add(actTo);
+				fromBranchANDCon.getToActivities().remove(actFrom);
+				fromBranchANDCon.getToActivities().add(actTo);
 				actTo.getFromBranchAND().add(fromBranchANDCon);
 			}
 			actFrom.getFromBranchANDCon().removeAll(temp);
@@ -10027,13 +10027,13 @@ System.out.println("salva :"+pmodel.getPmState());
 			actTo.setIsVersion(isVersion);
 			isVersion.getHasVersions().add(actTo);
 		}
-		if (actFrom.getTheActivityType() != null) {
+		if (actFrom.getTheActivitiesType() != null) {
 
-			ActivityType activityType = actFrom.getTheActivityType();
+			ActivityType activityType = actFrom.getTheActivitiesType();
 			actFrom.setTheActivityType(null);
-			activityType.getTheActivity().remove(actFrom);
+			activityType.getTheActivities().remove(actFrom);
 			actTo.setTheActivityType(activityType);
-			activityType.getTheActivity().add(actTo);
+			activityType.getTheActivities().add(actTo);
 		}
 		if (actFrom.getTheModelingActivityEvent() != null) {
 			Collection temp = new HashSet();
@@ -10109,9 +10109,9 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 		ProcessModel fromProcessModel = actFrom.getTheProcessModel();
 		actFrom.setTheProcessModel(null);
-		fromProcessModel.getTheActivity().remove(actFrom);
+		fromProcessModel.getTheActivities().remove(actFrom);
 		actTo.setTheProcessModel(fromProcessModel);
-		fromProcessModel.getTheActivity().add(actTo);
+		fromProcessModel.getTheActivities().add(actTo);
 	}
 
 	/**
@@ -10144,7 +10144,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			state = plain.getTheEnactionDescription().getState();
 		} else { // decomposed
 			Decomposed decomposed = (Decomposed) activity;
-			state = decomposed.getTheReferedProcessModel().getPmState();
+			state = decomposed.getTheReferedProcessModel().getPmStatus().name();
 		}
 
 		return (state);
@@ -10166,7 +10166,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 		boolean find = false;
 
-		Collection acts = pmodel.getTheActivity();
+		Collection acts = pmodel.getTheActivities();
 		Iterator iter = acts.iterator();
 		while (iter.hasNext()) {
 			Object obj = iter.next();
@@ -10199,7 +10199,7 @@ System.out.println("salva :"+pmodel.getPmState());
 	}
 
 	private void makeDecomposedWaiting(ProcessModel processModel, String why) {
-		Collection activities = processModel.getTheActivity();
+		Collection activities = processModel.getTheActivities();
 		Iterator iterActivities = activities.iterator();
 		while (iterActivities.hasNext()) {
 			Activity activity = (Activity) iterActivities.next();
@@ -10233,7 +10233,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			while (iter2.hasNext()) {
 				ProcessAgenda procAgenda = (ProcessAgenda) iter2.next();
 				if (procAgenda.getTheProcess().equals(this.getTheProcess(actNorm.getTheProcessModel()))) {
-					Collection tasks = procAgenda.getTheTask();
+					Collection tasks = procAgenda.getTheTasks();
 					Iterator iter3 = tasks.iterator();
 					while (iter3.hasNext()) {
 						Task task = (Task) iter3.next();
@@ -10292,7 +10292,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		} else if (res instanceof Shareable) {
 
 			Shareable allocRes = (Shareable) res;
-			Collection reqResources = allocRes.getTheRequiredResource();
+			Collection reqResources = allocRes.getTheRequiredResources();
 			Iterator iter = reqResources.iterator();
 			while (iter.hasNext()) {
 				RequiredResource reqRes = (RequiredResource) iter.next();
@@ -10306,7 +10306,7 @@ System.out.println("salva :"+pmodel.getPmState());
 	private boolean hasTheRequiredResourceType(Normal actNorm, ResourceType resType) {
 
 		boolean has = false;
-		Collection reqResTypes = actNorm.getTheRequiredResource();
+		Collection reqResTypes = actNorm.getTheRequiredResources();
 		Iterator iter = reqResTypes.iterator();
 		while (iter.hasNext()) {
 			RequiredResource reqRes = (RequiredResource) iter.next();
@@ -10321,7 +10321,7 @@ System.out.println("salva :"+pmodel.getPmState());
 	private boolean hasTheResource(Normal actNorm, Resource res) {
 
 		boolean has = false;
-		Collection reqRess = actNorm.getTheRequiredResource();
+		Collection reqRess = actNorm.getTheRequiredResources();
 		Iterator iter = reqRess.iterator();
 		while (iter.hasNext()) {
 			RequiredResource reqRes = (RequiredResource) iter.next();
@@ -10365,7 +10365,7 @@ System.out.println("salva :"+pmodel.getPmState());
 
 	private void releaseResourceFromActivity(Normal actNorm, Resource res) {
 
-		Collection activityResources = actNorm.getTheRequiredResource();
+		Collection activityResources = actNorm.getTheRequiredResources();
 		Iterator iter = activityResources.iterator();
 		while (iter.hasNext()) {
 			RequiredResource requiredResource = (RequiredResource) iter.next();
@@ -10374,7 +10374,7 @@ System.out.println("salva :"+pmodel.getPmState());
 				if (resource.equals(res)) {
 					if (resource instanceof Exclusive) {
 						Exclusive exc = (Exclusive) resource;
-						if (exc.getState().equals(Exclusive.LOCKED)) {
+						if (exc.getExclusiveStatus().name().equals(Exclusive.LOCKED)) {
 							exc.setState(Exclusive.AVAILABLE);
 							this.logging.registerResourceEvent(exc, actNorm, "ToAvailable", "Rule 7.19"); //$NON-NLS-1$ //$NON-NLS-2$
 						}
@@ -10394,14 +10394,14 @@ System.out.println("salva :"+pmodel.getPmState());
 	 */
 	private void releaseResourcesFromActivity(Normal actNorm) {
 
-		Collection activityResources = actNorm.getTheRequiredResource();
+		Collection activityResources = actNorm.getTheRequiredResources();
 		Iterator iter = activityResources.iterator();
 		while (iter.hasNext()) {
 			RequiredResource requiredResource = (RequiredResource) iter.next();
 			Resource resource = requiredResource.getTheResource();
 			if (resource instanceof Exclusive) {
 				Exclusive exc = (Exclusive) resource;
-				if (exc.getState().equals(Exclusive.LOCKED)) {
+				if (exc.getExclusiveStatus().name().equals(Exclusive.LOCKED)) {
 					exc.setState(Exclusive.AVAILABLE);
 					this.logging.registerResourceEvent(exc, actNorm, "ToAvailable", "Rule 12.7"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
@@ -10460,12 +10460,12 @@ System.out.println("atividades: "+act_id);
 		else if (activity instanceof Normal) { // Rule G1.4
 			Normal actNorm = (Normal) activity;
 
-		//	System.out.println("eventos:1 "+actNorm.getTheActivityType().getTheProcess());
+		//	System.out.println("eventos:1 "+actNorm.getTheActivitiesType().getTheProcess());
 			// End Checks for the parameters
-	System.out.println("eventos:2 "+actNorm.getTheActivityType());
-	System.out.println("eventos:3 "+actNorm.getTheActivityType().getTheProcess().iterator().next().getTheProcessEvent());
-	System.out.println("eventos:4 "+actNorm.getTheActivityType().getTheProcess().iterator().next().getTheProcessEvent().iterator().next().getTheCatalogEvents());
-	System.out.println("eventos:5 "+actNorm.getTheActivityType().getTheProcess().iterator().next().getTheProcessEvent().iterator().next().getTheCatalogEvents().getTheGlobalActivityEvent());
+	System.out.println("eventos:2 "+actNorm.getTheActivitiesType());
+	System.out.println("eventos:3 "+actNorm.getTheActivitiesType().getTheProcess().iterator().next().getTheProcessEvent());
+	System.out.println("eventos:4 "+actNorm.getTheActivitiesType().getTheProcess().iterator().next().getTheProcessEvent().iterator().next().getTheCatalogEvents());
+	System.out.println("eventos:5 "+actNorm.getTheActivitiesType().getTheProcess().iterator().next().getTheProcessEvent().iterator().next().getTheCatalogEvents().getTheGlobalActivityEvent());
 
 
 		}

@@ -458,7 +458,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 			if (processState.equals(Process.NOT_STARTED) || processState.equals(Process.ENACTING)) {
 
-				String ProcessModelState = pmodel.getPmState();
+				String ProcessModelState = pmodel.getPmStatus().name();
 				if (!(ProcessModelState.equals(ProcessModel.CANCELED) || ProcessModelState.equals(ProcessModel.FAILED) || ProcessModelState
 						.equals(ProcessModel.FINISHED))) {
 
@@ -472,7 +472,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 						e.printStackTrace();
 					} // Rule
 																								// C1.1
-					pmodel.insertIntoTheActivity(clone);
+					pmodel.addTheActivity(clone);
 
 					if (clone instanceof Decomposed) {
 						// CopyProcess.saveCoordinatesToCopyActivity(
@@ -563,7 +563,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			}
 		} else if (actDecomposed != null) { // Rule C1.2 and C1.3
 
-			String decomposedState = pmodel.getPmState();
+			String decomposedState = pmodel.getPmStatus().name();
 			if (!(decomposedState.equals(ProcessModel.CANCELED) || decomposedState.equals(ProcessModel.FAILED) || decomposedState
 					.equals(ProcessModel.FINISHED))) {
 
@@ -576,7 +576,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				pmodel.insertIntoTheActivity(clone);
+				pmodel.addTheActivity(clone);
 
 				if (clone instanceof Decomposed) {
 					// CopyProcess.saveCoordinatesToCopyActivity(
@@ -770,7 +770,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 			if (processState.equals(Process.NOT_STARTED) || processState.equals(Process.ENACTING)) {
 
-				String ProcessModelState = pmodel.getPmState();
+				String ProcessModelState = pmodel.getPmStatus().name();
 				if (!(ProcessModelState.equals(ProcessModel.CANCELED) || ProcessModelState.equals(ProcessModel.FAILED) || ProcessModelState
 						.equals(ProcessModel.FINISHED))) {
 
@@ -778,7 +778,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					// Collection<Activity> newActivities =
 					// this.copyActivitiesOnProcessModel(activities,
 					// level_to_copy, currentSession).values();
-					// pmodel.insertIntoTheActivity(newActivities);
+					// pmodel.addTheActivity(newActivities);
 
 					// Hashtable activitiesTable =
 					// this.generateActivitiesTable(newActivities);
@@ -822,14 +822,14 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			}
 		} else if (actDecomposed != null) { // Rule C1.2 and C1.3
 
-			String decomposedState = pmodel.getPmState();
+			String decomposedState = pmodel.getPmStatus().name();
 			if (!(decomposedState.equals(ProcessModel.CANCELED) || decomposedState.equals(ProcessModel.FAILED) || decomposedState
 					.equals(ProcessModel.FINISHED))) {
 				// TODO Adapt for new coordinates model
 				// Collection<Activity> newActivities =
 				// this.copyActivitiesOnProcessModel(activities, level_to_copy,
 				// currentSession).values();
-				// pmodel.insertIntoTheActivity(newActivities);
+				// pmodel.addTheActivity(newActivities);
 
 				// Hashtable activitiesTable =
 				// this.generateActivitiesTable(newActivities);
@@ -1134,12 +1134,12 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		destinationNormal.setRequirements(sourceNormal.getRequirements());
 
 		destinationNormal.setDelegable(sourceNormal.isDelegable());
-		destinationNormal.setAutoAllocable(sourceNormal.getAutoAllocable());
+		destinationNormal.setAutoAllocable(sourceNormal.isAutoAllocable());
 
 		// about reservations
 		Collection<Reservation> newReservations = null;
-		newReservations = copyReservations(sourceNormal.getTheReservation(), destinationNormal);
-		destinationNormal.setTheReservation(newReservations);
+		newReservations = copyReservations(sourceNormal.getTheReservations(), destinationNormal);
+		destinationNormal.setTheReservations(newReservations);
 		// about involved artifacts
 		// involved to
 		Collection<InvolvedArtifact> newInvolvedArtifactsToNormal = null;
@@ -1178,8 +1178,8 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					newReservation.insertIntoTheExclusive(currentReservation.getTheExclusive());
 				}
 				// dates
-				newReservation.setFrom(currentReservation.getFrom());
-				newReservation.setTo(currentReservation.getTo());
+				newReservation.setFromDate(currentReservation.getFromDate());
+				newReservation.setToDate(currentReservation.getToDate());
 				// add to Main Collection
 				newInvolvedReservations.add(newReservation);
 			}// END IF
@@ -1208,7 +1208,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				}
 				Artifact theArtifact = currentInvolved.getTheArtifact();
 				if (theArtifact != null) {
-					newInvolved.insertIntoTheArtifact(theArtifact);
+					newInvolved.insertIntoTheArtifacts(theArtifact);
 				}
 				if (kindRelationship == TO_INVOLVED) {
 					newInvolved.insertIntoInInvolvedArtifacts(newNormalReference);
@@ -1384,14 +1384,14 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	@Override
 	public Hashtable<String, String> copyProcessModelData(ProcessModel oldProcessModel, ProcessModel newProcessModel, String level_to) {
 		try {
-			Collection<Activity> activities = oldProcessModel.getTheActivity();
+			Collection<Activity> activities = oldProcessModel.getTheActivities();
 			Collection<Connection> connections = oldProcessModel.getTheConnection();
 
 			Hashtable<String, String> coordinates = new Hashtable<String, String>();
 
 			Hashtable<String, Activity> newActivities = null;// ####################################
 			newActivities = copyActivitiesOnProcessModel(activities, level_to, coordinates);
-			newProcessModel.insertIntoTheActivity(newActivities.values());
+			newProcessModel.addTheActivity(newActivities.values());
 
 			// Hashtable<String,Activity> activitiesTable =
 			// generateActivitiesTable(newActivities);
@@ -1563,7 +1563,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 					Artifact theArtifact = ((ArtifactCon) currentConnection).getTheArtifact();
 					if (theArtifact != null) {
-						((ArtifactCon) newConnection).insertIntoTheArtifact(theArtifact);
+						((ArtifactCon) newConnection).insertIntoTheArtifacts(theArtifact);
 					}
 
 					// about activities
@@ -1626,8 +1626,8 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 							if (currentToAct != null) {
 								BranchConCondToActivity newBranchCondToAct = new BranchConCondToActivity();
 
-								if (currentToAct.getTheActivity() != null) {
-									String actIdent = currentToAct.getTheActivity().getIdent();
+								if (currentToAct.getTheActivities() != null) {
+									String actIdent = currentToAct.getTheActivities().getIdent();
 									Activity newToAct = activitiesTable.get(actIdent);
 									if (newToAct != null) {
 										newToAct.insertIntoTheBranchConCondToActivity(newBranchConCondToAct);
@@ -1963,7 +1963,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		this.allActs = new Properties();
 		this.allConns = new Properties();
 
-		Collection<Activity> allacts = processModel.getTheActivity();
+		Collection<Activity> allacts = processModel.getTheActivities();
 		Collection<Connection> allconns = processModel.getTheConnection();
 
 		for (Activity activity : allacts) {
@@ -2368,7 +2368,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 	private Collection getCandidatesToFinal(Decomposed dec) {
 
-		Collection subacts = dec.getTheReferedProcessModel().getTheActivity();
+		Collection subacts = dec.getTheReferedProcessModel().getTheActivities();
 
 		Iterator iterSubacts = subacts.iterator();
 		Collection finals = new HashSet();
@@ -2399,7 +2399,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 	private Collection getBeginners(Decomposed dec) {
 
-		Collection subacts = dec.getTheReferedProcessModel().getTheActivity();
+		Collection subacts = dec.getTheReferedProcessModel().getTheActivities();
 		Iterator iterSubacts = subacts.iterator();
 
 		Collection beginners = new HashSet();
@@ -2589,7 +2589,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	private void replanningDecomposedDates(Decomposed decomposed, Activity predecessor, Object[] greaterPredecessor,CalendarDTO utilsDays) {
 
 		ProcessModel processModel = decomposed.getTheReferedProcessModel();
-		String state = processModel.getPmState();
+		String state = processModel.getPmStatus().name();
 
 		if (!(state.equals(ProcessModel.FINISHED) || state.equals(ProcessModel.FAILED) || state.equals(ProcessModel.CANCELED))) { // It
 																																	// means
@@ -2679,8 +2679,8 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 				}
 				while (iterAct.hasNext()) {
 					BranchConCondToActivity act = (BranchConCondToActivity) iterAct.next();
-					if (act.getTheActivity() != null)
-						succ.add(act.getTheActivity());
+					if (act.getTheActivities() != null)
+						succ.add(act.getTheActivities());
 				}
 			}
 		} else if (conn instanceof JoinCon) {
@@ -2897,7 +2897,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		}
 
 		if (pm != null) {
-			Collection<Activity> acts = pm.getTheActivity();
+			Collection<Activity> acts = pm.getTheActivities();
 			for (Activity act : acts) {
 
 				if (act instanceof Normal) {

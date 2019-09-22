@@ -51,7 +51,7 @@ public class DriverServicesImpl  implements DriverServices {
 		try {
 
 			driver = this.convertDriverDTOToDriver(driverDTO);
-			driver.setCompany(company);
+			driver.getThePlugin().setTheCompany(company);
 			driverDAO.daoSave(driver);
 			driver = null;
 		} catch (Exception e) {
@@ -126,7 +126,7 @@ public class DriverServicesImpl  implements DriverServices {
 		try {
 
 			driver = this.convertDriverDTOToDriver(driverDTO);
-			driver.setCompany(company);
+			driverdriver.getThePlugin().setCompany(company);
 			driverDAO.update(driver);
 			driver = null;
 		} catch (Exception e) {

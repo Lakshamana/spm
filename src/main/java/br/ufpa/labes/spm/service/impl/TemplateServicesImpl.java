@@ -916,7 +916,7 @@ public class TemplateServicesImpl implements TemplateServices {
 						String newArtifactIdent = this.artifactsIdents.getProperty(currentArtifactIdent);
 
 						if(newArtifactIdent==null || currentArtifactIdent.equals(newArtifactIdent)){
-							((ArtifactCon)newConnection).insertIntoTheArtifact(	currentArtifact );
+							((ArtifactCon)newConnection).insertIntoTheArtifacts(	currentArtifact );
 						}else{
 							try {
 								Artifact newArtifact = this.newArtifacts.get(newArtifactIdent);
@@ -931,7 +931,7 @@ public class TemplateServicesImpl implements TemplateServices {
 									}
 								}
 
-								((ArtifactCon)newConnection).insertIntoTheArtifact(	newArtifact );
+								((ArtifactCon)newConnection).insertIntoTheArtifacts(	newArtifact );
 								this.newArtifacts.put(newArtifactIdent, newArtifact);
 							} catch (Exception e) {
 								// TODO: handle exception
@@ -1510,7 +1510,7 @@ public class TemplateServicesImpl implements TemplateServices {
 					String newArtifactIdent = this.artifactsIdents.getProperty(currentArtifactIdent);
 
 					if(newArtifactIdent==null || currentArtifactIdent.equals(newArtifactIdent)){
-						newInvolved.insertIntoTheArtifact(currentArtifact);
+						newInvolved.insertIntoTheArtifacts(currentArtifact);
 					}else{
 						Artifact newArtifact;
 						newArtifact = newArtifacts.get(newArtifactIdent);
@@ -1523,7 +1523,7 @@ public class TemplateServicesImpl implements TemplateServices {
 								newArtifact.insertIntoTheArtifactType(currentInvolved.getTheArtifactType());
 							}
 						}
-						newInvolved.insertIntoTheArtifact(newArtifact);
+						newInvolved.insertIntoTheArtifacts(newArtifact);
 						this.newArtifacts.put(newArtifactIdent, newArtifact);
 					}
 				}

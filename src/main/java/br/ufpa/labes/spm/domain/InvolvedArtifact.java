@@ -121,4 +121,14 @@ public class InvolvedArtifact implements Serializable {
             "id=" + getId() +
             "}";
     }
+
+    public void removeFromTheArtifact(){
+      if (this.theArtifact!=null){
+        this.theArtifact.removeTheInvolvedArtifacts(this);
+      }
+    }
+
+    public void insertIntoTheArtifact(Artifact theArtifact){
+      theArtifact.addTheInvolvedArtifacts(this);
+    }
 }
