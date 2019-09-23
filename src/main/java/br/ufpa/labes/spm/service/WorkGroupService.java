@@ -1,41 +1,41 @@
 package br.ufpa.labes.spm.service;
 
-import br.ufpa.labes.spm.service.dto.WorkWorkGroupDTO;
+import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Service Interface for managing {@link br.ufpa.labes.spm.domain.WorkWorkGroup}.
+ * Service Interface for managing {@link br.ufpa.labes.spm.domain.WorkGroup}.
  */
-public interface WorkWorkGroupService {
+public interface WorkGroupService {
 
     /**
-     * Save a workWorkGroup.
+     * Save a WorkGroup.
      *
-     * @param workWorkGroupDTO the entity to save.
+     * @param WorkGroupDTO the entity to save.
      * @return the persisted entity.
      */
-    WorkWorkGroupDTO save(WorkWorkGroupDTO workWorkGroupDTO);
+    WorkWorkGroupDTO save(WorkWorkGroupDTO WorkGroupDTO);
 
     /**
-     * Get all the workWorkGroups.
+     * Get all the WorkGroups.
      *
      * @return the list of entities.
      */
-    List<WorkWorkGroupDTO> findAll();
+    List<WorkGroupDTO> findAll();
 
 
     /**
-     * Get the "id" workWorkGroup.
+     * Get the "id" WorkGroup.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<WorkWorkGroupDTO> findOne(Long id);
+    Optional<WorkGroupDTO> findOne(Long id);
 
     /**
-     * Delete the "id" workWorkGroup.
+     * Delete the "id" WorkGroup.
      *
      * @param id the id of the entity.
      */

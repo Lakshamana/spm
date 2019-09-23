@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 
@@ -1292,9 +1293,9 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 					}
 					// about ReqAgentRequiresAbility
 					Collection<ReqAgentRequiresAbility> newReqAgReqAbility = null;
-					newReqAgReqAbility = copyReqAgentReqAbility(((ReqAgent) currentReqPeople).getTheReqAgentRequiresAbility(),
+					newReqAgReqAbility = copyReqAgentReqAbility(((ReqAgent) currentReqPeople).getTheReqAgentRequiresAbilities(),
 							((ReqAgent) newRequiredPeople));
-					((ReqAgent) newRequiredPeople).setTheReqAgentRequiresAbility(newReqAgReqAbility);
+					((ReqAgent) newRequiredPeople).setTheReqAgentRequiresAbilities((Set<ReqAgentRequiresAbility>) newReqAgReqAbility);
 
 					coordinateKey = coordinateKey + ":" + destinationNormal.getIdent();
 					this.addCoordinate(((ReqAgent) currentReqPeople).getId(), ((ReqAgent) currentReqPeople).getClass().getSimpleName(),
@@ -1385,7 +1386,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	public Hashtable<String, String> copyProcessModelData(ProcessModel oldProcessModel, ProcessModel newProcessModel, String level_to) {
 		try {
 			Collection<Activity> activities = oldProcessModel.getTheActivities();
-			Collection<Connection> connections = oldProcessModel.getTheConnection();
+			Collection<Connection> connections = oldProcessModel.getTheConnections();
 
 			Hashtable<String, String> coordinates = new Hashtable<String, String>();
 

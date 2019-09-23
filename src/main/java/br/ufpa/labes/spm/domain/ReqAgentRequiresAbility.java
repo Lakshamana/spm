@@ -104,4 +104,24 @@ public class ReqAgentRequiresAbility implements Serializable {
             ", degree=" + getDegree() +
             "}";
     }
+
+    public void removeFromTheAbility(){
+      if (this.theAbility!=null){
+        this.theAbility.removeTheReqAgentRequiresAbility(this);
+      }
+    }
+
+    public void insertIntoTheAbility(Ability theAbility){
+      theAbility.addTheReqAgentRequiresAbility(this);
+    }
+
+    public void removeFromTheReqAgent(){
+      if (this.theReqAgent!=null){
+        this.theReqAgent.removeTheReqAgentRequiresAbility(this);
+      }
+    }
+
+    public void insertIntoTheReqAgent(ReqAgent theReqAgent){
+      theReqAgent.addTheReqAgentRequiresAbility(this);
+    }
 }

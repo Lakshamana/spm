@@ -1,10 +1,10 @@
 package br.ufpa.labes.spm.service.impl;
 
-import br.ufpa.labes.spm.service.WorkWorkGroupService;
-import br.ufpa.labes.spm.domain.WorkWorkGroup;
-import br.ufpa.labes.spm.repository.WorkWorkGroupRepository;
-import br.ufpa.labes.spm.service.dto.WorkWorkGroupDTO;
-import br.ufpa.labes.spm.service.mapper.WorkWorkGroupMapper;
+import br.ufpa.labes.spm.service.WorkGroupService;
+import br.ufpa.labes.spm.domain.WorkGroup;
+import br.ufpa.labes.spm.repository.WorkGroupRepository;
+import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
+import br.ufpa.labes.spm.service.mapper.WorkGroupMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,74 +17,74 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Service Implementation for managing {@link WorkWorkGroup}.
+ * Service Implementation for managing {@link WorkGroup}.
  */
 @Service
 @Transactional
-public class WorkWorkGroupServiceImpl implements WorkWorkGroupService {
+public class WorkWorkGroupServiceImpl implements WorkGroupService {
 
-    private final Logger log = LoggerFactory.getLogger(WorkWorkGroupServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(WorkGroupServiceImpl.class);
 
-    private final WorkWorkGroupRepository workWorkGroupRepository;
+    private final WorkWorkGroupRepository WorkGroupRepository;
 
-    private final WorkWorkGroupMapper workWorkGroupMapper;
+    private final WorkWorkGroupMapper WorkGroupMapper;
 
-    public WorkWorkGroupServiceImpl(WorkWorkGroupRepository workWorkGroupRepository, WorkWorkGroupMapper workWorkGroupMapper) {
-        this.workWorkGroupRepository = workWorkGroupRepository;
-        this.workWorkGroupMapper = workWorkGroupMapper;
+    public WorkWorkGroupServiceImpl(WorkWorkGroupRepository workWorkGroupRepository, WorkWorkGroupMapper WorkGroupMapper) {
+        this.workWorkGroupRepository = WorkGroupRepository;
+        this.workWorkGroupMapper = WorkGroupMapper;
     }
 
     /**
-     * Save a workWorkGroup.
+     * Save a WorkGroup.
      *
-     * @param workWorkGroupDTO the entity to save.
+     * @param WorkGroupDTO the entity to save.
      * @return the persisted entity.
      */
     @Override
-    public WorkWorkGroupDTO save(WorkWorkGroupDTO workWorkGroupDTO) {
-        log.debug("Request to save WorkWorkGroup : {}", workWorkGroupDTO);
-        WorkWorkGroup workWorkGroup = workWorkGroupMapper.toEntity(workWorkGroupDTO);
-        workWorkGroup = workWorkGroupRepository.save(workWorkGroup);
-        return workWorkGroupMapper.toDto(workWorkGroup);
+    public WorkWorkGroupDTO save(WorkWorkGroupDTO WorkGroupDTO) {
+        log.debug("Request to save WorkWorkGroup : {}", WorkGroupDTO);
+        WorkWorkGroup workWorkGroup = workWorkGroupMapper.toEntity(WorkGroupDTO);
+        workWorkGroup = workWorkGroupRepository.save(WorkGroup);
+        return workWorkGroupMapper.toDto(WorkGroup);
     }
 
     /**
-     * Get all the workWorkGroups.
+     * Get all the WorkGroups.
      *
      * @return the list of entities.
      */
     @Override
     @Transactional(readOnly = true)
-    public List<WorkWorkGroupDTO> findAll() {
-        log.debug("Request to get all WorkWorkGroups");
-        return workWorkGroupRepository.findAll().stream()
-            .map(workWorkGroupMapper::toDto)
+    public List<WorkGroupDTO> findAll() {
+        log.debug("Request to get all WorkGroups");
+        return WorkGroupRepository.findAll().stream()
+            .map(WorkGroupMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
     /**
-     * Get one workWorkGroup by id.
+     * Get one WorkGroup by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<WorkWorkGroupDTO> findOne(Long id) {
-        log.debug("Request to get WorkWorkGroup : {}", id);
-        return workWorkGroupRepository.findById(id)
-            .map(workWorkGroupMapper::toDto);
+    public Optional<WorkGroupDTO> findOne(Long id) {
+        log.debug("Request to get WorkGroup : {}", id);
+        return WorkGroupRepository.findById(id)
+            .map(WorkGroupMapper::toDto);
     }
 
     /**
-     * Delete the workWorkGroup by id.
+     * Delete the WorkGroup by id.
      *
      * @param id the id of the entity.
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete WorkWorkGroup : {}", id);
-        workWorkGroupRepository.deleteById(id);
+        log.debug("Request to delete WorkGroup : {}", id);
+        WorkGroupRepository.deleteById(id);
     }
 }

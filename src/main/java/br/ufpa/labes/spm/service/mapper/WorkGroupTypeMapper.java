@@ -1,29 +1,29 @@
 package br.ufpa.labes.spm.service.mapper;
 
 import br.ufpa.labes.spm.domain.*;
-import br.ufpa.labes.spm.service.dto.WorkWorkGroupTypeDTO;
+import br.ufpa.labes.spm.service.dto.WorkGroupTypeDTO;
 
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity {@link WorkWorkGroupType} and its DTO {@link WorkWorkGroupTypeDTO}.
+ * Mapper for the entity {@link WorkWorkGroupType} and its DTO {@link WorkGroupTypeDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface WorkWorkGroupTypeMapper extends EntityMapper<WorkWorkGroupTypeDTO, WorkWorkGroupType> {
+public interface WorkWorkGroupTypeMapper extends EntityMapper<WorkWorkGroupTypeDTO, WorkGroupType> {
 
 
-    @Mapping(target = "theWorkWorkGroups", ignore = true)
-    @Mapping(target = "removeTheWorkWorkGroup", ignore = true)
-    @Mapping(target = "theReqWorkWorkGroups", ignore = true)
-    @Mapping(target = "removeTheReqWorkWorkGroup", ignore = true)
-    WorkWorkGroupType toEntity(WorkWorkGroupTypeDTO workWorkGroupTypeDTO);
+    @Mapping(target = "theWorkGroups", ignore = true)
+    @Mapping(target = "removeTheWorkGroup", ignore = true)
+    @Mapping(target = "theReqWorkGroups", ignore = true)
+    @Mapping(target = "removeTheReqWorkGroup", ignore = true)
+    WorkWorkGroupType toEntity(WorkWorkGroupTypeDTO WorkGroupTypeDTO);
 
-    default WorkWorkGroupType fromId(Long id) {
+    default WorkGroupType fromId(Long id) {
         if (id == null) {
             return null;
         }
-        WorkWorkGroupType workWorkGroupType = new WorkWorkGroupType();
-        workWorkGroupType.setId(id);
-        return workWorkGroupType;
+        WorkWorkGroupType workWorkGroupType = new WorkGroupType();
+        WorkGroupType.setId(id);
+        return WorkGroupType;
     }
 }

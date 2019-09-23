@@ -129,4 +129,28 @@ public class Dependency implements Serializable {
             ", kindDep='" + getKindDep() + "'" +
             "}";
     }
+
+    public void removeFromTheSequence() {
+      if (this.theSequences!=null){
+        this.theSequences.setTheDependency(null);
+        this.setTheSequences(null);
+      }
+    }
+
+    public void insertIntoTheSequence(Sequence theSequence) {
+      this.setTheSequence(theSequence);
+      theSequence.setTheDependency(this);
+    }
+
+    public void removeFromTheMultipleCon() {
+      if (this.theMultipleCon != null){
+        this.theMultipleCon.setTheDependency(null);
+        this.setTheMultipleCon(null);
+      }
+    }
+
+    public void insertIntoTheMultipleCon(MultipleCon theMultipleCon) {
+      this.setTheMultipleCon(theMultipleCon);
+      theMultipleCon.setTheDependency(this);
+    }
 }

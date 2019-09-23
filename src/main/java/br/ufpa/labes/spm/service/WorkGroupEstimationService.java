@@ -1,9 +1,9 @@
 package br.ufpa.labes.spm.service;
 
-import br.ufpa.labes.spm.domain.WorkWorkGroupEstimation;
-import br.ufpa.labes.spm.repository.WorkWorkGroupEstimationRepository;
-import br.ufpa.labes.spm.service.dto.WorkWorkGroupEstimationDTO;
-import br.ufpa.labes.spm.service.mapper.WorkWorkGroupEstimationMapper;
+import br.ufpa.labes.spm.domain.WorkGroupEstimation;
+import br.ufpa.labes.spm.repository.WorkGroupEstimationRepository;
+import br.ufpa.labes.spm.service.dto.WorkGroupEstimationDTO;
+import br.ufpa.labes.spm.service.mapper.WorkGroupEstimationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,70 +16,70 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Service Implementation for managing {@link WorkWorkGroupEstimation}.
+ * Service Implementation for managing {@link WorkGroupEstimation}.
  */
 @Service
 @Transactional
-public class WorkWorkGroupEstimationService {
+public class WorkGroupEstimationService {
 
-    private final Logger log = LoggerFactory.getLogger(WorkWorkGroupEstimationService.class);
+    private final Logger log = LoggerFactory.getLogger(WorkGroupEstimationService.class);
 
-    private final WorkWorkGroupEstimationRepository workWorkGroupEstimationRepository;
+    private final WorkWorkGroupEstimationRepository WorkGroupEstimationRepository;
 
-    private final WorkWorkGroupEstimationMapper workWorkGroupEstimationMapper;
+    private final WorkWorkGroupEstimationMapper WorkGroupEstimationMapper;
 
-    public WorkWorkGroupEstimationService(WorkWorkGroupEstimationRepository workWorkGroupEstimationRepository, WorkWorkGroupEstimationMapper workWorkGroupEstimationMapper) {
-        this.workWorkGroupEstimationRepository = workWorkGroupEstimationRepository;
-        this.workWorkGroupEstimationMapper = workWorkGroupEstimationMapper;
+    public WorkWorkGroupEstimationService(WorkWorkGroupEstimationRepository workWorkGroupEstimationRepository, WorkWorkGroupEstimationMapper WorkGroupEstimationMapper) {
+        this.workWorkGroupEstimationRepository = WorkGroupEstimationRepository;
+        this.workWorkGroupEstimationMapper = WorkGroupEstimationMapper;
     }
 
     /**
-     * Save a workWorkGroupEstimation.
+     * Save a WorkGroupEstimation.
      *
-     * @param workWorkGroupEstimationDTO the entity to save.
+     * @param WorkGroupEstimationDTO the entity to save.
      * @return the persisted entity.
      */
-    public WorkWorkGroupEstimationDTO save(WorkWorkGroupEstimationDTO workWorkGroupEstimationDTO) {
-        log.debug("Request to save WorkWorkGroupEstimation : {}", workWorkGroupEstimationDTO);
-        WorkWorkGroupEstimation workWorkGroupEstimation = workWorkGroupEstimationMapper.toEntity(workWorkGroupEstimationDTO);
-        workWorkGroupEstimation = workWorkGroupEstimationRepository.save(workWorkGroupEstimation);
-        return workWorkGroupEstimationMapper.toDto(workWorkGroupEstimation);
+    public WorkWorkGroupEstimationDTO save(WorkWorkGroupEstimationDTO WorkGroupEstimationDTO) {
+        log.debug("Request to save WorkWorkGroupEstimation : {}", WorkGroupEstimationDTO);
+        WorkWorkGroupEstimation workWorkGroupEstimation = workWorkGroupEstimationMapper.toEntity(WorkGroupEstimationDTO);
+        workWorkGroupEstimation = workWorkGroupEstimationRepository.save(WorkGroupEstimation);
+        return workWorkGroupEstimationMapper.toDto(WorkGroupEstimation);
     }
 
     /**
-     * Get all the workWorkGroupEstimations.
+     * Get all the WorkGroupEstimations.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<WorkWorkGroupEstimationDTO> findAll() {
-        log.debug("Request to get all WorkWorkGroupEstimations");
-        return workWorkGroupEstimationRepository.findAll().stream()
-            .map(workWorkGroupEstimationMapper::toDto)
+    public List<WorkGroupEstimationDTO> findAll() {
+        log.debug("Request to get all WorkGroupEstimations");
+        return WorkGroupEstimationRepository.findAll().stream()
+            .map(WorkGroupEstimationMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
     /**
-     * Get one workWorkGroupEstimation by id.
+     * Get one WorkGroupEstimation by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<WorkWorkGroupEstimationDTO> findOne(Long id) {
-        log.debug("Request to get WorkWorkGroupEstimation : {}", id);
-        return workWorkGroupEstimationRepository.findById(id)
-            .map(workWorkGroupEstimationMapper::toDto);
+    public Optional<WorkGroupEstimationDTO> findOne(Long id) {
+        log.debug("Request to get WorkGroupEstimation : {}", id);
+        return WorkGroupEstimationRepository.findById(id)
+            .map(WorkGroupEstimationMapper::toDto);
     }
 
     /**
-     * Delete the workWorkGroupEstimation by id.
+     * Delete the WorkGroupEstimation by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete WorkWorkGroupEstimation : {}", id);
-        workWorkGroupEstimationRepository.deleteById(id);
+        log.debug("Request to delete WorkGroupEstimation : {}", id);
+        WorkGroupEstimationRepository.deleteById(id);
     }
 }

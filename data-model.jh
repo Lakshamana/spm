@@ -446,6 +446,8 @@ relationship ManyToMany {
 
 relationship OneToOne {
   MultipleCon{theDependency} to Dependency{theMultipleCon}
+
+  Dependency{theSequence} to Sequence{theDependency}
 }
 
 //package driver ------------------------------------------- OK
@@ -464,7 +466,7 @@ relationship OneToOne {
     Driver{company} to Company{theDriver}
 }
 
-//package email -------------------------------------------
+//package email ------------------------------------------- OK
 
 entity Email {
     emailServerHost String,

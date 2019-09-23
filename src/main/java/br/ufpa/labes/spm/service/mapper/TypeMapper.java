@@ -15,8 +15,8 @@ public interface TypeMapper extends EntityMapper<TypeDTO, Type> {
     TypeDTO toDto(Type type);
 
     @Mapping(source = "superTypeId", target = "superType")
-    @Mapping(target = "sugToReqWorkWorkGroups", ignore = true)
-    @Mapping(target = "removeSugToReqWorkWorkGroup", ignore = true)
+    @Mapping(target = "sugToReqWorkGroups", ignore = true)
+    @Mapping(target = "removeSugToReqWorkGroup", ignore = true)
     @Mapping(target = "instSugToTypes", ignore = true)
     @Mapping(target = "removeInstSugToType", ignore = true)
     @Mapping(target = "subTypes", ignore = true)
