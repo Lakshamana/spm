@@ -1,20 +1,21 @@
-//package activities -------------------------------------------
+// 22.09.2019 - OK
+//package activities ------------------------------------------- OK
 entity Activity {
-    ident String,
-    name String,
+    ident String
+    name String
     isVersion Boolean
 }
-//Plain state enum
-enum PlainStatus {
-    WAITING, READY, FAILED, CANCELED, ACTIVE, PAUSED, FINISHED
-}
+
+// //Plain state enum
+// enum PlainStatus {
+//     WAITING, READY, FAILED, CANCELED, ACTIVE, PAUSED, FINISHED
+// }
 
 entity Decomposed {}
 
 entity Plain {
-    requirements TextBlob,
-    plainStatus PlainStatus, //TODO: mover para EnactionDescription (?)
-    automatic Boolean
+    requirements TextBlob
+    // automatic Boolean
 }
 
 relationship ManyToOne {
@@ -23,20 +24,20 @@ relationship ManyToOne {
 
 relationship OneToMany {
     Activity{theModelingActivityEvent} to ModelingActivityEvent{theActivity},
-    Activity{hasVersions} to Activity{theAncestorActitvity},
-    Activity{fromSimpleCon} to SimpleCon{fromActivity},
-    Activity{toSimpleCon} to SimpleCon{toActivity},
-    Activity{fromJoinCon} to JoinCon{toActivity},
-    Activity{toBranchCon} to BranchCon{fromActivity},
-    Activity{activityMetric} to Metric{theActivity},
-    Activity{theActivityEstimation} to ActivityEstimation{theActivity},
+    Activity{hasVersions} to Activity{isVersion},
+    Activity{fromSimpleCon} to SimpleCon{toActivity},
+    Activity{toSimpleCon} to SimpleCon{fromActivity},
+    Activity{fromJoin} to JoinCon{toActivity},
+    Activity{toBranch} to BranchCon{fromActivity},
+    Activity{activityMetric} to Metric{activity},
+    Activity{activityEstimation} to ActivityEstimation{activity},
 
-    Plain{theGlobalActivityEvent} to Event{thePlain}
+    Plain{theGlobalActivityEvent} to GlobalActivityEvent{thePlain}
 }
 
 relationship ManyToMany {
-    Activity{toJoinCon} to JoinCon{fromActivity},
-    Activity{fromBranchANDCon} to BranchANDCon{toActivity},
+    Activity{toJoin} to JoinCon{fromActivity},
+    Activity{fromBranchAND} to BranchANDCon{toActivity},
     Activity{fromArtifactCon} to ArtifactCon{toActivity},
     Activity{toArtifactCon} to ArtifactCon{fromActivity}
 }
@@ -47,25 +48,26 @@ relationship OneToOne {
     Decomposed{theReferedProcessModel} to ProcessModel{theDecomposed}
 }
 
-//package agent -------------------------------------------
+//package agent ------------------------------------------- OK
 
 entity Ability {
-    ident String,
+    ident String
     name String
     description TextBlob
 }
 
 entity Agent {
-    ident String,
-    name String,
-    email String,
-    costHour Float,
-    passwordHash String,
-    tipoUser Integer,
-    active Boolean,
-    online Boolean,
-    photoURL String
+    ident String
+    name String
+    eMail String
+    costHour Float
+    passwordHash String
+    tipoUser Integer
+    isActive Boolean
+    online Boolean
+    photo Blob
     upload String
+    description TextBlob
 }
 
 entity AgentAffinityAgent {
@@ -80,58 +82,59 @@ entity AgentPlaysRole {
     sinceDate LocalDate
 }
 
-//EmailConfiguration enums
-enum EmailSecurityLevels {
-    WITHOUT_SECURITY,
-    TLS_IF_AVAILABLE,
-    TLS,
-    SSL
-}
+// //EmailConfiguration enums
+// enum EmailSecurityLevels {
+//     WITHOUT_SECURITY,
+//     TLS_IF_AVAILABLE,
+//     TLS,
+//     SSL
+// }
 
-enum EmailNotificationConfig {
-    NOTIFY_ALL_MANAGERS,
-    NOTIFY_SPECIFIC_MANAGERS,
-    NOT_NOTIFY
-}
+// enum EmailNotificationConfig {
+//     NOTIFY_ALL_MANAGERS,
+//     NOTIFY_SPECIFIC_MANAGERS,
+//     NOT_NOTIFY
+// }
 
-enum EmailProcessStatusNotifications {
-    PROCESS_HAS_FINISHED,
-    FIRST_ACTIVITY_HAS_STARTED,
-    CONSUMABLE_RESOURCE_5_AMOUNT,
-    ACTIVITY_IS_READY_INSTANTIATED,
-    TASK_DELEGATED,
-    DECISION_BRANCH_COND
-}
+// enum EmailProcessStatusNotifications {
+//     PROCESS_HAS_FINISHED,
+//     FIRST_ACTIVITY_HAS_STARTED,
+//     CONSUMABLE_RESOURCE_5_AMOUNT,
+//     ACTIVITY_IS_READY_INSTANTIATED,
+//     TASK_DELEGATED,
+//     DECISION_BRANCH_COND
+// }
 
 entity EmailConfiguration {
-    processFinished Boolean,
-    firstActStarted Boolean,
-    consumableResourceAmount Boolean,
-    activityInstantied Boolean,
-    taskDelegated Boolean,
+    processFinished Boolean
+    firstActStarted Boolean
+    consumableResourceAmount Boolean
+    activityInstantied Boolean
+    taskDelegated Boolean
+    decisionBranchCond Boolean
 
     //enums
-    securityLevels EmailSecurityLevels,
-    notificationConfig EmailNotificationConfig,
-    processNotifications EmailProcessStatusNotifications
+    // securityLevels EmailSecurityLevels,
+    // notificationConfig EmailNotificationConfig,
+    // processNotifications EmailProcessStatusNotifications
 }
 
 entity WorkGroup {
-    ident String,
-    name String,
-    description TextBlob,
-    active Boolean
+    ident String
+    name String
+    description TextBlob
+    isActive Boolean
 }
 
 entity OutOfWorkPeriod {
-    why TextBlob,
-    fromDate String,
+    why TextBlob
+    fromDate String
     toDate String
 }
 
 entity Role {
-    ident String,
-    name String,
+    ident String
+    name String
     description TextBlob
 }
 
@@ -142,22 +145,22 @@ entity RoleNeedsAbility {
 relationship ManyToOne {
     Ability{theAbilityType} to AbilityType{theAbility}
 
-    Agent{theResourceEvent} to ResourceEvent{theRequestorAgent}, // O agente solicita um recurso
+    Agent{theResourceEvent} to ResourceEvent{theRequestorAgent},
 
-    AgentAffinityAgent{fromAffinity} to Agent{fromAgentAffinity},
-    AgentAffinityAgent{toAffinity} to Agent{toAgentAffinity},
+    AgentAffinityAgent{toAffinity} to Agent{fromAgentAffinity},
+    AgentAffinityAgent{fromAffinity} to Agent{toAgentAffinity},
 
     AgentHasAbility{theAgent} to Agent{theAgentHasAbility},
 
     AgentPlaysRole{theAgent} to Agent{theAgentPlaysRole},
     AgentPlaysRole{theRole} to Role{theAgentPlaysRole},
 
-    WorkGroup{theWorkGroupType} to WorkGroupType{theWorkGroup}
-    WorkGroup{superWorkGroup} to WorkGroup{subWorkGroups},
+    WorkGroup{theGroupType} to WorkGroupType{theGroup}
+    WorkGroup{superGroup} to WorkGroup{subGroups},
 
     OutOfWorkPeriod{theAgent} to Agent{theOutOfWorkPeriod},
 
-    Role{subordinate} to Role{theRole},
+    Role{subordinate} to Role{commands},
     Role{theRoleType} to RoleType{theRole}
 
     RoleNeedsAbility{theRole} to Role{theRoleNeedsAbility},
@@ -172,87 +175,87 @@ relationship OneToMany {
     Agent{isDelegatedFor} to Task{delegatedTo},
     Agent{theModelingActivityEvent} to ModelingActivityEvent{theAgent},
     Agent{theReqAgent} to ReqAgent{theAgent},
-    Agent{theAgentMetric} to AgentMetric{theAgent},
-    Agent{theAgentEstimation} to AgentEstimation{theAgent},
+    Agent{theAgentMetric} to AgentMetric{agent},
+    Agent{theAgentEstimation} to AgentEstimation{agent},
     Agent{theManagedOrgUnits} to CompanyUnit{theAgent},
 
     EmailConfiguration{theProcesses} to Process{theEmailConfiguration},
     EmailConfiguration{theManagers} to Agent{theEmailConfiguration},
 
-    WorkGroup{theReqWorkGroup} to ReqWorkGroup{theWorkGroup},
-    WorkGroup{theWorkGroupMetric} to WorkGroupMetric{theWorkGroup},
-    WorkGroup{theWorkGroupEstimation} to WorkGroupEstimation{theWorkGroup},
+    WorkGroup{theReqGroup} to ReqWorkGroup{theGroup},
+    WorkGroup{theGroupMetric} to WorkGroupMetric{group},
+    WorkGroup{theGroupEstimation} to WorkGroupEstimation{group},
 
     Role{theReqAgent} to ReqAgent{theRole}
 }
 
 relationship ManyToMany {
-    Agent{theProcesses} to Process{theAgent}, // ** Qual o papel deste agent? Autor do process? **
-    Agent{theWorkGroups} to WorkGroup{theAgent},
-    Agent{theOrgUnits} to CompanyUnit{theAgent}
+    Agent{theProcess} to Process{theAgent},
+    Agent{theGroup} to WorkGroup{theAgent},
+    Agent{theOrgUnits} to CompanyUnit{theUnitAgents}
 }
 
 relationship OneToOne {
     Agent{theTaskAgenda} to TaskAgenda{theAgent},
-    Agent{configuration} to SpmConfiguration{theAgent}
+    Agent{configuration} to SpmConfiguration{agent}
 }
 
-//package artifacts -------------------------------------------
+//package artifacts ------------------------------------------- OK
 
 entity Artifact {
-    ident String,
-    name String,
-    description String,
-    pathName String,
-    fileName String,
-    latestVersion String,
-    isTemplate Boolean,
+    ident String
+    name String
+    description TextBlob
+    pathName String
+    fileName String
+    latestVersion String
+    isTemplate Boolean
     active Boolean
 }
 
 entity ArtifactTask {
-    inWorkspaceVersion String,
+    inWorkspaceVersion String
     outWorkspaceVersion String
 }
 
 relationship ManyToOne {
     Artifact{theArtifactType} to ArtifactType{theArtifact}
-    Artifact{derivedFrom} to Artifact{derivedTo},
+    Artifact{derivedTo} to Artifact{derivedFrom},
     Artifact{possess} to Artifact{belongsTo},
-    Artifact{theVCSRepository} to VCSRepository{theArtifact},
+    Artifact{theRepository} to VCSRepository{theArtifact},
 
     ArtifactTask{theArtifact} to Artifact{theArtifactTasks},
-    ArtifactTask{theTask} to Task{theArtifactTasks}
+    ArtifactTask{theTask} to Task{theArtifactTask}
 }
 
 relationship OneToMany {
     Artifact{theInvolvedArtifacts} to InvolvedArtifact{theArtifact},
-    Artifact{theArtifactParams} to ArtifactParam{theArtifact},
+    Artifact{theArtifactParam} to ArtifactParam{theArtifact},
     Artifact{theAutomatic} to Automatic{theArtifact},
-    Artifact{theArtifactMetric} to ArtifactMetric{theArtifact},
-    Artifact{theArtifactEstimation} to ArtifactEstimation{theArtifact}
+    Artifact{theArtifactMetric} to ArtifactMetric{artifact},
+    Artifact{theArtifactEstimation} to ArtifactEstimation{artifact}
 }
 
-//package assets -------------------------------------------
+//package assets ------------------------------------------- OK
 
 //AssetVisibility enum
-enum AssetVisibility {
-    VISIBILITY_PUBLIC,
-    VISIBILITY_PRIVATE
-}
+// enum AssetVisibility {
+//     VISIBILITY_PUBLIC,
+//     VISIBILITY_PRIVATE
+// }
 
 entity Asset {
-    uid String,
-    creationDate LocalDate,
-    publishDate LocalDate,
-    name String,
-    description String,
-    applicability String,
-    tags String,
-    path String,
-    latestVersion String,
-    readOnly Boolean,
-    assetVisibility AssetVisibility
+    uid String unique
+    creationDate LocalDate
+    publishDate LocalDate
+    name String
+    description String
+    applicability String
+    tags String
+    path String
+    latestVersion String
+    readOnly Boolean
+    // assetVisibility AssetVisibility
 }
 
 entity AssetRelationship {
@@ -260,22 +263,22 @@ entity AssetRelationship {
 }
 
 entity AssetStat {
-    voteCount Long,
-    visitCount Long,
-    downloadCount Long,
-    tVotes Double,
-    rate Double
+    // voteCount Long
+    // visitCount Long
+    // downloadCount Long
+    // tVotes Double
+    // rate Double
 }
 
 entity AuthorStat {
-    rate Double,
-    visitCount Long,
-    downloadCount Long
+    // rate Double,
+    // visitCount Long,
+    // downloadCount Long
 }
 
 entity LessonLearned {
     name String,
-    description TextBlob,
+    description TextBlob
     creationDate LocalDate
 }
 
@@ -298,11 +301,9 @@ entity TagStats {
 }
 
 relationship ManyToOne {
-    Asset{owner} to Author{theAssets},
+    Asset{owner} to Author{assets},
 
     AssetRelationship{kind} to RelationshipKind{theAssetRelationship},
-
-    AuthorStat{author} to Author{theAuthorStats},
 
     LessonLearned{author} to Author{theLessonLearned},
 
@@ -313,12 +314,14 @@ relationship ManyToOne {
 }
 
 relationship OneToMany {
-    Asset{authorStats} to AuthorStat{theAsset},
-    Asset{tagStats} to TagStats{theAsset},
-    Asset{lessonsLearned} to LessonLearned{theAsset},
-    Asset{relatedAssets} to AssetRelationship{theAsset},
+    Asset{authorStats} to AuthorStat{asset},
+    Asset{tagStats} to TagStats{asset},
+    Asset{lessonsLearned} to LessonLearned{asset},
+    Asset{relatedAssets} to AssetRelationship{asset},
     Asset{relatedByAssets} to AssetRelationship{relatedAsset},
-    Asset{comments} to Message{theAsset}
+    Asset{comments} to Message{theAsset},
+
+    Author{stats} to AuthorStat{author}
 }
 
 relationship ManyToMany {
@@ -331,28 +334,34 @@ relationship OneToOne {
     Asset{stats} to AssetStat{theAsset}
 }
 
-//package calendar -------------------------------------------
+//package calendar ------------------------------------------- OK
 entity Calendar {
     name String
 }
 
-relationship OneToMany {
-    Project{theCalendar} to Calendar{project}
+entity NotWorkingDay {
+  name String unique
 }
 
-//package chat -------------------------------------------
+relationship OneToMany {
+    Project{theCalendar} to Calendar{project},
+
+    Calendar{notWorkingDays} to NotWorkingDay{calendar}
+}
+
+//package chat ------------------------------------------- OK
 
 entity ChatMessage {
     ident String,
-    text String,
-    timestamp LocalDate required
+    text TextBlob,
+    timestamp Instant required
 }
 
 relationship OneToOne {
-    ChatMessage{fromAgent} to Agent{theChatMessage}
+    ChatMessage{de} to Agent{theChatMessage}
 }
 
-//package SpmConfiguration -------------------------------------------
+//package SpmConfiguration ------------------------------------------- OK
 
 entity SpmConfiguration {
     filtro String,
@@ -364,7 +373,11 @@ entity SpmConfiguration {
     senhaEmRecuperacao Boolean
 }
 
-//package connections -------------------------------------------
+//package connections ------------------------------------------- OK
+
+entity Connection {
+    ident String
+}
 
 entity ArtifactCon {} //extends Connection
 
@@ -374,16 +387,12 @@ entity Feedback {} //extends SimpleCon
 
 entity Sequence {} //extends SimpleCon
 
-entity Connection {
-    ident String
-}
-
 entity Dependency {
     kindDep String
 }
 
 entity JoinCon {  //extends MultipleCon
-    kindJoinCon String
+    kindJoin String
 }
 
 entity MultipleCon {
@@ -403,8 +412,8 @@ entity BranchConCondToActivity {}
 entity BranchConCondToMultipleCon {}
 
 relationship OneToMany {
-  BranchConCond{theBranchConCondToActivity} to BranchConCondToActivity{theBranchConCond},
-  BranchConCond{theBranchConCondToMultipleCon} to BranchConCondToMultipleCon{theBranchConCond}
+  BranchConCond{theBranchCondToActivity} to BranchConCondToActivity{theBranchCond},
+  BranchConCond{theBranchCondToMultipleCon} to BranchConCondToMultipleCon{theBranchCond}
 }
 
 relationship ManyToOne {
@@ -416,21 +425,27 @@ relationship ManyToOne {
 
     MultipleCon{theDependency} to Dependency{theMultipleCon},
 
-    BranchCon{fromMultipleCon} to MultipleCon{toBranchCon},
+    BranchCon{fromMultipleConnection} to MultipleCon{toBranch},
 
-    BranchConCondToActivity{theActivity} to Activity{theBranchConCondToActivity},
+    BranchConCondToActivity{theActivity} to Activity{theBranchCondToActivity},
 
-    BranchConCondToMultipleCon{theMultipleCon} to MultipleCon{theBranchConCondToMultipleCon},
+    BranchConCondToMultipleCon{theMultipleCon} to MultipleCon{theBranchCondToMultipleCon},
 
-    Sequence{theDependency} to Dependency{theSequence}
+    Sequence{theDependency} to Dependency{theSequence},
+
+    JoinCon{toMultipleCon} to MultipleCon{theJoin}
 }
 
 relationship ManyToMany {
-    ArtifactCon{toMultipleCon} to MultipleCon{theArtifactCon},
+    ArtifactCon{toMultipleCon} to MultipleCon{fromArtifactCon},
 
     BranchANDCon{toMultipleCon} to MultipleCon{theBranchAND},
 
-    JoinCon{fromMultipleCon} to MultipleCon{theJoinCon}
+    JoinCon{fromMultipleCon} to MultipleCon{theJoin}
+}
+
+relationship OneToOne {
+  MultipleCon{theDependency} to Dependency{theMultipleCon}
 }
 
 //package driver -------------------------------------------
@@ -599,17 +614,17 @@ relationship OneToMany {
     Project{finalArtifacts} to Artifact{theProject}
 }
 
-//package people -------------------------------------------
+//package people ------------------------------------------- OK
 
 entity Author {
-    uid String,
-    version Integer, //Annotate as @Version
-    name String,
-    email String,
-    interests String,
-    city String,
-    country String,
-    photoURL String
+    uid String unique
+    version Integer //Annotate as @Version
+    name String
+    email String
+    interests String
+    city String
+    country String
+    photo Blob
 }
 
 entity Organization {
@@ -621,7 +636,7 @@ entity Person {
 }
 
 relationship ManyToMany {
-    Author{authorsFollowed} to Author{theAuthor}
+    Author{authorsFollowed} to Author{followers}
 }
 
 relationship OneToOne {
@@ -630,7 +645,7 @@ relationship OneToOne {
 
 //package plainActivities -------------------------------------------
 
-entity Automatic {} //extends Plain (package activities: line 1)
+entity Automatic {} //extends Plain
 
 entity EnactionDescription {
     actualBegin LocalDate,

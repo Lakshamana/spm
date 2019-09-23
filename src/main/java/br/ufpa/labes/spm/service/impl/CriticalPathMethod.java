@@ -446,10 +446,10 @@ public class CriticalPathMethod {
 		}
 		else if (conn instanceof JoinCon) {
 			JoinCon join = (JoinCon)conn;
-			if(joinCon.getToActivities() != null)
-			    succ.add(joinCon.getToActivities());
+			if(join.getToActivities() != null)
+			    succ.add(join.getToActivities());
 			if(joinCon.getToMultipleCon() != null)
-			    succ.addAll(this.getSuccessors(joinCon.getToMultipleCon()));
+			    succ.addAll(this.getSuccessors(join.getToMultipleCon()));
 		}
 		return succ;
 	}
