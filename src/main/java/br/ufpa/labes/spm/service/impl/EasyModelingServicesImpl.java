@@ -1964,7 +1964,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		this.allConns = new Properties();
 
 		Collection<Activity> allacts = processModel.getTheActivities();
-		Collection<Connection> allconns = processModel.getTheConnection();
+		Collection<Connection> allconns = processModel.getTheConnections();
 
 		for (Activity activity : allacts) {
 			String ident = activity.getIdent();
@@ -2010,7 +2010,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		Collection<Connection> copy = new HashSet<Connection>();
 
 		ProcessModel processModel = act.getTheProcessModel();
-		Collection connections = processModel.getTheConnection();
+		Collection connections = processModel.getTheConnections();
 		Iterator iterConns = connections.iterator();
 		while (iterConns.hasNext()) {
 			Connection connection = (Connection) iterConns.next();
@@ -2732,12 +2732,12 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	private Collection getConnectionsTo(Activity act) {
 
 		Collection connTo = new LinkedList();
-		if (act.getToSimpleCon() != null)
-			connTo.addAll(act.getToSimpleCon());
-		if (act.getToJoinCon() != null)
-			connTo.addAll(act.getToJoinCon());
-		if (act.getToBranchCon() != null)
-			connTo.addAll(act.getToBranchCon());
+		if (act.getToSimpleCons() != null)
+			connTo.addAll(act.getToSimpleCons());
+		if (act.getToJoinCons() != null)
+			connTo.addAll(act.getToJoinCons());
+		if (act.getToBranchCons() != null)
+			connTo.addAll(act.getToBranchCons());
 		return connTo;
 	}
 
@@ -2747,10 +2747,10 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	private Collection getConnectionsFrom(Activity act) {
 
 		Collection connFrom = new LinkedList();
-		if (act.getFromSimpleCon() != null)
-			connFrom.addAll(act.getFromSimpleCon());
-		if (act.getFromJoinCon() != null)
-			connFrom.addAll(act.getFromJoinCon());
+		if (act.getFromSimpleCons() != null)
+			connFrom.addAll(act.getFromSimpleCons());
+		if (act.getFromJoinCons() != null)
+			connFrom.addAll(act.getFromJoinCons());
 		if (act.getFromBranchANDCon() != null)
 			connFrom.addAll(act.getFromBranchANDCon());
 		Collection bctas = act.getTheBranchConCondToActivity();

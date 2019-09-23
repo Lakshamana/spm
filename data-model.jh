@@ -61,7 +61,7 @@ entity Agent {
     name String
     eMail String
     costHour Float
-    passwordHash String
+    password String
     tipoUser Integer
     isActive Boolean
     online Boolean
@@ -210,7 +210,7 @@ entity Artifact {
     fileName String
     latestVersion String
     isTemplate Boolean
-    active Boolean
+    isActive Boolean
 }
 
 entity ArtifactTask {
@@ -222,7 +222,7 @@ relationship ManyToOne {
     Artifact{theArtifactType} to ArtifactType{theArtifact}
     Artifact{derivedTo} to Artifact{derivedFrom},
     Artifact{possess} to Artifact{belongsTo},
-    Artifact{theRepository} to VCSRepository{theArtifact},
+    Artifact{theRepository} to VCSRepository{theArtifacts},
 
     ArtifactTask{theArtifact} to Artifact{theArtifactTasks},
     ArtifactTask{theTask} to Task{theArtifactTask}
@@ -448,16 +448,20 @@ relationship OneToOne {
   MultipleCon{theDependency} to Dependency{theMultipleCon}
 }
 
-//package driver -------------------------------------------
+//package driver ------------------------------------------- OK
 
 entity Driver {
-    tipo String, // ?
-    appKey String,
+    tipo String
+    appKey String
     appSecret String
+    appKeyGoogle String
+    appSecretGoogle String
+    requestUrl String
 }
 
 relationship OneToOne {
     Driver{thePlugin} to Plugin{theDriver}
+    Driver{company} to Company{theDriver}
 }
 
 //package email -------------------------------------------
@@ -466,14 +470,14 @@ entity Email {
     emailServerHost String,
     emailServerPort String,
     userName String,
-    passwordHash String
+    password String
     servicoTls Boolean,
     servicoSsl Boolean,
     teste Boolean
 }
 
 
-//package log -------------------------------------------
+//package log ------------------------------------------- OK
 
 entity CatalogEvent {
     description TextBlob
@@ -507,20 +511,21 @@ entity ResourceEvent {} //extends Event
 entity SpmLog {}
 
 relationship ManyToOne {
-    Event{theCatalogEvents} to CatalogEvent{theAgendaEvent},
-    Event{theTask} to Task{theAgendaEvent},
+    CatalogEvent{theResourceEvent} to ResourceEvent{theCatalogEvents},
+    CatalogEvent{theProcessModelEvent} to ProcessModelEvent{theCatalogEvents},
+    CatalogEvent{theAgendaEvent} to AgendaEvent{theCatalogEvents},
+    CatalogEvent{theCatalogEvent} to CatalogEvent{theCatalogEvents},
+    CatalogEvent{theConnectionEvent} to ConnectionEvent{theCatalogEvents},
+    CatalogEvent{theGlobalActivityEvent} to GlobalActivityEvent{theCatalogEvents},
+    CatalogEvent{theModelingActivityEvent} to ModelingActivityEvent{theCatalogEvents},
+    CatalogEvent{theProcessEvent} to ProcessEvent{theCatalogEvents},
 
-    CatalogEvent{theAgendaEvent} to AgendaEvent{theCatalogEventToAgenda},
-    CatalogEvent{theCatalogEvent} to CatalogEvent{theCatalogEventToCatalog},
-    CatalogEvent{theConnectionEvent} to ConnectionEvent{theCatalogEventToConnection},
-    CatalogEvent{theGlobalActivityEvent} to GlobalActivityEvent{theCatalogEventToGlobalActivity},
-    CatalogEvent{theModelingActivityEvent} to ModelingActivityEvent{theCatalogEventToModelingActivity},
-    CatalogEvent{theProcessEvent} to ProcessEvent{theCatalogEventToProcess},
-    CatalogEvent{theProcessModelEvent} to ProcessModelEvent{theCatalogEventToProcessModel},
-    CatalogEvent{theResourceEvent} to ResourceEvent{theCatalogEventToResource},
+    AgendaEvent{theCatalogEvents} to CatalogEvent{theAgendaEvent},
+    AgendaEvent{theTask} to Task{theAgendaEvent},
+    AgendaEvent{theNormal} to Normal{theAgendaEvent}
 
     Event{theLog} to SpmLog{theEvent},
-    Event{theEventType} to EventType{theEvent}
+    Event{theEventType} to EventType{theEvent},
 
     CatalogEvent{thePlain} to Plain{theCatalogEvent},
 
@@ -539,79 +544,85 @@ relationship OneToOne {
     ResourceEvent{theNormal} to Normal{theResourceEvent}
 }
 
-//package organizationPolicies -------------------------------------------
+//package organizationPolicies ------------------------------------------- OK
 
 entity Company {
-    ident String,
-    cnpj String,
-    fantasyName String,
-    socialReason String,
-    acronym String,
-    address String,
-    phone String,
-    description TextBlob,
-    imageURL String
-    url String,
+    ident String
+    cnpj String
+    fantasyName String
+    socialReason String
+    acronym String
+    address String
+    phone String
+    description TextBlob
+    image Blob
+    url String
     automaticInstantiation Boolean
 }
 
 entity CompanyUnit {
-    ident String,
-    name String,
+    ident String
+    name String
     description TextBlob
 }
 
 entity Node {
-    ident String,
-    data String,
-    serviceFileId String
+    ident String
+    data String
+    serviceFileId String unique
 }
 
 entity Project {
-    ident String,
-    name String,
-    description TextBlob,
-    beginDate LocalDate,
+    ident String
+    name String
+    description TextBlob
+    beginDate LocalDate
     endDate LocalDate
 }
 
 entity VCSRepository {
-    ident String,
-    controlVersionSystem String,
-    server String,
-    repositoryPath String
-    //defaultUser Boolean
+    ident String
+    controlVersionSystem String
+    server String
+    port String
+    connectionMethod String
+    repository String
+    username String
+    password String
+    defaultUser Boolean
 }
 
 entity Structure {}
 
 entity DevelopingSystem {
-    ident String,
-    name String,
+    ident String
+    name String
     description TextBlob
 }
 
 relationship ManyToOne {
-    CompanyUnit{theOrganization} to Company{theCompanyUnit},
+    CompanyUnit{theOrganization} to Company{theOrganizationalUnits},
     CompanyUnit{theCommand} to CompanyUnit{theSubordinates},
 
     Project{processRefered} to Process{theProject},
     Project{theSystem} to DevelopingSystem{theProject},
 
-    VCSRepository{theStructure} to Structure{theVCSRepository},
+    VCSRepository{theStructure} to Structure{theRepository},
 
-    Structure{rootElement} to Node{theStructure},
-
-    DevelopingSystem{theOrganization} to Company{theDevelopingSystem}
+    DevelopingSystem{theOrganization} to Company{theSystem}
 }
 
 relationship OneToMany {
-    Company{organizationMetric} to OrganizationMetric{theCompany},
-    Company{theCompanyEstimation} to OrganizationEstimation{theCompany},
+    Company{organizationMetric} to OrganizationMetric{company},
+    Company{theCompanyEstimation} to OrganizationEstimation{company},
 
-    Node{children} to Node{theNode},
+    Node{children} to Node{parentNode},
 
     Project{finalArtifacts} to Artifact{theProject}
+}
+
+relationship OneToOne {
+  Structure{rootElement} to Node{theStructure}
 }
 
 //package people ------------------------------------------- OK
@@ -643,26 +654,25 @@ relationship OneToOne {
     Author{user} to User{theAuthor}
 }
 
-//package plainActivities -------------------------------------------
+//package plainActivities ------------------------------------------- OK
 
 entity Automatic {} //extends Plain
 
 entity EnactionDescription {
-    actualBegin LocalDate,
-    actualEnd LocalDate,
+    actualBegin LocalDate
+    actualEnd LocalDate
     state String
 }
 
 entity InvolvedArtifact {}
 
 entity Normal {
-    ident String,
-    howLong Float,
-    howLongUnit String,
-    plannedBegin LocalDate,
-    plannedEnd LocalDate,
-    script TextBlob,
-    delegable Boolean,
+    howLong Float
+    howLongUnit String
+    plannedBegin LocalDate
+    plannedEnd LocalDate
+    script TextBlob
+    delegable Boolean
     autoAllocable Boolean
 }
 
@@ -690,33 +700,32 @@ entity RequiredResource {
 }
 
 relationship ManyToOne {
-    InvolvedArtifact{inInvolvedArtifacts} to Normal{theInvolvedArtifactToNormal},
-    InvolvedArtifact{outInvolvedArtifacts} to Normal{theInvolvedArtifactsFromNormal},
-    InvolvedArtifact{theArtifactType} to ArtifactType{theInvolvedArtifact}
+    InvolvedArtifact{inInvolvedArtifacts} to Normal{involvedArtifactToNormal},
+    InvolvedArtifact{outInvolvedArtifacts} to Normal{involvedArtifactFromNormal},
+    InvolvedArtifact{theArtifactType} to ArtifactType{theInvolvedArtifacts},
 
-    Parameter{theAutomatic} to Automatic{theParameters},
+    ReqAgentRequiresAbility{theReqAgent} to RequiredAgent{theReqAgentRequiresAbility},
 
-    ReqAgentRequiresAbility{theReqAgent} to RequiredPeople{theReqAgentRequiresAbility},
+    ReqWorkGroup{theGroupType} to WorkGroupType{theReqGroup},
 
-    ReqWorkGroup{theWorkGroupType} to WorkGroupType{theReqWorkGroup}
-
-    RequiredPeople{theNormal} to Normal{theRequiredPeople},
-
-    RequiredResource{theNormal} to Normal{theRequiredResource},
-    RequiredResource{theResourceType} to ResourceType{theRequiredResource}
+    RequiredResource{theResourceType} to ResourceType{theRequiredResource},
     RequiredResource{theResource} to Resource{theRequiredResource}
 }
 
 relationship OneToMany {
     Normal{theTasks} to Task{theNormal},
-    Normal{theReservation} to Reservation{theNormal}
+    Normal{theReservation} to Reservation{theNormal},
+    Normal{theRequiredResource} to RequiredResource{theNormal},
+    Normal{theRequiredPeople} to RequiredPeople{theNormal},
+
+    Automatic{theParameters} to Parameter{theAutomatic}
 }
 
 relationship OneToOne {
     Automatic{theSubroutine} to Subroutine{theAutomatic}
 }
 
-//package plannerInfo -------------------------------------------
+//package plannerInfo ------------------------------------------- OK
 
 entity ActivityInstantiated {}
 
@@ -725,7 +734,7 @@ entity AgentInstSuggestionToAgent {
 }
 
 entity AgentWorkingLoad {
-    begin LocalDate,
+    begin LocalDate
     end LocalDate
 }
 
@@ -754,31 +763,36 @@ relationship ManyToOne {
     AgentInstSug{theRole} to Role{theAgentInstSug},
     AgentInstSug{chosenAgent} to Agent{theAgentInstSug},
 
-    AgentInstSuggestionToAgent{theInstAgSug} to AgentInstSug{suggestedAgent},
+    AgentInstSuggestionToAgent{theInstAgSugg} to AgentInstSug{agentSuggested},
     AgentInstSuggestionToAgent{theAgent} to Agent{theAgentInstSugToAgent},
 
     AgentWorkingLoad{theAgent} to Agent{theAgentWorkingLoad},
 
-    WorkGroupInstSug{chosenWorkGroup} to WorkGroup{sugToChosenWorkGroup},
-    WorkGroupInstSug{workGroupTypeRequired} to WorkGroupType{sugToReqWorkGroup},
+    WorkGroupInstSug{groupChosen} to WorkGroup{theWorkGroupInstSug},
+    WorkGroupInstSug{groupTypeRequired} to WorkGroupType{theWorkGroupInstSug},
 
-    InstantiationSuggestion{theActivityInstantiated} to ActivityInstantiated{theInstSug},
+    InstantiationSuggestion{theActivityInstantiated} to ActivityInstantiated{theInstantiationSuggestion},
 
-    InstantiationSuggestion{chosenResource} to Resource{instSugToResource},
-    InstantiationSuggestion{requiredResourceType} to Type{instSugToType},
+    ResourceInstSug{resourceChosen} to Resource{theResourceInstSug},
+    ResourceInstSug{resourceTypeRequired} to ResourceType{theResourceInstSug},
 
     ResourcePossibleUse{theResource} to Resource{theResourcePossibleUse}
 }
 
 relationship ManyToMany {
     WorkGroupInstSug{sugWorkGroup} to WorkGroup{theWorkGroupInstSug},
-    InstantiationSuggestion{sugRsrc} to Resource{instSuggestions}
+
+    InstantiationSuggestion{sugRsrc} to Resource{instSuggestions},
+
+    ResourceInstSug{resourceSuggested} to Resource{theResourceInstSug},
+
+    WorkGroupInstSug{groupSuggested} to WorkGroup{theWorkGroupInstSug}
 }
 
-//package processKnowledge -------------------------------------------
+//package processKnowledge ------------------------------------------- OK
 
 entity Estimation {
-    value Float,
+    value Float
     unit String
 }
 
@@ -797,9 +811,9 @@ entity ProcessEstimation {} //extends Estimation
 entity ResourceEstimation {} //extends Estimation
 
 entity Metric {
-    value Float,
-    unit String,
-    periodBegin LocalDate,
+    value Float
+    unit String
+    periodBegin LocalDate
     periodEnd LocalDate
 }
 
@@ -825,121 +839,119 @@ entity MetricDefinitionUnit {
 }
 
 entity MetricDefinition {
-    name String,
-    description TextBlob,
-    kind String,
-    rangeFrom Float,
-    rangeTo Float,
+    name String
+    description TextBlob
+    kind String
+    rangeFrom Float
+    rangeTo Float
     howToMeasure TextBlob
 }
 
 relationship ManyToOne {
-    MetricDefinition{theMetricType} to MetricType{theMetricDefinition}
+    MetricDefinition{metricType} to MetricType{theMetricDefinition}
 
-    Estimation{theMetricDefinition} to MetricDefinition{theEstimation},
+    Estimation{metricDefinition} to MetricDefinition{estimation},
 
-    Metric{theMetricDefinition} to MetricDefinition{theMetric},
+    Metric{metricDefinition} to MetricDefinition{metric},
 
-    ActivityMetric{theActivity} to Activity{theActivityMetric},
+    ActivityMetric{activity} to Activity{activityMetric},
 
-    OrganizationMetric{theOrganization} to Organization{theOrganizationMetric},
-
-    ProcessMetric{theProcess} to Process{theProcessMetric},
-
-    ResourceMetric{theResource} to Resource{theResourceMetric},
-
-    ResourceEstimation{theResource} to Resource{theResourceEstimation},
-
-    OrganizationEstimation{theOrganization} to Organization{theOrganizationEstimation},
+    OrganizationMetric{organization} to Organization{organizationMetric},
 
     ProcessEstimation{theProcess} to Process{theProcessEstimation},
 
-    ResourceEstimation{theResource} to Resource{theResourceEstimation}
+    ProcessMetric{process} to Process{theProcessMetric},
+
+    ResourceMetric{resource} to Resource{theResourceMetric},
+
+    ResourceEstimation{resource} to Resource{theResourceEstimation},
+
+    OrganizationEstimation{theOrganization} to Organization{organizationEstimation}
 }
 
 relationship OneToMany {
     MetricDefinition{units} to MetricDefinitionUnit{theMetricDefinition}
 }
 
-//package processModelGraphical -------------------------------------------
+//package processModelGraphical ------------------------------------------- OK
 
 entity GraphicCoordinate {
-    x Integer,
-    y Integer,
-    visible Boolean,
+    x Integer
+    y Integer
+    visible Boolean
     theProcess String
 }
 
-//WebAPSEEObject enum
-enum WebAPSEEObjectType {
-    ACTIVITY,
-    REQ_AGENT,
-    REQ_RESOURCE,
-    REQ_WORKGROUP,
-    CONNECTION
-}
+// //WebAPSEEObject enum
+// enum WebAPSEEObjectType {
+//     ACTIVITY,
+//     REQ_AGENT,
+//     REQ_RESOURCE,
+//     REQ_WORKGROUP,
+//     CONNECTION
+// }
 
 entity WebAPSEEObject {
-    theReferredOid Long required,
-    className String required,
-    webAPSEEObjectType WebAPSEEObjectType
+    theReferredOid Long required
+    className String required
+    // webAPSEEObjectType WebAPSEEObjectType
 }
 
 relationship OneToOne {
     WebAPSEEObject{theGraphicCoordinate} to GraphicCoordinate{theObjectReference}
 }
 
-//package processModels -------------------------------------------
+//package processModels ------------------------------------------- OK
 
 entity Description {
-    date LocalDate,
+    date LocalDate
     why TextBlob
 }
 
 //Process enum
-enum ProcessStatus {
-    NOT_STARTED,
-    ENACTING,
-    FINISHED
-}
+// enum ProcessStatus {
+//     NOT_STARTED,
+//     ENACTING,
+//     FINISHED
+// }
 
 entity Process {
-    ident String,
-    pStatus ProcessStatus
+    ident String
+    pState String
 }
 
-//ProcessModel enum
-enum ProcessModelStatus {
-    REQUIREMENTS,
-    ABSTRACT,
-    INSTANTIATED,
-    ENACTING,
-    FAILED,
-    CANCELED,
-    MIXED,
-    FINISHED
-}
+// //ProcessModel enum
+// enum ProcessModelStatus {
+//     REQUIREMENTS,
+//     ABSTRACT,
+//     INSTANTIATED,
+//     ENACTING,
+//     FAILED,
+//     CANCELED,
+//     MIXED,
+//     FINISHED
+// }
 
 entity ProcessModel {
-    requirements String,
-    pmStatus ProcessModelStatus
+    requirements String
+    pmState String
 }
 
-//Template enum
-enum TemplateStatus{
-    DRAFT,
-    DEFINED,
-    PENDING,
-    OUTDATED
-}
+// //Template enum
+// enum TemplateStatus{
+//     DRAFT,
+//     DEFINED,
+//     PENDING,
+//     OUTDATED
+// }
 
 entity Template {
-    tStatus TemplateStatus
+  templateState String
 }
 
 relationship ManyToOne {
-    Description{theTemplateOldVersion} to Template{theDerivedVersionDescription},
-    Description{theTemplateNewVersion} to Template{theTemplateNewDescription},
+    Description{theOldVersion} to Template{theDerivedVersionDescriptions},
+    Description{theNewVersion} to Template{theTemplateNewDescriptions},
 
     Template{theOriginalVersionDescription} to Description{descTemplateOriginalVersion},
 
@@ -947,106 +959,110 @@ relationship ManyToOne {
 }
 
 relationship OneToMany {
-    Process{theProcessAgendas} to ProcessAgenda{theProcess},
+    Process{theProcessAgenda} to ProcessAgenda{theProcess},
 
     ProcessModel{theActivity} to Activity{theProcessModel},
 
-    Template{theProcessModel} to ProcessModel{theOrigin}
+    Template{theInstances} to ProcessModel{theOrigin}
+}
+
+relationship ManyToMany {
+  Process{theAgent} to Agent{theProcess}
 }
 
 relationship OneToOne {
     Process{theProcessModel} to ProcessModel{theProcess}
 }
 
-//package resources -------------------------------------------
+//package resources ------------------------------------------- OK
 
-//Consumable enum
-enum ConsumableStatus {
-    AVAILABLE,
-    NOT_AUTHORIZED,
-    FINISHED
-}
+// //Consumable enum
+// enum ConsumableStatus {
+//     AVAILABLE,
+//     NOT_AUTHORIZED,
+//     FINISHED
+// }
 
 entity Consumable {
-    unit String,
-    consumableStatus ConsumableStatus,
-    totalQuantity Float,
+    state String
+    unit String
+    totalQuantity Float
     amountUsed Float
 }
 
-//Exclusive enum
-enum ExclusiveStatus {
-    AVAILABLE,
-    LOCKED,
-    DEFECT
-}
+// //Exclusive enum
+// enum ExclusiveStatus {
+//     AVAILABLE,
+//     LOCKED,
+//     DEFECT
+// }
 
 entity Exclusive {
-    exclusiveStatus ExclusiveStatus,
+    state String
     unitOfCost String
 }
 
 entity Reservation {
-    fromDate LocalDate,
+    fromDate LocalDate
     toDate LocalDate
 }
 
-//Shareable enum
-enum ShareableStatus{
-    AVAILABLE,
-    NOT_AVAILABLE
-}
+// //Shareable enum
+// enum ShareableStatus {
+//     AVAILABLE,
+//     NOT_AVAILABLE
+// }
 
 entity Shareable {
-    shareableStatus ShareableStatus,
+    state String
     unitOfCost String
 }
 
 entity Resource {
-    ident String,
-    name String,
-    description TextBlob,
-    mtbfTime Float,
-    mtbfUnitTime String,
-    currency String,
-    cost Float,
-    active Boolean
+    ident String
+    name String
+    description TextBlob
+    mtbfTime Float
+    mtbfUnitTime String
+    currency String
+    cost Float
+    isActive Boolean
 }
 
 relationship ManyToOne {
     Reservation{theExclusive} to Exclusive{theReservation},
 
-    Resource{belongsTo} to Resource{theResource},
-
+    Resource{belongsTo} to Resource{possess},
+    Resource{requires} to Resource{isRequired},
     Resource{theResourceType} to ResourceType{theResource}
 }
 
-//package security -------------------------------------------
+//package security ------------------------------------------- OK
 
 //Credential enum
-enum OperationEnum {
-    CREATE,
-    DELETE,
-    UPDATE,
-    VIEW,
-    VOTE,
-    FAVORITE,
-    UNFAVORITE,
-    FOLLOW,
-    UNFOLLOW,
-    COMMENT
-}
+// enum OperationEnum {
+//     CREATE,
+//     DELETE,
+//     UPDATE,
+//     VIEW,
+//     VOTE,
+//     FAVORITE,
+//     UNFAVORITE,
+//     FOLLOW,
+//     UNFOLLOW,
+//     COMMENT
+// }
 
 entity Credential {
-    className String,
-    uid String,
-    operationEnum OperationEnum
+    className String
+    uid String
+    // operationEnum OperationEnum
 }
 
 entity LogEntry {
-    date LocalDate,
-    operationEnum OperationEnum,
-    className String,
+    date LocalDate
+    operation String
+    className String
     uid String
 }
 
@@ -1056,40 +1072,43 @@ relationship ManyToOne {
     LogEntry{user} to User{theLogEntry}
 }
 
-//package taskagenda -------------------------------------------
+//package taskagenda ------------------------------------------- OK
 
 entity Ocurrence {
-    date LocalDate,
-    time Instant,
+    date LocalDate
+    time Instant
     event String
 }
 
 entity ProcessAgenda {}
 
 entity Task {
-    localState String,
-    beginDate LocalDate,
-    endDate LocalDate,
-    workingHours Float,
-    dateDelegatedTo LocalDate,
+    localState String
+    beginDate LocalDate
+    endDate LocalDate
+    workingHours Float
+    dateDelegatedTo LocalDate
     dateDelegatedFrom LocalDate
 }
 
 entity TaskAgenda {}
 
 relationship ManyToOne {
-    Ocurrence{theTask} to Task{theOcurrence},
+    Ocurrence{theTask} to Task{ocurrence},
 
-    ProcessAgenda{theTaskAgenda} to TaskAgenda{theProcessAgenda},
-
-    Task{theProcessAgenda} to ProcessAgenda{theTask}
+    ProcessAgenda{theTaskAgenda} to TaskAgenda{theProcessAgenda}
 }
 
-//package tools -------------------------------------------
+relationship OneToMany {
+  ProcessAgenda{theTask} to Task{theProcessAgenda}
+}
+
+//package tools ------------------------------------------- OK
 
 entity ClassMethodCall {
-    className String,
-    methodName String,
+    ident String
+    className String
+    methodName String
     description TextBlob
 }
 
@@ -1098,22 +1117,21 @@ entity PrimitiveType {
 }
 
 entity Script {
-    fileName String,
+    ident String
+    fileName String
     description TextBlob
 }
 
-entity Subroutine {
-    ident String
-}
+entity Subroutine {}
 
 entity ToolDefinition {
-    ident String,
-    name String,
+    ident String
+    name String
     description TextBlob
 }
 
 entity ToolParameter {
-    label String,
+    label String
     separatorSymbol String
 }
 
@@ -1122,20 +1140,20 @@ relationship ManyToOne {
 
     ToolDefinition{theToolType} to ToolType{theToolDefinition}
 
-    ToolParameter{theArtifactType} to ArtifactType{theToolParameter}
-    ToolParameter{theSubroutine} to Subroutine{theToolParameter},
-    ToolParameter{thePrimitiveType} to PrimitiveType{theToolParameter}
+    ToolParameter{theArtifactType} to ArtifactType{theToolParameters}
+    ToolParameter{theSubroutine} to Subroutine{theToolParameters},
+    ToolParameter{thePrimitiveType} to PrimitiveType{theToolParameters}
 }
 
 relationship ManyToMany {
-    ToolDefinition{theArtifactTypes} to Type{theToolDefinitionToArtifactType}
+    ToolDefinition{theArtifactTypes} to ArtifactType{theToolDefinition}
 }
 
 //package types -------------------------------------------
 
 entity Type {
-    ident String,
-    description TextBlob,
+    ident String
+    description TextBlob
     userDefined Boolean
 }
 
@@ -1166,9 +1184,9 @@ relationship ManyToOne {
 //package plugins -------------------------------------------
 
 entity Plugin {
-    name String required,
-    developerName String required,
-    jsonConfigFile String required
+    name String unique
+    developerName String required
+    configFilePath String required
 }
 
 relationship ManyToOne {

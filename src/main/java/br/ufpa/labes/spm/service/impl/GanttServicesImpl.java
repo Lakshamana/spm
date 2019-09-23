@@ -183,7 +183,7 @@ public class GanttServicesImpl implements GanttServices {
 	}
 
 	public List<ActivityDTO> getActivitiesHierarchy(ProcessModel model) {
-		Collection<Activity> activities = model.getTheActivity();
+		Collection<Activity> activities = model.getTheActivities();
 		List<ActivityDTO> activitiesDTO = new ArrayList<ActivityDTO>();
 
 		Iterator<Activity> activityIterator = activities.iterator();
@@ -193,7 +193,7 @@ public class GanttServicesImpl implements GanttServices {
 
 			if(activity instanceof Decomposed) {
 				Decomposed decomposed = (Decomposed) activity;
-//				System.out.println("D ==> " + decomposed.getName() + " - " + this.getBeginDate(decomposed.getTheReferedProcessModel().getTheActivity()));
+//				System.out.println("D ==> " + decomposed.getName() + " - " + this.getBeginDate(decomposed.getTheReferedProcessModel().getTheActivities()));
 				act = this.convertDecomposedToDecomposedDTO(decomposed);
 			}
 
@@ -213,7 +213,7 @@ public class GanttServicesImpl implements GanttServices {
 	}
 
 	public List<ActivityDTO> getActivitiesHierarchy(ProcessModel model, String parent) {
-		Collection<Activity> activities = model.getTheActivity();
+		Collection<Activity> activities = model.getTheActivities();
 		List<ActivityDTO> activitiesDTO = new ArrayList<ActivityDTO>();
 
 		Iterator activityIterator = activities.iterator();
@@ -251,8 +251,8 @@ public class GanttServicesImpl implements GanttServices {
 		List<ActivityDTO> childs = this.getActivitiesHierarchy(model, "");
 		dtos.getActivitys().addAll(childs);
 
-		Date plannedBeginDate = this.getBeginDate(model.getTheActivity());
-		Date plannedEndDate = this.getEndDate(model.getTheActivity());
+		Date plannedBeginDate = this.getBeginDate(model.getTheActivities());
+		Date plannedEndDate = this.getEndDate(model.getTheActivities());
 
 		decomposedDTO.setDuration(String.valueOf(duration));
 		decomposedDTO.setPlannedBegin(format.format(plannedBeginDate));
@@ -278,8 +278,8 @@ public class GanttServicesImpl implements GanttServices {
 		List<ActivityDTO> childs = this.getActivitiesHierarchy(model, "");
 		dtos.getActivitys().addAll(childs);
 
-		Date plannedBeginDate = this.getBeginDate(model.getTheActivity());
-		Date plannedEndDate = this.getEndDate(model.getTheActivity());
+		Date plannedBeginDate = this.getBeginDate(model.getTheActivities());
+		Date plannedEndDate = this.getEndDate(model.getTheActivities());
 
 		decomposedDTO.setDuration(String.valueOf(duration));
 		decomposedDTO.setPlannedBegin(format.format(plannedBeginDate));
@@ -370,7 +370,7 @@ public class GanttServicesImpl implements GanttServices {
 
 			if(activity instanceof Decomposed) {
 				Decomposed decomposed = (Decomposed) activity;
-				Collection<Activity> theActivity = decomposed.getTheReferedProcessModel().getTheActivity();
+				Collection<Activity> theActivity = decomposed.getTheReferedProcessModel().getTheActivities();
 //				System.out.println("Size: " + theActivity.size());
 //				if(!theActivity.isEmpty()) {
 					Date d = this.getBeginDate(theActivity);
@@ -403,7 +403,7 @@ public class GanttServicesImpl implements GanttServices {
 			if(activity instanceof Decomposed) {
 				Decomposed decomposed = (Decomposed) activity;
 				ProcessModel model = decomposed.getTheReferedProcessModel();
-				Collection<Activity> theActivity = model.getTheActivity();
+				Collection<Activity> theActivity = model.getTheActivities();
 //				System.out.println("Size: " + theActivity.size());
 //				if(!theActivity.isEmpty()) {
 				Date d = this.getBeginDate(theActivity);

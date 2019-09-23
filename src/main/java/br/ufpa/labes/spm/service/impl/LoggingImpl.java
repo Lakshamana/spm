@@ -47,7 +47,7 @@ public class LoggingImpl implements Logging {
 		event.setIsCreatedByApsee (new Boolean (true));
 		event.getTheCatalogEvents().setDescription (what);
 		event.setTheEventType(type);
-		type.getTheEventss().add(event);
+		type.getTheEvents().add(event);
 		SpmLog log = this.getTheProcess(activity.getTheProcessModel()).getTheLog();
 		event.setTheLog(log);
 		log.getTheEvents().add(event);
@@ -100,7 +100,7 @@ public class LoggingImpl implements Logging {
 		event.getTheCatalogEvents().setDescription (what);
 		event.setTheEventType(type);
 		type.getTheEvents().add (event);
-		process.getTheProcessEvent().add (event);
+		process.getTheProcessEvents().add (event);
 
 		EventNotification.getInstance().notifyEvent( event );
 	}
@@ -171,7 +171,7 @@ public class LoggingImpl implements Logging {
        	event.getTheCatalogEvents().setDescription (what);
        	event.setTheEventType(type);
        	type.getTheEvents().add(event);
-       	model.getTheProcessModelEvent().add (event);
+       	model.getTheProcessModelEvents().add (event);
 
        	EventNotification.getInstance().notifyEvent( event );
 	}
@@ -200,7 +200,7 @@ public class LoggingImpl implements Logging {
 		event.getTheCatalogEvents().setDescription (what);
 		event.setTheEventType(type);
 		type.getTheEvents().add (event);
-		resource.getTheResourceEvent().add (event);
+		resource.getTheResourceEvents().add (event);
 
 		EventNotification.getInstance().notifyEvent( event );
 	}
@@ -226,7 +226,7 @@ public class LoggingImpl implements Logging {
 		agEvent.setTheTask(task);
 		agEvent.setTheEventType(type);
 		type.getTheEvents().add(agEvent);
-		task.getTheAgendaEvent().add(agEvent);
+		task.getTheAgendaEvents().add(agEvent);
 
 		EventNotification.getInstance().notifyEvent( agEvent );
 	}
