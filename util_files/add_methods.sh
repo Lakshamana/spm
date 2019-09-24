@@ -48,10 +48,10 @@ for m in $models; do
   file="$newdir/$ename.txt"
   echo entity: $m
 
-  # 3.1
-  old_methods=`sed -rn "s/public (.*) (insertInto|removeFrom)(.*).*\(.*\).*\{/\2\3/p" "$m" | sed -r '/(get|set)Oid/d'`
-  # new_methods=`sed -rn "s/public (.*) (insertInto|removeFrom)(.*).*\(.*\).*\{/\2\3/p" "$file"`
-  if [[ $old_methods != '' ]]; then
+  if test -f $file; then
+    # 3.1
+    old_methods=`sed -rn "s/public (.*) (insertInto|removeFrom)(.*).*\(.*\).*\{/\2\3/p" "$m" | sed -r '/(get|set)Oid/d'`
+    new_methods=`sed -rn "s/public (.*) (insertInto|removeFrom)(.*).*\(.*\).*\{/\2\3/p" "$file"`
     echo olds: $old_methods
     # echo news: $new_methods
 
@@ -73,7 +73,7 @@ for m in $models; do
     # add input methods to new class
     echo -e "$inputs"
     # sed -i "s/^}$//" $file
-    echo -e "$inputs" >> $file
+    # echo -e "$inputs" >> $file
     # echo -e '}' >> $file
   fi
 done
