@@ -5,7 +5,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class EmailDTO implements Serializable {
 
-	private Long oid;
+	private Long id;
 
 	private String serverHost;
 
@@ -46,13 +46,13 @@ public class EmailDTO implements Serializable {
 	}
 
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
 
 
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getServerPort() {

@@ -8,14 +8,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 import br.ufpa.labes.spm.service.dto.TaskDTO;
 
 @SuppressWarnings("serial")
 @XmlRootElement(name="agent")
 public class AgentDTO implements Serializable {
 
-	private Long oid;
+	private Long id;
 
 	private String ident;
 
@@ -67,13 +67,13 @@ public class AgentDTO implements Serializable {
 	}
 
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
 
 
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Boolean isOnline() {

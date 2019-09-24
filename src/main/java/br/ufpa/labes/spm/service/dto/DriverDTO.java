@@ -14,7 +14,7 @@ public class DriverDTO implements Serializable{
 
 	private String appSecretGoogle;
 
-	private Long oid;
+	private Long id;
 
 
 	private String tipo;
@@ -29,12 +29,12 @@ public class DriverDTO implements Serializable{
 	private String requestUrl;
 
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTipo() {

@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
 public class ActivityDTO implements Serializable {

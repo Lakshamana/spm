@@ -3,13 +3,13 @@ package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 import br.ufpa.labes.spm.service.dto.ProjectDTO;
 
 
 @SuppressWarnings("serial")
 public class SystemDTO implements Serializable{
-	private Long oid;
+	private Long id;
 
 	private String ident;
 
@@ -20,12 +20,12 @@ public class SystemDTO implements Serializable{
 	@IgnoreMapping
 	private Collection<ProjectDTO> projetos;
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getIdent() {

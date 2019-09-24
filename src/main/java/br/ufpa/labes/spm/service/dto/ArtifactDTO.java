@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
 public class ArtifactDTO implements Serializable {
 
-	private Long oid;
+	private Long id;
 	private String ident;
 	private String description;
 	private String name;
@@ -30,7 +30,7 @@ public class ArtifactDTO implements Serializable {
 	private List<String> derivedTo;
 
 	public ArtifactDTO() {
-		this.oid = null;
+		this.id = null;
 		this.ident = "";
 		this.description = "";
 		this.name = "";
@@ -39,11 +39,11 @@ public class ArtifactDTO implements Serializable {
 		this.derivedTo = new ArrayList<String>();
 	}
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public String getIdent() {
 		return ident;

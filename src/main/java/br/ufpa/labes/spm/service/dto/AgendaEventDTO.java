@@ -3,7 +3,7 @@ package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
 public class AgendaEventDTO implements Serializable {

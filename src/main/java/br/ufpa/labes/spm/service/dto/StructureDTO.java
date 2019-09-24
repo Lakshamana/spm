@@ -2,11 +2,11 @@ package br.ufpa.labes.spm.service.dto;
 
 import java.io.Serializable;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
 public class StructureDTO implements Serializable{
-	private Long oid;
+	private Long id;
 
 	@IgnoreMapping
     private RepositoryDTO theRepository;
@@ -19,12 +19,12 @@ public class StructureDTO implements Serializable{
         this.rootElement = null;
     }
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public RepositoryDTO getTheRepository() {
@@ -45,7 +45,7 @@ public class StructureDTO implements Serializable{
 
 	@Override
 	public String toString() {
-		return "StructureDTO [oid=" + oid + ", rootElement=" + rootElement
+		return "StructureDTO [id=" + id + ", rootElement=" + rootElement
 				+ "]";
 	}
 }

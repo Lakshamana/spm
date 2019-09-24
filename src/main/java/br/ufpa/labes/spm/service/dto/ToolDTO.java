@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
 public class ToolDTO implements Serializable {
-	private Long oid;
+	private Long id;
 
 	private String ident;
 
@@ -33,12 +33,12 @@ public class ToolDTO implements Serializable {
 		this.description = description;
 	}
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getIdent() {

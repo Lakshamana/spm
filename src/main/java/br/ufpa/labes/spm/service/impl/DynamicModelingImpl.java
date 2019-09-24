@@ -9169,7 +9169,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		} catch(Exception e) {}
 	}
 
-	private void notifyAgents(Normal actNorm, String msg, Integer oid, String messageType, Class classe, String identObj, String direction) {
+	private void notifyAgents(Normal actNorm, String msg, Long oid, String messageType, Class classe, String identObj, String direction) {
 
 		Collection ids = new HashSet();
 		int i = 0;
@@ -9216,7 +9216,7 @@ System.out.println("salva :"+pmodel.getPmState());
 		}
 	}
 
-	private void notifyAgents(Normal actNorm, String msg, Collection ids, Integer oid, String messageType, Class classe, String identObj,
+	private void notifyAgents(Normal actNorm, String msg, Collection ids, Long oid, String messageType, Class classe, String identObj,
 			String direction) {
 
 		ids.remove(null);

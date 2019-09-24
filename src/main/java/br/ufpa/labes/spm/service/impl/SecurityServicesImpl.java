@@ -93,19 +93,19 @@ public class SecurityServicesImpl implements NotificationServices {
 	}
 
 	@Override
-	public boolean isLocked(Integer oid, Class classe) throws UserDeniedException, UserNotManagerException, UserInvalidException, DAOException,
+	public boolean isLocked(Long oid, Class classe) throws UserDeniedException, UserNotManagerException, UserInvalidException, DAOException,
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public String isLockedTo(Integer oid, Class classe) throws UserDeniedException, UserNotManagerException, UserInvalidException, DAOException,
+	public String isLockedTo(Long oid, Class classe) throws UserDeniedException, UserNotManagerException, UserInvalidException, DAOException,
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String isLockedTo_with_key(Integer oid, Class classe, float key) throws UserDeniedException, UserNotManagerException,
+	public String isLockedTo_with_key(Long oid, Class classe, float key) throws UserDeniedException, UserNotManagerException,
 		// TODO Auto-generated method stub
 		return null;
 	}

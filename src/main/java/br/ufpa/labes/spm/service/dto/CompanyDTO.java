@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
 public class CompanyDTO implements Serializable{
-	private Long oid;
+	private Long id;
 	private String ident;
 	private String cnpj;
 	private String fantasyName;
@@ -49,12 +49,12 @@ public class CompanyDTO implements Serializable{
 		setTheCompanyUnits(new ArrayList<CompanyUnitDTO>());
 	}
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getIdent() {
@@ -147,7 +147,7 @@ public class CompanyDTO implements Serializable{
 
 	@Override
 	public String toString() {
-		return "CompanyDTO [oid=" + oid + ", ident=" + ident + ", cnpj=" + cnpj
+		return "CompanyDTO [id=" + id + ", ident=" + ident + ", cnpj=" + cnpj
 				+ ", fantasyName=" + fantasyName + ", socialReason="
 				+ socialReason + ", acronym=" + acronym + ", address="
 				+ address + ", phone=" + phone + ", description=" + description

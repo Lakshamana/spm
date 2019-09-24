@@ -7,13 +7,13 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 import br.ufpa.labes.spm.service.dto.ProcessDTO;
 
 @SuppressWarnings("serial")
 @XmlRootElement(name="project")
 public class ProjectDTO implements Serializable {
-	private Long oid;
+	private Long id;
 	private String ident;
 	private String description;
 	private String name;
@@ -46,11 +46,11 @@ public class ProjectDTO implements Serializable {
 		this.agents = new ArrayList<String>();
 	}
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public String getIdent() {
 		return ident;

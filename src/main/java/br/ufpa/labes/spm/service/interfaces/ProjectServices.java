@@ -54,11 +54,11 @@ public interface ProjectServices {
 
 	public AgentsDTO getAgentsOnline(Integer agent_oid);
 
-	public ProjectDTO getProjectById(Integer oid);
+	public ProjectDTO getProjectById(Long oid);
 
 	public List<ProjectStatistic> getProjectsForDashboard();
 
-	public ProjectStatistic getProjectForDashboard(Integer oid);
+	public ProjectStatistic getProjectForDashboard(Long oid);
 
 	public ProjectDTO getProjectByIdent(String ident);
 

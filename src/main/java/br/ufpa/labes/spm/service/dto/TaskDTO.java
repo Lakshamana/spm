@@ -6,13 +6,13 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
-import br.ufpa.labes.spm.service.dto.Time;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.service.dto.dashboard.Time;
 
 @SuppressWarnings("serial")
 @XmlRootElement(name="task")
 public class TaskDTO implements Serializable {
-	private Long oid;//
+	private Long id;//
 
 	private String name;
 
@@ -61,10 +61,10 @@ public class TaskDTO implements Serializable {
 
 	public TaskDTO() {}
 
-	public TaskDTO(Long oid, String name, String localState, Date beginDate,
+	public TaskDTO(Long id, String name, String localState, Date beginDate,
 			Date endDate, Float workingHours, Date dateDelegatedTo,
 			Date dateDelegatedFrom, String theNormal) {
-		this.oid = oid;
+		this.id = id;
 		this.name = name;;
 		this.localState = localState;
 		this.beginDate = beginDate;
@@ -75,12 +75,12 @@ public class TaskDTO implements Serializable {
 		this.theNormal = theNormal;
 	}
 
-	public TaskDTO(Long oid, String name, String localState, Date beginDate,
+	public TaskDTO(Long id, String name, String localState, Date beginDate,
 			Date endDate, Float workingHours, Date dateDelegatedTo,
 			Date dateDelegatedFrom, Float howLong, String howLongUnit,
 			Date plannedBegin, Date plannedEnd, String script,
 			String theNormal, String agent) {
-		this.oid = oid;
+		this.id = id;
 		this.name = name;
 		this.localState = localState;
 		this.beginDate = beginDate;
@@ -97,12 +97,12 @@ public class TaskDTO implements Serializable {
 		this.plannedEnd = plannedEnd;
 	}
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {

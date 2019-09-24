@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class CalendarDTO implements Serializable{
 
 
-	private Long oid;
+	private Long id;
 
 
 	private String name;
@@ -20,12 +20,12 @@ public class CalendarDTO implements Serializable{
 
 
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {

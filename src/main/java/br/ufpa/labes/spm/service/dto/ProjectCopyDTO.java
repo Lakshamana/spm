@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 import br.ufpa.labes.spm.service.dto.ProjectDTO;
 import br.ufpa.labes.spm.service.dto.SimpleUpdateDTO;
 

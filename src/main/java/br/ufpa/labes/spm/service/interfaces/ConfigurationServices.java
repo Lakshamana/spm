@@ -9,7 +9,7 @@ public interface ConfigurationServices {
 
 	public boolean perfilSave(SpmConfigurationDTO confi,AgentDTO agent);
 
-	public SpmConfigurationDTO getPerfil(Integer oid);
+	public SpmConfigurationDTO getPerfil(Long oid);
 
 	public SpmConfigurationDTO updateConfiguration(Integer agentOid, SpmConfigurationDTO spmconfiguration);
 }

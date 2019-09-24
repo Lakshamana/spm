@@ -48,17 +48,17 @@ public interface NotificationServices {
 			UserDeniedException, UserNotManagerException, UserInvalidException,
 			DAOException, ObjectLockedException, RemoteException;
 
-	public abstract boolean isLocked(Integer oid, Class classe)
+	public abstract boolean isLocked(Long oid, Class classe)
 			throws UserDeniedException,
 			UserNotManagerException, UserInvalidException, DAOException,
 			ObjectLockedException, RemoteException;
 
-	public abstract String isLockedTo(Integer oid, Class classe)
+	public abstract String isLockedTo(Long oid, Class classe)
 			throws UserDeniedException,
 			UserNotManagerException, UserInvalidException, DAOException,
 			ObjectLockedException, RemoteException;
 
-	public abstract String isLockedTo_with_key(Integer oid, Class classe,
+	public abstract String isLockedTo_with_key(Long oid, Class classe,
 			float key) throws UserDeniedException,
 			UserNotManagerException, UserInvalidException, DAOException,
 			ObjectLockedException, RemoteException;

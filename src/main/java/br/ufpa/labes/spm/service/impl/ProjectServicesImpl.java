@@ -51,7 +51,7 @@ import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessModelDAO;
 import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
 import br.ufpa.labes.spm.service.dto.ProjectCost;
 import br.ufpa.labes.spm.service.dto.ProjectStatistic;
-import br.ufpa.labes.spm.service.dto.Time;
+import br.ufpa.labes.spm.service.dto.dashboard.Time;
 import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.AgentsDTO;
 import br.ufpa.labes.spm.service.dto.ArtifactDTO;
@@ -595,7 +595,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		return artConXML.toString();
 	}
 
-	private String getPositionTag(Integer oid, String className) throws DAOException{
+	private String getPositionTag(Long oid, String className) throws DAOException{
 		WebAPSEEObject webAPSEEObject = null;
 		GraphicCoordinate graphicCoord = null;
 
@@ -877,7 +877,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	@Override
-	public ProjectDTO getProjectById(Integer oid) {
+	public ProjectDTO getProjectById(Long oid) {
 		Project project = this.getProjectForId(oid);
 		ProjectDTO projectDTO = new ProjectDTO();
 		if(project != null) {
@@ -886,7 +886,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		return projectDTO;
 	}
 
-	private Project getProjectForId(Integer oid) {
+	private Project getProjectForId(Long oid) {
 		String hql = "select o from " + PROJECT_CLASSNAME + " o where o.oid = :oid";
 		query = projectDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("oid", oid);
@@ -913,7 +913,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	@Override
-	public ProjectStatistic getProjectForDashboard(Integer oid) {
+	public ProjectStatistic getProjectForDashboard(Long oid) {
 		Project project = this.getProjectForId(oid);
 		ProjectStatistic statistic = convertProjectToProjectStatistic(project);
 
@@ -3541,7 +3541,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			Class[] types = null;
 			Method get = obj.getClass().getMethod("getId", types);
 			Object[] params = null;
-			Integer oid = (Integer) get.invoke(obj, params);
+			Long oid = (Integer) get.invoke(obj, params);
 			return oid;
 		} catch (SecurityException e) {
 			e.printStackTrace();
@@ -3668,7 +3668,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		Object[] parameter = { obj };
 
 		Object[] nullparam = null;
-		Integer oid = (Integer) UtilReflection.invokeMethod(obj, "getId", nullparam);
+		Long oid = (Integer) UtilReflection.invokeMethod(obj, "getId", nullparam);
 		Object isPersisted = null;
 
 //		if(oid != null) {

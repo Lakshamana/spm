@@ -2,12 +2,12 @@ package br.ufpa.labes.spm.service.dto;
 
 import java.io.Serializable;
 
-import org.qrconsult.spm.converter.annotations.IgnoreMapping;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
 public class AgentAffinityAgentDTO implements Serializable {
 
-	private Long oid;
+	private Long id;
 
 	private Integer degree;
 	@IgnoreMapping
@@ -23,12 +23,12 @@ public class AgentAffinityAgentDTO implements Serializable {
 		this.fromAffinity = fromAffinity;
 	}
 
-	public Integer getId() {
-		return oid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(Long oid) {
-		this.oid = oid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Integer getDegree() {
