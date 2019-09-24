@@ -1,0 +1,8 @@
+    public void removeFromTheTheReferedProcessModel() {
+      if (this.theReferedProcessModel != null) {
+        this.theReferedProcessModel.setTheDecomposed(null);
+        this.setTheReferedProcessModel(null);
+      }
+    }
+
+

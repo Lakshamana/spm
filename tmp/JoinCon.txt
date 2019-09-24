@@ -1,0 +1,13 @@
+    public JoinCon removeFromMultipleCon(MultipleCon multipleCon) {
+        this.fromMultipleCons.remove(multipleCon);
+        multipleCon.getTheJoinCons().remove(this);
+        return this;
+    }
+
+    public JoinCon removeFromActivity(Activity activity) {
+        this.fromActivities.remove(activity);
+        activity.getToJoinCons().remove(this);
+        return this;
+    }
+
+

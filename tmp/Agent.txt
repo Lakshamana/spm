@@ -1,0 +1,7 @@
+    public Agent removeFromAgentAffinity(AgentAffinityAgent agentAffinityAgent) {
+        this.fromAgentAffinities.remove(agentAffinityAgent);
+        agentAffinityAgent.setFromAffinity(null);
+        return this;
+    }
+
+

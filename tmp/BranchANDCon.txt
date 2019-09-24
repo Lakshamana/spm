@@ -1,0 +1,7 @@
+    public BranchANDCon removeFromActivity(Activity activity) {
+        this.fromActivities.remove(activity);
+        activity.getToBranchANDCons().remove(this);
+        return this;
+    }
+
+

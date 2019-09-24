@@ -1,0 +1,7 @@
+    public ArtifactCon removeFromActivity(Activity activity) {
+        this.fromActivities.remove(activity);
+        activity.getToArtifactCons().remove(this);
+        return this;
+    }
+
+

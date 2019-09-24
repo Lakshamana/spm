@@ -1,0 +1,19 @@
+    public Activity removeFromSimpleCon(SimpleCon simpleCon) {
+        this.fromSimpleCons.remove(simpleCon);
+        simpleCon.setFromActivity(null);
+        return this;
+    }
+
+    public Activity removeFromJoinCon(JoinCon joinCon) {
+        this.fromJoinCons.remove(joinCon);
+        joinCon.setToActivity(null);
+        return this;
+    }
+
+    public Activity removeFromArtifactCon(ArtifactCon artifactCon) {
+        this.fromArtifactCons.remove(artifactCon);
+        artifactCon.getToActivities().remove(this);
+        return this;
+    }
+
+

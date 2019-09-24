@@ -69,7 +69,7 @@ for m in $models; do
 
       # add input methods to new class
       # echo -e "$inputs"
-      echo -e "$(node util_files/insertmethods.js "$inputs" "$file")"
+      echo -e "$(node util_files/insert.js "$inputs" "$file")"
       # sed -i "s/^}$//" $file
       # echo -e "$inputs" >> $file
       # echo -e '}' >> $file
