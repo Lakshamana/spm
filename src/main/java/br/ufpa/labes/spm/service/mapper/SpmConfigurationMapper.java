@@ -12,7 +12,7 @@ import org.mapstruct.*;
 public interface SpmConfigurationMapper extends EntityMapper<SpmConfigurationDTO, SpmConfiguration> {
 
 
-    @Mapping(target = "theAgent", ignore = true)
+    @Mapping(target = "agent", ignore = true)
     SpmConfiguration toEntity(SpmConfigurationDTO spmConfigurationDTO);
 
     default SpmConfiguration fromId(Long id) {

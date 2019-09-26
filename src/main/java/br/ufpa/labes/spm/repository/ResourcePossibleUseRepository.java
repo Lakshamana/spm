@@ -1,6 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-
 import br.ufpa.labes.spm.domain.ResourcePossibleUse;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;

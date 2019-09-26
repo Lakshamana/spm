@@ -6,7 +6,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "process",
             "otherEntityRelationshipName": "theProcessMetric",
-            "relationshipName": "theProcess",
+            "relationshipName": "process",
             "otherEntityField": "id"
         }
     ],

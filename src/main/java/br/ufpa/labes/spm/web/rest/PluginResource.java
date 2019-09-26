@@ -83,12 +83,12 @@ public class PluginResource {
     /**
      * {@code GET  /plugins} : get all the plugins.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+
      * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of plugins in body.
      */
     @GetMapping("/plugins")
-    public List<PluginDTO> getAllPlugins(@RequestParam(required = false) String filter,@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<PluginDTO> getAllPlugins(@RequestParam(required = false) String filter) {
         if ("thedriver-is-null".equals(filter)) {
             log.debug("REST request to get all Plugins where theDriver is null");
             return pluginService.findAllWhereTheDriverIsNull();

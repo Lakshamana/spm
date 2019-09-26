@@ -12,13 +12,16 @@ import java.io.Serializable;
 @Entity
 @Table(name = "script")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Script extends Subroutine implements Serializable {
+public class Script implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "ident")
+    private String ident;
 
     @Column(name = "file_name")
     private String fileName;
@@ -34,6 +37,19 @@ public class Script extends Subroutine implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIdent() {
+        return ident;
+    }
+
+    public Script ident(String ident) {
+        this.ident = ident;
+        return this;
+    }
+
+    public void setIdent(String ident) {
+        this.ident = ident;
     }
 
     public String getFileName() {
@@ -83,6 +99,7 @@ public class Script extends Subroutine implements Serializable {
     public String toString() {
         return "Script{" +
             "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
             ", fileName='" + getFileName() + "'" +
             ", description='" + getDescription() + "'" +
             "}";

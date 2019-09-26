@@ -2,6 +2,10 @@
     "name": "ClassMethodCall",
     "fields": [
         {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "className",
             "fieldType": "String"
         },

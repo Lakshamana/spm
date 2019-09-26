@@ -18,20 +18,6 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "catalogEvent",
-            "otherEntityRelationshipName": "theAgendaEvent",
-            "relationshipName": "theCatalogEvents",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "task",
-            "otherEntityRelationshipName": "theAgendaEvent",
-            "relationshipName": "theTask",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "spmLog",
             "otherEntityRelationshipName": "theEvent",
             "relationshipName": "theLog",
@@ -43,33 +29,6 @@
             "otherEntityRelationshipName": "theEvent",
             "relationshipName": "theEventType",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "activity",
-            "otherEntityRelationshipName": "theModelingActivityEvent",
-            "relationshipName": "theActivity",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "plain",
-            "otherEntityRelationshipName": "theGlobalActivityEvent",
-            "relationshipName": "thePlain",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "agent",
-            "otherEntityRelationshipName": "theModelingActivityEvent",
-            "relationshipName": "theAgent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "agent",
-            "otherEntityRelationshipName": "theResourceEvent",
-            "relationshipName": "theRequestorAgent"
         }
     ],
     "changelogDate": "20190914033802",

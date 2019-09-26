@@ -1,0 +1,30 @@
+{
+    "name": "NotWorkingDay",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "unique"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "calendar",
+            "otherEntityRelationshipName": "notWorkingDays",
+            "relationshipName": "calendar",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190925111956",
+    "entityTableName": "not_working_day",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -26,7 +26,7 @@ public class ReqAgentRequiresAbility implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theReqAgentRequiresAbilities")
-    private RequiredPeople theReqAgent;
+    private ReqAgent theReqAgent;
 
     @ManyToOne
     @JsonIgnoreProperties("theReqAgentRequiresAbilities")
@@ -54,17 +54,17 @@ public class ReqAgentRequiresAbility implements Serializable {
         this.degree = degree;
     }
 
-    public RequiredPeople getTheReqAgent() {
+    public ReqAgent getTheReqAgent() {
         return theReqAgent;
     }
 
-    public ReqAgentRequiresAbility theReqAgent(RequiredPeople requiredPeople) {
-        this.theReqAgent = requiredPeople;
+    public ReqAgentRequiresAbility theReqAgent(ReqAgent reqAgent) {
+        this.theReqAgent = reqAgent;
         return this;
     }
 
-    public void setTheReqAgent(RequiredPeople requiredPeople) {
-        this.theReqAgent = requiredPeople;
+    public void setTheReqAgent(ReqAgent reqAgent) {
+        this.theReqAgent = reqAgent;
     }
 
     public Ability getTheAbility() {
@@ -103,25 +103,5 @@ public class ReqAgentRequiresAbility implements Serializable {
             "id=" + getId() +
             ", degree=" + getDegree() +
             "}";
-    }
-
-    public void removeFromTheAbility(){
-      if (this.theAbility!=null){
-        this.theAbility.removeTheReqAgentRequiresAbility(this);
-      }
-    }
-
-    public void insertIntoTheAbility(Ability theAbility){
-      theAbility.addTheReqAgentRequiresAbility(this);
-    }
-
-    public void removeFromTheReqAgent(){
-      if (this.theReqAgent!=null){
-        this.theReqAgent.removeTheReqAgentRequiresAbility(this);
-      }
-    }
-
-    public void insertIntoTheReqAgent(ReqAgent theReqAgent){
-      theReqAgent.addTheReqAgentRequiresAbility(this);
     }
 }

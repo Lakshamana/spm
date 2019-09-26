@@ -15,8 +15,6 @@ public interface RequiredPeopleMapper extends EntityMapper<RequiredPeopleDTO, Re
     RequiredPeopleDTO toDto(RequiredPeople requiredPeople);
 
     @Mapping(source = "theNormalId", target = "theNormal")
-    @Mapping(target = "theReqAgentRequiresAbilities", ignore = true)
-    @Mapping(target = "removeTheReqAgentRequiresAbility", ignore = true)
     RequiredPeople toEntity(RequiredPeopleDTO requiredPeopleDTO);
 
     default RequiredPeople fromId(Long id) {

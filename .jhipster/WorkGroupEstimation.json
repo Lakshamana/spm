@@ -6,7 +6,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "workGroup",
             "otherEntityRelationshipName": "theWorkGroupEstimation",
-            "relationshipName": "theWorkGroup",
+            "relationshipName": "workGroup",
             "otherEntityField": "id"
         }
     ],

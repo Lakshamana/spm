@@ -10,8 +10,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.ufpa.labes.spm.domain.enumeration.ProcessModelStatus;
-
 /**
  * A ProcessModel.
  */
@@ -29,9 +27,8 @@ public class ProcessModel implements Serializable {
     @Column(name = "requirements")
     private String requirements;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "pm_status")
-    private ProcessModelStatus pmStatus;
+    @Column(name = "pm_state")
+    private String pmState;
 
     @OneToMany(mappedBy = "theProcessModel")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -46,7 +43,7 @@ public class ProcessModel implements Serializable {
     private Process theProcess;
 
     @ManyToOne
-    @JsonIgnoreProperties("theProcessModels")
+    @JsonIgnoreProperties("theInstances")
     private Template theOrigin;
 
     @OneToMany(mappedBy = "theProcessModel")
@@ -79,17 +76,17 @@ public class ProcessModel implements Serializable {
         this.requirements = requirements;
     }
 
-    public ProcessModelStatus getPmStatus() {
-        return pmStatus;
+    public String getPmState() {
+        return pmState;
     }
 
-    public ProcessModel pmStatus(ProcessModelStatus pmStatus) {
-        this.pmStatus = pmStatus;
+    public ProcessModel pmState(String pmState) {
+        this.pmState = pmState;
         return this;
     }
 
-    public void setPmStatus(ProcessModelStatus pmStatus) {
-        this.pmStatus = pmStatus;
+    public void setPmState(String pmState) {
+        this.pmState = pmState;
     }
 
     public Set<Activity> getTheActivities() {
@@ -228,7 +225,7 @@ public class ProcessModel implements Serializable {
         return "ProcessModel{" +
             "id=" + getId() +
             ", requirements='" + getRequirements() + "'" +
-            ", pmStatus='" + getPmStatus() + "'" +
+            ", pmState='" + getPmState() + "'" +
             "}";
     }
 }

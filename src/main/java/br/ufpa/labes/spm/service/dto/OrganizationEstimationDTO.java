@@ -12,7 +12,7 @@ public class OrganizationEstimationDTO implements Serializable {
 
     private Long theOrganizationId;
 
-    private Long theCompanyId;
+    private Long companyId;
 
     public Long getId() {
         return id;
@@ -30,12 +30,12 @@ public class OrganizationEstimationDTO implements Serializable {
         this.theOrganizationId = organizationId;
     }
 
-    public Long getTheCompanyId() {
-        return theCompanyId;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setTheCompanyId(Long companyId) {
-        this.theCompanyId = companyId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class OrganizationEstimationDTO implements Serializable {
         return "OrganizationEstimationDTO{" +
             "id=" + getId() +
             ", theOrganization=" + getTheOrganizationId() +
-            ", theCompany=" + getTheCompanyId() +
+            ", company=" + getCompanyId() +
             "}";
     }
 }

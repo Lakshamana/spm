@@ -38,26 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = SpmApp.class)
 public class AssetStatResourceIT {
 
-    private static final Long DEFAULT_VOTE_COUNT = 1L;
-    private static final Long UPDATED_VOTE_COUNT = 2L;
-    private static final Long SMALLER_VOTE_COUNT = 1L - 1L;
-
-    private static final Long DEFAULT_VISIT_COUNT = 1L;
-    private static final Long UPDATED_VISIT_COUNT = 2L;
-    private static final Long SMALLER_VISIT_COUNT = 1L - 1L;
-
-    private static final Long DEFAULT_DOWNLOAD_COUNT = 1L;
-    private static final Long UPDATED_DOWNLOAD_COUNT = 2L;
-    private static final Long SMALLER_DOWNLOAD_COUNT = 1L - 1L;
-
-    private static final Double DEFAULT_T_VOTES = 1D;
-    private static final Double UPDATED_T_VOTES = 2D;
-    private static final Double SMALLER_T_VOTES = 1D - 1D;
-
-    private static final Double DEFAULT_RATE = 1D;
-    private static final Double UPDATED_RATE = 2D;
-    private static final Double SMALLER_RATE = 1D - 1D;
-
     @Autowired
     private AssetStatRepository assetStatRepository;
 
@@ -105,12 +85,7 @@ public class AssetStatResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static AssetStat createEntity(EntityManager em) {
-        AssetStat assetStat = new AssetStat()
-            .voteCount(DEFAULT_VOTE_COUNT)
-            .visitCount(DEFAULT_VISIT_COUNT)
-            .downloadCount(DEFAULT_DOWNLOAD_COUNT)
-            .tVotes(DEFAULT_T_VOTES)
-            .rate(DEFAULT_RATE);
+        AssetStat assetStat = new AssetStat();
         return assetStat;
     }
     /**
@@ -120,12 +95,7 @@ public class AssetStatResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static AssetStat createUpdatedEntity(EntityManager em) {
-        AssetStat assetStat = new AssetStat()
-            .voteCount(UPDATED_VOTE_COUNT)
-            .visitCount(UPDATED_VISIT_COUNT)
-            .downloadCount(UPDATED_DOWNLOAD_COUNT)
-            .tVotes(UPDATED_T_VOTES)
-            .rate(UPDATED_RATE);
+        AssetStat assetStat = new AssetStat();
         return assetStat;
     }
 
@@ -150,11 +120,6 @@ public class AssetStatResourceIT {
         List<AssetStat> assetStatList = assetStatRepository.findAll();
         assertThat(assetStatList).hasSize(databaseSizeBeforeCreate + 1);
         AssetStat testAssetStat = assetStatList.get(assetStatList.size() - 1);
-        assertThat(testAssetStat.getVoteCount()).isEqualTo(DEFAULT_VOTE_COUNT);
-        assertThat(testAssetStat.getVisitCount()).isEqualTo(DEFAULT_VISIT_COUNT);
-        assertThat(testAssetStat.getDownloadCount()).isEqualTo(DEFAULT_DOWNLOAD_COUNT);
-        assertThat(testAssetStat.gettVotes()).isEqualTo(DEFAULT_T_VOTES);
-        assertThat(testAssetStat.getRate()).isEqualTo(DEFAULT_RATE);
     }
 
     @Test
@@ -188,12 +153,7 @@ public class AssetStatResourceIT {
         restAssetStatMockMvc.perform(get("/api/asset-stats?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(assetStat.getId().intValue())))
-            .andExpect(jsonPath("$.[*].voteCount").value(hasItem(DEFAULT_VOTE_COUNT.intValue())))
-            .andExpect(jsonPath("$.[*].visitCount").value(hasItem(DEFAULT_VISIT_COUNT.intValue())))
-            .andExpect(jsonPath("$.[*].downloadCount").value(hasItem(DEFAULT_DOWNLOAD_COUNT.intValue())))
-            .andExpect(jsonPath("$.[*].tVotes").value(hasItem(DEFAULT_T_VOTES.doubleValue())))
-            .andExpect(jsonPath("$.[*].rate").value(hasItem(DEFAULT_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(assetStat.getId().intValue())));
     }
     
     @Test
@@ -206,12 +166,7 @@ public class AssetStatResourceIT {
         restAssetStatMockMvc.perform(get("/api/asset-stats/{id}", assetStat.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(assetStat.getId().intValue()))
-            .andExpect(jsonPath("$.voteCount").value(DEFAULT_VOTE_COUNT.intValue()))
-            .andExpect(jsonPath("$.visitCount").value(DEFAULT_VISIT_COUNT.intValue()))
-            .andExpect(jsonPath("$.downloadCount").value(DEFAULT_DOWNLOAD_COUNT.intValue()))
-            .andExpect(jsonPath("$.tVotes").value(DEFAULT_T_VOTES.doubleValue()))
-            .andExpect(jsonPath("$.rate").value(DEFAULT_RATE.doubleValue()));
+            .andExpect(jsonPath("$.id").value(assetStat.getId().intValue()));
     }
 
     @Test
@@ -234,12 +189,6 @@ public class AssetStatResourceIT {
         AssetStat updatedAssetStat = assetStatRepository.findById(assetStat.getId()).get();
         // Disconnect from session so that the updates on updatedAssetStat are not directly saved in db
         em.detach(updatedAssetStat);
-        updatedAssetStat
-            .voteCount(UPDATED_VOTE_COUNT)
-            .visitCount(UPDATED_VISIT_COUNT)
-            .downloadCount(UPDATED_DOWNLOAD_COUNT)
-            .tVotes(UPDATED_T_VOTES)
-            .rate(UPDATED_RATE);
         AssetStatDTO assetStatDTO = assetStatMapper.toDto(updatedAssetStat);
 
         restAssetStatMockMvc.perform(put("/api/asset-stats")
@@ -251,11 +200,6 @@ public class AssetStatResourceIT {
         List<AssetStat> assetStatList = assetStatRepository.findAll();
         assertThat(assetStatList).hasSize(databaseSizeBeforeUpdate);
         AssetStat testAssetStat = assetStatList.get(assetStatList.size() - 1);
-        assertThat(testAssetStat.getVoteCount()).isEqualTo(UPDATED_VOTE_COUNT);
-        assertThat(testAssetStat.getVisitCount()).isEqualTo(UPDATED_VISIT_COUNT);
-        assertThat(testAssetStat.getDownloadCount()).isEqualTo(UPDATED_DOWNLOAD_COUNT);
-        assertThat(testAssetStat.gettVotes()).isEqualTo(UPDATED_T_VOTES);
-        assertThat(testAssetStat.getRate()).isEqualTo(UPDATED_RATE);
     }
 
     @Test

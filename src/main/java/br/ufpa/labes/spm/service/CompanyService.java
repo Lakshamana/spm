@@ -24,6 +24,12 @@ public interface CompanyService {
      * @return the list of entities.
      */
     List<CompanyDTO> findAll();
+    /**
+     * Get all the CompanyDTO where TheDriver is {@code null}.
+     *
+     * @return the list of entities.
+     */
+    List<CompanyDTO> findAllWhereTheDriverIsNull();
 
 
     /**

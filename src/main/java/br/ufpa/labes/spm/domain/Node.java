@@ -1,9 +1,11 @@
 package br.ufpa.labes.spm.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -29,20 +31,21 @@ public class Node implements Serializable {
     @Column(name = "data")
     private String data;
 
-    @Column(name = "service_file_id")
+    
+    @Column(name = "service_file_id", unique = true)
     private String serviceFileId;
 
-    @OneToMany(mappedBy = "theNode")
+    @OneToMany(mappedBy = "parentNode")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Node> children = new HashSet<>();
 
+    @OneToOne(mappedBy = "rootElement")
+    @JsonIgnore
+    private Structure theStructure;
+
     @ManyToOne
     @JsonIgnoreProperties("children")
-    private Node theNode;
-
-    @OneToMany(mappedBy = "rootElement")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Structure> theStructures = new HashSet<>();
+    private Node parentNode;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -103,13 +106,13 @@ public class Node implements Serializable {
 
     public Node addChildren(Node node) {
         this.children.add(node);
-        node.setTheNode(this);
+        node.setParentNode(this);
         return this;
     }
 
     public Node removeChildren(Node node) {
         this.children.remove(node);
-        node.setTheNode(null);
+        node.setParentNode(null);
         return this;
     }
 
@@ -117,42 +120,30 @@ public class Node implements Serializable {
         this.children = nodes;
     }
 
-    public Node getTheNode() {
-        return theNode;
+    public Structure getTheStructure() {
+        return theStructure;
     }
 
-    public Node theNode(Node node) {
-        this.theNode = node;
+    public Node theStructure(Structure structure) {
+        this.theStructure = structure;
         return this;
     }
 
-    public void setTheNode(Node node) {
-        this.theNode = node;
+    public void setTheStructure(Structure structure) {
+        this.theStructure = structure;
     }
 
-    public Set<Structure> getTheStructures() {
-        return theStructures;
+    public Node getParentNode() {
+        return parentNode;
     }
 
-    public Node theStructures(Set<Structure> structures) {
-        this.theStructures = structures;
+    public Node parentNode(Node node) {
+        this.parentNode = node;
         return this;
     }
 
-    public Node addTheStructure(Structure structure) {
-        this.theStructures.add(structure);
-        structure.setRootElement(this);
-        return this;
-    }
-
-    public Node removeTheStructure(Structure structure) {
-        this.theStructures.remove(structure);
-        structure.setRootElement(null);
-        return this;
-    }
-
-    public void setTheStructures(Set<Structure> structures) {
-        this.theStructures = structures;
+    public void setParentNode(Node node) {
+        this.parentNode = node;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

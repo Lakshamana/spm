@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "work_group_estimation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class WorkGroupEstimation extends Estimation implements Serializable {
+public class WorkGroupEstimation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class WorkGroupEstimation extends Estimation implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theWorkGroupEstimations")
-    private WorkGroup theWorkGroup;
+    private WorkGroup workGroup;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -34,17 +34,17 @@ public class WorkGroupEstimation extends Estimation implements Serializable {
         this.id = id;
     }
 
-    public WorkGroup getTheWorkGroup() {
-        return theWorkGroup;
+    public WorkGroup getWorkGroup() {
+        return workGroup;
     }
 
-    public WorkGroupEstimation theWorkGroup(WorkGroup workGroup) {
-        this.theWorkGroup = workGroup;
+    public WorkGroupEstimation workGroup(WorkGroup workGroup) {
+        this.workGroup = workGroup;
         return this;
     }
 
-    public void setTheWorkGroup(WorkGroup workGroup) {
-        this.theWorkGroup = workGroup;
+    public void setWorkGroup(WorkGroup workGroup) {
+        this.workGroup = workGroup;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -1,5 +1,4 @@
 package br.ufpa.labes.spm.domain;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -23,13 +22,13 @@ public class Structure implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JsonIgnoreProperties("theStructures")
+    @OneToOne
+    @JoinColumn(unique = true)
     private Node rootElement;
 
     @OneToMany(mappedBy = "theStructure")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<VCSRepository> theVCSRepositories = new HashSet<>();
+    private Set<VCSRepository> theRepositories = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -53,29 +52,29 @@ public class Structure implements Serializable {
         this.rootElement = node;
     }
 
-    public Set<VCSRepository> getTheVCSRepositories() {
-        return theVCSRepositories;
+    public Set<VCSRepository> getTheRepositories() {
+        return theRepositories;
     }
 
-    public Structure theVCSRepositories(Set<VCSRepository> vCSRepositories) {
-        this.theVCSRepositories = vCSRepositories;
+    public Structure theRepositories(Set<VCSRepository> vCSRepositories) {
+        this.theRepositories = vCSRepositories;
         return this;
     }
 
-    public Structure addTheVCSRepository(VCSRepository vCSRepository) {
-        this.theVCSRepositories.add(vCSRepository);
+    public Structure addTheRepository(VCSRepository vCSRepository) {
+        this.theRepositories.add(vCSRepository);
         vCSRepository.setTheStructure(this);
         return this;
     }
 
-    public Structure removeTheVCSRepository(VCSRepository vCSRepository) {
-        this.theVCSRepositories.remove(vCSRepository);
+    public Structure removeTheRepository(VCSRepository vCSRepository) {
+        this.theRepositories.remove(vCSRepository);
         vCSRepository.setTheStructure(null);
         return this;
     }
 
-    public void setTheVCSRepositories(Set<VCSRepository> vCSRepositories) {
-        this.theVCSRepositories = vCSRepositories;
+    public void setTheRepositories(Set<VCSRepository> vCSRepositories) {
+        this.theRepositories = vCSRepositories;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

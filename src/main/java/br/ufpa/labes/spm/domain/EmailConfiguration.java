@@ -8,12 +8,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.ufpa.labes.spm.domain.enumeration.EmailSecurityLevels;
-
-import br.ufpa.labes.spm.domain.enumeration.EmailNotificationConfig;
-
-import br.ufpa.labes.spm.domain.enumeration.EmailProcessStatusNotifications;
-
 /**
  * A EmailConfiguration.
  */
@@ -43,17 +37,8 @@ public class EmailConfiguration implements Serializable {
     @Column(name = "task_delegated")
     private Boolean taskDelegated;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "security_levels")
-    private EmailSecurityLevels securityLevels;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "notification_config")
-    private EmailNotificationConfig notificationConfig;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "process_notifications")
-    private EmailProcessStatusNotifications processNotifications;
+    @Column(name = "decision_branch_cond")
+    private Boolean decisionBranchCond;
 
     @OneToMany(mappedBy = "theEmailConfiguration")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -137,43 +122,17 @@ public class EmailConfiguration implements Serializable {
         this.taskDelegated = taskDelegated;
     }
 
-    public EmailSecurityLevels getSecurityLevels() {
-        return securityLevels;
+    public Boolean isDecisionBranchCond() {
+        return decisionBranchCond;
     }
 
-    public EmailConfiguration securityLevels(EmailSecurityLevels securityLevels) {
-        this.securityLevels = securityLevels;
+    public EmailConfiguration decisionBranchCond(Boolean decisionBranchCond) {
+        this.decisionBranchCond = decisionBranchCond;
         return this;
     }
 
-    public void setSecurityLevels(EmailSecurityLevels securityLevels) {
-        this.securityLevels = securityLevels;
-    }
-
-    public EmailNotificationConfig getNotificationConfig() {
-        return notificationConfig;
-    }
-
-    public EmailConfiguration notificationConfig(EmailNotificationConfig notificationConfig) {
-        this.notificationConfig = notificationConfig;
-        return this;
-    }
-
-    public void setNotificationConfig(EmailNotificationConfig notificationConfig) {
-        this.notificationConfig = notificationConfig;
-    }
-
-    public EmailProcessStatusNotifications getProcessNotifications() {
-        return processNotifications;
-    }
-
-    public EmailConfiguration processNotifications(EmailProcessStatusNotifications processNotifications) {
-        this.processNotifications = processNotifications;
-        return this;
-    }
-
-    public void setProcessNotifications(EmailProcessStatusNotifications processNotifications) {
-        this.processNotifications = processNotifications;
+    public void setDecisionBranchCond(Boolean decisionBranchCond) {
+        this.decisionBranchCond = decisionBranchCond;
     }
 
     public Set<Process> getTheProcesses() {
@@ -252,9 +211,7 @@ public class EmailConfiguration implements Serializable {
             ", consumableResourceAmount='" + isConsumableResourceAmount() + "'" +
             ", activityInstantied='" + isActivityInstantied() + "'" +
             ", taskDelegated='" + isTaskDelegated() + "'" +
-            ", securityLevels='" + getSecurityLevels() + "'" +
-            ", notificationConfig='" + getNotificationConfig() + "'" +
-            ", processNotifications='" + getProcessNotifications() + "'" +
+            ", decisionBranchCond='" + isDecisionBranchCond() + "'" +
             "}";
     }
 }

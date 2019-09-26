@@ -26,6 +26,12 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
+            "otherEntityName": "calendar",
+            "otherEntityRelationshipName": "project",
+            "relationshipName": "theCalendar"
+        },
+        {
+            "relationshipType": "one-to-many",
             "otherEntityName": "artifact",
             "otherEntityRelationshipName": "theProject",
             "relationshipName": "finalArtifacts"
@@ -42,13 +48,6 @@
             "otherEntityName": "developingSystem",
             "otherEntityRelationshipName": "theProject",
             "relationshipName": "theSystem",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "calendar",
-            "otherEntityRelationshipName": "project",
-            "relationshipName": "theCalendar",
             "otherEntityField": "id"
         }
     ],

@@ -8,6 +8,21 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "sequence",
+            "otherEntityRelationshipName": "theDependency",
+            "relationshipName": "theSequence",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "multipleCon",
+            "otherEntityRelationshipName": "theDependency",
+            "relationshipName": "theMultipleCon",
+            "ownerSide": false
+        },
+        {
             "relationshipType": "one-to-many",
             "otherEntityName": "multipleCon",
             "otherEntityRelationshipName": "theDependency",

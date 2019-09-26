@@ -18,7 +18,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "involvedArtifact",
             "otherEntityRelationshipName": "theArtifactType",
-            "relationshipName": "theInvolvedArtifact"
+            "relationshipName": "theInvolvedArtifacts"
         },
         {
             "relationshipType": "one-to-many",
@@ -30,7 +30,15 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "toolParameter",
             "otherEntityRelationshipName": "theArtifactType",
-            "relationshipName": "theToolParameter"
+            "relationshipName": "theToolParameters"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "toolDefinition",
+            "otherEntityRelationshipName": "theArtifactTypes",
+            "relationshipName": "theToolDefinition",
+            "otherEntityField": "id",
+            "ownerSide": false
         }
     ],
     "changelogDate": "20190914033925",

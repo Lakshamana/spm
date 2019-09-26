@@ -27,14 +27,14 @@
                                  referencedTableName="join_con"/>
         
         <addForeignKeyConstraint baseColumnNames="activity_id"
-                                 baseTableName="activity_to_branchandcon"
-                                 constraintName="fk_activity_to_branchandcon_activity_id"
+                                 baseTableName="activity_from_branchandcon"
+                                 constraintName="fk_activity_from_branchandcon_activity_id"
                                  referencedColumnNames="id"
                                  referencedTableName="activity"/>
 
-        <addForeignKeyConstraint baseColumnNames="to_branchandcon_id"
-                                 baseTableName="activity_to_branchandcon"
-                                 constraintName="fk_activity_to_branchandcon_to_branchandcon_id"
+        <addForeignKeyConstraint baseColumnNames="from_branchandcon_id"
+                                 baseTableName="activity_from_branchandcon"
+                                 constraintName="fk_activity_from_branchandcon_from_branchandcon_id"
                                  referencedColumnNames="id"
                                  referencedTableName="branch_and_con"/>
         
@@ -62,9 +62,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="artifact_con"/>
         
-        <addForeignKeyConstraint baseColumnNames="the_ancestor_actitvity_id"
+        <addForeignKeyConstraint baseColumnNames="is_version_of_id"
                                  baseTableName="activity"
-                                 constraintName="fk_activity_the_ancestor_actitvity_id"
+                                 constraintName="fk_activity_is_version_of_id"
                                  referencedColumnNames="id"
                                  referencedTableName="activity"/>
 

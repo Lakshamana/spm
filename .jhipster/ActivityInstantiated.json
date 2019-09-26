@@ -20,7 +20,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "instantiationSuggestion",
             "otherEntityRelationshipName": "theActivityInstantiated",
-            "relationshipName": "theInstSug"
+            "relationshipName": "theInstantiationSuggestion"
         }
     ],
     "changelogDate": "20190914033833",

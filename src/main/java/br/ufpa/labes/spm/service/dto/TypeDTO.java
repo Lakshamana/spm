@@ -1,91 +1,94 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.Lob;
 
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
-@SuppressWarnings("serial")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Type} entity.
+ */
 public class TypeDTO implements Serializable {
 
-	private Long id;
-	private String ident;
-	private String description;
-	private Boolean userDefined;
-	@IgnoreMapping
-	private String superTypeIdent;
-	@IgnoreMapping
-	private Integer subtypesNumber;
-	@IgnoreMapping
-	private String rootType;
+    private Long id;
 
-	public TypeDTO() {
-		this.id = null;
-		this.ident = "";
-		this.description = "";
-		this.userDefined = new Boolean (false);
-		this.superTypeIdent = "";
-		this.subtypesNumber = 0;
-		this.rootType = "";
-	}
+    private String ident;
 
-	public Long getId() {
-		return id;
-	}
+    @Lob
+    private String description;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    private Boolean userDefined;
 
-	public String getIdent() {
-		return ident;
-	}
 
-	public void setIdent(String ident) {
-		this.ident = ident;
-	}
+    private Long superTypeId;
 
-	public String getDescription() {
-		return description;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Boolean getUserDefined() {
-		return userDefined;
-	}
+    public String getIdent() {
+        return ident;
+    }
 
-	public Boolean isUserDefined() {
-		return userDefined;
-	}
+    public void setIdent(String ident) {
+        this.ident = ident;
+    }
 
-	public void setUserDefined(Boolean userDefined) {
-		this.userDefined = userDefined;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public String getSuperTypeIdent() {
-		return superTypeIdent;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setSuperTypeIdent(String superTypeIdent) {
-		this.superTypeIdent = superTypeIdent;
-	}
+    public Boolean isUserDefined() {
+        return userDefined;
+    }
 
-	public Integer getSubtypesNumber() {
-		return subtypesNumber;
-	}
+    public void setUserDefined(Boolean userDefined) {
+        this.userDefined = userDefined;
+    }
 
-	public void setSubtypesNumber(Integer subtypesNumber) {
-		this.subtypesNumber = subtypesNumber;
-	}
+    public Long getSuperTypeId() {
+        return superTypeId;
+    }
 
-	public String getRootType() {
-		return rootType;
-	}
+    public void setSuperTypeId(Long typeId) {
+        this.superTypeId = typeId;
+    }
 
-	public void setRootType(String rootType) {
-		this.rootType = rootType;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
+        TypeDTO typeDTO = (TypeDTO) o;
+        if (typeDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), typeDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "TypeDTO{" +
+            "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", userDefined='" + isUserDefined() + "'" +
+            ", superType=" + getSuperTypeId() +
+            "}";
+    }
 }

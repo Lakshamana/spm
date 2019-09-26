@@ -5,15 +5,15 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "organization",
-            "otherEntityRelationshipName": "theOrganizationMetric",
-            "relationshipName": "theOrganization",
+            "otherEntityRelationshipName": "organizationMetric",
+            "relationshipName": "organization",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "company",
             "otherEntityRelationshipName": "organizationMetric",
-            "relationshipName": "theCompany",
+            "relationshipName": "company",
             "otherEntityField": "id"
         }
     ],

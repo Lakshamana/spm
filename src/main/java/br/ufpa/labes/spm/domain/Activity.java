@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -19,7 +15,6 @@ import java.util.Set;
 @Entity
 @Table(name = "activity")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Activity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,19 +29,22 @@ public class Activity implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "is_version")
+    private Boolean isVersion;
+
     @OneToMany(mappedBy = "theActivity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Event> theModelingActivityEvents = new HashSet<>();
+    private Set<ModelingActivityEvent> theModelingActivityEvents = new HashSet<>();
 
-    @OneToMany(mappedBy = "theAncestorActitvity")
+    @OneToMany(mappedBy = "isVersionOf")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Activity> hasVersions = new HashSet<>();
 
-    @OneToMany(mappedBy = "fromActivity")
+    @OneToMany(mappedBy = "toActivity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<SimpleCon> fromSimpleCons = new HashSet<>();
 
-    @OneToMany(mappedBy = "toActivity")
+    @OneToMany(mappedBy = "fromActivity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<SimpleCon> toSimpleCons = new HashSet<>();
 
@@ -58,13 +56,13 @@ public class Activity implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<BranchCon> toBranchCons = new HashSet<>();
 
-    @OneToMany(mappedBy = "theActivity")
+    @OneToMany(mappedBy = "activity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Metric> activityMetrics = new HashSet<>();
 
-    @OneToMany(mappedBy = "theActivity")
+    @OneToMany(mappedBy = "activity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<ActivityEstimation> theActivityEstimations = new HashSet<>();
+    private Set<ActivityEstimation> activityEstimations = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties("theActivities")
@@ -79,10 +77,10 @@ public class Activity implements Serializable {
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "activity_to_branchandcon",
+    @JoinTable(name = "activity_from_branchandcon",
                joinColumns = @JoinColumn(name = "activity_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "to_branchandcon_id", referencedColumnName = "id"))
-    private Set<BranchANDCon> toBranchANDCons = new HashSet<>();
+               inverseJoinColumns = @JoinColumn(name = "from_branchandcon_id", referencedColumnName = "id"))
+    private Set<BranchANDCon> fromBranchANDCons = new HashSet<>();
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -100,7 +98,7 @@ public class Activity implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("hasVersions")
-    private Activity theAncestorActitvity;
+    private Activity isVersionOf;
 
     @ManyToOne
     @JsonIgnoreProperties("theActivities")
@@ -114,9 +112,9 @@ public class Activity implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ActivityInstantiated> theActivityInstantiateds = new HashSet<>();
 
-    @OneToMany(mappedBy = "theActivity")
+    @OneToMany(mappedBy = "activity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<ActivityMetric> theActivityMetrics = new HashSet<>();
+    private Set<ActivityMetric> activityMetrics = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -153,29 +151,42 @@ public class Activity implements Serializable {
         this.name = name;
     }
 
-    public Set<Event> getTheModelingActivityEvents() {
+    public Boolean isIsVersion() {
+        return isVersion;
+    }
+
+    public Activity isVersion(Boolean isVersion) {
+        this.isVersion = isVersion;
+        return this;
+    }
+
+    public void setIsVersion(Boolean isVersion) {
+        this.isVersion = isVersion;
+    }
+
+    public Set<ModelingActivityEvent> getTheModelingActivityEvents() {
         return theModelingActivityEvents;
     }
 
-    public Activity theModelingActivityEvents(Set<Event> events) {
-        this.theModelingActivityEvents = events;
+    public Activity theModelingActivityEvents(Set<ModelingActivityEvent> modelingActivityEvents) {
+        this.theModelingActivityEvents = modelingActivityEvents;
         return this;
     }
 
-    public Activity addTheModelingActivityEvent(Event event) {
-        this.theModelingActivityEvents.add(event);
-        event.setTheActivity(this);
+    public Activity addTheModelingActivityEvent(ModelingActivityEvent modelingActivityEvent) {
+        this.theModelingActivityEvents.add(modelingActivityEvent);
+        modelingActivityEvent.setTheActivity(this);
         return this;
     }
 
-    public Activity removeTheModelingActivityEvent(Event event) {
-        this.theModelingActivityEvents.remove(event);
-        event.setTheActivity(null);
+    public Activity removeTheModelingActivityEvent(ModelingActivityEvent modelingActivityEvent) {
+        this.theModelingActivityEvents.remove(modelingActivityEvent);
+        modelingActivityEvent.setTheActivity(null);
         return this;
     }
 
-    public void setTheModelingActivityEvents(Set<Event> events) {
-        this.theModelingActivityEvents = events;
+    public void setTheModelingActivityEvents(Set<ModelingActivityEvent> modelingActivityEvents) {
+        this.theModelingActivityEvents = modelingActivityEvents;
     }
 
     public Set<Activity> getHasVersions() {
@@ -189,13 +200,13 @@ public class Activity implements Serializable {
 
     public Activity addHasVersions(Activity activity) {
         this.hasVersions.add(activity);
-        activity.setTheAncestorActitvity(this);
+        activity.setIsVersionOf(this);
         return this;
     }
 
     public Activity removeHasVersions(Activity activity) {
         this.hasVersions.remove(activity);
-        activity.setTheAncestorActitvity(null);
+        activity.setIsVersionOf(null);
         return this;
     }
 
@@ -214,13 +225,13 @@ public class Activity implements Serializable {
 
     public Activity addFromSimpleCon(SimpleCon simpleCon) {
         this.fromSimpleCons.add(simpleCon);
-        simpleCon.setFromActivity(this);
+        simpleCon.setToActivity(this);
         return this;
     }
 
     public Activity removeFromSimpleCon(SimpleCon simpleCon) {
         this.fromSimpleCons.remove(simpleCon);
-        simpleCon.setFromActivity(null);
+        simpleCon.setToActivity(null);
         return this;
     }
 
@@ -239,13 +250,13 @@ public class Activity implements Serializable {
 
     public Activity addToSimpleCon(SimpleCon simpleCon) {
         this.toSimpleCons.add(simpleCon);
-        simpleCon.setToActivity(this);
+        simpleCon.setFromActivity(this);
         return this;
     }
 
     public Activity removeToSimpleCon(SimpleCon simpleCon) {
         this.toSimpleCons.remove(simpleCon);
-        simpleCon.setToActivity(null);
+        simpleCon.setFromActivity(null);
         return this;
     }
 
@@ -314,13 +325,13 @@ public class Activity implements Serializable {
 
     public Activity addActivityMetric(Metric metric) {
         this.activityMetrics.add(metric);
-        metric.setTheActivity(this);
+        metric.setActivity(this);
         return this;
     }
 
     public Activity removeActivityMetric(Metric metric) {
         this.activityMetrics.remove(metric);
-        metric.setTheActivity(null);
+        metric.setActivity(null);
         return this;
     }
 
@@ -328,29 +339,29 @@ public class Activity implements Serializable {
         this.activityMetrics = metrics;
     }
 
-    public Set<ActivityEstimation> getTheActivityEstimations() {
-        return theActivityEstimations;
+    public Set<ActivityEstimation> getActivityEstimations() {
+        return activityEstimations;
     }
 
-    public Activity theActivityEstimations(Set<ActivityEstimation> activityEstimations) {
-        this.theActivityEstimations = activityEstimations;
+    public Activity activityEstimations(Set<ActivityEstimation> activityEstimations) {
+        this.activityEstimations = activityEstimations;
         return this;
     }
 
-    public Activity addTheActivityEstimation(ActivityEstimation activityEstimation) {
-        this.theActivityEstimations.add(activityEstimation);
-        activityEstimation.setTheActivity(this);
+    public Activity addActivityEstimation(ActivityEstimation activityEstimation) {
+        this.activityEstimations.add(activityEstimation);
+        activityEstimation.setActivity(this);
         return this;
     }
 
-    public Activity removeTheActivityEstimation(ActivityEstimation activityEstimation) {
-        this.theActivityEstimations.remove(activityEstimation);
-        activityEstimation.setTheActivity(null);
+    public Activity removeActivityEstimation(ActivityEstimation activityEstimation) {
+        this.activityEstimations.remove(activityEstimation);
+        activityEstimation.setActivity(null);
         return this;
     }
 
-    public void setTheActivityEstimations(Set<ActivityEstimation> activityEstimations) {
-        this.theActivityEstimations = activityEstimations;
+    public void setActivityEstimations(Set<ActivityEstimation> activityEstimations) {
+        this.activityEstimations = activityEstimations;
     }
 
     public ActivityType getTheActivityType() {
@@ -391,29 +402,29 @@ public class Activity implements Serializable {
         this.toJoinCons = joinCons;
     }
 
-    public Set<BranchANDCon> getToBranchANDCons() {
-        return toBranchANDCons;
+    public Set<BranchANDCon> getFromBranchANDCons() {
+        return fromBranchANDCons;
     }
 
-    public Activity toBranchANDCons(Set<BranchANDCon> branchANDCons) {
-        this.toBranchANDCons = branchANDCons;
+    public Activity fromBranchANDCons(Set<BranchANDCon> branchANDCons) {
+        this.fromBranchANDCons = branchANDCons;
         return this;
     }
 
-    public Activity addToBranchANDCon(BranchANDCon branchANDCon) {
-        this.toBranchANDCons.add(branchANDCon);
-        branchANDCon.getFromActivities().add(this);
+    public Activity addFromBranchANDCon(BranchANDCon branchANDCon) {
+        this.fromBranchANDCons.add(branchANDCon);
+        branchANDCon.getToActivities().add(this);
         return this;
     }
 
-    public Activity removeToBranchANDCon(BranchANDCon branchANDCon) {
-        this.toBranchANDCons.remove(branchANDCon);
-        branchANDCon.getFromActivities().remove(this);
+    public Activity removeFromBranchANDCon(BranchANDCon branchANDCon) {
+        this.fromBranchANDCons.remove(branchANDCon);
+        branchANDCon.getToActivities().remove(this);
         return this;
     }
 
-    public void setToBranchANDCons(Set<BranchANDCon> branchANDCons) {
-        this.toBranchANDCons = branchANDCons;
+    public void setFromBranchANDCons(Set<BranchANDCon> branchANDCons) {
+        this.fromBranchANDCons = branchANDCons;
     }
 
     public Set<ArtifactCon> getFromArtifactCons() {
@@ -466,17 +477,17 @@ public class Activity implements Serializable {
         this.toArtifactCons = artifactCons;
     }
 
-    public Activity getTheAncestorActitvity() {
-        return theAncestorActitvity;
+    public Activity getIsVersionOf() {
+        return isVersionOf;
     }
 
-    public Activity theAncestorActitvity(Activity activity) {
-        this.theAncestorActitvity = activity;
+    public Activity isVersionOf(Activity activity) {
+        this.isVersionOf = activity;
         return this;
     }
 
-    public void setTheAncestorActitvity(Activity activity) {
-        this.theAncestorActitvity = activity;
+    public void setIsVersionOf(Activity activity) {
+        this.isVersionOf = activity;
     }
 
     public ProcessModel getTheProcessModel() {
@@ -542,29 +553,29 @@ public class Activity implements Serializable {
         this.theActivityInstantiateds = activityInstantiateds;
     }
 
-    public Set<ActivityMetric> getTheActivityMetrics() {
-        return theActivityMetrics;
+    public Set<ActivityMetric> getActivityMetrics() {
+        return activityMetrics;
     }
 
-    public Activity theActivityMetrics(Set<ActivityMetric> activityMetrics) {
-        this.theActivityMetrics = activityMetrics;
+    public Activity activityMetrics(Set<ActivityMetric> activityMetrics) {
+        this.activityMetrics = activityMetrics;
         return this;
     }
 
-    public Activity addTheActivityMetric(ActivityMetric activityMetric) {
-        this.theActivityMetrics.add(activityMetric);
-        activityMetric.setTheActivity(this);
+    public Activity addActivityMetric(ActivityMetric activityMetric) {
+        this.activityMetrics.add(activityMetric);
+        activityMetric.setActivity(this);
         return this;
     }
 
-    public Activity removeTheActivityMetric(ActivityMetric activityMetric) {
-        this.theActivityMetrics.remove(activityMetric);
-        activityMetric.setTheActivity(null);
+    public Activity removeActivityMetric(ActivityMetric activityMetric) {
+        this.activityMetrics.remove(activityMetric);
+        activityMetric.setActivity(null);
         return this;
     }
 
-    public void setTheActivityMetrics(Set<ActivityMetric> activityMetrics) {
-        this.theActivityMetrics = activityMetrics;
+    public void setActivityMetrics(Set<ActivityMetric> activityMetrics) {
+        this.activityMetrics = activityMetrics;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -590,6 +601,7 @@ public class Activity implements Serializable {
             "id=" + getId() +
             ", ident='" + getIdent() + "'" +
             ", name='" + getName() + "'" +
+            ", isVersion='" + isIsVersion() + "'" +
             "}";
     }
 }

@@ -11,12 +11,12 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {ActivityMapper.class})
 public interface SimpleConMapper extends EntityMapper<SimpleConDTO, SimpleCon> {
 
-    @Mapping(source = "fromActivity.id", target = "fromActivityId")
     @Mapping(source = "toActivity.id", target = "toActivityId")
+    @Mapping(source = "fromActivity.id", target = "fromActivityId")
     SimpleConDTO toDto(SimpleCon simpleCon);
 
-    @Mapping(source = "fromActivityId", target = "fromActivity")
     @Mapping(source = "toActivityId", target = "toActivity")
+    @Mapping(source = "fromActivityId", target = "fromActivity")
     SimpleCon toEntity(SimpleConDTO simpleConDTO);
 
     default SimpleCon fromId(Long id) {

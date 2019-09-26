@@ -12,7 +12,7 @@ import org.mapstruct.*;
 public interface ActivityMapper extends EntityMapper<ActivityDTO, Activity> {
 
     @Mapping(source = "theActivityType.id", target = "theActivityTypeId")
-    @Mapping(source = "theAncestorActitvity.id", target = "theAncestorActitvityId")
+    @Mapping(source = "isVersionOf.id", target = "isVersionOfId")
     @Mapping(source = "theProcessModel.id", target = "theProcessModelId")
     ActivityDTO toDto(Activity activity);
 
@@ -30,21 +30,21 @@ public interface ActivityMapper extends EntityMapper<ActivityDTO, Activity> {
     @Mapping(target = "removeToBranchCon", ignore = true)
     @Mapping(target = "activityMetrics", ignore = true)
     @Mapping(target = "removeActivityMetric", ignore = true)
-    @Mapping(target = "theActivityEstimations", ignore = true)
-    @Mapping(target = "removeTheActivityEstimation", ignore = true)
+    @Mapping(target = "activityEstimations", ignore = true)
+    @Mapping(target = "removeActivityEstimation", ignore = true)
     @Mapping(source = "theActivityTypeId", target = "theActivityType")
     @Mapping(target = "removeToJoinCon", ignore = true)
-    @Mapping(target = "removeToBranchANDCon", ignore = true)
+    @Mapping(target = "removeFromBranchANDCon", ignore = true)
     @Mapping(target = "removeFromArtifactCon", ignore = true)
     @Mapping(target = "removeToArtifactCon", ignore = true)
-    @Mapping(source = "theAncestorActitvityId", target = "theAncestorActitvity")
+    @Mapping(source = "isVersionOfId", target = "isVersionOf")
     @Mapping(source = "theProcessModelId", target = "theProcessModel")
     @Mapping(target = "theBranchConCondToActivities", ignore = true)
     @Mapping(target = "removeTheBranchConCondToActivity", ignore = true)
     @Mapping(target = "theActivityInstantiateds", ignore = true)
     @Mapping(target = "removeTheActivityInstantiated", ignore = true)
-    @Mapping(target = "theActivityMetrics", ignore = true)
-    @Mapping(target = "removeTheActivityMetric", ignore = true)
+    @Mapping(target = "activityMetrics", ignore = true)
+    @Mapping(target = "removeActivityMetric", ignore = true)
     Activity toEntity(ActivityDTO activityDTO);
 
     default Activity fromId(Long id) {

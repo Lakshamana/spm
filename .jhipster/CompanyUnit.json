@@ -19,14 +19,14 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "company",
-            "otherEntityRelationshipName": "theCompanyUnit",
+            "otherEntityRelationshipName": "theOrganizationalUnits",
             "relationshipName": "theOrganization",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "companyUnit",
-            "otherEntityRelationshipName": "theCompanyUnit",
+            "otherEntityRelationshipName": "theSubordinates",
             "relationshipName": "theCommand",
             "otherEntityField": "id"
         },
@@ -41,13 +41,13 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "companyUnit",
             "otherEntityRelationshipName": "theCommand",
-            "relationshipName": "theCompanyUnit"
+            "relationshipName": "theSubordinates"
         },
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "agent",
             "otherEntityRelationshipName": "theOrgUnits",
-            "relationshipName": "theAgent",
+            "relationshipName": "theUnitAgents",
             "otherEntityField": "id",
             "ownerSide": false
         }

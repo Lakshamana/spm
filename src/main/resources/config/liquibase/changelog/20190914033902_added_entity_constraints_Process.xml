@@ -20,6 +20,18 @@
                                  referencedColumnNames="id"
                                  referencedTableName="activity_type"/>
 
+        <addForeignKeyConstraint baseColumnNames="process_id"
+                                 baseTableName="process_the_agent"
+                                 constraintName="fk_process_the_agent_process_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="process"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_agent_id"
+                                 baseTableName="process_the_agent"
+                                 constraintName="fk_process_the_agent_the_agent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agent"/>
+        
         <addForeignKeyConstraint baseColumnNames="the_email_configuration_id"
                                  baseTableName="process"
                                  constraintName="fk_process_the_email_configuration_id"

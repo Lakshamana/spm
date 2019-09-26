@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "artifact_metric")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ArtifactMetric extends Metric implements Serializable {
+public class ArtifactMetric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class ArtifactMetric extends Metric implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theArtifactMetrics")
-    private Artifact theArtifact;
+    private Artifact artifact;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -34,17 +34,17 @@ public class ArtifactMetric extends Metric implements Serializable {
         this.id = id;
     }
 
-    public Artifact getTheArtifact() {
-        return theArtifact;
+    public Artifact getArtifact() {
+        return artifact;
     }
 
-    public ArtifactMetric theArtifact(Artifact artifact) {
-        this.theArtifact = artifact;
+    public ArtifactMetric artifact(Artifact artifact) {
+        this.artifact = artifact;
         return this;
     }
 
-    public void setTheArtifact(Artifact artifact) {
-        this.theArtifact = artifact;
+    public void setArtifact(Artifact artifact) {
+        this.artifact = artifact;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

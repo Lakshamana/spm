@@ -6,15 +6,13 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 
-import br.ufpa.labes.spm.domain.enumeration.ConsumableStatus;
-
 /**
  * A Consumable.
  */
 @Entity
 @Table(name = "consumable")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Consumable extends Resource implements Serializable {
+public class Consumable implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,12 +20,11 @@ public class Consumable extends Resource implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "state")
+    private String state;
+
     @Column(name = "unit")
     private String unit;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "consumable_status")
-    private ConsumableStatus consumableStatus;
 
     @Column(name = "total_quantity")
     private Float totalQuantity;
@@ -44,6 +41,19 @@ public class Consumable extends Resource implements Serializable {
         this.id = id;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public Consumable state(String state) {
+        this.state = state;
+        return this;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public String getUnit() {
         return unit;
     }
@@ -55,19 +65,6 @@ public class Consumable extends Resource implements Serializable {
 
     public void setUnit(String unit) {
         this.unit = unit;
-    }
-
-    public ConsumableStatus getConsumableStatus() {
-        return consumableStatus;
-    }
-
-    public Consumable consumableStatus(ConsumableStatus consumableStatus) {
-        this.consumableStatus = consumableStatus;
-        return this;
-    }
-
-    public void setConsumableStatus(ConsumableStatus consumableStatus) {
-        this.consumableStatus = consumableStatus;
     }
 
     public Float getTotalQuantity() {
@@ -117,8 +114,8 @@ public class Consumable extends Resource implements Serializable {
     public String toString() {
         return "Consumable{" +
             "id=" + getId() +
+            ", state='" + getState() + "'" +
             ", unit='" + getUnit() + "'" +
-            ", consumableStatus='" + getConsumableStatus() + "'" +
             ", totalQuantity=" + getTotalQuantity() +
             ", amountUsed=" + getAmountUsed() +
             "}";

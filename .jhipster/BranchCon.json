@@ -6,7 +6,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "multipleCon",
             "otherEntityRelationshipName": "toBranchCon",
-            "relationshipName": "fromMultipleCon",
+            "relationshipName": "fromMultipleConnection",
             "otherEntityField": "id"
         },
         {

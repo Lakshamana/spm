@@ -38,7 +38,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.AssetVisibility;
 /**
  * Integration tests for the {@link AssetResource} REST controller.
  */
@@ -77,9 +76,6 @@ public class AssetResourceIT {
 
     private static final Boolean DEFAULT_READ_ONLY = false;
     private static final Boolean UPDATED_READ_ONLY = true;
-
-    private static final AssetVisibility DEFAULT_ASSET_VISIBILITY = AssetVisibility.VISIBILITY_PUBLIC;
-    private static final AssetVisibility UPDATED_ASSET_VISIBILITY = AssetVisibility.VISIBILITY_PRIVATE;
 
     @Autowired
     private AssetRepository assetRepository;
@@ -144,8 +140,7 @@ public class AssetResourceIT {
             .tags(DEFAULT_TAGS)
             .path(DEFAULT_PATH)
             .latestVersion(DEFAULT_LATEST_VERSION)
-            .readOnly(DEFAULT_READ_ONLY)
-            .assetVisibility(DEFAULT_ASSET_VISIBILITY);
+            .readOnly(DEFAULT_READ_ONLY);
         return asset;
     }
     /**
@@ -165,8 +160,7 @@ public class AssetResourceIT {
             .tags(UPDATED_TAGS)
             .path(UPDATED_PATH)
             .latestVersion(UPDATED_LATEST_VERSION)
-            .readOnly(UPDATED_READ_ONLY)
-            .assetVisibility(UPDATED_ASSET_VISIBILITY);
+            .readOnly(UPDATED_READ_ONLY);
         return asset;
     }
 
@@ -201,7 +195,6 @@ public class AssetResourceIT {
         assertThat(testAsset.getPath()).isEqualTo(DEFAULT_PATH);
         assertThat(testAsset.getLatestVersion()).isEqualTo(DEFAULT_LATEST_VERSION);
         assertThat(testAsset.isReadOnly()).isEqualTo(DEFAULT_READ_ONLY);
-        assertThat(testAsset.getAssetVisibility()).isEqualTo(DEFAULT_ASSET_VISIBILITY);
     }
 
     @Test
@@ -245,8 +238,7 @@ public class AssetResourceIT {
             .andExpect(jsonPath("$.[*].tags").value(hasItem(DEFAULT_TAGS.toString())))
             .andExpect(jsonPath("$.[*].path").value(hasItem(DEFAULT_PATH.toString())))
             .andExpect(jsonPath("$.[*].latestVersion").value(hasItem(DEFAULT_LATEST_VERSION.toString())))
-            .andExpect(jsonPath("$.[*].readOnly").value(hasItem(DEFAULT_READ_ONLY.booleanValue())))
-            .andExpect(jsonPath("$.[*].assetVisibility").value(hasItem(DEFAULT_ASSET_VISIBILITY.toString())));
+            .andExpect(jsonPath("$.[*].readOnly").value(hasItem(DEFAULT_READ_ONLY.booleanValue())));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -302,8 +294,7 @@ public class AssetResourceIT {
             .andExpect(jsonPath("$.tags").value(DEFAULT_TAGS.toString()))
             .andExpect(jsonPath("$.path").value(DEFAULT_PATH.toString()))
             .andExpect(jsonPath("$.latestVersion").value(DEFAULT_LATEST_VERSION.toString()))
-            .andExpect(jsonPath("$.readOnly").value(DEFAULT_READ_ONLY.booleanValue()))
-            .andExpect(jsonPath("$.assetVisibility").value(DEFAULT_ASSET_VISIBILITY.toString()));
+            .andExpect(jsonPath("$.readOnly").value(DEFAULT_READ_ONLY.booleanValue()));
     }
 
     @Test
@@ -336,8 +327,7 @@ public class AssetResourceIT {
             .tags(UPDATED_TAGS)
             .path(UPDATED_PATH)
             .latestVersion(UPDATED_LATEST_VERSION)
-            .readOnly(UPDATED_READ_ONLY)
-            .assetVisibility(UPDATED_ASSET_VISIBILITY);
+            .readOnly(UPDATED_READ_ONLY);
         AssetDTO assetDTO = assetMapper.toDto(updatedAsset);
 
         restAssetMockMvc.perform(put("/api/assets")
@@ -359,7 +349,6 @@ public class AssetResourceIT {
         assertThat(testAsset.getPath()).isEqualTo(UPDATED_PATH);
         assertThat(testAsset.getLatestVersion()).isEqualTo(UPDATED_LATEST_VERSION);
         assertThat(testAsset.isReadOnly()).isEqualTo(UPDATED_READ_ONLY);
-        assertThat(testAsset.getAssetVisibility()).isEqualTo(UPDATED_ASSET_VISIBILITY);
     }
 
     @Test

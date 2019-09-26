@@ -30,29 +30,37 @@ public class Agent implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "e_mail")
+    private String eMail;
 
     @Column(name = "cost_hour")
     private Float costHour;
 
-    @Column(name = "password_hash")
-    private String passwordHash;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "tipo_user")
     private Integer tipoUser;
 
-    @Column(name = "active")
-    private Boolean active;
+    @Column(name = "is_active")
+    private Boolean isActive;
 
     @Column(name = "online")
     private Boolean online;
 
-    @Column(name = "photo_url")
-    private String photoURL;
+    @Lob
+    @Column(name = "photo")
+    private byte[] photo;
+
+    @Column(name = "photo_content_type")
+    private String photoContentType;
 
     @Column(name = "upload")
     private String upload;
+
+    @Lob
+    @Column(name = "description")
+    private String description;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -72,17 +80,17 @@ public class Agent implements Serializable {
 
     @OneToMany(mappedBy = "theAgent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Event> theModelingActivityEvents = new HashSet<>();
+    private Set<ModelingActivityEvent> theModelingActivityEvents = new HashSet<>();
 
     @OneToMany(mappedBy = "theAgent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ReqAgent> theReqAgents = new HashSet<>();
 
-    @OneToMany(mappedBy = "theAgent")
+    @OneToMany(mappedBy = "agent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<AgentMetric> theAgentMetrics = new HashSet<>();
 
-    @OneToMany(mappedBy = "theAgent")
+    @OneToMany(mappedBy = "agent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<AgentEstimation> theAgentEstimations = new HashSet<>();
 
@@ -92,20 +100,20 @@ public class Agent implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theRequestorAgents")
-    private Event theResourceEvent;
+    private ResourceEvent theResourceEvent;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "agent_the_processes",
+    @JoinTable(name = "agent_the_process",
                joinColumns = @JoinColumn(name = "agent_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "the_processes_id", referencedColumnName = "id"))
+               inverseJoinColumns = @JoinColumn(name = "the_process_id", referencedColumnName = "id"))
     private Set<Process> theProcesses = new HashSet<>();
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "agent_the_work_groups",
+    @JoinTable(name = "agent_the_work_group",
                joinColumns = @JoinColumn(name = "agent_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "the_work_groups_id", referencedColumnName = "id"))
+               inverseJoinColumns = @JoinColumn(name = "the_work_group_id", referencedColumnName = "id"))
     private Set<WorkGroup> theWorkGroups = new HashSet<>();
 
     @ManyToMany
@@ -115,7 +123,7 @@ public class Agent implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "the_org_units_id", referencedColumnName = "id"))
     private Set<CompanyUnit> theOrgUnits = new HashSet<>();
 
-    @OneToOne(mappedBy = "fromAgent")
+    @OneToOne(mappedBy = "de")
     @JsonIgnore
     private ChatMessage theChatMessage;
 
@@ -123,11 +131,11 @@ public class Agent implements Serializable {
     @JsonIgnoreProperties("theManagers")
     private EmailConfiguration theEmailConfiguration;
 
-    @OneToMany(mappedBy = "fromAffinity")
+    @OneToMany(mappedBy = "toAffinity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<AgentAffinityAgent> fromAgentAffinities = new HashSet<>();
 
-    @OneToMany(mappedBy = "toAffinity")
+    @OneToMany(mappedBy = "fromAffinity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<AgentAffinityAgent> toAgentAffinities = new HashSet<>();
 
@@ -159,6 +167,11 @@ public class Agent implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
     private Set<ChatLog> theChatLogs = new HashSet<>();
+
+    @ManyToMany(mappedBy = "theAgents")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private Set<Process> theProcesses = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -195,17 +208,17 @@ public class Agent implements Serializable {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String geteMail() {
+        return eMail;
     }
 
-    public Agent email(String email) {
-        this.email = email;
+    public Agent eMail(String eMail) {
+        this.eMail = eMail;
         return this;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void seteMail(String eMail) {
+        this.eMail = eMail;
     }
 
     public Float getCostHour() {
@@ -221,17 +234,17 @@ public class Agent implements Serializable {
         this.costHour = costHour;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public Agent passwordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public Agent password(String password) {
+        this.password = password;
         return this;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Integer getTipoUser() {
@@ -247,17 +260,17 @@ public class Agent implements Serializable {
         this.tipoUser = tipoUser;
     }
 
-    public Boolean isActive() {
-        return active;
+    public Boolean isIsActive() {
+        return isActive;
     }
 
-    public Agent active(Boolean active) {
-        this.active = active;
+    public Agent isActive(Boolean isActive) {
+        this.isActive = isActive;
         return this;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Boolean isOnline() {
@@ -273,17 +286,30 @@ public class Agent implements Serializable {
         this.online = online;
     }
 
-    public String getPhotoURL() {
-        return photoURL;
+    public byte[] getPhoto() {
+        return photo;
     }
 
-    public Agent photoURL(String photoURL) {
-        this.photoURL = photoURL;
+    public Agent photo(byte[] photo) {
+        this.photo = photo;
         return this;
     }
 
-    public void setPhotoURL(String photoURL) {
-        this.photoURL = photoURL;
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public String getPhotoContentType() {
+        return photoContentType;
+    }
+
+    public Agent photoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
+        return this;
+    }
+
+    public void setPhotoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
     }
 
     public String getUpload() {
@@ -297,6 +323,19 @@ public class Agent implements Serializable {
 
     public void setUpload(String upload) {
         this.upload = upload;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Agent description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public TaskAgenda getTheTaskAgenda() {
@@ -375,29 +414,29 @@ public class Agent implements Serializable {
         this.isDelegatedFors = tasks;
     }
 
-    public Set<Event> getTheModelingActivityEvents() {
+    public Set<ModelingActivityEvent> getTheModelingActivityEvents() {
         return theModelingActivityEvents;
     }
 
-    public Agent theModelingActivityEvents(Set<Event> events) {
-        this.theModelingActivityEvents = events;
+    public Agent theModelingActivityEvents(Set<ModelingActivityEvent> modelingActivityEvents) {
+        this.theModelingActivityEvents = modelingActivityEvents;
         return this;
     }
 
-    public Agent addTheModelingActivityEvent(Event event) {
-        this.theModelingActivityEvents.add(event);
-        event.setTheAgent(this);
+    public Agent addTheModelingActivityEvent(ModelingActivityEvent modelingActivityEvent) {
+        this.theModelingActivityEvents.add(modelingActivityEvent);
+        modelingActivityEvent.setTheAgent(this);
         return this;
     }
 
-    public Agent removeTheModelingActivityEvent(Event event) {
-        this.theModelingActivityEvents.remove(event);
-        event.setTheAgent(null);
+    public Agent removeTheModelingActivityEvent(ModelingActivityEvent modelingActivityEvent) {
+        this.theModelingActivityEvents.remove(modelingActivityEvent);
+        modelingActivityEvent.setTheAgent(null);
         return this;
     }
 
-    public void setTheModelingActivityEvents(Set<Event> events) {
-        this.theModelingActivityEvents = events;
+    public void setTheModelingActivityEvents(Set<ModelingActivityEvent> modelingActivityEvents) {
+        this.theModelingActivityEvents = modelingActivityEvents;
     }
 
     public Set<ReqAgent> getTheReqAgents() {
@@ -436,13 +475,13 @@ public class Agent implements Serializable {
 
     public Agent addTheAgentMetric(AgentMetric agentMetric) {
         this.theAgentMetrics.add(agentMetric);
-        agentMetric.setTheAgent(this);
+        agentMetric.setAgent(this);
         return this;
     }
 
     public Agent removeTheAgentMetric(AgentMetric agentMetric) {
         this.theAgentMetrics.remove(agentMetric);
-        agentMetric.setTheAgent(null);
+        agentMetric.setAgent(null);
         return this;
     }
 
@@ -461,13 +500,13 @@ public class Agent implements Serializable {
 
     public Agent addTheAgentEstimation(AgentEstimation agentEstimation) {
         this.theAgentEstimations.add(agentEstimation);
-        agentEstimation.setTheAgent(this);
+        agentEstimation.setAgent(this);
         return this;
     }
 
     public Agent removeTheAgentEstimation(AgentEstimation agentEstimation) {
         this.theAgentEstimations.remove(agentEstimation);
-        agentEstimation.setTheAgent(null);
+        agentEstimation.setAgent(null);
         return this;
     }
 
@@ -500,17 +539,17 @@ public class Agent implements Serializable {
         this.theManagedOrgUnits = companyUnits;
     }
 
-    public Event getTheResourceEvent() {
+    public ResourceEvent getTheResourceEvent() {
         return theResourceEvent;
     }
 
-    public Agent theResourceEvent(Event event) {
-        this.theResourceEvent = event;
+    public Agent theResourceEvent(ResourceEvent resourceEvent) {
+        this.theResourceEvent = resourceEvent;
         return this;
     }
 
-    public void setTheResourceEvent(Event event) {
-        this.theResourceEvent = event;
+    public void setTheResourceEvent(ResourceEvent resourceEvent) {
+        this.theResourceEvent = resourceEvent;
     }
 
     public Set<Process> getTheProcesses() {
@@ -522,13 +561,13 @@ public class Agent implements Serializable {
         return this;
     }
 
-    public Agent addTheProcesses(Process process) {
+    public Agent addTheProcess(Process process) {
         this.theProcesses.add(process);
         process.getTheAgents().add(this);
         return this;
     }
 
-    public Agent removeTheProcesses(Process process) {
+    public Agent removeTheProcess(Process process) {
         this.theProcesses.remove(process);
         process.getTheAgents().remove(this);
         return this;
@@ -547,13 +586,13 @@ public class Agent implements Serializable {
         return this;
     }
 
-    public Agent addTheWorkGroups(WorkGroup workGroup) {
+    public Agent addTheWorkGroup(WorkGroup workGroup) {
         this.theWorkGroups.add(workGroup);
         workGroup.getTheAgents().add(this);
         return this;
     }
 
-    public Agent removeTheWorkGroups(WorkGroup workGroup) {
+    public Agent removeTheWorkGroup(WorkGroup workGroup) {
         this.theWorkGroups.remove(workGroup);
         workGroup.getTheAgents().remove(this);
         return this;
@@ -574,13 +613,13 @@ public class Agent implements Serializable {
 
     public Agent addTheOrgUnits(CompanyUnit companyUnit) {
         this.theOrgUnits.add(companyUnit);
-        companyUnit.getTheAgents().add(this);
+        companyUnit.getTheUnitAgents().add(this);
         return this;
     }
 
     public Agent removeTheOrgUnits(CompanyUnit companyUnit) {
         this.theOrgUnits.remove(companyUnit);
-        companyUnit.getTheAgents().remove(this);
+        companyUnit.getTheUnitAgents().remove(this);
         return this;
     }
 
@@ -625,13 +664,13 @@ public class Agent implements Serializable {
 
     public Agent addFromAgentAffinity(AgentAffinityAgent agentAffinityAgent) {
         this.fromAgentAffinities.add(agentAffinityAgent);
-        agentAffinityAgent.setFromAffinity(this);
+        agentAffinityAgent.setToAffinity(this);
         return this;
     }
 
     public Agent removeFromAgentAffinity(AgentAffinityAgent agentAffinityAgent) {
         this.fromAgentAffinities.remove(agentAffinityAgent);
-        agentAffinityAgent.setFromAffinity(null);
+        agentAffinityAgent.setToAffinity(null);
         return this;
     }
 
@@ -650,13 +689,13 @@ public class Agent implements Serializable {
 
     public Agent addToAgentAffinity(AgentAffinityAgent agentAffinityAgent) {
         this.toAgentAffinities.add(agentAffinityAgent);
-        agentAffinityAgent.setToAffinity(this);
+        agentAffinityAgent.setFromAffinity(this);
         return this;
     }
 
     public Agent removeToAgentAffinity(AgentAffinityAgent agentAffinityAgent) {
         this.toAgentAffinities.remove(agentAffinityAgent);
-        agentAffinityAgent.setToAffinity(null);
+        agentAffinityAgent.setFromAffinity(null);
         return this;
     }
 
@@ -838,6 +877,31 @@ public class Agent implements Serializable {
     public void setTheChatLogs(Set<ChatLog> chatLogs) {
         this.theChatLogs = chatLogs;
     }
+
+    public Set<Process> getTheProcesses() {
+        return theProcesses;
+    }
+
+    public Agent theProcesses(Set<Process> processes) {
+        this.theProcesses = processes;
+        return this;
+    }
+
+    public Agent addTheProcess(Process process) {
+        this.theProcesses.add(process);
+        process.getTheAgents().add(this);
+        return this;
+    }
+
+    public Agent removeTheProcess(Process process) {
+        this.theProcesses.remove(process);
+        process.getTheAgents().remove(this);
+        return this;
+    }
+
+    public void setTheProcesses(Set<Process> processes) {
+        this.theProcesses = processes;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -862,14 +926,16 @@ public class Agent implements Serializable {
             "id=" + getId() +
             ", ident='" + getIdent() + "'" +
             ", name='" + getName() + "'" +
-            ", email='" + getEmail() + "'" +
+            ", eMail='" + geteMail() + "'" +
             ", costHour=" + getCostHour() +
-            ", passwordHash='" + getPasswordHash() + "'" +
+            ", password='" + getPassword() + "'" +
             ", tipoUser=" + getTipoUser() +
-            ", active='" + isActive() + "'" +
+            ", isActive='" + isIsActive() + "'" +
             ", online='" + isOnline() + "'" +
-            ", photoURL='" + getPhotoURL() + "'" +
+            ", photo='" + getPhoto() + "'" +
+            ", photoContentType='" + getPhotoContentType() + "'" +
             ", upload='" + getUpload() + "'" +
+            ", description='" + getDescription() + "'" +
             "}";
     }
 }

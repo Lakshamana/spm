@@ -20,7 +20,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="the_inst_ag_sug_id" type="bigint">
+            <column name="the_inst_ag_sugg_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

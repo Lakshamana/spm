@@ -11,28 +11,32 @@
         },
         {
             "fieldName": "serviceFileId",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "unique"
+            ]
         }
     ],
     "relationships": [
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "node",
-            "otherEntityRelationshipName": "theNode",
+            "otherEntityRelationshipName": "parentNode",
             "relationshipName": "children"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "structure",
+            "otherEntityRelationshipName": "rootElement",
+            "relationshipName": "theStructure",
+            "ownerSide": false
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "node",
             "otherEntityRelationshipName": "children",
-            "relationshipName": "theNode",
+            "relationshipName": "parentNode",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "structure",
-            "otherEntityRelationshipName": "rootElement",
-            "relationshipName": "theStructure"
         }
     ],
     "changelogDate": "20190914033813",

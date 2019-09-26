@@ -29,9 +29,22 @@ public class Driver implements Serializable {
     @Column(name = "app_secret")
     private String appSecret;
 
+    @Column(name = "app_key_google")
+    private String appKeyGoogle;
+
+    @Column(name = "app_secret_google")
+    private String appSecretGoogle;
+
+    @Column(name = "request_url")
+    private String requestUrl;
+
     @OneToOne
     @JoinColumn(unique = true)
     private Plugin thePlugin;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -81,6 +94,45 @@ public class Driver implements Serializable {
         this.appSecret = appSecret;
     }
 
+    public String getAppKeyGoogle() {
+        return appKeyGoogle;
+    }
+
+    public Driver appKeyGoogle(String appKeyGoogle) {
+        this.appKeyGoogle = appKeyGoogle;
+        return this;
+    }
+
+    public void setAppKeyGoogle(String appKeyGoogle) {
+        this.appKeyGoogle = appKeyGoogle;
+    }
+
+    public String getAppSecretGoogle() {
+        return appSecretGoogle;
+    }
+
+    public Driver appSecretGoogle(String appSecretGoogle) {
+        this.appSecretGoogle = appSecretGoogle;
+        return this;
+    }
+
+    public void setAppSecretGoogle(String appSecretGoogle) {
+        this.appSecretGoogle = appSecretGoogle;
+    }
+
+    public String getRequestUrl() {
+        return requestUrl;
+    }
+
+    public Driver requestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
+        return this;
+    }
+
+    public void setRequestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
+    }
+
     public Plugin getThePlugin() {
         return thePlugin;
     }
@@ -92,6 +144,19 @@ public class Driver implements Serializable {
 
     public void setThePlugin(Plugin plugin) {
         this.thePlugin = plugin;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public Driver company(Company company) {
+        this.company = company;
+        return this;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -118,6 +183,9 @@ public class Driver implements Serializable {
             ", tipo='" + getTipo() + "'" +
             ", appKey='" + getAppKey() + "'" +
             ", appSecret='" + getAppSecret() + "'" +
+            ", appKeyGoogle='" + getAppKeyGoogle() + "'" +
+            ", appSecretGoogle='" + getAppSecretGoogle() + "'" +
+            ", requestUrl='" + getRequestUrl() + "'" +
             "}";
     }
 }

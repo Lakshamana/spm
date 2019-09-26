@@ -15,7 +15,17 @@ public class VCSRepositoryDTO implements Serializable {
 
     private String server;
 
-    private String repositoryPath;
+    private String port;
+
+    private String connectionMethod;
+
+    private String repository;
+
+    private String username;
+
+    private String password;
+
+    private Boolean defaultUser;
 
 
     private Long theStructureId;
@@ -52,12 +62,52 @@ public class VCSRepositoryDTO implements Serializable {
         this.server = server;
     }
 
-    public String getRepositoryPath() {
-        return repositoryPath;
+    public String getPort() {
+        return port;
     }
 
-    public void setRepositoryPath(String repositoryPath) {
-        this.repositoryPath = repositoryPath;
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public String getConnectionMethod() {
+        return connectionMethod;
+    }
+
+    public void setConnectionMethod(String connectionMethod) {
+        this.connectionMethod = connectionMethod;
+    }
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Boolean isDefaultUser() {
+        return defaultUser;
+    }
+
+    public void setDefaultUser(Boolean defaultUser) {
+        this.defaultUser = defaultUser;
     }
 
     public Long getTheStructureId() {
@@ -96,7 +146,12 @@ public class VCSRepositoryDTO implements Serializable {
             ", ident='" + getIdent() + "'" +
             ", controlVersionSystem='" + getControlVersionSystem() + "'" +
             ", server='" + getServer() + "'" +
-            ", repositoryPath='" + getRepositoryPath() + "'" +
+            ", port='" + getPort() + "'" +
+            ", connectionMethod='" + getConnectionMethod() + "'" +
+            ", repository='" + getRepository() + "'" +
+            ", username='" + getUsername() + "'" +
+            ", password='" + getPassword() + "'" +
+            ", defaultUser='" + isDefaultUser() + "'" +
             ", theStructure=" + getTheStructureId() +
             "}";
     }

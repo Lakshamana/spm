@@ -5,7 +5,7 @@
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
+                "unique"
             ]
         },
         {
@@ -16,7 +16,7 @@
             ]
         },
         {
-            "fieldName": "jsonConfigFile",
+            "fieldName": "configFilePath",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
@@ -25,12 +25,11 @@
     ],
     "relationships": [
         {
-            "relationshipType": "many-to-many",
+            "relationshipType": "many-to-one",
             "otherEntityName": "user",
-            "otherEntityRelationshipName": "theUserPlugins",
-            "relationshipName": "user",
-            "otherEntityField": "login",
-            "ownerSide": true
+            "otherEntityRelationshipName": "thePlugins",
+            "relationshipName": "theCompany",
+            "otherEntityField": "id"
         },
         {
             "relationshipType": "one-to-one",

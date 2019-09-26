@@ -23,6 +23,7 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -65,8 +66,10 @@ public class AuthorResourceIT {
     private static final String DEFAULT_COUNTRY = "AAAAAAAAAA";
     private static final String UPDATED_COUNTRY = "BBBBBBBBBB";
 
-    private static final String DEFAULT_PHOTO_URL = "AAAAAAAAAA";
-    private static final String UPDATED_PHOTO_URL = "BBBBBBBBBB";
+    private static final byte[] DEFAULT_PHOTO = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_PHOTO = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_PHOTO_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_PHOTO_CONTENT_TYPE = "image/png";
 
     @Autowired
     private AuthorRepository authorRepository;
@@ -129,7 +132,8 @@ public class AuthorResourceIT {
             .interests(DEFAULT_INTERESTS)
             .city(DEFAULT_CITY)
             .country(DEFAULT_COUNTRY)
-            .photoURL(DEFAULT_PHOTO_URL);
+            .photo(DEFAULT_PHOTO)
+            .photoContentType(DEFAULT_PHOTO_CONTENT_TYPE);
         return author;
     }
     /**
@@ -147,7 +151,8 @@ public class AuthorResourceIT {
             .interests(UPDATED_INTERESTS)
             .city(UPDATED_CITY)
             .country(UPDATED_COUNTRY)
-            .photoURL(UPDATED_PHOTO_URL);
+            .photo(UPDATED_PHOTO)
+            .photoContentType(UPDATED_PHOTO_CONTENT_TYPE);
         return author;
     }
 
@@ -179,7 +184,8 @@ public class AuthorResourceIT {
         assertThat(testAuthor.getInterests()).isEqualTo(DEFAULT_INTERESTS);
         assertThat(testAuthor.getCity()).isEqualTo(DEFAULT_CITY);
         assertThat(testAuthor.getCountry()).isEqualTo(DEFAULT_COUNTRY);
-        assertThat(testAuthor.getPhotoURL()).isEqualTo(DEFAULT_PHOTO_URL);
+        assertThat(testAuthor.getPhoto()).isEqualTo(DEFAULT_PHOTO);
+        assertThat(testAuthor.getPhotoContentType()).isEqualTo(DEFAULT_PHOTO_CONTENT_TYPE);
     }
 
     @Test
@@ -221,7 +227,8 @@ public class AuthorResourceIT {
             .andExpect(jsonPath("$.[*].interests").value(hasItem(DEFAULT_INTERESTS.toString())))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY.toString())))
             .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY.toString())))
-            .andExpect(jsonPath("$.[*].photoURL").value(hasItem(DEFAULT_PHOTO_URL.toString())));
+            .andExpect(jsonPath("$.[*].photoContentType").value(hasItem(DEFAULT_PHOTO_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -275,7 +282,8 @@ public class AuthorResourceIT {
             .andExpect(jsonPath("$.interests").value(DEFAULT_INTERESTS.toString()))
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY.toString()))
             .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY.toString()))
-            .andExpect(jsonPath("$.photoURL").value(DEFAULT_PHOTO_URL.toString()));
+            .andExpect(jsonPath("$.photoContentType").value(DEFAULT_PHOTO_CONTENT_TYPE))
+            .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)));
     }
 
     @Test
@@ -306,7 +314,8 @@ public class AuthorResourceIT {
             .interests(UPDATED_INTERESTS)
             .city(UPDATED_CITY)
             .country(UPDATED_COUNTRY)
-            .photoURL(UPDATED_PHOTO_URL);
+            .photo(UPDATED_PHOTO)
+            .photoContentType(UPDATED_PHOTO_CONTENT_TYPE);
         AuthorDTO authorDTO = authorMapper.toDto(updatedAuthor);
 
         restAuthorMockMvc.perform(put("/api/authors")
@@ -325,7 +334,8 @@ public class AuthorResourceIT {
         assertThat(testAuthor.getInterests()).isEqualTo(UPDATED_INTERESTS);
         assertThat(testAuthor.getCity()).isEqualTo(UPDATED_CITY);
         assertThat(testAuthor.getCountry()).isEqualTo(UPDATED_COUNTRY);
-        assertThat(testAuthor.getPhotoURL()).isEqualTo(UPDATED_PHOTO_URL);
+        assertThat(testAuthor.getPhoto()).isEqualTo(UPDATED_PHOTO);
+        assertThat(testAuthor.getPhotoContentType()).isEqualTo(UPDATED_PHOTO_CONTENT_TYPE);
     }
 
     @Test

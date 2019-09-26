@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "organization_metric")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class OrganizationMetric extends Metric implements Serializable {
+public class OrganizationMetric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,12 +22,12 @@ public class OrganizationMetric extends Metric implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("theOrganizationMetrics")
-    private Organization theOrganization;
+    @JsonIgnoreProperties("organizationMetrics")
+    private Organization organization;
 
     @ManyToOne
     @JsonIgnoreProperties("organizationMetrics")
-    private Company theCompany;
+    private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -38,30 +38,30 @@ public class OrganizationMetric extends Metric implements Serializable {
         this.id = id;
     }
 
-    public Organization getTheOrganization() {
-        return theOrganization;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public OrganizationMetric theOrganization(Organization organization) {
-        this.theOrganization = organization;
+    public OrganizationMetric organization(Organization organization) {
+        this.organization = organization;
         return this;
     }
 
-    public void setTheOrganization(Organization organization) {
-        this.theOrganization = organization;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
-    public Company getTheCompany() {
-        return theCompany;
+    public Company getCompany() {
+        return company;
     }
 
-    public OrganizationMetric theCompany(Company company) {
-        this.theCompany = company;
+    public OrganizationMetric company(Company company) {
+        this.company = company;
         return this;
     }
 
-    public void setTheCompany(Company company) {
-        this.theCompany = company;
+    public void setCompany(Company company) {
+        this.company = company;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

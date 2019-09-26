@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.ExclusiveStatus;
 /**
  * Integration tests for the {@link ExclusiveResource} REST controller.
  */
@@ -39,8 +38,8 @@ import br.ufpa.labes.spm.domain.enumeration.ExclusiveStatus;
 @SpringBootTest(classes = SpmApp.class)
 public class ExclusiveResourceIT {
 
-    private static final ExclusiveStatus DEFAULT_EXCLUSIVE_STATUS = ExclusiveStatus.AVAILABLE;
-    private static final ExclusiveStatus UPDATED_EXCLUSIVE_STATUS = ExclusiveStatus.LOCKED;
+    private static final String DEFAULT_STATE = "AAAAAAAAAA";
+    private static final String UPDATED_STATE = "BBBBBBBBBB";
 
     private static final String DEFAULT_UNIT_OF_COST = "AAAAAAAAAA";
     private static final String UPDATED_UNIT_OF_COST = "BBBBBBBBBB";
@@ -93,7 +92,7 @@ public class ExclusiveResourceIT {
      */
     public static Exclusive createEntity(EntityManager em) {
         Exclusive exclusive = new Exclusive()
-            .exclusiveStatus(DEFAULT_EXCLUSIVE_STATUS)
+            .state(DEFAULT_STATE)
             .unitOfCost(DEFAULT_UNIT_OF_COST);
         return exclusive;
     }
@@ -105,7 +104,7 @@ public class ExclusiveResourceIT {
      */
     public static Exclusive createUpdatedEntity(EntityManager em) {
         Exclusive exclusive = new Exclusive()
-            .exclusiveStatus(UPDATED_EXCLUSIVE_STATUS)
+            .state(UPDATED_STATE)
             .unitOfCost(UPDATED_UNIT_OF_COST);
         return exclusive;
     }
@@ -131,7 +130,7 @@ public class ExclusiveResourceIT {
         List<Exclusive> exclusiveList = exclusiveRepository.findAll();
         assertThat(exclusiveList).hasSize(databaseSizeBeforeCreate + 1);
         Exclusive testExclusive = exclusiveList.get(exclusiveList.size() - 1);
-        assertThat(testExclusive.getExclusiveStatus()).isEqualTo(DEFAULT_EXCLUSIVE_STATUS);
+        assertThat(testExclusive.getState()).isEqualTo(DEFAULT_STATE);
         assertThat(testExclusive.getUnitOfCost()).isEqualTo(DEFAULT_UNIT_OF_COST);
     }
 
@@ -167,7 +166,7 @@ public class ExclusiveResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(exclusive.getId().intValue())))
-            .andExpect(jsonPath("$.[*].exclusiveStatus").value(hasItem(DEFAULT_EXCLUSIVE_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].state").value(hasItem(DEFAULT_STATE.toString())))
             .andExpect(jsonPath("$.[*].unitOfCost").value(hasItem(DEFAULT_UNIT_OF_COST.toString())));
     }
     
@@ -182,7 +181,7 @@ public class ExclusiveResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(exclusive.getId().intValue()))
-            .andExpect(jsonPath("$.exclusiveStatus").value(DEFAULT_EXCLUSIVE_STATUS.toString()))
+            .andExpect(jsonPath("$.state").value(DEFAULT_STATE.toString()))
             .andExpect(jsonPath("$.unitOfCost").value(DEFAULT_UNIT_OF_COST.toString()));
     }
 
@@ -207,7 +206,7 @@ public class ExclusiveResourceIT {
         // Disconnect from session so that the updates on updatedExclusive are not directly saved in db
         em.detach(updatedExclusive);
         updatedExclusive
-            .exclusiveStatus(UPDATED_EXCLUSIVE_STATUS)
+            .state(UPDATED_STATE)
             .unitOfCost(UPDATED_UNIT_OF_COST);
         ExclusiveDTO exclusiveDTO = exclusiveMapper.toDto(updatedExclusive);
 
@@ -220,7 +219,7 @@ public class ExclusiveResourceIT {
         List<Exclusive> exclusiveList = exclusiveRepository.findAll();
         assertThat(exclusiveList).hasSize(databaseSizeBeforeUpdate);
         Exclusive testExclusive = exclusiveList.get(exclusiveList.size() - 1);
-        assertThat(testExclusive.getExclusiveStatus()).isEqualTo(UPDATED_EXCLUSIVE_STATUS);
+        assertThat(testExclusive.getState()).isEqualTo(UPDATED_STATE);
         assertThat(testExclusive.getUnitOfCost()).isEqualTo(UPDATED_UNIT_OF_COST);
     }
 

@@ -7,11 +7,12 @@
         },
         {
             "fieldName": "text",
-            "fieldType": "String"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "timestamp",
-            "fieldType": "LocalDate",
+            "fieldType": "Instant",
             "fieldValidateRules": [
                 "required"
             ]
@@ -22,7 +23,7 @@
             "relationshipType": "one-to-one",
             "otherEntityName": "agent",
             "otherEntityRelationshipName": "theChatMessage",
-            "relationshipName": "fromAgent",
+            "relationshipName": "de",
             "otherEntityField": "id",
             "ownerSide": true
         }

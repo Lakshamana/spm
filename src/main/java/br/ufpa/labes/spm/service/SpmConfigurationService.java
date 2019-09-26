@@ -25,11 +25,11 @@ public interface SpmConfigurationService {
      */
     List<SpmConfigurationDTO> findAll();
     /**
-     * Get all the SpmConfigurationDTO where TheAgent is {@code null}.
+     * Get all the SpmConfigurationDTO where Agent is {@code null}.
      *
      * @return the list of entities.
      */
-    List<SpmConfigurationDTO> findAllWhereTheAgentIsNull();
+    List<SpmConfigurationDTO> findAllWhereAgentIsNull();
 
 
     /**

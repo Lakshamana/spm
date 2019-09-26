@@ -30,7 +30,7 @@ public class AssetRelationship implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("relatedAssets")
-    private Asset theAsset;
+    private Asset asset;
 
     @ManyToOne
     @JsonIgnoreProperties("relatedByAssets")
@@ -71,17 +71,17 @@ public class AssetRelationship implements Serializable {
         this.kind = relationshipKind;
     }
 
-    public Asset getTheAsset() {
-        return theAsset;
+    public Asset getAsset() {
+        return asset;
     }
 
-    public AssetRelationship theAsset(Asset asset) {
-        this.theAsset = asset;
+    public AssetRelationship asset(Asset asset) {
+        this.asset = asset;
         return this;
     }
 
-    public void setTheAsset(Asset asset) {
-        this.theAsset = asset;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 
     public Asset getRelatedAsset() {

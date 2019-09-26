@@ -1,4 +1,5 @@
 package br.ufpa.labes.spm.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -47,8 +48,12 @@ public class Company implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "image_url")
-    private String imageURL;
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
+
+    @Column(name = "image_content_type")
+    private String imageContentType;
 
     @Column(name = "url")
     private String url;
@@ -56,21 +61,25 @@ public class Company implements Serializable {
     @Column(name = "automatic_instantiation")
     private Boolean automaticInstantiation;
 
-    @OneToMany(mappedBy = "theCompany")
+    @OneToMany(mappedBy = "company")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<OrganizationMetric> organizationMetrics = new HashSet<>();
 
-    @OneToMany(mappedBy = "theCompany")
+    @OneToMany(mappedBy = "company")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<OrganizationEstimation> theCompanyEstimations = new HashSet<>();
 
-    @OneToMany(mappedBy = "theOrganization")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CompanyUnit> theCompanyUnits = new HashSet<>();
+    @OneToOne(mappedBy = "company")
+    @JsonIgnore
+    private Driver theDriver;
 
     @OneToMany(mappedBy = "theOrganization")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<DevelopingSystem> theDevelopingSystems = new HashSet<>();
+    private Set<CompanyUnit> theOrganizationalUnits = new HashSet<>();
+
+    @OneToMany(mappedBy = "theOrganization")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<DevelopingSystem> theSystems = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -185,17 +194,30 @@ public class Company implements Serializable {
         this.description = description;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public byte[] getImage() {
+        return image;
     }
 
-    public Company imageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public Company image(byte[] image) {
+        this.image = image;
         return this;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageContentType() {
+        return imageContentType;
+    }
+
+    public Company imageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
+        return this;
+    }
+
+    public void setImageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
     }
 
     public String getUrl() {
@@ -235,13 +257,13 @@ public class Company implements Serializable {
 
     public Company addOrganizationMetric(OrganizationMetric organizationMetric) {
         this.organizationMetrics.add(organizationMetric);
-        organizationMetric.setTheCompany(this);
+        organizationMetric.setCompany(this);
         return this;
     }
 
     public Company removeOrganizationMetric(OrganizationMetric organizationMetric) {
         this.organizationMetrics.remove(organizationMetric);
-        organizationMetric.setTheCompany(null);
+        organizationMetric.setCompany(null);
         return this;
     }
 
@@ -260,13 +282,13 @@ public class Company implements Serializable {
 
     public Company addTheCompanyEstimation(OrganizationEstimation organizationEstimation) {
         this.theCompanyEstimations.add(organizationEstimation);
-        organizationEstimation.setTheCompany(this);
+        organizationEstimation.setCompany(this);
         return this;
     }
 
     public Company removeTheCompanyEstimation(OrganizationEstimation organizationEstimation) {
         this.theCompanyEstimations.remove(organizationEstimation);
-        organizationEstimation.setTheCompany(null);
+        organizationEstimation.setCompany(null);
         return this;
     }
 
@@ -274,54 +296,67 @@ public class Company implements Serializable {
         this.theCompanyEstimations = organizationEstimations;
     }
 
-    public Set<CompanyUnit> getTheCompanyUnits() {
-        return theCompanyUnits;
+    public Driver getTheDriver() {
+        return theDriver;
     }
 
-    public Company theCompanyUnits(Set<CompanyUnit> companyUnits) {
-        this.theCompanyUnits = companyUnits;
+    public Company theDriver(Driver driver) {
+        this.theDriver = driver;
         return this;
     }
 
-    public Company addTheCompanyUnit(CompanyUnit companyUnit) {
-        this.theCompanyUnits.add(companyUnit);
+    public void setTheDriver(Driver driver) {
+        this.theDriver = driver;
+    }
+
+    public Set<CompanyUnit> getTheOrganizationalUnits() {
+        return theOrganizationalUnits;
+    }
+
+    public Company theOrganizationalUnits(Set<CompanyUnit> companyUnits) {
+        this.theOrganizationalUnits = companyUnits;
+        return this;
+    }
+
+    public Company addTheOrganizationalUnits(CompanyUnit companyUnit) {
+        this.theOrganizationalUnits.add(companyUnit);
         companyUnit.setTheOrganization(this);
         return this;
     }
 
-    public Company removeTheCompanyUnit(CompanyUnit companyUnit) {
-        this.theCompanyUnits.remove(companyUnit);
+    public Company removeTheOrganizationalUnits(CompanyUnit companyUnit) {
+        this.theOrganizationalUnits.remove(companyUnit);
         companyUnit.setTheOrganization(null);
         return this;
     }
 
-    public void setTheCompanyUnits(Set<CompanyUnit> companyUnits) {
-        this.theCompanyUnits = companyUnits;
+    public void setTheOrganizationalUnits(Set<CompanyUnit> companyUnits) {
+        this.theOrganizationalUnits = companyUnits;
     }
 
-    public Set<DevelopingSystem> getTheDevelopingSystems() {
-        return theDevelopingSystems;
+    public Set<DevelopingSystem> getTheSystems() {
+        return theSystems;
     }
 
-    public Company theDevelopingSystems(Set<DevelopingSystem> developingSystems) {
-        this.theDevelopingSystems = developingSystems;
+    public Company theSystems(Set<DevelopingSystem> developingSystems) {
+        this.theSystems = developingSystems;
         return this;
     }
 
-    public Company addTheDevelopingSystem(DevelopingSystem developingSystem) {
-        this.theDevelopingSystems.add(developingSystem);
+    public Company addTheSystem(DevelopingSystem developingSystem) {
+        this.theSystems.add(developingSystem);
         developingSystem.setTheOrganization(this);
         return this;
     }
 
-    public Company removeTheDevelopingSystem(DevelopingSystem developingSystem) {
-        this.theDevelopingSystems.remove(developingSystem);
+    public Company removeTheSystem(DevelopingSystem developingSystem) {
+        this.theSystems.remove(developingSystem);
         developingSystem.setTheOrganization(null);
         return this;
     }
 
-    public void setTheDevelopingSystems(Set<DevelopingSystem> developingSystems) {
-        this.theDevelopingSystems = developingSystems;
+    public void setTheSystems(Set<DevelopingSystem> developingSystems) {
+        this.theSystems = developingSystems;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -353,7 +388,8 @@ public class Company implements Serializable {
             ", address='" + getAddress() + "'" +
             ", phone='" + getPhone() + "'" +
             ", description='" + getDescription() + "'" +
-            ", imageURL='" + getImageURL() + "'" +
+            ", image='" + getImage() + "'" +
+            ", imageContentType='" + getImageContentType() + "'" +
             ", url='" + getUrl() + "'" +
             ", automaticInstantiation='" + isAutomaticInstantiation() + "'" +
             "}";

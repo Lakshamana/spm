@@ -19,9 +19,15 @@
         },
         {
             "relationshipType": "one-to-many",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theResourceEvent",
+            "relationshipName": "theRequestorAgent"
+        },
+        {
+            "relationshipType": "one-to-many",
             "otherEntityName": "catalogEvent",
             "otherEntityRelationshipName": "theResourceEvent",
-            "relationshipName": "theCatalogEventToResource"
+            "relationshipName": "theCatalogEvents"
         }
     ],
     "changelogDate": "20190914033809",

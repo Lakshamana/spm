@@ -9,13 +9,6 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "normal",
-            "otherEntityRelationshipName": "theRequiredResource",
-            "relationshipName": "theNormal",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "resourceType",
             "otherEntityRelationshipName": "theRequiredResource",
             "relationshipName": "theResourceType",
@@ -26,6 +19,13 @@
             "otherEntityName": "resource",
             "otherEntityRelationshipName": "theRequiredResource",
             "relationshipName": "theResource",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "normal",
+            "otherEntityRelationshipName": "theRequiredResource",
+            "relationshipName": "theNormal",
             "otherEntityField": "id"
         }
     ],

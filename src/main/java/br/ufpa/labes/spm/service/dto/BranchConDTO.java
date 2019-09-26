@@ -10,7 +10,7 @@ public class BranchConDTO implements Serializable {
     private Long id;
 
 
-    private Long fromMultipleConId;
+    private Long fromMultipleConnectionId;
 
     private Long fromActivityId;
 
@@ -22,12 +22,12 @@ public class BranchConDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getFromMultipleConId() {
-        return fromMultipleConId;
+    public Long getFromMultipleConnectionId() {
+        return fromMultipleConnectionId;
     }
 
-    public void setFromMultipleConId(Long multipleConId) {
-        this.fromMultipleConId = multipleConId;
+    public void setFromMultipleConnectionId(Long multipleConId) {
+        this.fromMultipleConnectionId = multipleConId;
     }
 
     public Long getFromActivityId() {
@@ -63,7 +63,7 @@ public class BranchConDTO implements Serializable {
     public String toString() {
         return "BranchConDTO{" +
             "id=" + getId() +
-            ", fromMultipleCon=" + getFromMultipleConId() +
+            ", fromMultipleConnection=" + getFromMultipleConnectionId() +
             ", fromActivity=" + getFromActivityId() +
             "}";
     }

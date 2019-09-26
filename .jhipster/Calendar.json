@@ -9,15 +9,16 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "calendarDay",
-            "otherEntityRelationshipName": "theCalendar",
+            "otherEntityName": "notWorkingDay",
+            "otherEntityRelationshipName": "calendar",
             "relationshipName": "notWorkingDays"
         },
         {
-            "relationshipType": "one-to-many",
+            "relationshipType": "many-to-one",
             "otherEntityName": "project",
             "otherEntityRelationshipName": "theCalendar",
-            "relationshipName": "project"
+            "relationshipName": "project",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20190914033745",

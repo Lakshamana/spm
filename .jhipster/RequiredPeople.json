@@ -8,12 +8,6 @@
             "otherEntityRelationshipName": "theRequiredPeople",
             "relationshipName": "theNormal",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "reqAgentRequiresAbility",
-            "otherEntityRelationshipName": "theReqAgent",
-            "relationshipName": "theReqAgentRequiresAbility"
         }
     ],
     "changelogDate": "20190914033829",

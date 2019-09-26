@@ -8,15 +8,15 @@
     -->
     <changeSet id="20190914033849-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_metric_definition_id"
+        <addForeignKeyConstraint baseColumnNames="metric_definition_id"
                                  baseTableName="metric"
-                                 constraintName="fk_metric_the_metric_definition_id"
+                                 constraintName="fk_metric_metric_definition_id"
                                  referencedColumnNames="id"
                                  referencedTableName="metric_definition"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_activity_id"
+        <addForeignKeyConstraint baseColumnNames="activity_id"
                                  baseTableName="metric"
-                                 constraintName="fk_metric_the_activity_id"
+                                 constraintName="fk_metric_activity_id"
                                  referencedColumnNames="id"
                                  referencedTableName="activity"/>
 

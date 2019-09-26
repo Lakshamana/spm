@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "resource_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ResourceEvent extends Event implements Serializable {
+public class ResourceEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,7 +33,11 @@ public class ResourceEvent extends Event implements Serializable {
 
     @OneToMany(mappedBy = "theResourceEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CatalogEvent> theCatalogEventToResources = new HashSet<>();
+    private Set<Agent> theRequestorAgents = new HashSet<>();
+
+    @OneToMany(mappedBy = "theResourceEvent")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<CatalogEvent> theCatalogEvents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -70,29 +74,54 @@ public class ResourceEvent extends Event implements Serializable {
         this.theResource = resource;
     }
 
-    public Set<CatalogEvent> getTheCatalogEventToResources() {
-        return theCatalogEventToResources;
+    public Set<Agent> getTheRequestorAgents() {
+        return theRequestorAgents;
     }
 
-    public ResourceEvent theCatalogEventToResources(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToResources = catalogEvents;
+    public ResourceEvent theRequestorAgents(Set<Agent> agents) {
+        this.theRequestorAgents = agents;
         return this;
     }
 
-    public ResourceEvent addTheCatalogEventToResource(CatalogEvent catalogEvent) {
-        this.theCatalogEventToResources.add(catalogEvent);
+    public ResourceEvent addTheRequestorAgent(Agent agent) {
+        this.theRequestorAgents.add(agent);
+        agent.setTheResourceEvent(this);
+        return this;
+    }
+
+    public ResourceEvent removeTheRequestorAgent(Agent agent) {
+        this.theRequestorAgents.remove(agent);
+        agent.setTheResourceEvent(null);
+        return this;
+    }
+
+    public void setTheRequestorAgents(Set<Agent> agents) {
+        this.theRequestorAgents = agents;
+    }
+
+    public Set<CatalogEvent> getTheCatalogEvents() {
+        return theCatalogEvents;
+    }
+
+    public ResourceEvent theCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
+        return this;
+    }
+
+    public ResourceEvent addTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.add(catalogEvent);
         catalogEvent.setTheResourceEvent(this);
         return this;
     }
 
-    public ResourceEvent removeTheCatalogEventToResource(CatalogEvent catalogEvent) {
-        this.theCatalogEventToResources.remove(catalogEvent);
+    public ResourceEvent removeTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.remove(catalogEvent);
         catalogEvent.setTheResourceEvent(null);
         return this;
     }
 
-    public void setTheCatalogEventToResources(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToResources = catalogEvents;
+    public void setTheCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

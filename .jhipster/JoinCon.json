@@ -2,11 +2,18 @@
     "name": "JoinCon",
     "fields": [
         {
-            "fieldName": "kindJoinCon",
+            "fieldName": "kindJoin",
             "fieldType": "String"
         }
     ],
     "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "multipleCon",
+            "otherEntityRelationshipName": "theJoinCon",
+            "relationshipName": "toMultipleCon",
+            "otherEntityField": "id"
+        },
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "multipleCon",

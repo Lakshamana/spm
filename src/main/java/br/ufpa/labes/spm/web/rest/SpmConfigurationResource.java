@@ -88,9 +88,9 @@ public class SpmConfigurationResource {
      */
     @GetMapping("/spm-configurations")
     public List<SpmConfigurationDTO> getAllSpmConfigurations(@RequestParam(required = false) String filter) {
-        if ("theagent-is-null".equals(filter)) {
-            log.debug("REST request to get all SpmConfigurations where theAgent is null");
-            return spmConfigurationService.findAllWhereTheAgentIsNull();
+        if ("agent-is-null".equals(filter)) {
+            log.debug("REST request to get all SpmConfigurations where agent is null");
+            return spmConfigurationService.findAllWhereAgentIsNull();
         }
         log.debug("REST request to get all SpmConfigurations");
         return spmConfigurationService.findAll();

@@ -14,11 +14,6 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "webAPSEEObjectType",
-            "fieldType": "WebAPSEEObjectType",
-            "fieldValues": "ACTIVITY,REQ_AGENT,REQ_RESOURCE,REQ_WORKGROUP,CONNECTION"
         }
     ],
     "relationships": [

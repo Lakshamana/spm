@@ -60,13 +60,13 @@ public class PrimitiveType implements Serializable {
         return this;
     }
 
-    public PrimitiveType addTheToolParameter(ToolParameter toolParameter) {
+    public PrimitiveType addTheToolParameters(ToolParameter toolParameter) {
         this.theToolParameters.add(toolParameter);
         toolParameter.setThePrimitiveType(this);
         return this;
     }
 
-    public PrimitiveType removeTheToolParameter(ToolParameter toolParameter) {
+    public PrimitiveType removeTheToolParameters(ToolParameter toolParameter) {
         this.theToolParameters.remove(toolParameter);
         toolParameter.setThePrimitiveType(null);
         return this;

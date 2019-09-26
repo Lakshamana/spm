@@ -11,10 +11,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {ActivityMapper.class})
 public interface ActivityEstimationMapper extends EntityMapper<ActivityEstimationDTO, ActivityEstimation> {
 
-    @Mapping(source = "theActivity.id", target = "theActivityId")
+    @Mapping(source = "activity.id", target = "activityId")
     ActivityEstimationDTO toDto(ActivityEstimation activityEstimation);
 
-    @Mapping(source = "theActivityId", target = "theActivity")
+    @Mapping(source = "activityId", target = "activity")
     ActivityEstimation toEntity(ActivityEstimationDTO activityEstimationDTO);
 
     default ActivityEstimation fromId(Long id) {

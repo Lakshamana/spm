@@ -33,7 +33,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.OperationEnum;
 /**
  * Integration tests for the {@link LogEntryResource} REST controller.
  */
@@ -45,8 +44,8 @@ public class LogEntryResourceIT {
     private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DATE = LocalDate.ofEpochDay(-1L);
 
-    private static final OperationEnum DEFAULT_OPERATION_ENUM = OperationEnum.CREATE;
-    private static final OperationEnum UPDATED_OPERATION_ENUM = OperationEnum.DELETE;
+    private static final String DEFAULT_OPERATION = "AAAAAAAAAA";
+    private static final String UPDATED_OPERATION = "BBBBBBBBBB";
 
     private static final String DEFAULT_CLASS_NAME = "AAAAAAAAAA";
     private static final String UPDATED_CLASS_NAME = "BBBBBBBBBB";
@@ -103,7 +102,7 @@ public class LogEntryResourceIT {
     public static LogEntry createEntity(EntityManager em) {
         LogEntry logEntry = new LogEntry()
             .date(DEFAULT_DATE)
-            .operationEnum(DEFAULT_OPERATION_ENUM)
+            .operation(DEFAULT_OPERATION)
             .className(DEFAULT_CLASS_NAME)
             .uid(DEFAULT_UID);
         return logEntry;
@@ -117,7 +116,7 @@ public class LogEntryResourceIT {
     public static LogEntry createUpdatedEntity(EntityManager em) {
         LogEntry logEntry = new LogEntry()
             .date(UPDATED_DATE)
-            .operationEnum(UPDATED_OPERATION_ENUM)
+            .operation(UPDATED_OPERATION)
             .className(UPDATED_CLASS_NAME)
             .uid(UPDATED_UID);
         return logEntry;
@@ -145,7 +144,7 @@ public class LogEntryResourceIT {
         assertThat(logEntryList).hasSize(databaseSizeBeforeCreate + 1);
         LogEntry testLogEntry = logEntryList.get(logEntryList.size() - 1);
         assertThat(testLogEntry.getDate()).isEqualTo(DEFAULT_DATE);
-        assertThat(testLogEntry.getOperationEnum()).isEqualTo(DEFAULT_OPERATION_ENUM);
+        assertThat(testLogEntry.getOperation()).isEqualTo(DEFAULT_OPERATION);
         assertThat(testLogEntry.getClassName()).isEqualTo(DEFAULT_CLASS_NAME);
         assertThat(testLogEntry.getUid()).isEqualTo(DEFAULT_UID);
     }
@@ -183,7 +182,7 @@ public class LogEntryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(logEntry.getId().intValue())))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].operationEnum").value(hasItem(DEFAULT_OPERATION_ENUM.toString())))
+            .andExpect(jsonPath("$.[*].operation").value(hasItem(DEFAULT_OPERATION.toString())))
             .andExpect(jsonPath("$.[*].className").value(hasItem(DEFAULT_CLASS_NAME.toString())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())));
     }
@@ -200,7 +199,7 @@ public class LogEntryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(logEntry.getId().intValue()))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
-            .andExpect(jsonPath("$.operationEnum").value(DEFAULT_OPERATION_ENUM.toString()))
+            .andExpect(jsonPath("$.operation").value(DEFAULT_OPERATION.toString()))
             .andExpect(jsonPath("$.className").value(DEFAULT_CLASS_NAME.toString()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()));
     }
@@ -227,7 +226,7 @@ public class LogEntryResourceIT {
         em.detach(updatedLogEntry);
         updatedLogEntry
             .date(UPDATED_DATE)
-            .operationEnum(UPDATED_OPERATION_ENUM)
+            .operation(UPDATED_OPERATION)
             .className(UPDATED_CLASS_NAME)
             .uid(UPDATED_UID);
         LogEntryDTO logEntryDTO = logEntryMapper.toDto(updatedLogEntry);
@@ -242,7 +241,7 @@ public class LogEntryResourceIT {
         assertThat(logEntryList).hasSize(databaseSizeBeforeUpdate);
         LogEntry testLogEntry = logEntryList.get(logEntryList.size() - 1);
         assertThat(testLogEntry.getDate()).isEqualTo(UPDATED_DATE);
-        assertThat(testLogEntry.getOperationEnum()).isEqualTo(UPDATED_OPERATION_ENUM);
+        assertThat(testLogEntry.getOperation()).isEqualTo(UPDATED_OPERATION);
         assertThat(testLogEntry.getClassName()).isEqualTo(UPDATED_CLASS_NAME);
         assertThat(testLogEntry.getUid()).isEqualTo(UPDATED_UID);
     }

@@ -25,29 +25,9 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "workGroupInstSug",
-            "otherEntityRelationshipName": "workGroupTypeRequired",
-            "relationshipName": "sugToReqWorkGroup"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "instantiationSuggestion",
-            "otherEntityRelationshipName": "requiredResourceType",
-            "relationshipName": "instSugToType"
-        },
-        {
-            "relationshipType": "one-to-many",
             "otherEntityName": "type",
             "otherEntityRelationshipName": "superType",
             "relationshipName": "subType"
-        },
-        {
-            "relationshipType": "many-to-many",
-            "otherEntityName": "toolDefinition",
-            "otherEntityRelationshipName": "theArtifactTypes",
-            "relationshipName": "theToolDefinitionToArtifactType",
-            "otherEntityField": "id",
-            "ownerSide": false
         }
     ],
     "changelogDate": "20190914033922",

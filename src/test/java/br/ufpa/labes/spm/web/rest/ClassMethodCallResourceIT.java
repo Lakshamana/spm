@@ -39,6 +39,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = SpmApp.class)
 public class ClassMethodCallResourceIT {
 
+    private static final String DEFAULT_IDENT = "AAAAAAAAAA";
+    private static final String UPDATED_IDENT = "BBBBBBBBBB";
+
     private static final String DEFAULT_CLASS_NAME = "AAAAAAAAAA";
     private static final String UPDATED_CLASS_NAME = "BBBBBBBBBB";
 
@@ -96,6 +99,7 @@ public class ClassMethodCallResourceIT {
      */
     public static ClassMethodCall createEntity(EntityManager em) {
         ClassMethodCall classMethodCall = new ClassMethodCall()
+            .ident(DEFAULT_IDENT)
             .className(DEFAULT_CLASS_NAME)
             .methodName(DEFAULT_METHOD_NAME)
             .description(DEFAULT_DESCRIPTION);
@@ -109,6 +113,7 @@ public class ClassMethodCallResourceIT {
      */
     public static ClassMethodCall createUpdatedEntity(EntityManager em) {
         ClassMethodCall classMethodCall = new ClassMethodCall()
+            .ident(UPDATED_IDENT)
             .className(UPDATED_CLASS_NAME)
             .methodName(UPDATED_METHOD_NAME)
             .description(UPDATED_DESCRIPTION);
@@ -136,6 +141,7 @@ public class ClassMethodCallResourceIT {
         List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
         assertThat(classMethodCallList).hasSize(databaseSizeBeforeCreate + 1);
         ClassMethodCall testClassMethodCall = classMethodCallList.get(classMethodCallList.size() - 1);
+        assertThat(testClassMethodCall.getIdent()).isEqualTo(DEFAULT_IDENT);
         assertThat(testClassMethodCall.getClassName()).isEqualTo(DEFAULT_CLASS_NAME);
         assertThat(testClassMethodCall.getMethodName()).isEqualTo(DEFAULT_METHOD_NAME);
         assertThat(testClassMethodCall.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
@@ -173,6 +179,7 @@ public class ClassMethodCallResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(classMethodCall.getId().intValue())))
+            .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())))
             .andExpect(jsonPath("$.[*].className").value(hasItem(DEFAULT_CLASS_NAME.toString())))
             .andExpect(jsonPath("$.[*].methodName").value(hasItem(DEFAULT_METHOD_NAME.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
@@ -189,6 +196,7 @@ public class ClassMethodCallResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(classMethodCall.getId().intValue()))
+            .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()))
             .andExpect(jsonPath("$.className").value(DEFAULT_CLASS_NAME.toString()))
             .andExpect(jsonPath("$.methodName").value(DEFAULT_METHOD_NAME.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
@@ -215,6 +223,7 @@ public class ClassMethodCallResourceIT {
         // Disconnect from session so that the updates on updatedClassMethodCall are not directly saved in db
         em.detach(updatedClassMethodCall);
         updatedClassMethodCall
+            .ident(UPDATED_IDENT)
             .className(UPDATED_CLASS_NAME)
             .methodName(UPDATED_METHOD_NAME)
             .description(UPDATED_DESCRIPTION);
@@ -229,6 +238,7 @@ public class ClassMethodCallResourceIT {
         List<ClassMethodCall> classMethodCallList = classMethodCallRepository.findAll();
         assertThat(classMethodCallList).hasSize(databaseSizeBeforeUpdate);
         ClassMethodCall testClassMethodCall = classMethodCallList.get(classMethodCallList.size() - 1);
+        assertThat(testClassMethodCall.getIdent()).isEqualTo(UPDATED_IDENT);
         assertThat(testClassMethodCall.getClassName()).isEqualTo(UPDATED_CLASS_NAME);
         assertThat(testClassMethodCall.getMethodName()).isEqualTo(UPDATED_METHOD_NAME);
         assertThat(testClassMethodCall.getDescription()).isEqualTo(UPDATED_DESCRIPTION);

@@ -16,10 +16,6 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="ident" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
             <column name="how_long" type="${floatType}">
                 <constraints nullable="true" />
             </column>
@@ -72,7 +68,6 @@
                   separator=";"
                   tableName="normal">
             <column name="id" type="numeric"/>
-            <column name="ident" type="string"/>
             <column name="how_long" type="numeric"/>
             <column name="how_long_unit" type="string"/>
             <column name="planned_begin" type="date"/>

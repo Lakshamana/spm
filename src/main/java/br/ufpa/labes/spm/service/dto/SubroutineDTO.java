@@ -9,8 +9,6 @@ public class SubroutineDTO implements Serializable {
 
     private Long id;
 
-    private String ident;
-
 
     private Long theArtifactTypeId;
 
@@ -20,14 +18,6 @@ public class SubroutineDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getIdent() {
-        return ident;
-    }
-
-    public void setIdent(String ident) {
-        this.ident = ident;
     }
 
     public Long getTheArtifactTypeId() {
@@ -63,7 +53,6 @@ public class SubroutineDTO implements Serializable {
     public String toString() {
         return "SubroutineDTO{" +
             "id=" + getId() +
-            ", ident='" + getIdent() + "'" +
             ", theArtifactType=" + getTheArtifactTypeId() +
             "}";
     }

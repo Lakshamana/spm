@@ -6,8 +6,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A RequiredPeople.
@@ -15,7 +13,6 @@ import java.util.Set;
 @Entity
 @Table(name = "required_people")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class RequiredPeople implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,10 +24,6 @@ public class RequiredPeople implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("theRequiredPeople")
     private Normal theNormal;
-
-    @OneToMany(mappedBy = "theReqAgent")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<ReqAgentRequiresAbility> theReqAgentRequiresAbilities = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -52,31 +45,6 @@ public class RequiredPeople implements Serializable {
 
     public void setTheNormal(Normal normal) {
         this.theNormal = normal;
-    }
-
-    public Set<ReqAgentRequiresAbility> getTheReqAgentRequiresAbilities() {
-        return theReqAgentRequiresAbilities;
-    }
-
-    public RequiredPeople theReqAgentRequiresAbilities(Set<ReqAgentRequiresAbility> reqAgentRequiresAbilities) {
-        this.theReqAgentRequiresAbilities = reqAgentRequiresAbilities;
-        return this;
-    }
-
-    public RequiredPeople addTheReqAgentRequiresAbility(ReqAgentRequiresAbility reqAgentRequiresAbility) {
-        this.theReqAgentRequiresAbilities.add(reqAgentRequiresAbility);
-        reqAgentRequiresAbility.setTheReqAgent(this);
-        return this;
-    }
-
-    public RequiredPeople removeTheReqAgentRequiresAbility(ReqAgentRequiresAbility reqAgentRequiresAbility) {
-        this.theReqAgentRequiresAbilities.remove(reqAgentRequiresAbility);
-        reqAgentRequiresAbility.setTheReqAgent(null);
-        return this;
-    }
-
-    public void setTheReqAgentRequiresAbilities(Set<ReqAgentRequiresAbility> reqAgentRequiresAbilities) {
-        this.theReqAgentRequiresAbilities = reqAgentRequiresAbilities;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -101,16 +69,5 @@ public class RequiredPeople implements Serializable {
         return "RequiredPeople{" +
             "id=" + getId() +
             "}";
-    }
-
-    public void removeFromTheNormal(){
-      if (this.theNormal!=null){
-        this.theNormal.removeTheRequiredPeople(this);
-      }
-    }
-
-    public void insertIntoTheNormal(Normal theNormal){
-      if(theNormal != null)
-        theNormal.addTheRequiredPeople(this);
     }
 }

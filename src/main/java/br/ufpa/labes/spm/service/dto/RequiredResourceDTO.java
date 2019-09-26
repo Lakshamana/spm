@@ -12,11 +12,11 @@ public class RequiredResourceDTO implements Serializable {
     private Float amountNeeded;
 
 
-    private Long theNormalId;
-
     private Long theResourceTypeId;
 
     private Long theResourceId;
+
+    private Long theNormalId;
 
     public Long getId() {
         return id;
@@ -34,14 +34,6 @@ public class RequiredResourceDTO implements Serializable {
         this.amountNeeded = amountNeeded;
     }
 
-    public Long getTheNormalId() {
-        return theNormalId;
-    }
-
-    public void setTheNormalId(Long normalId) {
-        this.theNormalId = normalId;
-    }
-
     public Long getTheResourceTypeId() {
         return theResourceTypeId;
     }
@@ -56,6 +48,14 @@ public class RequiredResourceDTO implements Serializable {
 
     public void setTheResourceId(Long resourceId) {
         this.theResourceId = resourceId;
+    }
+
+    public Long getTheNormalId() {
+        return theNormalId;
+    }
+
+    public void setTheNormalId(Long normalId) {
+        this.theNormalId = normalId;
     }
 
     @Override
@@ -84,9 +84,9 @@ public class RequiredResourceDTO implements Serializable {
         return "RequiredResourceDTO{" +
             "id=" + getId() +
             ", amountNeeded=" + getAmountNeeded() +
-            ", theNormal=" + getTheNormalId() +
             ", theResourceType=" + getTheResourceTypeId() +
             ", theResource=" + getTheResourceId() +
+            ", theNormal=" + getTheNormalId() +
             "}";
     }
 }

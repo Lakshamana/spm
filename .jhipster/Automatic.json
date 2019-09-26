@@ -11,17 +11,17 @@
             "ownerSide": true
         },
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "parameter",
+            "otherEntityRelationshipName": "theAutomatic",
+            "relationshipName": "theParameters"
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "artifact",
             "otherEntityRelationshipName": "theAutomatic",
             "relationshipName": "theArtifact",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "parameter",
-            "otherEntityRelationshipName": "theAutomatic",
-            "relationshipName": "theParameters"
         }
     ],
     "changelogDate": "20190914033821",

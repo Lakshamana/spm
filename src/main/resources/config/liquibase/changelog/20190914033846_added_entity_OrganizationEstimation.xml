@@ -20,7 +20,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="the_company_id" type="bigint">
+            <column name="company_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

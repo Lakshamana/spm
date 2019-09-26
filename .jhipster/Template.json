@@ -2,9 +2,8 @@
     "name": "Template",
     "fields": [
         {
-            "fieldName": "tStatus",
-            "fieldType": "TemplateStatus",
-            "fieldValues": "DRAFT,DEFINED,PENDING,OUTDATED"
+            "fieldName": "templateState",
+            "fieldType": "String"
         }
     ],
     "relationships": [
@@ -12,7 +11,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "processModel",
             "otherEntityRelationshipName": "theOrigin",
-            "relationshipName": "theProcessModel"
+            "relationshipName": "theInstances"
         },
         {
             "relationshipType": "many-to-one",
@@ -24,14 +23,14 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "description",
-            "otherEntityRelationshipName": "theTemplateOldVersion",
-            "relationshipName": "theDerivedVersionDescription"
+            "otherEntityRelationshipName": "theOldVersion",
+            "relationshipName": "theDerivedVersionDescriptions"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "description",
-            "otherEntityRelationshipName": "theTemplateNewVersion",
-            "relationshipName": "theTemplateNewDescription"
+            "otherEntityRelationshipName": "theNewVersion",
+            "relationshipName": "theTemplateNewDescriptions"
         }
     ],
     "changelogDate": "20190914033904",

@@ -15,15 +15,15 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "template",
-            "otherEntityRelationshipName": "theDerivedVersionDescription",
-            "relationshipName": "theTemplateOldVersion",
+            "otherEntityRelationshipName": "theDerivedVersionDescriptions",
+            "relationshipName": "theOldVersion",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "template",
-            "otherEntityRelationshipName": "theTemplateNewDescription",
-            "relationshipName": "theTemplateNewVersion",
+            "otherEntityRelationshipName": "theTemplateNewDescriptions",
+            "relationshipName": "theNewVersion",
             "otherEntityField": "id"
         },
         {

@@ -8,15 +8,15 @@
     -->
     <changeSet id="20190914033901-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_template_old_version_id"
+        <addForeignKeyConstraint baseColumnNames="the_old_version_id"
                                  baseTableName="description"
-                                 constraintName="fk_description_the_template_old_version_id"
+                                 constraintName="fk_description_the_old_version_id"
                                  referencedColumnNames="id"
                                  referencedTableName="template"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_template_new_version_id"
+        <addForeignKeyConstraint baseColumnNames="the_new_version_id"
                                  baseTableName="description"
-                                 constraintName="fk_description_the_template_new_version_id"
+                                 constraintName="fk_description_the_new_version_id"
                                  referencedColumnNames="id"
                                  referencedTableName="template"/>
 

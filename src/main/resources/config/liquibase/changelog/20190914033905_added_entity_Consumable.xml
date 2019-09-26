@@ -16,11 +16,11 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="unit" type="varchar(255)">
+            <column name="state" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="consumable_status" type="varchar(255)">
+            <column name="unit" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
@@ -56,8 +56,8 @@
                   separator=";"
                   tableName="consumable">
             <column name="id" type="numeric"/>
+            <column name="state" type="string"/>
             <column name="unit" type="string"/>
-            <column name="consumable_status" type="string"/>
             <column name="total_quantity" type="numeric"/>
             <column name="amount_used" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->

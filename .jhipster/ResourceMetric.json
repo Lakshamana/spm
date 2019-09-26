@@ -6,7 +6,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "resource",
             "otherEntityRelationshipName": "theResourceMetric",
-            "relationshipName": "theResource",
+            "relationshipName": "resource",
             "otherEntityField": "id"
         }
     ],

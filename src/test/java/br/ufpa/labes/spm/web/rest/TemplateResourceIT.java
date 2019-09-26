@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.TemplateStatus;
 /**
  * Integration tests for the {@link TemplateResource} REST controller.
  */
@@ -39,8 +38,8 @@ import br.ufpa.labes.spm.domain.enumeration.TemplateStatus;
 @SpringBootTest(classes = SpmApp.class)
 public class TemplateResourceIT {
 
-    private static final TemplateStatus DEFAULT_T_STATUS = TemplateStatus.DRAFT;
-    private static final TemplateStatus UPDATED_T_STATUS = TemplateStatus.DEFINED;
+    private static final String DEFAULT_TEMPLATE_STATE = "AAAAAAAAAA";
+    private static final String UPDATED_TEMPLATE_STATE = "BBBBBBBBBB";
 
     @Autowired
     private TemplateRepository templateRepository;
@@ -90,7 +89,7 @@ public class TemplateResourceIT {
      */
     public static Template createEntity(EntityManager em) {
         Template template = new Template()
-            .tStatus(DEFAULT_T_STATUS);
+            .templateState(DEFAULT_TEMPLATE_STATE);
         return template;
     }
     /**
@@ -101,7 +100,7 @@ public class TemplateResourceIT {
      */
     public static Template createUpdatedEntity(EntityManager em) {
         Template template = new Template()
-            .tStatus(UPDATED_T_STATUS);
+            .templateState(UPDATED_TEMPLATE_STATE);
         return template;
     }
 
@@ -126,7 +125,7 @@ public class TemplateResourceIT {
         List<Template> templateList = templateRepository.findAll();
         assertThat(templateList).hasSize(databaseSizeBeforeCreate + 1);
         Template testTemplate = templateList.get(templateList.size() - 1);
-        assertThat(testTemplate.gettStatus()).isEqualTo(DEFAULT_T_STATUS);
+        assertThat(testTemplate.getTemplateState()).isEqualTo(DEFAULT_TEMPLATE_STATE);
     }
 
     @Test
@@ -161,7 +160,7 @@ public class TemplateResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(template.getId().intValue())))
-            .andExpect(jsonPath("$.[*].tStatus").value(hasItem(DEFAULT_T_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].templateState").value(hasItem(DEFAULT_TEMPLATE_STATE.toString())));
     }
     
     @Test
@@ -175,7 +174,7 @@ public class TemplateResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(template.getId().intValue()))
-            .andExpect(jsonPath("$.tStatus").value(DEFAULT_T_STATUS.toString()));
+            .andExpect(jsonPath("$.templateState").value(DEFAULT_TEMPLATE_STATE.toString()));
     }
 
     @Test
@@ -199,7 +198,7 @@ public class TemplateResourceIT {
         // Disconnect from session so that the updates on updatedTemplate are not directly saved in db
         em.detach(updatedTemplate);
         updatedTemplate
-            .tStatus(UPDATED_T_STATUS);
+            .templateState(UPDATED_TEMPLATE_STATE);
         TemplateDTO templateDTO = templateMapper.toDto(updatedTemplate);
 
         restTemplateMockMvc.perform(put("/api/templates")
@@ -211,7 +210,7 @@ public class TemplateResourceIT {
         List<Template> templateList = templateRepository.findAll();
         assertThat(templateList).hasSize(databaseSizeBeforeUpdate);
         Template testTemplate = templateList.get(templateList.size() - 1);
-        assertThat(testTemplate.gettStatus()).isEqualTo(UPDATED_T_STATUS);
+        assertThat(testTemplate.getTemplateState()).isEqualTo(UPDATED_TEMPLATE_STATE);
     }
 
     @Test

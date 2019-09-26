@@ -38,18 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = SpmApp.class)
 public class AuthorStatResourceIT {
 
-    private static final Double DEFAULT_RATE = 1D;
-    private static final Double UPDATED_RATE = 2D;
-    private static final Double SMALLER_RATE = 1D - 1D;
-
-    private static final Long DEFAULT_VISIT_COUNT = 1L;
-    private static final Long UPDATED_VISIT_COUNT = 2L;
-    private static final Long SMALLER_VISIT_COUNT = 1L - 1L;
-
-    private static final Long DEFAULT_DOWNLOAD_COUNT = 1L;
-    private static final Long UPDATED_DOWNLOAD_COUNT = 2L;
-    private static final Long SMALLER_DOWNLOAD_COUNT = 1L - 1L;
-
     @Autowired
     private AuthorStatRepository authorStatRepository;
 
@@ -97,10 +85,7 @@ public class AuthorStatResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static AuthorStat createEntity(EntityManager em) {
-        AuthorStat authorStat = new AuthorStat()
-            .rate(DEFAULT_RATE)
-            .visitCount(DEFAULT_VISIT_COUNT)
-            .downloadCount(DEFAULT_DOWNLOAD_COUNT);
+        AuthorStat authorStat = new AuthorStat();
         return authorStat;
     }
     /**
@@ -110,10 +95,7 @@ public class AuthorStatResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static AuthorStat createUpdatedEntity(EntityManager em) {
-        AuthorStat authorStat = new AuthorStat()
-            .rate(UPDATED_RATE)
-            .visitCount(UPDATED_VISIT_COUNT)
-            .downloadCount(UPDATED_DOWNLOAD_COUNT);
+        AuthorStat authorStat = new AuthorStat();
         return authorStat;
     }
 
@@ -138,9 +120,6 @@ public class AuthorStatResourceIT {
         List<AuthorStat> authorStatList = authorStatRepository.findAll();
         assertThat(authorStatList).hasSize(databaseSizeBeforeCreate + 1);
         AuthorStat testAuthorStat = authorStatList.get(authorStatList.size() - 1);
-        assertThat(testAuthorStat.getRate()).isEqualTo(DEFAULT_RATE);
-        assertThat(testAuthorStat.getVisitCount()).isEqualTo(DEFAULT_VISIT_COUNT);
-        assertThat(testAuthorStat.getDownloadCount()).isEqualTo(DEFAULT_DOWNLOAD_COUNT);
     }
 
     @Test
@@ -174,10 +153,7 @@ public class AuthorStatResourceIT {
         restAuthorStatMockMvc.perform(get("/api/author-stats?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(authorStat.getId().intValue())))
-            .andExpect(jsonPath("$.[*].rate").value(hasItem(DEFAULT_RATE.doubleValue())))
-            .andExpect(jsonPath("$.[*].visitCount").value(hasItem(DEFAULT_VISIT_COUNT.intValue())))
-            .andExpect(jsonPath("$.[*].downloadCount").value(hasItem(DEFAULT_DOWNLOAD_COUNT.intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(authorStat.getId().intValue())));
     }
     
     @Test
@@ -190,10 +166,7 @@ public class AuthorStatResourceIT {
         restAuthorStatMockMvc.perform(get("/api/author-stats/{id}", authorStat.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(authorStat.getId().intValue()))
-            .andExpect(jsonPath("$.rate").value(DEFAULT_RATE.doubleValue()))
-            .andExpect(jsonPath("$.visitCount").value(DEFAULT_VISIT_COUNT.intValue()))
-            .andExpect(jsonPath("$.downloadCount").value(DEFAULT_DOWNLOAD_COUNT.intValue()));
+            .andExpect(jsonPath("$.id").value(authorStat.getId().intValue()));
     }
 
     @Test
@@ -216,10 +189,6 @@ public class AuthorStatResourceIT {
         AuthorStat updatedAuthorStat = authorStatRepository.findById(authorStat.getId()).get();
         // Disconnect from session so that the updates on updatedAuthorStat are not directly saved in db
         em.detach(updatedAuthorStat);
-        updatedAuthorStat
-            .rate(UPDATED_RATE)
-            .visitCount(UPDATED_VISIT_COUNT)
-            .downloadCount(UPDATED_DOWNLOAD_COUNT);
         AuthorStatDTO authorStatDTO = authorStatMapper.toDto(updatedAuthorStat);
 
         restAuthorStatMockMvc.perform(put("/api/author-stats")
@@ -231,9 +200,6 @@ public class AuthorStatResourceIT {
         List<AuthorStat> authorStatList = authorStatRepository.findAll();
         assertThat(authorStatList).hasSize(databaseSizeBeforeUpdate);
         AuthorStat testAuthorStat = authorStatList.get(authorStatList.size() - 1);
-        assertThat(testAuthorStat.getRate()).isEqualTo(UPDATED_RATE);
-        assertThat(testAuthorStat.getVisitCount()).isEqualTo(UPDATED_VISIT_COUNT);
-        assertThat(testAuthorStat.getDownloadCount()).isEqualTo(UPDATED_DOWNLOAD_COUNT);
     }
 
     @Test

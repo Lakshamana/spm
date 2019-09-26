@@ -5,7 +5,7 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "organization",
-            "otherEntityRelationshipName": "theOrganizationEstimation",
+            "otherEntityRelationshipName": "organizationEstimation",
             "relationshipName": "theOrganization",
             "otherEntityField": "id"
         },
@@ -13,7 +13,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "company",
             "otherEntityRelationshipName": "theCompanyEstimation",
-            "relationshipName": "theCompany",
+            "relationshipName": "company",
             "otherEntityField": "id"
         }
     ],

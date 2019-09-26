@@ -18,7 +18,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "asset",
             "otherEntityRelationshipName": "tagStats",
-            "relationshipName": "theAsset",
+            "relationshipName": "asset",
             "otherEntityField": "id"
         }
     ],

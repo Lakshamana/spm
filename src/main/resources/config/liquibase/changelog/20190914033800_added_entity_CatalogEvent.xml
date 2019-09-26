@@ -20,6 +20,14 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="the_resource_event_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="the_process_model_event_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
             <column name="the_agenda_event_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -41,14 +49,6 @@
             </column>
 
             <column name="the_process_event_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_process_model_event_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_resource_event_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

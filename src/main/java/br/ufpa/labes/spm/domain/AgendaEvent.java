@@ -1,4 +1,5 @@
 package br.ufpa.labes.spm.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "agenda_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class AgendaEvent extends Event implements Serializable {
+public class AgendaEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,9 +23,21 @@ public class AgendaEvent extends Event implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JsonIgnoreProperties("theAgendaEvents")
+    private CatalogEvent theCatalogEvents;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theAgendaEvents")
+    private Task theTask;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theAgendaEvents")
+    private Normal theNormal;
+
     @OneToMany(mappedBy = "theAgendaEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CatalogEvent> theCatalogEventToAgenda = new HashSet<>();
+    private Set<CatalogEvent> theCatalogEvents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -35,29 +48,68 @@ public class AgendaEvent extends Event implements Serializable {
         this.id = id;
     }
 
-    public Set<CatalogEvent> getTheCatalogEventToAgenda() {
-        return theCatalogEventToAgenda;
+    public CatalogEvent getTheCatalogEvents() {
+        return theCatalogEvents;
     }
 
-    public AgendaEvent theCatalogEventToAgenda(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToAgenda = catalogEvents;
+    public AgendaEvent theCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents = catalogEvent;
         return this;
     }
 
-    public AgendaEvent addTheCatalogEventToAgenda(CatalogEvent catalogEvent) {
-        this.theCatalogEventToAgenda.add(catalogEvent);
+    public void setTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents = catalogEvent;
+    }
+
+    public Task getTheTask() {
+        return theTask;
+    }
+
+    public AgendaEvent theTask(Task task) {
+        this.theTask = task;
+        return this;
+    }
+
+    public void setTheTask(Task task) {
+        this.theTask = task;
+    }
+
+    public Normal getTheNormal() {
+        return theNormal;
+    }
+
+    public AgendaEvent theNormal(Normal normal) {
+        this.theNormal = normal;
+        return this;
+    }
+
+    public void setTheNormal(Normal normal) {
+        this.theNormal = normal;
+    }
+
+    public Set<CatalogEvent> getTheCatalogEvents() {
+        return theCatalogEvents;
+    }
+
+    public AgendaEvent theCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
+        return this;
+    }
+
+    public AgendaEvent addTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.add(catalogEvent);
         catalogEvent.setTheAgendaEvent(this);
         return this;
     }
 
-    public AgendaEvent removeTheCatalogEventToAgenda(CatalogEvent catalogEvent) {
-        this.theCatalogEventToAgenda.remove(catalogEvent);
+    public AgendaEvent removeTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.remove(catalogEvent);
         catalogEvent.setTheAgendaEvent(null);
         return this;
     }
 
-    public void setTheCatalogEventToAgenda(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToAgenda = catalogEvents;
+    public void setTheCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

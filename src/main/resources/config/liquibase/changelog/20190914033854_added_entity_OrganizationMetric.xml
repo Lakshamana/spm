@@ -16,11 +16,11 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="the_organization_id" type="bigint">
+            <column name="organization_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
-            <column name="the_company_id" type="bigint">
+            <column name="company_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

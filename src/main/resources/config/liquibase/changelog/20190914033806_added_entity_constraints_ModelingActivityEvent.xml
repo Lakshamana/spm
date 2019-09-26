@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity ModelingActivityEvent.
+    -->
+    <changeSet id="20190914033806-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="the_activity_id"
+                                 baseTableName="modeling_activity_event"
+                                 constraintName="fk_modeling_activity_event_the_activity_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="activity"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_agent_id"
+                                 baseTableName="modeling_activity_event"
+                                 constraintName="fk_modeling_activity_event_the_agent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agent"/>
+
+    </changeSet>
+</databaseChangeLog>

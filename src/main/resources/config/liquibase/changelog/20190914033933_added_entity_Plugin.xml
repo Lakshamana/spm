@@ -17,15 +17,19 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_plugin_name" />
             </column>
 
             <column name="developer_name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
 
-            <column name="json_config_file" type="varchar(255)">
+            <column name="config_file_path" type="varchar(255)">
                 <constraints nullable="false" />
+            </column>
+
+            <column name="the_company_id" type="bigint">
+                <constraints nullable="true" />
             </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
@@ -35,17 +39,6 @@
 
     <changeSet id="20190914033933-1-relations" author="jhipster">
 
-        <createTable tableName="plugin_user">
-            <column name="user_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="plugin_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="plugin_id, user_id" tableName="plugin_user"/>
-        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
@@ -65,7 +58,7 @@
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
             <column name="developer_name" type="string"/>
-            <column name="json_config_file" type="string"/>
+            <column name="config_file_path" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

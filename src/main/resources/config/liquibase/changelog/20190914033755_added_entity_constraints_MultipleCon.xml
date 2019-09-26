@@ -14,5 +14,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="dependency"/>
 
+        <addForeignKeyConstraint baseColumnNames="the_dependency_id"
+                                 baseTableName="multiple_con"
+                                 constraintName="fk_multiple_con_the_dependency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dependency"/>
+
     </changeSet>
 </databaseChangeLog>

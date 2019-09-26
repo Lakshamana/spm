@@ -4,13 +4,12 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-
-import br.ufpa.labes.spm.domain.enumeration.AssetVisibility;
 
 /**
  * A Asset.
@@ -26,7 +25,8 @@ public class Asset implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uid")
+    
+    @Column(name = "uid", unique = true)
     private String uid;
 
     @Column(name = "creation_date")
@@ -56,27 +56,23 @@ public class Asset implements Serializable {
     @Column(name = "read_only")
     private Boolean readOnly;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "asset_visibility")
-    private AssetVisibility assetVisibility;
-
     @OneToOne
     @JoinColumn(unique = true)
     private AssetStat stats;
 
-    @OneToMany(mappedBy = "theAsset")
+    @OneToMany(mappedBy = "asset")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<AuthorStat> authorStats = new HashSet<>();
 
-    @OneToMany(mappedBy = "theAsset")
+    @OneToMany(mappedBy = "asset")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<TagStats> tagStats = new HashSet<>();
 
-    @OneToMany(mappedBy = "theAsset")
+    @OneToMany(mappedBy = "asset")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<LessonLearned> lessonsLearneds = new HashSet<>();
 
-    @OneToMany(mappedBy = "theAsset")
+    @OneToMany(mappedBy = "asset")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<AssetRelationship> relatedAssets = new HashSet<>();
 
@@ -89,7 +85,7 @@ public class Asset implements Serializable {
     private Set<Message> comments = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties("theAssets")
+    @JsonIgnoreProperties("assets")
     private Author owner;
 
     @ManyToMany
@@ -252,19 +248,6 @@ public class Asset implements Serializable {
         this.readOnly = readOnly;
     }
 
-    public AssetVisibility getAssetVisibility() {
-        return assetVisibility;
-    }
-
-    public Asset assetVisibility(AssetVisibility assetVisibility) {
-        this.assetVisibility = assetVisibility;
-        return this;
-    }
-
-    public void setAssetVisibility(AssetVisibility assetVisibility) {
-        this.assetVisibility = assetVisibility;
-    }
-
     public AssetStat getStats() {
         return stats;
     }
@@ -289,13 +272,13 @@ public class Asset implements Serializable {
 
     public Asset addAuthorStats(AuthorStat authorStat) {
         this.authorStats.add(authorStat);
-        authorStat.setTheAsset(this);
+        authorStat.setAsset(this);
         return this;
     }
 
     public Asset removeAuthorStats(AuthorStat authorStat) {
         this.authorStats.remove(authorStat);
-        authorStat.setTheAsset(null);
+        authorStat.setAsset(null);
         return this;
     }
 
@@ -314,13 +297,13 @@ public class Asset implements Serializable {
 
     public Asset addTagStats(TagStats tagStats) {
         this.tagStats.add(tagStats);
-        tagStats.setTheAsset(this);
+        tagStats.setAsset(this);
         return this;
     }
 
     public Asset removeTagStats(TagStats tagStats) {
         this.tagStats.remove(tagStats);
-        tagStats.setTheAsset(null);
+        tagStats.setAsset(null);
         return this;
     }
 
@@ -339,13 +322,13 @@ public class Asset implements Serializable {
 
     public Asset addLessonsLearned(LessonLearned lessonLearned) {
         this.lessonsLearneds.add(lessonLearned);
-        lessonLearned.setTheAsset(this);
+        lessonLearned.setAsset(this);
         return this;
     }
 
     public Asset removeLessonsLearned(LessonLearned lessonLearned) {
         this.lessonsLearneds.remove(lessonLearned);
-        lessonLearned.setTheAsset(null);
+        lessonLearned.setAsset(null);
         return this;
     }
 
@@ -364,13 +347,13 @@ public class Asset implements Serializable {
 
     public Asset addRelatedAssets(AssetRelationship assetRelationship) {
         this.relatedAssets.add(assetRelationship);
-        assetRelationship.setTheAsset(this);
+        assetRelationship.setAsset(this);
         return this;
     }
 
     public Asset removeRelatedAssets(AssetRelationship assetRelationship) {
         this.relatedAssets.remove(assetRelationship);
-        assetRelationship.setTheAsset(null);
+        assetRelationship.setAsset(null);
         return this;
     }
 
@@ -547,7 +530,6 @@ public class Asset implements Serializable {
             ", path='" + getPath() + "'" +
             ", latestVersion='" + getLatestVersion() + "'" +
             ", readOnly='" + isReadOnly() + "'" +
-            ", assetVisibility='" + getAssetVisibility() + "'" +
             "}";
     }
 }

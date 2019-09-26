@@ -11,10 +11,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {AgentMapper.class})
 public interface ChatMessageMapper extends EntityMapper<ChatMessageDTO, ChatMessage> {
 
-    @Mapping(source = "fromAgent.id", target = "fromAgentId")
+    @Mapping(source = "de.id", target = "deId")
     ChatMessageDTO toDto(ChatMessage chatMessage);
 
-    @Mapping(source = "fromAgentId", target = "fromAgent")
+    @Mapping(source = "deId", target = "de")
     ChatMessage toEntity(ChatMessageDTO chatMessageDTO);
 
     default ChatMessage fromId(Long id) {

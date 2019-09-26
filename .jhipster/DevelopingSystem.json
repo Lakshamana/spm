@@ -19,7 +19,7 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "company",
-            "otherEntityRelationshipName": "theDevelopingSystem",
+            "otherEntityRelationshipName": "theSystem",
             "relationshipName": "theOrganization",
             "otherEntityField": "id"
         },

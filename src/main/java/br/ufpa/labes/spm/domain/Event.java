@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -11,8 +7,6 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A Event.
@@ -20,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,36 +33,12 @@ public class Event implements Serializable {
     private Boolean isCreatedByApsee;
 
     @ManyToOne
-    @JsonIgnoreProperties("theAgendaEvents")
-    private CatalogEvent theCatalogEvents;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theAgendaEvents")
-    private Task theTask;
-
-    @ManyToOne
     @JsonIgnoreProperties("theEvents")
     private SpmLog theLog;
 
     @ManyToOne
     @JsonIgnoreProperties("theEvents")
     private EventType theEventType;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theModelingActivityEvents")
-    private Activity theActivity;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theGlobalActivityEvents")
-    private Plain thePlain;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theModelingActivityEvents")
-    private Agent theAgent;
-
-    @OneToMany(mappedBy = "theResourceEvent")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Agent> theRequestorAgents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -119,32 +88,6 @@ public class Event implements Serializable {
         this.isCreatedByApsee = isCreatedByApsee;
     }
 
-    public CatalogEvent getTheCatalogEvents() {
-        return theCatalogEvents;
-    }
-
-    public Event theCatalogEvents(CatalogEvent catalogEvent) {
-        this.theCatalogEvents = catalogEvent;
-        return this;
-    }
-
-    public void setTheCatalogEvents(CatalogEvent catalogEvent) {
-        this.theCatalogEvents = catalogEvent;
-    }
-
-    public Task getTheTask() {
-        return theTask;
-    }
-
-    public Event theTask(Task task) {
-        this.theTask = task;
-        return this;
-    }
-
-    public void setTheTask(Task task) {
-        this.theTask = task;
-    }
-
     public SpmLog getTheLog() {
         return theLog;
     }
@@ -169,70 +112,6 @@ public class Event implements Serializable {
 
     public void setTheEventType(EventType eventType) {
         this.theEventType = eventType;
-    }
-
-    public Activity getTheActivity() {
-        return theActivity;
-    }
-
-    public Event theActivity(Activity activity) {
-        this.theActivity = activity;
-        return this;
-    }
-
-    public void setTheActivity(Activity activity) {
-        this.theActivity = activity;
-    }
-
-    public Plain getThePlain() {
-        return thePlain;
-    }
-
-    public Event thePlain(Plain plain) {
-        this.thePlain = plain;
-        return this;
-    }
-
-    public void setThePlain(Plain plain) {
-        this.thePlain = plain;
-    }
-
-    public Agent getTheAgent() {
-        return theAgent;
-    }
-
-    public Event theAgent(Agent agent) {
-        this.theAgent = agent;
-        return this;
-    }
-
-    public void setTheAgent(Agent agent) {
-        this.theAgent = agent;
-    }
-
-    public Set<Agent> getTheRequestorAgents() {
-        return theRequestorAgents;
-    }
-
-    public Event theRequestorAgents(Set<Agent> agents) {
-        this.theRequestorAgents = agents;
-        return this;
-    }
-
-    public Event addTheRequestorAgent(Agent agent) {
-        this.theRequestorAgents.add(agent);
-        agent.setTheResourceEvent(this);
-        return this;
-    }
-
-    public Event removeTheRequestorAgent(Agent agent) {
-        this.theRequestorAgents.remove(agent);
-        agent.setTheResourceEvent(null);
-        return this;
-    }
-
-    public void setTheRequestorAgents(Set<Agent> agents) {
-        this.theRequestorAgents = agents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

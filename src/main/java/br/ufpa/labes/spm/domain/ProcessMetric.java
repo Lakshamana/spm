@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "process_metric")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ProcessMetric extends Metric implements Serializable {
+public class ProcessMetric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class ProcessMetric extends Metric implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theProcessMetrics")
-    private Process theProcess;
+    private Process process;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -34,17 +34,17 @@ public class ProcessMetric extends Metric implements Serializable {
         this.id = id;
     }
 
-    public Process getTheProcess() {
-        return theProcess;
+    public Process getProcess() {
+        return process;
     }
 
-    public ProcessMetric theProcess(Process process) {
-        this.theProcess = process;
+    public ProcessMetric process(Process process) {
+        this.process = process;
         return this;
     }
 
-    public void setTheProcess(Process process) {
-        this.theProcess = process;
+    public void setProcess(Process process) {
+        this.process = process;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

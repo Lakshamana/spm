@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 /**
  * REST controller for managing {@link br.ufpa.labes.spm.domain.Node}.
@@ -46,7 +48,7 @@ public class NodeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/nodes")
-    public ResponseEntity<NodeDTO> createNode(@RequestBody NodeDTO nodeDTO) throws URISyntaxException {
+    public ResponseEntity<NodeDTO> createNode(@Valid @RequestBody NodeDTO nodeDTO) throws URISyntaxException {
         log.debug("REST request to save Node : {}", nodeDTO);
         if (nodeDTO.getId() != null) {
             throw new BadRequestAlertException("A new node cannot already have an ID", ENTITY_NAME, "idexists");
@@ -67,7 +69,7 @@ public class NodeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/nodes")
-    public ResponseEntity<NodeDTO> updateNode(@RequestBody NodeDTO nodeDTO) throws URISyntaxException {
+    public ResponseEntity<NodeDTO> updateNode(@Valid @RequestBody NodeDTO nodeDTO) throws URISyntaxException {
         log.debug("REST request to update Node : {}", nodeDTO);
         if (nodeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -82,10 +84,15 @@ public class NodeResource {
      * {@code GET  /nodes} : get all the nodes.
      *
 
+     * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of nodes in body.
      */
     @GetMapping("/nodes")
-    public List<NodeDTO> getAllNodes() {
+    public List<NodeDTO> getAllNodes(@RequestParam(required = false) String filter) {
+        if ("thestructure-is-null".equals(filter)) {
+            log.debug("REST request to get all Nodes where theStructure is null");
+            return nodeService.findAllWhereTheStructureIsNull();
+        }
         log.debug("REST request to get all Nodes");
         return nodeService.findAll();
     }

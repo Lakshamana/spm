@@ -17,6 +17,8 @@ public interface AgentInstSugMapper extends EntityMapper<AgentInstSugDTO, AgentI
 
     @Mapping(source = "theRoleId", target = "theRole")
     @Mapping(source = "chosenAgentId", target = "chosenAgent")
+    @Mapping(target = "agentSuggesteds", ignore = true)
+    @Mapping(target = "removeAgentSuggested", ignore = true)
     AgentInstSug toEntity(AgentInstSugDTO agentInstSugDTO);
 
     default AgentInstSug fromId(Long id) {

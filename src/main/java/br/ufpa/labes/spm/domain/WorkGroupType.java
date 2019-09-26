@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "work_group_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class WorkGroupType extends Type implements Serializable {
+public class WorkGroupType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,13 +22,17 @@ public class WorkGroupType extends Type implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "theWorkGroupType")
+    @OneToMany(mappedBy = "theGroupType")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<WorkGroup> theWorkGroups = new HashSet<>();
 
     @OneToMany(mappedBy = "theWorkGroupType")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<ReqWorkGroup> theReqWorkGroups = new HashSet<>();
+    private Set<ReqWorkGroup> theReqGroups = new HashSet<>();
+
+    @OneToMany(mappedBy = "groupTypeRequired")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<WorkGroupInstSug> theWorkGroupInstSugs = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -50,13 +54,13 @@ public class WorkGroupType extends Type implements Serializable {
 
     public WorkGroupType addTheWorkGroup(WorkGroup workGroup) {
         this.theWorkGroups.add(workGroup);
-        workGroup.setTheWorkGroupType(this);
+        workGroup.setTheGroupType(this);
         return this;
     }
 
     public WorkGroupType removeTheWorkGroup(WorkGroup workGroup) {
         this.theWorkGroups.remove(workGroup);
-        workGroup.setTheWorkGroupType(null);
+        workGroup.setTheGroupType(null);
         return this;
     }
 
@@ -64,29 +68,54 @@ public class WorkGroupType extends Type implements Serializable {
         this.theWorkGroups = workGroups;
     }
 
-    public Set<ReqWorkGroup> getTheReqWorkGroups() {
-        return theReqWorkGroups;
+    public Set<ReqWorkGroup> getTheReqGroups() {
+        return theReqGroups;
     }
 
-    public WorkGroupType theReqWorkGroups(Set<ReqWorkGroup> reqWorkGroups) {
-        this.theReqWorkGroups = reqWorkGroups;
+    public WorkGroupType theReqGroups(Set<ReqWorkGroup> reqWorkGroups) {
+        this.theReqGroups = reqWorkGroups;
         return this;
     }
 
-    public WorkGroupType addTheReqWorkGroup(ReqWorkGroup reqWorkGroup) {
-        this.theReqWorkGroups.add(reqWorkGroup);
+    public WorkGroupType addTheReqGroup(ReqWorkGroup reqWorkGroup) {
+        this.theReqGroups.add(reqWorkGroup);
         reqWorkGroup.setTheWorkGroupType(this);
         return this;
     }
 
-    public WorkGroupType removeTheReqWorkGroup(ReqWorkGroup reqWorkGroup) {
-        this.theReqWorkGroups.remove(reqWorkGroup);
+    public WorkGroupType removeTheReqGroup(ReqWorkGroup reqWorkGroup) {
+        this.theReqGroups.remove(reqWorkGroup);
         reqWorkGroup.setTheWorkGroupType(null);
         return this;
     }
 
-    public void setTheReqWorkGroups(Set<ReqWorkGroup> reqWorkGroups) {
-        this.theReqWorkGroups = reqWorkGroups;
+    public void setTheReqGroups(Set<ReqWorkGroup> reqWorkGroups) {
+        this.theReqGroups = reqWorkGroups;
+    }
+
+    public Set<WorkGroupInstSug> getTheWorkGroupInstSugs() {
+        return theWorkGroupInstSugs;
+    }
+
+    public WorkGroupType theWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
+        this.theWorkGroupInstSugs = workGroupInstSugs;
+        return this;
+    }
+
+    public WorkGroupType addTheWorkGroupInstSug(WorkGroupInstSug workGroupInstSug) {
+        this.theWorkGroupInstSugs.add(workGroupInstSug);
+        workGroupInstSug.setGroupTypeRequired(this);
+        return this;
+    }
+
+    public WorkGroupType removeTheWorkGroupInstSug(WorkGroupInstSug workGroupInstSug) {
+        this.theWorkGroupInstSugs.remove(workGroupInstSug);
+        workGroupInstSug.setGroupTypeRequired(null);
+        return this;
+    }
+
+    public void setTheWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
+        this.theWorkGroupInstSugs = workGroupInstSugs;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

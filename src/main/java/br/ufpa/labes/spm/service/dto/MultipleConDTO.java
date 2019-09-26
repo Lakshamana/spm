@@ -14,6 +14,8 @@ public class MultipleConDTO implements Serializable {
 
     private Long theDependencyId;
 
+    private Long theDependencyId;
+
     public Long getId() {
         return id;
     }
@@ -28,6 +30,14 @@ public class MultipleConDTO implements Serializable {
 
     public void setFired(Boolean fired) {
         this.fired = fired;
+    }
+
+    public Long getTheDependencyId() {
+        return theDependencyId;
+    }
+
+    public void setTheDependencyId(Long dependencyId) {
+        this.theDependencyId = dependencyId;
     }
 
     public Long getTheDependencyId() {
@@ -64,6 +74,7 @@ public class MultipleConDTO implements Serializable {
         return "MultipleConDTO{" +
             "id=" + getId() +
             ", fired='" + isFired() + "'" +
+            ", theDependency=" + getTheDependencyId() +
             ", theDependency=" + getTheDependencyId() +
             "}";
     }

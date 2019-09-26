@@ -10,7 +10,7 @@ public class WorkGroupMetricDTO implements Serializable {
     private Long id;
 
 
-    private Long theWorkGroupId;
+    private Long workGroupId;
 
     public Long getId() {
         return id;
@@ -20,12 +20,12 @@ public class WorkGroupMetricDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getTheWorkGroupId() {
-        return theWorkGroupId;
+    public Long getWorkGroupId() {
+        return workGroupId;
     }
 
-    public void setTheWorkGroupId(Long workGroupId) {
-        this.theWorkGroupId = workGroupId;
+    public void setWorkGroupId(Long workGroupId) {
+        this.workGroupId = workGroupId;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class WorkGroupMetricDTO implements Serializable {
     public String toString() {
         return "WorkGroupMetricDTO{" +
             "id=" + getId() +
-            ", theWorkGroup=" + getTheWorkGroupId() +
+            ", workGroup=" + getWorkGroupId() +
             "}";
     }
 }

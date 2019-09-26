@@ -8,6 +8,18 @@
     -->
     <changeSet id="20190914033800-2" author="jhipster">
         
+        <addForeignKeyConstraint baseColumnNames="the_resource_event_id"
+                                 baseTableName="catalog_event"
+                                 constraintName="fk_catalog_event_the_resource_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="resource_event"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_process_model_event_id"
+                                 baseTableName="catalog_event"
+                                 constraintName="fk_catalog_event_the_process_model_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="process_model_event"/>
+
         <addForeignKeyConstraint baseColumnNames="the_agenda_event_id"
                                  baseTableName="catalog_event"
                                  constraintName="fk_catalog_event_the_agenda_event_id"
@@ -43,18 +55,6 @@
                                  constraintName="fk_catalog_event_the_process_event_id"
                                  referencedColumnNames="id"
                                  referencedTableName="process_event"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_process_model_event_id"
-                                 baseTableName="catalog_event"
-                                 constraintName="fk_catalog_event_the_process_model_event_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="process_model_event"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_resource_event_id"
-                                 baseTableName="catalog_event"
-                                 constraintName="fk_catalog_event_the_resource_event_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="resource_event"/>
 
         <addForeignKeyConstraint baseColumnNames="the_plain_id"
                                  baseTableName="catalog_event"

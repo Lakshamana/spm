@@ -43,8 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = SpmApp.class)
 public class JoinConResourceIT {
 
-    private static final String DEFAULT_KIND_JOIN_CON = "AAAAAAAAAA";
-    private static final String UPDATED_KIND_JOIN_CON = "BBBBBBBBBB";
+    private static final String DEFAULT_KIND_JOIN = "AAAAAAAAAA";
+    private static final String UPDATED_KIND_JOIN = "BBBBBBBBBB";
 
     @Autowired
     private JoinConRepository joinConRepository;
@@ -100,7 +100,7 @@ public class JoinConResourceIT {
      */
     public static JoinCon createEntity(EntityManager em) {
         JoinCon joinCon = new JoinCon()
-            .kindJoinCon(DEFAULT_KIND_JOIN_CON);
+            .kindJoin(DEFAULT_KIND_JOIN);
         return joinCon;
     }
     /**
@@ -111,7 +111,7 @@ public class JoinConResourceIT {
      */
     public static JoinCon createUpdatedEntity(EntityManager em) {
         JoinCon joinCon = new JoinCon()
-            .kindJoinCon(UPDATED_KIND_JOIN_CON);
+            .kindJoin(UPDATED_KIND_JOIN);
         return joinCon;
     }
 
@@ -136,7 +136,7 @@ public class JoinConResourceIT {
         List<JoinCon> joinConList = joinConRepository.findAll();
         assertThat(joinConList).hasSize(databaseSizeBeforeCreate + 1);
         JoinCon testJoinCon = joinConList.get(joinConList.size() - 1);
-        assertThat(testJoinCon.getKindJoinCon()).isEqualTo(DEFAULT_KIND_JOIN_CON);
+        assertThat(testJoinCon.getKindJoin()).isEqualTo(DEFAULT_KIND_JOIN);
     }
 
     @Test
@@ -171,7 +171,7 @@ public class JoinConResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(joinCon.getId().intValue())))
-            .andExpect(jsonPath("$.[*].kindJoinCon").value(hasItem(DEFAULT_KIND_JOIN_CON.toString())));
+            .andExpect(jsonPath("$.[*].kindJoin").value(hasItem(DEFAULT_KIND_JOIN.toString())));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -218,7 +218,7 @@ public class JoinConResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(joinCon.getId().intValue()))
-            .andExpect(jsonPath("$.kindJoinCon").value(DEFAULT_KIND_JOIN_CON.toString()));
+            .andExpect(jsonPath("$.kindJoin").value(DEFAULT_KIND_JOIN.toString()));
     }
 
     @Test
@@ -242,7 +242,7 @@ public class JoinConResourceIT {
         // Disconnect from session so that the updates on updatedJoinCon are not directly saved in db
         em.detach(updatedJoinCon);
         updatedJoinCon
-            .kindJoinCon(UPDATED_KIND_JOIN_CON);
+            .kindJoin(UPDATED_KIND_JOIN);
         JoinConDTO joinConDTO = joinConMapper.toDto(updatedJoinCon);
 
         restJoinConMockMvc.perform(put("/api/join-cons")
@@ -254,7 +254,7 @@ public class JoinConResourceIT {
         List<JoinCon> joinConList = joinConRepository.findAll();
         assertThat(joinConList).hasSize(databaseSizeBeforeUpdate);
         JoinCon testJoinCon = joinConList.get(joinConList.size() - 1);
-        assertThat(testJoinCon.getKindJoinCon()).isEqualTo(UPDATED_KIND_JOIN_CON);
+        assertThat(testJoinCon.getKindJoin()).isEqualTo(UPDATED_KIND_JOIN);
     }
 
     @Test

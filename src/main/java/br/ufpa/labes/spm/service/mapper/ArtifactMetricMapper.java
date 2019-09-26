@@ -11,10 +11,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {ArtifactMapper.class})
 public interface ArtifactMetricMapper extends EntityMapper<ArtifactMetricDTO, ArtifactMetric> {
 
-    @Mapping(source = "theArtifact.id", target = "theArtifactId")
+    @Mapping(source = "artifact.id", target = "artifactId")
     ArtifactMetricDTO toDto(ArtifactMetric artifactMetric);
 
-    @Mapping(source = "theArtifactId", target = "theArtifact")
+    @Mapping(source = "artifactId", target = "artifact")
     ArtifactMetric toEntity(ArtifactMetricDTO artifactMetricDTO);
 
     default ArtifactMetric fromId(Long id) {

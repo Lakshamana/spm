@@ -3,10 +3,17 @@
     "fields": [],
     "relationships": [
         {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "plain",
+            "otherEntityRelationshipName": "theGlobalActivityEvent",
+            "relationshipName": "thePlain",
+            "otherEntityField": "id"
+        },
+        {
             "relationshipType": "one-to-many",
             "otherEntityName": "catalogEvent",
             "otherEntityRelationshipName": "theGlobalActivityEvent",
-            "relationshipName": "theCatalogEventToGlobalActivity"
+            "relationshipName": "theCatalogEvents"
         }
     ],
     "changelogDate": "20190914033805",

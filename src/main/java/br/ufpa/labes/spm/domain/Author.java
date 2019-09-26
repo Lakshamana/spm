@@ -1,13 +1,10 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -19,7 +16,6 @@ import java.util.Set;
 @Entity
 @Table(name = "author")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Author implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,7 +24,8 @@ public class Author implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uid")
+    
+    @Column(name = "uid", unique = true)
     private String uid;
 
     @Column(name = "version")
@@ -49,12 +46,20 @@ public class Author implements Serializable {
     @Column(name = "country")
     private String country;
 
-    @Column(name = "photo_url")
-    private String photoURL;
+    @Lob
+    @Column(name = "photo")
+    private byte[] photo;
+
+    @Column(name = "photo_content_type")
+    private String photoContentType;
 
     @OneToOne
     @JoinColumn(unique = true)
     private User user;
+
+    @OneToMany(mappedBy = "author")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<AuthorStat> stats = new HashSet<>();
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -65,11 +70,7 @@ public class Author implements Serializable {
 
     @OneToMany(mappedBy = "owner")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Asset> theAssets = new HashSet<>();
-
-    @OneToMany(mappedBy = "author")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<AuthorStat> theAuthorStats = new HashSet<>();
+    private Set<Asset> assets = new HashSet<>();
 
     @OneToMany(mappedBy = "author")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -101,7 +102,7 @@ public class Author implements Serializable {
     @ManyToMany(mappedBy = "authorsFolloweds")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
-    private Set<Author> theAuthors = new HashSet<>();
+    private Set<Author> followers = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -203,17 +204,30 @@ public class Author implements Serializable {
         this.country = country;
     }
 
-    public String getPhotoURL() {
-        return photoURL;
+    public byte[] getPhoto() {
+        return photo;
     }
 
-    public Author photoURL(String photoURL) {
-        this.photoURL = photoURL;
+    public Author photo(byte[] photo) {
+        this.photo = photo;
         return this;
     }
 
-    public void setPhotoURL(String photoURL) {
-        this.photoURL = photoURL;
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public String getPhotoContentType() {
+        return photoContentType;
+    }
+
+    public Author photoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
+        return this;
+    }
+
+    public void setPhotoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
     }
 
     public User getUser() {
@@ -229,6 +243,31 @@ public class Author implements Serializable {
         this.user = user;
     }
 
+    public Set<AuthorStat> getStats() {
+        return stats;
+    }
+
+    public Author stats(Set<AuthorStat> authorStats) {
+        this.stats = authorStats;
+        return this;
+    }
+
+    public Author addStats(AuthorStat authorStat) {
+        this.stats.add(authorStat);
+        authorStat.setAuthor(this);
+        return this;
+    }
+
+    public Author removeStats(AuthorStat authorStat) {
+        this.stats.remove(authorStat);
+        authorStat.setAuthor(null);
+        return this;
+    }
+
+    public void setStats(Set<AuthorStat> authorStats) {
+        this.stats = authorStats;
+    }
+
     public Set<Author> getAuthorsFolloweds() {
         return authorsFolloweds;
     }
@@ -240,13 +279,13 @@ public class Author implements Serializable {
 
     public Author addAuthorsFollowed(Author author) {
         this.authorsFolloweds.add(author);
-        author.getTheAuthors().add(this);
+        author.getFollowers().add(this);
         return this;
     }
 
     public Author removeAuthorsFollowed(Author author) {
         this.authorsFolloweds.remove(author);
-        author.getTheAuthors().remove(this);
+        author.getFollowers().remove(this);
         return this;
     }
 
@@ -254,54 +293,29 @@ public class Author implements Serializable {
         this.authorsFolloweds = authors;
     }
 
-    public Set<Asset> getTheAssets() {
-        return theAssets;
+    public Set<Asset> getAssets() {
+        return assets;
     }
 
-    public Author theAssets(Set<Asset> assets) {
-        this.theAssets = assets;
+    public Author assets(Set<Asset> assets) {
+        this.assets = assets;
         return this;
     }
 
-    public Author addTheAssets(Asset asset) {
-        this.theAssets.add(asset);
+    public Author addAssets(Asset asset) {
+        this.assets.add(asset);
         asset.setOwner(this);
         return this;
     }
 
-    public Author removeTheAssets(Asset asset) {
-        this.theAssets.remove(asset);
+    public Author removeAssets(Asset asset) {
+        this.assets.remove(asset);
         asset.setOwner(null);
         return this;
     }
 
-    public void setTheAssets(Set<Asset> assets) {
-        this.theAssets = assets;
-    }
-
-    public Set<AuthorStat> getTheAuthorStats() {
-        return theAuthorStats;
-    }
-
-    public Author theAuthorStats(Set<AuthorStat> authorStats) {
-        this.theAuthorStats = authorStats;
-        return this;
-    }
-
-    public Author addTheAuthorStats(AuthorStat authorStat) {
-        this.theAuthorStats.add(authorStat);
-        authorStat.setAuthor(this);
-        return this;
-    }
-
-    public Author removeTheAuthorStats(AuthorStat authorStat) {
-        this.theAuthorStats.remove(authorStat);
-        authorStat.setAuthor(null);
-        return this;
-    }
-
-    public void setTheAuthorStats(Set<AuthorStat> authorStats) {
-        this.theAuthorStats = authorStats;
+    public void setAssets(Set<Asset> assets) {
+        this.assets = assets;
     }
 
     public Set<LessonLearned> getTheLessonLearneds() {
@@ -454,29 +468,29 @@ public class Author implements Serializable {
         this.collaborateOnAssets = assets;
     }
 
-    public Set<Author> getTheAuthors() {
-        return theAuthors;
+    public Set<Author> getFollowers() {
+        return followers;
     }
 
-    public Author theAuthors(Set<Author> authors) {
-        this.theAuthors = authors;
+    public Author followers(Set<Author> authors) {
+        this.followers = authors;
         return this;
     }
 
-    public Author addTheAuthor(Author author) {
-        this.theAuthors.add(author);
+    public Author addFollowers(Author author) {
+        this.followers.add(author);
         author.getAuthorsFolloweds().add(this);
         return this;
     }
 
-    public Author removeTheAuthor(Author author) {
-        this.theAuthors.remove(author);
+    public Author removeFollowers(Author author) {
+        this.followers.remove(author);
         author.getAuthorsFolloweds().remove(this);
         return this;
     }
 
-    public void setTheAuthors(Set<Author> authors) {
-        this.theAuthors = authors;
+    public void setFollowers(Set<Author> authors) {
+        this.followers = authors;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -507,22 +521,8 @@ public class Author implements Serializable {
             ", interests='" + getInterests() + "'" +
             ", city='" + getCity() + "'" +
             ", country='" + getCountry() + "'" +
-            ", photoURL='" + getPhotoURL() + "'" +
+            ", photo='" + getPhoto() + "'" +
+            ", photoContentType='" + getPhotoContentType() + "'" +
             "}";
-    }
-
-    public void sendMessageTo(Author author, String msg) {
-      Message message = new Message(this, msg, author);
-
-      author.receivedMessages.add(message);
-      this.sentMessages.add(message);
-    }
-
-    public int getReceivedMessagesCount() {
-      return this.receivedMessages.size();
-    }
-
-    public int getSentMessagesCount() {
-      return this.sentMessages.size();
     }
 }

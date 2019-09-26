@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -20,7 +16,6 @@ import java.util.Set;
 @Entity
 @Table(name = "subroutine")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Subroutine implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,9 +23,6 @@ public class Subroutine implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "ident")
-    private String ident;
 
     @ManyToOne
     @JsonIgnoreProperties("theSubroutines")
@@ -51,19 +43,6 @@ public class Subroutine implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getIdent() {
-        return ident;
-    }
-
-    public Subroutine ident(String ident) {
-        this.ident = ident;
-        return this;
-    }
-
-    public void setIdent(String ident) {
-        this.ident = ident;
     }
 
     public ArtifactType getTheArtifactType() {
@@ -101,13 +80,13 @@ public class Subroutine implements Serializable {
         return this;
     }
 
-    public Subroutine addTheToolParameter(ToolParameter toolParameter) {
+    public Subroutine addTheToolParameters(ToolParameter toolParameter) {
         this.theToolParameters.add(toolParameter);
         toolParameter.setTheSubroutine(this);
         return this;
     }
 
-    public Subroutine removeTheToolParameter(ToolParameter toolParameter) {
+    public Subroutine removeTheToolParameters(ToolParameter toolParameter) {
         this.theToolParameters.remove(toolParameter);
         toolParameter.setTheSubroutine(null);
         return this;
@@ -138,7 +117,6 @@ public class Subroutine implements Serializable {
     public String toString() {
         return "Subroutine{" +
             "id=" + getId() +
-            ", ident='" + getIdent() + "'" +
             "}";
     }
 }

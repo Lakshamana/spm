@@ -5,14 +5,20 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "workGroup",
-            "otherEntityRelationshipName": "theWorkGroupType",
+            "otherEntityRelationshipName": "theGroupType",
             "relationshipName": "theWorkGroup"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "reqWorkGroup",
             "otherEntityRelationshipName": "theWorkGroupType",
-            "relationshipName": "theReqWorkGroup"
+            "relationshipName": "theReqGroup"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "workGroupInstSug",
+            "otherEntityRelationshipName": "groupTypeRequired",
+            "relationshipName": "theWorkGroupInstSug"
         }
     ],
     "changelogDate": "20190914033928",

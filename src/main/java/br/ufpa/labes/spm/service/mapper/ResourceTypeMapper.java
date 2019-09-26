@@ -14,6 +14,8 @@ public interface ResourceTypeMapper extends EntityMapper<ResourceTypeDTO, Resour
 
     @Mapping(target = "theRequiredResources", ignore = true)
     @Mapping(target = "removeTheRequiredResource", ignore = true)
+    @Mapping(target = "theResourceInstSugs", ignore = true)
+    @Mapping(target = "removeTheResourceInstSug", ignore = true)
     @Mapping(target = "theResources", ignore = true)
     @Mapping(target = "removeTheResource", ignore = true)
     ResourceType toEntity(ResourceTypeDTO resourceTypeDTO);

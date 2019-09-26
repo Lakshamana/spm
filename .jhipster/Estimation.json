@@ -14,8 +14,8 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "metricDefinition",
-            "otherEntityRelationshipName": "theEstimation",
-            "relationshipName": "theMetricDefinition",
+            "otherEntityRelationshipName": "estimation",
+            "relationshipName": "metricDefinition",
             "otherEntityField": "id"
         }
     ],

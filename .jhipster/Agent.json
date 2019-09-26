@@ -10,7 +10,7 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "email",
+            "fieldName": "eMail",
             "fieldType": "String"
         },
         {
@@ -18,7 +18,7 @@
             "fieldType": "Float"
         },
         {
-            "fieldName": "passwordHash",
+            "fieldName": "password",
             "fieldType": "String"
         },
         {
@@ -26,7 +26,7 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "active",
+            "fieldName": "isActive",
             "fieldType": "Boolean"
         },
         {
@@ -34,12 +34,18 @@
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "photoURL",
-            "fieldType": "String"
+            "fieldName": "photo",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
         },
         {
             "fieldName": "upload",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
     "relationships": [
@@ -54,7 +60,7 @@
         {
             "relationshipType": "one-to-one",
             "otherEntityName": "spmConfiguration",
-            "otherEntityRelationshipName": "theAgent",
+            "otherEntityRelationshipName": "agent",
             "relationshipName": "configuration",
             "otherEntityField": "id",
             "ownerSide": true
@@ -73,7 +79,7 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "event",
+            "otherEntityName": "modelingActivityEvent",
             "otherEntityRelationshipName": "theAgent",
             "relationshipName": "theModelingActivityEvent"
         },
@@ -86,13 +92,13 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "agentMetric",
-            "otherEntityRelationshipName": "theAgent",
+            "otherEntityRelationshipName": "agent",
             "relationshipName": "theAgentMetric"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "agentEstimation",
-            "otherEntityRelationshipName": "theAgent",
+            "otherEntityRelationshipName": "agent",
             "relationshipName": "theAgentEstimation"
         },
         {
@@ -103,7 +109,7 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "event",
+            "otherEntityName": "resourceEvent",
             "otherEntityRelationshipName": "theRequestorAgent",
             "relationshipName": "theResourceEvent",
             "otherEntityField": "id"
@@ -112,7 +118,7 @@
             "relationshipType": "many-to-many",
             "otherEntityName": "process",
             "otherEntityRelationshipName": "theAgent",
-            "relationshipName": "theProcesses",
+            "relationshipName": "theProcess",
             "otherEntityField": "id",
             "ownerSide": true
         },
@@ -120,14 +126,14 @@
             "relationshipType": "many-to-many",
             "otherEntityName": "workGroup",
             "otherEntityRelationshipName": "theAgent",
-            "relationshipName": "theWorkGroups",
+            "relationshipName": "theWorkGroup",
             "otherEntityField": "id",
             "ownerSide": true
         },
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "companyUnit",
-            "otherEntityRelationshipName": "theAgent",
+            "otherEntityRelationshipName": "theUnitAgents",
             "relationshipName": "theOrgUnits",
             "otherEntityField": "id",
             "ownerSide": true
@@ -135,7 +141,7 @@
         {
             "relationshipType": "one-to-one",
             "otherEntityName": "chatMessage",
-            "otherEntityRelationshipName": "fromAgent",
+            "otherEntityRelationshipName": "de",
             "relationshipName": "theChatMessage",
             "ownerSide": false
         },
@@ -149,13 +155,13 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "agentAffinityAgent",
-            "otherEntityRelationshipName": "fromAffinity",
+            "otherEntityRelationshipName": "toAffinity",
             "relationshipName": "fromAgentAffinity"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "agentAffinityAgent",
-            "otherEntityRelationshipName": "toAffinity",
+            "otherEntityRelationshipName": "fromAffinity",
             "relationshipName": "toAgentAffinity"
         },
         {
@@ -199,6 +205,14 @@
             "otherEntityName": "chatLog",
             "otherEntityRelationshipName": "involvedAgentsInChat",
             "relationshipName": "theChatLog",
+            "otherEntityField": "id",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "process",
+            "otherEntityRelationshipName": "theAgent",
+            "relationshipName": "theProcess",
             "otherEntityField": "id",
             "ownerSide": false
         }

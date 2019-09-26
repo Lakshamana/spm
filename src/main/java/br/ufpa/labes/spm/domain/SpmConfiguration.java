@@ -44,7 +44,7 @@ public class SpmConfiguration implements Serializable {
 
     @OneToOne(mappedBy = "configuration")
     @JsonIgnore
-    private Agent theAgent;
+    private Agent agent;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -146,17 +146,17 @@ public class SpmConfiguration implements Serializable {
         this.senhaEmRecuperacao = senhaEmRecuperacao;
     }
 
-    public Agent getTheAgent() {
-        return theAgent;
+    public Agent getAgent() {
+        return agent;
     }
 
-    public SpmConfiguration theAgent(Agent agent) {
-        this.theAgent = agent;
+    public SpmConfiguration agent(Agent agent) {
+        this.agent = agent;
         return this;
     }
 
-    public void setTheAgent(Agent agent) {
-        this.theAgent = agent;
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

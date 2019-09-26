@@ -7,8 +7,6 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 
-import br.ufpa.labes.spm.domain.enumeration.OperationEnum;
-
 /**
  * A Credential.
  */
@@ -28,10 +26,6 @@ public class Credential implements Serializable {
 
     @Column(name = "uid")
     private String uid;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "operation_enum")
-    private OperationEnum operationEnum;
 
     @ManyToOne
     @JsonIgnoreProperties("theCredentials")
@@ -72,19 +66,6 @@ public class Credential implements Serializable {
         this.uid = uid;
     }
 
-    public OperationEnum getOperationEnum() {
-        return operationEnum;
-    }
-
-    public Credential operationEnum(OperationEnum operationEnum) {
-        this.operationEnum = operationEnum;
-        return this;
-    }
-
-    public void setOperationEnum(OperationEnum operationEnum) {
-        this.operationEnum = operationEnum;
-    }
-
     public User getUser() {
         return user;
     }
@@ -121,7 +102,6 @@ public class Credential implements Serializable {
             "id=" + getId() +
             ", className='" + getClassName() + "'" +
             ", uid='" + getUid() + "'" +
-            ", operationEnum='" + getOperationEnum() + "'" +
             "}";
     }
 }

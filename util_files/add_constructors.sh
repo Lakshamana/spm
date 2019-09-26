@@ -53,7 +53,7 @@ for m in $models; do
     if [[ $constructors != '' ]]; then
       inputs=''
       list=`echo "$constructors" | tr ';' "\n"`
-      for mthd in $list; do
+      for mthd in $list; doconst trigger = 'jhipster-needle-entity-add-field'
         method=`echo $mthd | tr '_' ' '`
         # echo method: $method
         selfclose=`echo $method | grep {}`

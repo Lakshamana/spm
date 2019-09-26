@@ -47,8 +47,23 @@ public class VCSRepositoryResourceIT {
     private static final String DEFAULT_SERVER = "AAAAAAAAAA";
     private static final String UPDATED_SERVER = "BBBBBBBBBB";
 
-    private static final String DEFAULT_REPOSITORY_PATH = "AAAAAAAAAA";
-    private static final String UPDATED_REPOSITORY_PATH = "BBBBBBBBBB";
+    private static final String DEFAULT_PORT = "AAAAAAAAAA";
+    private static final String UPDATED_PORT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CONNECTION_METHOD = "AAAAAAAAAA";
+    private static final String UPDATED_CONNECTION_METHOD = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REPOSITORY = "AAAAAAAAAA";
+    private static final String UPDATED_REPOSITORY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_USERNAME = "AAAAAAAAAA";
+    private static final String UPDATED_USERNAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PASSWORD = "AAAAAAAAAA";
+    private static final String UPDATED_PASSWORD = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_DEFAULT_USER = false;
+    private static final Boolean UPDATED_DEFAULT_USER = true;
 
     @Autowired
     private VCSRepositoryRepository vCSRepositoryRepository;
@@ -101,7 +116,12 @@ public class VCSRepositoryResourceIT {
             .ident(DEFAULT_IDENT)
             .controlVersionSystem(DEFAULT_CONTROL_VERSION_SYSTEM)
             .server(DEFAULT_SERVER)
-            .repositoryPath(DEFAULT_REPOSITORY_PATH);
+            .port(DEFAULT_PORT)
+            .connectionMethod(DEFAULT_CONNECTION_METHOD)
+            .repository(DEFAULT_REPOSITORY)
+            .username(DEFAULT_USERNAME)
+            .password(DEFAULT_PASSWORD)
+            .defaultUser(DEFAULT_DEFAULT_USER);
         return vCSRepository;
     }
     /**
@@ -115,7 +135,12 @@ public class VCSRepositoryResourceIT {
             .ident(UPDATED_IDENT)
             .controlVersionSystem(UPDATED_CONTROL_VERSION_SYSTEM)
             .server(UPDATED_SERVER)
-            .repositoryPath(UPDATED_REPOSITORY_PATH);
+            .port(UPDATED_PORT)
+            .connectionMethod(UPDATED_CONNECTION_METHOD)
+            .repository(UPDATED_REPOSITORY)
+            .username(UPDATED_USERNAME)
+            .password(UPDATED_PASSWORD)
+            .defaultUser(UPDATED_DEFAULT_USER);
         return vCSRepository;
     }
 
@@ -143,7 +168,12 @@ public class VCSRepositoryResourceIT {
         assertThat(testVCSRepository.getIdent()).isEqualTo(DEFAULT_IDENT);
         assertThat(testVCSRepository.getControlVersionSystem()).isEqualTo(DEFAULT_CONTROL_VERSION_SYSTEM);
         assertThat(testVCSRepository.getServer()).isEqualTo(DEFAULT_SERVER);
-        assertThat(testVCSRepository.getRepositoryPath()).isEqualTo(DEFAULT_REPOSITORY_PATH);
+        assertThat(testVCSRepository.getPort()).isEqualTo(DEFAULT_PORT);
+        assertThat(testVCSRepository.getConnectionMethod()).isEqualTo(DEFAULT_CONNECTION_METHOD);
+        assertThat(testVCSRepository.getRepository()).isEqualTo(DEFAULT_REPOSITORY);
+        assertThat(testVCSRepository.getUsername()).isEqualTo(DEFAULT_USERNAME);
+        assertThat(testVCSRepository.getPassword()).isEqualTo(DEFAULT_PASSWORD);
+        assertThat(testVCSRepository.isDefaultUser()).isEqualTo(DEFAULT_DEFAULT_USER);
     }
 
     @Test
@@ -181,7 +211,12 @@ public class VCSRepositoryResourceIT {
             .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())))
             .andExpect(jsonPath("$.[*].controlVersionSystem").value(hasItem(DEFAULT_CONTROL_VERSION_SYSTEM.toString())))
             .andExpect(jsonPath("$.[*].server").value(hasItem(DEFAULT_SERVER.toString())))
-            .andExpect(jsonPath("$.[*].repositoryPath").value(hasItem(DEFAULT_REPOSITORY_PATH.toString())));
+            .andExpect(jsonPath("$.[*].port").value(hasItem(DEFAULT_PORT.toString())))
+            .andExpect(jsonPath("$.[*].connectionMethod").value(hasItem(DEFAULT_CONNECTION_METHOD.toString())))
+            .andExpect(jsonPath("$.[*].repository").value(hasItem(DEFAULT_REPOSITORY.toString())))
+            .andExpect(jsonPath("$.[*].username").value(hasItem(DEFAULT_USERNAME.toString())))
+            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())))
+            .andExpect(jsonPath("$.[*].defaultUser").value(hasItem(DEFAULT_DEFAULT_USER.booleanValue())));
     }
     
     @Test
@@ -198,7 +233,12 @@ public class VCSRepositoryResourceIT {
             .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()))
             .andExpect(jsonPath("$.controlVersionSystem").value(DEFAULT_CONTROL_VERSION_SYSTEM.toString()))
             .andExpect(jsonPath("$.server").value(DEFAULT_SERVER.toString()))
-            .andExpect(jsonPath("$.repositoryPath").value(DEFAULT_REPOSITORY_PATH.toString()));
+            .andExpect(jsonPath("$.port").value(DEFAULT_PORT.toString()))
+            .andExpect(jsonPath("$.connectionMethod").value(DEFAULT_CONNECTION_METHOD.toString()))
+            .andExpect(jsonPath("$.repository").value(DEFAULT_REPOSITORY.toString()))
+            .andExpect(jsonPath("$.username").value(DEFAULT_USERNAME.toString()))
+            .andExpect(jsonPath("$.password").value(DEFAULT_PASSWORD.toString()))
+            .andExpect(jsonPath("$.defaultUser").value(DEFAULT_DEFAULT_USER.booleanValue()));
     }
 
     @Test
@@ -225,7 +265,12 @@ public class VCSRepositoryResourceIT {
             .ident(UPDATED_IDENT)
             .controlVersionSystem(UPDATED_CONTROL_VERSION_SYSTEM)
             .server(UPDATED_SERVER)
-            .repositoryPath(UPDATED_REPOSITORY_PATH);
+            .port(UPDATED_PORT)
+            .connectionMethod(UPDATED_CONNECTION_METHOD)
+            .repository(UPDATED_REPOSITORY)
+            .username(UPDATED_USERNAME)
+            .password(UPDATED_PASSWORD)
+            .defaultUser(UPDATED_DEFAULT_USER);
         VCSRepositoryDTO vCSRepositoryDTO = vCSRepositoryMapper.toDto(updatedVCSRepository);
 
         restVCSRepositoryMockMvc.perform(put("/api/vcs-repositories")
@@ -240,7 +285,12 @@ public class VCSRepositoryResourceIT {
         assertThat(testVCSRepository.getIdent()).isEqualTo(UPDATED_IDENT);
         assertThat(testVCSRepository.getControlVersionSystem()).isEqualTo(UPDATED_CONTROL_VERSION_SYSTEM);
         assertThat(testVCSRepository.getServer()).isEqualTo(UPDATED_SERVER);
-        assertThat(testVCSRepository.getRepositoryPath()).isEqualTo(UPDATED_REPOSITORY_PATH);
+        assertThat(testVCSRepository.getPort()).isEqualTo(UPDATED_PORT);
+        assertThat(testVCSRepository.getConnectionMethod()).isEqualTo(UPDATED_CONNECTION_METHOD);
+        assertThat(testVCSRepository.getRepository()).isEqualTo(UPDATED_REPOSITORY);
+        assertThat(testVCSRepository.getUsername()).isEqualTo(UPDATED_USERNAME);
+        assertThat(testVCSRepository.getPassword()).isEqualTo(UPDATED_PASSWORD);
+        assertThat(testVCSRepository.isDefaultUser()).isEqualTo(UPDATED_DEFAULT_USER);
     }
 
     @Test

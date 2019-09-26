@@ -16,23 +16,11 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="rate" type="double">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="visit_count" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="download_count" type="bigint">
+            <column name="asset_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
             <column name="author_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_asset_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
@@ -60,9 +48,6 @@
                   separator=";"
                   tableName="author_stat">
             <column name="id" type="numeric"/>
-            <column name="rate" type="numeric"/>
-            <column name="visit_count" type="numeric"/>
-            <column name="download_count" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

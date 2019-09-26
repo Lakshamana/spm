@@ -25,8 +25,8 @@ public class AgentInstSuggestionToAgent implements Serializable {
     private Float orderCriteriaResult;
 
     @ManyToOne
-    @JsonIgnoreProperties("theAgentInstSugToAgents")
-    private PeopleInstSug theInstAgSug;
+    @JsonIgnoreProperties("agentSuggesteds")
+    private AgentInstSug theInstAgSugg;
 
     @ManyToOne
     @JsonIgnoreProperties("theAgentInstSugToAgents")
@@ -54,17 +54,17 @@ public class AgentInstSuggestionToAgent implements Serializable {
         this.orderCriteriaResult = orderCriteriaResult;
     }
 
-    public PeopleInstSug getTheInstAgSug() {
-        return theInstAgSug;
+    public AgentInstSug getTheInstAgSugg() {
+        return theInstAgSugg;
     }
 
-    public AgentInstSuggestionToAgent theInstAgSug(PeopleInstSug peopleInstSug) {
-        this.theInstAgSug = peopleInstSug;
+    public AgentInstSuggestionToAgent theInstAgSugg(AgentInstSug agentInstSug) {
+        this.theInstAgSugg = agentInstSug;
         return this;
     }
 
-    public void setTheInstAgSug(PeopleInstSug peopleInstSug) {
-        this.theInstAgSug = peopleInstSug;
+    public void setTheInstAgSugg(AgentInstSug agentInstSug) {
+        this.theInstAgSugg = agentInstSug;
     }
 
     public Agent getTheAgent() {

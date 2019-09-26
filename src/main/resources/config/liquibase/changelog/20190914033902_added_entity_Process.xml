@@ -20,7 +20,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="p_status" type="varchar(255)">
+            <column name="p_state" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="the_process_model_id" type="bigint">
@@ -41,6 +41,17 @@
 
     <changeSet id="20190914033902-1-relations" author="jhipster">
 
+        <createTable tableName="process_the_agent">
+            <column name="the_agent_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="process_id, the_agent_id" tableName="process_the_agent"/>
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
@@ -59,7 +70,7 @@
                   tableName="process">
             <column name="id" type="numeric"/>
             <column name="ident" type="string"/>
-            <column name="p_status" type="string"/>
+            <column name="p_state" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

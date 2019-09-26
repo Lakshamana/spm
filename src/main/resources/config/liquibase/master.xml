@@ -157,6 +157,7 @@
     <include file="config/liquibase/changelog/20190915215224_added_entity_BranchConCondToMultipleCon.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190917161812_added_entity_InstantiationPolicyLog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190917161813_added_entity_ResourceInstSug.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190925111956_added_entity_NotWorkingDay.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20190914033720_added_entity_constraints_Activity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033722_added_entity_constraints_Plain.xml" relativeToChangelogFile="false"/>
@@ -261,5 +262,12 @@
     <include file="config/liquibase/changelog/20190915215223_added_entity_constraints_BranchConCondToActivity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190915215224_added_entity_constraints_BranchConCondToMultipleCon.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190914033721_added_entity_constraints_Decomposed.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033745_added_entity_constraints_Calendar.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190925111956_added_entity_constraints_NotWorkingDay.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033753_added_entity_constraints_Dependency.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033803_added_entity_constraints_AgendaEvent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033805_added_entity_constraints_GlobalActivityEvent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190914033806_added_entity_constraints_ModelingActivityEvent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190917161813_added_entity_constraints_ResourceInstSug.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

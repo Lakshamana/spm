@@ -14,9 +14,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="organization"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_company_id"
+        <addForeignKeyConstraint baseColumnNames="company_id"
                                  baseTableName="organization_estimation"
-                                 constraintName="fk_organization_estimation_the_company_id"
+                                 constraintName="fk_organization_estimation_company_id"
                                  referencedColumnNames="id"
                                  referencedTableName="company"/>
 

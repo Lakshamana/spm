@@ -12,11 +12,11 @@ import org.mapstruct.*;
 public interface LessonLearnedMapper extends EntityMapper<LessonLearnedDTO, LessonLearned> {
 
     @Mapping(source = "author.id", target = "authorId")
-    @Mapping(source = "theAsset.id", target = "theAssetId")
+    @Mapping(source = "asset.id", target = "assetId")
     LessonLearnedDTO toDto(LessonLearned lessonLearned);
 
     @Mapping(source = "authorId", target = "author")
-    @Mapping(source = "theAssetId", target = "theAsset")
+    @Mapping(source = "assetId", target = "asset")
     LessonLearned toEntity(LessonLearnedDTO lessonLearnedDTO);
 
     default LessonLearned fromId(Long id) {

@@ -20,11 +20,12 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static br.ufpa.labes.spm.web.rest.TestUtil.createFormattingConversionService;
@@ -46,9 +47,9 @@ public class ChatMessageResourceIT {
     private static final String DEFAULT_TEXT = "AAAAAAAAAA";
     private static final String UPDATED_TEXT = "BBBBBBBBBB";
 
-    private static final LocalDate DEFAULT_TIMESTAMP = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_TIMESTAMP = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_TIMESTAMP = LocalDate.ofEpochDay(-1L);
+    private static final Instant DEFAULT_TIMESTAMP = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_TIMESTAMP = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant SMALLER_TIMESTAMP = Instant.ofEpochMilli(-1L);
 
     @Autowired
     private ChatMessageRepository chatMessageRepository;

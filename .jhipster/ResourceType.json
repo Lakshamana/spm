@@ -10,6 +10,12 @@
         },
         {
             "relationshipType": "one-to-many",
+            "otherEntityName": "resourceInstSug",
+            "otherEntityRelationshipName": "resourceTypeRequired",
+            "relationshipName": "theResourceInstSug"
+        },
+        {
+            "relationshipType": "one-to-many",
             "otherEntityName": "resource",
             "otherEntityRelationshipName": "theResourceType",
             "relationshipName": "theResource"

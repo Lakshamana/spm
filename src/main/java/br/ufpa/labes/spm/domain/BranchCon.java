@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -17,8 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "branch_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
-public class BranchCon extends MultipleCon implements Serializable {
+public class BranchCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,7 +23,7 @@ public class BranchCon extends MultipleCon implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("toBranchCons")
-    private MultipleCon fromMultipleCon;
+    private MultipleCon fromMultipleConnection;
 
     @ManyToOne
     @JsonIgnoreProperties("toBranchCons")
@@ -43,17 +38,17 @@ public class BranchCon extends MultipleCon implements Serializable {
         this.id = id;
     }
 
-    public MultipleCon getFromMultipleCon() {
-        return fromMultipleCon;
+    public MultipleCon getFromMultipleConnection() {
+        return fromMultipleConnection;
     }
 
-    public BranchCon fromMultipleCon(MultipleCon multipleCon) {
-        this.fromMultipleCon = multipleCon;
+    public BranchCon fromMultipleConnection(MultipleCon multipleCon) {
+        this.fromMultipleConnection = multipleCon;
         return this;
     }
 
-    public void setFromMultipleCon(MultipleCon multipleCon) {
-        this.fromMultipleCon = multipleCon;
+    public void setFromMultipleConnection(MultipleCon multipleCon) {
+        this.fromMultipleConnection = multipleCon;
     }
 
     public Activity getFromActivity() {

@@ -11,10 +11,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {ResourceMapper.class})
 public interface ResourceEstimationMapper extends EntityMapper<ResourceEstimationDTO, ResourceEstimation> {
 
-    @Mapping(source = "theResource.id", target = "theResourceId")
+    @Mapping(source = "resource.id", target = "resourceId")
     ResourceEstimationDTO toDto(ResourceEstimation resourceEstimation);
 
-    @Mapping(source = "theResourceId", target = "theResource")
+    @Mapping(source = "resourceId", target = "resource")
     ResourceEstimation toEntity(ResourceEstimationDTO resourceEstimationDTO);
 
     default ResourceEstimation fromId(Long id) {

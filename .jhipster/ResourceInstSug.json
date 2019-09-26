@@ -1,7 +1,30 @@
 {
     "name": "ResourceInstSug",
     "fields": [],
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "theResourceInstSug",
+            "relationshipName": "resourceChosen",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resourceType",
+            "otherEntityRelationshipName": "theResourceInstSug",
+            "relationshipName": "resourceTypeRequired",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "theResourceInstSug",
+            "relationshipName": "resourceSuggested",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
     "changelogDate": "20190917161813",
     "entityTableName": "resource_inst_sug",
     "dto": "mapstruct",

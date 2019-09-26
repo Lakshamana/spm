@@ -35,8 +35,9 @@
             "fieldTypeBlobContent": "text"
         },
         {
-            "fieldName": "imageURL",
-            "fieldType": "String"
+            "fieldName": "image",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
         },
         {
             "fieldName": "url",
@@ -51,26 +52,33 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "organizationMetric",
-            "otherEntityRelationshipName": "theCompany",
+            "otherEntityRelationshipName": "company",
             "relationshipName": "organizationMetric"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "organizationEstimation",
-            "otherEntityRelationshipName": "theCompany",
+            "otherEntityRelationshipName": "company",
             "relationshipName": "theCompanyEstimation"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "driver",
+            "otherEntityRelationshipName": "company",
+            "relationshipName": "theDriver",
+            "ownerSide": false
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "companyUnit",
             "otherEntityRelationshipName": "theOrganization",
-            "relationshipName": "theCompanyUnit"
+            "relationshipName": "theOrganizationalUnits"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "developingSystem",
             "otherEntityRelationshipName": "theOrganization",
-            "relationshipName": "theDevelopingSystem"
+            "relationshipName": "theSystem"
         }
     ],
     "changelogDate": "20190914033811",

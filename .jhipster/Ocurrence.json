@@ -18,7 +18,7 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "task",
-            "otherEntityRelationshipName": "theOcurrence",
+            "otherEntityRelationshipName": "ocurrence",
             "relationshipName": "theTask",
             "otherEntityField": "id"
         }

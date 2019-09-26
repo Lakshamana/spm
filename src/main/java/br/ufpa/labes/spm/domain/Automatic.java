@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "automatic")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Automatic extends Plain implements Serializable {
+public class Automatic implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,13 +27,13 @@ public class Automatic extends Plain implements Serializable {
     @JoinColumn(unique = true)
     private Subroutine theSubroutine;
 
-    @ManyToOne
-    @JsonIgnoreProperties("theAutomatics")
-    private Artifact theArtifact;
-
     @OneToMany(mappedBy = "theAutomatic")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Parameter> theParameters = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties("theAutomatics")
+    private Artifact theArtifact;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -55,19 +55,6 @@ public class Automatic extends Plain implements Serializable {
 
     public void setTheSubroutine(Subroutine subroutine) {
         this.theSubroutine = subroutine;
-    }
-
-    public Artifact getTheArtifact() {
-        return theArtifact;
-    }
-
-    public Automatic theArtifact(Artifact artifact) {
-        this.theArtifact = artifact;
-        return this;
-    }
-
-    public void setTheArtifact(Artifact artifact) {
-        this.theArtifact = artifact;
     }
 
     public Set<Parameter> getTheParameters() {
@@ -93,6 +80,19 @@ public class Automatic extends Plain implements Serializable {
 
     public void setTheParameters(Set<Parameter> parameters) {
         this.theParameters = parameters;
+    }
+
+    public Artifact getTheArtifact() {
+        return theArtifact;
+    }
+
+    public Automatic theArtifact(Artifact artifact) {
+        this.theArtifact = artifact;
+        return this;
+    }
+
+    public void setTheArtifact(Artifact artifact) {
+        this.theArtifact = artifact;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

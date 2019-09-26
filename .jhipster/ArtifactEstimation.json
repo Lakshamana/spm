@@ -6,7 +6,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "artifact",
             "otherEntityRelationshipName": "theArtifactEstimation",
-            "relationshipName": "theArtifact",
+            "relationshipName": "artifact",
             "otherEntityField": "id"
         }
     ],

@@ -9,7 +9,7 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "requiredPeople",
+            "otherEntityName": "reqAgent",
             "otherEntityRelationshipName": "theReqAgentRequiresAbility",
             "relationshipName": "theReqAgent",
             "otherEntityField": "id"

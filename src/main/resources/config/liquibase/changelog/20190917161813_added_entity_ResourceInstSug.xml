@@ -16,6 +16,14 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="resource_chosen_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="resource_type_required_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
 
@@ -23,6 +31,17 @@
 
     <changeSet id="20190917161813-1-relations" author="jhipster">
 
+        <createTable tableName="resource_inst_sug_resource_suggested">
+            <column name="resource_suggested_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource_inst_sug_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="resource_inst_sug_id, resource_suggested_id" tableName="resource_inst_sug_resource_suggested"/>
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

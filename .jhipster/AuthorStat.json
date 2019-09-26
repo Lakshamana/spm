@@ -1,32 +1,19 @@
 {
     "name": "AuthorStat",
-    "fields": [
-        {
-            "fieldName": "rate",
-            "fieldType": "Double"
-        },
-        {
-            "fieldName": "visitCount",
-            "fieldType": "Long"
-        },
-        {
-            "fieldName": "downloadCount",
-            "fieldType": "Long"
-        }
-    ],
+    "fields": [],
     "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "author",
-            "otherEntityRelationshipName": "theAuthorStats",
-            "relationshipName": "author",
-            "otherEntityField": "id"
-        },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "asset",
             "otherEntityRelationshipName": "authorStats",
-            "relationshipName": "theAsset",
+            "relationshipName": "asset",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "author",
+            "otherEntityRelationshipName": "stats",
+            "relationshipName": "author",
             "otherEntityField": "id"
         }
     ],

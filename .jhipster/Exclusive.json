@@ -2,9 +2,8 @@
     "name": "Exclusive",
     "fields": [
         {
-            "fieldName": "exclusiveStatus",
-            "fieldType": "ExclusiveStatus",
-            "fieldValues": "AVAILABLE,LOCKED,DEFECT"
+            "fieldName": "state",
+            "fieldType": "String"
         },
         {
             "fieldName": "unitOfCost",

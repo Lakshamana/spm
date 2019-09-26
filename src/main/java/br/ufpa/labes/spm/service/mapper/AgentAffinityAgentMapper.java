@@ -11,12 +11,12 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {AgentMapper.class})
 public interface AgentAffinityAgentMapper extends EntityMapper<AgentAffinityAgentDTO, AgentAffinityAgent> {
 
-    @Mapping(source = "fromAffinity.id", target = "fromAffinityId")
     @Mapping(source = "toAffinity.id", target = "toAffinityId")
+    @Mapping(source = "fromAffinity.id", target = "fromAffinityId")
     AgentAffinityAgentDTO toDto(AgentAffinityAgent agentAffinityAgent);
 
-    @Mapping(source = "fromAffinityId", target = "fromAffinity")
     @Mapping(source = "toAffinityId", target = "toAffinity")
+    @Mapping(source = "fromAffinityId", target = "fromAffinity")
     AgentAffinityAgent toEntity(AgentAffinityAgentDTO agentAffinityAgentDTO);
 
     default AgentAffinityAgent fromId(Long id) {

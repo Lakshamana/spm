@@ -14,23 +14,43 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "repositoryPath",
+            "fieldName": "port",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "connectionMethod",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "repository",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "username",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "password",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "defaultUser",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "structure",
-            "otherEntityRelationshipName": "theVCSRepository",
+            "otherEntityRelationshipName": "theRepository",
             "relationshipName": "theStructure",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "artifact",
-            "otherEntityRelationshipName": "theVCSRepository",
-            "relationshipName": "theArtifact"
+            "otherEntityRelationshipName": "theRepository",
+            "relationshipName": "theArtifacts"
         }
     ],
     "changelogDate": "20190914033815",

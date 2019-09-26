@@ -5,7 +5,7 @@
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "multipleCon",
-            "otherEntityRelationshipName": "theBranchAND",
+            "otherEntityRelationshipName": "theBranchANDCon",
             "relationshipName": "toMultipleCon",
             "otherEntityField": "id",
             "ownerSide": true
@@ -13,8 +13,8 @@
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "activity",
-            "otherEntityRelationshipName": "toBranchANDCon",
-            "relationshipName": "fromActivity",
+            "otherEntityRelationshipName": "fromBranchANDCon",
+            "relationshipName": "toActivity",
             "otherEntityField": "id",
             "ownerSide": false
         }

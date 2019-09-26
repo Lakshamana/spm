@@ -8,8 +8,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import br.ufpa.labes.spm.domain.enumeration.OperationEnum;
-
 /**
  * A LogEntry.
  */
@@ -27,9 +25,8 @@ public class LogEntry implements Serializable {
     @Column(name = "date")
     private LocalDate date;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "operation_enum")
-    private OperationEnum operationEnum;
+    @Column(name = "operation")
+    private String operation;
 
     @Column(name = "class_name")
     private String className;
@@ -63,17 +60,17 @@ public class LogEntry implements Serializable {
         this.date = date;
     }
 
-    public OperationEnum getOperationEnum() {
-        return operationEnum;
+    public String getOperation() {
+        return operation;
     }
 
-    public LogEntry operationEnum(OperationEnum operationEnum) {
-        this.operationEnum = operationEnum;
+    public LogEntry operation(String operation) {
+        this.operation = operation;
         return this;
     }
 
-    public void setOperationEnum(OperationEnum operationEnum) {
-        this.operationEnum = operationEnum;
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
     public String getClassName() {
@@ -137,7 +134,7 @@ public class LogEntry implements Serializable {
         return "LogEntry{" +
             "id=" + getId() +
             ", date='" + getDate() + "'" +
-            ", operationEnum='" + getOperationEnum() + "'" +
+            ", operation='" + getOperation() + "'" +
             ", className='" + getClassName() + "'" +
             ", uid='" + getUid() + "'" +
             "}";

@@ -39,20 +39,20 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "metricType",
             "otherEntityRelationshipName": "theMetricDefinition",
-            "relationshipName": "theMetricType",
+            "relationshipName": "metricType",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "estimation",
-            "otherEntityRelationshipName": "theMetricDefinition",
-            "relationshipName": "theEstimation"
+            "otherEntityRelationshipName": "metricDefinition",
+            "relationshipName": "estimation"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "metric",
-            "otherEntityRelationshipName": "theMetricDefinition",
-            "relationshipName": "theMetric"
+            "otherEntityRelationshipName": "metricDefinition",
+            "relationshipName": "metric"
         }
     ],
     "changelogDate": "20190914033858",

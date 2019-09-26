@@ -42,7 +42,7 @@ public class ToolDefinition implements Serializable {
     @JoinTable(name = "tool_definition_the_artifact_types",
                joinColumns = @JoinColumn(name = "tool_definition_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "the_artifact_types_id", referencedColumnName = "id"))
-    private Set<Type> theArtifactTypes = new HashSet<>();
+    private Set<ArtifactType> theArtifactTypes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -105,29 +105,29 @@ public class ToolDefinition implements Serializable {
         this.theToolType = toolType;
     }
 
-    public Set<Type> getTheArtifactTypes() {
+    public Set<ArtifactType> getTheArtifactTypes() {
         return theArtifactTypes;
     }
 
-    public ToolDefinition theArtifactTypes(Set<Type> types) {
-        this.theArtifactTypes = types;
+    public ToolDefinition theArtifactTypes(Set<ArtifactType> artifactTypes) {
+        this.theArtifactTypes = artifactTypes;
         return this;
     }
 
-    public ToolDefinition addTheArtifactTypes(Type type) {
-        this.theArtifactTypes.add(type);
-        type.getTheToolDefinitionToArtifactTypes().add(this);
+    public ToolDefinition addTheArtifactTypes(ArtifactType artifactType) {
+        this.theArtifactTypes.add(artifactType);
+        artifactType.getTheToolDefinitions().add(this);
         return this;
     }
 
-    public ToolDefinition removeTheArtifactTypes(Type type) {
-        this.theArtifactTypes.remove(type);
-        type.getTheToolDefinitionToArtifactTypes().remove(this);
+    public ToolDefinition removeTheArtifactTypes(ArtifactType artifactType) {
+        this.theArtifactTypes.remove(artifactType);
+        artifactType.getTheToolDefinitions().remove(this);
         return this;
     }
 
-    public void setTheArtifactTypes(Set<Type> types) {
-        this.theArtifactTypes = types;
+    public void setTheArtifactTypes(Set<ArtifactType> artifactTypes) {
+        this.theArtifactTypes = artifactTypes;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

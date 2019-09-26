@@ -1,7 +1,6 @@
 package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
-import br.ufpa.labes.spm.domain.enumeration.ConsumableStatus;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.Consumable} entity.
@@ -10,9 +9,9 @@ public class ConsumableDTO implements Serializable {
 
     private Long id;
 
-    private String unit;
+    private String state;
 
-    private ConsumableStatus consumableStatus;
+    private String unit;
 
     private Float totalQuantity;
 
@@ -27,20 +26,20 @@ public class ConsumableDTO implements Serializable {
         this.id = id;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public String getUnit() {
         return unit;
     }
 
     public void setUnit(String unit) {
         this.unit = unit;
-    }
-
-    public ConsumableStatus getConsumableStatus() {
-        return consumableStatus;
-    }
-
-    public void setConsumableStatus(ConsumableStatus consumableStatus) {
-        this.consumableStatus = consumableStatus;
     }
 
     public Float getTotalQuantity() {
@@ -84,8 +83,8 @@ public class ConsumableDTO implements Serializable {
     public String toString() {
         return "ConsumableDTO{" +
             "id=" + getId() +
+            ", state='" + getState() + "'" +
             ", unit='" + getUnit() + "'" +
-            ", consumableStatus='" + getConsumableStatus() + "'" +
             ", totalQuantity=" + getTotalQuantity() +
             ", amountUsed=" + getAmountUsed() +
             "}";

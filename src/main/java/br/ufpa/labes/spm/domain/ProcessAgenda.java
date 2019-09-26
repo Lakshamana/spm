@@ -23,17 +23,17 @@ public class ProcessAgenda implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "theProcessAgenda")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Task> theTasks = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties("theProcessAgenda")
     private TaskAgenda theTaskAgenda;
 
     @ManyToOne
-    @JsonIgnoreProperties("theProcessAgendas")
+    @JsonIgnoreProperties("theProcessAgenda")
     private Process theProcess;
-
-    @OneToMany(mappedBy = "theProcessAgenda")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Task> theTasks = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -42,6 +42,31 @@ public class ProcessAgenda implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Set<Task> getTheTasks() {
+        return theTasks;
+    }
+
+    public ProcessAgenda theTasks(Set<Task> tasks) {
+        this.theTasks = tasks;
+        return this;
+    }
+
+    public ProcessAgenda addTheTask(Task task) {
+        this.theTasks.add(task);
+        task.setTheProcessAgenda(this);
+        return this;
+    }
+
+    public ProcessAgenda removeTheTask(Task task) {
+        this.theTasks.remove(task);
+        task.setTheProcessAgenda(null);
+        return this;
+    }
+
+    public void setTheTasks(Set<Task> tasks) {
+        this.theTasks = tasks;
     }
 
     public TaskAgenda getTheTaskAgenda() {
@@ -68,31 +93,6 @@ public class ProcessAgenda implements Serializable {
 
     public void setTheProcess(Process process) {
         this.theProcess = process;
-    }
-
-    public Set<Task> getTheTasks() {
-        return theTasks;
-    }
-
-    public ProcessAgenda theTasks(Set<Task> tasks) {
-        this.theTasks = tasks;
-        return this;
-    }
-
-    public ProcessAgenda addTheTask(Task task) {
-        this.theTasks.add(task);
-        task.setTheProcessAgenda(this);
-        return this;
-    }
-
-    public ProcessAgenda removeTheTask(Task task) {
-        this.theTasks.remove(task);
-        task.setTheProcessAgenda(null);
-        return this;
-    }
-
-    public void setTheTasks(Set<Task> tasks) {
-        this.theTasks = tasks;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

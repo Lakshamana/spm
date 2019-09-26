@@ -14,21 +14,21 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "artifactType",
-            "otherEntityRelationshipName": "theToolParameter",
+            "otherEntityRelationshipName": "theToolParameters",
             "relationshipName": "theArtifactType",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "subroutine",
-            "otherEntityRelationshipName": "theToolParameter",
+            "otherEntityRelationshipName": "theToolParameters",
             "relationshipName": "theSubroutine",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "primitiveType",
-            "otherEntityRelationshipName": "theToolParameter",
+            "otherEntityRelationshipName": "theToolParameters",
             "relationshipName": "thePrimitiveType",
             "otherEntityField": "id"
         }

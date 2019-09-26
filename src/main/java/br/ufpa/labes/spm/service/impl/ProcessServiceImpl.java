@@ -8,6 +8,8 @@ import br.ufpa.labes.spm.service.mapper.ProcessMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,11 +60,20 @@ public class ProcessServiceImpl implements ProcessService {
     @Transactional(readOnly = true)
     public List<ProcessDTO> findAll() {
         log.debug("Request to get all Processes");
-        return processRepository.findAll().stream()
+        return processRepository.findAllWithEagerRelationships().stream()
             .map(processMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+    /**
+     * Get all the processes with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<ProcessDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return processRepository.findAllWithEagerRelationships(pageable).map(processMapper::toDto);
+    }
+    
 
 
     /**
@@ -89,7 +100,7 @@ public class ProcessServiceImpl implements ProcessService {
     @Transactional(readOnly = true)
     public Optional<ProcessDTO> findOne(Long id) {
         log.debug("Request to get Process : {}", id);
-        return processRepository.findById(id)
+        return processRepository.findOneWithEagerRelationships(id)
             .map(processMapper::toDto);
     }
 

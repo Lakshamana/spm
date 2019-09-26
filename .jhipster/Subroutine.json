@@ -1,11 +1,6 @@
 {
     "name": "Subroutine",
-    "fields": [
-        {
-            "fieldName": "ident",
-            "fieldType": "String"
-        }
-    ],
+    "fields": [],
     "relationships": [
         {
             "relationshipType": "many-to-one",
@@ -25,7 +20,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "toolParameter",
             "otherEntityRelationshipName": "theSubroutine",
-            "relationshipName": "theToolParameter"
+            "relationshipName": "theToolParameters"
         }
     ],
     "changelogDate": "20190914033919",

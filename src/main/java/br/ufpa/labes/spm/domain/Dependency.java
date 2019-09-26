@@ -1,4 +1,5 @@
 package br.ufpa.labes.spm.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -24,6 +25,14 @@ public class Dependency implements Serializable {
 
     @Column(name = "kind_dep")
     private String kindDep;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Sequence theSequence;
+
+    @OneToOne(mappedBy = "theDependency")
+    @JsonIgnore
+    private MultipleCon theMultipleCon;
 
     @OneToMany(mappedBy = "theDependency")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -53,6 +62,32 @@ public class Dependency implements Serializable {
 
     public void setKindDep(String kindDep) {
         this.kindDep = kindDep;
+    }
+
+    public Sequence getTheSequence() {
+        return theSequence;
+    }
+
+    public Dependency theSequence(Sequence sequence) {
+        this.theSequence = sequence;
+        return this;
+    }
+
+    public void setTheSequence(Sequence sequence) {
+        this.theSequence = sequence;
+    }
+
+    public MultipleCon getTheMultipleCon() {
+        return theMultipleCon;
+    }
+
+    public Dependency theMultipleCon(MultipleCon multipleCon) {
+        this.theMultipleCon = multipleCon;
+        return this;
+    }
+
+    public void setTheMultipleCon(MultipleCon multipleCon) {
+        this.theMultipleCon = multipleCon;
     }
 
     public Set<MultipleCon> getTheMultipleCons() {
@@ -128,29 +163,5 @@ public class Dependency implements Serializable {
             "id=" + getId() +
             ", kindDep='" + getKindDep() + "'" +
             "}";
-    }
-
-    public void removeFromTheSequence() {
-      if (this.theSequences!=null){
-        this.theSequences.setTheDependency(null);
-        this.setTheSequences(null);
-      }
-    }
-
-    public void insertIntoTheSequence(Sequence theSequence) {
-      this.setTheSequence(theSequence);
-      theSequence.setTheDependency(this);
-    }
-
-    public void removeFromTheMultipleCon() {
-      if (this.theMultipleCon != null){
-        this.theMultipleCon.setTheDependency(null);
-        this.setTheMultipleCon(null);
-      }
-    }
-
-    public void insertIntoTheMultipleCon(MultipleCon theMultipleCon) {
-      this.setTheMultipleCon(theMultipleCon);
-      theMultipleCon.setTheDependency(this);
     }
 }

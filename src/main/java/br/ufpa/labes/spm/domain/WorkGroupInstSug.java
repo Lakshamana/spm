@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "work_group_inst_sug")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class WorkGroupInstSug extends PeopleInstSug implements Serializable {
+public class WorkGroupInstSug implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,12 +24,12 @@ public class WorkGroupInstSug extends PeopleInstSug implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("sugToChosenWorkGroups")
-    private WorkGroup chosenWorkGroup;
+    @JsonIgnoreProperties("theWorkGroupInstSugs")
+    private WorkGroup groupChosen;
 
     @ManyToOne
-    @JsonIgnoreProperties("sugToReqWorkGroups")
-    private Type workGroupTypeRequired;
+    @JsonIgnoreProperties("theWorkGroupInstSugs")
+    private WorkGroupType groupTypeRequired;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -37,6 +37,13 @@ public class WorkGroupInstSug extends PeopleInstSug implements Serializable {
                joinColumns = @JoinColumn(name = "work_group_inst_sug_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "sug_work_group_id", referencedColumnName = "id"))
     private Set<WorkGroup> sugWorkGroups = new HashSet<>();
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "work_group_inst_sug_group_suggested",
+               joinColumns = @JoinColumn(name = "work_group_inst_sug_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "group_suggested_id", referencedColumnName = "id"))
+    private Set<WorkGroup> groupSuggesteds = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -47,30 +54,30 @@ public class WorkGroupInstSug extends PeopleInstSug implements Serializable {
         this.id = id;
     }
 
-    public WorkGroup getChosenWorkGroup() {
-        return chosenWorkGroup;
+    public WorkGroup getGroupChosen() {
+        return groupChosen;
     }
 
-    public WorkGroupInstSug chosenWorkGroup(WorkGroup workGroup) {
-        this.chosenWorkGroup = workGroup;
+    public WorkGroupInstSug groupChosen(WorkGroup workGroup) {
+        this.groupChosen = workGroup;
         return this;
     }
 
-    public void setChosenWorkGroup(WorkGroup workGroup) {
-        this.chosenWorkGroup = workGroup;
+    public void setGroupChosen(WorkGroup workGroup) {
+        this.groupChosen = workGroup;
     }
 
-    public Type getWorkGroupTypeRequired() {
-        return workGroupTypeRequired;
+    public WorkGroupType getGroupTypeRequired() {
+        return groupTypeRequired;
     }
 
-    public WorkGroupInstSug workGroupTypeRequired(Type type) {
-        this.workGroupTypeRequired = type;
+    public WorkGroupInstSug groupTypeRequired(WorkGroupType workGroupType) {
+        this.groupTypeRequired = workGroupType;
         return this;
     }
 
-    public void setWorkGroupTypeRequired(Type type) {
-        this.workGroupTypeRequired = type;
+    public void setGroupTypeRequired(WorkGroupType workGroupType) {
+        this.groupTypeRequired = workGroupType;
     }
 
     public Set<WorkGroup> getSugWorkGroups() {
@@ -96,6 +103,31 @@ public class WorkGroupInstSug extends PeopleInstSug implements Serializable {
 
     public void setSugWorkGroups(Set<WorkGroup> workGroups) {
         this.sugWorkGroups = workGroups;
+    }
+
+    public Set<WorkGroup> getGroupSuggesteds() {
+        return groupSuggesteds;
+    }
+
+    public WorkGroupInstSug groupSuggesteds(Set<WorkGroup> workGroups) {
+        this.groupSuggesteds = workGroups;
+        return this;
+    }
+
+    public WorkGroupInstSug addGroupSuggested(WorkGroup workGroup) {
+        this.groupSuggesteds.add(workGroup);
+        workGroup.getTheWorkGroupInstSugs().add(this);
+        return this;
+    }
+
+    public WorkGroupInstSug removeGroupSuggested(WorkGroup workGroup) {
+        this.groupSuggesteds.remove(workGroup);
+        workGroup.getTheWorkGroupInstSugs().remove(this);
+        return this;
+    }
+
+    public void setGroupSuggesteds(Set<WorkGroup> workGroups) {
+        this.groupSuggesteds = workGroups;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

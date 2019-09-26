@@ -33,11 +33,11 @@ public class Description implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theDerivedVersionDescriptions")
-    private Template theTemplateOldVersion;
+    private Template theOldVersion;
 
     @ManyToOne
     @JsonIgnoreProperties("theTemplateNewDescriptions")
-    private Template theTemplateNewVersion;
+    private Template theNewVersion;
 
     @OneToMany(mappedBy = "theOriginalVersionDescription")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -78,30 +78,30 @@ public class Description implements Serializable {
         this.why = why;
     }
 
-    public Template getTheTemplateOldVersion() {
-        return theTemplateOldVersion;
+    public Template getTheOldVersion() {
+        return theOldVersion;
     }
 
-    public Description theTemplateOldVersion(Template template) {
-        this.theTemplateOldVersion = template;
+    public Description theOldVersion(Template template) {
+        this.theOldVersion = template;
         return this;
     }
 
-    public void setTheTemplateOldVersion(Template template) {
-        this.theTemplateOldVersion = template;
+    public void setTheOldVersion(Template template) {
+        this.theOldVersion = template;
     }
 
-    public Template getTheTemplateNewVersion() {
-        return theTemplateNewVersion;
+    public Template getTheNewVersion() {
+        return theNewVersion;
     }
 
-    public Description theTemplateNewVersion(Template template) {
-        this.theTemplateNewVersion = template;
+    public Description theNewVersion(Template template) {
+        this.theNewVersion = template;
         return this;
     }
 
-    public void setTheTemplateNewVersion(Template template) {
-        this.theTemplateNewVersion = template;
+    public void setTheNewVersion(Template template) {
+        this.theNewVersion = template;
     }
 
     public Set<Template> getDescTemplateOriginalVersions() {

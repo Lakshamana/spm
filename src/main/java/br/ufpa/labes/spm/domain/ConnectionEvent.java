@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "connection_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ConnectionEvent extends Event implements Serializable {
+public class ConnectionEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ public class ConnectionEvent extends Event implements Serializable {
 
     @OneToMany(mappedBy = "theConnectionEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CatalogEvent> theCatalogEventToConnections = new HashSet<>();
+    private Set<CatalogEvent> theCatalogEvents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -35,29 +35,29 @@ public class ConnectionEvent extends Event implements Serializable {
         this.id = id;
     }
 
-    public Set<CatalogEvent> getTheCatalogEventToConnections() {
-        return theCatalogEventToConnections;
+    public Set<CatalogEvent> getTheCatalogEvents() {
+        return theCatalogEvents;
     }
 
-    public ConnectionEvent theCatalogEventToConnections(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToConnections = catalogEvents;
+    public ConnectionEvent theCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
         return this;
     }
 
-    public ConnectionEvent addTheCatalogEventToConnection(CatalogEvent catalogEvent) {
-        this.theCatalogEventToConnections.add(catalogEvent);
+    public ConnectionEvent addTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.add(catalogEvent);
         catalogEvent.setTheConnectionEvent(this);
         return this;
     }
 
-    public ConnectionEvent removeTheCatalogEventToConnection(CatalogEvent catalogEvent) {
-        this.theCatalogEventToConnections.remove(catalogEvent);
+    public ConnectionEvent removeTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.remove(catalogEvent);
         catalogEvent.setTheConnectionEvent(null);
         return this;
     }
 
-    public void setTheCatalogEventToConnections(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToConnections = catalogEvents;
+    public void setTheCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

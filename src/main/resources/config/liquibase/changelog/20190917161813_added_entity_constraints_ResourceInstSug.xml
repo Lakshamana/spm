@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity ResourceInstSug.
+    -->
+    <changeSet id="20190917161813-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="resource_chosen_id"
+                                 baseTableName="resource_inst_sug"
+                                 constraintName="fk_resource_inst_sug_resource_chosen_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="resource"/>
+
+        <addForeignKeyConstraint baseColumnNames="resource_type_required_id"
+                                 baseTableName="resource_inst_sug"
+                                 constraintName="fk_resource_inst_sug_resource_type_required_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="resource_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="resource_inst_sug_id"
+                                 baseTableName="resource_inst_sug_resource_suggested"
+                                 constraintName="fk_resource_inst_sug_resource_suggested_resource_inst_sug_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="resource_inst_sug"/>
+
+        <addForeignKeyConstraint baseColumnNames="resource_suggested_id"
+                                 baseTableName="resource_inst_sug_resource_suggested"
+                                 constraintName="fk_resource_inst_sug_resource_suggested_resource_suggested_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="resource"/>
+        
+    </changeSet>
+</databaseChangeLog>

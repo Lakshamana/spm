@@ -33,7 +33,7 @@ public class ActivityInstantiated implements Serializable {
 
     @OneToMany(mappedBy = "theActivityInstantiated")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<InstantiationSuggestion> theInstSugs = new HashSet<>();
+    private Set<InstantiationSuggestion> theInstantiationSuggestions = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -70,29 +70,29 @@ public class ActivityInstantiated implements Serializable {
         this.theActivity = activity;
     }
 
-    public Set<InstantiationSuggestion> getTheInstSugs() {
-        return theInstSugs;
+    public Set<InstantiationSuggestion> getTheInstantiationSuggestions() {
+        return theInstantiationSuggestions;
     }
 
-    public ActivityInstantiated theInstSugs(Set<InstantiationSuggestion> instantiationSuggestions) {
-        this.theInstSugs = instantiationSuggestions;
+    public ActivityInstantiated theInstantiationSuggestions(Set<InstantiationSuggestion> instantiationSuggestions) {
+        this.theInstantiationSuggestions = instantiationSuggestions;
         return this;
     }
 
-    public ActivityInstantiated addTheInstSug(InstantiationSuggestion instantiationSuggestion) {
-        this.theInstSugs.add(instantiationSuggestion);
+    public ActivityInstantiated addTheInstantiationSuggestion(InstantiationSuggestion instantiationSuggestion) {
+        this.theInstantiationSuggestions.add(instantiationSuggestion);
         instantiationSuggestion.setTheActivityInstantiated(this);
         return this;
     }
 
-    public ActivityInstantiated removeTheInstSug(InstantiationSuggestion instantiationSuggestion) {
-        this.theInstSugs.remove(instantiationSuggestion);
+    public ActivityInstantiated removeTheInstantiationSuggestion(InstantiationSuggestion instantiationSuggestion) {
+        this.theInstantiationSuggestions.remove(instantiationSuggestion);
         instantiationSuggestion.setTheActivityInstantiated(null);
         return this;
     }
 
-    public void setTheInstSugs(Set<InstantiationSuggestion> instantiationSuggestions) {
-        this.theInstSugs = instantiationSuggestions;
+    public void setTheInstantiationSuggestions(Set<InstantiationSuggestion> instantiationSuggestions) {
+        this.theInstantiationSuggestions = instantiationSuggestions;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

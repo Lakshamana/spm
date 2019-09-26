@@ -10,9 +10,12 @@ import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -23,15 +26,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 import static br.ufpa.labes.spm.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.ProcessStatus;
 /**
  * Integration tests for the {@link ProcessResource} REST controller.
  */
@@ -42,14 +46,20 @@ public class ProcessResourceIT {
     private static final String DEFAULT_IDENT = "AAAAAAAAAA";
     private static final String UPDATED_IDENT = "BBBBBBBBBB";
 
-    private static final ProcessStatus DEFAULT_P_STATUS = ProcessStatus.NOT_STARTED;
-    private static final ProcessStatus UPDATED_P_STATUS = ProcessStatus.ENACTING;
+    private static final String DEFAULT_P_STATE = "AAAAAAAAAA";
+    private static final String UPDATED_P_STATE = "BBBBBBBBBB";
 
     @Autowired
     private ProcessRepository processRepository;
 
+    @Mock
+    private ProcessRepository processRepositoryMock;
+
     @Autowired
     private ProcessMapper processMapper;
+
+    @Mock
+    private ProcessService processServiceMock;
 
     @Autowired
     private ProcessService processService;
@@ -94,7 +104,7 @@ public class ProcessResourceIT {
     public static Process createEntity(EntityManager em) {
         Process process = new Process()
             .ident(DEFAULT_IDENT)
-            .pStatus(DEFAULT_P_STATUS);
+            .pState(DEFAULT_P_STATE);
         return process;
     }
     /**
@@ -106,7 +116,7 @@ public class ProcessResourceIT {
     public static Process createUpdatedEntity(EntityManager em) {
         Process process = new Process()
             .ident(UPDATED_IDENT)
-            .pStatus(UPDATED_P_STATUS);
+            .pState(UPDATED_P_STATE);
         return process;
     }
 
@@ -132,7 +142,7 @@ public class ProcessResourceIT {
         assertThat(processList).hasSize(databaseSizeBeforeCreate + 1);
         Process testProcess = processList.get(processList.size() - 1);
         assertThat(testProcess.getIdent()).isEqualTo(DEFAULT_IDENT);
-        assertThat(testProcess.getpStatus()).isEqualTo(DEFAULT_P_STATUS);
+        assertThat(testProcess.getpState()).isEqualTo(DEFAULT_P_STATE);
     }
 
     @Test
@@ -168,9 +178,42 @@ public class ProcessResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(process.getId().intValue())))
             .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())))
-            .andExpect(jsonPath("$.[*].pStatus").value(hasItem(DEFAULT_P_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].pState").value(hasItem(DEFAULT_P_STATE.toString())));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllProcessesWithEagerRelationshipsIsEnabled() throws Exception {
+        ProcessResource processResource = new ProcessResource(processServiceMock);
+        when(processServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        MockMvc restProcessMockMvc = MockMvcBuilders.standaloneSetup(processResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restProcessMockMvc.perform(get("/api/processes?eagerload=true"))
+        .andExpect(status().isOk());
+
+        verify(processServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllProcessesWithEagerRelationshipsIsNotEnabled() throws Exception {
+        ProcessResource processResource = new ProcessResource(processServiceMock);
+            when(processServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+            MockMvc restProcessMockMvc = MockMvcBuilders.standaloneSetup(processResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restProcessMockMvc.perform(get("/api/processes?eagerload=true"))
+        .andExpect(status().isOk());
+
+            verify(processServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getProcess() throws Exception {
@@ -183,7 +226,7 @@ public class ProcessResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(process.getId().intValue()))
             .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()))
-            .andExpect(jsonPath("$.pStatus").value(DEFAULT_P_STATUS.toString()));
+            .andExpect(jsonPath("$.pState").value(DEFAULT_P_STATE.toString()));
     }
 
     @Test
@@ -208,7 +251,7 @@ public class ProcessResourceIT {
         em.detach(updatedProcess);
         updatedProcess
             .ident(UPDATED_IDENT)
-            .pStatus(UPDATED_P_STATUS);
+            .pState(UPDATED_P_STATE);
         ProcessDTO processDTO = processMapper.toDto(updatedProcess);
 
         restProcessMockMvc.perform(put("/api/processes")
@@ -221,7 +264,7 @@ public class ProcessResourceIT {
         assertThat(processList).hasSize(databaseSizeBeforeUpdate);
         Process testProcess = processList.get(processList.size() - 1);
         assertThat(testProcess.getIdent()).isEqualTo(UPDATED_IDENT);
-        assertThat(testProcess.getpStatus()).isEqualTo(UPDATED_P_STATUS);
+        assertThat(testProcess.getpState()).isEqualTo(UPDATED_P_STATE);
     }
 
     @Test

@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -12,22 +8,15 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.ufpa.labes.spm.domain.enumeration.PlainStatus;
-
 /**
  * A Plain.
  */
 @Entity
 @Table(name = "plain")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
-public class Plain extends Activity implements Serializable {
+public class Plain implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    public static final transient String WAITING = "Waiting", READY = "Ready",
-			FAILED = "Failed", CANCELED = "Canceled", ACTIVE = "Active",
-			PAUSED = "Paused", FINISHED = "Finished";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,20 +26,13 @@ public class Plain extends Activity implements Serializable {
     @Column(name = "requirements")
     private String requirements;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "plain_status")
-    private PlainStatus plainStatus;
-
-    @Column(name = "automatic")
-    private Boolean automatic;
-
     @OneToOne
     @JoinColumn(unique = true)
     private EnactionDescription theEnactionDescription;
 
     @OneToMany(mappedBy = "thePlain")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Event> theGlobalActivityEvents = new HashSet<>();
+    private Set<GlobalActivityEvent> theGlobalActivityEvents = new HashSet<>();
 
     @OneToMany(mappedBy = "thePlain")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -78,32 +60,6 @@ public class Plain extends Activity implements Serializable {
         this.requirements = requirements;
     }
 
-    public PlainStatus getPlainStatus() {
-        return plainStatus;
-    }
-
-    public Plain plainStatus(PlainStatus plainStatus) {
-        this.plainStatus = plainStatus;
-        return this;
-    }
-
-    public void setPlainStatus(PlainStatus plainStatus) {
-        this.plainStatus = plainStatus;
-    }
-
-    public Boolean isAutomatic() {
-        return automatic;
-    }
-
-    public Plain automatic(Boolean automatic) {
-        this.automatic = automatic;
-        return this;
-    }
-
-    public void setAutomatic(Boolean automatic) {
-        this.automatic = automatic;
-    }
-
     public EnactionDescription getTheEnactionDescription() {
         return theEnactionDescription;
     }
@@ -117,29 +73,29 @@ public class Plain extends Activity implements Serializable {
         this.theEnactionDescription = enactionDescription;
     }
 
-    public Set<Event> getTheGlobalActivityEvents() {
+    public Set<GlobalActivityEvent> getTheGlobalActivityEvents() {
         return theGlobalActivityEvents;
     }
 
-    public Plain theGlobalActivityEvents(Set<Event> events) {
-        this.theGlobalActivityEvents = events;
+    public Plain theGlobalActivityEvents(Set<GlobalActivityEvent> globalActivityEvents) {
+        this.theGlobalActivityEvents = globalActivityEvents;
         return this;
     }
 
-    public Plain addTheGlobalActivityEvent(Event event) {
-        this.theGlobalActivityEvents.add(event);
-        event.setThePlain(this);
+    public Plain addTheGlobalActivityEvent(GlobalActivityEvent globalActivityEvent) {
+        this.theGlobalActivityEvents.add(globalActivityEvent);
+        globalActivityEvent.setThePlain(this);
         return this;
     }
 
-    public Plain removeTheGlobalActivityEvent(Event event) {
-        this.theGlobalActivityEvents.remove(event);
-        event.setThePlain(null);
+    public Plain removeTheGlobalActivityEvent(GlobalActivityEvent globalActivityEvent) {
+        this.theGlobalActivityEvents.remove(globalActivityEvent);
+        globalActivityEvent.setThePlain(null);
         return this;
     }
 
-    public void setTheGlobalActivityEvents(Set<Event> events) {
-        this.theGlobalActivityEvents = events;
+    public void setTheGlobalActivityEvents(Set<GlobalActivityEvent> globalActivityEvents) {
+        this.theGlobalActivityEvents = globalActivityEvents;
     }
 
     public Set<CatalogEvent> getTheCatalogEvents() {
@@ -189,8 +145,6 @@ public class Plain extends Activity implements Serializable {
         return "Plain{" +
             "id=" + getId() +
             ", requirements='" + getRequirements() + "'" +
-            ", plainStatus='" + getPlainStatus() + "'" +
-            ", automatic='" + isAutomatic() + "'" +
             "}";
     }
 }

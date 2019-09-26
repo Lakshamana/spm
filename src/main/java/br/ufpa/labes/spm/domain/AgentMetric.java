@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "agent_metric")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class AgentMetric extends Metric implements Serializable {
+public class AgentMetric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class AgentMetric extends Metric implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theAgentMetrics")
-    private Agent theAgent;
+    private Agent agent;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -34,17 +34,17 @@ public class AgentMetric extends Metric implements Serializable {
         this.id = id;
     }
 
-    public Agent getTheAgent() {
-        return theAgent;
+    public Agent getAgent() {
+        return agent;
     }
 
-    public AgentMetric theAgent(Agent agent) {
-        this.theAgent = agent;
+    public AgentMetric agent(Agent agent) {
+        this.agent = agent;
         return this;
     }
 
-    public void setTheAgent(Agent agent) {
-        this.theAgent = agent;
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

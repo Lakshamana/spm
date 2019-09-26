@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -20,8 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "multiple_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
-public class MultipleCon extends Connection implements Serializable {
+public class MultipleCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,11 +27,15 @@ public class MultipleCon extends Connection implements Serializable {
     @Column(name = "fired")
     private Boolean fired;
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Dependency theDependency;
+
     @ManyToOne
     @JsonIgnoreProperties("theMultipleCons")
     private Dependency theDependency;
 
-    @OneToMany(mappedBy = "fromMultipleCon")
+    @OneToMany(mappedBy = "fromMultipleConnection")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<BranchCon> toBranchCons = new HashSet<>();
 
@@ -44,15 +43,19 @@ public class MultipleCon extends Connection implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<BranchConCondToMultipleCon> theBranchConCondToMultipleCons = new HashSet<>();
 
-    @ManyToMany(mappedBy = "toMultipleCons")
+    @OneToMany(mappedBy = "toMultipleCon")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnore
-    private Set<ArtifactCon> theArtifactCons = new HashSet<>();
+    private Set<JoinCon> theJoinCons = new HashSet<>();
 
     @ManyToMany(mappedBy = "toMultipleCons")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
-    private Set<BranchANDCon> theBranchANDS = new HashSet<>();
+    private Set<ArtifactCon> fromArtifactCons = new HashSet<>();
+
+    @ManyToMany(mappedBy = "toMultipleCons")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private Set<BranchANDCon> theBranchANDCons = new HashSet<>();
 
     @ManyToMany(mappedBy = "fromMultipleCons")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -94,6 +97,19 @@ public class MultipleCon extends Connection implements Serializable {
         this.theDependency = dependency;
     }
 
+    public Dependency getTheDependency() {
+        return theDependency;
+    }
+
+    public MultipleCon theDependency(Dependency dependency) {
+        this.theDependency = dependency;
+        return this;
+    }
+
+    public void setTheDependency(Dependency dependency) {
+        this.theDependency = dependency;
+    }
+
     public Set<BranchCon> getToBranchCons() {
         return toBranchCons;
     }
@@ -105,13 +121,13 @@ public class MultipleCon extends Connection implements Serializable {
 
     public MultipleCon addToBranchCon(BranchCon branchCon) {
         this.toBranchCons.add(branchCon);
-        branchCon.setFromMultipleCon(this);
+        branchCon.setFromMultipleConnection(this);
         return this;
     }
 
     public MultipleCon removeToBranchCon(BranchCon branchCon) {
         this.toBranchCons.remove(branchCon);
-        branchCon.setFromMultipleCon(null);
+        branchCon.setFromMultipleConnection(null);
         return this;
     }
 
@@ -144,54 +160,79 @@ public class MultipleCon extends Connection implements Serializable {
         this.theBranchConCondToMultipleCons = branchConCondToMultipleCons;
     }
 
-    public Set<ArtifactCon> getTheArtifactCons() {
-        return theArtifactCons;
+    public Set<JoinCon> getTheJoinCons() {
+        return theJoinCons;
     }
 
-    public MultipleCon theArtifactCons(Set<ArtifactCon> artifactCons) {
-        this.theArtifactCons = artifactCons;
+    public MultipleCon theJoinCons(Set<JoinCon> joinCons) {
+        this.theJoinCons = joinCons;
         return this;
     }
 
-    public MultipleCon addTheArtifactCon(ArtifactCon artifactCon) {
-        this.theArtifactCons.add(artifactCon);
+    public MultipleCon addTheJoinCon(JoinCon joinCon) {
+        this.theJoinCons.add(joinCon);
+        joinCon.setToMultipleCon(this);
+        return this;
+    }
+
+    public MultipleCon removeTheJoinCon(JoinCon joinCon) {
+        this.theJoinCons.remove(joinCon);
+        joinCon.setToMultipleCon(null);
+        return this;
+    }
+
+    public void setTheJoinCons(Set<JoinCon> joinCons) {
+        this.theJoinCons = joinCons;
+    }
+
+    public Set<ArtifactCon> getFromArtifactCons() {
+        return fromArtifactCons;
+    }
+
+    public MultipleCon fromArtifactCons(Set<ArtifactCon> artifactCons) {
+        this.fromArtifactCons = artifactCons;
+        return this;
+    }
+
+    public MultipleCon addFromArtifactCon(ArtifactCon artifactCon) {
+        this.fromArtifactCons.add(artifactCon);
         artifactCon.getToMultipleCons().add(this);
         return this;
     }
 
-    public MultipleCon removeTheArtifactCon(ArtifactCon artifactCon) {
-        this.theArtifactCons.remove(artifactCon);
+    public MultipleCon removeFromArtifactCon(ArtifactCon artifactCon) {
+        this.fromArtifactCons.remove(artifactCon);
         artifactCon.getToMultipleCons().remove(this);
         return this;
     }
 
-    public void setTheArtifactCons(Set<ArtifactCon> artifactCons) {
-        this.theArtifactCons = artifactCons;
+    public void setFromArtifactCons(Set<ArtifactCon> artifactCons) {
+        this.fromArtifactCons = artifactCons;
     }
 
-    public Set<BranchANDCon> getTheBranchANDS() {
-        return theBranchANDS;
+    public Set<BranchANDCon> getTheBranchANDCons() {
+        return theBranchANDCons;
     }
 
-    public MultipleCon theBranchANDS(Set<BranchANDCon> branchANDCons) {
-        this.theBranchANDS = branchANDCons;
+    public MultipleCon theBranchANDCons(Set<BranchANDCon> branchANDCons) {
+        this.theBranchANDCons = branchANDCons;
         return this;
     }
 
-    public MultipleCon addTheBranchAND(BranchANDCon branchANDCon) {
-        this.theBranchANDS.add(branchANDCon);
+    public MultipleCon addTheBranchANDCon(BranchANDCon branchANDCon) {
+        this.theBranchANDCons.add(branchANDCon);
         branchANDCon.getToMultipleCons().add(this);
         return this;
     }
 
-    public MultipleCon removeTheBranchAND(BranchANDCon branchANDCon) {
-        this.theBranchANDS.remove(branchANDCon);
+    public MultipleCon removeTheBranchANDCon(BranchANDCon branchANDCon) {
+        this.theBranchANDCons.remove(branchANDCon);
         branchANDCon.getToMultipleCons().remove(this);
         return this;
     }
 
-    public void setTheBranchANDS(Set<BranchANDCon> branchANDCons) {
-        this.theBranchANDS = branchANDCons;
+    public void setTheBranchANDCons(Set<BranchANDCon> branchANDCons) {
+        this.theBranchANDCons = branchANDCons;
     }
 
     public Set<JoinCon> getTheJoinCons() {

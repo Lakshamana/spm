@@ -14,5 +14,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="plugin"/>
 
+        <addForeignKeyConstraint baseColumnNames="company_id"
+                                 baseTableName="driver"
+                                 constraintName="fk_driver_company_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="company"/>
+
     </changeSet>
 </databaseChangeLog>

@@ -10,9 +10,9 @@ public class SimpleConDTO implements Serializable {
     private Long id;
 
 
-    private Long fromActivityId;
-
     private Long toActivityId;
+
+    private Long fromActivityId;
 
     public Long getId() {
         return id;
@@ -22,20 +22,20 @@ public class SimpleConDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getFromActivityId() {
-        return fromActivityId;
-    }
-
-    public void setFromActivityId(Long activityId) {
-        this.fromActivityId = activityId;
-    }
-
     public Long getToActivityId() {
         return toActivityId;
     }
 
     public void setToActivityId(Long activityId) {
         this.toActivityId = activityId;
+    }
+
+    public Long getFromActivityId() {
+        return fromActivityId;
+    }
+
+    public void setFromActivityId(Long activityId) {
+        this.fromActivityId = activityId;
     }
 
     @Override
@@ -63,8 +63,8 @@ public class SimpleConDTO implements Serializable {
     public String toString() {
         return "SimpleConDTO{" +
             "id=" + getId() +
-            ", fromActivity=" + getFromActivityId() +
             ", toActivity=" + getToActivityId() +
+            ", fromActivity=" + getFromActivityId() +
             "}";
     }
 }

@@ -8,6 +8,13 @@
             "otherEntityRelationshipName": "theSequence",
             "relationshipName": "theDependency",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "dependency",
+            "otherEntityRelationshipName": "theSequence",
+            "relationshipName": "theDependency",
+            "ownerSide": false
         }
     ],
     "changelogDate": "20190914033751",

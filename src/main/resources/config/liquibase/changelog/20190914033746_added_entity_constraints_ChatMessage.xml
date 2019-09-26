@@ -8,9 +8,9 @@
     -->
     <changeSet id="20190914033746-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="from_agent_id"
+        <addForeignKeyConstraint baseColumnNames="de_id"
                                  baseTableName="chat_message"
-                                 constraintName="fk_chat_message_from_agent_id"
+                                 constraintName="fk_chat_message_de_id"
                                  referencedColumnNames="id"
                                  referencedTableName="agent"/>
 

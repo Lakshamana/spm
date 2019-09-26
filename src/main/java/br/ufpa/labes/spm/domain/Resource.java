@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -20,7 +16,6 @@ import java.util.Set;
 @Entity
 @Table(name = "resource")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Resource implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,12 +46,16 @@ public class Resource implements Serializable {
     @Column(name = "cost")
     private Float cost;
 
-    @Column(name = "active")
-    private Boolean active;
+    @Column(name = "is_active")
+    private Boolean isActive;
 
     @ManyToOne
-    @JsonIgnoreProperties("theResources")
+    @JsonIgnoreProperties("possesses")
     private Resource belongsTo;
+
+    @ManyToOne
+    @JsonIgnoreProperties("isRequireds")
+    private Resource requires;
 
     @ManyToOne
     @JsonIgnoreProperties("theResources")
@@ -70,30 +69,39 @@ public class Resource implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<RequiredResource> theRequiredResources = new HashSet<>();
 
-    @OneToMany(mappedBy = "chosenResource")
+    @OneToMany(mappedBy = "resourceChosen")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<InstantiationSuggestion> instSugToResources = new HashSet<>();
+    private Set<ResourceInstSug> theResourceInstSugs = new HashSet<>();
 
     @OneToMany(mappedBy = "theResource")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ResourcePossibleUse> theResourcePossibleUses = new HashSet<>();
 
-    @OneToMany(mappedBy = "theResource")
+    @OneToMany(mappedBy = "resource")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ResourceMetric> theResourceMetrics = new HashSet<>();
 
-    @OneToMany(mappedBy = "theResource")
+    @OneToMany(mappedBy = "resource")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ResourceEstimation> theResourceEstimations = new HashSet<>();
 
     @OneToMany(mappedBy = "belongsTo")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Resource> theResources = new HashSet<>();
+    private Set<Resource> possesses = new HashSet<>();
+
+    @OneToMany(mappedBy = "requires")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Resource> isRequireds = new HashSet<>();
 
     @ManyToMany(mappedBy = "sugRsrcs")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
     private Set<InstantiationSuggestion> instSuggestions = new HashSet<>();
+
+    @ManyToMany(mappedBy = "resourceSuggesteds")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private Set<ResourceInstSug> theResourceInstSugs = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -195,17 +203,17 @@ public class Resource implements Serializable {
         this.cost = cost;
     }
 
-    public Boolean isActive() {
-        return active;
+    public Boolean isIsActive() {
+        return isActive;
     }
 
-    public Resource active(Boolean active) {
-        this.active = active;
+    public Resource isActive(Boolean isActive) {
+        this.isActive = isActive;
         return this;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Resource getBelongsTo() {
@@ -219,6 +227,19 @@ public class Resource implements Serializable {
 
     public void setBelongsTo(Resource resource) {
         this.belongsTo = resource;
+    }
+
+    public Resource getRequires() {
+        return requires;
+    }
+
+    public Resource requires(Resource resource) {
+        this.requires = resource;
+        return this;
+    }
+
+    public void setRequires(Resource resource) {
+        this.requires = resource;
     }
 
     public ResourceType getTheResourceType() {
@@ -284,29 +305,29 @@ public class Resource implements Serializable {
         this.theRequiredResources = requiredResources;
     }
 
-    public Set<InstantiationSuggestion> getInstSugToResources() {
-        return instSugToResources;
+    public Set<ResourceInstSug> getTheResourceInstSugs() {
+        return theResourceInstSugs;
     }
 
-    public Resource instSugToResources(Set<InstantiationSuggestion> instantiationSuggestions) {
-        this.instSugToResources = instantiationSuggestions;
+    public Resource theResourceInstSugs(Set<ResourceInstSug> resourceInstSugs) {
+        this.theResourceInstSugs = resourceInstSugs;
         return this;
     }
 
-    public Resource addInstSugToResource(InstantiationSuggestion instantiationSuggestion) {
-        this.instSugToResources.add(instantiationSuggestion);
-        instantiationSuggestion.setChosenResource(this);
+    public Resource addTheResourceInstSug(ResourceInstSug resourceInstSug) {
+        this.theResourceInstSugs.add(resourceInstSug);
+        resourceInstSug.setResourceChosen(this);
         return this;
     }
 
-    public Resource removeInstSugToResource(InstantiationSuggestion instantiationSuggestion) {
-        this.instSugToResources.remove(instantiationSuggestion);
-        instantiationSuggestion.setChosenResource(null);
+    public Resource removeTheResourceInstSug(ResourceInstSug resourceInstSug) {
+        this.theResourceInstSugs.remove(resourceInstSug);
+        resourceInstSug.setResourceChosen(null);
         return this;
     }
 
-    public void setInstSugToResources(Set<InstantiationSuggestion> instantiationSuggestions) {
-        this.instSugToResources = instantiationSuggestions;
+    public void setTheResourceInstSugs(Set<ResourceInstSug> resourceInstSugs) {
+        this.theResourceInstSugs = resourceInstSugs;
     }
 
     public Set<ResourcePossibleUse> getTheResourcePossibleUses() {
@@ -345,13 +366,13 @@ public class Resource implements Serializable {
 
     public Resource addTheResourceMetric(ResourceMetric resourceMetric) {
         this.theResourceMetrics.add(resourceMetric);
-        resourceMetric.setTheResource(this);
+        resourceMetric.setResource(this);
         return this;
     }
 
     public Resource removeTheResourceMetric(ResourceMetric resourceMetric) {
         this.theResourceMetrics.remove(resourceMetric);
-        resourceMetric.setTheResource(null);
+        resourceMetric.setResource(null);
         return this;
     }
 
@@ -370,13 +391,13 @@ public class Resource implements Serializable {
 
     public Resource addTheResourceEstimation(ResourceEstimation resourceEstimation) {
         this.theResourceEstimations.add(resourceEstimation);
-        resourceEstimation.setTheResource(this);
+        resourceEstimation.setResource(this);
         return this;
     }
 
     public Resource removeTheResourceEstimation(ResourceEstimation resourceEstimation) {
         this.theResourceEstimations.remove(resourceEstimation);
-        resourceEstimation.setTheResource(null);
+        resourceEstimation.setResource(null);
         return this;
     }
 
@@ -384,29 +405,54 @@ public class Resource implements Serializable {
         this.theResourceEstimations = resourceEstimations;
     }
 
-    public Set<Resource> getTheResources() {
-        return theResources;
+    public Set<Resource> getPossesses() {
+        return possesses;
     }
 
-    public Resource theResources(Set<Resource> resources) {
-        this.theResources = resources;
+    public Resource possesses(Set<Resource> resources) {
+        this.possesses = resources;
         return this;
     }
 
-    public Resource addTheResource(Resource resource) {
-        this.theResources.add(resource);
+    public Resource addPossess(Resource resource) {
+        this.possesses.add(resource);
         resource.setBelongsTo(this);
         return this;
     }
 
-    public Resource removeTheResource(Resource resource) {
-        this.theResources.remove(resource);
+    public Resource removePossess(Resource resource) {
+        this.possesses.remove(resource);
         resource.setBelongsTo(null);
         return this;
     }
 
-    public void setTheResources(Set<Resource> resources) {
-        this.theResources = resources;
+    public void setPossesses(Set<Resource> resources) {
+        this.possesses = resources;
+    }
+
+    public Set<Resource> getIsRequireds() {
+        return isRequireds;
+    }
+
+    public Resource isRequireds(Set<Resource> resources) {
+        this.isRequireds = resources;
+        return this;
+    }
+
+    public Resource addIsRequired(Resource resource) {
+        this.isRequireds.add(resource);
+        resource.setRequires(this);
+        return this;
+    }
+
+    public Resource removeIsRequired(Resource resource) {
+        this.isRequireds.remove(resource);
+        resource.setRequires(null);
+        return this;
+    }
+
+    public void setIsRequireds(Set<Resource> resources) {
+        this.isRequireds = resources;
     }
 
     public Set<InstantiationSuggestion> getInstSuggestions() {
@@ -432,6 +478,31 @@ public class Resource implements Serializable {
 
     public void setInstSuggestions(Set<InstantiationSuggestion> instantiationSuggestions) {
         this.instSuggestions = instantiationSuggestions;
+    }
+
+    public Set<ResourceInstSug> getTheResourceInstSugs() {
+        return theResourceInstSugs;
+    }
+
+    public Resource theResourceInstSugs(Set<ResourceInstSug> resourceInstSugs) {
+        this.theResourceInstSugs = resourceInstSugs;
+        return this;
+    }
+
+    public Resource addTheResourceInstSug(ResourceInstSug resourceInstSug) {
+        this.theResourceInstSugs.add(resourceInstSug);
+        resourceInstSug.getResourceSuggesteds().add(this);
+        return this;
+    }
+
+    public Resource removeTheResourceInstSug(ResourceInstSug resourceInstSug) {
+        this.theResourceInstSugs.remove(resourceInstSug);
+        resourceInstSug.getResourceSuggesteds().remove(this);
+        return this;
+    }
+
+    public void setTheResourceInstSugs(Set<ResourceInstSug> resourceInstSugs) {
+        this.theResourceInstSugs = resourceInstSugs;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -462,7 +533,7 @@ public class Resource implements Serializable {
             ", mtbfUnitTime='" + getMtbfUnitTime() + "'" +
             ", currency='" + getCurrency() + "'" +
             ", cost=" + getCost() +
-            ", active='" + isActive() + "'" +
+            ", isActive='" + isIsActive() + "'" +
             "}";
     }
 }

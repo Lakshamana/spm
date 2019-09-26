@@ -1,14 +1,7 @@
 {
     "name": "PeopleInstSug",
     "fields": [],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "agentInstSuggestionToAgent",
-            "otherEntityRelationshipName": "theInstAgSug",
-            "relationshipName": "theAgentInstSugToAgent"
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20190914033837",
     "entityTableName": "people_inst_sug",
     "dto": "mapstruct",

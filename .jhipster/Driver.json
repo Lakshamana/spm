@@ -12,6 +12,18 @@
         {
             "fieldName": "appSecret",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "appKeyGoogle",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "appSecretGoogle",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "requestUrl",
+            "fieldType": "String"
         }
     ],
     "relationships": [
@@ -20,6 +32,14 @@
             "otherEntityName": "plugin",
             "otherEntityRelationshipName": "theDriver",
             "relationshipName": "thePlugin",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "company",
+            "otherEntityRelationshipName": "theDriver",
+            "relationshipName": "company",
             "otherEntityField": "id",
             "ownerSide": true
         }

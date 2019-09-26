@@ -8,17 +8,11 @@
     -->
     <changeSet id="20190914033933-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="plugin_id"
-                                 baseTableName="plugin_user"
-                                 constraintName="fk_plugin_user_plugin_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="plugin"/>
-
-        <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="plugin_user"
-                                 constraintName="fk_plugin_user_user_id"
+        <addForeignKeyConstraint baseColumnNames="the_company_id"
+                                 baseTableName="plugin"
+                                 constraintName="fk_plugin_the_company_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
-        
+
     </changeSet>
 </databaseChangeLog>

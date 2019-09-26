@@ -1,6 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-
 import br.ufpa.labes.spm.domain.Activity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,14 +16,14 @@ import java.util.Optional;
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
-    @Query(value = "select distinct activity from Activity activity left join fetch activity.toJoinCons left join fetch activity.toBranchANDCons left join fetch activity.fromArtifactCons left join fetch activity.toArtifactCons",
+    @Query(value = "select distinct activity from Activity activity left join fetch activity.toJoinCons left join fetch activity.fromBranchANDCons left join fetch activity.fromArtifactCons left join fetch activity.toArtifactCons",
         countQuery = "select count(distinct activity) from Activity activity")
     Page<Activity> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct activity from Activity activity left join fetch activity.toJoinCons left join fetch activity.toBranchANDCons left join fetch activity.fromArtifactCons left join fetch activity.toArtifactCons")
+    @Query("select distinct activity from Activity activity left join fetch activity.toJoinCons left join fetch activity.fromBranchANDCons left join fetch activity.fromArtifactCons left join fetch activity.toArtifactCons")
     List<Activity> findAllWithEagerRelationships();
 
-    @Query("select activity from Activity activity left join fetch activity.toJoinCons left join fetch activity.toBranchANDCons left join fetch activity.fromArtifactCons left join fetch activity.toArtifactCons where activity.id =:id")
+    @Query("select activity from Activity activity left join fetch activity.toJoinCons left join fetch activity.fromBranchANDCons left join fetch activity.fromArtifactCons left join fetch activity.toArtifactCons where activity.id =:id")
     Optional<Activity> findOneWithEagerRelationships(@Param("id") Long id);
 
 }

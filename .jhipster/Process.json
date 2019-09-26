@@ -6,9 +6,8 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "pStatus",
-            "fieldType": "ProcessStatus",
-            "fieldValues": "NOT_STARTED,ENACTING,FINISHED"
+            "fieldName": "pState",
+            "fieldType": "String"
         }
     ],
     "relationships": [
@@ -24,7 +23,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "processAgenda",
             "otherEntityRelationshipName": "theProcess",
-            "relationshipName": "theProcessAgendas"
+            "relationshipName": "theProcessAgenda"
         },
         {
             "relationshipType": "many-to-one",
@@ -32,6 +31,14 @@
             "otherEntityRelationshipName": "theProcess",
             "relationshipName": "theActivityType",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "agent",
+            "otherEntityRelationshipName": "theProcess",
+            "relationshipName": "theAgent",
+            "otherEntityField": "id",
+            "ownerSide": true
         },
         {
             "relationshipType": "one-to-one",
@@ -61,20 +68,20 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "processMetric",
-            "otherEntityRelationshipName": "theProcess",
-            "relationshipName": "theProcessMetric"
-        },
-        {
-            "relationshipType": "one-to-many",
             "otherEntityName": "processEstimation",
             "otherEntityRelationshipName": "theProcess",
             "relationshipName": "theProcessEstimation"
         },
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "processMetric",
+            "otherEntityRelationshipName": "process",
+            "relationshipName": "theProcessMetric"
+        },
+        {
             "relationshipType": "many-to-many",
             "otherEntityName": "agent",
-            "otherEntityRelationshipName": "theProcesses",
+            "otherEntityRelationshipName": "theProcess",
             "relationshipName": "theAgent",
             "otherEntityField": "id",
             "ownerSide": false

@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.Instant;
 
 /**
  * A ChatMessage.
@@ -25,16 +25,17 @@ public class ChatMessage implements Serializable {
     @Column(name = "ident")
     private String ident;
 
+    @Lob
     @Column(name = "text")
     private String text;
 
     @NotNull
     @Column(name = "timestamp", nullable = false)
-    private LocalDate timestamp;
+    private Instant timestamp;
 
     @OneToOne
     @JoinColumn(unique = true)
-    private Agent fromAgent;
+    private Agent de;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -71,30 +72,30 @@ public class ChatMessage implements Serializable {
         this.text = text;
     }
 
-    public LocalDate getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 
-    public ChatMessage timestamp(LocalDate timestamp) {
+    public ChatMessage timestamp(Instant timestamp) {
         this.timestamp = timestamp;
         return this;
     }
 
-    public void setTimestamp(LocalDate timestamp) {
+    public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
     }
 
-    public Agent getFromAgent() {
-        return fromAgent;
+    public Agent getDe() {
+        return de;
     }
 
-    public ChatMessage fromAgent(Agent agent) {
-        this.fromAgent = agent;
+    public ChatMessage de(Agent agent) {
+        this.de = agent;
         return this;
     }
 
-    public void setFromAgent(Agent agent) {
-        this.fromAgent = agent;
+    public void setDe(Agent agent) {
+        this.de = agent;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

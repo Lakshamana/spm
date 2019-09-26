@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -19,7 +15,6 @@ import java.util.Set;
 @Entity
 @Table(name = "instantiation_suggestion")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class InstantiationSuggestion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,16 +24,8 @@ public class InstantiationSuggestion implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("theInstSugs")
+    @JsonIgnoreProperties("theInstantiationSuggestions")
     private ActivityInstantiated theActivityInstantiated;
-
-    @ManyToOne
-    @JsonIgnoreProperties("instSugToResources")
-    private Resource chosenResource;
-
-    @ManyToOne
-    @JsonIgnoreProperties("instSugToTypes")
-    private Type requiredResourceType;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -67,32 +54,6 @@ public class InstantiationSuggestion implements Serializable {
 
     public void setTheActivityInstantiated(ActivityInstantiated activityInstantiated) {
         this.theActivityInstantiated = activityInstantiated;
-    }
-
-    public Resource getChosenResource() {
-        return chosenResource;
-    }
-
-    public InstantiationSuggestion chosenResource(Resource resource) {
-        this.chosenResource = resource;
-        return this;
-    }
-
-    public void setChosenResource(Resource resource) {
-        this.chosenResource = resource;
-    }
-
-    public Type getRequiredResourceType() {
-        return requiredResourceType;
-    }
-
-    public InstantiationSuggestion requiredResourceType(Type type) {
-        this.requiredResourceType = type;
-        return this;
-    }
-
-    public void setRequiredResourceType(Type type) {
-        this.requiredResourceType = type;
     }
 
     public Set<Resource> getSugRsrcs() {

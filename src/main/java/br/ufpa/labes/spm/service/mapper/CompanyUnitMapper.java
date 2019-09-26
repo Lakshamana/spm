@@ -19,10 +19,10 @@ public interface CompanyUnitMapper extends EntityMapper<CompanyUnitDTO, CompanyU
     @Mapping(source = "theOrganizationId", target = "theOrganization")
     @Mapping(source = "theCommandId", target = "theCommand")
     @Mapping(source = "theAgentId", target = "theAgent")
-    @Mapping(target = "theCompanyUnits", ignore = true)
-    @Mapping(target = "removeTheCompanyUnit", ignore = true)
-    @Mapping(target = "theAgents", ignore = true)
-    @Mapping(target = "removeTheAgent", ignore = true)
+    @Mapping(target = "theSubordinates", ignore = true)
+    @Mapping(target = "removeTheSubordinates", ignore = true)
+    @Mapping(target = "theUnitAgents", ignore = true)
+    @Mapping(target = "removeTheUnitAgents", ignore = true)
     CompanyUnit toEntity(CompanyUnitDTO companyUnitDTO);
 
     default CompanyUnit fromId(Long id) {

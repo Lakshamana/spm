@@ -36,8 +36,8 @@ public class ReqAgentRequiresAbilityDTO implements Serializable {
         return theReqAgentId;
     }
 
-    public void setTheReqAgentId(Long requiredPeopleId) {
-        this.theReqAgentId = requiredPeopleId;
+    public void setTheReqAgentId(Long reqAgentId) {
+        this.theReqAgentId = reqAgentId;
     }
 
     public Long getTheAbilityId() {

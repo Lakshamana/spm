@@ -24,44 +24,44 @@ public class WorkGroupMetricService {
 
     private final Logger log = LoggerFactory.getLogger(WorkGroupMetricService.class);
 
-    private final WorkWorkGroupMetricRepository WorkGroupMetricRepository;
+    private final WorkGroupMetricRepository workGroupMetricRepository;
 
-    private final WorkWorkGroupMetricMapper WorkGroupMetricMapper;
+    private final WorkGroupMetricMapper workGroupMetricMapper;
 
-    public WorkWorkGroupMetricService(WorkWorkGroupMetricRepository workWorkGroupMetricRepository, WorkWorkGroupMetricMapper WorkGroupMetricMapper) {
-        this.workWorkGroupMetricRepository = WorkGroupMetricRepository;
-        this.workWorkGroupMetricMapper = WorkGroupMetricMapper;
+    public WorkGroupMetricService(WorkGroupMetricRepository workGroupMetricRepository, WorkGroupMetricMapper workGroupMetricMapper) {
+        this.workGroupMetricRepository = workGroupMetricRepository;
+        this.workGroupMetricMapper = workGroupMetricMapper;
     }
 
     /**
-     * Save a WorkGroupMetric.
+     * Save a workGroupMetric.
      *
-     * @param WorkGroupMetricDTO the entity to save.
+     * @param workGroupMetricDTO the entity to save.
      * @return the persisted entity.
      */
-    public WorkWorkGroupMetricDTO save(WorkWorkGroupMetricDTO WorkGroupMetricDTO) {
-        log.debug("Request to save WorkWorkGroupMetric : {}", WorkGroupMetricDTO);
-        WorkWorkGroupMetric workWorkGroupMetric = workWorkGroupMetricMapper.toEntity(WorkGroupMetricDTO);
-        workWorkGroupMetric = workWorkGroupMetricRepository.save(WorkGroupMetric);
-        return workWorkGroupMetricMapper.toDto(WorkGroupMetric);
+    public WorkGroupMetricDTO save(WorkGroupMetricDTO workGroupMetricDTO) {
+        log.debug("Request to save WorkGroupMetric : {}", workGroupMetricDTO);
+        WorkGroupMetric workGroupMetric = workGroupMetricMapper.toEntity(workGroupMetricDTO);
+        workGroupMetric = workGroupMetricRepository.save(workGroupMetric);
+        return workGroupMetricMapper.toDto(workGroupMetric);
     }
 
     /**
-     * Get all the WorkGroupMetrics.
+     * Get all the workGroupMetrics.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public List<WorkGroupMetricDTO> findAll() {
         log.debug("Request to get all WorkGroupMetrics");
-        return WorkGroupMetricRepository.findAll().stream()
-            .map(WorkGroupMetricMapper::toDto)
+        return workGroupMetricRepository.findAll().stream()
+            .map(workGroupMetricMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
     /**
-     * Get one WorkGroupMetric by id.
+     * Get one workGroupMetric by id.
      *
      * @param id the id of the entity.
      * @return the entity.
@@ -69,17 +69,17 @@ public class WorkGroupMetricService {
     @Transactional(readOnly = true)
     public Optional<WorkGroupMetricDTO> findOne(Long id) {
         log.debug("Request to get WorkGroupMetric : {}", id);
-        return WorkGroupMetricRepository.findById(id)
-            .map(WorkGroupMetricMapper::toDto);
+        return workGroupMetricRepository.findById(id)
+            .map(workGroupMetricMapper::toDto);
     }
 
     /**
-     * Delete the WorkGroupMetric by id.
+     * Delete the workGroupMetric by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete WorkGroupMetric : {}", id);
-        WorkGroupMetricRepository.deleteById(id);
+        workGroupMetricRepository.deleteById(id);
     }
 }

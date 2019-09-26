@@ -3,7 +3,10 @@
     "fields": [
         {
             "fieldName": "uid",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "unique"
+            ]
         },
         {
             "fieldName": "version",
@@ -30,8 +33,9 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "photoURL",
-            "fieldType": "String"
+            "fieldName": "photo",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
         }
     ],
     "relationships": [
@@ -44,9 +48,15 @@
             "ownerSide": true
         },
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "authorStat",
+            "otherEntityRelationshipName": "author",
+            "relationshipName": "stats"
+        },
+        {
             "relationshipType": "many-to-many",
             "otherEntityName": "author",
-            "otherEntityRelationshipName": "theAuthor",
+            "otherEntityRelationshipName": "followers",
             "relationshipName": "authorsFollowed",
             "otherEntityField": "id",
             "ownerSide": true
@@ -55,13 +65,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "asset",
             "otherEntityRelationshipName": "owner",
-            "relationshipName": "theAssets"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "authorStat",
-            "otherEntityRelationshipName": "author",
-            "relationshipName": "theAuthorStats"
+            "relationshipName": "assets"
         },
         {
             "relationshipType": "one-to-many",
@@ -109,7 +113,7 @@
             "relationshipType": "many-to-many",
             "otherEntityName": "author",
             "otherEntityRelationshipName": "authorsFollowed",
-            "relationshipName": "theAuthor",
+            "relationshipName": "followers",
             "otherEntityField": "id",
             "ownerSide": false
         }

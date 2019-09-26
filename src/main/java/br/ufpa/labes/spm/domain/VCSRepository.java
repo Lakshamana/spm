@@ -32,14 +32,29 @@ public class VCSRepository implements Serializable {
     @Column(name = "server")
     private String server;
 
-    @Column(name = "repository_path")
-    private String repositoryPath;
+    @Column(name = "port")
+    private String port;
+
+    @Column(name = "connection_method")
+    private String connectionMethod;
+
+    @Column(name = "repository")
+    private String repository;
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "default_user")
+    private Boolean defaultUser;
 
     @ManyToOne
-    @JsonIgnoreProperties("theVCSRepositories")
+    @JsonIgnoreProperties("theRepositories")
     private Structure theStructure;
 
-    @OneToMany(mappedBy = "theVCSRepository")
+    @OneToMany(mappedBy = "theRepository")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Artifact> theArtifacts = new HashSet<>();
 
@@ -91,17 +106,82 @@ public class VCSRepository implements Serializable {
         this.server = server;
     }
 
-    public String getRepositoryPath() {
-        return repositoryPath;
+    public String getPort() {
+        return port;
     }
 
-    public VCSRepository repositoryPath(String repositoryPath) {
-        this.repositoryPath = repositoryPath;
+    public VCSRepository port(String port) {
+        this.port = port;
         return this;
     }
 
-    public void setRepositoryPath(String repositoryPath) {
-        this.repositoryPath = repositoryPath;
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public String getConnectionMethod() {
+        return connectionMethod;
+    }
+
+    public VCSRepository connectionMethod(String connectionMethod) {
+        this.connectionMethod = connectionMethod;
+        return this;
+    }
+
+    public void setConnectionMethod(String connectionMethod) {
+        this.connectionMethod = connectionMethod;
+    }
+
+    public String getRepository() {
+        return repository;
+    }
+
+    public VCSRepository repository(String repository) {
+        this.repository = repository;
+        return this;
+    }
+
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public VCSRepository username(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public VCSRepository password(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Boolean isDefaultUser() {
+        return defaultUser;
+    }
+
+    public VCSRepository defaultUser(Boolean defaultUser) {
+        this.defaultUser = defaultUser;
+        return this;
+    }
+
+    public void setDefaultUser(Boolean defaultUser) {
+        this.defaultUser = defaultUser;
     }
 
     public Structure getTheStructure() {
@@ -126,15 +206,15 @@ public class VCSRepository implements Serializable {
         return this;
     }
 
-    public VCSRepository addTheArtifact(Artifact artifact) {
+    public VCSRepository addTheArtifacts(Artifact artifact) {
         this.theArtifacts.add(artifact);
-        artifact.setTheVCSRepository(this);
+        artifact.setTheRepository(this);
         return this;
     }
 
-    public VCSRepository removeTheArtifact(Artifact artifact) {
+    public VCSRepository removeTheArtifacts(Artifact artifact) {
         this.theArtifacts.remove(artifact);
-        artifact.setTheVCSRepository(null);
+        artifact.setTheRepository(null);
         return this;
     }
 
@@ -166,7 +246,12 @@ public class VCSRepository implements Serializable {
             ", ident='" + getIdent() + "'" +
             ", controlVersionSystem='" + getControlVersionSystem() + "'" +
             ", server='" + getServer() + "'" +
-            ", repositoryPath='" + getRepositoryPath() + "'" +
+            ", port='" + getPort() + "'" +
+            ", connectionMethod='" + getConnectionMethod() + "'" +
+            ", repository='" + getRepository() + "'" +
+            ", username='" + getUsername() + "'" +
+            ", password='" + getPassword() + "'" +
+            ", defaultUser='" + isDefaultUser() + "'" +
             "}";
     }
 }

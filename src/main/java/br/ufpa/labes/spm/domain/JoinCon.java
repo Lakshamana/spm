@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "join_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class JoinCon extends MultipleCon implements Serializable {
+public class JoinCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,8 +24,12 @@ public class JoinCon extends MultipleCon implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "kind_join_con")
-    private String kindJoinCon;
+    @Column(name = "kind_join")
+    private String kindJoin;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theJoinCons")
+    private MultipleCon toMultipleCon;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -52,17 +56,30 @@ public class JoinCon extends MultipleCon implements Serializable {
         this.id = id;
     }
 
-    public String getKindJoinCon() {
-        return kindJoinCon;
+    public String getKindJoin() {
+        return kindJoin;
     }
 
-    public JoinCon kindJoinCon(String kindJoinCon) {
-        this.kindJoinCon = kindJoinCon;
+    public JoinCon kindJoin(String kindJoin) {
+        this.kindJoin = kindJoin;
         return this;
     }
 
-    public void setKindJoinCon(String kindJoinCon) {
-        this.kindJoinCon = kindJoinCon;
+    public void setKindJoin(String kindJoin) {
+        this.kindJoin = kindJoin;
+    }
+
+    public MultipleCon getToMultipleCon() {
+        return toMultipleCon;
+    }
+
+    public JoinCon toMultipleCon(MultipleCon multipleCon) {
+        this.toMultipleCon = multipleCon;
+        return this;
+    }
+
+    public void setToMultipleCon(MultipleCon multipleCon) {
+        this.toMultipleCon = multipleCon;
     }
 
     public Set<MultipleCon> getFromMultipleCons() {
@@ -149,7 +166,7 @@ public class JoinCon extends MultipleCon implements Serializable {
     public String toString() {
         return "JoinCon{" +
             "id=" + getId() +
-            ", kindJoinCon='" + getKindJoinCon() + "'" +
+            ", kindJoin='" + getKindJoin() + "'" +
             "}";
     }
 }

@@ -28,31 +28,11 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="the_catalog_events_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_task_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
             <column name="the_log_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
             <column name="the_event_type_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_activity_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_plain_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_agent_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

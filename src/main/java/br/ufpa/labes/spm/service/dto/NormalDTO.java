@@ -11,8 +11,6 @@ public class NormalDTO implements Serializable {
 
     private Long id;
 
-    private String ident;
-
     private Float howLong;
 
     private String howLongUnit;
@@ -35,14 +33,6 @@ public class NormalDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getIdent() {
-        return ident;
-    }
-
-    public void setIdent(String ident) {
-        this.ident = ident;
     }
 
     public Float getHowLong() {
@@ -126,7 +116,6 @@ public class NormalDTO implements Serializable {
     public String toString() {
         return "NormalDTO{" +
             "id=" + getId() +
-            ", ident='" + getIdent() + "'" +
             ", howLong=" + getHowLong() +
             ", howLongUnit='" + getHowLongUnit() + "'" +
             ", plannedBegin='" + getPlannedBegin() + "'" +

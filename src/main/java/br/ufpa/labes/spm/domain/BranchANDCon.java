@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "branch_and_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class BranchANDCon extends BranchCon implements Serializable {
+public class BranchANDCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,10 +30,10 @@ public class BranchANDCon extends BranchCon implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "to_multiple_con_id", referencedColumnName = "id"))
     private Set<MultipleCon> toMultipleCons = new HashSet<>();
 
-    @ManyToMany(mappedBy = "toBranchANDCons")
+    @ManyToMany(mappedBy = "fromBranchANDCons")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
-    private Set<Activity> fromActivities = new HashSet<>();
+    private Set<Activity> toActivities = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -55,13 +55,13 @@ public class BranchANDCon extends BranchCon implements Serializable {
 
     public BranchANDCon addToMultipleCon(MultipleCon multipleCon) {
         this.toMultipleCons.add(multipleCon);
-        multipleCon.getTheBranchANDS().add(this);
+        multipleCon.getTheBranchANDCons().add(this);
         return this;
     }
 
     public BranchANDCon removeToMultipleCon(MultipleCon multipleCon) {
         this.toMultipleCons.remove(multipleCon);
-        multipleCon.getTheBranchANDS().remove(this);
+        multipleCon.getTheBranchANDCons().remove(this);
         return this;
     }
 
@@ -69,29 +69,29 @@ public class BranchANDCon extends BranchCon implements Serializable {
         this.toMultipleCons = multipleCons;
     }
 
-    public Set<Activity> getFromActivities() {
-        return fromActivities;
+    public Set<Activity> getToActivities() {
+        return toActivities;
     }
 
-    public BranchANDCon fromActivities(Set<Activity> activities) {
-        this.fromActivities = activities;
+    public BranchANDCon toActivities(Set<Activity> activities) {
+        this.toActivities = activities;
         return this;
     }
 
-    public BranchANDCon addFromActivity(Activity activity) {
-        this.fromActivities.add(activity);
-        activity.getToBranchANDCons().add(this);
+    public BranchANDCon addToActivity(Activity activity) {
+        this.toActivities.add(activity);
+        activity.getFromBranchANDCons().add(this);
         return this;
     }
 
-    public BranchANDCon removeFromActivity(Activity activity) {
-        this.fromActivities.remove(activity);
-        activity.getToBranchANDCons().remove(this);
+    public BranchANDCon removeToActivity(Activity activity) {
+        this.toActivities.remove(activity);
+        activity.getFromBranchANDCons().remove(this);
         return this;
     }
 
-    public void setFromActivities(Set<Activity> activities) {
-        this.fromActivities = activities;
+    public void setToActivities(Set<Activity> activities) {
+        this.toActivities = activities;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

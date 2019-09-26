@@ -19,7 +19,9 @@
             <column name="fired" type="boolean">
                 <constraints nullable="true" />
             </column>
-
+            <column name="the_dependency_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_multiple_con_the_dependency_id" />
+            </column>
             <column name="the_dependency_id" type="bigint">
                 <constraints nullable="true" />
             </column>

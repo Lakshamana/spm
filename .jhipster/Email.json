@@ -14,7 +14,7 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "passwordHash",
+            "fieldName": "password",
             "fieldType": "String"
         },
         {

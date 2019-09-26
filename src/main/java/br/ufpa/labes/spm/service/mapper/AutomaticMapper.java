@@ -16,9 +16,9 @@ public interface AutomaticMapper extends EntityMapper<AutomaticDTO, Automatic> {
     AutomaticDTO toDto(Automatic automatic);
 
     @Mapping(source = "theSubroutineId", target = "theSubroutine")
-    @Mapping(source = "theArtifactId", target = "theArtifact")
     @Mapping(target = "theParameters", ignore = true)
     @Mapping(target = "removeTheParameters", ignore = true)
+    @Mapping(source = "theArtifactId", target = "theArtifact")
     Automatic toEntity(AutomaticDTO automaticDTO);
 
     default Automatic fromId(Long id) {

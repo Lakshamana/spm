@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "organization_estimation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class OrganizationEstimation extends Estimation implements Serializable {
+public class OrganizationEstimation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,12 +22,12 @@ public class OrganizationEstimation extends Estimation implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("theOrganizationEstimations")
+    @JsonIgnoreProperties("organizationEstimations")
     private Organization theOrganization;
 
     @ManyToOne
     @JsonIgnoreProperties("theCompanyEstimations")
-    private Company theCompany;
+    private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -51,17 +51,17 @@ public class OrganizationEstimation extends Estimation implements Serializable {
         this.theOrganization = organization;
     }
 
-    public Company getTheCompany() {
-        return theCompany;
+    public Company getCompany() {
+        return company;
     }
 
-    public OrganizationEstimation theCompany(Company company) {
-        this.theCompany = company;
+    public OrganizationEstimation company(Company company) {
+        this.company = company;
         return this;
     }
 
-    public void setTheCompany(Company company) {
-        this.theCompany = company;
+    public void setCompany(Company company) {
+        this.company = company;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

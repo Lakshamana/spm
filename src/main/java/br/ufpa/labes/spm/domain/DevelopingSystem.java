@@ -34,7 +34,7 @@ public class DevelopingSystem implements Serializable {
     private String description;
 
     @ManyToOne
-    @JsonIgnoreProperties("theDevelopingSystems")
+    @JsonIgnoreProperties("theSystems")
     private Company theOrganization;
 
     @OneToMany(mappedBy = "theSystem")

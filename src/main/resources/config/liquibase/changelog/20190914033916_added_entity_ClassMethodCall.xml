@@ -16,6 +16,10 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="ident" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <column name="class_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -52,6 +56,7 @@
                   separator=";"
                   tableName="class_method_call">
             <column name="id" type="numeric"/>
+            <column name="ident" type="string"/>
             <column name="class_name" type="string"/>
             <column name="method_name" type="string"/>
             <column name="description" type="clob"/>

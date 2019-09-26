@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.ProcessModelStatus;
 /**
  * Integration tests for the {@link ProcessModelResource} REST controller.
  */
@@ -42,8 +41,8 @@ public class ProcessModelResourceIT {
     private static final String DEFAULT_REQUIREMENTS = "AAAAAAAAAA";
     private static final String UPDATED_REQUIREMENTS = "BBBBBBBBBB";
 
-    private static final ProcessModelStatus DEFAULT_PM_STATUS = ProcessModelStatus.REQUIREMENTS;
-    private static final ProcessModelStatus UPDATED_PM_STATUS = ProcessModelStatus.ABSTRACT;
+    private static final String DEFAULT_PM_STATE = "AAAAAAAAAA";
+    private static final String UPDATED_PM_STATE = "BBBBBBBBBB";
 
     @Autowired
     private ProcessModelRepository processModelRepository;
@@ -94,7 +93,7 @@ public class ProcessModelResourceIT {
     public static ProcessModel createEntity(EntityManager em) {
         ProcessModel processModel = new ProcessModel()
             .requirements(DEFAULT_REQUIREMENTS)
-            .pmStatus(DEFAULT_PM_STATUS);
+            .pmState(DEFAULT_PM_STATE);
         return processModel;
     }
     /**
@@ -106,7 +105,7 @@ public class ProcessModelResourceIT {
     public static ProcessModel createUpdatedEntity(EntityManager em) {
         ProcessModel processModel = new ProcessModel()
             .requirements(UPDATED_REQUIREMENTS)
-            .pmStatus(UPDATED_PM_STATUS);
+            .pmState(UPDATED_PM_STATE);
         return processModel;
     }
 
@@ -132,7 +131,7 @@ public class ProcessModelResourceIT {
         assertThat(processModelList).hasSize(databaseSizeBeforeCreate + 1);
         ProcessModel testProcessModel = processModelList.get(processModelList.size() - 1);
         assertThat(testProcessModel.getRequirements()).isEqualTo(DEFAULT_REQUIREMENTS);
-        assertThat(testProcessModel.getPmStatus()).isEqualTo(DEFAULT_PM_STATUS);
+        assertThat(testProcessModel.getPmState()).isEqualTo(DEFAULT_PM_STATE);
     }
 
     @Test
@@ -168,7 +167,7 @@ public class ProcessModelResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(processModel.getId().intValue())))
             .andExpect(jsonPath("$.[*].requirements").value(hasItem(DEFAULT_REQUIREMENTS.toString())))
-            .andExpect(jsonPath("$.[*].pmStatus").value(hasItem(DEFAULT_PM_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].pmState").value(hasItem(DEFAULT_PM_STATE.toString())));
     }
     
     @Test
@@ -183,7 +182,7 @@ public class ProcessModelResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(processModel.getId().intValue()))
             .andExpect(jsonPath("$.requirements").value(DEFAULT_REQUIREMENTS.toString()))
-            .andExpect(jsonPath("$.pmStatus").value(DEFAULT_PM_STATUS.toString()));
+            .andExpect(jsonPath("$.pmState").value(DEFAULT_PM_STATE.toString()));
     }
 
     @Test
@@ -208,7 +207,7 @@ public class ProcessModelResourceIT {
         em.detach(updatedProcessModel);
         updatedProcessModel
             .requirements(UPDATED_REQUIREMENTS)
-            .pmStatus(UPDATED_PM_STATUS);
+            .pmState(UPDATED_PM_STATE);
         ProcessModelDTO processModelDTO = processModelMapper.toDto(updatedProcessModel);
 
         restProcessModelMockMvc.perform(put("/api/process-models")
@@ -221,7 +220,7 @@ public class ProcessModelResourceIT {
         assertThat(processModelList).hasSize(databaseSizeBeforeUpdate);
         ProcessModel testProcessModel = processModelList.get(processModelList.size() - 1);
         assertThat(testProcessModel.getRequirements()).isEqualTo(UPDATED_REQUIREMENTS);
-        assertThat(testProcessModel.getPmStatus()).isEqualTo(UPDATED_PM_STATUS);
+        assertThat(testProcessModel.getPmState()).isEqualTo(UPDATED_PM_STATE);
     }
 
     @Test

@@ -29,8 +29,8 @@ public class Email implements Serializable {
     @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "password_hash")
-    private String passwordHash;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "servico_tls")
     private Boolean servicoTls;
@@ -89,17 +89,17 @@ public class Email implements Serializable {
         this.userName = userName;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public Email passwordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public Email password(String password) {
+        this.password = password;
         return this;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Boolean isServicoTls() {
@@ -165,7 +165,7 @@ public class Email implements Serializable {
             ", emailServerHost='" + getEmailServerHost() + "'" +
             ", emailServerPort='" + getEmailServerPort() + "'" +
             ", userName='" + getUserName() + "'" +
-            ", passwordHash='" + getPasswordHash() + "'" +
+            ", password='" + getPassword() + "'" +
             ", servicoTls='" + isServicoTls() + "'" +
             ", servicoSsl='" + isServicoSsl() + "'" +
             ", teste='" + isTeste() + "'" +

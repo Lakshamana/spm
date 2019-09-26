@@ -39,6 +39,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = SpmApp.class)
 public class ScriptResourceIT {
 
+    private static final String DEFAULT_IDENT = "AAAAAAAAAA";
+    private static final String UPDATED_IDENT = "BBBBBBBBBB";
+
     private static final String DEFAULT_FILE_NAME = "AAAAAAAAAA";
     private static final String UPDATED_FILE_NAME = "BBBBBBBBBB";
 
@@ -93,6 +96,7 @@ public class ScriptResourceIT {
      */
     public static Script createEntity(EntityManager em) {
         Script script = new Script()
+            .ident(DEFAULT_IDENT)
             .fileName(DEFAULT_FILE_NAME)
             .description(DEFAULT_DESCRIPTION);
         return script;
@@ -105,6 +109,7 @@ public class ScriptResourceIT {
      */
     public static Script createUpdatedEntity(EntityManager em) {
         Script script = new Script()
+            .ident(UPDATED_IDENT)
             .fileName(UPDATED_FILE_NAME)
             .description(UPDATED_DESCRIPTION);
         return script;
@@ -131,6 +136,7 @@ public class ScriptResourceIT {
         List<Script> scriptList = scriptRepository.findAll();
         assertThat(scriptList).hasSize(databaseSizeBeforeCreate + 1);
         Script testScript = scriptList.get(scriptList.size() - 1);
+        assertThat(testScript.getIdent()).isEqualTo(DEFAULT_IDENT);
         assertThat(testScript.getFileName()).isEqualTo(DEFAULT_FILE_NAME);
         assertThat(testScript.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
@@ -167,6 +173,7 @@ public class ScriptResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(script.getId().intValue())))
+            .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())))
             .andExpect(jsonPath("$.[*].fileName").value(hasItem(DEFAULT_FILE_NAME.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
@@ -182,6 +189,7 @@ public class ScriptResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(script.getId().intValue()))
+            .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()))
             .andExpect(jsonPath("$.fileName").value(DEFAULT_FILE_NAME.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
     }
@@ -207,6 +215,7 @@ public class ScriptResourceIT {
         // Disconnect from session so that the updates on updatedScript are not directly saved in db
         em.detach(updatedScript);
         updatedScript
+            .ident(UPDATED_IDENT)
             .fileName(UPDATED_FILE_NAME)
             .description(UPDATED_DESCRIPTION);
         ScriptDTO scriptDTO = scriptMapper.toDto(updatedScript);
@@ -220,6 +229,7 @@ public class ScriptResourceIT {
         List<Script> scriptList = scriptRepository.findAll();
         assertThat(scriptList).hasSize(databaseSizeBeforeUpdate);
         Script testScript = scriptList.get(scriptList.size() - 1);
+        assertThat(testScript.getIdent()).isEqualTo(UPDATED_IDENT);
         assertThat(testScript.getFileName()).isEqualTo(UPDATED_FILE_NAME);
         assertThat(testScript.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }

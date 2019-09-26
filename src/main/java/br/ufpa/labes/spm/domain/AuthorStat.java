@@ -21,22 +21,13 @@ public class AuthorStat implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "rate")
-    private Double rate;
-
-    @Column(name = "visit_count")
-    private Long visitCount;
-
-    @Column(name = "download_count")
-    private Long downloadCount;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theAuthorStats")
-    private Author author;
-
     @ManyToOne
     @JsonIgnoreProperties("authorStats")
-    private Asset theAsset;
+    private Asset asset;
+
+    @ManyToOne
+    @JsonIgnoreProperties("stats")
+    private Author author;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -47,43 +38,17 @@ public class AuthorStat implements Serializable {
         this.id = id;
     }
 
-    public Double getRate() {
-        return rate;
+    public Asset getAsset() {
+        return asset;
     }
 
-    public AuthorStat rate(Double rate) {
-        this.rate = rate;
+    public AuthorStat asset(Asset asset) {
+        this.asset = asset;
         return this;
     }
 
-    public void setRate(Double rate) {
-        this.rate = rate;
-    }
-
-    public Long getVisitCount() {
-        return visitCount;
-    }
-
-    public AuthorStat visitCount(Long visitCount) {
-        this.visitCount = visitCount;
-        return this;
-    }
-
-    public void setVisitCount(Long visitCount) {
-        this.visitCount = visitCount;
-    }
-
-    public Long getDownloadCount() {
-        return downloadCount;
-    }
-
-    public AuthorStat downloadCount(Long downloadCount) {
-        this.downloadCount = downloadCount;
-        return this;
-    }
-
-    public void setDownloadCount(Long downloadCount) {
-        this.downloadCount = downloadCount;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 
     public Author getAuthor() {
@@ -97,19 +62,6 @@ public class AuthorStat implements Serializable {
 
     public void setAuthor(Author author) {
         this.author = author;
-    }
-
-    public Asset getTheAsset() {
-        return theAsset;
-    }
-
-    public AuthorStat theAsset(Asset asset) {
-        this.theAsset = asset;
-        return this;
-    }
-
-    public void setTheAsset(Asset asset) {
-        this.theAsset = asset;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -133,9 +85,6 @@ public class AuthorStat implements Serializable {
     public String toString() {
         return "AuthorStat{" +
             "id=" + getId() +
-            ", rate=" + getRate() +
-            ", visitCount=" + getVisitCount() +
-            ", downloadCount=" + getDownloadCount() +
             "}";
     }
 }

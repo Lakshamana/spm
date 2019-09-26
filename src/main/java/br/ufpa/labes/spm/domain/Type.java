@@ -1,9 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -20,7 +15,6 @@ import java.util.Set;
 @Entity
 @Table(name = "type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Type implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,22 +37,9 @@ public class Type implements Serializable {
     @JsonIgnoreProperties("subTypes")
     private Type superType;
 
-    @OneToMany(mappedBy = "workGroupTypeRequired")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<WorkGroupInstSug> sugToReqWorkGroups = new HashSet<>();
-
-    @OneToMany(mappedBy = "requiredResourceType")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<InstantiationSuggestion> instSugToTypes = new HashSet<>();
-
     @OneToMany(mappedBy = "superType")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Type> subTypes = new HashSet<>();
-
-    @ManyToMany(mappedBy = "theArtifactTypes")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnore
-    private Set<ToolDefinition> theToolDefinitionToArtifactTypes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -121,56 +102,6 @@ public class Type implements Serializable {
         this.superType = type;
     }
 
-    public Set<WorkGroupInstSug> getSugToReqWorkGroups() {
-        return sugToReqWorkGroups;
-    }
-
-    public Type sugToReqWorkGroups(Set<WorkGroupInstSug> workGroupInstSugs) {
-        this.sugToReqWorkGroups = workGroupInstSugs;
-        return this;
-    }
-
-    public Type addSugToReqWorkGroup(WorkGroupInstSug workGroupInstSug) {
-        this.sugToReqWorkGroups.add(workGroupInstSug);
-        workGroupInstSug.setWorkGroupTypeRequired(this);
-        return this;
-    }
-
-    public Type removeSugToReqWorkGroup(WorkGroupInstSug workGroupInstSug) {
-        this.sugToReqWorkGroups.remove(workGroupInstSug);
-        workGroupInstSug.setWorkGroupTypeRequired(null);
-        return this;
-    }
-
-    public void setSugToReqWorkGroups(Set<WorkGroupInstSug> workGroupInstSugs) {
-        this.sugToReqWorkGroups = workGroupInstSugs;
-    }
-
-    public Set<InstantiationSuggestion> getInstSugToTypes() {
-        return instSugToTypes;
-    }
-
-    public Type instSugToTypes(Set<InstantiationSuggestion> instantiationSuggestions) {
-        this.instSugToTypes = instantiationSuggestions;
-        return this;
-    }
-
-    public Type addInstSugToType(InstantiationSuggestion instantiationSuggestion) {
-        this.instSugToTypes.add(instantiationSuggestion);
-        instantiationSuggestion.setRequiredResourceType(this);
-        return this;
-    }
-
-    public Type removeInstSugToType(InstantiationSuggestion instantiationSuggestion) {
-        this.instSugToTypes.remove(instantiationSuggestion);
-        instantiationSuggestion.setRequiredResourceType(null);
-        return this;
-    }
-
-    public void setInstSugToTypes(Set<InstantiationSuggestion> instantiationSuggestions) {
-        this.instSugToTypes = instantiationSuggestions;
-    }
-
     public Set<Type> getSubTypes() {
         return subTypes;
     }
@@ -194,31 +125,6 @@ public class Type implements Serializable {
 
     public void setSubTypes(Set<Type> types) {
         this.subTypes = types;
-    }
-
-    public Set<ToolDefinition> getTheToolDefinitionToArtifactTypes() {
-        return theToolDefinitionToArtifactTypes;
-    }
-
-    public Type theToolDefinitionToArtifactTypes(Set<ToolDefinition> toolDefinitions) {
-        this.theToolDefinitionToArtifactTypes = toolDefinitions;
-        return this;
-    }
-
-    public Type addTheToolDefinitionToArtifactType(ToolDefinition toolDefinition) {
-        this.theToolDefinitionToArtifactTypes.add(toolDefinition);
-        toolDefinition.getTheArtifactTypes().add(this);
-        return this;
-    }
-
-    public Type removeTheToolDefinitionToArtifactType(ToolDefinition toolDefinition) {
-        this.theToolDefinitionToArtifactTypes.remove(toolDefinition);
-        toolDefinition.getTheArtifactTypes().remove(this);
-        return this;
-    }
-
-    public void setTheToolDefinitionToArtifactTypes(Set<ToolDefinition> toolDefinitions) {
-        this.theToolDefinitionToArtifactTypes = toolDefinitions;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

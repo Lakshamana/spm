@@ -1,4 +1,5 @@
 package br.ufpa.labes.spm.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -25,13 +26,13 @@ public class Calendar implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "theCalendar")
+    @OneToMany(mappedBy = "calendar")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CalendarDay> notWorkingDays = new HashSet<>();
+    private Set<NotWorkingDay> notWorkingDays = new HashSet<>();
 
-    @OneToMany(mappedBy = "theCalendar")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Project> projects = new HashSet<>();
+    @ManyToOne
+    @JsonIgnoreProperties("theCalendars")
+    private Project project;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -55,54 +56,42 @@ public class Calendar implements Serializable {
         this.name = name;
     }
 
-    public Set<CalendarDay> getNotWorkingDays() {
+    public Set<NotWorkingDay> getNotWorkingDays() {
         return notWorkingDays;
     }
 
-    public Calendar notWorkingDays(Set<CalendarDay> calendarDays) {
-        this.notWorkingDays = calendarDays;
+    public Calendar notWorkingDays(Set<NotWorkingDay> notWorkingDays) {
+        this.notWorkingDays = notWorkingDays;
         return this;
     }
 
-    public Calendar addNotWorkingDays(CalendarDay calendarDay) {
-        this.notWorkingDays.add(calendarDay);
-        calendarDay.setTheCalendar(this);
+    public Calendar addNotWorkingDays(NotWorkingDay notWorkingDay) {
+        this.notWorkingDays.add(notWorkingDay);
+        notWorkingDay.setCalendar(this);
         return this;
     }
 
-    public Calendar removeNotWorkingDays(CalendarDay calendarDay) {
-        this.notWorkingDays.remove(calendarDay);
-        calendarDay.setTheCalendar(null);
+    public Calendar removeNotWorkingDays(NotWorkingDay notWorkingDay) {
+        this.notWorkingDays.remove(notWorkingDay);
+        notWorkingDay.setCalendar(null);
         return this;
     }
 
-    public void setNotWorkingDays(Set<CalendarDay> calendarDays) {
-        this.notWorkingDays = calendarDays;
+    public void setNotWorkingDays(Set<NotWorkingDay> notWorkingDays) {
+        this.notWorkingDays = notWorkingDays;
     }
 
-    public Set<Project> getProjects() {
-        return projects;
+    public Project getProject() {
+        return project;
     }
 
-    public Calendar projects(Set<Project> projects) {
-        this.projects = projects;
+    public Calendar project(Project project) {
+        this.project = project;
         return this;
     }
 
-    public Calendar addProject(Project project) {
-        this.projects.add(project);
-        project.setTheCalendar(this);
-        return this;
-    }
-
-    public Calendar removeProject(Project project) {
-        this.projects.remove(project);
-        project.setTheCalendar(null);
-        return this;
-    }
-
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
+    public void setProject(Project project) {
+        this.project = project;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

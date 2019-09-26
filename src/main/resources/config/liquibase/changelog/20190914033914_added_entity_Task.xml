@@ -40,10 +40,6 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="the_process_agenda_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
             <column name="delegated_from_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -53,6 +49,10 @@
             </column>
 
             <column name="the_normal_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="the_process_agenda_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

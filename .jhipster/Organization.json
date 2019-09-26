@@ -10,14 +10,14 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "organizationMetric",
-            "otherEntityRelationshipName": "theOrganization",
-            "relationshipName": "theOrganizationMetric"
+            "otherEntityRelationshipName": "organization",
+            "relationshipName": "organizationMetric"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "organizationEstimation",
             "otherEntityRelationshipName": "theOrganization",
-            "relationshipName": "theOrganizationEstimation"
+            "relationshipName": "organizationEstimation"
         }
     ],
     "changelogDate": "20190914033819",

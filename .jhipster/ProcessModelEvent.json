@@ -13,7 +13,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "catalogEvent",
             "otherEntityRelationshipName": "theProcessModelEvent",
-            "relationshipName": "theCatalogEventToProcessModel"
+            "relationshipName": "theCatalogEvents"
         }
     ],
     "changelogDate": "20190914033808",

@@ -8,10 +8,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Dependency} and its DTO {@link DependencyDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {SequenceMapper.class})
 public interface DependencyMapper extends EntityMapper<DependencyDTO, Dependency> {
 
+    @Mapping(source = "theSequence.id", target = "theSequenceId")
+    DependencyDTO toDto(Dependency dependency);
 
+    @Mapping(source = "theSequenceId", target = "theSequence")
+    @Mapping(target = "theMultipleCon", ignore = true)
     @Mapping(target = "theMultipleCons", ignore = true)
     @Mapping(target = "removeTheMultipleCon", ignore = true)
     @Mapping(target = "theSequences", ignore = true)

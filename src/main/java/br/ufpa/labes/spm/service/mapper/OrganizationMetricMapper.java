@@ -11,12 +11,12 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {OrganizationMapper.class, CompanyMapper.class})
 public interface OrganizationMetricMapper extends EntityMapper<OrganizationMetricDTO, OrganizationMetric> {
 
-    @Mapping(source = "theOrganization.id", target = "theOrganizationId")
-    @Mapping(source = "theCompany.id", target = "theCompanyId")
+    @Mapping(source = "organization.id", target = "organizationId")
+    @Mapping(source = "company.id", target = "companyId")
     OrganizationMetricDTO toDto(OrganizationMetric organizationMetric);
 
-    @Mapping(source = "theOrganizationId", target = "theOrganization")
-    @Mapping(source = "theCompanyId", target = "theCompany")
+    @Mapping(source = "organizationId", target = "organization")
+    @Mapping(source = "companyId", target = "company")
     OrganizationMetric toEntity(OrganizationMetricDTO organizationMetricDTO);
 
     default OrganizationMetric fromId(Long id) {

@@ -1,4 +1,5 @@
 package br.ufpa.labes.spm.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "artifact_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ArtifactType extends Type implements Serializable {
+public class ArtifactType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,6 +42,11 @@ public class ArtifactType extends Type implements Serializable {
     @OneToMany(mappedBy = "theArtifactType")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ToolParameter> theToolParameters = new HashSet<>();
+
+    @ManyToMany(mappedBy = "theArtifactTypes")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private Set<ToolDefinition> theToolDefinitions = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -110,13 +116,13 @@ public class ArtifactType extends Type implements Serializable {
         return this;
     }
 
-    public ArtifactType addTheInvolvedArtifact(InvolvedArtifact involvedArtifact) {
+    public ArtifactType addTheInvolvedArtifacts(InvolvedArtifact involvedArtifact) {
         this.theInvolvedArtifacts.add(involvedArtifact);
         involvedArtifact.setTheArtifactType(this);
         return this;
     }
 
-    public ArtifactType removeTheInvolvedArtifact(InvolvedArtifact involvedArtifact) {
+    public ArtifactType removeTheInvolvedArtifacts(InvolvedArtifact involvedArtifact) {
         this.theInvolvedArtifacts.remove(involvedArtifact);
         involvedArtifact.setTheArtifactType(null);
         return this;
@@ -160,13 +166,13 @@ public class ArtifactType extends Type implements Serializable {
         return this;
     }
 
-    public ArtifactType addTheToolParameter(ToolParameter toolParameter) {
+    public ArtifactType addTheToolParameters(ToolParameter toolParameter) {
         this.theToolParameters.add(toolParameter);
         toolParameter.setTheArtifactType(this);
         return this;
     }
 
-    public ArtifactType removeTheToolParameter(ToolParameter toolParameter) {
+    public ArtifactType removeTheToolParameters(ToolParameter toolParameter) {
         this.theToolParameters.remove(toolParameter);
         toolParameter.setTheArtifactType(null);
         return this;
@@ -174,6 +180,31 @@ public class ArtifactType extends Type implements Serializable {
 
     public void setTheToolParameters(Set<ToolParameter> toolParameters) {
         this.theToolParameters = toolParameters;
+    }
+
+    public Set<ToolDefinition> getTheToolDefinitions() {
+        return theToolDefinitions;
+    }
+
+    public ArtifactType theToolDefinitions(Set<ToolDefinition> toolDefinitions) {
+        this.theToolDefinitions = toolDefinitions;
+        return this;
+    }
+
+    public ArtifactType addTheToolDefinition(ToolDefinition toolDefinition) {
+        this.theToolDefinitions.add(toolDefinition);
+        toolDefinition.getTheArtifactTypes().add(this);
+        return this;
+    }
+
+    public ArtifactType removeTheToolDefinition(ToolDefinition toolDefinition) {
+        this.theToolDefinitions.remove(toolDefinition);
+        toolDefinition.getTheArtifactTypes().remove(this);
+        return this;
+    }
+
+    public void setTheToolDefinitions(Set<ToolDefinition> toolDefinitions) {
+        this.theToolDefinitions = toolDefinitions;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

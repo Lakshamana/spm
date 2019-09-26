@@ -10,7 +10,7 @@ public class ArtifactMetricDTO implements Serializable {
     private Long id;
 
 
-    private Long theArtifactId;
+    private Long artifactId;
 
     public Long getId() {
         return id;
@@ -20,12 +20,12 @@ public class ArtifactMetricDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getTheArtifactId() {
-        return theArtifactId;
+    public Long getArtifactId() {
+        return artifactId;
     }
 
-    public void setTheArtifactId(Long artifactId) {
-        this.theArtifactId = artifactId;
+    public void setArtifactId(Long artifactId) {
+        this.artifactId = artifactId;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ArtifactMetricDTO implements Serializable {
     public String toString() {
         return "ArtifactMetricDTO{" +
             "id=" + getId() +
-            ", theArtifact=" + getTheArtifactId() +
+            ", artifact=" + getArtifactId() +
             "}";
     }
 }

@@ -3,7 +3,10 @@
     "fields": [
         {
             "fieldName": "uid",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "unique"
+            ]
         },
         {
             "fieldName": "creationDate",
@@ -40,11 +43,6 @@
         {
             "fieldName": "readOnly",
             "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "assetVisibility",
-            "fieldType": "AssetVisibility",
-            "fieldValues": "VISIBILITY_PUBLIC,VISIBILITY_PRIVATE"
         }
     ],
     "relationships": [
@@ -59,25 +57,25 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "authorStat",
-            "otherEntityRelationshipName": "theAsset",
+            "otherEntityRelationshipName": "asset",
             "relationshipName": "authorStats"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "tagStats",
-            "otherEntityRelationshipName": "theAsset",
+            "otherEntityRelationshipName": "asset",
             "relationshipName": "tagStats"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "lessonLearned",
-            "otherEntityRelationshipName": "theAsset",
+            "otherEntityRelationshipName": "asset",
             "relationshipName": "lessonsLearned"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "assetRelationship",
-            "otherEntityRelationshipName": "theAsset",
+            "otherEntityRelationshipName": "asset",
             "relationshipName": "relatedAssets"
         },
         {
@@ -95,7 +93,7 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "author",
-            "otherEntityRelationshipName": "theAssets",
+            "otherEntityRelationshipName": "assets",
             "relationshipName": "owner",
             "otherEntityField": "id"
         },

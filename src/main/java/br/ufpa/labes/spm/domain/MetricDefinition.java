@@ -49,15 +49,15 @@ public class MetricDefinition implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theMetricDefinitions")
-    private MetricType theMetricType;
+    private MetricType metricType;
 
-    @OneToMany(mappedBy = "theMetricDefinition")
+    @OneToMany(mappedBy = "metricDefinition")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Estimation> theEstimations = new HashSet<>();
+    private Set<Estimation> estimations = new HashSet<>();
 
-    @OneToMany(mappedBy = "theMetricDefinition")
+    @OneToMany(mappedBy = "metricDefinition")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Metric> theMetrics = new HashSet<>();
+    private Set<Metric> metrics = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -171,67 +171,67 @@ public class MetricDefinition implements Serializable {
         this.units = metricDefinitionUnits;
     }
 
-    public MetricType getTheMetricType() {
-        return theMetricType;
+    public MetricType getMetricType() {
+        return metricType;
     }
 
-    public MetricDefinition theMetricType(MetricType metricType) {
-        this.theMetricType = metricType;
+    public MetricDefinition metricType(MetricType metricType) {
+        this.metricType = metricType;
         return this;
     }
 
-    public void setTheMetricType(MetricType metricType) {
-        this.theMetricType = metricType;
+    public void setMetricType(MetricType metricType) {
+        this.metricType = metricType;
     }
 
-    public Set<Estimation> getTheEstimations() {
-        return theEstimations;
+    public Set<Estimation> getEstimations() {
+        return estimations;
     }
 
-    public MetricDefinition theEstimations(Set<Estimation> estimations) {
-        this.theEstimations = estimations;
+    public MetricDefinition estimations(Set<Estimation> estimations) {
+        this.estimations = estimations;
         return this;
     }
 
-    public MetricDefinition addTheEstimation(Estimation estimation) {
-        this.theEstimations.add(estimation);
-        estimation.setTheMetricDefinition(this);
+    public MetricDefinition addEstimation(Estimation estimation) {
+        this.estimations.add(estimation);
+        estimation.setMetricDefinition(this);
         return this;
     }
 
-    public MetricDefinition removeTheEstimation(Estimation estimation) {
-        this.theEstimations.remove(estimation);
-        estimation.setTheMetricDefinition(null);
+    public MetricDefinition removeEstimation(Estimation estimation) {
+        this.estimations.remove(estimation);
+        estimation.setMetricDefinition(null);
         return this;
     }
 
-    public void setTheEstimations(Set<Estimation> estimations) {
-        this.theEstimations = estimations;
+    public void setEstimations(Set<Estimation> estimations) {
+        this.estimations = estimations;
     }
 
-    public Set<Metric> getTheMetrics() {
-        return theMetrics;
+    public Set<Metric> getMetrics() {
+        return metrics;
     }
 
-    public MetricDefinition theMetrics(Set<Metric> metrics) {
-        this.theMetrics = metrics;
+    public MetricDefinition metrics(Set<Metric> metrics) {
+        this.metrics = metrics;
         return this;
     }
 
-    public MetricDefinition addTheMetric(Metric metric) {
-        this.theMetrics.add(metric);
-        metric.setTheMetricDefinition(this);
+    public MetricDefinition addMetric(Metric metric) {
+        this.metrics.add(metric);
+        metric.setMetricDefinition(this);
         return this;
     }
 
-    public MetricDefinition removeTheMetric(Metric metric) {
-        this.theMetrics.remove(metric);
-        metric.setTheMetricDefinition(null);
+    public MetricDefinition removeMetric(Metric metric) {
+        this.metrics.remove(metric);
+        metric.setMetricDefinition(null);
         return this;
     }
 
-    public void setTheMetrics(Set<Metric> metrics) {
-        this.theMetrics = metrics;
+    public void setMetrics(Set<Metric> metrics) {
+        this.metrics = metrics;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

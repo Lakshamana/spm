@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -17,8 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "simple_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
-public class SimpleCon extends Connection implements Serializable {
+public class SimpleCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,11 +23,11 @@ public class SimpleCon extends Connection implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("fromSimpleCons")
-    private Activity fromActivity;
+    private Activity toActivity;
 
     @ManyToOne
     @JsonIgnoreProperties("toSimpleCons")
-    private Activity toActivity;
+    private Activity fromActivity;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -41,19 +36,6 @@ public class SimpleCon extends Connection implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Activity getFromActivity() {
-        return fromActivity;
-    }
-
-    public SimpleCon fromActivity(Activity activity) {
-        this.fromActivity = activity;
-        return this;
-    }
-
-    public void setFromActivity(Activity activity) {
-        this.fromActivity = activity;
     }
 
     public Activity getToActivity() {
@@ -67,6 +49,19 @@ public class SimpleCon extends Connection implements Serializable {
 
     public void setToActivity(Activity activity) {
         this.toActivity = activity;
+    }
+
+    public Activity getFromActivity() {
+        return fromActivity;
+    }
+
+    public SimpleCon fromActivity(Activity activity) {
+        this.fromActivity = activity;
+        return this;
+    }
+
+    public void setFromActivity(Activity activity) {
+        this.fromActivity = activity;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -5,8 +5,8 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "activity",
-            "otherEntityRelationshipName": "theActivityMetric",
-            "relationshipName": "theActivity",
+            "otherEntityRelationshipName": "activityMetric",
+            "relationshipName": "activity",
             "otherEntityField": "id"
         }
     ],

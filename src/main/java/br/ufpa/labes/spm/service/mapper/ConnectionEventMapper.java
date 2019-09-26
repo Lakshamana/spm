@@ -12,8 +12,8 @@ import org.mapstruct.*;
 public interface ConnectionEventMapper extends EntityMapper<ConnectionEventDTO, ConnectionEvent> {
 
 
-    @Mapping(target = "theCatalogEventToConnections", ignore = true)
-    @Mapping(target = "removeTheCatalogEventToConnection", ignore = true)
+    @Mapping(target = "theCatalogEvents", ignore = true)
+    @Mapping(target = "removeTheCatalogEvents", ignore = true)
     ConnectionEvent toEntity(ConnectionEventDTO connectionEventDTO);
 
     default ConnectionEvent fromId(Long id) {

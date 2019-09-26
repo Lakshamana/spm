@@ -12,9 +12,6 @@ import org.mapstruct.*;
 public interface PeopleInstSugMapper extends EntityMapper<PeopleInstSugDTO, PeopleInstSug> {
 
 
-    @Mapping(target = "theAgentInstSugToAgents", ignore = true)
-    @Mapping(target = "removeTheAgentInstSugToAgent", ignore = true)
-    PeopleInstSug toEntity(PeopleInstSugDTO peopleInstSugDTO);
 
     default PeopleInstSug fromId(Long id) {
         if (id == null) {

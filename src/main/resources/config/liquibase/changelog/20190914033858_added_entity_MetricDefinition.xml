@@ -40,7 +40,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="the_metric_type_id" type="bigint">
+            <column name="metric_type_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

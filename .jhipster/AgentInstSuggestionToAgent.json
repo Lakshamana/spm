@@ -9,9 +9,9 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "peopleInstSug",
-            "otherEntityRelationshipName": "theAgentInstSugToAgent",
-            "relationshipName": "theInstAgSug",
+            "otherEntityName": "agentInstSug",
+            "otherEntityRelationshipName": "agentSuggested",
+            "relationshipName": "theInstAgSugg",
             "otherEntityField": "id"
         },
         {

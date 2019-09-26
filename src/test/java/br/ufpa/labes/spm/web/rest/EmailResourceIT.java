@@ -47,8 +47,8 @@ public class EmailResourceIT {
     private static final String DEFAULT_USER_NAME = "AAAAAAAAAA";
     private static final String UPDATED_USER_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_PASSWORD_HASH = "AAAAAAAAAA";
-    private static final String UPDATED_PASSWORD_HASH = "BBBBBBBBBB";
+    private static final String DEFAULT_PASSWORD = "AAAAAAAAAA";
+    private static final String UPDATED_PASSWORD = "BBBBBBBBBB";
 
     private static final Boolean DEFAULT_SERVICO_TLS = false;
     private static final Boolean UPDATED_SERVICO_TLS = true;
@@ -110,7 +110,7 @@ public class EmailResourceIT {
             .emailServerHost(DEFAULT_EMAIL_SERVER_HOST)
             .emailServerPort(DEFAULT_EMAIL_SERVER_PORT)
             .userName(DEFAULT_USER_NAME)
-            .passwordHash(DEFAULT_PASSWORD_HASH)
+            .password(DEFAULT_PASSWORD)
             .servicoTls(DEFAULT_SERVICO_TLS)
             .servicoSsl(DEFAULT_SERVICO_SSL)
             .teste(DEFAULT_TESTE);
@@ -127,7 +127,7 @@ public class EmailResourceIT {
             .emailServerHost(UPDATED_EMAIL_SERVER_HOST)
             .emailServerPort(UPDATED_EMAIL_SERVER_PORT)
             .userName(UPDATED_USER_NAME)
-            .passwordHash(UPDATED_PASSWORD_HASH)
+            .password(UPDATED_PASSWORD)
             .servicoTls(UPDATED_SERVICO_TLS)
             .servicoSsl(UPDATED_SERVICO_SSL)
             .teste(UPDATED_TESTE);
@@ -158,7 +158,7 @@ public class EmailResourceIT {
         assertThat(testEmail.getEmailServerHost()).isEqualTo(DEFAULT_EMAIL_SERVER_HOST);
         assertThat(testEmail.getEmailServerPort()).isEqualTo(DEFAULT_EMAIL_SERVER_PORT);
         assertThat(testEmail.getUserName()).isEqualTo(DEFAULT_USER_NAME);
-        assertThat(testEmail.getPasswordHash()).isEqualTo(DEFAULT_PASSWORD_HASH);
+        assertThat(testEmail.getPassword()).isEqualTo(DEFAULT_PASSWORD);
         assertThat(testEmail.isServicoTls()).isEqualTo(DEFAULT_SERVICO_TLS);
         assertThat(testEmail.isServicoSsl()).isEqualTo(DEFAULT_SERVICO_SSL);
         assertThat(testEmail.isTeste()).isEqualTo(DEFAULT_TESTE);
@@ -199,7 +199,7 @@ public class EmailResourceIT {
             .andExpect(jsonPath("$.[*].emailServerHost").value(hasItem(DEFAULT_EMAIL_SERVER_HOST.toString())))
             .andExpect(jsonPath("$.[*].emailServerPort").value(hasItem(DEFAULT_EMAIL_SERVER_PORT.toString())))
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME.toString())))
-            .andExpect(jsonPath("$.[*].passwordHash").value(hasItem(DEFAULT_PASSWORD_HASH.toString())))
+            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())))
             .andExpect(jsonPath("$.[*].servicoTls").value(hasItem(DEFAULT_SERVICO_TLS.booleanValue())))
             .andExpect(jsonPath("$.[*].servicoSsl").value(hasItem(DEFAULT_SERVICO_SSL.booleanValue())))
             .andExpect(jsonPath("$.[*].teste").value(hasItem(DEFAULT_TESTE.booleanValue())));
@@ -219,7 +219,7 @@ public class EmailResourceIT {
             .andExpect(jsonPath("$.emailServerHost").value(DEFAULT_EMAIL_SERVER_HOST.toString()))
             .andExpect(jsonPath("$.emailServerPort").value(DEFAULT_EMAIL_SERVER_PORT.toString()))
             .andExpect(jsonPath("$.userName").value(DEFAULT_USER_NAME.toString()))
-            .andExpect(jsonPath("$.passwordHash").value(DEFAULT_PASSWORD_HASH.toString()))
+            .andExpect(jsonPath("$.password").value(DEFAULT_PASSWORD.toString()))
             .andExpect(jsonPath("$.servicoTls").value(DEFAULT_SERVICO_TLS.booleanValue()))
             .andExpect(jsonPath("$.servicoSsl").value(DEFAULT_SERVICO_SSL.booleanValue()))
             .andExpect(jsonPath("$.teste").value(DEFAULT_TESTE.booleanValue()));
@@ -249,7 +249,7 @@ public class EmailResourceIT {
             .emailServerHost(UPDATED_EMAIL_SERVER_HOST)
             .emailServerPort(UPDATED_EMAIL_SERVER_PORT)
             .userName(UPDATED_USER_NAME)
-            .passwordHash(UPDATED_PASSWORD_HASH)
+            .password(UPDATED_PASSWORD)
             .servicoTls(UPDATED_SERVICO_TLS)
             .servicoSsl(UPDATED_SERVICO_SSL)
             .teste(UPDATED_TESTE);
@@ -267,7 +267,7 @@ public class EmailResourceIT {
         assertThat(testEmail.getEmailServerHost()).isEqualTo(UPDATED_EMAIL_SERVER_HOST);
         assertThat(testEmail.getEmailServerPort()).isEqualTo(UPDATED_EMAIL_SERVER_PORT);
         assertThat(testEmail.getUserName()).isEqualTo(UPDATED_USER_NAME);
-        assertThat(testEmail.getPasswordHash()).isEqualTo(UPDATED_PASSWORD_HASH);
+        assertThat(testEmail.getPassword()).isEqualTo(UPDATED_PASSWORD);
         assertThat(testEmail.isServicoTls()).isEqualTo(UPDATED_SERVICO_TLS);
         assertThat(testEmail.isServicoSsl()).isEqualTo(UPDATED_SERVICO_SSL);
         assertThat(testEmail.isTeste()).isEqualTo(UPDATED_TESTE);

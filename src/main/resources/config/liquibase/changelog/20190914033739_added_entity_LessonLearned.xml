@@ -32,7 +32,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="the_asset_id" type="bigint">
+            <column name="asset_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

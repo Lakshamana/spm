@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Service Implementation for managing {@link Company}.
@@ -62,6 +63,21 @@ public class CompanyServiceImpl implements CompanyService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
+
+    /**
+    *  Get all the companies where TheDriver is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true) 
+    public List<CompanyDTO> findAllWhereTheDriverIsNull() {
+        log.debug("Request to get all companies where TheDriver is null");
+        return StreamSupport
+            .stream(companyRepository.findAll().spliterator(), false)
+            .filter(company -> company.getTheDriver() == null)
+            .map(companyMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
     /**
      * Get one company by id.

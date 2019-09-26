@@ -14,10 +14,6 @@ public class InstantiationSuggestionDTO implements Serializable {
 
     private Long theActivityInstantiatedId;
 
-    private Long chosenResourceId;
-
-    private Long requiredResourceTypeId;
-
     private Set<ResourceDTO> sugRsrcs = new HashSet<>();
 
     public Long getId() {
@@ -34,22 +30,6 @@ public class InstantiationSuggestionDTO implements Serializable {
 
     public void setTheActivityInstantiatedId(Long activityInstantiatedId) {
         this.theActivityInstantiatedId = activityInstantiatedId;
-    }
-
-    public Long getChosenResourceId() {
-        return chosenResourceId;
-    }
-
-    public void setChosenResourceId(Long resourceId) {
-        this.chosenResourceId = resourceId;
-    }
-
-    public Long getRequiredResourceTypeId() {
-        return requiredResourceTypeId;
-    }
-
-    public void setRequiredResourceTypeId(Long typeId) {
-        this.requiredResourceTypeId = typeId;
     }
 
     public Set<ResourceDTO> getSugRsrcs() {
@@ -86,8 +66,6 @@ public class InstantiationSuggestionDTO implements Serializable {
         return "InstantiationSuggestionDTO{" +
             "id=" + getId() +
             ", theActivityInstantiated=" + getTheActivityInstantiatedId() +
-            ", chosenResource=" + getChosenResourceId() +
-            ", requiredResourceType=" + getRequiredResourceTypeId() +
             "}";
     }
 }

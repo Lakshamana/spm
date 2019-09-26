@@ -11,8 +11,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface PluginMapper extends EntityMapper<PluginDTO, Plugin> {
 
+    @Mapping(source = "theCompany.id", target = "theCompanyId")
+    PluginDTO toDto(Plugin plugin);
 
-    @Mapping(target = "removeUser", ignore = true)
+    @Mapping(source = "theCompanyId", target = "theCompany")
     @Mapping(target = "theDriver", ignore = true)
     Plugin toEntity(PluginDTO pluginDTO);
 

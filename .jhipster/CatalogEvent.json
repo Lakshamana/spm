@@ -10,58 +10,58 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "resourceEvent",
+            "otherEntityRelationshipName": "theCatalogEvents",
+            "relationshipName": "theResourceEvent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "processModelEvent",
+            "otherEntityRelationshipName": "theCatalogEvents",
+            "relationshipName": "theProcessModelEvent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "agendaEvent",
-            "otherEntityRelationshipName": "theCatalogEventToAgenda",
+            "otherEntityRelationshipName": "theCatalogEvents",
             "relationshipName": "theAgendaEvent",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "catalogEvent",
-            "otherEntityRelationshipName": "theCatalogEventToCatalog",
+            "otherEntityRelationshipName": "theCatalogEvents",
             "relationshipName": "theCatalogEvent",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "connectionEvent",
-            "otherEntityRelationshipName": "theCatalogEventToConnection",
+            "otherEntityRelationshipName": "theCatalogEvents",
             "relationshipName": "theConnectionEvent",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "globalActivityEvent",
-            "otherEntityRelationshipName": "theCatalogEventToGlobalActivity",
+            "otherEntityRelationshipName": "theCatalogEvents",
             "relationshipName": "theGlobalActivityEvent",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "modelingActivityEvent",
-            "otherEntityRelationshipName": "theCatalogEventToModelingActivity",
+            "otherEntityRelationshipName": "theCatalogEvents",
             "relationshipName": "theModelingActivityEvent",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "processEvent",
-            "otherEntityRelationshipName": "theCatalogEventToProcess",
+            "otherEntityRelationshipName": "theCatalogEvents",
             "relationshipName": "theProcessEvent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "processModelEvent",
-            "otherEntityRelationshipName": "theCatalogEventToProcessModel",
-            "relationshipName": "theProcessModelEvent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "resourceEvent",
-            "otherEntityRelationshipName": "theCatalogEventToResource",
-            "relationshipName": "theResourceEvent",
             "otherEntityField": "id"
         },
         {
@@ -73,15 +73,15 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "event",
-            "otherEntityRelationshipName": "theCatalogEvents",
-            "relationshipName": "theAgendaEvent"
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theCatalogEvent",
+            "relationshipName": "theCatalogEvents"
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "catalogEvent",
-            "otherEntityRelationshipName": "theCatalogEvent",
-            "relationshipName": "theCatalogEventToCatalog"
+            "otherEntityName": "agendaEvent",
+            "otherEntityRelationshipName": "theCatalogEvents",
+            "relationshipName": "theAgendaEvent"
         }
     ],
     "changelogDate": "20190914033800",

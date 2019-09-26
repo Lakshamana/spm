@@ -8,9 +8,9 @@
     -->
     <changeSet id="20190914033756-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="from_multiple_con_id"
+        <addForeignKeyConstraint baseColumnNames="from_multiple_connection_id"
                                  baseTableName="branch_con"
-                                 constraintName="fk_branch_con_from_multiple_con_id"
+                                 constraintName="fk_branch_con_from_multiple_connection_id"
                                  referencedColumnNames="id"
                                  referencedTableName="multiple_con"/>
 

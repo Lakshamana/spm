@@ -5,6 +5,7 @@ const args = process.argv.slice(2)
 
 const methodText = args[0]
 const oldfile = args[1]
+const trigger = args[2]
 
 // create instance of readline
 // each instance is associated with single input stream
@@ -22,7 +23,6 @@ let rl = readline.createInterface({
 rl.on('close', _ => {})
 
 const methodLines = methodText.split('\n')
-const trigger = 'jhipster-needle-entity-add-field'
 
 rl.on('line', line => {
   console.log(line)

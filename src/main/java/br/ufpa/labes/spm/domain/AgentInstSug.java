@@ -6,6 +6,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A AgentInstSug.
@@ -13,7 +15,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "agent_inst_sug")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class AgentInstSug extends PeopleInstSug implements Serializable {
+public class AgentInstSug implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,6 +30,10 @@ public class AgentInstSug extends PeopleInstSug implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("theAgentInstSugs")
     private Agent chosenAgent;
+
+    @OneToMany(mappedBy = "theInstAgSugg")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<AgentInstSuggestionToAgent> agentSuggesteds = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -62,6 +68,31 @@ public class AgentInstSug extends PeopleInstSug implements Serializable {
 
     public void setChosenAgent(Agent agent) {
         this.chosenAgent = agent;
+    }
+
+    public Set<AgentInstSuggestionToAgent> getAgentSuggesteds() {
+        return agentSuggesteds;
+    }
+
+    public AgentInstSug agentSuggesteds(Set<AgentInstSuggestionToAgent> agentInstSuggestionToAgents) {
+        this.agentSuggesteds = agentInstSuggestionToAgents;
+        return this;
+    }
+
+    public AgentInstSug addAgentSuggested(AgentInstSuggestionToAgent agentInstSuggestionToAgent) {
+        this.agentSuggesteds.add(agentInstSuggestionToAgent);
+        agentInstSuggestionToAgent.setTheInstAgSugg(this);
+        return this;
+    }
+
+    public AgentInstSug removeAgentSuggested(AgentInstSuggestionToAgent agentInstSuggestionToAgent) {
+        this.agentSuggesteds.remove(agentInstSuggestionToAgent);
+        agentInstSuggestionToAgent.setTheInstAgSugg(null);
+        return this;
+    }
+
+    public void setAgentSuggesteds(Set<AgentInstSuggestionToAgent> agentInstSuggestionToAgents) {
+        this.agentSuggesteds = agentInstSuggestionToAgents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

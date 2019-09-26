@@ -22,19 +22,8 @@
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "securityLevels",
-            "fieldType": "EmailSecurityLevels",
-            "fieldValues": "WITHOUT_SECURITY,TLS_IF_AVAILABLE,TLS,SSL"
-        },
-        {
-            "fieldName": "notificationConfig",
-            "fieldType": "EmailNotificationConfig",
-            "fieldValues": "NOTIFY_ALL_MANAGERS,NOTIFY_SPECIFIC_MANAGERS,NOT_NOTIFY"
-        },
-        {
-            "fieldName": "processNotifications",
-            "fieldType": "EmailProcessStatusNotifications",
-            "fieldValues": "PROCESS_HAS_FINISHED,FIRST_ACTIVITY_HAS_STARTED,CONSUMABLE_RESOURCE_5_AMOUNT,ACTIVITY_IS_READY_INSTANTIATED,TASK_DELEGATED,DECISION_BRANCH_COND"
+            "fieldName": "decisionBranchCond",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [

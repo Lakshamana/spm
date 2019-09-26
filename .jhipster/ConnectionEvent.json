@@ -6,7 +6,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "catalogEvent",
             "otherEntityRelationshipName": "theConnectionEvent",
-            "relationshipName": "theCatalogEventToConnection"
+            "relationshipName": "theCatalogEvents"
         }
     ],
     "changelogDate": "20190914033804",

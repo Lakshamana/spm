@@ -35,11 +35,11 @@ public class CompanyUnit implements Serializable {
     private String description;
 
     @ManyToOne
-    @JsonIgnoreProperties("theCompanyUnits")
+    @JsonIgnoreProperties("theOrganizationalUnits")
     private Company theOrganization;
 
     @ManyToOne
-    @JsonIgnoreProperties("theCompanyUnits")
+    @JsonIgnoreProperties("theSubordinates")
     private CompanyUnit theCommand;
 
     @ManyToOne
@@ -48,12 +48,12 @@ public class CompanyUnit implements Serializable {
 
     @OneToMany(mappedBy = "theCommand")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CompanyUnit> theCompanyUnits = new HashSet<>();
+    private Set<CompanyUnit> theSubordinates = new HashSet<>();
 
     @ManyToMany(mappedBy = "theOrgUnits")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
-    private Set<Agent> theAgents = new HashSet<>();
+    private Set<Agent> theUnitAgents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -142,54 +142,54 @@ public class CompanyUnit implements Serializable {
         this.theAgent = agent;
     }
 
-    public Set<CompanyUnit> getTheCompanyUnits() {
-        return theCompanyUnits;
+    public Set<CompanyUnit> getTheSubordinates() {
+        return theSubordinates;
     }
 
-    public CompanyUnit theCompanyUnits(Set<CompanyUnit> companyUnits) {
-        this.theCompanyUnits = companyUnits;
+    public CompanyUnit theSubordinates(Set<CompanyUnit> companyUnits) {
+        this.theSubordinates = companyUnits;
         return this;
     }
 
-    public CompanyUnit addTheCompanyUnit(CompanyUnit companyUnit) {
-        this.theCompanyUnits.add(companyUnit);
+    public CompanyUnit addTheSubordinates(CompanyUnit companyUnit) {
+        this.theSubordinates.add(companyUnit);
         companyUnit.setTheCommand(this);
         return this;
     }
 
-    public CompanyUnit removeTheCompanyUnit(CompanyUnit companyUnit) {
-        this.theCompanyUnits.remove(companyUnit);
+    public CompanyUnit removeTheSubordinates(CompanyUnit companyUnit) {
+        this.theSubordinates.remove(companyUnit);
         companyUnit.setTheCommand(null);
         return this;
     }
 
-    public void setTheCompanyUnits(Set<CompanyUnit> companyUnits) {
-        this.theCompanyUnits = companyUnits;
+    public void setTheSubordinates(Set<CompanyUnit> companyUnits) {
+        this.theSubordinates = companyUnits;
     }
 
-    public Set<Agent> getTheAgents() {
-        return theAgents;
+    public Set<Agent> getTheUnitAgents() {
+        return theUnitAgents;
     }
 
-    public CompanyUnit theAgents(Set<Agent> agents) {
-        this.theAgents = agents;
+    public CompanyUnit theUnitAgents(Set<Agent> agents) {
+        this.theUnitAgents = agents;
         return this;
     }
 
-    public CompanyUnit addTheAgent(Agent agent) {
-        this.theAgents.add(agent);
+    public CompanyUnit addTheUnitAgents(Agent agent) {
+        this.theUnitAgents.add(agent);
         agent.getTheOrgUnits().add(this);
         return this;
     }
 
-    public CompanyUnit removeTheAgent(Agent agent) {
-        this.theAgents.remove(agent);
+    public CompanyUnit removeTheUnitAgents(Agent agent) {
+        this.theUnitAgents.remove(agent);
         agent.getTheOrgUnits().remove(this);
         return this;
     }
 
-    public void setTheAgents(Set<Agent> agents) {
-        this.theAgents = agents;
+    public void setTheUnitAgents(Set<Agent> agents) {
+        this.theUnitAgents = agents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

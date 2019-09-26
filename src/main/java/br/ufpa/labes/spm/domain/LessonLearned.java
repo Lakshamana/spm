@@ -38,7 +38,7 @@ public class LessonLearned implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("lessonsLearneds")
-    private Asset theAsset;
+    private Asset asset;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -101,17 +101,17 @@ public class LessonLearned implements Serializable {
         this.author = author;
     }
 
-    public Asset getTheAsset() {
-        return theAsset;
+    public Asset getAsset() {
+        return asset;
     }
 
-    public LessonLearned theAsset(Asset asset) {
-        this.theAsset = asset;
+    public LessonLearned asset(Asset asset) {
+        this.asset = asset;
         return this;
     }
 
-    public void setTheAsset(Asset asset) {
-        this.theAsset = asset;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

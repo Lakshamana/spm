@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -17,7 +13,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "estimation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Estimation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,8 +28,8 @@ public class Estimation implements Serializable {
     private String unit;
 
     @ManyToOne
-    @JsonIgnoreProperties("theEstimations")
-    private MetricDefinition theMetricDefinition;
+    @JsonIgnoreProperties("estimations")
+    private MetricDefinition metricDefinition;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -71,17 +66,17 @@ public class Estimation implements Serializable {
         this.unit = unit;
     }
 
-    public MetricDefinition getTheMetricDefinition() {
-        return theMetricDefinition;
+    public MetricDefinition getMetricDefinition() {
+        return metricDefinition;
     }
 
-    public Estimation theMetricDefinition(MetricDefinition metricDefinition) {
-        this.theMetricDefinition = metricDefinition;
+    public Estimation metricDefinition(MetricDefinition metricDefinition) {
+        this.metricDefinition = metricDefinition;
         return this;
     }
 
-    public void setTheMetricDefinition(MetricDefinition metricDefinition) {
-        this.theMetricDefinition = metricDefinition;
+    public void setMetricDefinition(MetricDefinition metricDefinition) {
+        this.metricDefinition = metricDefinition;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

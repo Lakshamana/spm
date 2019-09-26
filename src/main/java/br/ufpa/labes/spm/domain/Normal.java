@@ -16,16 +16,13 @@ import java.util.Set;
 @Entity
 @Table(name = "normal")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Normal extends Plain implements Serializable {
+public class Normal implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "ident")
-    private String ident;
 
     @Column(name = "how_long")
     private Float howLong;
@@ -57,25 +54,29 @@ public class Normal extends Plain implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Reservation> theReservations = new HashSet<>();
 
-    @OneToOne(mappedBy = "theNormal")
-    @JsonIgnore
-    private ResourceEvent theResourceEvent;
-
-    @OneToMany(mappedBy = "inInvolvedArtifacts")
+    @OneToMany(mappedBy = "theNormal")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<InvolvedArtifact> theInvolvedArtifactToNormals = new HashSet<>();
-
-    @OneToMany(mappedBy = "outInvolvedArtifacts")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<InvolvedArtifact> theInvolvedArtifactsFromNormals = new HashSet<>();
+    private Set<RequiredResource> theRequiredResources = new HashSet<>();
 
     @OneToMany(mappedBy = "theNormal")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<RequiredPeople> theRequiredPeople = new HashSet<>();
 
+    @OneToOne(mappedBy = "theNormal")
+    @JsonIgnore
+    private ResourceEvent theResourceEvent;
+
     @OneToMany(mappedBy = "theNormal")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<RequiredResource> theRequiredResources = new HashSet<>();
+    private Set<AgendaEvent> theAgendaEvents = new HashSet<>();
+
+    @OneToMany(mappedBy = "inInvolvedArtifacts")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<InvolvedArtifact> involvedArtifactToNormals = new HashSet<>();
+
+    @OneToMany(mappedBy = "outInvolvedArtifacts")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<InvolvedArtifact> involvedArtifactFromNormals = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -84,19 +85,6 @@ public class Normal extends Plain implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getIdent() {
-        return ident;
-    }
-
-    public Normal ident(String ident) {
-        this.ident = ident;
-        return this;
-    }
-
-    public void setIdent(String ident) {
-        this.ident = ident;
     }
 
     public Float getHowLong() {
@@ -240,67 +228,29 @@ public class Normal extends Plain implements Serializable {
         this.theReservations = reservations;
     }
 
-    public ResourceEvent getTheResourceEvent() {
-        return theResourceEvent;
+    public Set<RequiredResource> getTheRequiredResources() {
+        return theRequiredResources;
     }
 
-    public Normal theResourceEvent(ResourceEvent resourceEvent) {
-        this.theResourceEvent = resourceEvent;
+    public Normal theRequiredResources(Set<RequiredResource> requiredResources) {
+        this.theRequiredResources = requiredResources;
         return this;
     }
 
-    public void setTheResourceEvent(ResourceEvent resourceEvent) {
-        this.theResourceEvent = resourceEvent;
-    }
-
-    public Set<InvolvedArtifact> getTheInvolvedArtifactToNormals() {
-        return theInvolvedArtifactToNormals;
-    }
-
-    public Normal theInvolvedArtifactToNormals(Set<InvolvedArtifact> involvedArtifacts) {
-        this.theInvolvedArtifactToNormals = involvedArtifacts;
+    public Normal addTheRequiredResource(RequiredResource requiredResource) {
+        this.theRequiredResources.add(requiredResource);
+        requiredResource.setTheNormal(this);
         return this;
     }
 
-    public Normal addTheInvolvedArtifactToNormal(InvolvedArtifact involvedArtifact) {
-        this.theInvolvedArtifactToNormals.add(involvedArtifact);
-        involvedArtifact.setInInvolvedArtifacts(this);
+    public Normal removeTheRequiredResource(RequiredResource requiredResource) {
+        this.theRequiredResources.remove(requiredResource);
+        requiredResource.setTheNormal(null);
         return this;
     }
 
-    public Normal removeTheInvolvedArtifactToNormal(InvolvedArtifact involvedArtifact) {
-        this.theInvolvedArtifactToNormals.remove(involvedArtifact);
-        involvedArtifact.setInInvolvedArtifacts(null);
-        return this;
-    }
-
-    public void setTheInvolvedArtifactToNormals(Set<InvolvedArtifact> involvedArtifacts) {
-        this.theInvolvedArtifactToNormals = involvedArtifacts;
-    }
-
-    public Set<InvolvedArtifact> getTheInvolvedArtifactsFromNormals() {
-        return theInvolvedArtifactsFromNormals;
-    }
-
-    public Normal theInvolvedArtifactsFromNormals(Set<InvolvedArtifact> involvedArtifacts) {
-        this.theInvolvedArtifactsFromNormals = involvedArtifacts;
-        return this;
-    }
-
-    public Normal addTheInvolvedArtifactsFromNormal(InvolvedArtifact involvedArtifact) {
-        this.theInvolvedArtifactsFromNormals.add(involvedArtifact);
-        involvedArtifact.setOutInvolvedArtifacts(this);
-        return this;
-    }
-
-    public Normal removeTheInvolvedArtifactsFromNormal(InvolvedArtifact involvedArtifact) {
-        this.theInvolvedArtifactsFromNormals.remove(involvedArtifact);
-        involvedArtifact.setOutInvolvedArtifacts(null);
-        return this;
-    }
-
-    public void setTheInvolvedArtifactsFromNormals(Set<InvolvedArtifact> involvedArtifacts) {
-        this.theInvolvedArtifactsFromNormals = involvedArtifacts;
+    public void setTheRequiredResources(Set<RequiredResource> requiredResources) {
+        this.theRequiredResources = requiredResources;
     }
 
     public Set<RequiredPeople> getTheRequiredPeople() {
@@ -328,29 +278,92 @@ public class Normal extends Plain implements Serializable {
         this.theRequiredPeople = requiredPeople;
     }
 
-    public Set<RequiredResource> getTheRequiredResources() {
-        return theRequiredResources;
+    public ResourceEvent getTheResourceEvent() {
+        return theResourceEvent;
     }
 
-    public Normal theRequiredResources(Set<RequiredResource> requiredResources) {
-        this.theRequiredResources = requiredResources;
+    public Normal theResourceEvent(ResourceEvent resourceEvent) {
+        this.theResourceEvent = resourceEvent;
         return this;
     }
 
-    public Normal addTheRequiredResource(RequiredResource requiredResource) {
-        this.theRequiredResources.add(requiredResource);
-        requiredResource.setTheNormal(this);
+    public void setTheResourceEvent(ResourceEvent resourceEvent) {
+        this.theResourceEvent = resourceEvent;
+    }
+
+    public Set<AgendaEvent> getTheAgendaEvents() {
+        return theAgendaEvents;
+    }
+
+    public Normal theAgendaEvents(Set<AgendaEvent> agendaEvents) {
+        this.theAgendaEvents = agendaEvents;
         return this;
     }
 
-    public Normal removeTheRequiredResource(RequiredResource requiredResource) {
-        this.theRequiredResources.remove(requiredResource);
-        requiredResource.setTheNormal(null);
+    public Normal addTheAgendaEvent(AgendaEvent agendaEvent) {
+        this.theAgendaEvents.add(agendaEvent);
+        agendaEvent.setTheNormal(this);
         return this;
     }
 
-    public void setTheRequiredResources(Set<RequiredResource> requiredResources) {
-        this.theRequiredResources = requiredResources;
+    public Normal removeTheAgendaEvent(AgendaEvent agendaEvent) {
+        this.theAgendaEvents.remove(agendaEvent);
+        agendaEvent.setTheNormal(null);
+        return this;
+    }
+
+    public void setTheAgendaEvents(Set<AgendaEvent> agendaEvents) {
+        this.theAgendaEvents = agendaEvents;
+    }
+
+    public Set<InvolvedArtifact> getInvolvedArtifactToNormals() {
+        return involvedArtifactToNormals;
+    }
+
+    public Normal involvedArtifactToNormals(Set<InvolvedArtifact> involvedArtifacts) {
+        this.involvedArtifactToNormals = involvedArtifacts;
+        return this;
+    }
+
+    public Normal addInvolvedArtifactToNormal(InvolvedArtifact involvedArtifact) {
+        this.involvedArtifactToNormals.add(involvedArtifact);
+        involvedArtifact.setInInvolvedArtifacts(this);
+        return this;
+    }
+
+    public Normal removeInvolvedArtifactToNormal(InvolvedArtifact involvedArtifact) {
+        this.involvedArtifactToNormals.remove(involvedArtifact);
+        involvedArtifact.setInInvolvedArtifacts(null);
+        return this;
+    }
+
+    public void setInvolvedArtifactToNormals(Set<InvolvedArtifact> involvedArtifacts) {
+        this.involvedArtifactToNormals = involvedArtifacts;
+    }
+
+    public Set<InvolvedArtifact> getInvolvedArtifactFromNormals() {
+        return involvedArtifactFromNormals;
+    }
+
+    public Normal involvedArtifactFromNormals(Set<InvolvedArtifact> involvedArtifacts) {
+        this.involvedArtifactFromNormals = involvedArtifacts;
+        return this;
+    }
+
+    public Normal addInvolvedArtifactFromNormal(InvolvedArtifact involvedArtifact) {
+        this.involvedArtifactFromNormals.add(involvedArtifact);
+        involvedArtifact.setOutInvolvedArtifacts(this);
+        return this;
+    }
+
+    public Normal removeInvolvedArtifactFromNormal(InvolvedArtifact involvedArtifact) {
+        this.involvedArtifactFromNormals.remove(involvedArtifact);
+        involvedArtifact.setOutInvolvedArtifacts(null);
+        return this;
+    }
+
+    public void setInvolvedArtifactFromNormals(Set<InvolvedArtifact> involvedArtifacts) {
+        this.involvedArtifactFromNormals = involvedArtifacts;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -374,7 +387,6 @@ public class Normal extends Plain implements Serializable {
     public String toString() {
         return "Normal{" +
             "id=" + getId() +
-            ", ident='" + getIdent() + "'" +
             ", howLong=" + getHowLong() +
             ", howLongUnit='" + getHowLongUnit() + "'" +
             ", plannedBegin='" + getPlannedBegin() + "'" +

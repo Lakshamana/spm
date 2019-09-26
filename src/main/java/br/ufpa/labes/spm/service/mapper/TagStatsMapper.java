@@ -12,11 +12,11 @@ import org.mapstruct.*;
 public interface TagStatsMapper extends EntityMapper<TagStatsDTO, TagStats> {
 
     @Mapping(source = "tag.id", target = "tagId")
-    @Mapping(source = "theAsset.id", target = "theAssetId")
+    @Mapping(source = "asset.id", target = "assetId")
     TagStatsDTO toDto(TagStats tagStats);
 
     @Mapping(source = "tagId", target = "tag")
-    @Mapping(source = "theAssetId", target = "theAsset")
+    @Mapping(source = "assetId", target = "asset")
     TagStats toEntity(TagStatsDTO tagStatsDTO);
 
     default TagStats fromId(Long id) {

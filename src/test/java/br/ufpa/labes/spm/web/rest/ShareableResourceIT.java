@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.ShareableStatus;
 /**
  * Integration tests for the {@link ShareableResource} REST controller.
  */
@@ -39,8 +38,8 @@ import br.ufpa.labes.spm.domain.enumeration.ShareableStatus;
 @SpringBootTest(classes = SpmApp.class)
 public class ShareableResourceIT {
 
-    private static final ShareableStatus DEFAULT_SHAREABLE_STATUS = ShareableStatus.AVAILABLE;
-    private static final ShareableStatus UPDATED_SHAREABLE_STATUS = ShareableStatus.NOT_AVAILABLE;
+    private static final String DEFAULT_STATE = "AAAAAAAAAA";
+    private static final String UPDATED_STATE = "BBBBBBBBBB";
 
     private static final String DEFAULT_UNIT_OF_COST = "AAAAAAAAAA";
     private static final String UPDATED_UNIT_OF_COST = "BBBBBBBBBB";
@@ -93,7 +92,7 @@ public class ShareableResourceIT {
      */
     public static Shareable createEntity(EntityManager em) {
         Shareable shareable = new Shareable()
-            .shareableStatus(DEFAULT_SHAREABLE_STATUS)
+            .state(DEFAULT_STATE)
             .unitOfCost(DEFAULT_UNIT_OF_COST);
         return shareable;
     }
@@ -105,7 +104,7 @@ public class ShareableResourceIT {
      */
     public static Shareable createUpdatedEntity(EntityManager em) {
         Shareable shareable = new Shareable()
-            .shareableStatus(UPDATED_SHAREABLE_STATUS)
+            .state(UPDATED_STATE)
             .unitOfCost(UPDATED_UNIT_OF_COST);
         return shareable;
     }
@@ -131,7 +130,7 @@ public class ShareableResourceIT {
         List<Shareable> shareableList = shareableRepository.findAll();
         assertThat(shareableList).hasSize(databaseSizeBeforeCreate + 1);
         Shareable testShareable = shareableList.get(shareableList.size() - 1);
-        assertThat(testShareable.getShareableStatus()).isEqualTo(DEFAULT_SHAREABLE_STATUS);
+        assertThat(testShareable.getState()).isEqualTo(DEFAULT_STATE);
         assertThat(testShareable.getUnitOfCost()).isEqualTo(DEFAULT_UNIT_OF_COST);
     }
 
@@ -167,7 +166,7 @@ public class ShareableResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(shareable.getId().intValue())))
-            .andExpect(jsonPath("$.[*].shareableStatus").value(hasItem(DEFAULT_SHAREABLE_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].state").value(hasItem(DEFAULT_STATE.toString())))
             .andExpect(jsonPath("$.[*].unitOfCost").value(hasItem(DEFAULT_UNIT_OF_COST.toString())));
     }
     
@@ -182,7 +181,7 @@ public class ShareableResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(shareable.getId().intValue()))
-            .andExpect(jsonPath("$.shareableStatus").value(DEFAULT_SHAREABLE_STATUS.toString()))
+            .andExpect(jsonPath("$.state").value(DEFAULT_STATE.toString()))
             .andExpect(jsonPath("$.unitOfCost").value(DEFAULT_UNIT_OF_COST.toString()));
     }
 
@@ -207,7 +206,7 @@ public class ShareableResourceIT {
         // Disconnect from session so that the updates on updatedShareable are not directly saved in db
         em.detach(updatedShareable);
         updatedShareable
-            .shareableStatus(UPDATED_SHAREABLE_STATUS)
+            .state(UPDATED_STATE)
             .unitOfCost(UPDATED_UNIT_OF_COST);
         ShareableDTO shareableDTO = shareableMapper.toDto(updatedShareable);
 
@@ -220,7 +219,7 @@ public class ShareableResourceIT {
         List<Shareable> shareableList = shareableRepository.findAll();
         assertThat(shareableList).hasSize(databaseSizeBeforeUpdate);
         Shareable testShareable = shareableList.get(shareableList.size() - 1);
-        assertThat(testShareable.getShareableStatus()).isEqualTo(UPDATED_SHAREABLE_STATUS);
+        assertThat(testShareable.getState()).isEqualTo(UPDATED_STATE);
         assertThat(testShareable.getUnitOfCost()).isEqualTo(UPDATED_UNIT_OF_COST);
     }
 

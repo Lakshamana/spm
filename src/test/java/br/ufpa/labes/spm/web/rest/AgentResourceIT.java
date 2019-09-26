@@ -23,6 +23,7 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -49,31 +50,36 @@ public class AgentResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
-    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
+    private static final String DEFAULT_E_MAIL = "AAAAAAAAAA";
+    private static final String UPDATED_E_MAIL = "BBBBBBBBBB";
 
     private static final Float DEFAULT_COST_HOUR = 1F;
     private static final Float UPDATED_COST_HOUR = 2F;
     private static final Float SMALLER_COST_HOUR = 1F - 1F;
 
-    private static final String DEFAULT_PASSWORD_HASH = "AAAAAAAAAA";
-    private static final String UPDATED_PASSWORD_HASH = "BBBBBBBBBB";
+    private static final String DEFAULT_PASSWORD = "AAAAAAAAAA";
+    private static final String UPDATED_PASSWORD = "BBBBBBBBBB";
 
     private static final Integer DEFAULT_TIPO_USER = 1;
     private static final Integer UPDATED_TIPO_USER = 2;
     private static final Integer SMALLER_TIPO_USER = 1 - 1;
 
-    private static final Boolean DEFAULT_ACTIVE = false;
-    private static final Boolean UPDATED_ACTIVE = true;
+    private static final Boolean DEFAULT_IS_ACTIVE = false;
+    private static final Boolean UPDATED_IS_ACTIVE = true;
 
     private static final Boolean DEFAULT_ONLINE = false;
     private static final Boolean UPDATED_ONLINE = true;
 
-    private static final String DEFAULT_PHOTO_URL = "AAAAAAAAAA";
-    private static final String UPDATED_PHOTO_URL = "BBBBBBBBBB";
+    private static final byte[] DEFAULT_PHOTO = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_PHOTO = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_PHOTO_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_PHOTO_CONTENT_TYPE = "image/png";
 
     private static final String DEFAULT_UPLOAD = "AAAAAAAAAA";
     private static final String UPDATED_UPLOAD = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     @Autowired
     private AgentRepository agentRepository;
@@ -131,14 +137,16 @@ public class AgentResourceIT {
         Agent agent = new Agent()
             .ident(DEFAULT_IDENT)
             .name(DEFAULT_NAME)
-            .email(DEFAULT_EMAIL)
+            .eMail(DEFAULT_E_MAIL)
             .costHour(DEFAULT_COST_HOUR)
-            .passwordHash(DEFAULT_PASSWORD_HASH)
+            .password(DEFAULT_PASSWORD)
             .tipoUser(DEFAULT_TIPO_USER)
-            .active(DEFAULT_ACTIVE)
+            .isActive(DEFAULT_IS_ACTIVE)
             .online(DEFAULT_ONLINE)
-            .photoURL(DEFAULT_PHOTO_URL)
-            .upload(DEFAULT_UPLOAD);
+            .photo(DEFAULT_PHOTO)
+            .photoContentType(DEFAULT_PHOTO_CONTENT_TYPE)
+            .upload(DEFAULT_UPLOAD)
+            .description(DEFAULT_DESCRIPTION);
         return agent;
     }
     /**
@@ -151,14 +159,16 @@ public class AgentResourceIT {
         Agent agent = new Agent()
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
-            .email(UPDATED_EMAIL)
+            .eMail(UPDATED_E_MAIL)
             .costHour(UPDATED_COST_HOUR)
-            .passwordHash(UPDATED_PASSWORD_HASH)
+            .password(UPDATED_PASSWORD)
             .tipoUser(UPDATED_TIPO_USER)
-            .active(UPDATED_ACTIVE)
+            .isActive(UPDATED_IS_ACTIVE)
             .online(UPDATED_ONLINE)
-            .photoURL(UPDATED_PHOTO_URL)
-            .upload(UPDATED_UPLOAD);
+            .photo(UPDATED_PHOTO)
+            .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
+            .upload(UPDATED_UPLOAD)
+            .description(UPDATED_DESCRIPTION);
         return agent;
     }
 
@@ -185,14 +195,16 @@ public class AgentResourceIT {
         Agent testAgent = agentList.get(agentList.size() - 1);
         assertThat(testAgent.getIdent()).isEqualTo(DEFAULT_IDENT);
         assertThat(testAgent.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testAgent.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(testAgent.geteMail()).isEqualTo(DEFAULT_E_MAIL);
         assertThat(testAgent.getCostHour()).isEqualTo(DEFAULT_COST_HOUR);
-        assertThat(testAgent.getPasswordHash()).isEqualTo(DEFAULT_PASSWORD_HASH);
+        assertThat(testAgent.getPassword()).isEqualTo(DEFAULT_PASSWORD);
         assertThat(testAgent.getTipoUser()).isEqualTo(DEFAULT_TIPO_USER);
-        assertThat(testAgent.isActive()).isEqualTo(DEFAULT_ACTIVE);
+        assertThat(testAgent.isIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
         assertThat(testAgent.isOnline()).isEqualTo(DEFAULT_ONLINE);
-        assertThat(testAgent.getPhotoURL()).isEqualTo(DEFAULT_PHOTO_URL);
+        assertThat(testAgent.getPhoto()).isEqualTo(DEFAULT_PHOTO);
+        assertThat(testAgent.getPhotoContentType()).isEqualTo(DEFAULT_PHOTO_CONTENT_TYPE);
         assertThat(testAgent.getUpload()).isEqualTo(DEFAULT_UPLOAD);
+        assertThat(testAgent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
     @Test
@@ -229,14 +241,16 @@ public class AgentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(agent.getId().intValue())))
             .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
+            .andExpect(jsonPath("$.[*].eMail").value(hasItem(DEFAULT_E_MAIL.toString())))
             .andExpect(jsonPath("$.[*].costHour").value(hasItem(DEFAULT_COST_HOUR.doubleValue())))
-            .andExpect(jsonPath("$.[*].passwordHash").value(hasItem(DEFAULT_PASSWORD_HASH.toString())))
+            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())))
             .andExpect(jsonPath("$.[*].tipoUser").value(hasItem(DEFAULT_TIPO_USER)))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].online").value(hasItem(DEFAULT_ONLINE.booleanValue())))
-            .andExpect(jsonPath("$.[*].photoURL").value(hasItem(DEFAULT_PHOTO_URL.toString())))
-            .andExpect(jsonPath("$.[*].upload").value(hasItem(DEFAULT_UPLOAD.toString())));
+            .andExpect(jsonPath("$.[*].photoContentType").value(hasItem(DEFAULT_PHOTO_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))))
+            .andExpect(jsonPath("$.[*].upload").value(hasItem(DEFAULT_UPLOAD.toString())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -285,14 +299,16 @@ public class AgentResourceIT {
             .andExpect(jsonPath("$.id").value(agent.getId().intValue()))
             .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
+            .andExpect(jsonPath("$.eMail").value(DEFAULT_E_MAIL.toString()))
             .andExpect(jsonPath("$.costHour").value(DEFAULT_COST_HOUR.doubleValue()))
-            .andExpect(jsonPath("$.passwordHash").value(DEFAULT_PASSWORD_HASH.toString()))
+            .andExpect(jsonPath("$.password").value(DEFAULT_PASSWORD.toString()))
             .andExpect(jsonPath("$.tipoUser").value(DEFAULT_TIPO_USER))
-            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.online").value(DEFAULT_ONLINE.booleanValue()))
-            .andExpect(jsonPath("$.photoURL").value(DEFAULT_PHOTO_URL.toString()))
-            .andExpect(jsonPath("$.upload").value(DEFAULT_UPLOAD.toString()));
+            .andExpect(jsonPath("$.photoContentType").value(DEFAULT_PHOTO_CONTENT_TYPE))
+            .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)))
+            .andExpect(jsonPath("$.upload").value(DEFAULT_UPLOAD.toString()))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
     }
 
     @Test
@@ -318,14 +334,16 @@ public class AgentResourceIT {
         updatedAgent
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
-            .email(UPDATED_EMAIL)
+            .eMail(UPDATED_E_MAIL)
             .costHour(UPDATED_COST_HOUR)
-            .passwordHash(UPDATED_PASSWORD_HASH)
+            .password(UPDATED_PASSWORD)
             .tipoUser(UPDATED_TIPO_USER)
-            .active(UPDATED_ACTIVE)
+            .isActive(UPDATED_IS_ACTIVE)
             .online(UPDATED_ONLINE)
-            .photoURL(UPDATED_PHOTO_URL)
-            .upload(UPDATED_UPLOAD);
+            .photo(UPDATED_PHOTO)
+            .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
+            .upload(UPDATED_UPLOAD)
+            .description(UPDATED_DESCRIPTION);
         AgentDTO agentDTO = agentMapper.toDto(updatedAgent);
 
         restAgentMockMvc.perform(put("/api/agents")
@@ -339,14 +357,16 @@ public class AgentResourceIT {
         Agent testAgent = agentList.get(agentList.size() - 1);
         assertThat(testAgent.getIdent()).isEqualTo(UPDATED_IDENT);
         assertThat(testAgent.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testAgent.getEmail()).isEqualTo(UPDATED_EMAIL);
+        assertThat(testAgent.geteMail()).isEqualTo(UPDATED_E_MAIL);
         assertThat(testAgent.getCostHour()).isEqualTo(UPDATED_COST_HOUR);
-        assertThat(testAgent.getPasswordHash()).isEqualTo(UPDATED_PASSWORD_HASH);
+        assertThat(testAgent.getPassword()).isEqualTo(UPDATED_PASSWORD);
         assertThat(testAgent.getTipoUser()).isEqualTo(UPDATED_TIPO_USER);
-        assertThat(testAgent.isActive()).isEqualTo(UPDATED_ACTIVE);
+        assertThat(testAgent.isIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testAgent.isOnline()).isEqualTo(UPDATED_ONLINE);
-        assertThat(testAgent.getPhotoURL()).isEqualTo(UPDATED_PHOTO_URL);
+        assertThat(testAgent.getPhoto()).isEqualTo(UPDATED_PHOTO);
+        assertThat(testAgent.getPhotoContentType()).isEqualTo(UPDATED_PHOTO_CONTENT_TYPE);
         assertThat(testAgent.getUpload()).isEqualTo(UPDATED_UPLOAD);
+        assertThat(testAgent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test

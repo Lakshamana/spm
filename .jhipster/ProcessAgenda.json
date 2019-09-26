@@ -3,6 +3,12 @@
     "fields": [],
     "relationships": [
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "task",
+            "otherEntityRelationshipName": "theProcessAgenda",
+            "relationshipName": "theTask"
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "taskAgenda",
             "otherEntityRelationshipName": "theProcessAgenda",
@@ -12,15 +18,9 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "process",
-            "otherEntityRelationshipName": "theProcessAgendas",
+            "otherEntityRelationshipName": "theProcessAgenda",
             "relationshipName": "theProcess",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "task",
-            "otherEntityRelationshipName": "theProcessAgenda",
-            "relationshipName": "theTask"
         }
     ],
     "changelogDate": "20190914033913",

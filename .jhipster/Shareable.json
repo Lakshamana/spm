@@ -2,9 +2,8 @@
     "name": "Shareable",
     "fields": [
         {
-            "fieldName": "shareableStatus",
-            "fieldType": "ShareableStatus",
-            "fieldValues": "AVAILABLE,NOT_AVAILABLE"
+            "fieldName": "state",
+            "fieldType": "String"
         },
         {
             "fieldName": "unitOfCost",

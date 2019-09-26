@@ -20,6 +20,7 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -59,8 +60,8 @@ public class ArtifactResourceIT {
     private static final Boolean DEFAULT_IS_TEMPLATE = false;
     private static final Boolean UPDATED_IS_TEMPLATE = true;
 
-    private static final Boolean DEFAULT_ACTIVE = false;
-    private static final Boolean UPDATED_ACTIVE = true;
+    private static final Boolean DEFAULT_IS_ACTIVE = false;
+    private static final Boolean UPDATED_IS_ACTIVE = true;
 
     @Autowired
     private ArtifactRepository artifactRepository;
@@ -117,7 +118,7 @@ public class ArtifactResourceIT {
             .fileName(DEFAULT_FILE_NAME)
             .latestVersion(DEFAULT_LATEST_VERSION)
             .isTemplate(DEFAULT_IS_TEMPLATE)
-            .active(DEFAULT_ACTIVE);
+            .isActive(DEFAULT_IS_ACTIVE);
         return artifact;
     }
     /**
@@ -135,7 +136,7 @@ public class ArtifactResourceIT {
             .fileName(UPDATED_FILE_NAME)
             .latestVersion(UPDATED_LATEST_VERSION)
             .isTemplate(UPDATED_IS_TEMPLATE)
-            .active(UPDATED_ACTIVE);
+            .isActive(UPDATED_IS_ACTIVE);
         return artifact;
     }
 
@@ -167,7 +168,7 @@ public class ArtifactResourceIT {
         assertThat(testArtifact.getFileName()).isEqualTo(DEFAULT_FILE_NAME);
         assertThat(testArtifact.getLatestVersion()).isEqualTo(DEFAULT_LATEST_VERSION);
         assertThat(testArtifact.isIsTemplate()).isEqualTo(DEFAULT_IS_TEMPLATE);
-        assertThat(testArtifact.isActive()).isEqualTo(DEFAULT_ACTIVE);
+        assertThat(testArtifact.isIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
     }
 
     @Test
@@ -209,9 +210,9 @@ public class ArtifactResourceIT {
             .andExpect(jsonPath("$.[*].fileName").value(hasItem(DEFAULT_FILE_NAME.toString())))
             .andExpect(jsonPath("$.[*].latestVersion").value(hasItem(DEFAULT_LATEST_VERSION.toString())))
             .andExpect(jsonPath("$.[*].isTemplate").value(hasItem(DEFAULT_IS_TEMPLATE.booleanValue())))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
     }
-
+    
     @Test
     @Transactional
     public void getArtifact() throws Exception {
@@ -230,7 +231,7 @@ public class ArtifactResourceIT {
             .andExpect(jsonPath("$.fileName").value(DEFAULT_FILE_NAME.toString()))
             .andExpect(jsonPath("$.latestVersion").value(DEFAULT_LATEST_VERSION.toString()))
             .andExpect(jsonPath("$.isTemplate").value(DEFAULT_IS_TEMPLATE.booleanValue()))
-            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
     }
 
     @Test
@@ -261,7 +262,7 @@ public class ArtifactResourceIT {
             .fileName(UPDATED_FILE_NAME)
             .latestVersion(UPDATED_LATEST_VERSION)
             .isTemplate(UPDATED_IS_TEMPLATE)
-            .active(UPDATED_ACTIVE);
+            .isActive(UPDATED_IS_ACTIVE);
         ArtifactDTO artifactDTO = artifactMapper.toDto(updatedArtifact);
 
         restArtifactMockMvc.perform(put("/api/artifacts")
@@ -280,7 +281,7 @@ public class ArtifactResourceIT {
         assertThat(testArtifact.getFileName()).isEqualTo(UPDATED_FILE_NAME);
         assertThat(testArtifact.getLatestVersion()).isEqualTo(UPDATED_LATEST_VERSION);
         assertThat(testArtifact.isIsTemplate()).isEqualTo(UPDATED_IS_TEMPLATE);
-        assertThat(testArtifact.isActive()).isEqualTo(UPDATED_ACTIVE);
+        assertThat(testArtifact.isIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
     }
 
     @Test

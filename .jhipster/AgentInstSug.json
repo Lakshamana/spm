@@ -15,6 +15,12 @@
             "otherEntityRelationshipName": "theAgentInstSug",
             "relationshipName": "chosenAgent",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agentInstSuggestionToAgent",
+            "otherEntityRelationshipName": "theInstAgSugg",
+            "relationshipName": "agentSuggested"
         }
     ],
     "changelogDate": "20190914033838",

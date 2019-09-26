@@ -5,15 +5,15 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "workGroup",
-            "otherEntityRelationshipName": "sugToChosenWorkGroup",
-            "relationshipName": "chosenWorkGroup",
+            "otherEntityRelationshipName": "theWorkGroupInstSug",
+            "relationshipName": "groupChosen",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "type",
-            "otherEntityRelationshipName": "sugToReqWorkGroup",
-            "relationshipName": "workGroupTypeRequired",
+            "otherEntityName": "workGroupType",
+            "otherEntityRelationshipName": "theWorkGroupInstSug",
+            "relationshipName": "groupTypeRequired",
             "otherEntityField": "id"
         },
         {
@@ -21,6 +21,14 @@
             "otherEntityName": "workGroup",
             "otherEntityRelationshipName": "theWorkGroupInstSug",
             "relationshipName": "sugWorkGroup",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "workGroup",
+            "otherEntityRelationshipName": "theWorkGroupInstSug",
+            "relationshipName": "groupSuggested",
             "otherEntityField": "id",
             "ownerSide": true
         }

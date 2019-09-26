@@ -32,7 +32,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.PlainStatus;
 /**
  * Integration tests for the {@link PlainResource} REST controller.
  */
@@ -42,12 +41,6 @@ public class PlainResourceIT {
 
     private static final String DEFAULT_REQUIREMENTS = "AAAAAAAAAA";
     private static final String UPDATED_REQUIREMENTS = "BBBBBBBBBB";
-
-    private static final PlainStatus DEFAULT_PLAIN_STATUS = PlainStatus.WAITING;
-    private static final PlainStatus UPDATED_PLAIN_STATUS = PlainStatus.READY;
-
-    private static final Boolean DEFAULT_AUTOMATIC = false;
-    private static final Boolean UPDATED_AUTOMATIC = true;
 
     @Autowired
     private PlainRepository plainRepository;
@@ -97,9 +90,7 @@ public class PlainResourceIT {
      */
     public static Plain createEntity(EntityManager em) {
         Plain plain = new Plain()
-            .requirements(DEFAULT_REQUIREMENTS)
-            .plainStatus(DEFAULT_PLAIN_STATUS)
-            .automatic(DEFAULT_AUTOMATIC);
+            .requirements(DEFAULT_REQUIREMENTS);
         return plain;
     }
     /**
@@ -110,9 +101,7 @@ public class PlainResourceIT {
      */
     public static Plain createUpdatedEntity(EntityManager em) {
         Plain plain = new Plain()
-            .requirements(UPDATED_REQUIREMENTS)
-            .plainStatus(UPDATED_PLAIN_STATUS)
-            .automatic(UPDATED_AUTOMATIC);
+            .requirements(UPDATED_REQUIREMENTS);
         return plain;
     }
 
@@ -138,8 +127,6 @@ public class PlainResourceIT {
         assertThat(plainList).hasSize(databaseSizeBeforeCreate + 1);
         Plain testPlain = plainList.get(plainList.size() - 1);
         assertThat(testPlain.getRequirements()).isEqualTo(DEFAULT_REQUIREMENTS);
-        assertThat(testPlain.getPlainStatus()).isEqualTo(DEFAULT_PLAIN_STATUS);
-        assertThat(testPlain.isAutomatic()).isEqualTo(DEFAULT_AUTOMATIC);
     }
 
     @Test
@@ -174,9 +161,7 @@ public class PlainResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(plain.getId().intValue())))
-            .andExpect(jsonPath("$.[*].requirements").value(hasItem(DEFAULT_REQUIREMENTS.toString())))
-            .andExpect(jsonPath("$.[*].plainStatus").value(hasItem(DEFAULT_PLAIN_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].automatic").value(hasItem(DEFAULT_AUTOMATIC.booleanValue())));
+            .andExpect(jsonPath("$.[*].requirements").value(hasItem(DEFAULT_REQUIREMENTS.toString())));
     }
     
     @Test
@@ -190,9 +175,7 @@ public class PlainResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(plain.getId().intValue()))
-            .andExpect(jsonPath("$.requirements").value(DEFAULT_REQUIREMENTS.toString()))
-            .andExpect(jsonPath("$.plainStatus").value(DEFAULT_PLAIN_STATUS.toString()))
-            .andExpect(jsonPath("$.automatic").value(DEFAULT_AUTOMATIC.booleanValue()));
+            .andExpect(jsonPath("$.requirements").value(DEFAULT_REQUIREMENTS.toString()));
     }
 
     @Test
@@ -216,9 +199,7 @@ public class PlainResourceIT {
         // Disconnect from session so that the updates on updatedPlain are not directly saved in db
         em.detach(updatedPlain);
         updatedPlain
-            .requirements(UPDATED_REQUIREMENTS)
-            .plainStatus(UPDATED_PLAIN_STATUS)
-            .automatic(UPDATED_AUTOMATIC);
+            .requirements(UPDATED_REQUIREMENTS);
         PlainDTO plainDTO = plainMapper.toDto(updatedPlain);
 
         restPlainMockMvc.perform(put("/api/plains")
@@ -231,8 +212,6 @@ public class PlainResourceIT {
         assertThat(plainList).hasSize(databaseSizeBeforeUpdate);
         Plain testPlain = plainList.get(plainList.size() - 1);
         assertThat(testPlain.getRequirements()).isEqualTo(UPDATED_REQUIREMENTS);
-        assertThat(testPlain.getPlainStatus()).isEqualTo(UPDATED_PLAIN_STATUS);
-        assertThat(testPlain.isAutomatic()).isEqualTo(UPDATED_AUTOMATIC);
     }
 
     @Test

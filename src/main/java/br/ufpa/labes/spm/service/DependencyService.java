@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Service Implementation for managing {@link Dependency}.
@@ -59,6 +60,21 @@ public class DependencyService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
+
+    /**
+    *  Get all the dependencies where TheMultipleCon is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true) 
+    public List<DependencyDTO> findAllWhereTheMultipleConIsNull() {
+        log.debug("Request to get all dependencies where TheMultipleCon is null");
+        return StreamSupport
+            .stream(dependencyRepository.findAll().spliterator(), false)
+            .filter(dependency -> dependency.getTheMultipleCon() == null)
+            .map(dependencyMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
     /**
      * Get one dependency by id.

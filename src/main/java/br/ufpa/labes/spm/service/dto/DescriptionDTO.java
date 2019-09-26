@@ -17,9 +17,9 @@ public class DescriptionDTO implements Serializable {
     private String why;
 
 
-    private Long theTemplateOldVersionId;
+    private Long theOldVersionId;
 
-    private Long theTemplateNewVersionId;
+    private Long theNewVersionId;
 
     public Long getId() {
         return id;
@@ -45,20 +45,20 @@ public class DescriptionDTO implements Serializable {
         this.why = why;
     }
 
-    public Long getTheTemplateOldVersionId() {
-        return theTemplateOldVersionId;
+    public Long getTheOldVersionId() {
+        return theOldVersionId;
     }
 
-    public void setTheTemplateOldVersionId(Long templateId) {
-        this.theTemplateOldVersionId = templateId;
+    public void setTheOldVersionId(Long templateId) {
+        this.theOldVersionId = templateId;
     }
 
-    public Long getTheTemplateNewVersionId() {
-        return theTemplateNewVersionId;
+    public Long getTheNewVersionId() {
+        return theNewVersionId;
     }
 
-    public void setTheTemplateNewVersionId(Long templateId) {
-        this.theTemplateNewVersionId = templateId;
+    public void setTheNewVersionId(Long templateId) {
+        this.theNewVersionId = templateId;
     }
 
     @Override
@@ -88,8 +88,8 @@ public class DescriptionDTO implements Serializable {
             "id=" + getId() +
             ", date='" + getDate() + "'" +
             ", why='" + getWhy() + "'" +
-            ", theTemplateOldVersion=" + getTheTemplateOldVersionId() +
-            ", theTemplateNewVersion=" + getTheTemplateNewVersionId() +
+            ", theOldVersion=" + getTheOldVersionId() +
+            ", theNewVersion=" + getTheNewVersionId() +
             "}";
     }
 }

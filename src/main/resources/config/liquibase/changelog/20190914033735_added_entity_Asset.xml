@@ -17,7 +17,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="uid" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_asset_uid" />
             </column>
 
             <column name="creation_date" type="date">
@@ -53,10 +53,6 @@
             </column>
 
             <column name="read_only" type="boolean">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="asset_visibility" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="stats_id" type="bigint">
@@ -133,7 +129,6 @@
             <column name="path" type="string"/>
             <column name="latest_version" type="string"/>
             <column name="read_only" type="boolean"/>
-            <column name="asset_visibility" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

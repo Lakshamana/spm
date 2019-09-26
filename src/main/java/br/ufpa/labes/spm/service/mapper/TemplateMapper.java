@@ -14,13 +14,13 @@ public interface TemplateMapper extends EntityMapper<TemplateDTO, Template> {
     @Mapping(source = "theOriginalVersionDescription.id", target = "theOriginalVersionDescriptionId")
     TemplateDTO toDto(Template template);
 
-    @Mapping(target = "theProcessModels", ignore = true)
-    @Mapping(target = "removeTheProcessModel", ignore = true)
+    @Mapping(target = "theInstances", ignore = true)
+    @Mapping(target = "removeTheInstances", ignore = true)
     @Mapping(source = "theOriginalVersionDescriptionId", target = "theOriginalVersionDescription")
     @Mapping(target = "theDerivedVersionDescriptions", ignore = true)
-    @Mapping(target = "removeTheDerivedVersionDescription", ignore = true)
+    @Mapping(target = "removeTheDerivedVersionDescriptions", ignore = true)
     @Mapping(target = "theTemplateNewDescriptions", ignore = true)
-    @Mapping(target = "removeTheTemplateNewDescription", ignore = true)
+    @Mapping(target = "removeTheTemplateNewDescriptions", ignore = true)
     Template toEntity(TemplateDTO templateDTO);
 
     default Template fromId(Long id) {

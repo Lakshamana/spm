@@ -11,14 +11,14 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "agent",
             "otherEntityRelationshipName": "fromAgentAffinity",
-            "relationshipName": "fromAffinity",
+            "relationshipName": "toAffinity",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "agent",
             "otherEntityRelationshipName": "toAgentAffinity",
-            "relationshipName": "toAffinity",
+            "relationshipName": "fromAffinity",
             "otherEntityField": "id"
         }
     ],

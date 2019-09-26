@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "process_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ProcessEvent extends Event implements Serializable {
+public class ProcessEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,7 +29,7 @@ public class ProcessEvent extends Event implements Serializable {
 
     @OneToMany(mappedBy = "theProcessEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CatalogEvent> theCatalogEventToProcesses = new HashSet<>();
+    private Set<CatalogEvent> theCatalogEvents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -53,29 +53,29 @@ public class ProcessEvent extends Event implements Serializable {
         this.theProcess = process;
     }
 
-    public Set<CatalogEvent> getTheCatalogEventToProcesses() {
-        return theCatalogEventToProcesses;
+    public Set<CatalogEvent> getTheCatalogEvents() {
+        return theCatalogEvents;
     }
 
-    public ProcessEvent theCatalogEventToProcesses(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToProcesses = catalogEvents;
+    public ProcessEvent theCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
         return this;
     }
 
-    public ProcessEvent addTheCatalogEventToProcess(CatalogEvent catalogEvent) {
-        this.theCatalogEventToProcesses.add(catalogEvent);
+    public ProcessEvent addTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.add(catalogEvent);
         catalogEvent.setTheProcessEvent(this);
         return this;
     }
 
-    public ProcessEvent removeTheCatalogEventToProcess(CatalogEvent catalogEvent) {
-        this.theCatalogEventToProcesses.remove(catalogEvent);
+    public ProcessEvent removeTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.remove(catalogEvent);
         catalogEvent.setTheProcessEvent(null);
         return this;
     }
 
-    public void setTheCatalogEventToProcesses(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToProcesses = catalogEvents;
+    public void setTheCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

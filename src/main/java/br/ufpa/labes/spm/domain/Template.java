@@ -9,15 +9,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.ufpa.labes.spm.domain.enumeration.TemplateStatus;
-
 /**
  * A Template.
  */
 @Entity
 @Table(name = "template")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Template extends Process implements Serializable {
+public class Template implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,23 +23,22 @@ public class Template extends Process implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "t_status")
-    private TemplateStatus tStatus;
+    @Column(name = "template_state")
+    private String templateState;
 
     @OneToMany(mappedBy = "theOrigin")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<ProcessModel> theProcessModels = new HashSet<>();
+    private Set<ProcessModel> theInstances = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties("descTemplateOriginalVersions")
     private Description theOriginalVersionDescription;
 
-    @OneToMany(mappedBy = "theTemplateOldVersion")
+    @OneToMany(mappedBy = "theOldVersion")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Description> theDerivedVersionDescriptions = new HashSet<>();
 
-    @OneToMany(mappedBy = "theTemplateNewVersion")
+    @OneToMany(mappedBy = "theNewVersion")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Description> theTemplateNewDescriptions = new HashSet<>();
 
@@ -54,42 +51,42 @@ public class Template extends Process implements Serializable {
         this.id = id;
     }
 
-    public TemplateStatus gettStatus() {
-        return tStatus;
+    public String getTemplateState() {
+        return templateState;
     }
 
-    public Template tStatus(TemplateStatus tStatus) {
-        this.tStatus = tStatus;
+    public Template templateState(String templateState) {
+        this.templateState = templateState;
         return this;
     }
 
-    public void settStatus(TemplateStatus tStatus) {
-        this.tStatus = tStatus;
+    public void setTemplateState(String templateState) {
+        this.templateState = templateState;
     }
 
-    public Set<ProcessModel> getTheProcessModels() {
-        return theProcessModels;
+    public Set<ProcessModel> getTheInstances() {
+        return theInstances;
     }
 
-    public Template theProcessModels(Set<ProcessModel> processModels) {
-        this.theProcessModels = processModels;
+    public Template theInstances(Set<ProcessModel> processModels) {
+        this.theInstances = processModels;
         return this;
     }
 
-    public Template addTheProcessModel(ProcessModel processModel) {
-        this.theProcessModels.add(processModel);
+    public Template addTheInstances(ProcessModel processModel) {
+        this.theInstances.add(processModel);
         processModel.setTheOrigin(this);
         return this;
     }
 
-    public Template removeTheProcessModel(ProcessModel processModel) {
-        this.theProcessModels.remove(processModel);
+    public Template removeTheInstances(ProcessModel processModel) {
+        this.theInstances.remove(processModel);
         processModel.setTheOrigin(null);
         return this;
     }
 
-    public void setTheProcessModels(Set<ProcessModel> processModels) {
-        this.theProcessModels = processModels;
+    public void setTheInstances(Set<ProcessModel> processModels) {
+        this.theInstances = processModels;
     }
 
     public Description getTheOriginalVersionDescription() {
@@ -114,15 +111,15 @@ public class Template extends Process implements Serializable {
         return this;
     }
 
-    public Template addTheDerivedVersionDescription(Description description) {
+    public Template addTheDerivedVersionDescriptions(Description description) {
         this.theDerivedVersionDescriptions.add(description);
-        description.setTheTemplateOldVersion(this);
+        description.setTheOldVersion(this);
         return this;
     }
 
-    public Template removeTheDerivedVersionDescription(Description description) {
+    public Template removeTheDerivedVersionDescriptions(Description description) {
         this.theDerivedVersionDescriptions.remove(description);
-        description.setTheTemplateOldVersion(null);
+        description.setTheOldVersion(null);
         return this;
     }
 
@@ -139,15 +136,15 @@ public class Template extends Process implements Serializable {
         return this;
     }
 
-    public Template addTheTemplateNewDescription(Description description) {
+    public Template addTheTemplateNewDescriptions(Description description) {
         this.theTemplateNewDescriptions.add(description);
-        description.setTheTemplateNewVersion(this);
+        description.setTheNewVersion(this);
         return this;
     }
 
-    public Template removeTheTemplateNewDescription(Description description) {
+    public Template removeTheTemplateNewDescriptions(Description description) {
         this.theTemplateNewDescriptions.remove(description);
-        description.setTheTemplateNewVersion(null);
+        description.setTheNewVersion(null);
         return this;
     }
 
@@ -176,7 +173,7 @@ public class Template extends Process implements Serializable {
     public String toString() {
         return "Template{" +
             "id=" + getId() +
-            ", tStatus='" + gettStatus() + "'" +
+            ", templateState='" + getTemplateState() + "'" +
             "}";
     }
 }

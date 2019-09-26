@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "catalog_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CatalogEvent extends Event implements Serializable {
+public class CatalogEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,48 +28,48 @@ public class CatalogEvent extends Event implements Serializable {
     private String description;
 
     @ManyToOne
-    @JsonIgnoreProperties("theCatalogEventToAgenda")
-    private AgendaEvent theAgendaEvent;
+    @JsonIgnoreProperties("theCatalogEvents")
+    private ResourceEvent theResourceEvent;
 
     @ManyToOne
-    @JsonIgnoreProperties("theCatalogEventToCatalogs")
-    private CatalogEvent theCatalogEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEventToConnections")
-    private ConnectionEvent theConnectionEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEventToGlobalActivities")
-    private GlobalActivityEvent theGlobalActivityEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEventToModelingActivities")
-    private ModelingActivityEvent theModelingActivityEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEventToProcesses")
-    private ProcessEvent theProcessEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEventToProcessModels")
+    @JsonIgnoreProperties("theCatalogEvents")
     private ProcessModelEvent theProcessModelEvent;
 
     @ManyToOne
-    @JsonIgnoreProperties("theCatalogEventToResources")
-    private ResourceEvent theResourceEvent;
+    @JsonIgnoreProperties("theCatalogEvents")
+    private AgendaEvent theAgendaEvent;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theCatalogEvents")
+    private CatalogEvent theCatalogEvent;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theCatalogEvents")
+    private ConnectionEvent theConnectionEvent;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theCatalogEvents")
+    private GlobalActivityEvent theGlobalActivityEvent;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theCatalogEvents")
+    private ModelingActivityEvent theModelingActivityEvent;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theCatalogEvents")
+    private ProcessEvent theProcessEvent;
 
     @ManyToOne
     @JsonIgnoreProperties("theCatalogEvents")
     private Plain thePlain;
 
-    @OneToMany(mappedBy = "theCatalogEvents")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Event> theAgendaEvents = new HashSet<>();
-
     @OneToMany(mappedBy = "theCatalogEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CatalogEvent> theCatalogEventToCatalogs = new HashSet<>();
+    private Set<CatalogEvent> theCatalogEvents = new HashSet<>();
+
+    @OneToMany(mappedBy = "theCatalogEvents")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<AgendaEvent> theAgendaEvents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -91,6 +91,32 @@ public class CatalogEvent extends Event implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ResourceEvent getTheResourceEvent() {
+        return theResourceEvent;
+    }
+
+    public CatalogEvent theResourceEvent(ResourceEvent resourceEvent) {
+        this.theResourceEvent = resourceEvent;
+        return this;
+    }
+
+    public void setTheResourceEvent(ResourceEvent resourceEvent) {
+        this.theResourceEvent = resourceEvent;
+    }
+
+    public ProcessModelEvent getTheProcessModelEvent() {
+        return theProcessModelEvent;
+    }
+
+    public CatalogEvent theProcessModelEvent(ProcessModelEvent processModelEvent) {
+        this.theProcessModelEvent = processModelEvent;
+        return this;
+    }
+
+    public void setTheProcessModelEvent(ProcessModelEvent processModelEvent) {
+        this.theProcessModelEvent = processModelEvent;
     }
 
     public AgendaEvent getTheAgendaEvent() {
@@ -171,32 +197,6 @@ public class CatalogEvent extends Event implements Serializable {
         this.theProcessEvent = processEvent;
     }
 
-    public ProcessModelEvent getTheProcessModelEvent() {
-        return theProcessModelEvent;
-    }
-
-    public CatalogEvent theProcessModelEvent(ProcessModelEvent processModelEvent) {
-        this.theProcessModelEvent = processModelEvent;
-        return this;
-    }
-
-    public void setTheProcessModelEvent(ProcessModelEvent processModelEvent) {
-        this.theProcessModelEvent = processModelEvent;
-    }
-
-    public ResourceEvent getTheResourceEvent() {
-        return theResourceEvent;
-    }
-
-    public CatalogEvent theResourceEvent(ResourceEvent resourceEvent) {
-        this.theResourceEvent = resourceEvent;
-        return this;
-    }
-
-    public void setTheResourceEvent(ResourceEvent resourceEvent) {
-        this.theResourceEvent = resourceEvent;
-    }
-
     public Plain getThePlain() {
         return thePlain;
     }
@@ -210,54 +210,54 @@ public class CatalogEvent extends Event implements Serializable {
         this.thePlain = plain;
     }
 
-    public Set<Event> getTheAgendaEvents() {
-        return theAgendaEvents;
+    public Set<CatalogEvent> getTheCatalogEvents() {
+        return theCatalogEvents;
     }
 
-    public CatalogEvent theAgendaEvents(Set<Event> events) {
-        this.theAgendaEvents = events;
+    public CatalogEvent theCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
         return this;
     }
 
-    public CatalogEvent addTheAgendaEvent(Event event) {
-        this.theAgendaEvents.add(event);
-        event.setTheCatalogEvents(this);
-        return this;
-    }
-
-    public CatalogEvent removeTheAgendaEvent(Event event) {
-        this.theAgendaEvents.remove(event);
-        event.setTheCatalogEvents(null);
-        return this;
-    }
-
-    public void setTheAgendaEvents(Set<Event> events) {
-        this.theAgendaEvents = events;
-    }
-
-    public Set<CatalogEvent> getTheCatalogEventToCatalogs() {
-        return theCatalogEventToCatalogs;
-    }
-
-    public CatalogEvent theCatalogEventToCatalogs(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToCatalogs = catalogEvents;
-        return this;
-    }
-
-    public CatalogEvent addTheCatalogEventToCatalog(CatalogEvent catalogEvent) {
-        this.theCatalogEventToCatalogs.add(catalogEvent);
+    public CatalogEvent addTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.add(catalogEvent);
         catalogEvent.setTheCatalogEvent(this);
         return this;
     }
 
-    public CatalogEvent removeTheCatalogEventToCatalog(CatalogEvent catalogEvent) {
-        this.theCatalogEventToCatalogs.remove(catalogEvent);
+    public CatalogEvent removeTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.remove(catalogEvent);
         catalogEvent.setTheCatalogEvent(null);
         return this;
     }
 
-    public void setTheCatalogEventToCatalogs(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToCatalogs = catalogEvents;
+    public void setTheCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
+    }
+
+    public Set<AgendaEvent> getTheAgendaEvents() {
+        return theAgendaEvents;
+    }
+
+    public CatalogEvent theAgendaEvents(Set<AgendaEvent> agendaEvents) {
+        this.theAgendaEvents = agendaEvents;
+        return this;
+    }
+
+    public CatalogEvent addTheAgendaEvent(AgendaEvent agendaEvent) {
+        this.theAgendaEvents.add(agendaEvent);
+        agendaEvent.setTheCatalogEvents(this);
+        return this;
+    }
+
+    public CatalogEvent removeTheAgendaEvent(AgendaEvent agendaEvent) {
+        this.theAgendaEvents.remove(agendaEvent);
+        agendaEvent.setTheCatalogEvents(null);
+        return this;
+    }
+
+    public void setTheAgendaEvents(Set<AgendaEvent> agendaEvents) {
+        this.theAgendaEvents = agendaEvents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

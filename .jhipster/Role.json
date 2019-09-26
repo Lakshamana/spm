@@ -25,7 +25,7 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "role",
-            "otherEntityRelationshipName": "theRole",
+            "otherEntityRelationshipName": "commands",
             "relationshipName": "subordinate",
             "otherEntityField": "id"
         },
@@ -46,7 +46,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "role",
             "otherEntityRelationshipName": "subordinate",
-            "relationshipName": "theRole"
+            "relationshipName": "commands"
         },
         {
             "relationshipType": "one-to-many",

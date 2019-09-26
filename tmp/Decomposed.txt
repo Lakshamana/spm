@@ -5,4 +5,8 @@
       }
     }
 
-
+    public void insertIntoTheReferedProcessModel(
+        ProcessModel theReferedProcessModel) {
+      this.setTheReferedProcessModel(theReferedProcessModel);
+      theReferedProcessModel.setTheDecomposed(this);
+    }

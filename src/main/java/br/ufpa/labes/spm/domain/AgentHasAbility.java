@@ -104,10 +104,4 @@ public class AgentHasAbility implements Serializable {
             ", degree=" + getDegree() +
             "}";
     }
-
-    public void removeFromTheAbility() {
-      if (this.theAbility != null) {
-        this.theAbility.removeTheAgentHasAbility(this);
-      }
-    }
 }

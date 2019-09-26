@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "resource_estimation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ResourceEstimation extends Estimation implements Serializable {
+public class ResourceEstimation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class ResourceEstimation extends Estimation implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theResourceEstimations")
-    private Resource theResource;
+    private Resource resource;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -34,17 +34,17 @@ public class ResourceEstimation extends Estimation implements Serializable {
         this.id = id;
     }
 
-    public Resource getTheResource() {
-        return theResource;
+    public Resource getResource() {
+        return resource;
     }
 
-    public ResourceEstimation theResource(Resource resource) {
-        this.theResource = resource;
+    public ResourceEstimation resource(Resource resource) {
+        this.resource = resource;
         return this;
     }
 
-    public void setTheResource(Resource resource) {
-        this.theResource = resource;
+    public void setResource(Resource resource) {
+        this.resource = resource;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

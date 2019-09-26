@@ -31,9 +31,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.EmailSecurityLevels;
-import br.ufpa.labes.spm.domain.enumeration.EmailNotificationConfig;
-import br.ufpa.labes.spm.domain.enumeration.EmailProcessStatusNotifications;
 /**
  * Integration tests for the {@link EmailConfigurationResource} REST controller.
  */
@@ -56,14 +53,8 @@ public class EmailConfigurationResourceIT {
     private static final Boolean DEFAULT_TASK_DELEGATED = false;
     private static final Boolean UPDATED_TASK_DELEGATED = true;
 
-    private static final EmailSecurityLevels DEFAULT_SECURITY_LEVELS = EmailSecurityLevels.WITHOUT_SECURITY;
-    private static final EmailSecurityLevels UPDATED_SECURITY_LEVELS = EmailSecurityLevels.TLS_IF_AVAILABLE;
-
-    private static final EmailNotificationConfig DEFAULT_NOTIFICATION_CONFIG = EmailNotificationConfig.NOTIFY_ALL_MANAGERS;
-    private static final EmailNotificationConfig UPDATED_NOTIFICATION_CONFIG = EmailNotificationConfig.NOTIFY_SPECIFIC_MANAGERS;
-
-    private static final EmailProcessStatusNotifications DEFAULT_PROCESS_NOTIFICATIONS = EmailProcessStatusNotifications.PROCESS_HAS_FINISHED;
-    private static final EmailProcessStatusNotifications UPDATED_PROCESS_NOTIFICATIONS = EmailProcessStatusNotifications.FIRST_ACTIVITY_HAS_STARTED;
+    private static final Boolean DEFAULT_DECISION_BRANCH_COND = false;
+    private static final Boolean UPDATED_DECISION_BRANCH_COND = true;
 
     @Autowired
     private EmailConfigurationRepository emailConfigurationRepository;
@@ -118,9 +109,7 @@ public class EmailConfigurationResourceIT {
             .consumableResourceAmount(DEFAULT_CONSUMABLE_RESOURCE_AMOUNT)
             .activityInstantied(DEFAULT_ACTIVITY_INSTANTIED)
             .taskDelegated(DEFAULT_TASK_DELEGATED)
-            .securityLevels(DEFAULT_SECURITY_LEVELS)
-            .notificationConfig(DEFAULT_NOTIFICATION_CONFIG)
-            .processNotifications(DEFAULT_PROCESS_NOTIFICATIONS);
+            .decisionBranchCond(DEFAULT_DECISION_BRANCH_COND);
         return emailConfiguration;
     }
     /**
@@ -136,9 +125,7 @@ public class EmailConfigurationResourceIT {
             .consumableResourceAmount(UPDATED_CONSUMABLE_RESOURCE_AMOUNT)
             .activityInstantied(UPDATED_ACTIVITY_INSTANTIED)
             .taskDelegated(UPDATED_TASK_DELEGATED)
-            .securityLevels(UPDATED_SECURITY_LEVELS)
-            .notificationConfig(UPDATED_NOTIFICATION_CONFIG)
-            .processNotifications(UPDATED_PROCESS_NOTIFICATIONS);
+            .decisionBranchCond(UPDATED_DECISION_BRANCH_COND);
         return emailConfiguration;
     }
 
@@ -168,9 +155,7 @@ public class EmailConfigurationResourceIT {
         assertThat(testEmailConfiguration.isConsumableResourceAmount()).isEqualTo(DEFAULT_CONSUMABLE_RESOURCE_AMOUNT);
         assertThat(testEmailConfiguration.isActivityInstantied()).isEqualTo(DEFAULT_ACTIVITY_INSTANTIED);
         assertThat(testEmailConfiguration.isTaskDelegated()).isEqualTo(DEFAULT_TASK_DELEGATED);
-        assertThat(testEmailConfiguration.getSecurityLevels()).isEqualTo(DEFAULT_SECURITY_LEVELS);
-        assertThat(testEmailConfiguration.getNotificationConfig()).isEqualTo(DEFAULT_NOTIFICATION_CONFIG);
-        assertThat(testEmailConfiguration.getProcessNotifications()).isEqualTo(DEFAULT_PROCESS_NOTIFICATIONS);
+        assertThat(testEmailConfiguration.isDecisionBranchCond()).isEqualTo(DEFAULT_DECISION_BRANCH_COND);
     }
 
     @Test
@@ -210,9 +195,7 @@ public class EmailConfigurationResourceIT {
             .andExpect(jsonPath("$.[*].consumableResourceAmount").value(hasItem(DEFAULT_CONSUMABLE_RESOURCE_AMOUNT.booleanValue())))
             .andExpect(jsonPath("$.[*].activityInstantied").value(hasItem(DEFAULT_ACTIVITY_INSTANTIED.booleanValue())))
             .andExpect(jsonPath("$.[*].taskDelegated").value(hasItem(DEFAULT_TASK_DELEGATED.booleanValue())))
-            .andExpect(jsonPath("$.[*].securityLevels").value(hasItem(DEFAULT_SECURITY_LEVELS.toString())))
-            .andExpect(jsonPath("$.[*].notificationConfig").value(hasItem(DEFAULT_NOTIFICATION_CONFIG.toString())))
-            .andExpect(jsonPath("$.[*].processNotifications").value(hasItem(DEFAULT_PROCESS_NOTIFICATIONS.toString())));
+            .andExpect(jsonPath("$.[*].decisionBranchCond").value(hasItem(DEFAULT_DECISION_BRANCH_COND.booleanValue())));
     }
     
     @Test
@@ -231,9 +214,7 @@ public class EmailConfigurationResourceIT {
             .andExpect(jsonPath("$.consumableResourceAmount").value(DEFAULT_CONSUMABLE_RESOURCE_AMOUNT.booleanValue()))
             .andExpect(jsonPath("$.activityInstantied").value(DEFAULT_ACTIVITY_INSTANTIED.booleanValue()))
             .andExpect(jsonPath("$.taskDelegated").value(DEFAULT_TASK_DELEGATED.booleanValue()))
-            .andExpect(jsonPath("$.securityLevels").value(DEFAULT_SECURITY_LEVELS.toString()))
-            .andExpect(jsonPath("$.notificationConfig").value(DEFAULT_NOTIFICATION_CONFIG.toString()))
-            .andExpect(jsonPath("$.processNotifications").value(DEFAULT_PROCESS_NOTIFICATIONS.toString()));
+            .andExpect(jsonPath("$.decisionBranchCond").value(DEFAULT_DECISION_BRANCH_COND.booleanValue()));
     }
 
     @Test
@@ -262,9 +243,7 @@ public class EmailConfigurationResourceIT {
             .consumableResourceAmount(UPDATED_CONSUMABLE_RESOURCE_AMOUNT)
             .activityInstantied(UPDATED_ACTIVITY_INSTANTIED)
             .taskDelegated(UPDATED_TASK_DELEGATED)
-            .securityLevels(UPDATED_SECURITY_LEVELS)
-            .notificationConfig(UPDATED_NOTIFICATION_CONFIG)
-            .processNotifications(UPDATED_PROCESS_NOTIFICATIONS);
+            .decisionBranchCond(UPDATED_DECISION_BRANCH_COND);
         EmailConfigurationDTO emailConfigurationDTO = emailConfigurationMapper.toDto(updatedEmailConfiguration);
 
         restEmailConfigurationMockMvc.perform(put("/api/email-configurations")
@@ -281,9 +260,7 @@ public class EmailConfigurationResourceIT {
         assertThat(testEmailConfiguration.isConsumableResourceAmount()).isEqualTo(UPDATED_CONSUMABLE_RESOURCE_AMOUNT);
         assertThat(testEmailConfiguration.isActivityInstantied()).isEqualTo(UPDATED_ACTIVITY_INSTANTIED);
         assertThat(testEmailConfiguration.isTaskDelegated()).isEqualTo(UPDATED_TASK_DELEGATED);
-        assertThat(testEmailConfiguration.getSecurityLevels()).isEqualTo(UPDATED_SECURITY_LEVELS);
-        assertThat(testEmailConfiguration.getNotificationConfig()).isEqualTo(UPDATED_NOTIFICATION_CONFIG);
-        assertThat(testEmailConfiguration.getProcessNotifications()).isEqualTo(UPDATED_PROCESS_NOTIFICATIONS);
+        assertThat(testEmailConfiguration.isDecisionBranchCond()).isEqualTo(UPDATED_DECISION_BRANCH_COND);
     }
 
     @Test

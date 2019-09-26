@@ -6,7 +6,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "agent",
             "otherEntityRelationshipName": "theAgentEstimation",
-            "relationshipName": "theAgent",
+            "relationshipName": "agent",
             "otherEntityField": "id"
         }
     ],

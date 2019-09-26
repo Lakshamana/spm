@@ -24,29 +24,29 @@
                                  baseTableName="agent"
                                  constraintName="fk_agent_the_resource_event_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="event"/>
+                                 referencedTableName="resource_event"/>
 
         <addForeignKeyConstraint baseColumnNames="agent_id"
-                                 baseTableName="agent_the_processes"
-                                 constraintName="fk_agent_the_processes_agent_id"
+                                 baseTableName="agent_the_process"
+                                 constraintName="fk_agent_the_process_agent_id"
                                  referencedColumnNames="id"
                                  referencedTableName="agent"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_processes_id"
-                                 baseTableName="agent_the_processes"
-                                 constraintName="fk_agent_the_processes_the_processes_id"
+        <addForeignKeyConstraint baseColumnNames="the_process_id"
+                                 baseTableName="agent_the_process"
+                                 constraintName="fk_agent_the_process_the_process_id"
                                  referencedColumnNames="id"
                                  referencedTableName="process"/>
         
         <addForeignKeyConstraint baseColumnNames="agent_id"
-                                 baseTableName="agent_the_work_groups"
-                                 constraintName="fk_agent_the_work_groups_agent_id"
+                                 baseTableName="agent_the_work_group"
+                                 constraintName="fk_agent_the_work_group_agent_id"
                                  referencedColumnNames="id"
                                  referencedTableName="agent"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_work_groups_id"
-                                 baseTableName="agent_the_work_groups"
-                                 constraintName="fk_agent_the_work_groups_the_work_groups_id"
+        <addForeignKeyConstraint baseColumnNames="the_work_group_id"
+                                 baseTableName="agent_the_work_group"
+                                 constraintName="fk_agent_the_work_group_the_work_group_id"
                                  referencedColumnNames="id"
                                  referencedTableName="work_group"/>
         

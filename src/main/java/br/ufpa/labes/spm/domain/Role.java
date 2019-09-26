@@ -38,7 +38,7 @@ public class Role implements Serializable {
     private Set<ReqAgent> theReqAgents = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties("theRoles")
+    @JsonIgnoreProperties("commands")
     private Role subordinate;
 
     @ManyToOne
@@ -51,7 +51,7 @@ public class Role implements Serializable {
 
     @OneToMany(mappedBy = "subordinate")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Role> theRoles = new HashSet<>();
+    private Set<Role> commands = new HashSet<>();
 
     @OneToMany(mappedBy = "theRole")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -185,29 +185,29 @@ public class Role implements Serializable {
         this.theAgentPlaysRoles = agentPlaysRoles;
     }
 
-    public Set<Role> getTheRoles() {
-        return theRoles;
+    public Set<Role> getCommands() {
+        return commands;
     }
 
-    public Role theRoles(Set<Role> roles) {
-        this.theRoles = roles;
+    public Role commands(Set<Role> roles) {
+        this.commands = roles;
         return this;
     }
 
-    public Role addTheRole(Role role) {
-        this.theRoles.add(role);
+    public Role addCommands(Role role) {
+        this.commands.add(role);
         role.setSubordinate(this);
         return this;
     }
 
-    public Role removeTheRole(Role role) {
-        this.theRoles.remove(role);
+    public Role removeCommands(Role role) {
+        this.commands.remove(role);
         role.setSubordinate(null);
         return this;
     }
 
-    public void setTheRoles(Set<Role> roles) {
-        this.theRoles = roles;
+    public void setCommands(Set<Role> roles) {
+        this.commands = roles;
     }
 
     public Set<RoleNeedsAbility> getTheRoleNeedsAbilities() {

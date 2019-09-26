@@ -41,9 +41,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = SpmApp.class)
 public class NormalResourceIT {
 
-    private static final String DEFAULT_IDENT = "AAAAAAAAAA";
-    private static final String UPDATED_IDENT = "BBBBBBBBBB";
-
     private static final Float DEFAULT_HOW_LONG = 1F;
     private static final Float UPDATED_HOW_LONG = 2F;
     private static final Float SMALLER_HOW_LONG = 1F - 1F;
@@ -116,7 +113,6 @@ public class NormalResourceIT {
      */
     public static Normal createEntity(EntityManager em) {
         Normal normal = new Normal()
-            .ident(DEFAULT_IDENT)
             .howLong(DEFAULT_HOW_LONG)
             .howLongUnit(DEFAULT_HOW_LONG_UNIT)
             .plannedBegin(DEFAULT_PLANNED_BEGIN)
@@ -134,7 +130,6 @@ public class NormalResourceIT {
      */
     public static Normal createUpdatedEntity(EntityManager em) {
         Normal normal = new Normal()
-            .ident(UPDATED_IDENT)
             .howLong(UPDATED_HOW_LONG)
             .howLongUnit(UPDATED_HOW_LONG_UNIT)
             .plannedBegin(UPDATED_PLANNED_BEGIN)
@@ -166,7 +161,6 @@ public class NormalResourceIT {
         List<Normal> normalList = normalRepository.findAll();
         assertThat(normalList).hasSize(databaseSizeBeforeCreate + 1);
         Normal testNormal = normalList.get(normalList.size() - 1);
-        assertThat(testNormal.getIdent()).isEqualTo(DEFAULT_IDENT);
         assertThat(testNormal.getHowLong()).isEqualTo(DEFAULT_HOW_LONG);
         assertThat(testNormal.getHowLongUnit()).isEqualTo(DEFAULT_HOW_LONG_UNIT);
         assertThat(testNormal.getPlannedBegin()).isEqualTo(DEFAULT_PLANNED_BEGIN);
@@ -208,7 +202,6 @@ public class NormalResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(normal.getId().intValue())))
-            .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())))
             .andExpect(jsonPath("$.[*].howLong").value(hasItem(DEFAULT_HOW_LONG.doubleValue())))
             .andExpect(jsonPath("$.[*].howLongUnit").value(hasItem(DEFAULT_HOW_LONG_UNIT.toString())))
             .andExpect(jsonPath("$.[*].plannedBegin").value(hasItem(DEFAULT_PLANNED_BEGIN.toString())))
@@ -229,7 +222,6 @@ public class NormalResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(normal.getId().intValue()))
-            .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()))
             .andExpect(jsonPath("$.howLong").value(DEFAULT_HOW_LONG.doubleValue()))
             .andExpect(jsonPath("$.howLongUnit").value(DEFAULT_HOW_LONG_UNIT.toString()))
             .andExpect(jsonPath("$.plannedBegin").value(DEFAULT_PLANNED_BEGIN.toString()))
@@ -260,7 +252,6 @@ public class NormalResourceIT {
         // Disconnect from session so that the updates on updatedNormal are not directly saved in db
         em.detach(updatedNormal);
         updatedNormal
-            .ident(UPDATED_IDENT)
             .howLong(UPDATED_HOW_LONG)
             .howLongUnit(UPDATED_HOW_LONG_UNIT)
             .plannedBegin(UPDATED_PLANNED_BEGIN)
@@ -279,7 +270,6 @@ public class NormalResourceIT {
         List<Normal> normalList = normalRepository.findAll();
         assertThat(normalList).hasSize(databaseSizeBeforeUpdate);
         Normal testNormal = normalList.get(normalList.size() - 1);
-        assertThat(testNormal.getIdent()).isEqualTo(UPDATED_IDENT);
         assertThat(testNormal.getHowLong()).isEqualTo(UPDATED_HOW_LONG);
         assertThat(testNormal.getHowLongUnit()).isEqualTo(UPDATED_HOW_LONG_UNIT);
         assertThat(testNormal.getPlannedBegin()).isEqualTo(UPDATED_PLANNED_BEGIN);

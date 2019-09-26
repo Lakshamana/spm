@@ -5,14 +5,14 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "workGroupType",
-            "otherEntityRelationshipName": "theReqWorkGroup",
+            "otherEntityRelationshipName": "theReqGroup",
             "relationshipName": "theWorkGroupType",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "workGroup",
-            "otherEntityRelationshipName": "theReqWorkGroup",
+            "otherEntityRelationshipName": "theReqGroup",
             "relationshipName": "theWorkGroup",
             "otherEntityField": "id"
         }

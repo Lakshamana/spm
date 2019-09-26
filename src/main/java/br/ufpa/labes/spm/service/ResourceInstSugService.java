@@ -7,6 +7,8 @@ import br.ufpa.labes.spm.service.mapper.ResourceInstSugMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,11 +56,20 @@ public class ResourceInstSugService {
     @Transactional(readOnly = true)
     public List<ResourceInstSugDTO> findAll() {
         log.debug("Request to get all ResourceInstSugs");
-        return resourceInstSugRepository.findAll().stream()
+        return resourceInstSugRepository.findAllWithEagerRelationships().stream()
             .map(resourceInstSugMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+    /**
+     * Get all the resourceInstSugs with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<ResourceInstSugDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return resourceInstSugRepository.findAllWithEagerRelationships(pageable).map(resourceInstSugMapper::toDto);
+    }
+    
 
     /**
      * Get one resourceInstSug by id.
@@ -69,7 +80,7 @@ public class ResourceInstSugService {
     @Transactional(readOnly = true)
     public Optional<ResourceInstSugDTO> findOne(Long id) {
         log.debug("Request to get ResourceInstSug : {}", id);
-        return resourceInstSugRepository.findById(id)
+        return resourceInstSugRepository.findOneWithEagerRelationships(id)
             .map(resourceInstSugMapper::toDto);
     }
 

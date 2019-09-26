@@ -8,15 +8,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.ufpa.labes.spm.domain.enumeration.ExclusiveStatus;
-
 /**
  * A Exclusive.
  */
 @Entity
 @Table(name = "exclusive")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Exclusive extends Resource implements Serializable {
+public class Exclusive implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,9 +22,8 @@ public class Exclusive extends Resource implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "exclusive_status")
-    private ExclusiveStatus exclusiveStatus;
+    @Column(name = "state")
+    private String state;
 
     @Column(name = "unit_of_cost")
     private String unitOfCost;
@@ -44,17 +41,17 @@ public class Exclusive extends Resource implements Serializable {
         this.id = id;
     }
 
-    public ExclusiveStatus getExclusiveStatus() {
-        return exclusiveStatus;
+    public String getState() {
+        return state;
     }
 
-    public Exclusive exclusiveStatus(ExclusiveStatus exclusiveStatus) {
-        this.exclusiveStatus = exclusiveStatus;
+    public Exclusive state(String state) {
+        this.state = state;
         return this;
     }
 
-    public void setExclusiveStatus(ExclusiveStatus exclusiveStatus) {
-        this.exclusiveStatus = exclusiveStatus;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getUnitOfCost() {
@@ -116,7 +113,7 @@ public class Exclusive extends Resource implements Serializable {
     public String toString() {
         return "Exclusive{" +
             "id=" + getId() +
-            ", exclusiveStatus='" + getExclusiveStatus() + "'" +
+            ", state='" + getState() + "'" +
             ", unitOfCost='" + getUnitOfCost() + "'" +
             "}";
     }

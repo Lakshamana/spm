@@ -1,5 +1,6 @@
 package br.ufpa.labes.spm.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -7,8 +8,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A Plugin.
@@ -24,8 +23,8 @@ public class Plugin implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column(name = "name", nullable = false)
+    
+    @Column(name = "name", unique = true)
     private String name;
 
     @NotNull
@@ -33,15 +32,12 @@ public class Plugin implements Serializable {
     private String developerName;
 
     @NotNull
-    @Column(name = "json_config_file", nullable = false)
-    private String jsonConfigFile;
+    @Column(name = "config_file_path", nullable = false)
+    private String configFilePath;
 
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "plugin_user",
-               joinColumns = @JoinColumn(name = "plugin_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private Set<User> users = new HashSet<>();
+    @ManyToOne
+    @JsonIgnoreProperties("thePlugins")
+    private User theCompany;
 
     @OneToOne(mappedBy = "thePlugin")
     @JsonIgnore
@@ -82,40 +78,30 @@ public class Plugin implements Serializable {
         this.developerName = developerName;
     }
 
-    public String getJsonConfigFile() {
-        return jsonConfigFile;
+    public String getConfigFilePath() {
+        return configFilePath;
     }
 
-    public Plugin jsonConfigFile(String jsonConfigFile) {
-        this.jsonConfigFile = jsonConfigFile;
+    public Plugin configFilePath(String configFilePath) {
+        this.configFilePath = configFilePath;
         return this;
     }
 
-    public void setJsonConfigFile(String jsonConfigFile) {
-        this.jsonConfigFile = jsonConfigFile;
+    public void setConfigFilePath(String configFilePath) {
+        this.configFilePath = configFilePath;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public User getTheCompany() {
+        return theCompany;
     }
 
-    public Plugin users(Set<User> users) {
-        this.users = users;
+    public Plugin theCompany(User user) {
+        this.theCompany = user;
         return this;
     }
 
-    public Plugin addUser(User user) {
-        this.users.add(user);
-        return this;
-    }
-
-    public Plugin removeUser(User user) {
-        this.users.remove(user);
-        return this;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setTheCompany(User user) {
+        this.theCompany = user;
     }
 
     public Driver getTheDriver() {
@@ -154,7 +140,7 @@ public class Plugin implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", developerName='" + getDeveloperName() + "'" +
-            ", jsonConfigFile='" + getJsonConfigFile() + "'" +
+            ", configFilePath='" + getConfigFilePath() + "'" +
             "}";
     }
 }

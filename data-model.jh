@@ -24,20 +24,19 @@ relationship ManyToOne {
 
 relationship OneToMany {
     Activity{theModelingActivityEvent} to ModelingActivityEvent{theActivity},
-    Activity{hasVersions} to Activity{isVersion},
+    Activity{hasVersions} to Activity{isVersionOf},
     Activity{fromSimpleCon} to SimpleCon{toActivity},
     Activity{toSimpleCon} to SimpleCon{fromActivity},
-    Activity{fromJoin} to JoinCon{toActivity},
-    Activity{toBranch} to BranchCon{fromActivity},
-    Activity{activityMetric} to Metric{activity},
+    Activity{fromJoinCon} to JoinCon{toActivity},
+    Activity{toBranchCon} to BranchCon{fromActivity},
     Activity{activityEstimation} to ActivityEstimation{activity},
 
     Plain{theGlobalActivityEvent} to GlobalActivityEvent{thePlain}
 }
 
 relationship ManyToMany {
-    Activity{toJoin} to JoinCon{fromActivity},
-    Activity{fromBranchAND} to BranchANDCon{toActivity},
+    Activity{toJoinCon} to JoinCon{fromActivity},
+    Activity{fromBranchANDCon} to BranchANDCon{toActivity},
     Activity{fromArtifactCon} to ArtifactCon{toActivity},
     Activity{toArtifactCon} to ArtifactCon{fromActivity}
 }
@@ -155,7 +154,7 @@ relationship ManyToOne {
     AgentPlaysRole{theAgent} to Agent{theAgentPlaysRole},
     AgentPlaysRole{theRole} to Role{theAgentPlaysRole},
 
-    WorkGroup{theGroupType} to WorkGroupType{theGroup}
+    WorkGroup{theGroupType} to WorkGroupType{theWorkGroup}
     WorkGroup{superGroup} to WorkGroup{subGroups},
 
     OutOfWorkPeriod{theAgent} to Agent{theOutOfWorkPeriod},
@@ -182,16 +181,16 @@ relationship OneToMany {
     EmailConfiguration{theProcesses} to Process{theEmailConfiguration},
     EmailConfiguration{theManagers} to Agent{theEmailConfiguration},
 
-    WorkGroup{theReqGroup} to ReqWorkGroup{theGroup},
-    WorkGroup{theGroupMetric} to WorkGroupMetric{group},
-    WorkGroup{theGroupEstimation} to WorkGroupEstimation{group},
+    WorkGroup{theReqGroup} to ReqWorkGroup{theWorkGroup},
+    WorkGroup{theWorkGroupMetric} to WorkGroupMetric{workGroup},
+    WorkGroup{theWorkGroupEstimation} to WorkGroupEstimation{workGroup},
 
     Role{theReqAgent} to ReqAgent{theRole}
 }
 
 relationship ManyToMany {
     Agent{theProcess} to Process{theAgent},
-    Agent{theGroup} to WorkGroup{theAgent},
+    Agent{theWorkGroup} to WorkGroup{theAgent},
     Agent{theOrgUnits} to CompanyUnit{theUnitAgents}
 }
 
@@ -412,8 +411,8 @@ entity BranchConCondToActivity {}
 entity BranchConCondToMultipleCon {}
 
 relationship OneToMany {
-  BranchConCond{theBranchCondToActivity} to BranchConCondToActivity{theBranchCond},
-  BranchConCond{theBranchCondToMultipleCon} to BranchConCondToMultipleCon{theBranchCond}
+  BranchConCond{theBranchConCondToActivity} to BranchConCondToActivity{theBranchConCond},
+  BranchConCond{theBranchConCondToMultipleCon} to BranchConCondToMultipleCon{theBranchConCond}
 }
 
 relationship ManyToOne {
@@ -425,23 +424,23 @@ relationship ManyToOne {
 
     MultipleCon{theDependency} to Dependency{theMultipleCon},
 
-    BranchCon{fromMultipleConnection} to MultipleCon{toBranch},
+    BranchCon{fromMultipleConnection} to MultipleCon{toBranchCon},
 
-    BranchConCondToActivity{theActivity} to Activity{theBranchCondToActivity},
+    BranchConCondToActivity{theActivity} to Activity{theBranchConCondToActivity},
 
-    BranchConCondToMultipleCon{theMultipleCon} to MultipleCon{theBranchCondToMultipleCon},
+    BranchConCondToMultipleCon{theMultipleCon} to MultipleCon{theBranchConCondToMultipleCon},
 
     Sequence{theDependency} to Dependency{theSequence},
 
-    JoinCon{toMultipleCon} to MultipleCon{theJoin}
+    JoinCon{toMultipleCon} to MultipleCon{theJoinCon}
 }
 
 relationship ManyToMany {
     ArtifactCon{toMultipleCon} to MultipleCon{fromArtifactCon},
 
-    BranchANDCon{toMultipleCon} to MultipleCon{theBranchAND},
+    BranchANDCon{toMultipleCon} to MultipleCon{theBranchANDCon},
 
-    JoinCon{fromMultipleCon} to MultipleCon{theJoin}
+    JoinCon{fromMultipleCon} to MultipleCon{theJoinCon}
 }
 
 relationship OneToOne {
@@ -706,9 +705,9 @@ relationship ManyToOne {
     InvolvedArtifact{outInvolvedArtifacts} to Normal{involvedArtifactFromNormal},
     InvolvedArtifact{theArtifactType} to ArtifactType{theInvolvedArtifacts},
 
-    ReqAgentRequiresAbility{theReqAgent} to RequiredAgent{theReqAgentRequiresAbility},
+    ReqAgentRequiresAbility{theReqAgent} to ReqAgent{theReqAgentRequiresAbility},
 
-    ReqWorkGroup{theGroupType} to WorkGroupType{theReqGroup},
+    ReqWorkGroup{theWorkGroupType} to WorkGroupType{theReqGroup},
 
     RequiredResource{theResourceType} to ResourceType{theRequiredResource},
     RequiredResource{theResource} to Resource{theRequiredResource}

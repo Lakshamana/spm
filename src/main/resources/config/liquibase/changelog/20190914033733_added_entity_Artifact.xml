@@ -24,7 +24,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="description" type="varchar(255)">
+            <column name="description" type="${clobType}">
                 <constraints nullable="true" />
             </column>
 
@@ -44,7 +44,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="active" type="boolean">
+            <column name="is_active" type="boolean">
                 <constraints nullable="true" />
             </column>
 
@@ -52,11 +52,15 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="derived_from_id" type="bigint">
+            <column name="derived_to_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
-            <column name="thevcsrepository_id" type="bigint">
+            <column name="possess_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="the_repository_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
@@ -90,12 +94,12 @@
             <column name="id" type="numeric"/>
             <column name="ident" type="string"/>
             <column name="name" type="string"/>
-            <column name="description" type="string"/>
+            <column name="description" type="clob"/>
             <column name="path_name" type="string"/>
             <column name="file_name" type="string"/>
             <column name="latest_version" type="string"/>
             <column name="is_template" type="boolean"/>
-            <column name="active" type="boolean"/>
+            <column name="is_active" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

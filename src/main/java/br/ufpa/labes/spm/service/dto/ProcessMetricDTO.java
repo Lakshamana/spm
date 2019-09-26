@@ -10,7 +10,7 @@ public class ProcessMetricDTO implements Serializable {
     private Long id;
 
 
-    private Long theProcessId;
+    private Long processId;
 
     public Long getId() {
         return id;
@@ -20,12 +20,12 @@ public class ProcessMetricDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getTheProcessId() {
-        return theProcessId;
+    public Long getProcessId() {
+        return processId;
     }
 
-    public void setTheProcessId(Long processId) {
-        this.theProcessId = processId;
+    public void setProcessId(Long processId) {
+        this.processId = processId;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ProcessMetricDTO implements Serializable {
     public String toString() {
         return "ProcessMetricDTO{" +
             "id=" + getId() +
-            ", theProcess=" + getTheProcessId() +
+            ", process=" + getProcessId() +
             "}";
     }
 }

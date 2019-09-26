@@ -5,22 +5,8 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "activityInstantiated",
-            "otherEntityRelationshipName": "theInstSug",
+            "otherEntityRelationshipName": "theInstantiationSuggestion",
             "relationshipName": "theActivityInstantiated",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "resource",
-            "otherEntityRelationshipName": "instSugToResource",
-            "relationshipName": "chosenResource",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "type",
-            "otherEntityRelationshipName": "instSugToType",
-            "relationshipName": "requiredResourceType",
             "otherEntityField": "id"
         },
         {

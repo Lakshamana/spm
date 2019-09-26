@@ -19,14 +19,6 @@
             <column name="requirements" type="${clobType}">
                 <constraints nullable="true" />
             </column>
-
-            <column name="plain_status" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="automatic" type="boolean">
-                <constraints nullable="true" />
-            </column>
             <column name="the_enaction_description_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_plain_the_enaction_description_id" />
             </column>
@@ -55,8 +47,6 @@
                   tableName="plain">
             <column name="id" type="numeric"/>
             <column name="requirements" type="clob"/>
-            <column name="plain_status" type="string"/>
-            <column name="automatic" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

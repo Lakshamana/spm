@@ -1,7 +1,6 @@
 package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
-import br.ufpa.labes.spm.domain.enumeration.ShareableStatus;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.Shareable} entity.
@@ -10,7 +9,7 @@ public class ShareableDTO implements Serializable {
 
     private Long id;
 
-    private ShareableStatus shareableStatus;
+    private String state;
 
     private String unitOfCost;
 
@@ -23,12 +22,12 @@ public class ShareableDTO implements Serializable {
         this.id = id;
     }
 
-    public ShareableStatus getShareableStatus() {
-        return shareableStatus;
+    public String getState() {
+        return state;
     }
 
-    public void setShareableStatus(ShareableStatus shareableStatus) {
-        this.shareableStatus = shareableStatus;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getUnitOfCost() {
@@ -64,7 +63,7 @@ public class ShareableDTO implements Serializable {
     public String toString() {
         return "ShareableDTO{" +
             "id=" + getId() +
-            ", shareableStatus='" + getShareableStatus() + "'" +
+            ", state='" + getState() + "'" +
             ", unitOfCost='" + getUnitOfCost() + "'" +
             "}";
     }

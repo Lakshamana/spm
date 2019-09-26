@@ -2,6 +2,10 @@
     "name": "Script",
     "fields": [
         {
+            "fieldName": "ident",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "fileName",
             "fieldType": "String"
         },

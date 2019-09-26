@@ -8,31 +8,35 @@
         {
             "fieldName": "name",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "isVersion",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "event",
+            "otherEntityName": "modelingActivityEvent",
             "otherEntityRelationshipName": "theActivity",
             "relationshipName": "theModelingActivityEvent"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "activity",
-            "otherEntityRelationshipName": "theAncestorActitvity",
+            "otherEntityRelationshipName": "isVersionOf",
             "relationshipName": "hasVersions"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "simpleCon",
-            "otherEntityRelationshipName": "fromActivity",
+            "otherEntityRelationshipName": "toActivity",
             "relationshipName": "fromSimpleCon"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "simpleCon",
-            "otherEntityRelationshipName": "toActivity",
+            "otherEntityRelationshipName": "fromActivity",
             "relationshipName": "toSimpleCon"
         },
         {
@@ -50,14 +54,14 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "metric",
-            "otherEntityRelationshipName": "theActivity",
+            "otherEntityRelationshipName": "activity",
             "relationshipName": "activityMetric"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "activityEstimation",
-            "otherEntityRelationshipName": "theActivity",
-            "relationshipName": "theActivityEstimation"
+            "otherEntityRelationshipName": "activity",
+            "relationshipName": "activityEstimation"
         },
         {
             "relationshipType": "many-to-one",
@@ -77,8 +81,8 @@
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "branchANDCon",
-            "otherEntityRelationshipName": "fromActivity",
-            "relationshipName": "toBranchANDCon",
+            "otherEntityRelationshipName": "toActivity",
+            "relationshipName": "fromBranchANDCon",
             "otherEntityField": "id",
             "ownerSide": true
         },
@@ -102,7 +106,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "activity",
             "otherEntityRelationshipName": "hasVersions",
-            "relationshipName": "theAncestorActitvity",
+            "relationshipName": "isVersionOf",
             "otherEntityField": "id"
         },
         {
@@ -127,8 +131,8 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "activityMetric",
-            "otherEntityRelationshipName": "theActivity",
-            "relationshipName": "theActivityMetric"
+            "otherEntityRelationshipName": "activity",
+            "relationshipName": "activityMetric"
         }
     ],
     "changelogDate": "20190914033720",

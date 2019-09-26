@@ -12,13 +12,16 @@ import java.io.Serializable;
 @Entity
 @Table(name = "class_method_call")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ClassMethodCall extends Subroutine implements Serializable {
+public class ClassMethodCall implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "ident")
+    private String ident;
 
     @Column(name = "class_name")
     private String className;
@@ -37,6 +40,19 @@ public class ClassMethodCall extends Subroutine implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIdent() {
+        return ident;
+    }
+
+    public ClassMethodCall ident(String ident) {
+        this.ident = ident;
+        return this;
+    }
+
+    public void setIdent(String ident) {
+        this.ident = ident;
     }
 
     public String getClassName() {
@@ -99,6 +115,7 @@ public class ClassMethodCall extends Subroutine implements Serializable {
     public String toString() {
         return "ClassMethodCall{" +
             "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
             ", className='" + getClassName() + "'" +
             ", methodName='" + getMethodName() + "'" +
             ", description='" + getDescription() + "'" +

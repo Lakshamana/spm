@@ -34,36 +34,36 @@ public class WorkGroup implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "active")
-    private Boolean active;
+    @Column(name = "is_active")
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "theWorkGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<ReqWorkGroup> theReqWorkGroups = new HashSet<>();
+    private Set<ReqWorkGroup> theReqGroups = new HashSet<>();
 
-    @OneToMany(mappedBy = "theWorkGroup")
+    @OneToMany(mappedBy = "workGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<WorkGroupMetric> theWorkGroupMetrics = new HashSet<>();
 
-    @OneToMany(mappedBy = "theWorkGroup")
+    @OneToMany(mappedBy = "workGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<WorkGroupEstimation> theWorkGroupEstimations = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties("theWorkGroups")
-    private WorkGroupType theWorkGroupType;
+    private WorkGroupType theGroupType;
 
     @ManyToOne
-    @JsonIgnoreProperties("subWorkGroups")
-    private WorkGroup superWorkGroup;
+    @JsonIgnoreProperties("subGroups")
+    private WorkGroup superGroup;
 
-    @OneToMany(mappedBy = "superWorkGroup")
+    @OneToMany(mappedBy = "superGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<WorkGroup> subWorkGroups = new HashSet<>();
+    private Set<WorkGroup> subGroups = new HashSet<>();
 
-    @OneToMany(mappedBy = "chosenWorkGroup")
+    @OneToMany(mappedBy = "groupChosen")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<WorkGroupInstSug> sugToChosenWorkGroups = new HashSet<>();
+    private Set<WorkGroupInstSug> theWorkGroupInstSugs = new HashSet<>();
 
     @ManyToMany(mappedBy = "theWorkGroups")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -71,6 +71,11 @@ public class WorkGroup implements Serializable {
     private Set<Agent> theAgents = new HashSet<>();
 
     @ManyToMany(mappedBy = "sugWorkGroups")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private Set<WorkGroupInstSug> theWorkGroupInstSugs = new HashSet<>();
+
+    @ManyToMany(mappedBy = "groupSuggesteds")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
     private Set<WorkGroupInstSug> theWorkGroupInstSugs = new HashSet<>();
@@ -123,42 +128,42 @@ public class WorkGroup implements Serializable {
         this.description = description;
     }
 
-    public Boolean isActive() {
-        return active;
+    public Boolean isIsActive() {
+        return isActive;
     }
 
-    public WorkGroup active(Boolean active) {
-        this.active = active;
+    public WorkGroup isActive(Boolean isActive) {
+        this.isActive = isActive;
         return this;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
-    public Set<ReqWorkGroup> getTheReqWorkGroups() {
-        return theReqWorkGroups;
+    public Set<ReqWorkGroup> getTheReqGroups() {
+        return theReqGroups;
     }
 
-    public WorkGroup theReqWorkGroups(Set<ReqWorkGroup> reqWorkGroups) {
-        this.theReqWorkGroups = reqWorkGroups;
+    public WorkGroup theReqGroups(Set<ReqWorkGroup> reqWorkGroups) {
+        this.theReqGroups = reqWorkGroups;
         return this;
     }
 
-    public WorkGroup addTheReqWorkGroup(ReqWorkGroup reqWorkGroup) {
-        this.theReqWorkGroups.add(reqWorkGroup);
+    public WorkGroup addTheReqGroup(ReqWorkGroup reqWorkGroup) {
+        this.theReqGroups.add(reqWorkGroup);
         reqWorkGroup.setTheWorkGroup(this);
         return this;
     }
 
-    public WorkGroup removeTheReqWorkGroup(ReqWorkGroup reqWorkGroup) {
-        this.theReqWorkGroups.remove(reqWorkGroup);
+    public WorkGroup removeTheReqGroup(ReqWorkGroup reqWorkGroup) {
+        this.theReqGroups.remove(reqWorkGroup);
         reqWorkGroup.setTheWorkGroup(null);
         return this;
     }
 
-    public void setTheReqWorkGroups(Set<ReqWorkGroup> reqWorkGroups) {
-        this.theReqWorkGroups = reqWorkGroups;
+    public void setTheReqGroups(Set<ReqWorkGroup> reqWorkGroups) {
+        this.theReqGroups = reqWorkGroups;
     }
 
     public Set<WorkGroupMetric> getTheWorkGroupMetrics() {
@@ -172,13 +177,13 @@ public class WorkGroup implements Serializable {
 
     public WorkGroup addTheWorkGroupMetric(WorkGroupMetric workGroupMetric) {
         this.theWorkGroupMetrics.add(workGroupMetric);
-        workGroupMetric.setTheWorkGroup(this);
+        workGroupMetric.setWorkGroup(this);
         return this;
     }
 
     public WorkGroup removeTheWorkGroupMetric(WorkGroupMetric workGroupMetric) {
         this.theWorkGroupMetrics.remove(workGroupMetric);
-        workGroupMetric.setTheWorkGroup(null);
+        workGroupMetric.setWorkGroup(null);
         return this;
     }
 
@@ -197,13 +202,13 @@ public class WorkGroup implements Serializable {
 
     public WorkGroup addTheWorkGroupEstimation(WorkGroupEstimation workGroupEstimation) {
         this.theWorkGroupEstimations.add(workGroupEstimation);
-        workGroupEstimation.setTheWorkGroup(this);
+        workGroupEstimation.setWorkGroup(this);
         return this;
     }
 
     public WorkGroup removeTheWorkGroupEstimation(WorkGroupEstimation workGroupEstimation) {
         this.theWorkGroupEstimations.remove(workGroupEstimation);
-        workGroupEstimation.setTheWorkGroup(null);
+        workGroupEstimation.setWorkGroup(null);
         return this;
     }
 
@@ -211,80 +216,80 @@ public class WorkGroup implements Serializable {
         this.theWorkGroupEstimations = workGroupEstimations;
     }
 
-    public WorkGroupType getTheWorkGroupType() {
-        return theWorkGroupType;
+    public WorkGroupType getTheGroupType() {
+        return theGroupType;
     }
 
-    public WorkGroup theWorkGroupType(WorkGroupType workGroupType) {
-        this.theWorkGroupType = workGroupType;
+    public WorkGroup theGroupType(WorkGroupType workGroupType) {
+        this.theGroupType = workGroupType;
         return this;
     }
 
-    public void setTheWorkGroupType(WorkGroupType workGroupType) {
-        this.theWorkGroupType = workGroupType;
+    public void setTheGroupType(WorkGroupType workGroupType) {
+        this.theGroupType = workGroupType;
     }
 
-    public WorkGroup getSuperWorkGroup() {
-        return superWorkGroup;
+    public WorkGroup getSuperGroup() {
+        return superGroup;
     }
 
-    public WorkGroup superWorkGroup(WorkGroup workGroup) {
-        this.superWorkGroup = workGroup;
+    public WorkGroup superGroup(WorkGroup workGroup) {
+        this.superGroup = workGroup;
         return this;
     }
 
-    public void setSuperWorkGroup(WorkGroup workGroup) {
-        this.superWorkGroup = workGroup;
+    public void setSuperGroup(WorkGroup workGroup) {
+        this.superGroup = workGroup;
     }
 
-    public Set<WorkGroup> getSubWorkGroups() {
-        return subWorkGroups;
+    public Set<WorkGroup> getSubGroups() {
+        return subGroups;
     }
 
-    public WorkGroup subWorkGroups(Set<WorkGroup> workGroups) {
-        this.subWorkGroups = workGroups;
+    public WorkGroup subGroups(Set<WorkGroup> workGroups) {
+        this.subGroups = workGroups;
         return this;
     }
 
-    public WorkGroup addSubWorkGroups(WorkGroup workGroup) {
-        this.subWorkGroups.add(workGroup);
-        workGroup.setSuperWorkGroup(this);
+    public WorkGroup addSubGroups(WorkGroup workGroup) {
+        this.subGroups.add(workGroup);
+        workGroup.setSuperGroup(this);
         return this;
     }
 
-    public WorkGroup removeSubWorkGroups(WorkGroup workGroup) {
-        this.subWorkGroups.remove(workGroup);
-        workGroup.setSuperWorkGroup(null);
+    public WorkGroup removeSubGroups(WorkGroup workGroup) {
+        this.subGroups.remove(workGroup);
+        workGroup.setSuperGroup(null);
         return this;
     }
 
-    public void setSubWorkGroups(Set<WorkGroup> workGroups) {
-        this.subWorkGroups = workGroups;
+    public void setSubGroups(Set<WorkGroup> workGroups) {
+        this.subGroups = workGroups;
     }
 
-    public Set<WorkGroupInstSug> getSugToChosenWorkGroups() {
-        return sugToChosenWorkGroups;
+    public Set<WorkGroupInstSug> getTheWorkGroupInstSugs() {
+        return theWorkGroupInstSugs;
     }
 
-    public WorkGroup sugToChosenWorkGroups(Set<WorkGroupInstSug> workGroupInstSugs) {
-        this.sugToChosenWorkGroups = workGroupInstSugs;
+    public WorkGroup theWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
+        this.theWorkGroupInstSugs = workGroupInstSugs;
         return this;
     }
 
-    public WorkGroup addSugToChosenWorkGroup(WorkGroupInstSug workGroupInstSug) {
-        this.sugToChosenWorkGroups.add(workGroupInstSug);
-        workGroupInstSug.setChosenWorkGroup(this);
+    public WorkGroup addTheWorkGroupInstSug(WorkGroupInstSug workGroupInstSug) {
+        this.theWorkGroupInstSugs.add(workGroupInstSug);
+        workGroupInstSug.setGroupChosen(this);
         return this;
     }
 
-    public WorkGroup removeSugToChosenWorkGroup(WorkGroupInstSug workGroupInstSug) {
-        this.sugToChosenWorkGroups.remove(workGroupInstSug);
-        workGroupInstSug.setChosenWorkGroup(null);
+    public WorkGroup removeTheWorkGroupInstSug(WorkGroupInstSug workGroupInstSug) {
+        this.theWorkGroupInstSugs.remove(workGroupInstSug);
+        workGroupInstSug.setGroupChosen(null);
         return this;
     }
 
-    public void setSugToChosenWorkGroups(Set<WorkGroupInstSug> workGroupInstSugs) {
-        this.sugToChosenWorkGroups = workGroupInstSugs;
+    public void setTheWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
+        this.theWorkGroupInstSugs = workGroupInstSugs;
     }
 
     public Set<Agent> getTheAgents() {
@@ -336,6 +341,31 @@ public class WorkGroup implements Serializable {
     public void setTheWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
         this.theWorkGroupInstSugs = workGroupInstSugs;
     }
+
+    public Set<WorkGroupInstSug> getTheWorkGroupInstSugs() {
+        return theWorkGroupInstSugs;
+    }
+
+    public WorkGroup theWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
+        this.theWorkGroupInstSugs = workGroupInstSugs;
+        return this;
+    }
+
+    public WorkGroup addTheWorkGroupInstSug(WorkGroupInstSug workGroupInstSug) {
+        this.theWorkGroupInstSugs.add(workGroupInstSug);
+        workGroupInstSug.getGroupSuggesteds().add(this);
+        return this;
+    }
+
+    public WorkGroup removeTheWorkGroupInstSug(WorkGroupInstSug workGroupInstSug) {
+        this.theWorkGroupInstSugs.remove(workGroupInstSug);
+        workGroupInstSug.getGroupSuggesteds().remove(this);
+        return this;
+    }
+
+    public void setTheWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
+        this.theWorkGroupInstSugs = workGroupInstSugs;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -361,7 +391,7 @@ public class WorkGroup implements Serializable {
             ", ident='" + getIdent() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", active='" + isActive() + "'" +
+            ", isActive='" + isIsActive() + "'" +
             "}";
     }
 }

@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 /**
  * REST controller for managing {@link br.ufpa.labes.spm.domain.Company}.
@@ -82,10 +83,15 @@ public class CompanyResource {
      * {@code GET  /companies} : get all the companies.
      *
 
+     * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of companies in body.
      */
     @GetMapping("/companies")
-    public List<CompanyDTO> getAllCompanies() {
+    public List<CompanyDTO> getAllCompanies(@RequestParam(required = false) String filter) {
+        if ("thedriver-is-null".equals(filter)) {
+            log.debug("REST request to get all Companys where theDriver is null");
+            return companyService.findAllWhereTheDriverIsNull();
+        }
         log.debug("REST request to get all Companies");
         return companyService.findAll();
     }

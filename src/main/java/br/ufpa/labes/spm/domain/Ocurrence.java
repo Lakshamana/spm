@@ -33,7 +33,7 @@ public class Ocurrence implements Serializable {
     private String event;
 
     @ManyToOne
-    @JsonIgnoreProperties("theOcurrences")
+    @JsonIgnoreProperties("ocurrences")
     private Task theTask;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

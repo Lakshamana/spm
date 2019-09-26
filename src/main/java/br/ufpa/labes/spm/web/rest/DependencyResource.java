@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 /**
  * REST controller for managing {@link br.ufpa.labes.spm.domain.Dependency}.
@@ -82,10 +83,15 @@ public class DependencyResource {
      * {@code GET  /dependencies} : get all the dependencies.
      *
 
+     * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of dependencies in body.
      */
     @GetMapping("/dependencies")
-    public List<DependencyDTO> getAllDependencies() {
+    public List<DependencyDTO> getAllDependencies(@RequestParam(required = false) String filter) {
+        if ("themultiplecon-is-null".equals(filter)) {
+            log.debug("REST request to get all Dependencys where theMultipleCon is null");
+            return dependencyService.findAllWhereTheMultipleConIsNull();
+        }
         log.debug("REST request to get all Dependencies");
         return dependencyService.findAll();
     }

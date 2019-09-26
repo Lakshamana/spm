@@ -22,15 +22,15 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "metricDefinition",
-            "otherEntityRelationshipName": "theMetric",
-            "relationshipName": "theMetricDefinition",
+            "otherEntityRelationshipName": "metric",
+            "relationshipName": "metricDefinition",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "activity",
             "otherEntityRelationshipName": "activityMetric",
-            "relationshipName": "theActivity",
+            "relationshipName": "activity",
             "otherEntityField": "id"
         }
     ],

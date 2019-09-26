@@ -43,10 +43,6 @@ public class Task implements Serializable {
     private LocalDate dateDelegatedFrom;
 
     @ManyToOne
-    @JsonIgnoreProperties("theTasks")
-    private ProcessAgenda theProcessAgenda;
-
-    @ManyToOne
     @JsonIgnoreProperties("delegates")
     private Agent delegatedFrom;
 
@@ -58,17 +54,21 @@ public class Task implements Serializable {
     @JsonIgnoreProperties("theTasks")
     private Normal theNormal;
 
+    @ManyToOne
+    @JsonIgnoreProperties("theTasks")
+    private ProcessAgenda theProcessAgenda;
+
     @OneToMany(mappedBy = "theTask")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ArtifactTask> theArtifactTasks = new HashSet<>();
 
     @OneToMany(mappedBy = "theTask")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Event> theAgendaEvents = new HashSet<>();
+    private Set<AgendaEvent> theAgendaEvents = new HashSet<>();
 
     @OneToMany(mappedBy = "theTask")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Ocurrence> theOcurrences = new HashSet<>();
+    private Set<Ocurrence> ocurrences = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -157,19 +157,6 @@ public class Task implements Serializable {
         this.dateDelegatedFrom = dateDelegatedFrom;
     }
 
-    public ProcessAgenda getTheProcessAgenda() {
-        return theProcessAgenda;
-    }
-
-    public Task theProcessAgenda(ProcessAgenda processAgenda) {
-        this.theProcessAgenda = processAgenda;
-        return this;
-    }
-
-    public void setTheProcessAgenda(ProcessAgenda processAgenda) {
-        this.theProcessAgenda = processAgenda;
-    }
-
     public Agent getDelegatedFrom() {
         return delegatedFrom;
     }
@@ -209,6 +196,19 @@ public class Task implements Serializable {
         this.theNormal = normal;
     }
 
+    public ProcessAgenda getTheProcessAgenda() {
+        return theProcessAgenda;
+    }
+
+    public Task theProcessAgenda(ProcessAgenda processAgenda) {
+        this.theProcessAgenda = processAgenda;
+        return this;
+    }
+
+    public void setTheProcessAgenda(ProcessAgenda processAgenda) {
+        this.theProcessAgenda = processAgenda;
+    }
+
     public Set<ArtifactTask> getTheArtifactTasks() {
         return theArtifactTasks;
     }
@@ -218,13 +218,13 @@ public class Task implements Serializable {
         return this;
     }
 
-    public Task addTheArtifactTasks(ArtifactTask artifactTask) {
+    public Task addTheArtifactTask(ArtifactTask artifactTask) {
         this.theArtifactTasks.add(artifactTask);
         artifactTask.setTheTask(this);
         return this;
     }
 
-    public Task removeTheArtifactTasks(ArtifactTask artifactTask) {
+    public Task removeTheArtifactTask(ArtifactTask artifactTask) {
         this.theArtifactTasks.remove(artifactTask);
         artifactTask.setTheTask(null);
         return this;
@@ -234,54 +234,54 @@ public class Task implements Serializable {
         this.theArtifactTasks = artifactTasks;
     }
 
-    public Set<Event> getTheAgendaEvents() {
+    public Set<AgendaEvent> getTheAgendaEvents() {
         return theAgendaEvents;
     }
 
-    public Task theAgendaEvents(Set<Event> events) {
-        this.theAgendaEvents = events;
+    public Task theAgendaEvents(Set<AgendaEvent> agendaEvents) {
+        this.theAgendaEvents = agendaEvents;
         return this;
     }
 
-    public Task addTheAgendaEvent(Event event) {
-        this.theAgendaEvents.add(event);
-        event.setTheTask(this);
+    public Task addTheAgendaEvent(AgendaEvent agendaEvent) {
+        this.theAgendaEvents.add(agendaEvent);
+        agendaEvent.setTheTask(this);
         return this;
     }
 
-    public Task removeTheAgendaEvent(Event event) {
-        this.theAgendaEvents.remove(event);
-        event.setTheTask(null);
+    public Task removeTheAgendaEvent(AgendaEvent agendaEvent) {
+        this.theAgendaEvents.remove(agendaEvent);
+        agendaEvent.setTheTask(null);
         return this;
     }
 
-    public void setTheAgendaEvents(Set<Event> events) {
-        this.theAgendaEvents = events;
+    public void setTheAgendaEvents(Set<AgendaEvent> agendaEvents) {
+        this.theAgendaEvents = agendaEvents;
     }
 
-    public Set<Ocurrence> getTheOcurrences() {
-        return theOcurrences;
+    public Set<Ocurrence> getOcurrences() {
+        return ocurrences;
     }
 
-    public Task theOcurrences(Set<Ocurrence> ocurrences) {
-        this.theOcurrences = ocurrences;
+    public Task ocurrences(Set<Ocurrence> ocurrences) {
+        this.ocurrences = ocurrences;
         return this;
     }
 
-    public Task addTheOcurrence(Ocurrence ocurrence) {
-        this.theOcurrences.add(ocurrence);
+    public Task addOcurrence(Ocurrence ocurrence) {
+        this.ocurrences.add(ocurrence);
         ocurrence.setTheTask(this);
         return this;
     }
 
-    public Task removeTheOcurrence(Ocurrence ocurrence) {
-        this.theOcurrences.remove(ocurrence);
+    public Task removeOcurrence(Ocurrence ocurrence) {
+        this.ocurrences.remove(ocurrence);
         ocurrence.setTheTask(null);
         return this;
     }
 
-    public void setTheOcurrences(Set<Ocurrence> ocurrences) {
-        this.theOcurrences = ocurrences;
+    public void setOcurrences(Set<Ocurrence> ocurrences) {
+        this.ocurrences = ocurrences;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

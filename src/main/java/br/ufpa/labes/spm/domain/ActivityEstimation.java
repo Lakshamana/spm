@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "activity_estimation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ActivityEstimation extends Estimation implements Serializable {
+public class ActivityEstimation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,8 +22,8 @@ public class ActivityEstimation extends Estimation implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("theActivityEstimations")
-    private Activity theActivity;
+    @JsonIgnoreProperties("activityEstimations")
+    private Activity activity;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -34,17 +34,17 @@ public class ActivityEstimation extends Estimation implements Serializable {
         this.id = id;
     }
 
-    public Activity getTheActivity() {
-        return theActivity;
+    public Activity getActivity() {
+        return activity;
     }
 
-    public ActivityEstimation theActivity(Activity activity) {
-        this.theActivity = activity;
+    public ActivityEstimation activity(Activity activity) {
+        this.activity = activity;
         return this;
     }
 
-    public void setTheActivity(Activity activity) {
-        this.theActivity = activity;
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

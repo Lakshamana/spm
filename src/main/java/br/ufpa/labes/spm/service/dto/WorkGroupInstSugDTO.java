@@ -12,11 +12,13 @@ public class WorkGroupInstSugDTO implements Serializable {
     private Long id;
 
 
-    private Long chosenWorkGroupId;
+    private Long groupChosenId;
 
-    private Long workGroupTypeRequiredId;
+    private Long groupTypeRequiredId;
 
     private Set<WorkGroupDTO> sugWorkGroups = new HashSet<>();
+
+    private Set<WorkGroupDTO> groupSuggesteds = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -26,20 +28,20 @@ public class WorkGroupInstSugDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getChosenWorkGroupId() {
-        return chosenWorkGroupId;
+    public Long getGroupChosenId() {
+        return groupChosenId;
     }
 
-    public void setChosenWorkGroupId(Long workGroupId) {
-        this.chosenWorkGroupId = workGroupId;
+    public void setGroupChosenId(Long workGroupId) {
+        this.groupChosenId = workGroupId;
     }
 
-    public Long getWorkGroupTypeRequiredId() {
-        return workGroupTypeRequiredId;
+    public Long getGroupTypeRequiredId() {
+        return groupTypeRequiredId;
     }
 
-    public void setWorkGroupTypeRequiredId(Long typeId) {
-        this.workGroupTypeRequiredId = typeId;
+    public void setGroupTypeRequiredId(Long workGroupTypeId) {
+        this.groupTypeRequiredId = workGroupTypeId;
     }
 
     public Set<WorkGroupDTO> getSugWorkGroups() {
@@ -48,6 +50,14 @@ public class WorkGroupInstSugDTO implements Serializable {
 
     public void setSugWorkGroups(Set<WorkGroupDTO> workGroups) {
         this.sugWorkGroups = workGroups;
+    }
+
+    public Set<WorkGroupDTO> getGroupSuggesteds() {
+        return groupSuggesteds;
+    }
+
+    public void setGroupSuggesteds(Set<WorkGroupDTO> workGroups) {
+        this.groupSuggesteds = workGroups;
     }
 
     @Override
@@ -75,8 +85,8 @@ public class WorkGroupInstSugDTO implements Serializable {
     public String toString() {
         return "WorkGroupInstSugDTO{" +
             "id=" + getId() +
-            ", chosenWorkGroup=" + getChosenWorkGroupId() +
-            ", workGroupTypeRequired=" + getWorkGroupTypeRequiredId() +
+            ", groupChosen=" + getGroupChosenId() +
+            ", groupTypeRequired=" + getGroupTypeRequiredId() +
             "}";
     }
 }

@@ -40,6 +40,10 @@ public class Project implements Serializable {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @OneToMany(mappedBy = "project")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Calendar> theCalendars = new HashSet<>();
+
     @OneToMany(mappedBy = "theProject")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Artifact> finalArtifacts = new HashSet<>();
@@ -51,10 +55,6 @@ public class Project implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("theProjects")
     private DevelopingSystem theSystem;
-
-    @ManyToOne
-    @JsonIgnoreProperties("projects")
-    private Calendar theCalendar;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -130,6 +130,31 @@ public class Project implements Serializable {
         this.endDate = endDate;
     }
 
+    public Set<Calendar> getTheCalendars() {
+        return theCalendars;
+    }
+
+    public Project theCalendars(Set<Calendar> calendars) {
+        this.theCalendars = calendars;
+        return this;
+    }
+
+    public Project addTheCalendar(Calendar calendar) {
+        this.theCalendars.add(calendar);
+        calendar.setProject(this);
+        return this;
+    }
+
+    public Project removeTheCalendar(Calendar calendar) {
+        this.theCalendars.remove(calendar);
+        calendar.setProject(null);
+        return this;
+    }
+
+    public void setTheCalendars(Set<Calendar> calendars) {
+        this.theCalendars = calendars;
+    }
+
     public Set<Artifact> getFinalArtifacts() {
         return finalArtifacts;
     }
@@ -179,19 +204,6 @@ public class Project implements Serializable {
 
     public void setTheSystem(DevelopingSystem developingSystem) {
         this.theSystem = developingSystem;
-    }
-
-    public Calendar getTheCalendar() {
-        return theCalendar;
-    }
-
-    public Project theCalendar(Calendar calendar) {
-        this.theCalendar = calendar;
-        return this;
-    }
-
-    public void setTheCalendar(Calendar calendar) {
-        this.theCalendar = calendar;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

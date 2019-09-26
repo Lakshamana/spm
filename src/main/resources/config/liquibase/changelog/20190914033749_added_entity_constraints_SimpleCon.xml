@@ -8,15 +8,15 @@
     -->
     <changeSet id="20190914033749-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="from_activity_id"
-                                 baseTableName="simple_con"
-                                 constraintName="fk_simple_con_from_activity_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="activity"/>
-
         <addForeignKeyConstraint baseColumnNames="to_activity_id"
                                  baseTableName="simple_con"
                                  constraintName="fk_simple_con_to_activity_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="activity"/>
+
+        <addForeignKeyConstraint baseColumnNames="from_activity_id"
+                                 baseTableName="simple_con"
+                                 constraintName="fk_simple_con_from_activity_id"
                                  referencedColumnNames="id"
                                  referencedTableName="activity"/>
 

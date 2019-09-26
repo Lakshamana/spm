@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -46,7 +47,7 @@ public class AssetResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/assets")
-    public ResponseEntity<AssetDTO> createAsset(@RequestBody AssetDTO assetDTO) throws URISyntaxException {
+    public ResponseEntity<AssetDTO> createAsset(@Valid @RequestBody AssetDTO assetDTO) throws URISyntaxException {
         log.debug("REST request to save Asset : {}", assetDTO);
         if (assetDTO.getId() != null) {
             throw new BadRequestAlertException("A new asset cannot already have an ID", ENTITY_NAME, "idexists");
@@ -67,7 +68,7 @@ public class AssetResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/assets")
-    public ResponseEntity<AssetDTO> updateAsset(@RequestBody AssetDTO assetDTO) throws URISyntaxException {
+    public ResponseEntity<AssetDTO> updateAsset(@Valid @RequestBody AssetDTO assetDTO) throws URISyntaxException {
         log.debug("REST request to update Asset : {}", assetDTO);
         if (assetDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

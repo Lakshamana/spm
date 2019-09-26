@@ -27,8 +27,22 @@
             <column name="app_secret" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+
+            <column name="app_key_google" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="app_secret_google" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="request_url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="the_plugin_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_driver_the_plugin_id" />
+            </column>            <column name="company_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_driver_company_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
@@ -57,6 +71,9 @@
             <column name="tipo" type="string"/>
             <column name="app_key" type="string"/>
             <column name="app_secret" type="string"/>
+            <column name="app_key_google" type="string"/>
+            <column name="app_secret_google" type="string"/>
+            <column name="request_url" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

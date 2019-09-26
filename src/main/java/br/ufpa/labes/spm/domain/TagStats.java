@@ -30,7 +30,7 @@ public class TagStats implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("tagStats")
-    private Asset theAsset;
+    private Asset asset;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -67,17 +67,17 @@ public class TagStats implements Serializable {
         this.tag = tag;
     }
 
-    public Asset getTheAsset() {
-        return theAsset;
+    public Asset getAsset() {
+        return asset;
     }
 
-    public TagStats theAsset(Asset asset) {
-        this.theAsset = asset;
+    public TagStats asset(Asset asset) {
+        this.asset = asset;
         return this;
     }
 
-    public void setTheAsset(Asset asset) {
-        this.theAsset = asset;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

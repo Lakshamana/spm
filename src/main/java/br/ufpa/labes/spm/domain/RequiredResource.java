@@ -26,15 +26,15 @@ public class RequiredResource implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theRequiredResources")
-    private Normal theNormal;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theRequiredResources")
     private ResourceType theResourceType;
 
     @ManyToOne
     @JsonIgnoreProperties("theRequiredResources")
     private Resource theResource;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theRequiredResources")
+    private Normal theNormal;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -56,19 +56,6 @@ public class RequiredResource implements Serializable {
 
     public void setAmountNeeded(Float amountNeeded) {
         this.amountNeeded = amountNeeded;
-    }
-
-    public Normal getTheNormal() {
-        return theNormal;
-    }
-
-    public RequiredResource theNormal(Normal normal) {
-        this.theNormal = normal;
-        return this;
-    }
-
-    public void setTheNormal(Normal normal) {
-        this.theNormal = normal;
     }
 
     public ResourceType getTheResourceType() {
@@ -96,6 +83,19 @@ public class RequiredResource implements Serializable {
     public void setTheResource(Resource resource) {
         this.theResource = resource;
     }
+
+    public Normal getTheNormal() {
+        return theNormal;
+    }
+
+    public RequiredResource theNormal(Normal normal) {
+        this.theNormal = normal;
+        return this;
+    }
+
+    public void setTheNormal(Normal normal) {
+        this.theNormal = normal;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -120,35 +120,5 @@ public class RequiredResource implements Serializable {
             "id=" + getId() +
             ", amountNeeded=" + getAmountNeeded() +
             "}";
-    }
-
-    public void removeFromTheResourceType(){
-      if (this.theResourceType!=null){
-        this.theResourceType.removeTheRequiredResource(this);
-      }
-    }
-
-    public void insertIntoTheResourceType(ResourceType theResourceType){
-      theResourceType.addTheRequiredResource(this);
-    }
-
-    public void removeFromTheResource(){
-      if (this.theResource!=null){
-        this.theResource.removeTheRequiredResource(this);
-      }
-    }
-
-    public void insertIntoTheResource(Resource theResource){
-      theResource.addTheRequiredResource(this);
-    }
-
-    public void removeFromTheNormal(){
-      if (this.theNormal!=null){
-        this.theNormal.removeTheRequiredResource(this);
-      }
-    }
-
-    public void insertIntoTheNormal(Normal theNormal){
-      theNormal.addTheRequiredResource(this);
     }
 }

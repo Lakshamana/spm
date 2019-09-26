@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "organization")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Organization extends Author implements Serializable {
+public class Organization implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,13 +25,13 @@ public class Organization extends Author implements Serializable {
     @Column(name = "domain")
     private String domain;
 
-    @OneToMany(mappedBy = "theOrganization")
+    @OneToMany(mappedBy = "organization")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<OrganizationMetric> theOrganizationMetrics = new HashSet<>();
+    private Set<OrganizationMetric> organizationMetrics = new HashSet<>();
 
     @OneToMany(mappedBy = "theOrganization")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<OrganizationEstimation> theOrganizationEstimations = new HashSet<>();
+    private Set<OrganizationEstimation> organizationEstimations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -55,54 +55,54 @@ public class Organization extends Author implements Serializable {
         this.domain = domain;
     }
 
-    public Set<OrganizationMetric> getTheOrganizationMetrics() {
-        return theOrganizationMetrics;
+    public Set<OrganizationMetric> getOrganizationMetrics() {
+        return organizationMetrics;
     }
 
-    public Organization theOrganizationMetrics(Set<OrganizationMetric> organizationMetrics) {
-        this.theOrganizationMetrics = organizationMetrics;
+    public Organization organizationMetrics(Set<OrganizationMetric> organizationMetrics) {
+        this.organizationMetrics = organizationMetrics;
         return this;
     }
 
-    public Organization addTheOrganizationMetric(OrganizationMetric organizationMetric) {
-        this.theOrganizationMetrics.add(organizationMetric);
-        organizationMetric.setTheOrganization(this);
+    public Organization addOrganizationMetric(OrganizationMetric organizationMetric) {
+        this.organizationMetrics.add(organizationMetric);
+        organizationMetric.setOrganization(this);
         return this;
     }
 
-    public Organization removeTheOrganizationMetric(OrganizationMetric organizationMetric) {
-        this.theOrganizationMetrics.remove(organizationMetric);
-        organizationMetric.setTheOrganization(null);
+    public Organization removeOrganizationMetric(OrganizationMetric organizationMetric) {
+        this.organizationMetrics.remove(organizationMetric);
+        organizationMetric.setOrganization(null);
         return this;
     }
 
-    public void setTheOrganizationMetrics(Set<OrganizationMetric> organizationMetrics) {
-        this.theOrganizationMetrics = organizationMetrics;
+    public void setOrganizationMetrics(Set<OrganizationMetric> organizationMetrics) {
+        this.organizationMetrics = organizationMetrics;
     }
 
-    public Set<OrganizationEstimation> getTheOrganizationEstimations() {
-        return theOrganizationEstimations;
+    public Set<OrganizationEstimation> getOrganizationEstimations() {
+        return organizationEstimations;
     }
 
-    public Organization theOrganizationEstimations(Set<OrganizationEstimation> organizationEstimations) {
-        this.theOrganizationEstimations = organizationEstimations;
+    public Organization organizationEstimations(Set<OrganizationEstimation> organizationEstimations) {
+        this.organizationEstimations = organizationEstimations;
         return this;
     }
 
-    public Organization addTheOrganizationEstimation(OrganizationEstimation organizationEstimation) {
-        this.theOrganizationEstimations.add(organizationEstimation);
+    public Organization addOrganizationEstimation(OrganizationEstimation organizationEstimation) {
+        this.organizationEstimations.add(organizationEstimation);
         organizationEstimation.setTheOrganization(this);
         return this;
     }
 
-    public Organization removeTheOrganizationEstimation(OrganizationEstimation organizationEstimation) {
-        this.theOrganizationEstimations.remove(organizationEstimation);
+    public Organization removeOrganizationEstimation(OrganizationEstimation organizationEstimation) {
+        this.organizationEstimations.remove(organizationEstimation);
         organizationEstimation.setTheOrganization(null);
         return this;
     }
 
-    public void setTheOrganizationEstimations(Set<OrganizationEstimation> organizationEstimations) {
-        this.theOrganizationEstimations = organizationEstimations;
+    public void setOrganizationEstimations(Set<OrganizationEstimation> organizationEstimations) {
+        this.organizationEstimations = organizationEstimations;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -1,8 +1,6 @@
 package br.ufpa.labes.spm.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -12,17 +10,17 @@ public class PluginDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
+    
     private String name;
 
     @NotNull
     private String developerName;
 
     @NotNull
-    private String jsonConfigFile;
+    private String configFilePath;
 
 
-    private Set<UserDTO> users = new HashSet<>();
+    private Long theCompanyId;
 
     public Long getId() {
         return id;
@@ -48,20 +46,20 @@ public class PluginDTO implements Serializable {
         this.developerName = developerName;
     }
 
-    public String getJsonConfigFile() {
-        return jsonConfigFile;
+    public String getConfigFilePath() {
+        return configFilePath;
     }
 
-    public void setJsonConfigFile(String jsonConfigFile) {
-        this.jsonConfigFile = jsonConfigFile;
+    public void setConfigFilePath(String configFilePath) {
+        this.configFilePath = configFilePath;
     }
 
-    public Set<UserDTO> getUsers() {
-        return users;
+    public Long getTheCompanyId() {
+        return theCompanyId;
     }
 
-    public void setUsers(Set<UserDTO> users) {
-        this.users = users;
+    public void setTheCompanyId(Long userId) {
+        this.theCompanyId = userId;
     }
 
     @Override
@@ -91,7 +89,8 @@ public class PluginDTO implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", developerName='" + getDeveloperName() + "'" +
-            ", jsonConfigFile='" + getJsonConfigFile() + "'" +
+            ", configFilePath='" + getConfigFilePath() + "'" +
+            ", theCompany=" + getTheCompanyId() +
             "}";
     }
 }

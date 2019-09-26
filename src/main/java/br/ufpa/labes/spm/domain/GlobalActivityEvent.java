@@ -1,4 +1,5 @@
 package br.ufpa.labes.spm.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "global_activity_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class GlobalActivityEvent extends Event implements Serializable {
+public class GlobalActivityEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,9 +23,13 @@ public class GlobalActivityEvent extends Event implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JsonIgnoreProperties("theGlobalActivityEvents")
+    private Plain thePlain;
+
     @OneToMany(mappedBy = "theGlobalActivityEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CatalogEvent> theCatalogEventToGlobalActivities = new HashSet<>();
+    private Set<CatalogEvent> theCatalogEvents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -35,29 +40,42 @@ public class GlobalActivityEvent extends Event implements Serializable {
         this.id = id;
     }
 
-    public Set<CatalogEvent> getTheCatalogEventToGlobalActivities() {
-        return theCatalogEventToGlobalActivities;
+    public Plain getThePlain() {
+        return thePlain;
     }
 
-    public GlobalActivityEvent theCatalogEventToGlobalActivities(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToGlobalActivities = catalogEvents;
+    public GlobalActivityEvent thePlain(Plain plain) {
+        this.thePlain = plain;
         return this;
     }
 
-    public GlobalActivityEvent addTheCatalogEventToGlobalActivity(CatalogEvent catalogEvent) {
-        this.theCatalogEventToGlobalActivities.add(catalogEvent);
+    public void setThePlain(Plain plain) {
+        this.thePlain = plain;
+    }
+
+    public Set<CatalogEvent> getTheCatalogEvents() {
+        return theCatalogEvents;
+    }
+
+    public GlobalActivityEvent theCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
+        return this;
+    }
+
+    public GlobalActivityEvent addTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.add(catalogEvent);
         catalogEvent.setTheGlobalActivityEvent(this);
         return this;
     }
 
-    public GlobalActivityEvent removeTheCatalogEventToGlobalActivity(CatalogEvent catalogEvent) {
-        this.theCatalogEventToGlobalActivities.remove(catalogEvent);
+    public GlobalActivityEvent removeTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents.remove(catalogEvent);
         catalogEvent.setTheGlobalActivityEvent(null);
         return this;
     }
 
-    public void setTheCatalogEventToGlobalActivities(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEventToGlobalActivities = catalogEvents;
+    public void setTheCatalogEvents(Set<CatalogEvent> catalogEvents) {
+        this.theCatalogEvents = catalogEvents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

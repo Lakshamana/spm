@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.ConsumableStatus;
 /**
  * Integration tests for the {@link ConsumableResource} REST controller.
  */
@@ -39,11 +38,11 @@ import br.ufpa.labes.spm.domain.enumeration.ConsumableStatus;
 @SpringBootTest(classes = SpmApp.class)
 public class ConsumableResourceIT {
 
+    private static final String DEFAULT_STATE = "AAAAAAAAAA";
+    private static final String UPDATED_STATE = "BBBBBBBBBB";
+
     private static final String DEFAULT_UNIT = "AAAAAAAAAA";
     private static final String UPDATED_UNIT = "BBBBBBBBBB";
-
-    private static final ConsumableStatus DEFAULT_CONSUMABLE_STATUS = ConsumableStatus.AVAILABLE;
-    private static final ConsumableStatus UPDATED_CONSUMABLE_STATUS = ConsumableStatus.NOT_AUTHORIZED;
 
     private static final Float DEFAULT_TOTAL_QUANTITY = 1F;
     private static final Float UPDATED_TOTAL_QUANTITY = 2F;
@@ -101,8 +100,8 @@ public class ConsumableResourceIT {
      */
     public static Consumable createEntity(EntityManager em) {
         Consumable consumable = new Consumable()
+            .state(DEFAULT_STATE)
             .unit(DEFAULT_UNIT)
-            .consumableStatus(DEFAULT_CONSUMABLE_STATUS)
             .totalQuantity(DEFAULT_TOTAL_QUANTITY)
             .amountUsed(DEFAULT_AMOUNT_USED);
         return consumable;
@@ -115,8 +114,8 @@ public class ConsumableResourceIT {
      */
     public static Consumable createUpdatedEntity(EntityManager em) {
         Consumable consumable = new Consumable()
+            .state(UPDATED_STATE)
             .unit(UPDATED_UNIT)
-            .consumableStatus(UPDATED_CONSUMABLE_STATUS)
             .totalQuantity(UPDATED_TOTAL_QUANTITY)
             .amountUsed(UPDATED_AMOUNT_USED);
         return consumable;
@@ -143,8 +142,8 @@ public class ConsumableResourceIT {
         List<Consumable> consumableList = consumableRepository.findAll();
         assertThat(consumableList).hasSize(databaseSizeBeforeCreate + 1);
         Consumable testConsumable = consumableList.get(consumableList.size() - 1);
+        assertThat(testConsumable.getState()).isEqualTo(DEFAULT_STATE);
         assertThat(testConsumable.getUnit()).isEqualTo(DEFAULT_UNIT);
-        assertThat(testConsumable.getConsumableStatus()).isEqualTo(DEFAULT_CONSUMABLE_STATUS);
         assertThat(testConsumable.getTotalQuantity()).isEqualTo(DEFAULT_TOTAL_QUANTITY);
         assertThat(testConsumable.getAmountUsed()).isEqualTo(DEFAULT_AMOUNT_USED);
     }
@@ -181,8 +180,8 @@ public class ConsumableResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(consumable.getId().intValue())))
+            .andExpect(jsonPath("$.[*].state").value(hasItem(DEFAULT_STATE.toString())))
             .andExpect(jsonPath("$.[*].unit").value(hasItem(DEFAULT_UNIT.toString())))
-            .andExpect(jsonPath("$.[*].consumableStatus").value(hasItem(DEFAULT_CONSUMABLE_STATUS.toString())))
             .andExpect(jsonPath("$.[*].totalQuantity").value(hasItem(DEFAULT_TOTAL_QUANTITY.doubleValue())))
             .andExpect(jsonPath("$.[*].amountUsed").value(hasItem(DEFAULT_AMOUNT_USED.doubleValue())));
     }
@@ -198,8 +197,8 @@ public class ConsumableResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(consumable.getId().intValue()))
+            .andExpect(jsonPath("$.state").value(DEFAULT_STATE.toString()))
             .andExpect(jsonPath("$.unit").value(DEFAULT_UNIT.toString()))
-            .andExpect(jsonPath("$.consumableStatus").value(DEFAULT_CONSUMABLE_STATUS.toString()))
             .andExpect(jsonPath("$.totalQuantity").value(DEFAULT_TOTAL_QUANTITY.doubleValue()))
             .andExpect(jsonPath("$.amountUsed").value(DEFAULT_AMOUNT_USED.doubleValue()));
     }
@@ -225,8 +224,8 @@ public class ConsumableResourceIT {
         // Disconnect from session so that the updates on updatedConsumable are not directly saved in db
         em.detach(updatedConsumable);
         updatedConsumable
+            .state(UPDATED_STATE)
             .unit(UPDATED_UNIT)
-            .consumableStatus(UPDATED_CONSUMABLE_STATUS)
             .totalQuantity(UPDATED_TOTAL_QUANTITY)
             .amountUsed(UPDATED_AMOUNT_USED);
         ConsumableDTO consumableDTO = consumableMapper.toDto(updatedConsumable);
@@ -240,8 +239,8 @@ public class ConsumableResourceIT {
         List<Consumable> consumableList = consumableRepository.findAll();
         assertThat(consumableList).hasSize(databaseSizeBeforeUpdate);
         Consumable testConsumable = consumableList.get(consumableList.size() - 1);
+        assertThat(testConsumable.getState()).isEqualTo(UPDATED_STATE);
         assertThat(testConsumable.getUnit()).isEqualTo(UPDATED_UNIT);
-        assertThat(testConsumable.getConsumableStatus()).isEqualTo(UPDATED_CONSUMABLE_STATUS);
         assertThat(testConsumable.getTotalQuantity()).isEqualTo(UPDATED_TOTAL_QUANTITY);
         assertThat(testConsumable.getAmountUsed()).isEqualTo(UPDATED_AMOUNT_USED);
     }

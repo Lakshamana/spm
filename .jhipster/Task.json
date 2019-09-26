@@ -29,13 +29,6 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "processAgenda",
-            "otherEntityRelationshipName": "theTask",
-            "relationshipName": "theProcessAgenda",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "agent",
             "otherEntityRelationshipName": "delegates",
             "relationshipName": "delegatedFrom",
@@ -56,14 +49,21 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "artifactTask",
+            "relationshipType": "many-to-one",
+            "otherEntityName": "processAgenda",
             "otherEntityRelationshipName": "theTask",
-            "relationshipName": "theArtifactTasks"
+            "relationshipName": "theProcessAgenda",
+            "otherEntityField": "id"
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "event",
+            "otherEntityName": "artifactTask",
+            "otherEntityRelationshipName": "theTask",
+            "relationshipName": "theArtifactTask"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agendaEvent",
             "otherEntityRelationshipName": "theTask",
             "relationshipName": "theAgendaEvent"
         },
@@ -71,7 +71,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "ocurrence",
             "otherEntityRelationshipName": "theTask",
-            "relationshipName": "theOcurrence"
+            "relationshipName": "ocurrence"
         }
     ],
     "changelogDate": "20190914033914",

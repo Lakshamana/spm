@@ -10,7 +10,7 @@ public class ActivityEstimationDTO implements Serializable {
     private Long id;
 
 
-    private Long theActivityId;
+    private Long activityId;
 
     public Long getId() {
         return id;
@@ -20,12 +20,12 @@ public class ActivityEstimationDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getTheActivityId() {
-        return theActivityId;
+    public Long getActivityId() {
+        return activityId;
     }
 
-    public void setTheActivityId(Long activityId) {
-        this.theActivityId = activityId;
+    public void setActivityId(Long activityId) {
+        this.activityId = activityId;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ActivityEstimationDTO implements Serializable {
     public String toString() {
         return "ActivityEstimationDTO{" +
             "id=" + getId() +
-            ", theActivity=" + getTheActivityId() +
+            ", activity=" + getActivityId() +
             "}";
     }
 }

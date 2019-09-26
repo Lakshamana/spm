@@ -24,13 +24,13 @@ public class ReqWorkGroupService {
 
     private final Logger log = LoggerFactory.getLogger(ReqWorkGroupService.class);
 
-    private final ReqWorkWorkGroupRepository reqWorkGroupRepository;
+    private final ReqWorkGroupRepository reqWorkGroupRepository;
 
-    private final ReqWorkWorkGroupMapper reqWorkGroupMapper;
+    private final ReqWorkGroupMapper reqWorkGroupMapper;
 
-    public ReqWorkWorkGroupService(ReqWorkWorkGroupRepository reqWorkWorkGroupRepository, ReqWorkWorkGroupMapper reqWorkGroupMapper) {
-        this.reqWorkWorkGroupRepository = reqWorkGroupRepository;
-        this.reqWorkWorkGroupMapper = reqWorkGroupMapper;
+    public ReqWorkGroupService(ReqWorkGroupRepository reqWorkGroupRepository, ReqWorkGroupMapper reqWorkGroupMapper) {
+        this.reqWorkGroupRepository = reqWorkGroupRepository;
+        this.reqWorkGroupMapper = reqWorkGroupMapper;
     }
 
     /**
@@ -39,11 +39,11 @@ public class ReqWorkGroupService {
      * @param reqWorkGroupDTO the entity to save.
      * @return the persisted entity.
      */
-    public ReqWorkWorkGroupDTO save(ReqWorkWorkGroupDTO reqWorkGroupDTO) {
-        log.debug("Request to save ReqWorkWorkGroup : {}", reqWorkGroupDTO);
-        ReqWorkWorkGroup reqWorkWorkGroup = reqWorkWorkGroupMapper.toEntity(reqWorkGroupDTO);
-        reqWorkWorkGroup = reqWorkWorkGroupRepository.save(reqWorkGroup);
-        return reqWorkWorkGroupMapper.toDto(reqWorkGroup);
+    public ReqWorkGroupDTO save(ReqWorkGroupDTO reqWorkGroupDTO) {
+        log.debug("Request to save ReqWorkGroup : {}", reqWorkGroupDTO);
+        ReqWorkGroup reqWorkGroup = reqWorkGroupMapper.toEntity(reqWorkGroupDTO);
+        reqWorkGroup = reqWorkGroupRepository.save(reqWorkGroup);
+        return reqWorkGroupMapper.toDto(reqWorkGroup);
     }
 
     /**

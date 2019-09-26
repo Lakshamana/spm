@@ -15,8 +15,8 @@ public interface ProcessEventMapper extends EntityMapper<ProcessEventDTO, Proces
     ProcessEventDTO toDto(ProcessEvent processEvent);
 
     @Mapping(source = "theProcessId", target = "theProcess")
-    @Mapping(target = "theCatalogEventToProcesses", ignore = true)
-    @Mapping(target = "removeTheCatalogEventToProcess", ignore = true)
+    @Mapping(target = "theCatalogEvents", ignore = true)
+    @Mapping(target = "removeTheCatalogEvents", ignore = true)
     ProcessEvent toEntity(ProcessEventDTO processEventDTO);
 
     default ProcessEvent fromId(Long id) {

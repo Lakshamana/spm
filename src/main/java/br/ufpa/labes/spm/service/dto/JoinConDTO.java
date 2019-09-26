@@ -11,8 +11,10 @@ public class JoinConDTO implements Serializable {
 
     private Long id;
 
-    private String kindJoinCon;
+    private String kindJoin;
 
+
+    private Long toMultipleConId;
 
     private Set<MultipleConDTO> fromMultipleCons = new HashSet<>();
 
@@ -26,12 +28,20 @@ public class JoinConDTO implements Serializable {
         this.id = id;
     }
 
-    public String getKindJoinCon() {
-        return kindJoinCon;
+    public String getKindJoin() {
+        return kindJoin;
     }
 
-    public void setKindJoinCon(String kindJoinCon) {
-        this.kindJoinCon = kindJoinCon;
+    public void setKindJoin(String kindJoin) {
+        this.kindJoin = kindJoin;
+    }
+
+    public Long getToMultipleConId() {
+        return toMultipleConId;
+    }
+
+    public void setToMultipleConId(Long multipleConId) {
+        this.toMultipleConId = multipleConId;
     }
 
     public Set<MultipleConDTO> getFromMultipleCons() {
@@ -75,7 +85,8 @@ public class JoinConDTO implements Serializable {
     public String toString() {
         return "JoinConDTO{" +
             "id=" + getId() +
-            ", kindJoinCon='" + getKindJoinCon() + "'" +
+            ", kindJoin='" + getKindJoin() + "'" +
+            ", toMultipleCon=" + getToMultipleConId() +
             ", toActivity=" + getToActivityId() +
             "}";
     }

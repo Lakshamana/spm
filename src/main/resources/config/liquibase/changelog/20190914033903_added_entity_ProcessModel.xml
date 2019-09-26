@@ -20,7 +20,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="pm_status" type="varchar(255)">
+            <column name="pm_state" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
@@ -53,7 +53,7 @@
                   tableName="process_model">
             <column name="id" type="numeric"/>
             <column name="requirements" type="string"/>
-            <column name="pm_status" type="string"/>
+            <column name="pm_state" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

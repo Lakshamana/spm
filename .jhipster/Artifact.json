@@ -11,7 +11,8 @@
         },
         {
             "fieldName": "description",
-            "fieldType": "String"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "pathName",
@@ -30,7 +31,7 @@
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "active",
+            "fieldName": "isActive",
             "fieldType": "Boolean"
         }
     ],
@@ -45,7 +46,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "artifactParam",
             "otherEntityRelationshipName": "theArtifact",
-            "relationshipName": "theArtifactParams"
+            "relationshipName": "theArtifactParam"
         },
         {
             "relationshipType": "one-to-many",
@@ -56,13 +57,13 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "artifactMetric",
-            "otherEntityRelationshipName": "theArtifact",
+            "otherEntityRelationshipName": "artifact",
             "relationshipName": "theArtifactMetric"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "artifactEstimation",
-            "otherEntityRelationshipName": "theArtifact",
+            "otherEntityRelationshipName": "artifact",
             "relationshipName": "theArtifactEstimation"
         },
         {
@@ -75,15 +76,22 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "artifact",
-            "otherEntityRelationshipName": "possess",
-            "relationshipName": "derivedFrom",
+            "otherEntityRelationshipName": "derivedFrom",
+            "relationshipName": "derivedTo",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "belongsTo",
+            "relationshipName": "possess",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "vCSRepository",
-            "otherEntityRelationshipName": "theArtifact",
-            "relationshipName": "theVCSRepository",
+            "otherEntityRelationshipName": "theArtifacts",
+            "relationshipName": "theRepository",
             "otherEntityField": "id"
         },
         {
@@ -96,8 +104,14 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "artifact",
-            "otherEntityRelationshipName": "derivedFrom",
-            "relationshipName": "possess"
+            "otherEntityRelationshipName": "derivedTo",
+            "relationshipName": "derivedFrom"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "artifact",
+            "otherEntityRelationshipName": "possess",
+            "relationshipName": "belongsTo"
         },
         {
             "relationshipType": "one-to-many",

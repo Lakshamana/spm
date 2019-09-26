@@ -24,11 +24,15 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="is_version" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
             <column name="the_activity_type_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
-            <column name="the_ancestor_actitvity_id" type="bigint">
+            <column name="is_version_of_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
@@ -54,8 +58,8 @@
 
         <addPrimaryKey columnNames="activity_id, to_join_con_id" tableName="activity_to_join_con"/>
         
-        <createTable tableName="activity_to_branchandcon">
-            <column name="to_branchandcon_id" type="bigint">
+        <createTable tableName="activity_from_branchandcon">
+            <column name="from_branchandcon_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="activity_id" type="bigint">
@@ -63,7 +67,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="activity_id, to_branchandcon_id" tableName="activity_to_branchandcon"/>
+        <addPrimaryKey columnNames="activity_id, from_branchandcon_id" tableName="activity_from_branchandcon"/>
         
         <createTable tableName="activity_from_artifact_con">
             <column name="from_artifact_con_id" type="bigint">
@@ -106,6 +110,7 @@
             <column name="id" type="numeric"/>
             <column name="ident" type="string"/>
             <column name="name" type="string"/>
+            <column name="is_version" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

@@ -14,9 +14,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="tag"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_asset_id"
+        <addForeignKeyConstraint baseColumnNames="asset_id"
                                  baseTableName="tag_stats"
-                                 constraintName="fk_tag_stats_the_asset_id"
+                                 constraintName="fk_tag_stats_asset_id"
                                  referencedColumnNames="id"
                                  referencedTableName="asset"/>
 

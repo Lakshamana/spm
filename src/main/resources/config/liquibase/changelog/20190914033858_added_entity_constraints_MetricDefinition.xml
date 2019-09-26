@@ -8,9 +8,9 @@
     -->
     <changeSet id="20190914033858-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_metric_type_id"
+        <addForeignKeyConstraint baseColumnNames="metric_type_id"
                                  baseTableName="metric_definition"
-                                 constraintName="fk_metric_definition_the_metric_type_id"
+                                 constraintName="fk_metric_definition_metric_type_id"
                                  referencedColumnNames="id"
                                  referencedTableName="metric_type"/>
 

@@ -6,9 +6,8 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "pmStatus",
-            "fieldType": "ProcessModelStatus",
-            "fieldValues": "REQUIREMENTS,ABSTRACT,INSTANTIATED,ENACTING,FAILED,CANCELED,MIXED,FINISHED"
+            "fieldName": "pmState",
+            "fieldType": "String"
         }
     ],
     "relationships": [
@@ -35,7 +34,7 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "template",
-            "otherEntityRelationshipName": "theProcessModel",
+            "otherEntityRelationshipName": "theInstances",
             "relationshipName": "theOrigin",
             "otherEntityField": "id"
         },

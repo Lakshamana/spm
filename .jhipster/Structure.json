@@ -3,17 +3,18 @@
     "fields": [],
     "relationships": [
         {
-            "relationshipType": "many-to-one",
+            "relationshipType": "one-to-one",
             "otherEntityName": "node",
             "otherEntityRelationshipName": "theStructure",
             "relationshipName": "rootElement",
-            "otherEntityField": "id"
+            "otherEntityField": "id",
+            "ownerSide": true
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "vCSRepository",
             "otherEntityRelationshipName": "theStructure",
-            "relationshipName": "theVCSRepository"
+            "relationshipName": "theRepository"
         }
     ],
     "changelogDate": "20190914033816",

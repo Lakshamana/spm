@@ -21,7 +21,7 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "task",
-            "otherEntityRelationshipName": "theArtifactTasks",
+            "otherEntityRelationshipName": "theArtifactTask",
             "relationshipName": "theTask",
             "otherEntityField": "id"
         }

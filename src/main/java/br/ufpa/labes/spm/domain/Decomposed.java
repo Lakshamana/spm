@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "decomposed")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Decomposed extends Activity implements Serializable {
+public class Decomposed implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -68,18 +68,5 @@ public class Decomposed extends Activity implements Serializable {
         return "Decomposed{" +
             "id=" + getId() +
             "}";
-    }
-
-    public void removeFromTheTheReferedProcessModel() {
-      if (this.theReferedProcessModel != null) {
-        this.theReferedProcessModel.setTheDecomposed(null);
-        this.setTheReferedProcessModel(null);
-      }
-    }
-
-    public void insertIntoTheReferedProcessModel(
-        ProcessModel theReferedProcessModel) {
-      this.setTheReferedProcessModel(theReferedProcessModel);
-      theReferedProcessModel.setTheDecomposed(this);
     }
 }

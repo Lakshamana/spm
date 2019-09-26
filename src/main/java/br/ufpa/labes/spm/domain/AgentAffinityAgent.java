@@ -26,11 +26,11 @@ public class AgentAffinityAgent implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("fromAgentAffinities")
-    private Agent fromAffinity;
+    private Agent toAffinity;
 
     @ManyToOne
     @JsonIgnoreProperties("toAgentAffinities")
-    private Agent toAffinity;
+    private Agent fromAffinity;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -54,19 +54,6 @@ public class AgentAffinityAgent implements Serializable {
         this.degree = degree;
     }
 
-    public Agent getFromAffinity() {
-        return fromAffinity;
-    }
-
-    public AgentAffinityAgent fromAffinity(Agent agent) {
-        this.fromAffinity = agent;
-        return this;
-    }
-
-    public void setFromAffinity(Agent agent) {
-        this.fromAffinity = agent;
-    }
-
     public Agent getToAffinity() {
         return toAffinity;
     }
@@ -78,6 +65,19 @@ public class AgentAffinityAgent implements Serializable {
 
     public void setToAffinity(Agent agent) {
         this.toAffinity = agent;
+    }
+
+    public Agent getFromAffinity() {
+        return fromAffinity;
+    }
+
+    public AgentAffinityAgent fromAffinity(Agent agent) {
+        this.fromAffinity = agent;
+        return this;
+    }
+
+    public void setFromAffinity(Agent agent) {
+        this.fromAffinity = agent;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -103,17 +103,5 @@ public class AgentAffinityAgent implements Serializable {
             "id=" + getId() +
             ", degree=" + getDegree() +
             "}";
-    }
-
-    public void removeFromFromAffinity() {
-      if (this.fromAffinity != null) {
-        this.fromAffinity.removeToAgentAffinity(this);
-      }
-    }
-
-    public void removeFromToAffinity() {
-      if (this.toAffinity != null) {
-        this.toAffinity.removeToAgentAffinity(this);
-      }
     }
 }

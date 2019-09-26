@@ -36,15 +36,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="security_levels" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="notification_config" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="process_notifications" type="varchar(255)">
+            <column name="decision_branch_cond" type="boolean">
                 <constraints nullable="true" />
             </column>
 
@@ -77,9 +69,7 @@
             <column name="consumable_resource_amount" type="boolean"/>
             <column name="activity_instantied" type="boolean"/>
             <column name="task_delegated" type="boolean"/>
-            <column name="security_levels" type="string"/>
-            <column name="notification_config" type="string"/>
-            <column name="process_notifications" type="string"/>
+            <column name="decision_branch_cond" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

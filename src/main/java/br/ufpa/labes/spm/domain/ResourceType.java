@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "resource_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ResourceType extends Type implements Serializable {
+public class ResourceType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +25,10 @@ public class ResourceType extends Type implements Serializable {
     @OneToMany(mappedBy = "theResourceType")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<RequiredResource> theRequiredResources = new HashSet<>();
+
+    @OneToMany(mappedBy = "resourceTypeRequired")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ResourceInstSug> theResourceInstSugs = new HashSet<>();
 
     @OneToMany(mappedBy = "theResourceType")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -62,6 +66,31 @@ public class ResourceType extends Type implements Serializable {
 
     public void setTheRequiredResources(Set<RequiredResource> requiredResources) {
         this.theRequiredResources = requiredResources;
+    }
+
+    public Set<ResourceInstSug> getTheResourceInstSugs() {
+        return theResourceInstSugs;
+    }
+
+    public ResourceType theResourceInstSugs(Set<ResourceInstSug> resourceInstSugs) {
+        this.theResourceInstSugs = resourceInstSugs;
+        return this;
+    }
+
+    public ResourceType addTheResourceInstSug(ResourceInstSug resourceInstSug) {
+        this.theResourceInstSugs.add(resourceInstSug);
+        resourceInstSug.setResourceTypeRequired(this);
+        return this;
+    }
+
+    public ResourceType removeTheResourceInstSug(ResourceInstSug resourceInstSug) {
+        this.theResourceInstSugs.remove(resourceInstSug);
+        resourceInstSug.setResourceTypeRequired(null);
+        return this;
+    }
+
+    public void setTheResourceInstSugs(Set<ResourceInstSug> resourceInstSugs) {
+        this.theResourceInstSugs = resourceInstSugs;
     }
 
     public Set<Resource> getTheResources() {

@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 /**
  * REST controller for managing {@link br.ufpa.labes.spm.domain.Sequence}.
@@ -82,10 +83,15 @@ public class SequenceResource {
      * {@code GET  /sequences} : get all the sequences.
      *
 
+     * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of sequences in body.
      */
     @GetMapping("/sequences")
-    public List<SequenceDTO> getAllSequences() {
+    public List<SequenceDTO> getAllSequences(@RequestParam(required = false) String filter) {
+        if ("thedependency-is-null".equals(filter)) {
+            log.debug("REST request to get all Sequences where theDependency is null");
+            return sequenceService.findAllWhereTheDependencyIsNull();
+        }
         log.debug("REST request to get all Sequences");
         return sequenceService.findAll();
     }

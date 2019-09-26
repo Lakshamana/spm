@@ -15,6 +15,7 @@ public interface SequenceMapper extends EntityMapper<SequenceDTO, Sequence> {
     SequenceDTO toDto(Sequence sequence);
 
     @Mapping(source = "theDependencyId", target = "theDependency")
+    @Mapping(target = "theDependency", ignore = true)
     Sequence toEntity(SequenceDTO sequenceDTO);
 
     default Sequence fromId(Long id) {

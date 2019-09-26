@@ -9,16 +9,10 @@ public class AuthorStatDTO implements Serializable {
 
     private Long id;
 
-    private Double rate;
 
-    private Long visitCount;
-
-    private Long downloadCount;
-
+    private Long assetId;
 
     private Long authorId;
-
-    private Long theAssetId;
 
     public Long getId() {
         return id;
@@ -28,28 +22,12 @@ public class AuthorStatDTO implements Serializable {
         this.id = id;
     }
 
-    public Double getRate() {
-        return rate;
+    public Long getAssetId() {
+        return assetId;
     }
 
-    public void setRate(Double rate) {
-        this.rate = rate;
-    }
-
-    public Long getVisitCount() {
-        return visitCount;
-    }
-
-    public void setVisitCount(Long visitCount) {
-        this.visitCount = visitCount;
-    }
-
-    public Long getDownloadCount() {
-        return downloadCount;
-    }
-
-    public void setDownloadCount(Long downloadCount) {
-        this.downloadCount = downloadCount;
+    public void setAssetId(Long assetId) {
+        this.assetId = assetId;
     }
 
     public Long getAuthorId() {
@@ -58,14 +36,6 @@ public class AuthorStatDTO implements Serializable {
 
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
-    }
-
-    public Long getTheAssetId() {
-        return theAssetId;
-    }
-
-    public void setTheAssetId(Long assetId) {
-        this.theAssetId = assetId;
     }
 
     @Override
@@ -93,11 +63,8 @@ public class AuthorStatDTO implements Serializable {
     public String toString() {
         return "AuthorStatDTO{" +
             "id=" + getId() +
-            ", rate=" + getRate() +
-            ", visitCount=" + getVisitCount() +
-            ", downloadCount=" + getDownloadCount() +
+            ", asset=" + getAssetId() +
             ", author=" + getAuthorId() +
-            ", theAsset=" + getTheAssetId() +
             "}";
     }
 }

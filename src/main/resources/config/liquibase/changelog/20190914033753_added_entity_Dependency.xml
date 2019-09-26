@@ -19,7 +19,9 @@
             <column name="kind_dep" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-
+            <column name="the_sequence_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_dependency_the_sequence_id" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
 

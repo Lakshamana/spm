@@ -7,8 +7,6 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 
-import br.ufpa.labes.spm.domain.enumeration.WebAPSEEObjectType;
-
 /**
  * A WebAPSEEObject.
  */
@@ -30,10 +28,6 @@ public class WebAPSEEObject implements Serializable {
     @NotNull
     @Column(name = "class_name", nullable = false)
     private String className;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "web_apsee_object_type")
-    private WebAPSEEObjectType webAPSEEObjectType;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -74,19 +68,6 @@ public class WebAPSEEObject implements Serializable {
         this.className = className;
     }
 
-    public WebAPSEEObjectType getWebAPSEEObjectType() {
-        return webAPSEEObjectType;
-    }
-
-    public WebAPSEEObject webAPSEEObjectType(WebAPSEEObjectType webAPSEEObjectType) {
-        this.webAPSEEObjectType = webAPSEEObjectType;
-        return this;
-    }
-
-    public void setWebAPSEEObjectType(WebAPSEEObjectType webAPSEEObjectType) {
-        this.webAPSEEObjectType = webAPSEEObjectType;
-    }
-
     public GraphicCoordinate getTheGraphicCoordinate() {
         return theGraphicCoordinate;
     }
@@ -123,7 +104,6 @@ public class WebAPSEEObject implements Serializable {
             "id=" + getId() +
             ", theReferredOid=" + getTheReferredOid() +
             ", className='" + getClassName() + "'" +
-            ", webAPSEEObjectType='" + getWebAPSEEObjectType() + "'" +
             "}";
     }
 }

@@ -16,26 +16,6 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="vote_count" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="visit_count" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="download_count" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="t_votes" type="double">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="rate" type="double">
-                <constraints nullable="true" />
-            </column>
-
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
 
@@ -60,11 +40,6 @@
                   separator=";"
                   tableName="asset_stat">
             <column name="id" type="numeric"/>
-            <column name="vote_count" type="numeric"/>
-            <column name="visit_count" type="numeric"/>
-            <column name="download_count" type="numeric"/>
-            <column name="t_votes" type="numeric"/>
-            <column name="rate" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

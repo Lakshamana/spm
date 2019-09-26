@@ -14,9 +14,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="author"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_asset_id"
+        <addForeignKeyConstraint baseColumnNames="asset_id"
                                  baseTableName="lesson_learned"
-                                 constraintName="fk_lesson_learned_the_asset_id"
+                                 constraintName="fk_lesson_learned_asset_id"
                                  referencedColumnNames="id"
                                  referencedTableName="asset"/>
 

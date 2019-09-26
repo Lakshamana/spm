@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "metric_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MetricType extends Type implements Serializable {
+public class MetricType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,7 +22,7 @@ public class MetricType extends Type implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "theMetricType")
+    @OneToMany(mappedBy = "metricType")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<MetricDefinition> theMetricDefinitions = new HashSet<>();
 
@@ -46,13 +46,13 @@ public class MetricType extends Type implements Serializable {
 
     public MetricType addTheMetricDefinition(MetricDefinition metricDefinition) {
         this.theMetricDefinitions.add(metricDefinition);
-        metricDefinition.setTheMetricType(this);
+        metricDefinition.setMetricType(this);
         return this;
     }
 
     public MetricType removeTheMetricDefinition(MetricDefinition metricDefinition) {
         this.theMetricDefinitions.remove(metricDefinition);
-        metricDefinition.setTheMetricType(null);
+        metricDefinition.setMetricType(null);
         return this;
     }
 

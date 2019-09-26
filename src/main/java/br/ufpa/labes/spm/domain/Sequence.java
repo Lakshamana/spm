@@ -1,4 +1,5 @@
 package br.ufpa.labes.spm.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -13,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "sequence")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Sequence extends SimpleCon implements Serializable {
+public class Sequence implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +26,10 @@ public class Sequence extends SimpleCon implements Serializable {
     @JsonIgnoreProperties("theSequences")
     private Dependency theDependency;
 
+    @OneToOne(mappedBy = "theSequence")
+    @JsonIgnore
+    private Dependency theDependency;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -32,6 +37,19 @@ public class Sequence extends SimpleCon implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Dependency getTheDependency() {
+        return theDependency;
+    }
+
+    public Sequence theDependency(Dependency dependency) {
+        this.theDependency = dependency;
+        return this;
+    }
+
+    public void setTheDependency(Dependency dependency) {
+        this.theDependency = dependency;
     }
 
     public Dependency getTheDependency() {

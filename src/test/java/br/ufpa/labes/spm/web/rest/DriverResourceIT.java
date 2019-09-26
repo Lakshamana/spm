@@ -47,6 +47,15 @@ public class DriverResourceIT {
     private static final String DEFAULT_APP_SECRET = "AAAAAAAAAA";
     private static final String UPDATED_APP_SECRET = "BBBBBBBBBB";
 
+    private static final String DEFAULT_APP_KEY_GOOGLE = "AAAAAAAAAA";
+    private static final String UPDATED_APP_KEY_GOOGLE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_APP_SECRET_GOOGLE = "AAAAAAAAAA";
+    private static final String UPDATED_APP_SECRET_GOOGLE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REQUEST_URL = "AAAAAAAAAA";
+    private static final String UPDATED_REQUEST_URL = "BBBBBBBBBB";
+
     @Autowired
     private DriverRepository driverRepository;
 
@@ -97,7 +106,10 @@ public class DriverResourceIT {
         Driver driver = new Driver()
             .tipo(DEFAULT_TIPO)
             .appKey(DEFAULT_APP_KEY)
-            .appSecret(DEFAULT_APP_SECRET);
+            .appSecret(DEFAULT_APP_SECRET)
+            .appKeyGoogle(DEFAULT_APP_KEY_GOOGLE)
+            .appSecretGoogle(DEFAULT_APP_SECRET_GOOGLE)
+            .requestUrl(DEFAULT_REQUEST_URL);
         return driver;
     }
     /**
@@ -110,7 +122,10 @@ public class DriverResourceIT {
         Driver driver = new Driver()
             .tipo(UPDATED_TIPO)
             .appKey(UPDATED_APP_KEY)
-            .appSecret(UPDATED_APP_SECRET);
+            .appSecret(UPDATED_APP_SECRET)
+            .appKeyGoogle(UPDATED_APP_KEY_GOOGLE)
+            .appSecretGoogle(UPDATED_APP_SECRET_GOOGLE)
+            .requestUrl(UPDATED_REQUEST_URL);
         return driver;
     }
 
@@ -138,6 +153,9 @@ public class DriverResourceIT {
         assertThat(testDriver.getTipo()).isEqualTo(DEFAULT_TIPO);
         assertThat(testDriver.getAppKey()).isEqualTo(DEFAULT_APP_KEY);
         assertThat(testDriver.getAppSecret()).isEqualTo(DEFAULT_APP_SECRET);
+        assertThat(testDriver.getAppKeyGoogle()).isEqualTo(DEFAULT_APP_KEY_GOOGLE);
+        assertThat(testDriver.getAppSecretGoogle()).isEqualTo(DEFAULT_APP_SECRET_GOOGLE);
+        assertThat(testDriver.getRequestUrl()).isEqualTo(DEFAULT_REQUEST_URL);
     }
 
     @Test
@@ -174,7 +192,10 @@ public class DriverResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(driver.getId().intValue())))
             .andExpect(jsonPath("$.[*].tipo").value(hasItem(DEFAULT_TIPO.toString())))
             .andExpect(jsonPath("$.[*].appKey").value(hasItem(DEFAULT_APP_KEY.toString())))
-            .andExpect(jsonPath("$.[*].appSecret").value(hasItem(DEFAULT_APP_SECRET.toString())));
+            .andExpect(jsonPath("$.[*].appSecret").value(hasItem(DEFAULT_APP_SECRET.toString())))
+            .andExpect(jsonPath("$.[*].appKeyGoogle").value(hasItem(DEFAULT_APP_KEY_GOOGLE.toString())))
+            .andExpect(jsonPath("$.[*].appSecretGoogle").value(hasItem(DEFAULT_APP_SECRET_GOOGLE.toString())))
+            .andExpect(jsonPath("$.[*].requestUrl").value(hasItem(DEFAULT_REQUEST_URL.toString())));
     }
     
     @Test
@@ -190,7 +211,10 @@ public class DriverResourceIT {
             .andExpect(jsonPath("$.id").value(driver.getId().intValue()))
             .andExpect(jsonPath("$.tipo").value(DEFAULT_TIPO.toString()))
             .andExpect(jsonPath("$.appKey").value(DEFAULT_APP_KEY.toString()))
-            .andExpect(jsonPath("$.appSecret").value(DEFAULT_APP_SECRET.toString()));
+            .andExpect(jsonPath("$.appSecret").value(DEFAULT_APP_SECRET.toString()))
+            .andExpect(jsonPath("$.appKeyGoogle").value(DEFAULT_APP_KEY_GOOGLE.toString()))
+            .andExpect(jsonPath("$.appSecretGoogle").value(DEFAULT_APP_SECRET_GOOGLE.toString()))
+            .andExpect(jsonPath("$.requestUrl").value(DEFAULT_REQUEST_URL.toString()));
     }
 
     @Test
@@ -216,7 +240,10 @@ public class DriverResourceIT {
         updatedDriver
             .tipo(UPDATED_TIPO)
             .appKey(UPDATED_APP_KEY)
-            .appSecret(UPDATED_APP_SECRET);
+            .appSecret(UPDATED_APP_SECRET)
+            .appKeyGoogle(UPDATED_APP_KEY_GOOGLE)
+            .appSecretGoogle(UPDATED_APP_SECRET_GOOGLE)
+            .requestUrl(UPDATED_REQUEST_URL);
         DriverDTO driverDTO = driverMapper.toDto(updatedDriver);
 
         restDriverMockMvc.perform(put("/api/drivers")
@@ -231,6 +258,9 @@ public class DriverResourceIT {
         assertThat(testDriver.getTipo()).isEqualTo(UPDATED_TIPO);
         assertThat(testDriver.getAppKey()).isEqualTo(UPDATED_APP_KEY);
         assertThat(testDriver.getAppSecret()).isEqualTo(UPDATED_APP_SECRET);
+        assertThat(testDriver.getAppKeyGoogle()).isEqualTo(UPDATED_APP_KEY_GOOGLE);
+        assertThat(testDriver.getAppSecretGoogle()).isEqualTo(UPDATED_APP_SECRET_GOOGLE);
+        assertThat(testDriver.getRequestUrl()).isEqualTo(UPDATED_REQUEST_URL);
     }
 
     @Test

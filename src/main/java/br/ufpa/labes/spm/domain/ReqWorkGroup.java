@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "req_work_group")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ReqWorkGroup extends RequiredPeople implements Serializable {
+public class ReqWorkGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,11 +22,11 @@ public class ReqWorkGroup extends RequiredPeople implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("theReqWorkGroups")
+    @JsonIgnoreProperties("theReqGroups")
     private WorkGroupType theWorkGroupType;
 
     @ManyToOne
-    @JsonIgnoreProperties("theReqWorkGroups")
+    @JsonIgnoreProperties("theReqGroups")
     private WorkGroup theWorkGroup;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

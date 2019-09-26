@@ -17,8 +17,10 @@ public interface ResourceEventMapper extends EntityMapper<ResourceEventDTO, Reso
 
     @Mapping(source = "theNormalId", target = "theNormal")
     @Mapping(source = "theResourceId", target = "theResource")
-    @Mapping(target = "theCatalogEventToResources", ignore = true)
-    @Mapping(target = "removeTheCatalogEventToResource", ignore = true)
+    @Mapping(target = "theRequestorAgents", ignore = true)
+    @Mapping(target = "removeTheRequestorAgent", ignore = true)
+    @Mapping(target = "theCatalogEvents", ignore = true)
+    @Mapping(target = "removeTheCatalogEvents", ignore = true)
     ResourceEvent toEntity(ResourceEventDTO resourceEventDTO);
 
     default ResourceEvent fromId(Long id) {

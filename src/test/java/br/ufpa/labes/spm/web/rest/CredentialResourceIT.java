@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.OperationEnum;
 /**
  * Integration tests for the {@link CredentialResource} REST controller.
  */
@@ -44,9 +43,6 @@ public class CredentialResourceIT {
 
     private static final String DEFAULT_UID = "AAAAAAAAAA";
     private static final String UPDATED_UID = "BBBBBBBBBB";
-
-    private static final OperationEnum DEFAULT_OPERATION_ENUM = OperationEnum.CREATE;
-    private static final OperationEnum UPDATED_OPERATION_ENUM = OperationEnum.DELETE;
 
     @Autowired
     private CredentialRepository credentialRepository;
@@ -97,8 +93,7 @@ public class CredentialResourceIT {
     public static Credential createEntity(EntityManager em) {
         Credential credential = new Credential()
             .className(DEFAULT_CLASS_NAME)
-            .uid(DEFAULT_UID)
-            .operationEnum(DEFAULT_OPERATION_ENUM);
+            .uid(DEFAULT_UID);
         return credential;
     }
     /**
@@ -110,8 +105,7 @@ public class CredentialResourceIT {
     public static Credential createUpdatedEntity(EntityManager em) {
         Credential credential = new Credential()
             .className(UPDATED_CLASS_NAME)
-            .uid(UPDATED_UID)
-            .operationEnum(UPDATED_OPERATION_ENUM);
+            .uid(UPDATED_UID);
         return credential;
     }
 
@@ -138,7 +132,6 @@ public class CredentialResourceIT {
         Credential testCredential = credentialList.get(credentialList.size() - 1);
         assertThat(testCredential.getClassName()).isEqualTo(DEFAULT_CLASS_NAME);
         assertThat(testCredential.getUid()).isEqualTo(DEFAULT_UID);
-        assertThat(testCredential.getOperationEnum()).isEqualTo(DEFAULT_OPERATION_ENUM);
     }
 
     @Test
@@ -174,8 +167,7 @@ public class CredentialResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(credential.getId().intValue())))
             .andExpect(jsonPath("$.[*].className").value(hasItem(DEFAULT_CLASS_NAME.toString())))
-            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
-            .andExpect(jsonPath("$.[*].operationEnum").value(hasItem(DEFAULT_OPERATION_ENUM.toString())));
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())));
     }
     
     @Test
@@ -190,8 +182,7 @@ public class CredentialResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(credential.getId().intValue()))
             .andExpect(jsonPath("$.className").value(DEFAULT_CLASS_NAME.toString()))
-            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
-            .andExpect(jsonPath("$.operationEnum").value(DEFAULT_OPERATION_ENUM.toString()));
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()));
     }
 
     @Test
@@ -216,8 +207,7 @@ public class CredentialResourceIT {
         em.detach(updatedCredential);
         updatedCredential
             .className(UPDATED_CLASS_NAME)
-            .uid(UPDATED_UID)
-            .operationEnum(UPDATED_OPERATION_ENUM);
+            .uid(UPDATED_UID);
         CredentialDTO credentialDTO = credentialMapper.toDto(updatedCredential);
 
         restCredentialMockMvc.perform(put("/api/credentials")
@@ -231,7 +221,6 @@ public class CredentialResourceIT {
         Credential testCredential = credentialList.get(credentialList.size() - 1);
         assertThat(testCredential.getClassName()).isEqualTo(UPDATED_CLASS_NAME);
         assertThat(testCredential.getUid()).isEqualTo(UPDATED_UID);
-        assertThat(testCredential.getOperationEnum()).isEqualTo(UPDATED_OPERATION_ENUM);
     }
 
     @Test

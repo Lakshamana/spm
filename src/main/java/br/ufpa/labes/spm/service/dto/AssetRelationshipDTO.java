@@ -14,7 +14,7 @@ public class AssetRelationshipDTO implements Serializable {
 
     private Long kindId;
 
-    private Long theAssetId;
+    private Long assetId;
 
     private Long relatedAssetId;
 
@@ -42,12 +42,12 @@ public class AssetRelationshipDTO implements Serializable {
         this.kindId = relationshipKindId;
     }
 
-    public Long getTheAssetId() {
-        return theAssetId;
+    public Long getAssetId() {
+        return assetId;
     }
 
-    public void setTheAssetId(Long assetId) {
-        this.theAssetId = assetId;
+    public void setAssetId(Long assetId) {
+        this.assetId = assetId;
     }
 
     public Long getRelatedAssetId() {
@@ -85,7 +85,7 @@ public class AssetRelationshipDTO implements Serializable {
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
             ", kind=" + getKindId() +
-            ", theAsset=" + getTheAssetId() +
+            ", asset=" + getAssetId() +
             ", relatedAsset=" + getRelatedAssetId() +
             "}";
     }

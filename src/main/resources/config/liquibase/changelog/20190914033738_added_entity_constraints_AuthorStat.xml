@@ -8,17 +8,17 @@
     -->
     <changeSet id="20190914033738-2" author="jhipster">
         
+        <addForeignKeyConstraint baseColumnNames="asset_id"
+                                 baseTableName="author_stat"
+                                 constraintName="fk_author_stat_asset_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset"/>
+
         <addForeignKeyConstraint baseColumnNames="author_id"
                                  baseTableName="author_stat"
                                  constraintName="fk_author_stat_author_id"
                                  referencedColumnNames="id"
                                  referencedTableName="author"/>
-
-        <addForeignKeyConstraint baseColumnNames="the_asset_id"
-                                 baseTableName="author_stat"
-                                 constraintName="fk_author_stat_the_asset_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="asset"/>
 
     </changeSet>
 </databaseChangeLog>

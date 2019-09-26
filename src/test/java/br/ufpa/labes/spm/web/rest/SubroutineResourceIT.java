@@ -38,9 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = SpmApp.class)
 public class SubroutineResourceIT {
 
-    private static final String DEFAULT_IDENT = "AAAAAAAAAA";
-    private static final String UPDATED_IDENT = "BBBBBBBBBB";
-
     @Autowired
     private SubroutineRepository subroutineRepository;
 
@@ -88,8 +85,7 @@ public class SubroutineResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Subroutine createEntity(EntityManager em) {
-        Subroutine subroutine = new Subroutine()
-            .ident(DEFAULT_IDENT);
+        Subroutine subroutine = new Subroutine();
         return subroutine;
     }
     /**
@@ -99,8 +95,7 @@ public class SubroutineResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Subroutine createUpdatedEntity(EntityManager em) {
-        Subroutine subroutine = new Subroutine()
-            .ident(UPDATED_IDENT);
+        Subroutine subroutine = new Subroutine();
         return subroutine;
     }
 
@@ -125,7 +120,6 @@ public class SubroutineResourceIT {
         List<Subroutine> subroutineList = subroutineRepository.findAll();
         assertThat(subroutineList).hasSize(databaseSizeBeforeCreate + 1);
         Subroutine testSubroutine = subroutineList.get(subroutineList.size() - 1);
-        assertThat(testSubroutine.getIdent()).isEqualTo(DEFAULT_IDENT);
     }
 
     @Test
@@ -159,8 +153,7 @@ public class SubroutineResourceIT {
         restSubroutineMockMvc.perform(get("/api/subroutines?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(subroutine.getId().intValue())))
-            .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(subroutine.getId().intValue())));
     }
     
     @Test
@@ -173,8 +166,7 @@ public class SubroutineResourceIT {
         restSubroutineMockMvc.perform(get("/api/subroutines/{id}", subroutine.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(subroutine.getId().intValue()))
-            .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()));
+            .andExpect(jsonPath("$.id").value(subroutine.getId().intValue()));
     }
 
     @Test
@@ -197,8 +189,6 @@ public class SubroutineResourceIT {
         Subroutine updatedSubroutine = subroutineRepository.findById(subroutine.getId()).get();
         // Disconnect from session so that the updates on updatedSubroutine are not directly saved in db
         em.detach(updatedSubroutine);
-        updatedSubroutine
-            .ident(UPDATED_IDENT);
         SubroutineDTO subroutineDTO = subroutineMapper.toDto(updatedSubroutine);
 
         restSubroutineMockMvc.perform(put("/api/subroutines")
@@ -210,7 +200,6 @@ public class SubroutineResourceIT {
         List<Subroutine> subroutineList = subroutineRepository.findAll();
         assertThat(subroutineList).hasSize(databaseSizeBeforeUpdate);
         Subroutine testSubroutine = subroutineList.get(subroutineList.size() - 1);
-        assertThat(testSubroutine.getIdent()).isEqualTo(UPDATED_IDENT);
     }
 
     @Test

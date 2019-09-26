@@ -63,8 +63,10 @@ public class CompanyResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_IMAGE_URL = "AAAAAAAAAA";
-    private static final String UPDATED_IMAGE_URL = "BBBBBBBBBB";
+    private static final byte[] DEFAULT_IMAGE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_IMAGE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_IMAGE_CONTENT_TYPE = "image/png";
 
     private static final String DEFAULT_URL = "AAAAAAAAAA";
     private static final String UPDATED_URL = "BBBBBBBBBB";
@@ -128,7 +130,8 @@ public class CompanyResourceIT {
             .address(DEFAULT_ADDRESS)
             .phone(DEFAULT_PHONE)
             .description(DEFAULT_DESCRIPTION)
-            .imageURL(DEFAULT_IMAGE_URL)
+            .image(DEFAULT_IMAGE)
+            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
             .url(DEFAULT_URL)
             .automaticInstantiation(DEFAULT_AUTOMATIC_INSTANTIATION);
         return company;
@@ -149,7 +152,8 @@ public class CompanyResourceIT {
             .address(UPDATED_ADDRESS)
             .phone(UPDATED_PHONE)
             .description(UPDATED_DESCRIPTION)
-            .imageURL(UPDATED_IMAGE_URL)
+            .image(UPDATED_IMAGE)
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .url(UPDATED_URL)
             .automaticInstantiation(UPDATED_AUTOMATIC_INSTANTIATION);
         return company;
@@ -184,7 +188,8 @@ public class CompanyResourceIT {
         assertThat(testCompany.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testCompany.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testCompany.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testCompany.getImageURL()).isEqualTo(DEFAULT_IMAGE_URL);
+        assertThat(testCompany.getImage()).isEqualTo(DEFAULT_IMAGE);
+        assertThat(testCompany.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
         assertThat(testCompany.getUrl()).isEqualTo(DEFAULT_URL);
         assertThat(testCompany.isAutomaticInstantiation()).isEqualTo(DEFAULT_AUTOMATIC_INSTANTIATION);
     }
@@ -229,7 +234,8 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS.toString())))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].imageURL").value(hasItem(DEFAULT_IMAGE_URL.toString())))
+            .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
             .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL.toString())))
             .andExpect(jsonPath("$.[*].automaticInstantiation").value(hasItem(DEFAULT_AUTOMATIC_INSTANTIATION.booleanValue())));
     }
@@ -253,7 +259,8 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS.toString()))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.imageURL").value(DEFAULT_IMAGE_URL.toString()))
+            .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
             .andExpect(jsonPath("$.url").value(DEFAULT_URL.toString()))
             .andExpect(jsonPath("$.automaticInstantiation").value(DEFAULT_AUTOMATIC_INSTANTIATION.booleanValue()));
     }
@@ -287,7 +294,8 @@ public class CompanyResourceIT {
             .address(UPDATED_ADDRESS)
             .phone(UPDATED_PHONE)
             .description(UPDATED_DESCRIPTION)
-            .imageURL(UPDATED_IMAGE_URL)
+            .image(UPDATED_IMAGE)
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .url(UPDATED_URL)
             .automaticInstantiation(UPDATED_AUTOMATIC_INSTANTIATION);
         CompanyDTO companyDTO = companyMapper.toDto(updatedCompany);
@@ -309,7 +317,8 @@ public class CompanyResourceIT {
         assertThat(testCompany.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testCompany.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testCompany.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testCompany.getImageURL()).isEqualTo(UPDATED_IMAGE_URL);
+        assertThat(testCompany.getImage()).isEqualTo(UPDATED_IMAGE);
+        assertThat(testCompany.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
         assertThat(testCompany.getUrl()).isEqualTo(UPDATED_URL);
         assertThat(testCompany.isAutomaticInstantiation()).isEqualTo(UPDATED_AUTOMATIC_INSTANTIATION);
     }

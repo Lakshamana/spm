@@ -29,6 +29,7 @@ public class Artifact implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Lob
     @Column(name = "description")
     private String description;
 
@@ -44,8 +45,8 @@ public class Artifact implements Serializable {
     @Column(name = "is_template")
     private Boolean isTemplate;
 
-    @Column(name = "active")
-    private Boolean active;
+    @Column(name = "is_active")
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "theArtifact")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -59,11 +60,11 @@ public class Artifact implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Automatic> theAutomatics = new HashSet<>();
 
-    @OneToMany(mappedBy = "theArtifact")
+    @OneToMany(mappedBy = "artifact")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ArtifactMetric> theArtifactMetrics = new HashSet<>();
 
-    @OneToMany(mappedBy = "theArtifact")
+    @OneToMany(mappedBy = "artifact")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ArtifactEstimation> theArtifactEstimations = new HashSet<>();
 
@@ -72,20 +73,28 @@ public class Artifact implements Serializable {
     private ArtifactType theArtifactType;
 
     @ManyToOne
-    @JsonIgnoreProperties("possesses")
-    private Artifact derivedFrom;
+    @JsonIgnoreProperties("derivedFroms")
+    private Artifact derivedTo;
+
+    @ManyToOne
+    @JsonIgnoreProperties("belongsTos")
+    private Artifact possess;
 
     @ManyToOne
     @JsonIgnoreProperties("theArtifacts")
-    private VCSRepository theVCSRepository;
+    private VCSRepository theRepository;
 
     @ManyToOne
     @JsonIgnoreProperties("finalArtifacts")
     private Project theProject;
 
-    @OneToMany(mappedBy = "derivedFrom")
+    @OneToMany(mappedBy = "derivedTo")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Artifact> possesses = new HashSet<>();
+    private Set<Artifact> derivedFroms = new HashSet<>();
+
+    @OneToMany(mappedBy = "possess")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Artifact> belongsTos = new HashSet<>();
 
     @OneToMany(mappedBy = "theArtifact")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -195,17 +204,17 @@ public class Artifact implements Serializable {
         this.isTemplate = isTemplate;
     }
 
-    public Boolean isActive() {
-        return active;
+    public Boolean isIsActive() {
+        return isActive;
     }
 
-    public Artifact active(Boolean active) {
-        this.active = active;
+    public Artifact isActive(Boolean isActive) {
+        this.isActive = isActive;
         return this;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Set<InvolvedArtifact> getTheInvolvedArtifacts() {
@@ -242,13 +251,13 @@ public class Artifact implements Serializable {
         return this;
     }
 
-    public Artifact addTheArtifactParams(ArtifactParam artifactParam) {
+    public Artifact addTheArtifactParam(ArtifactParam artifactParam) {
         this.theArtifactParams.add(artifactParam);
         artifactParam.setTheArtifact(this);
         return this;
     }
 
-    public Artifact removeTheArtifactParams(ArtifactParam artifactParam) {
+    public Artifact removeTheArtifactParam(ArtifactParam artifactParam) {
         this.theArtifactParams.remove(artifactParam);
         artifactParam.setTheArtifact(null);
         return this;
@@ -294,13 +303,13 @@ public class Artifact implements Serializable {
 
     public Artifact addTheArtifactMetric(ArtifactMetric artifactMetric) {
         this.theArtifactMetrics.add(artifactMetric);
-        artifactMetric.setTheArtifact(this);
+        artifactMetric.setArtifact(this);
         return this;
     }
 
     public Artifact removeTheArtifactMetric(ArtifactMetric artifactMetric) {
         this.theArtifactMetrics.remove(artifactMetric);
-        artifactMetric.setTheArtifact(null);
+        artifactMetric.setArtifact(null);
         return this;
     }
 
@@ -319,13 +328,13 @@ public class Artifact implements Serializable {
 
     public Artifact addTheArtifactEstimation(ArtifactEstimation artifactEstimation) {
         this.theArtifactEstimations.add(artifactEstimation);
-        artifactEstimation.setTheArtifact(this);
+        artifactEstimation.setArtifact(this);
         return this;
     }
 
     public Artifact removeTheArtifactEstimation(ArtifactEstimation artifactEstimation) {
         this.theArtifactEstimations.remove(artifactEstimation);
-        artifactEstimation.setTheArtifact(null);
+        artifactEstimation.setArtifact(null);
         return this;
     }
 
@@ -346,30 +355,43 @@ public class Artifact implements Serializable {
         this.theArtifactType = artifactType;
     }
 
-    public Artifact getDerivedFrom() {
-        return derivedFrom;
+    public Artifact getDerivedTo() {
+        return derivedTo;
     }
 
-    public Artifact derivedFrom(Artifact artifact) {
-        this.derivedFrom = artifact;
+    public Artifact derivedTo(Artifact artifact) {
+        this.derivedTo = artifact;
         return this;
     }
 
-    public void setDerivedFrom(Artifact artifact) {
-        this.derivedFrom = artifact;
+    public void setDerivedTo(Artifact artifact) {
+        this.derivedTo = artifact;
     }
 
-    public VCSRepository getTheVCSRepository() {
-        return theVCSRepository;
+    public Artifact getPossess() {
+        return possess;
     }
 
-    public Artifact theVCSRepository(VCSRepository vCSRepository) {
-        this.theVCSRepository = vCSRepository;
+    public Artifact possess(Artifact artifact) {
+        this.possess = artifact;
         return this;
     }
 
-    public void setTheVCSRepository(VCSRepository vCSRepository) {
-        this.theVCSRepository = vCSRepository;
+    public void setPossess(Artifact artifact) {
+        this.possess = artifact;
+    }
+
+    public VCSRepository getTheRepository() {
+        return theRepository;
+    }
+
+    public Artifact theRepository(VCSRepository vCSRepository) {
+        this.theRepository = vCSRepository;
+        return this;
+    }
+
+    public void setTheRepository(VCSRepository vCSRepository) {
+        this.theRepository = vCSRepository;
     }
 
     public Project getTheProject() {
@@ -385,29 +407,54 @@ public class Artifact implements Serializable {
         this.theProject = project;
     }
 
-    public Set<Artifact> getPossesses() {
-        return possesses;
+    public Set<Artifact> getDerivedFroms() {
+        return derivedFroms;
     }
 
-    public Artifact possesses(Set<Artifact> artifacts) {
-        this.possesses = artifacts;
+    public Artifact derivedFroms(Set<Artifact> artifacts) {
+        this.derivedFroms = artifacts;
         return this;
     }
 
-    public Artifact addPossess(Artifact artifact) {
-        this.possesses.add(artifact);
-        artifact.setDerivedFrom(this);
+    public Artifact addDerivedFrom(Artifact artifact) {
+        this.derivedFroms.add(artifact);
+        artifact.setDerivedTo(this);
         return this;
     }
 
-    public Artifact removePossess(Artifact artifact) {
-        this.possesses.remove(artifact);
-        artifact.setDerivedFrom(null);
+    public Artifact removeDerivedFrom(Artifact artifact) {
+        this.derivedFroms.remove(artifact);
+        artifact.setDerivedTo(null);
         return this;
     }
 
-    public void setPossesses(Set<Artifact> artifacts) {
-        this.possesses = artifacts;
+    public void setDerivedFroms(Set<Artifact> artifacts) {
+        this.derivedFroms = artifacts;
+    }
+
+    public Set<Artifact> getBelongsTos() {
+        return belongsTos;
+    }
+
+    public Artifact belongsTos(Set<Artifact> artifacts) {
+        this.belongsTos = artifacts;
+        return this;
+    }
+
+    public Artifact addBelongsTo(Artifact artifact) {
+        this.belongsTos.add(artifact);
+        artifact.setPossess(this);
+        return this;
+    }
+
+    public Artifact removeBelongsTo(Artifact artifact) {
+        this.belongsTos.remove(artifact);
+        artifact.setPossess(null);
+        return this;
+    }
+
+    public void setBelongsTos(Set<Artifact> artifacts) {
+        this.belongsTos = artifacts;
     }
 
     public Set<ArtifactTask> getTheArtifactTasks() {
@@ -488,7 +535,7 @@ public class Artifact implements Serializable {
             ", fileName='" + getFileName() + "'" +
             ", latestVersion='" + getLatestVersion() + "'" +
             ", isTemplate='" + isIsTemplate() + "'" +
-            ", active='" + isActive() + "'" +
+            ", isActive='" + isIsActive() + "'" +
             "}";
     }
 }

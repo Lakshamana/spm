@@ -24,7 +24,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="email" type="varchar(255)">
+            <column name="e_mail" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
@@ -32,7 +32,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="password_hash" type="varchar(255)">
+            <column name="password" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
@@ -40,7 +40,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="active" type="boolean">
+            <column name="is_active" type="boolean">
                 <constraints nullable="true" />
             </column>
 
@@ -48,11 +48,18 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="photo_url" type="varchar(255)">
+            <column name="photo" type="longblob">
+                <constraints nullable="true" />
+            </column>
+            <column name="photo_content_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
             <column name="upload" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="description" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="the_task_agenda_id" type="bigint">
@@ -75,8 +82,8 @@
 
     <changeSet id="20190914033724-1-relations" author="jhipster">
 
-        <createTable tableName="agent_the_processes">
-            <column name="the_processes_id" type="bigint">
+        <createTable tableName="agent_the_process">
+            <column name="the_process_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="agent_id" type="bigint">
@@ -84,10 +91,10 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="agent_id, the_processes_id" tableName="agent_the_processes"/>
+        <addPrimaryKey columnNames="agent_id, the_process_id" tableName="agent_the_process"/>
         
-        <createTable tableName="agent_the_work_groups">
-            <column name="the_work_groups_id" type="bigint">
+        <createTable tableName="agent_the_work_group">
+            <column name="the_work_group_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="agent_id" type="bigint">
@@ -95,7 +102,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="agent_id, the_work_groups_id" tableName="agent_the_work_groups"/>
+        <addPrimaryKey columnNames="agent_id, the_work_group_id" tableName="agent_the_work_group"/>
         
         <createTable tableName="agent_the_org_units">
             <column name="the_org_units_id" type="bigint">
@@ -127,14 +134,16 @@
             <column name="id" type="numeric"/>
             <column name="ident" type="string"/>
             <column name="name" type="string"/>
-            <column name="email" type="string"/>
+            <column name="e_mail" type="string"/>
             <column name="cost_hour" type="numeric"/>
-            <column name="password_hash" type="string"/>
+            <column name="password" type="string"/>
             <column name="tipo_user" type="numeric"/>
-            <column name="active" type="boolean"/>
+            <column name="is_active" type="boolean"/>
             <column name="online" type="boolean"/>
-            <column name="photo_url" type="string"/>
+            <column name="photo" type="blob"/>
+            <column name="photo_content_type" type="string"/>
             <column name="upload" type="string"/>
+            <column name="description" type="clob"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

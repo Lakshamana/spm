@@ -2,10 +2,6 @@
     "name": "Normal",
     "fields": [
         {
-            "fieldName": "ident",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "howLong",
             "fieldType": "Float"
         },
@@ -49,23 +45,10 @@
             "relationshipName": "theReservation"
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "resourceEvent",
+            "relationshipType": "one-to-many",
+            "otherEntityName": "requiredResource",
             "otherEntityRelationshipName": "theNormal",
-            "relationshipName": "theResourceEvent",
-            "ownerSide": false
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "involvedArtifact",
-            "otherEntityRelationshipName": "inInvolvedArtifacts",
-            "relationshipName": "theInvolvedArtifactToNormal"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "involvedArtifact",
-            "otherEntityRelationshipName": "outInvolvedArtifacts",
-            "relationshipName": "theInvolvedArtifactsFromNormal"
+            "relationshipName": "theRequiredResource"
         },
         {
             "relationshipType": "one-to-many",
@@ -74,10 +57,29 @@
             "relationshipName": "theRequiredPeople"
         },
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "requiredResource",
+            "relationshipType": "one-to-one",
+            "otherEntityName": "resourceEvent",
             "otherEntityRelationshipName": "theNormal",
-            "relationshipName": "theRequiredResource"
+            "relationshipName": "theResourceEvent",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agendaEvent",
+            "otherEntityRelationshipName": "theNormal",
+            "relationshipName": "theAgendaEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "involvedArtifact",
+            "otherEntityRelationshipName": "inInvolvedArtifacts",
+            "relationshipName": "involvedArtifactToNormal"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "involvedArtifact",
+            "otherEntityRelationshipName": "outInvolvedArtifacts",
+            "relationshipName": "involvedArtifactFromNormal"
         }
     ],
     "changelogDate": "20190914033824",

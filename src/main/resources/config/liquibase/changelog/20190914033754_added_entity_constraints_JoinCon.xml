@@ -8,6 +8,12 @@
     -->
     <changeSet id="20190914033754-2" author="jhipster">
         
+        <addForeignKeyConstraint baseColumnNames="to_multiple_con_id"
+                                 baseTableName="join_con"
+                                 constraintName="fk_join_con_to_multiple_con_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="multiple_con"/>
+
         <addForeignKeyConstraint baseColumnNames="join_con_id"
                                  baseTableName="join_con_from_multiple_con"
                                  constraintName="fk_join_con_from_multiple_con_join_con_id"

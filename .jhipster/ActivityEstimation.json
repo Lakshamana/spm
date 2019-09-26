@@ -5,8 +5,8 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "activity",
-            "otherEntityRelationshipName": "theActivityEstimation",
-            "relationshipName": "theActivity",
+            "otherEntityRelationshipName": "activityEstimation",
+            "relationshipName": "activity",
             "otherEntityField": "id"
         }
     ],

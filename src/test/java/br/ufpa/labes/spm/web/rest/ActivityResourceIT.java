@@ -49,6 +49,9 @@ public class ActivityResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_IS_VERSION = false;
+    private static final Boolean UPDATED_IS_VERSION = true;
+
     @Autowired
     private ActivityRepository activityRepository;
 
@@ -104,7 +107,8 @@ public class ActivityResourceIT {
     public static Activity createEntity(EntityManager em) {
         Activity activity = new Activity()
             .ident(DEFAULT_IDENT)
-            .name(DEFAULT_NAME);
+            .name(DEFAULT_NAME)
+            .isVersion(DEFAULT_IS_VERSION);
         return activity;
     }
     /**
@@ -116,7 +120,8 @@ public class ActivityResourceIT {
     public static Activity createUpdatedEntity(EntityManager em) {
         Activity activity = new Activity()
             .ident(UPDATED_IDENT)
-            .name(UPDATED_NAME);
+            .name(UPDATED_NAME)
+            .isVersion(UPDATED_IS_VERSION);
         return activity;
     }
 
@@ -143,6 +148,7 @@ public class ActivityResourceIT {
         Activity testActivity = activityList.get(activityList.size() - 1);
         assertThat(testActivity.getIdent()).isEqualTo(DEFAULT_IDENT);
         assertThat(testActivity.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testActivity.isIsVersion()).isEqualTo(DEFAULT_IS_VERSION);
     }
 
     @Test
@@ -178,7 +184,8 @@ public class ActivityResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(activity.getId().intValue())))
             .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].isVersion").value(hasItem(DEFAULT_IS_VERSION.booleanValue())));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -226,7 +233,8 @@ public class ActivityResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(activity.getId().intValue()))
             .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.isVersion").value(DEFAULT_IS_VERSION.booleanValue()));
     }
 
     @Test
@@ -251,7 +259,8 @@ public class ActivityResourceIT {
         em.detach(updatedActivity);
         updatedActivity
             .ident(UPDATED_IDENT)
-            .name(UPDATED_NAME);
+            .name(UPDATED_NAME)
+            .isVersion(UPDATED_IS_VERSION);
         ActivityDTO activityDTO = activityMapper.toDto(updatedActivity);
 
         restActivityMockMvc.perform(put("/api/activities")
@@ -265,6 +274,7 @@ public class ActivityResourceIT {
         Activity testActivity = activityList.get(activityList.size() - 1);
         assertThat(testActivity.getIdent()).isEqualTo(UPDATED_IDENT);
         assertThat(testActivity.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testActivity.isIsVersion()).isEqualTo(UPDATED_IS_VERSION);
     }
 
     @Test

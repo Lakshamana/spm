@@ -2,13 +2,12 @@
     "name": "Consumable",
     "fields": [
         {
-            "fieldName": "unit",
+            "fieldName": "state",
             "fieldType": "String"
         },
         {
-            "fieldName": "consumableStatus",
-            "fieldType": "ConsumableStatus",
-            "fieldValues": "AVAILABLE,NOT_AUTHORIZED,FINISHED"
+            "fieldName": "unit",
+            "fieldType": "String"
         },
         {
             "fieldName": "totalQuantity",

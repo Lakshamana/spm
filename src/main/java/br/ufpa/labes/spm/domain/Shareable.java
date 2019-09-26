@@ -6,15 +6,13 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 
-import br.ufpa.labes.spm.domain.enumeration.ShareableStatus;
-
 /**
  * A Shareable.
  */
 @Entity
 @Table(name = "shareable")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Shareable extends Resource implements Serializable {
+public class Shareable implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,9 +20,8 @@ public class Shareable extends Resource implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "shareable_status")
-    private ShareableStatus shareableStatus;
+    @Column(name = "state")
+    private String state;
 
     @Column(name = "unit_of_cost")
     private String unitOfCost;
@@ -38,17 +35,17 @@ public class Shareable extends Resource implements Serializable {
         this.id = id;
     }
 
-    public ShareableStatus getShareableStatus() {
-        return shareableStatus;
+    public String getState() {
+        return state;
     }
 
-    public Shareable shareableStatus(ShareableStatus shareableStatus) {
-        this.shareableStatus = shareableStatus;
+    public Shareable state(String state) {
+        this.state = state;
         return this;
     }
 
-    public void setShareableStatus(ShareableStatus shareableStatus) {
-        this.shareableStatus = shareableStatus;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getUnitOfCost() {
@@ -85,7 +82,7 @@ public class Shareable extends Resource implements Serializable {
     public String toString() {
         return "Shareable{" +
             "id=" + getId() +
-            ", shareableStatus='" + getShareableStatus() + "'" +
+            ", state='" + getState() + "'" +
             ", unitOfCost='" + getUnitOfCost() + "'" +
             "}";
     }

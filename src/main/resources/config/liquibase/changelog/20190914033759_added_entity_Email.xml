@@ -28,7 +28,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="password_hash" type="varchar(255)">
+            <column name="password" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
@@ -71,7 +71,7 @@
             <column name="email_server_host" type="string"/>
             <column name="email_server_port" type="string"/>
             <column name="user_name" type="string"/>
-            <column name="password_hash" type="string"/>
+            <column name="password" type="string"/>
             <column name="servico_tls" type="boolean"/>
             <column name="servico_ssl" type="boolean"/>
             <column name="teste" type="boolean"/>

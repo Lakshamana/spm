@@ -20,11 +20,5 @@
                                  referencedColumnNames="id"
                                  referencedTableName="developing_system"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_calendar_id"
-                                 baseTableName="project"
-                                 constraintName="fk_project_the_calendar_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="calendar"/>
-
     </changeSet>
 </databaseChangeLog>

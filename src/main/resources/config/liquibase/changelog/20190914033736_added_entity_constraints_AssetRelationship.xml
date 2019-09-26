@@ -14,9 +14,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="relationship_kind"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_asset_id"
+        <addForeignKeyConstraint baseColumnNames="asset_id"
                                  baseTableName="asset_relationship"
-                                 constraintName="fk_asset_relationship_the_asset_id"
+                                 constraintName="fk_asset_relationship_asset_id"
                                  referencedColumnNames="id"
                                  referencedTableName="asset"/>
 

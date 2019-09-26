@@ -10,6 +10,8 @@ public class ScriptDTO implements Serializable {
 
     private Long id;
 
+    private String ident;
+
     private String fileName;
 
     @Lob
@@ -22,6 +24,14 @@ public class ScriptDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIdent() {
+        return ident;
+    }
+
+    public void setIdent(String ident) {
+        this.ident = ident;
     }
 
     public String getFileName() {
@@ -65,6 +75,7 @@ public class ScriptDTO implements Serializable {
     public String toString() {
         return "ScriptDTO{" +
             "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
             ", fileName='" + getFileName() + "'" +
             ", description='" + getDescription() + "'" +
             "}";

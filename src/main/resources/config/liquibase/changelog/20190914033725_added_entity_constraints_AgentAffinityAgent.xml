@@ -8,15 +8,15 @@
     -->
     <changeSet id="20190914033725-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="from_affinity_id"
-                                 baseTableName="agent_affinity_agent"
-                                 constraintName="fk_agent_affinity_agent_from_affinity_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="agent"/>
-
         <addForeignKeyConstraint baseColumnNames="to_affinity_id"
                                  baseTableName="agent_affinity_agent"
                                  constraintName="fk_agent_affinity_agent_to_affinity_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agent"/>
+
+        <addForeignKeyConstraint baseColumnNames="from_affinity_id"
+                                 baseTableName="agent_affinity_agent"
+                                 constraintName="fk_agent_affinity_agent_from_affinity_id"
                                  referencedColumnNames="id"
                                  referencedTableName="agent"/>
 

@@ -1,6 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-
 import br.ufpa.labes.spm.domain.JoinCon;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

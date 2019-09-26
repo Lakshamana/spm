@@ -8,12 +8,6 @@
     -->
     <changeSet id="20190914033914-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_process_agenda_id"
-                                 baseTableName="task"
-                                 constraintName="fk_task_the_process_agenda_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="process_agenda"/>
-
         <addForeignKeyConstraint baseColumnNames="delegated_from_id"
                                  baseTableName="task"
                                  constraintName="fk_task_delegated_from_id"
@@ -31,6 +25,12 @@
                                  constraintName="fk_task_the_normal_id"
                                  referencedColumnNames="id"
                                  referencedTableName="normal"/>
+
+        <addForeignKeyConstraint baseColumnNames="the_process_agenda_id"
+                                 baseTableName="task"
+                                 constraintName="fk_task_the_process_agenda_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="process_agenda"/>
 
     </changeSet>
 </databaseChangeLog>

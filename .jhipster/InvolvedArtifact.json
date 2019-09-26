@@ -5,21 +5,21 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "normal",
-            "otherEntityRelationshipName": "theInvolvedArtifactToNormal",
+            "otherEntityRelationshipName": "involvedArtifactToNormal",
             "relationshipName": "inInvolvedArtifacts",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "normal",
-            "otherEntityRelationshipName": "theInvolvedArtifactsFromNormal",
+            "otherEntityRelationshipName": "involvedArtifactFromNormal",
             "relationshipName": "outInvolvedArtifacts",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "artifactType",
-            "otherEntityRelationshipName": "theInvolvedArtifact",
+            "otherEntityRelationshipName": "theInvolvedArtifacts",
             "relationshipName": "theArtifactType",
             "otherEntityField": "id"
         },

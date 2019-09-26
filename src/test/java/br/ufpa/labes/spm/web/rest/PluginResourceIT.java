@@ -10,12 +10,9 @@ import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -26,13 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 import static br.ufpa.labes.spm.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -49,20 +44,14 @@ public class PluginResourceIT {
     private static final String DEFAULT_DEVELOPER_NAME = "AAAAAAAAAA";
     private static final String UPDATED_DEVELOPER_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_JSON_CONFIG_FILE = "AAAAAAAAAA";
-    private static final String UPDATED_JSON_CONFIG_FILE = "BBBBBBBBBB";
+    private static final String DEFAULT_CONFIG_FILE_PATH = "AAAAAAAAAA";
+    private static final String UPDATED_CONFIG_FILE_PATH = "BBBBBBBBBB";
 
     @Autowired
     private PluginRepository pluginRepository;
 
-    @Mock
-    private PluginRepository pluginRepositoryMock;
-
     @Autowired
     private PluginMapper pluginMapper;
-
-    @Mock
-    private PluginService pluginServiceMock;
 
     @Autowired
     private PluginService pluginService;
@@ -108,7 +97,7 @@ public class PluginResourceIT {
         Plugin plugin = new Plugin()
             .name(DEFAULT_NAME)
             .developerName(DEFAULT_DEVELOPER_NAME)
-            .jsonConfigFile(DEFAULT_JSON_CONFIG_FILE);
+            .configFilePath(DEFAULT_CONFIG_FILE_PATH);
         return plugin;
     }
     /**
@@ -121,7 +110,7 @@ public class PluginResourceIT {
         Plugin plugin = new Plugin()
             .name(UPDATED_NAME)
             .developerName(UPDATED_DEVELOPER_NAME)
-            .jsonConfigFile(UPDATED_JSON_CONFIG_FILE);
+            .configFilePath(UPDATED_CONFIG_FILE_PATH);
         return plugin;
     }
 
@@ -148,7 +137,7 @@ public class PluginResourceIT {
         Plugin testPlugin = pluginList.get(pluginList.size() - 1);
         assertThat(testPlugin.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testPlugin.getDeveloperName()).isEqualTo(DEFAULT_DEVELOPER_NAME);
-        assertThat(testPlugin.getJsonConfigFile()).isEqualTo(DEFAULT_JSON_CONFIG_FILE);
+        assertThat(testPlugin.getConfigFilePath()).isEqualTo(DEFAULT_CONFIG_FILE_PATH);
     }
 
     @Test
@@ -174,25 +163,6 @@ public class PluginResourceIT {
 
     @Test
     @Transactional
-    public void checkNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = pluginRepository.findAll().size();
-        // set the field null
-        plugin.setName(null);
-
-        // Create the Plugin, which fails.
-        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
-
-        restPluginMockMvc.perform(post("/api/plugins")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Plugin> pluginList = pluginRepository.findAll();
-        assertThat(pluginList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void checkDeveloperNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = pluginRepository.findAll().size();
         // set the field null
@@ -212,10 +182,10 @@ public class PluginResourceIT {
 
     @Test
     @Transactional
-    public void checkJsonConfigFileIsRequired() throws Exception {
+    public void checkConfigFilePathIsRequired() throws Exception {
         int databaseSizeBeforeTest = pluginRepository.findAll().size();
         // set the field null
-        plugin.setJsonConfigFile(null);
+        plugin.setConfigFilePath(null);
 
         // Create the Plugin, which fails.
         PluginDTO pluginDTO = pluginMapper.toDto(plugin);
@@ -242,42 +212,9 @@ public class PluginResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(plugin.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].developerName").value(hasItem(DEFAULT_DEVELOPER_NAME.toString())))
-            .andExpect(jsonPath("$.[*].jsonConfigFile").value(hasItem(DEFAULT_JSON_CONFIG_FILE.toString())));
+            .andExpect(jsonPath("$.[*].configFilePath").value(hasItem(DEFAULT_CONFIG_FILE_PATH.toString())));
     }
     
-    @SuppressWarnings({"unchecked"})
-    public void getAllPluginsWithEagerRelationshipsIsEnabled() throws Exception {
-        PluginResource pluginResource = new PluginResource(pluginServiceMock);
-        when(pluginServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        MockMvc restPluginMockMvc = MockMvcBuilders.standaloneSetup(pluginResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-
-        restPluginMockMvc.perform(get("/api/plugins?eagerload=true"))
-        .andExpect(status().isOk());
-
-        verify(pluginServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({"unchecked"})
-    public void getAllPluginsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        PluginResource pluginResource = new PluginResource(pluginServiceMock);
-            when(pluginServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-            MockMvc restPluginMockMvc = MockMvcBuilders.standaloneSetup(pluginResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-
-        restPluginMockMvc.perform(get("/api/plugins?eagerload=true"))
-        .andExpect(status().isOk());
-
-            verify(pluginServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
     @Test
     @Transactional
     public void getPlugin() throws Exception {
@@ -291,7 +228,7 @@ public class PluginResourceIT {
             .andExpect(jsonPath("$.id").value(plugin.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.developerName").value(DEFAULT_DEVELOPER_NAME.toString()))
-            .andExpect(jsonPath("$.jsonConfigFile").value(DEFAULT_JSON_CONFIG_FILE.toString()));
+            .andExpect(jsonPath("$.configFilePath").value(DEFAULT_CONFIG_FILE_PATH.toString()));
     }
 
     @Test
@@ -317,7 +254,7 @@ public class PluginResourceIT {
         updatedPlugin
             .name(UPDATED_NAME)
             .developerName(UPDATED_DEVELOPER_NAME)
-            .jsonConfigFile(UPDATED_JSON_CONFIG_FILE);
+            .configFilePath(UPDATED_CONFIG_FILE_PATH);
         PluginDTO pluginDTO = pluginMapper.toDto(updatedPlugin);
 
         restPluginMockMvc.perform(put("/api/plugins")
@@ -331,7 +268,7 @@ public class PluginResourceIT {
         Plugin testPlugin = pluginList.get(pluginList.size() - 1);
         assertThat(testPlugin.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testPlugin.getDeveloperName()).isEqualTo(UPDATED_DEVELOPER_NAME);
-        assertThat(testPlugin.getJsonConfigFile()).isEqualTo(UPDATED_JSON_CONFIG_FILE);
+        assertThat(testPlugin.getConfigFilePath()).isEqualTo(UPDATED_CONFIG_FILE_PATH);
     }
 
     @Test

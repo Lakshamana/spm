@@ -82,12 +82,12 @@ public class ProcessResource {
     /**
      * {@code GET  /processes} : get all the processes.
      *
-
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of processes in body.
      */
     @GetMapping("/processes")
-    public List<ProcessDTO> getAllProcesses(@RequestParam(required = false) String filter) {
+    public List<ProcessDTO> getAllProcesses(@RequestParam(required = false) String filter,@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         if ("thelog-is-null".equals(filter)) {
             log.debug("REST request to get all Processs where theLog is null");
             return processService.findAllWhereTheLogIsNull();

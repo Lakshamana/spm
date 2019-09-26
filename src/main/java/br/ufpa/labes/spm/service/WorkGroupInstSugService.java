@@ -26,53 +26,53 @@ public class WorkGroupInstSugService {
 
     private final Logger log = LoggerFactory.getLogger(WorkGroupInstSugService.class);
 
-    private final WorkWorkGroupInstSugRepository WorkGroupInstSugRepository;
+    private final WorkGroupInstSugRepository workGroupInstSugRepository;
 
-    private final WorkWorkGroupInstSugMapper WorkGroupInstSugMapper;
+    private final WorkGroupInstSugMapper workGroupInstSugMapper;
 
-    public WorkWorkGroupInstSugService(WorkWorkGroupInstSugRepository workWorkGroupInstSugRepository, WorkWorkGroupInstSugMapper WorkGroupInstSugMapper) {
-        this.workWorkGroupInstSugRepository = WorkGroupInstSugRepository;
-        this.workWorkGroupInstSugMapper = WorkGroupInstSugMapper;
+    public WorkGroupInstSugService(WorkGroupInstSugRepository workGroupInstSugRepository, WorkGroupInstSugMapper workGroupInstSugMapper) {
+        this.workGroupInstSugRepository = workGroupInstSugRepository;
+        this.workGroupInstSugMapper = workGroupInstSugMapper;
     }
 
     /**
-     * Save a WorkGroupInstSug.
+     * Save a workGroupInstSug.
      *
-     * @param WorkGroupInstSugDTO the entity to save.
+     * @param workGroupInstSugDTO the entity to save.
      * @return the persisted entity.
      */
-    public WorkWorkGroupInstSugDTO save(WorkWorkGroupInstSugDTO WorkGroupInstSugDTO) {
-        log.debug("Request to save WorkWorkGroupInstSug : {}", WorkGroupInstSugDTO);
-        WorkWorkGroupInstSug workWorkGroupInstSug = workWorkGroupInstSugMapper.toEntity(WorkGroupInstSugDTO);
-        workWorkGroupInstSug = workWorkGroupInstSugRepository.save(WorkGroupInstSug);
-        return workWorkGroupInstSugMapper.toDto(WorkGroupInstSug);
+    public WorkGroupInstSugDTO save(WorkGroupInstSugDTO workGroupInstSugDTO) {
+        log.debug("Request to save WorkGroupInstSug : {}", workGroupInstSugDTO);
+        WorkGroupInstSug workGroupInstSug = workGroupInstSugMapper.toEntity(workGroupInstSugDTO);
+        workGroupInstSug = workGroupInstSugRepository.save(workGroupInstSug);
+        return workGroupInstSugMapper.toDto(workGroupInstSug);
     }
 
     /**
-     * Get all the WorkGroupInstSugs.
+     * Get all the workGroupInstSugs.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public List<WorkGroupInstSugDTO> findAll() {
         log.debug("Request to get all WorkGroupInstSugs");
-        return WorkGroupInstSugRepository.findAllWithEagerRelationships().stream()
-            .map(WorkGroupInstSugMapper::toDto)
+        return workGroupInstSugRepository.findAllWithEagerRelationships().stream()
+            .map(workGroupInstSugMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
-     * Get all the WorkGroupInstSugs with eager load of many-to-many relationships.
+     * Get all the workGroupInstSugs with eager load of many-to-many relationships.
      *
      * @return the list of entities.
      */
     public Page<WorkGroupInstSugDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return workWorkGroupInstSugRepository.findAllWithEagerRelationships(pageable).map(WorkGroupInstSugMapper::toDto);
+        return workGroupInstSugRepository.findAllWithEagerRelationships(pageable).map(workGroupInstSugMapper::toDto);
     }
-
+    
 
     /**
-     * Get one WorkGroupInstSug by id.
+     * Get one workGroupInstSug by id.
      *
      * @param id the id of the entity.
      * @return the entity.
@@ -80,17 +80,17 @@ public class WorkGroupInstSugService {
     @Transactional(readOnly = true)
     public Optional<WorkGroupInstSugDTO> findOne(Long id) {
         log.debug("Request to get WorkGroupInstSug : {}", id);
-        return WorkGroupInstSugRepository.findOneWithEagerRelationships(id)
-            .map(WorkGroupInstSugMapper::toDto);
+        return workGroupInstSugRepository.findOneWithEagerRelationships(id)
+            .map(workGroupInstSugMapper::toDto);
     }
 
     /**
-     * Delete the WorkGroupInstSug by id.
+     * Delete the workGroupInstSug by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete WorkGroupInstSug : {}", id);
-        WorkGroupInstSugRepository.deleteById(id);
+        workGroupInstSugRepository.deleteById(id);
     }
 }

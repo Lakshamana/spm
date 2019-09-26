@@ -27,7 +27,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "asset",
             "otherEntityRelationshipName": "lessonsLearned",
-            "relationshipName": "theAsset",
+            "relationshipName": "asset",
             "otherEntityField": "id"
         }
     ],

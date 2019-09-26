@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import br.ufpa.labes.spm.domain.enumeration.WebAPSEEObjectType;
 /**
  * Integration tests for the {@link WebAPSEEObjectResource} REST controller.
  */
@@ -45,9 +44,6 @@ public class WebAPSEEObjectResourceIT {
 
     private static final String DEFAULT_CLASS_NAME = "AAAAAAAAAA";
     private static final String UPDATED_CLASS_NAME = "BBBBBBBBBB";
-
-    private static final WebAPSEEObjectType DEFAULT_WEB_APSEE_OBJECT_TYPE = WebAPSEEObjectType.ACTIVITY;
-    private static final WebAPSEEObjectType UPDATED_WEB_APSEE_OBJECT_TYPE = WebAPSEEObjectType.REQ_AGENT;
 
     @Autowired
     private WebAPSEEObjectRepository webAPSEEObjectRepository;
@@ -98,8 +94,7 @@ public class WebAPSEEObjectResourceIT {
     public static WebAPSEEObject createEntity(EntityManager em) {
         WebAPSEEObject webAPSEEObject = new WebAPSEEObject()
             .theReferredOid(DEFAULT_THE_REFERRED_OID)
-            .className(DEFAULT_CLASS_NAME)
-            .webAPSEEObjectType(DEFAULT_WEB_APSEE_OBJECT_TYPE);
+            .className(DEFAULT_CLASS_NAME);
         return webAPSEEObject;
     }
     /**
@@ -111,8 +106,7 @@ public class WebAPSEEObjectResourceIT {
     public static WebAPSEEObject createUpdatedEntity(EntityManager em) {
         WebAPSEEObject webAPSEEObject = new WebAPSEEObject()
             .theReferredOid(UPDATED_THE_REFERRED_OID)
-            .className(UPDATED_CLASS_NAME)
-            .webAPSEEObjectType(UPDATED_WEB_APSEE_OBJECT_TYPE);
+            .className(UPDATED_CLASS_NAME);
         return webAPSEEObject;
     }
 
@@ -139,7 +133,6 @@ public class WebAPSEEObjectResourceIT {
         WebAPSEEObject testWebAPSEEObject = webAPSEEObjectList.get(webAPSEEObjectList.size() - 1);
         assertThat(testWebAPSEEObject.getTheReferredOid()).isEqualTo(DEFAULT_THE_REFERRED_OID);
         assertThat(testWebAPSEEObject.getClassName()).isEqualTo(DEFAULT_CLASS_NAME);
-        assertThat(testWebAPSEEObject.getWebAPSEEObjectType()).isEqualTo(DEFAULT_WEB_APSEE_OBJECT_TYPE);
     }
 
     @Test
@@ -213,8 +206,7 @@ public class WebAPSEEObjectResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(webAPSEEObject.getId().intValue())))
             .andExpect(jsonPath("$.[*].theReferredOid").value(hasItem(DEFAULT_THE_REFERRED_OID.intValue())))
-            .andExpect(jsonPath("$.[*].className").value(hasItem(DEFAULT_CLASS_NAME.toString())))
-            .andExpect(jsonPath("$.[*].webAPSEEObjectType").value(hasItem(DEFAULT_WEB_APSEE_OBJECT_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].className").value(hasItem(DEFAULT_CLASS_NAME.toString())));
     }
     
     @Test
@@ -229,8 +221,7 @@ public class WebAPSEEObjectResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(webAPSEEObject.getId().intValue()))
             .andExpect(jsonPath("$.theReferredOid").value(DEFAULT_THE_REFERRED_OID.intValue()))
-            .andExpect(jsonPath("$.className").value(DEFAULT_CLASS_NAME.toString()))
-            .andExpect(jsonPath("$.webAPSEEObjectType").value(DEFAULT_WEB_APSEE_OBJECT_TYPE.toString()));
+            .andExpect(jsonPath("$.className").value(DEFAULT_CLASS_NAME.toString()));
     }
 
     @Test
@@ -255,8 +246,7 @@ public class WebAPSEEObjectResourceIT {
         em.detach(updatedWebAPSEEObject);
         updatedWebAPSEEObject
             .theReferredOid(UPDATED_THE_REFERRED_OID)
-            .className(UPDATED_CLASS_NAME)
-            .webAPSEEObjectType(UPDATED_WEB_APSEE_OBJECT_TYPE);
+            .className(UPDATED_CLASS_NAME);
         WebAPSEEObjectDTO webAPSEEObjectDTO = webAPSEEObjectMapper.toDto(updatedWebAPSEEObject);
 
         restWebAPSEEObjectMockMvc.perform(put("/api/web-apsee-objects")
@@ -270,7 +260,6 @@ public class WebAPSEEObjectResourceIT {
         WebAPSEEObject testWebAPSEEObject = webAPSEEObjectList.get(webAPSEEObjectList.size() - 1);
         assertThat(testWebAPSEEObject.getTheReferredOid()).isEqualTo(UPDATED_THE_REFERRED_OID);
         assertThat(testWebAPSEEObject.getClassName()).isEqualTo(UPDATED_CLASS_NAME);
-        assertThat(testWebAPSEEObject.getWebAPSEEObjectType()).isEqualTo(UPDATED_WEB_APSEE_OBJECT_TYPE);
     }
 
     @Test

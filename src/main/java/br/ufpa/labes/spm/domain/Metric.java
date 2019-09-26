@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -18,7 +14,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "metric")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Metric implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,12 +35,12 @@ public class Metric implements Serializable {
     private LocalDate periodEnd;
 
     @ManyToOne
-    @JsonIgnoreProperties("theMetrics")
-    private MetricDefinition theMetricDefinition;
+    @JsonIgnoreProperties("metrics")
+    private MetricDefinition metricDefinition;
 
     @ManyToOne
     @JsonIgnoreProperties("activityMetrics")
-    private Activity theActivity;
+    private Activity activity;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -108,30 +103,30 @@ public class Metric implements Serializable {
         this.periodEnd = periodEnd;
     }
 
-    public MetricDefinition getTheMetricDefinition() {
-        return theMetricDefinition;
+    public MetricDefinition getMetricDefinition() {
+        return metricDefinition;
     }
 
-    public Metric theMetricDefinition(MetricDefinition metricDefinition) {
-        this.theMetricDefinition = metricDefinition;
+    public Metric metricDefinition(MetricDefinition metricDefinition) {
+        this.metricDefinition = metricDefinition;
         return this;
     }
 
-    public void setTheMetricDefinition(MetricDefinition metricDefinition) {
-        this.theMetricDefinition = metricDefinition;
+    public void setMetricDefinition(MetricDefinition metricDefinition) {
+        this.metricDefinition = metricDefinition;
     }
 
-    public Activity getTheActivity() {
-        return theActivity;
+    public Activity getActivity() {
+        return activity;
     }
 
-    public Metric theActivity(Activity activity) {
-        this.theActivity = activity;
+    public Metric activity(Activity activity) {
+        this.activity = activity;
         return this;
     }
 
-    public void setTheActivity(Activity activity) {
-        this.theActivity = activity;
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

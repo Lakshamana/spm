@@ -8,6 +8,14 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "dependency",
+            "otherEntityRelationshipName": "theMultipleCon",
+            "relationshipName": "theDependency",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "dependency",
             "otherEntityRelationshipName": "theMultipleCon",
@@ -17,7 +25,7 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "branchCon",
-            "otherEntityRelationshipName": "fromMultipleCon",
+            "otherEntityRelationshipName": "fromMultipleConnection",
             "relationshipName": "toBranchCon"
         },
         {
@@ -27,10 +35,16 @@
             "relationshipName": "theBranchConCondToMultipleCon"
         },
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "joinCon",
+            "otherEntityRelationshipName": "toMultipleCon",
+            "relationshipName": "theJoinCon"
+        },
+        {
             "relationshipType": "many-to-many",
             "otherEntityName": "artifactCon",
             "otherEntityRelationshipName": "toMultipleCon",
-            "relationshipName": "theArtifactCon",
+            "relationshipName": "fromArtifactCon",
             "otherEntityField": "id",
             "ownerSide": false
         },
@@ -38,7 +52,7 @@
             "relationshipType": "many-to-many",
             "otherEntityName": "branchANDCon",
             "otherEntityRelationshipName": "toMultipleCon",
-            "relationshipName": "theBranchAND",
+            "relationshipName": "theBranchANDCon",
             "otherEntityField": "id",
             "ownerSide": false
         },

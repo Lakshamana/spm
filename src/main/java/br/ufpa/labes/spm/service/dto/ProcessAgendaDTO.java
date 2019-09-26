@@ -1,5 +1,4 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -8,27 +7,18 @@ import java.util.Objects;
  */
 public class ProcessAgendaDTO implements Serializable {
 
-  private Long id;
+    private Long id;
 
-  private String tasks;
 
-  private Long theTaskAgendaId;
+    private Long theTaskAgendaId;
 
-  private Long theProcessId;
+    private Long theProcessId;
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getTasks() {
-    return tasks;
-  }
-
-  public void setTasks(String tasks) {
-    this.tasks = tasks;
-  }
-
-  public void setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

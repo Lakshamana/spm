@@ -20,15 +20,15 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="the_normal_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
             <column name="the_resource_type_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
             <column name="the_resource_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="the_normal_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

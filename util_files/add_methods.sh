@@ -50,8 +50,8 @@ for m in $models; do
 
   if test -f $file; then
     # 3.1
-    old_methods=`sed -rn "s/public (.*) (insertInto|removeFrom)(.*).*\(.*\).*\{/\2\3/p" "$m" | sed -r '/(get|set)Oid/d'`
-    new_methods=`sed -rn "s/public (.*) (insertInto|removeFrom)(.*).*\(.*\).*\{/\2\3/p" "$file"`
+    old_methods=`sed -rn "s/public (.*) (.*).*\(.*\).*\{/\2/p" "$m" | sed -r '/(get|set)Oid/d'`
+    new_methods=`sed -rn "s/public (.*) (.*).*\(.*\).*\{/\2/p" "$file"`
     echo olds: $old_methods
     # echo news: $new_methods
 

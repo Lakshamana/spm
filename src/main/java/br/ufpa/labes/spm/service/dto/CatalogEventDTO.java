@@ -14,6 +14,10 @@ public class CatalogEventDTO implements Serializable {
     private String description;
 
 
+    private Long theResourceEventId;
+
+    private Long theProcessModelEventId;
+
     private Long theAgendaEventId;
 
     private Long theCatalogEventId;
@@ -25,10 +29,6 @@ public class CatalogEventDTO implements Serializable {
     private Long theModelingActivityEventId;
 
     private Long theProcessEventId;
-
-    private Long theProcessModelEventId;
-
-    private Long theResourceEventId;
 
     private Long thePlainId;
 
@@ -46,6 +46,22 @@ public class CatalogEventDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getTheResourceEventId() {
+        return theResourceEventId;
+    }
+
+    public void setTheResourceEventId(Long resourceEventId) {
+        this.theResourceEventId = resourceEventId;
+    }
+
+    public Long getTheProcessModelEventId() {
+        return theProcessModelEventId;
+    }
+
+    public void setTheProcessModelEventId(Long processModelEventId) {
+        this.theProcessModelEventId = processModelEventId;
     }
 
     public Long getTheAgendaEventId() {
@@ -96,22 +112,6 @@ public class CatalogEventDTO implements Serializable {
         this.theProcessEventId = processEventId;
     }
 
-    public Long getTheProcessModelEventId() {
-        return theProcessModelEventId;
-    }
-
-    public void setTheProcessModelEventId(Long processModelEventId) {
-        this.theProcessModelEventId = processModelEventId;
-    }
-
-    public Long getTheResourceEventId() {
-        return theResourceEventId;
-    }
-
-    public void setTheResourceEventId(Long resourceEventId) {
-        this.theResourceEventId = resourceEventId;
-    }
-
     public Long getThePlainId() {
         return thePlainId;
     }
@@ -146,14 +146,14 @@ public class CatalogEventDTO implements Serializable {
         return "CatalogEventDTO{" +
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
+            ", theResourceEvent=" + getTheResourceEventId() +
+            ", theProcessModelEvent=" + getTheProcessModelEventId() +
             ", theAgendaEvent=" + getTheAgendaEventId() +
             ", theCatalogEvent=" + getTheCatalogEventId() +
             ", theConnectionEvent=" + getTheConnectionEventId() +
             ", theGlobalActivityEvent=" + getTheGlobalActivityEventId() +
             ", theModelingActivityEvent=" + getTheModelingActivityEventId() +
             ", theProcessEvent=" + getTheProcessEventId() +
-            ", theProcessModelEvent=" + getTheProcessModelEventId() +
-            ", theResourceEvent=" + getTheResourceEventId() +
             ", thePlain=" + getThePlainId() +
             "}";
     }

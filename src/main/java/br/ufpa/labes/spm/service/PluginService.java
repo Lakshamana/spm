@@ -7,8 +7,6 @@ import br.ufpa.labes.spm.service.mapper.PluginMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,20 +55,11 @@ public class PluginService {
     @Transactional(readOnly = true)
     public List<PluginDTO> findAll() {
         log.debug("Request to get all Plugins");
-        return pluginRepository.findAllWithEagerRelationships().stream()
+        return pluginRepository.findAll().stream()
             .map(pluginMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    /**
-     * Get all the plugins with eager load of many-to-many relationships.
-     *
-     * @return the list of entities.
-     */
-    public Page<PluginDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return pluginRepository.findAllWithEagerRelationships(pageable).map(pluginMapper::toDto);
-    }
-    
 
 
     /**
@@ -96,7 +85,7 @@ public class PluginService {
     @Transactional(readOnly = true)
     public Optional<PluginDTO> findOne(Long id) {
         log.debug("Request to get Plugin : {}", id);
-        return pluginRepository.findOneWithEagerRelationships(id)
+        return pluginRepository.findById(id)
             .map(pluginMapper::toDto);
     }
 
