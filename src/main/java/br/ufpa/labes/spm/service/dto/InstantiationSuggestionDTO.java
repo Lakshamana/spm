@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -13,8 +11,6 @@ public class InstantiationSuggestionDTO implements Serializable {
 
 
     private Long theActivityInstantiatedId;
-
-    private Set<ResourceDTO> sugRsrcs = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -30,14 +26,6 @@ public class InstantiationSuggestionDTO implements Serializable {
 
     public void setTheActivityInstantiatedId(Long activityInstantiatedId) {
         this.theActivityInstantiatedId = activityInstantiatedId;
-    }
-
-    public Set<ResourceDTO> getSugRsrcs() {
-        return sugRsrcs;
-    }
-
-    public void setSugRsrcs(Set<ResourceDTO> resources) {
-        this.sugRsrcs = resources;
     }
 
     @Override

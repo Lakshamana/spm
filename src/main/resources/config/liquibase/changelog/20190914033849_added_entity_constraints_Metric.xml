@@ -14,11 +14,5 @@
                                  referencedColumnNames="id"
                                  referencedTableName="metric_definition"/>
 
-        <addForeignKeyConstraint baseColumnNames="activity_id"
-                                 baseTableName="metric"
-                                 constraintName="fk_metric_activity_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="activity"/>
-
     </changeSet>
 </databaseChangeLog>

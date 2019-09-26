@@ -8,14 +8,13 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link InstantiationSuggestion} and its DTO {@link InstantiationSuggestionDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ActivityInstantiatedMapper.class, ResourceMapper.class})
+@Mapper(componentModel = "spring", uses = {ActivityInstantiatedMapper.class})
 public interface InstantiationSuggestionMapper extends EntityMapper<InstantiationSuggestionDTO, InstantiationSuggestion> {
 
     @Mapping(source = "theActivityInstantiated.id", target = "theActivityInstantiatedId")
     InstantiationSuggestionDTO toDto(InstantiationSuggestion instantiationSuggestion);
 
     @Mapping(source = "theActivityInstantiatedId", target = "theActivityInstantiated")
-    @Mapping(target = "removeSugRsrc", ignore = true)
     InstantiationSuggestion toEntity(InstantiationSuggestionDTO instantiationSuggestionDTO);
 
     default InstantiationSuggestion fromId(Long id) {

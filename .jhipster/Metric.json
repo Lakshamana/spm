@@ -25,13 +25,6 @@
             "otherEntityRelationshipName": "metric",
             "relationshipName": "metricDefinition",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "activity",
-            "otherEntityRelationshipName": "activityMetric",
-            "relationshipName": "activity",
-            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20190914033849",

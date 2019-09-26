@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Process} and its DTO {@link ProcessDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ProcessModelMapper.class, ActivityTypeMapper.class, AgentMapper.class, EmailConfigurationMapper.class})
+@Mapper(componentModel = "spring", uses = {ProcessModelMapper.class, ActivityTypeMapper.class, EmailConfigurationMapper.class})
 public interface ProcessMapper extends EntityMapper<ProcessDTO, Process> {
 
     @Mapping(source = "theProcessModel.id", target = "theProcessModelId")
@@ -20,7 +20,6 @@ public interface ProcessMapper extends EntityMapper<ProcessDTO, Process> {
     @Mapping(target = "theProcessAgenda", ignore = true)
     @Mapping(target = "removeTheProcessAgenda", ignore = true)
     @Mapping(source = "theActivityTypeId", target = "theActivityType")
-    @Mapping(target = "removeTheAgent", ignore = true)
     @Mapping(target = "theLog", ignore = true)
     @Mapping(source = "theEmailConfigurationId", target = "theEmailConfiguration")
     @Mapping(target = "theProcessEvents", ignore = true)

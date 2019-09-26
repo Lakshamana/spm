@@ -21,8 +21,6 @@ public class MetricDTO implements Serializable {
 
     private Long metricDefinitionId;
 
-    private Long activityId;
-
     public Long getId() {
         return id;
     }
@@ -71,14 +69,6 @@ public class MetricDTO implements Serializable {
         this.metricDefinitionId = metricDefinitionId;
     }
 
-    public Long getActivityId() {
-        return activityId;
-    }
-
-    public void setActivityId(Long activityId) {
-        this.activityId = activityId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -109,7 +99,6 @@ public class MetricDTO implements Serializable {
             ", periodBegin='" + getPeriodBegin() + "'" +
             ", periodEnd='" + getPeriodEnd() + "'" +
             ", metricDefinition=" + getMetricDefinitionId() +
-            ", activity=" + getActivityId() +
             "}";
     }
 }

@@ -16,10 +16,10 @@ public interface DependencyMapper extends EntityMapper<DependencyDTO, Dependency
 
     @Mapping(source = "theSequenceId", target = "theSequence")
     @Mapping(target = "theMultipleCon", ignore = true)
-    @Mapping(target = "theMultipleCons", ignore = true)
-    @Mapping(target = "removeTheMultipleCon", ignore = true)
-    @Mapping(target = "theSequences", ignore = true)
-    @Mapping(target = "removeTheSequence", ignore = true)
+    @Mapping(target = "theMultipleConsToDependencies", ignore = true)
+    @Mapping(target = "removeTheMultipleConsToDependency", ignore = true)
+    @Mapping(target = "theMultipleSequences", ignore = true)
+    @Mapping(target = "removeTheMultipleSequences", ignore = true)
     Dependency toEntity(DependencyDTO dependencyDTO);
 
     default Dependency fromId(Long id) {

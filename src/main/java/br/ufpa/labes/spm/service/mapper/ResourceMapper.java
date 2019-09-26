@@ -23,8 +23,8 @@ public interface ResourceMapper extends EntityMapper<ResourceDTO, Resource> {
     @Mapping(target = "removeTheResourceEvent", ignore = true)
     @Mapping(target = "theRequiredResources", ignore = true)
     @Mapping(target = "removeTheRequiredResource", ignore = true)
-    @Mapping(target = "theResourceInstSugs", ignore = true)
-    @Mapping(target = "removeTheResourceInstSug", ignore = true)
+    @Mapping(target = "theResourceChosenSuggestions", ignore = true)
+    @Mapping(target = "removeTheResourceChosenSuggestions", ignore = true)
     @Mapping(target = "theResourcePossibleUses", ignore = true)
     @Mapping(target = "removeTheResourcePossibleUse", ignore = true)
     @Mapping(target = "theResourceMetrics", ignore = true)
@@ -35,10 +35,8 @@ public interface ResourceMapper extends EntityMapper<ResourceDTO, Resource> {
     @Mapping(target = "removePossess", ignore = true)
     @Mapping(target = "isRequireds", ignore = true)
     @Mapping(target = "removeIsRequired", ignore = true)
-    @Mapping(target = "instSuggestions", ignore = true)
-    @Mapping(target = "removeInstSuggestions", ignore = true)
-    @Mapping(target = "theResourceInstSugs", ignore = true)
-    @Mapping(target = "removeTheResourceInstSug", ignore = true)
+    @Mapping(target = "theResourceSuggestions", ignore = true)
+    @Mapping(target = "removeTheResourceSuggestions", ignore = true)
     Resource toEntity(ResourceDTO resourceDTO);
 
     default Resource fromId(Long id) {

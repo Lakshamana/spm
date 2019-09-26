@@ -18,8 +18,8 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "dependency",
-            "otherEntityRelationshipName": "theMultipleCon",
-            "relationshipName": "theDependency",
+            "otherEntityRelationshipName": "theMultipleConsToDependency",
+            "relationshipName": "theDependencyToMultipleCons",
             "otherEntityField": "id"
         },
         {
@@ -60,7 +60,7 @@
             "relationshipType": "many-to-many",
             "otherEntityName": "joinCon",
             "otherEntityRelationshipName": "fromMultipleCon",
-            "relationshipName": "theJoinCon",
+            "relationshipName": "theJoinConToMultipleCon",
             "otherEntityField": "id",
             "ownerSide": false
         }

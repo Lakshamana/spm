@@ -5,7 +5,7 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "resource",
-            "otherEntityRelationshipName": "theResourceInstSug",
+            "otherEntityRelationshipName": "theResourceChosenSuggestions",
             "relationshipName": "resourceChosen",
             "otherEntityField": "id"
         },
@@ -19,7 +19,7 @@
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "resource",
-            "otherEntityRelationshipName": "theResourceInstSug",
+            "otherEntityRelationshipName": "theResourceSuggestions",
             "relationshipName": "resourceSuggested",
             "otherEntityField": "id",
             "ownerSide": true

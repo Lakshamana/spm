@@ -5,8 +5,8 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "dependency",
-            "otherEntityRelationshipName": "theSequence",
-            "relationshipName": "theDependency",
+            "otherEntityRelationshipName": "theMultipleSequences",
+            "relationshipName": "theDependencyToMultipleSequences",
             "otherEntityField": "id"
         },
         {

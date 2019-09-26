@@ -27,17 +27,6 @@
 
     <changeSet id="20190914033836-1-relations" author="jhipster">
 
-        <createTable tableName="instantiation_suggestion_sug_rsrc">
-            <column name="sug_rsrc_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="instantiation_suggestion_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="instantiation_suggestion_id, sug_rsrc_id" tableName="instantiation_suggestion_sug_rsrc"/>
-        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

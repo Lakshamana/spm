@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "branch_and_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class BranchANDCon implements Serializable {
+public class BranchANDCon extends BranchCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

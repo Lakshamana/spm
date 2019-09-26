@@ -8,14 +8,6 @@
             "otherEntityRelationshipName": "theInstantiationSuggestion",
             "relationshipName": "theActivityInstantiated",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-many",
-            "otherEntityName": "resource",
-            "otherEntityRelationshipName": "instSuggestions",
-            "relationshipName": "sugRsrc",
-            "otherEntityField": "id",
-            "ownerSide": true
         }
     ],
     "changelogDate": "20190914033836",

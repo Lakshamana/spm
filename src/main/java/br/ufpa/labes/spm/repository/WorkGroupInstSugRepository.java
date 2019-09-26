@@ -16,14 +16,14 @@ import java.util.Optional;
 @Repository
 public interface WorkGroupInstSugRepository extends JpaRepository<WorkGroupInstSug, Long> {
 
-    @Query(value = "select distinct workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.sugWorkGroups left join fetch workGroupInstSug.groupSuggesteds",
+    @Query(value = "select distinct workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.groupSuggesteds",
         countQuery = "select count(distinct workGroupInstSug) from WorkGroupInstSug workGroupInstSug")
     Page<WorkGroupInstSug> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.sugWorkGroups left join fetch workGroupInstSug.groupSuggesteds")
+    @Query("select distinct workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.groupSuggesteds")
     List<WorkGroupInstSug> findAllWithEagerRelationships();
 
-    @Query("select workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.sugWorkGroups left join fetch workGroupInstSug.groupSuggesteds where workGroupInstSug.id =:id")
+    @Query("select workGroupInstSug from WorkGroupInstSug workGroupInstSug left join fetch workGroupInstSug.groupSuggesteds where workGroupInstSug.id =:id")
     Optional<WorkGroupInstSug> findOneWithEagerRelationships(@Param("id") Long id);
 
 }

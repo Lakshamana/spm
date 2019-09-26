@@ -76,12 +76,6 @@
             "otherEntityName": "catalogEvent",
             "otherEntityRelationshipName": "theCatalogEvent",
             "relationshipName": "theCatalogEvents"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "agendaEvent",
-            "otherEntityRelationshipName": "theCatalogEvents",
-            "relationshipName": "theAgendaEvent"
         }
     ],
     "changelogDate": "20190914033800",

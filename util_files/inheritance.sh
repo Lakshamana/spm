@@ -4,19 +4,15 @@ cd $HOME/Documentos/spm_root/SPMServices/ejbModule/org/qrconsult/spm
 classes=`grep -iRl '@Inheritance(strategy=InheritanceType.JOINED)' | sed '/policies/d' | cut -d'/' -f3 | sed -r 's/(.*).java/\1/'`
 
 cd $HOME/git/spm/
+diffs="$utildir/entitydiffs.txt"
 model_path='src/main/java/br/ufpa/labes/spm/domain'
 cd $model_path
 
 for c in $classes; do
 
-  if [[ $c == 'Branch' ]]; then
-    c='BranchCon'
-  elif [[ $c == 'Join' ]]; then
-    c='JoinCon'
-  elif [[ $c == 'PeopleInstantiationSuggestion' ]]; then
-    c='PeopleInstSug'
-  elif [[ $c == 'Parameters' ]]; then
-   c='Parameter'
+  seek=`cat "$diffs" | grep -w "$c" | awk '{print $2}'`
+  if [[ $seek != '' ]]; then
+    c=$seek
   fi
 
   class_path="$c.java"

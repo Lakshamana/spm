@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -19,8 +17,6 @@ public class ProcessDTO implements Serializable {
     private Long theProcessModelId;
 
     private Long theActivityTypeId;
-
-    private Set<AgentDTO> theAgents = new HashSet<>();
 
     private Long theEmailConfigurationId;
 
@@ -62,14 +58,6 @@ public class ProcessDTO implements Serializable {
 
     public void setTheActivityTypeId(Long activityTypeId) {
         this.theActivityTypeId = activityTypeId;
-    }
-
-    public Set<AgentDTO> getTheAgents() {
-        return theAgents;
-    }
-
-    public void setTheAgents(Set<AgentDTO> agents) {
-        this.theAgents = agents;
     }
 
     public Long getTheEmailConfigurationId() {

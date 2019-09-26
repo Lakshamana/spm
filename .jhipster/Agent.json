@@ -207,14 +207,6 @@
             "relationshipName": "theChatLog",
             "otherEntityField": "id",
             "ownerSide": false
-        },
-        {
-            "relationshipType": "many-to-many",
-            "otherEntityName": "process",
-            "otherEntityRelationshipName": "theAgent",
-            "relationshipName": "theProcess",
-            "otherEntityField": "id",
-            "ownerSide": false
         }
     ],
     "changelogDate": "20190914033724",

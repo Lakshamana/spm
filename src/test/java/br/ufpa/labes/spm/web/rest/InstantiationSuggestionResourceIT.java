@@ -10,12 +10,9 @@ import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -26,13 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 import static br.ufpa.labes.spm.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,14 +41,8 @@ public class InstantiationSuggestionResourceIT {
     @Autowired
     private InstantiationSuggestionRepository instantiationSuggestionRepository;
 
-    @Mock
-    private InstantiationSuggestionRepository instantiationSuggestionRepositoryMock;
-
     @Autowired
     private InstantiationSuggestionMapper instantiationSuggestionMapper;
-
-    @Mock
-    private InstantiationSuggestionService instantiationSuggestionServiceMock;
 
     @Autowired
     private InstantiationSuggestionService instantiationSuggestionService;
@@ -167,39 +156,6 @@ public class InstantiationSuggestionResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(instantiationSuggestion.getId().intValue())));
     }
     
-    @SuppressWarnings({"unchecked"})
-    public void getAllInstantiationSuggestionsWithEagerRelationshipsIsEnabled() throws Exception {
-        InstantiationSuggestionResource instantiationSuggestionResource = new InstantiationSuggestionResource(instantiationSuggestionServiceMock);
-        when(instantiationSuggestionServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        MockMvc restInstantiationSuggestionMockMvc = MockMvcBuilders.standaloneSetup(instantiationSuggestionResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-
-        restInstantiationSuggestionMockMvc.perform(get("/api/instantiation-suggestions?eagerload=true"))
-        .andExpect(status().isOk());
-
-        verify(instantiationSuggestionServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({"unchecked"})
-    public void getAllInstantiationSuggestionsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        InstantiationSuggestionResource instantiationSuggestionResource = new InstantiationSuggestionResource(instantiationSuggestionServiceMock);
-            when(instantiationSuggestionServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-            MockMvc restInstantiationSuggestionMockMvc = MockMvcBuilders.standaloneSetup(instantiationSuggestionResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-
-        restInstantiationSuggestionMockMvc.perform(get("/api/instantiation-suggestions?eagerload=true"))
-        .andExpect(status().isOk());
-
-            verify(instantiationSuggestionServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
     @Test
     @Transactional
     public void getInstantiationSuggestion() throws Exception {

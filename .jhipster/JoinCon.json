@@ -17,7 +17,7 @@
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "multipleCon",
-            "otherEntityRelationshipName": "theJoinCon",
+            "otherEntityRelationshipName": "theJoinConToMultipleCon",
             "relationshipName": "fromMultipleCon",
             "otherEntityField": "id",
             "ownerSide": true

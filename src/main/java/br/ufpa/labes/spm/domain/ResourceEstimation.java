@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "resource_estimation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ResourceEstimation implements Serializable {
+public class ResourceEstimation extends Estimation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

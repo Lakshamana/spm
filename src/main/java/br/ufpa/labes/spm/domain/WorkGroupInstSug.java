@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "work_group_inst_sug")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class WorkGroupInstSug implements Serializable {
+public class WorkGroupInstSug extends PeopleInstSug implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,13 +30,6 @@ public class WorkGroupInstSug implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("theWorkGroupInstSugs")
     private WorkGroupType groupTypeRequired;
-
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "work_group_inst_sug_sug_work_group",
-               joinColumns = @JoinColumn(name = "work_group_inst_sug_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "sug_work_group_id", referencedColumnName = "id"))
-    private Set<WorkGroup> sugWorkGroups = new HashSet<>();
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -80,31 +73,6 @@ public class WorkGroupInstSug implements Serializable {
         this.groupTypeRequired = workGroupType;
     }
 
-    public Set<WorkGroup> getSugWorkGroups() {
-        return sugWorkGroups;
-    }
-
-    public WorkGroupInstSug sugWorkGroups(Set<WorkGroup> workGroups) {
-        this.sugWorkGroups = workGroups;
-        return this;
-    }
-
-    public WorkGroupInstSug addSugWorkGroup(WorkGroup workGroup) {
-        this.sugWorkGroups.add(workGroup);
-        workGroup.getTheWorkGroupInstSugs().add(this);
-        return this;
-    }
-
-    public WorkGroupInstSug removeSugWorkGroup(WorkGroup workGroup) {
-        this.sugWorkGroups.remove(workGroup);
-        workGroup.getTheWorkGroupInstSugs().remove(this);
-        return this;
-    }
-
-    public void setSugWorkGroups(Set<WorkGroup> workGroups) {
-        this.sugWorkGroups = workGroups;
-    }
-
     public Set<WorkGroup> getGroupSuggesteds() {
         return groupSuggesteds;
     }
@@ -116,13 +84,13 @@ public class WorkGroupInstSug implements Serializable {
 
     public WorkGroupInstSug addGroupSuggested(WorkGroup workGroup) {
         this.groupSuggesteds.add(workGroup);
-        workGroup.getTheWorkGroupInstSugs().add(this);
+        workGroup.getTheSuggestedGroups().add(this);
         return this;
     }
 
     public WorkGroupInstSug removeGroupSuggested(WorkGroup workGroup) {
         this.groupSuggesteds.remove(workGroup);
-        workGroup.getTheWorkGroupInstSugs().remove(this);
+        workGroup.getTheSuggestedGroups().remove(this);
         return this;
     }
 

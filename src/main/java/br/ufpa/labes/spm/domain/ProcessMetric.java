@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "process_metric")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ProcessMetric implements Serializable {
+public class ProcessMetric extends Metric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

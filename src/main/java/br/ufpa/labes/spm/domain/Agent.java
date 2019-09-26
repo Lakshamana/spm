@@ -168,11 +168,6 @@ public class Agent implements Serializable {
     @JsonIgnore
     private Set<ChatLog> theChatLogs = new HashSet<>();
 
-    @ManyToMany(mappedBy = "theAgents")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnore
-    private Set<Process> theProcesses = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -876,31 +871,6 @@ public class Agent implements Serializable {
 
     public void setTheChatLogs(Set<ChatLog> chatLogs) {
         this.theChatLogs = chatLogs;
-    }
-
-    public Set<Process> getTheProcesses() {
-        return theProcesses;
-    }
-
-    public Agent theProcesses(Set<Process> processes) {
-        this.theProcesses = processes;
-        return this;
-    }
-
-    public Agent addTheProcess(Process process) {
-        this.theProcesses.add(process);
-        process.getTheAgents().add(this);
-        return this;
-    }
-
-    public Agent removeTheProcess(Process process) {
-        this.theProcesses.remove(process);
-        process.getTheAgents().remove(this);
-        return this;
-    }
-
-    public void setTheProcesses(Set<Process> processes) {
-        this.theProcesses = processes;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

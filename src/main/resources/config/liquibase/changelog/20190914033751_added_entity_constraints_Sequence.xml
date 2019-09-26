@@ -8,9 +8,9 @@
     -->
     <changeSet id="20190914033751-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_dependency_id"
+        <addForeignKeyConstraint baseColumnNames="the_dependency_to_multiple_sequences_id"
                                  baseTableName="sequence"
-                                 constraintName="fk_sequence_the_dependency_id"
+                                 constraintName="fk_sequence_the_dependency_to_multiple_sequences_id"
                                  referencedColumnNames="id"
                                  referencedTableName="dependency"/>
 

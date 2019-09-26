@@ -12,11 +12,11 @@ import org.mapstruct.*;
 public interface MultipleConMapper extends EntityMapper<MultipleConDTO, MultipleCon> {
 
     @Mapping(source = "theDependency.id", target = "theDependencyId")
-    @Mapping(source = "theDependency.id", target = "theDependencyId")
+    @Mapping(source = "theDependencyToMultipleCons.id", target = "theDependencyToMultipleConsId")
     MultipleConDTO toDto(MultipleCon multipleCon);
 
     @Mapping(source = "theDependencyId", target = "theDependency")
-    @Mapping(source = "theDependencyId", target = "theDependency")
+    @Mapping(source = "theDependencyToMultipleConsId", target = "theDependencyToMultipleCons")
     @Mapping(target = "toBranchCons", ignore = true)
     @Mapping(target = "removeToBranchCon", ignore = true)
     @Mapping(target = "theBranchConCondToMultipleCons", ignore = true)
@@ -27,8 +27,8 @@ public interface MultipleConMapper extends EntityMapper<MultipleConDTO, Multiple
     @Mapping(target = "removeFromArtifactCon", ignore = true)
     @Mapping(target = "theBranchANDCons", ignore = true)
     @Mapping(target = "removeTheBranchANDCon", ignore = true)
-    @Mapping(target = "theJoinCons", ignore = true)
-    @Mapping(target = "removeTheJoinCon", ignore = true)
+    @Mapping(target = "theJoinConToMultipleCons", ignore = true)
+    @Mapping(target = "removeTheJoinConToMultipleCon", ignore = true)
     MultipleCon toEntity(MultipleConDTO multipleConDTO);
 
     default MultipleCon fromId(Long id) {

@@ -10,7 +10,7 @@ public class SequenceDTO implements Serializable {
     private Long id;
 
 
-    private Long theDependencyId;
+    private Long theDependencyToMultipleSequencesId;
 
     public Long getId() {
         return id;
@@ -20,12 +20,12 @@ public class SequenceDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getTheDependencyId() {
-        return theDependencyId;
+    public Long getTheDependencyToMultipleSequencesId() {
+        return theDependencyToMultipleSequencesId;
     }
 
-    public void setTheDependencyId(Long dependencyId) {
-        this.theDependencyId = dependencyId;
+    public void setTheDependencyToMultipleSequencesId(Long dependencyId) {
+        this.theDependencyToMultipleSequencesId = dependencyId;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class SequenceDTO implements Serializable {
     public String toString() {
         return "SequenceDTO{" +
             "id=" + getId() +
-            ", theDependency=" + getTheDependencyId() +
+            ", theDependencyToMultipleSequences=" + getTheDependencyToMultipleSequencesId() +
             "}";
     }
 }

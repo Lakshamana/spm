@@ -73,7 +73,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "resourceInstSug",
             "otherEntityRelationshipName": "resourceChosen",
-            "relationshipName": "theResourceInstSug"
+            "relationshipName": "theResourceChosenSuggestions"
         },
         {
             "relationshipType": "one-to-many",
@@ -107,17 +107,9 @@
         },
         {
             "relationshipType": "many-to-many",
-            "otherEntityName": "instantiationSuggestion",
-            "otherEntityRelationshipName": "sugRsrc",
-            "relationshipName": "instSuggestions",
-            "otherEntityField": "id",
-            "ownerSide": false
-        },
-        {
-            "relationshipType": "many-to-many",
             "otherEntityName": "resourceInstSug",
             "otherEntityRelationshipName": "resourceSuggested",
-            "relationshipName": "theResourceInstSug",
+            "relationshipName": "theResourceSuggestions",
             "otherEntityField": "id",
             "ownerSide": false
         }

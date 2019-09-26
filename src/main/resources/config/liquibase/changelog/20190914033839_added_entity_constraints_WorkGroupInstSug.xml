@@ -21,18 +21,6 @@
                                  referencedTableName="work_group_type"/>
 
         <addForeignKeyConstraint baseColumnNames="work_group_inst_sug_id"
-                                 baseTableName="work_group_inst_sug_sug_work_group"
-                                 constraintName="fk_work_group_inst_sug_sug_work_group_work_group_inst_sug_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="work_group_inst_sug"/>
-
-        <addForeignKeyConstraint baseColumnNames="sug_work_group_id"
-                                 baseTableName="work_group_inst_sug_sug_work_group"
-                                 constraintName="fk_work_group_inst_sug_sug_work_group_sug_work_group_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="work_group"/>
-        
-        <addForeignKeyConstraint baseColumnNames="work_group_inst_sug_id"
                                  baseTableName="work_group_inst_sug_group_suggested"
                                  constraintName="fk_work_group_inst_sug_group_suggested_work_group_inst_sug_id"
                                  referencedColumnNames="id"

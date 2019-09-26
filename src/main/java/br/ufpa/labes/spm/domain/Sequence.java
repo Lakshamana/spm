@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "sequence")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Sequence implements Serializable {
+public class Sequence extends SimpleCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,8 +23,8 @@ public class Sequence implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("theSequences")
-    private Dependency theDependency;
+    @JsonIgnoreProperties("theMultipleSequences")
+    private Dependency theDependencyToMultipleSequences;
 
     @OneToOne(mappedBy = "theSequence")
     @JsonIgnore
@@ -39,17 +39,17 @@ public class Sequence implements Serializable {
         this.id = id;
     }
 
-    public Dependency getTheDependency() {
-        return theDependency;
+    public Dependency getTheDependencyToMultipleSequences() {
+        return theDependencyToMultipleSequences;
     }
 
-    public Sequence theDependency(Dependency dependency) {
-        this.theDependency = dependency;
+    public Sequence theDependencyToMultipleSequences(Dependency dependency) {
+        this.theDependencyToMultipleSequences = dependency;
         return this;
     }
 
-    public void setTheDependency(Dependency dependency) {
-        this.theDependency = dependency;
+    public void setTheDependencyToMultipleSequences(Dependency dependency) {
+        this.theDependencyToMultipleSequences = dependency;
     }
 
     public Dependency getTheDependency() {

@@ -422,7 +422,7 @@ relationship ManyToOne {
     Connection{theProcessModel} to ProcessModel{theConnection},
     Connection{theConnectionType} to ConnectionType{theConnection}
 
-    MultipleCon{theDependency} to Dependency{theMultipleCon},
+    MultipleCon{theDependencyToMultipleCons} to Dependency{theMultipleConsToDependency},
 
     BranchCon{fromMultipleConnection} to MultipleCon{toBranchCon},
 
@@ -430,7 +430,7 @@ relationship ManyToOne {
 
     BranchConCondToMultipleCon{theMultipleCon} to MultipleCon{theBranchConCondToMultipleCon},
 
-    Sequence{theDependency} to Dependency{theSequence},
+    Sequence{theDependencyToMultipleSequences} to Dependency{theMultipleSequences},
 
     JoinCon{toMultipleCon} to MultipleCon{theJoinCon}
 }
@@ -440,11 +440,11 @@ relationship ManyToMany {
 
     BranchANDCon{toMultipleCon} to MultipleCon{theBranchANDCon},
 
-    JoinCon{fromMultipleCon} to MultipleCon{theJoinCon}
+    JoinCon{fromMultipleCon} to MultipleCon{theJoinConToMultipleCon}
 }
 
 relationship OneToOne {
-  MultipleCon{theDependency} to Dependency{theMultipleCon}
+  MultipleCon{theDependency} to Dependency{theMultipleCon},
 
   Dependency{theSequence} to Sequence{theDependency}
 }
@@ -521,7 +521,6 @@ relationship ManyToOne {
     CatalogEvent{theModelingActivityEvent} to ModelingActivityEvent{theCatalogEvents},
     CatalogEvent{theProcessEvent} to ProcessEvent{theCatalogEvents},
 
-    AgendaEvent{theCatalogEvents} to CatalogEvent{theAgendaEvent},
     AgendaEvent{theTask} to Task{theAgendaEvent},
     AgendaEvent{theNormal} to Normal{theAgendaEvent}
 
@@ -774,20 +773,16 @@ relationship ManyToOne {
 
     InstantiationSuggestion{theActivityInstantiated} to ActivityInstantiated{theInstantiationSuggestion},
 
-    ResourceInstSug{resourceChosen} to Resource{theResourceInstSug},
+    ResourceInstSug{resourceChosen} to Resource{theResourceChosenSuggestions},
     ResourceInstSug{resourceTypeRequired} to ResourceType{theResourceInstSug},
 
     ResourcePossibleUse{theResource} to Resource{theResourcePossibleUse}
 }
 
 relationship ManyToMany {
-    WorkGroupInstSug{sugWorkGroup} to WorkGroup{theWorkGroupInstSug},
+    ResourceInstSug{resourceSuggested} to Resource{theResourceSuggestions},
 
-    InstantiationSuggestion{sugRsrc} to Resource{instSuggestions},
-
-    ResourceInstSug{resourceSuggested} to Resource{theResourceInstSug},
-
-    WorkGroupInstSug{groupSuggested} to WorkGroup{theWorkGroupInstSug}
+    WorkGroupInstSug{groupSuggested} to WorkGroup{theSuggestedGroups}
 }
 
 //package processKnowledge ------------------------------------------- OK
@@ -965,10 +960,6 @@ relationship OneToMany {
     ProcessModel{theActivity} to Activity{theProcessModel},
 
     Template{theInstances} to ProcessModel{theOrigin}
-}
-
-relationship ManyToMany {
-  Process{theAgent} to Agent{theProcess}
 }
 
 relationship OneToOne {

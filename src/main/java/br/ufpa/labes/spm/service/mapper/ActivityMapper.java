@@ -28,8 +28,6 @@ public interface ActivityMapper extends EntityMapper<ActivityDTO, Activity> {
     @Mapping(target = "removeFromJoinCon", ignore = true)
     @Mapping(target = "toBranchCons", ignore = true)
     @Mapping(target = "removeToBranchCon", ignore = true)
-    @Mapping(target = "activityMetrics", ignore = true)
-    @Mapping(target = "removeActivityMetric", ignore = true)
     @Mapping(target = "activityEstimations", ignore = true)
     @Mapping(target = "removeActivityEstimation", ignore = true)
     @Mapping(source = "theActivityTypeId", target = "theActivityType")

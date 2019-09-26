@@ -16,8 +16,6 @@ public class WorkGroupInstSugDTO implements Serializable {
 
     private Long groupTypeRequiredId;
 
-    private Set<WorkGroupDTO> sugWorkGroups = new HashSet<>();
-
     private Set<WorkGroupDTO> groupSuggesteds = new HashSet<>();
 
     public Long getId() {
@@ -42,14 +40,6 @@ public class WorkGroupInstSugDTO implements Serializable {
 
     public void setGroupTypeRequiredId(Long workGroupTypeId) {
         this.groupTypeRequiredId = workGroupTypeId;
-    }
-
-    public Set<WorkGroupDTO> getSugWorkGroups() {
-        return sugWorkGroups;
-    }
-
-    public void setSugWorkGroups(Set<WorkGroupDTO> workGroups) {
-        this.sugWorkGroups = workGroups;
     }
 
     public Set<WorkGroupDTO> getGroupSuggesteds() {

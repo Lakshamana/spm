@@ -41,17 +41,6 @@
 
     <changeSet id="20190914033902-1-relations" author="jhipster">
 
-        <createTable tableName="process_the_agent">
-            <column name="the_agent_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="process_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="process_id, the_agent_id" tableName="process_the_agent"/>
-        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

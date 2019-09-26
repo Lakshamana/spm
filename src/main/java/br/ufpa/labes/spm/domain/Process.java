@@ -1,4 +1,8 @@
 package br.ufpa.labes.spm.domain;
+
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -16,6 +20,7 @@ import java.util.Set;
 @Entity
 @Table(name = "process")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Process implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,13 +46,6 @@ public class Process implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("theProcesses")
     private ActivityType theActivityType;
-
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "process_the_agent",
-               joinColumns = @JoinColumn(name = "process_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "the_agent_id", referencedColumnName = "id"))
-    private Set<Agent> theAgents = new HashSet<>();
 
     @OneToOne(mappedBy = "theProcess")
     @JsonIgnore
@@ -162,31 +160,6 @@ public class Process implements Serializable {
 
     public void setTheActivityType(ActivityType activityType) {
         this.theActivityType = activityType;
-    }
-
-    public Set<Agent> getTheAgents() {
-        return theAgents;
-    }
-
-    public Process theAgents(Set<Agent> agents) {
-        this.theAgents = agents;
-        return this;
-    }
-
-    public Process addTheAgent(Agent agent) {
-        this.theAgents.add(agent);
-        agent.getTheProcesses().add(this);
-        return this;
-    }
-
-    public Process removeTheAgent(Agent agent) {
-        this.theAgents.remove(agent);
-        agent.getTheProcesses().remove(this);
-        return this;
-    }
-
-    public void setTheAgents(Set<Agent> agents) {
-        this.theAgents = agents;
     }
 
     public SpmLog getTheLog() {

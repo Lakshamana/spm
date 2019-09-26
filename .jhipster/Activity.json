@@ -53,12 +53,6 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "metric",
-            "otherEntityRelationshipName": "activity",
-            "relationshipName": "activityMetric"
-        },
-        {
-            "relationshipType": "one-to-many",
             "otherEntityName": "activityEstimation",
             "otherEntityRelationshipName": "activity",
             "relationshipName": "activityEstimation"

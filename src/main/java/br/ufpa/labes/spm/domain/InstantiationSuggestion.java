@@ -1,4 +1,8 @@
 package br.ufpa.labes.spm.domain;
+
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -6,8 +10,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A InstantiationSuggestion.
@@ -15,6 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name = "instantiation_suggestion")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class InstantiationSuggestion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -26,13 +29,6 @@ public class InstantiationSuggestion implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("theInstantiationSuggestions")
     private ActivityInstantiated theActivityInstantiated;
-
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "instantiation_suggestion_sug_rsrc",
-               joinColumns = @JoinColumn(name = "instantiation_suggestion_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "sug_rsrc_id", referencedColumnName = "id"))
-    private Set<Resource> sugRsrcs = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -54,31 +50,6 @@ public class InstantiationSuggestion implements Serializable {
 
     public void setTheActivityInstantiated(ActivityInstantiated activityInstantiated) {
         this.theActivityInstantiated = activityInstantiated;
-    }
-
-    public Set<Resource> getSugRsrcs() {
-        return sugRsrcs;
-    }
-
-    public InstantiationSuggestion sugRsrcs(Set<Resource> resources) {
-        this.sugRsrcs = resources;
-        return this;
-    }
-
-    public InstantiationSuggestion addSugRsrc(Resource resource) {
-        this.sugRsrcs.add(resource);
-        resource.getInstSuggestions().add(this);
-        return this;
-    }
-
-    public InstantiationSuggestion removeSugRsrc(Resource resource) {
-        this.sugRsrcs.remove(resource);
-        resource.getInstSuggestions().remove(this);
-        return this;
-    }
-
-    public void setSugRsrcs(Set<Resource> resources) {
-        this.sugRsrcs = resources;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

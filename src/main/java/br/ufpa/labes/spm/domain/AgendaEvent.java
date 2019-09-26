@@ -15,17 +15,13 @@ import java.util.Set;
 @Entity
 @Table(name = "agenda_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class AgendaEvent implements Serializable {
+public class AgendaEvent extends Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theAgendaEvents")
-    private CatalogEvent theCatalogEvents;
 
     @ManyToOne
     @JsonIgnoreProperties("theAgendaEvents")
@@ -46,19 +42,6 @@ public class AgendaEvent implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public CatalogEvent getTheCatalogEvents() {
-        return theCatalogEvents;
-    }
-
-    public AgendaEvent theCatalogEvents(CatalogEvent catalogEvent) {
-        this.theCatalogEvents = catalogEvent;
-        return this;
-    }
-
-    public void setTheCatalogEvents(CatalogEvent catalogEvent) {
-        this.theCatalogEvents = catalogEvent;
     }
 
     public Task getTheTask() {

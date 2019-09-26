@@ -4,13 +4,6 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "catalogEvent",
-            "otherEntityRelationshipName": "theAgendaEvent",
-            "relationshipName": "theCatalogEvents",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "task",
             "otherEntityRelationshipName": "theAgendaEvent",
             "relationshipName": "theTask",

@@ -34,13 +34,13 @@ public class Dependency implements Serializable {
     @JsonIgnore
     private MultipleCon theMultipleCon;
 
-    @OneToMany(mappedBy = "theDependency")
+    @OneToMany(mappedBy = "theDependencyToMultipleCons")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<MultipleCon> theMultipleCons = new HashSet<>();
+    private Set<MultipleCon> theMultipleConsToDependencies = new HashSet<>();
 
-    @OneToMany(mappedBy = "theDependency")
+    @OneToMany(mappedBy = "theDependencyToMultipleSequences")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Sequence> theSequences = new HashSet<>();
+    private Set<Sequence> theMultipleSequences = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -90,54 +90,54 @@ public class Dependency implements Serializable {
         this.theMultipleCon = multipleCon;
     }
 
-    public Set<MultipleCon> getTheMultipleCons() {
-        return theMultipleCons;
+    public Set<MultipleCon> getTheMultipleConsToDependencies() {
+        return theMultipleConsToDependencies;
     }
 
-    public Dependency theMultipleCons(Set<MultipleCon> multipleCons) {
-        this.theMultipleCons = multipleCons;
+    public Dependency theMultipleConsToDependencies(Set<MultipleCon> multipleCons) {
+        this.theMultipleConsToDependencies = multipleCons;
         return this;
     }
 
-    public Dependency addTheMultipleCon(MultipleCon multipleCon) {
-        this.theMultipleCons.add(multipleCon);
-        multipleCon.setTheDependency(this);
+    public Dependency addTheMultipleConsToDependency(MultipleCon multipleCon) {
+        this.theMultipleConsToDependencies.add(multipleCon);
+        multipleCon.setTheDependencyToMultipleCons(this);
         return this;
     }
 
-    public Dependency removeTheMultipleCon(MultipleCon multipleCon) {
-        this.theMultipleCons.remove(multipleCon);
-        multipleCon.setTheDependency(null);
+    public Dependency removeTheMultipleConsToDependency(MultipleCon multipleCon) {
+        this.theMultipleConsToDependencies.remove(multipleCon);
+        multipleCon.setTheDependencyToMultipleCons(null);
         return this;
     }
 
-    public void setTheMultipleCons(Set<MultipleCon> multipleCons) {
-        this.theMultipleCons = multipleCons;
+    public void setTheMultipleConsToDependencies(Set<MultipleCon> multipleCons) {
+        this.theMultipleConsToDependencies = multipleCons;
     }
 
-    public Set<Sequence> getTheSequences() {
-        return theSequences;
+    public Set<Sequence> getTheMultipleSequences() {
+        return theMultipleSequences;
     }
 
-    public Dependency theSequences(Set<Sequence> sequences) {
-        this.theSequences = sequences;
+    public Dependency theMultipleSequences(Set<Sequence> sequences) {
+        this.theMultipleSequences = sequences;
         return this;
     }
 
-    public Dependency addTheSequence(Sequence sequence) {
-        this.theSequences.add(sequence);
-        sequence.setTheDependency(this);
+    public Dependency addTheMultipleSequences(Sequence sequence) {
+        this.theMultipleSequences.add(sequence);
+        sequence.setTheDependencyToMultipleSequences(this);
         return this;
     }
 
-    public Dependency removeTheSequence(Sequence sequence) {
-        this.theSequences.remove(sequence);
-        sequence.setTheDependency(null);
+    public Dependency removeTheMultipleSequences(Sequence sequence) {
+        this.theMultipleSequences.remove(sequence);
+        sequence.setTheDependencyToMultipleSequences(null);
         return this;
     }
 
-    public void setTheSequences(Set<Sequence> sequences) {
-        this.theSequences = sequences;
+    public void setTheMultipleSequences(Set<Sequence> sequences) {
+        this.theMultipleSequences = sequences;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

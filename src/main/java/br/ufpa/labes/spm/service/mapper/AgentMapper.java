@@ -57,8 +57,6 @@ public interface AgentMapper extends EntityMapper<AgentDTO, Agent> {
     @Mapping(target = "removeTheAgentWorkingLoad", ignore = true)
     @Mapping(target = "theChatLogs", ignore = true)
     @Mapping(target = "removeTheChatLog", ignore = true)
-    @Mapping(target = "theProcesses", ignore = true)
-    @Mapping(target = "removeTheProcess", ignore = true)
     Agent toEntity(AgentDTO agentDTO);
 
     default Agent fromId(Long id) {

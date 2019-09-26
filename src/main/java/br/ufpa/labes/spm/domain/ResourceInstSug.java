@@ -24,7 +24,7 @@ public class ResourceInstSug implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties("theResourceInstSugs")
+    @JsonIgnoreProperties("theResourceChosenSuggestions")
     private Resource resourceChosen;
 
     @ManyToOne
@@ -84,13 +84,13 @@ public class ResourceInstSug implements Serializable {
 
     public ResourceInstSug addResourceSuggested(Resource resource) {
         this.resourceSuggesteds.add(resource);
-        resource.getTheResourceInstSugs().add(this);
+        resource.getTheResourceSuggestions().add(this);
         return this;
     }
 
     public ResourceInstSug removeResourceSuggested(Resource resource) {
         this.resourceSuggesteds.remove(resource);
-        resource.getTheResourceInstSugs().remove(this);
+        resource.getTheResourceSuggestions().remove(this);
         return this;
     }
 

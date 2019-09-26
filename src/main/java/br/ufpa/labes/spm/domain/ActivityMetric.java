@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "activity_metric")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ActivityMetric implements Serializable {
+public class ActivityMetric extends Metric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

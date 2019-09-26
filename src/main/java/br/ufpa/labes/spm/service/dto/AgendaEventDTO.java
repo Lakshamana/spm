@@ -10,8 +10,6 @@ public class AgendaEventDTO implements Serializable {
     private Long id;
 
 
-    private Long theCatalogEventsId;
-
     private Long theTaskId;
 
     private Long theNormalId;
@@ -22,14 +20,6 @@ public class AgendaEventDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getTheCatalogEventsId() {
-        return theCatalogEventsId;
-    }
-
-    public void setTheCatalogEventsId(Long catalogEventId) {
-        this.theCatalogEventsId = catalogEventId;
     }
 
     public Long getTheTaskId() {
@@ -73,7 +63,6 @@ public class AgendaEventDTO implements Serializable {
     public String toString() {
         return "AgendaEventDTO{" +
             "id=" + getId() +
-            ", theCatalogEvents=" + getTheCatalogEventsId() +
             ", theTask=" + getTheTaskId() +
             ", theNormal=" + getTheNormalId() +
             "}";

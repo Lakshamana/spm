@@ -31,17 +31,6 @@
 
     <changeSet id="20190914033839-1-relations" author="jhipster">
 
-        <createTable tableName="work_group_inst_sug_sug_work_group">
-            <column name="sug_work_group_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="work_group_inst_sug_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="work_group_inst_sug_id, sug_work_group_id" tableName="work_group_inst_sug_sug_work_group"/>
-        
         <createTable tableName="work_group_inst_sug_group_suggested">
             <column name="group_suggested_id" type="bigint">
                 <constraints nullable="false"/>

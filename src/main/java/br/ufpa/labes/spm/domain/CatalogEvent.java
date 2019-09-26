@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "catalog_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CatalogEvent implements Serializable {
+public class CatalogEvent extends Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,10 +66,6 @@ public class CatalogEvent implements Serializable {
     @OneToMany(mappedBy = "theCatalogEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<CatalogEvent> theCatalogEvents = new HashSet<>();
-
-    @OneToMany(mappedBy = "theCatalogEvents")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<AgendaEvent> theAgendaEvents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -233,31 +229,6 @@ public class CatalogEvent implements Serializable {
 
     public void setTheCatalogEvents(Set<CatalogEvent> catalogEvents) {
         this.theCatalogEvents = catalogEvents;
-    }
-
-    public Set<AgendaEvent> getTheAgendaEvents() {
-        return theAgendaEvents;
-    }
-
-    public CatalogEvent theAgendaEvents(Set<AgendaEvent> agendaEvents) {
-        this.theAgendaEvents = agendaEvents;
-        return this;
-    }
-
-    public CatalogEvent addTheAgendaEvent(AgendaEvent agendaEvent) {
-        this.theAgendaEvents.add(agendaEvent);
-        agendaEvent.setTheCatalogEvents(this);
-        return this;
-    }
-
-    public CatalogEvent removeTheAgendaEvent(AgendaEvent agendaEvent) {
-        this.theAgendaEvents.remove(agendaEvent);
-        agendaEvent.setTheCatalogEvents(null);
-        return this;
-    }
-
-    public void setTheAgendaEvents(Set<AgendaEvent> agendaEvents) {
-        this.theAgendaEvents = agendaEvents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -33,14 +33,6 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "many-to-many",
-            "otherEntityName": "agent",
-            "otherEntityRelationshipName": "theProcess",
-            "relationshipName": "theAgent",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "one-to-one",
             "otherEntityName": "spmLog",
             "otherEntityRelationshipName": "theProcess",

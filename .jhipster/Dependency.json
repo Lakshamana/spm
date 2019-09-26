@@ -25,14 +25,14 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "multipleCon",
-            "otherEntityRelationshipName": "theDependency",
-            "relationshipName": "theMultipleCon"
+            "otherEntityRelationshipName": "theDependencyToMultipleCons",
+            "relationshipName": "theMultipleConsToDependency"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "sequence",
-            "otherEntityRelationshipName": "theDependency",
-            "relationshipName": "theSequence"
+            "otherEntityRelationshipName": "theDependencyToMultipleSequences",
+            "relationshipName": "theMultipleSequences"
         }
     ],
     "changelogDate": "20190914033753",

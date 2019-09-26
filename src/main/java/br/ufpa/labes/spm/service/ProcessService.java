@@ -2,9 +2,6 @@ package br.ufpa.labes.spm.service;
 
 import br.ufpa.labes.spm.service.dto.ProcessDTO;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -34,13 +31,7 @@ public interface ProcessService {
      */
     List<ProcessDTO> findAllWhereTheLogIsNull();
 
-    /**
-     * Get all the processes with eager load of many-to-many relationships.
-     *
-     * @return the list of entities.
-     */
-    Page<ProcessDTO> findAllWithEagerRelationships(Pageable pageable);
-    
+
     /**
      * Get the "id" process.
      *

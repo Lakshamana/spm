@@ -14,17 +14,5 @@
                                  referencedColumnNames="id"
                                  referencedTableName="activity_instantiated"/>
 
-        <addForeignKeyConstraint baseColumnNames="instantiation_suggestion_id"
-                                 baseTableName="instantiation_suggestion_sug_rsrc"
-                                 constraintName="instantiation_suggestion_sug_rs_instantiation_suggestion_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="instantiation_suggestion"/>
-
-        <addForeignKeyConstraint baseColumnNames="sug_rsrc_id"
-                                 baseTableName="instantiation_suggestion_sug_rsrc"
-                                 constraintName="fk_instantiation_suggestion_sug_rsrc_sug_rsrc_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="resource"/>
-        
     </changeSet>
 </databaseChangeLog>

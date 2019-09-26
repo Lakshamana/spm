@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "artifact_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ArtifactCon implements Serializable {
+public class ArtifactCon extends Connection implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

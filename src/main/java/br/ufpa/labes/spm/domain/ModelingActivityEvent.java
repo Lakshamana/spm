@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "modeling_activity_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ModelingActivityEvent implements Serializable {
+public class ModelingActivityEvent extends Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

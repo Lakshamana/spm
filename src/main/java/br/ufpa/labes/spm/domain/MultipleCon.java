@@ -1,4 +1,8 @@
 package br.ufpa.labes.spm.domain;
+
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -16,7 +20,8 @@ import java.util.Set;
 @Entity
 @Table(name = "multiple_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MultipleCon implements Serializable {
+@Inheritance(strategy=InheritanceType.JOINED)
+public class MultipleCon extends Connection implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,8 +37,8 @@ public class MultipleCon implements Serializable {
     private Dependency theDependency;
 
     @ManyToOne
-    @JsonIgnoreProperties("theMultipleCons")
-    private Dependency theDependency;
+    @JsonIgnoreProperties("theMultipleConsToDependencies")
+    private Dependency theDependencyToMultipleCons;
 
     @OneToMany(mappedBy = "fromMultipleConnection")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -60,7 +65,7 @@ public class MultipleCon implements Serializable {
     @ManyToMany(mappedBy = "fromMultipleCons")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
-    private Set<JoinCon> theJoinCons = new HashSet<>();
+    private Set<JoinCon> theJoinConToMultipleCons = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -97,17 +102,17 @@ public class MultipleCon implements Serializable {
         this.theDependency = dependency;
     }
 
-    public Dependency getTheDependency() {
-        return theDependency;
+    public Dependency getTheDependencyToMultipleCons() {
+        return theDependencyToMultipleCons;
     }
 
-    public MultipleCon theDependency(Dependency dependency) {
-        this.theDependency = dependency;
+    public MultipleCon theDependencyToMultipleCons(Dependency dependency) {
+        this.theDependencyToMultipleCons = dependency;
         return this;
     }
 
-    public void setTheDependency(Dependency dependency) {
-        this.theDependency = dependency;
+    public void setTheDependencyToMultipleCons(Dependency dependency) {
+        this.theDependencyToMultipleCons = dependency;
     }
 
     public Set<BranchCon> getToBranchCons() {
@@ -235,29 +240,29 @@ public class MultipleCon implements Serializable {
         this.theBranchANDCons = branchANDCons;
     }
 
-    public Set<JoinCon> getTheJoinCons() {
-        return theJoinCons;
+    public Set<JoinCon> getTheJoinConToMultipleCons() {
+        return theJoinConToMultipleCons;
     }
 
-    public MultipleCon theJoinCons(Set<JoinCon> joinCons) {
-        this.theJoinCons = joinCons;
+    public MultipleCon theJoinConToMultipleCons(Set<JoinCon> joinCons) {
+        this.theJoinConToMultipleCons = joinCons;
         return this;
     }
 
-    public MultipleCon addTheJoinCon(JoinCon joinCon) {
-        this.theJoinCons.add(joinCon);
+    public MultipleCon addTheJoinConToMultipleCon(JoinCon joinCon) {
+        this.theJoinConToMultipleCons.add(joinCon);
         joinCon.getFromMultipleCons().add(this);
         return this;
     }
 
-    public MultipleCon removeTheJoinCon(JoinCon joinCon) {
-        this.theJoinCons.remove(joinCon);
+    public MultipleCon removeTheJoinConToMultipleCon(JoinCon joinCon) {
+        this.theJoinConToMultipleCons.remove(joinCon);
         joinCon.getFromMultipleCons().remove(this);
         return this;
     }
 
-    public void setTheJoinCons(Set<JoinCon> joinCons) {
-        this.theJoinCons = joinCons;
+    public void setTheJoinConToMultipleCons(Set<JoinCon> joinCons) {
+        this.theJoinConToMultipleCons = joinCons;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

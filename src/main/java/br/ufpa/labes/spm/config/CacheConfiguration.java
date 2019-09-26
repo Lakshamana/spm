@@ -631,6 +631,12 @@ public class CacheConfiguration {
       createCache(cm, br.ufpa.labes.spm.domain.WorkGroupType.class.getName() + ".theReqGroups");
       createCache(cm, br.ufpa.labes.spm.domain.WorkGroupType.class.getName() + ".theWorkGroupInstSugs");
       createCache(cm, br.ufpa.labes.spm.domain.ResourceType.class.getName() + ".theResourceInstSugs");
+      createCache(cm, br.ufpa.labes.spm.domain.WorkGroup.class.getName() + ".theSuggestedGroups");
+      createCache(cm, br.ufpa.labes.spm.domain.Dependency.class.getName() + ".theMultipleConsToDependencies");
+      createCache(cm, br.ufpa.labes.spm.domain.Dependency.class.getName() + ".theMultipleSequences");
+      createCache(cm, br.ufpa.labes.spm.domain.MultipleCon.class.getName() + ".theJoinConToMultipleCons");
+      createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceChosenSuggestions");
+      createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceSuggestions");
       // jhipster-needle-ehcache-add-entry
     };
   }

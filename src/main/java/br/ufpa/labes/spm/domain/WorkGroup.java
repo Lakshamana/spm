@@ -70,15 +70,10 @@ public class WorkGroup implements Serializable {
     @JsonIgnore
     private Set<Agent> theAgents = new HashSet<>();
 
-    @ManyToMany(mappedBy = "sugWorkGroups")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnore
-    private Set<WorkGroupInstSug> theWorkGroupInstSugs = new HashSet<>();
-
     @ManyToMany(mappedBy = "groupSuggesteds")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
-    private Set<WorkGroupInstSug> theWorkGroupInstSugs = new HashSet<>();
+    private Set<WorkGroupInstSug> theSuggestedGroups = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -317,54 +312,29 @@ public class WorkGroup implements Serializable {
         this.theAgents = agents;
     }
 
-    public Set<WorkGroupInstSug> getTheWorkGroupInstSugs() {
-        return theWorkGroupInstSugs;
+    public Set<WorkGroupInstSug> getTheSuggestedGroups() {
+        return theSuggestedGroups;
     }
 
-    public WorkGroup theWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
-        this.theWorkGroupInstSugs = workGroupInstSugs;
+    public WorkGroup theSuggestedGroups(Set<WorkGroupInstSug> workGroupInstSugs) {
+        this.theSuggestedGroups = workGroupInstSugs;
         return this;
     }
 
-    public WorkGroup addTheWorkGroupInstSug(WorkGroupInstSug workGroupInstSug) {
-        this.theWorkGroupInstSugs.add(workGroupInstSug);
-        workGroupInstSug.getSugWorkGroups().add(this);
-        return this;
-    }
-
-    public WorkGroup removeTheWorkGroupInstSug(WorkGroupInstSug workGroupInstSug) {
-        this.theWorkGroupInstSugs.remove(workGroupInstSug);
-        workGroupInstSug.getSugWorkGroups().remove(this);
-        return this;
-    }
-
-    public void setTheWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
-        this.theWorkGroupInstSugs = workGroupInstSugs;
-    }
-
-    public Set<WorkGroupInstSug> getTheWorkGroupInstSugs() {
-        return theWorkGroupInstSugs;
-    }
-
-    public WorkGroup theWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
-        this.theWorkGroupInstSugs = workGroupInstSugs;
-        return this;
-    }
-
-    public WorkGroup addTheWorkGroupInstSug(WorkGroupInstSug workGroupInstSug) {
-        this.theWorkGroupInstSugs.add(workGroupInstSug);
+    public WorkGroup addTheSuggestedGroups(WorkGroupInstSug workGroupInstSug) {
+        this.theSuggestedGroups.add(workGroupInstSug);
         workGroupInstSug.getGroupSuggesteds().add(this);
         return this;
     }
 
-    public WorkGroup removeTheWorkGroupInstSug(WorkGroupInstSug workGroupInstSug) {
-        this.theWorkGroupInstSugs.remove(workGroupInstSug);
+    public WorkGroup removeTheSuggestedGroups(WorkGroupInstSug workGroupInstSug) {
+        this.theSuggestedGroups.remove(workGroupInstSug);
         workGroupInstSug.getGroupSuggesteds().remove(this);
         return this;
     }
 
-    public void setTheWorkGroupInstSugs(Set<WorkGroupInstSug> workGroupInstSugs) {
-        this.theWorkGroupInstSugs = workGroupInstSugs;
+    public void setTheSuggestedGroups(Set<WorkGroupInstSug> workGroupInstSugs) {
+        this.theSuggestedGroups = workGroupInstSugs;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

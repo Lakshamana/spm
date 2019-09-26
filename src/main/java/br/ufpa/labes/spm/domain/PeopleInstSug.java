@@ -1,4 +1,8 @@
 package br.ufpa.labes.spm.domain;
+
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -12,6 +16,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "people_inst_sug")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class PeopleInstSug implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "join_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class JoinCon implements Serializable {
+public class JoinCon extends MultipleCon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -93,13 +93,13 @@ public class JoinCon implements Serializable {
 
     public JoinCon addFromMultipleCon(MultipleCon multipleCon) {
         this.fromMultipleCons.add(multipleCon);
-        multipleCon.getTheJoinCons().add(this);
+        multipleCon.getTheJoinConToMultipleCons().add(this);
         return this;
     }
 
     public JoinCon removeFromMultipleCon(MultipleCon multipleCon) {
         this.fromMultipleCons.remove(multipleCon);
-        multipleCon.getTheJoinCons().remove(this);
+        multipleCon.getTheJoinConToMultipleCons().remove(this);
         return this;
     }
 

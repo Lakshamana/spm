@@ -1,4 +1,8 @@
 package br.ufpa.labes.spm.domain;
+
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -15,6 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name = "activity")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Activity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,10 +60,6 @@ public class Activity implements Serializable {
     @OneToMany(mappedBy = "fromActivity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<BranchCon> toBranchCons = new HashSet<>();
-
-    @OneToMany(mappedBy = "activity")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Metric> activityMetrics = new HashSet<>();
 
     @OneToMany(mappedBy = "activity")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -312,31 +313,6 @@ public class Activity implements Serializable {
 
     public void setToBranchCons(Set<BranchCon> branchCons) {
         this.toBranchCons = branchCons;
-    }
-
-    public Set<Metric> getActivityMetrics() {
-        return activityMetrics;
-    }
-
-    public Activity activityMetrics(Set<Metric> metrics) {
-        this.activityMetrics = metrics;
-        return this;
-    }
-
-    public Activity addActivityMetric(Metric metric) {
-        this.activityMetrics.add(metric);
-        metric.setActivity(this);
-        return this;
-    }
-
-    public Activity removeActivityMetric(Metric metric) {
-        this.activityMetrics.remove(metric);
-        metric.setActivity(null);
-        return this;
-    }
-
-    public void setActivityMetrics(Set<Metric> metrics) {
-        this.activityMetrics = metrics;
     }
 
     public Set<ActivityEstimation> getActivityEstimations() {

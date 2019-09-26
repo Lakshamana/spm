@@ -14,9 +14,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="dependency"/>
 
-        <addForeignKeyConstraint baseColumnNames="the_dependency_id"
+        <addForeignKeyConstraint baseColumnNames="the_dependency_to_multiple_cons_id"
                                  baseTableName="multiple_con"
-                                 constraintName="fk_multiple_con_the_dependency_id"
+                                 constraintName="fk_multiple_con_the_dependency_to_multiple_cons_id"
                                  referencedColumnNames="id"
                                  referencedTableName="dependency"/>
 

@@ -29,10 +29,8 @@ public interface WorkGroupMapper extends EntityMapper<WorkGroupDTO, WorkGroup> {
     @Mapping(target = "removeTheWorkGroupInstSug", ignore = true)
     @Mapping(target = "theAgents", ignore = true)
     @Mapping(target = "removeTheAgent", ignore = true)
-    @Mapping(target = "theWorkGroupInstSugs", ignore = true)
-    @Mapping(target = "removeTheWorkGroupInstSug", ignore = true)
-    @Mapping(target = "theWorkGroupInstSugs", ignore = true)
-    @Mapping(target = "removeTheWorkGroupInstSug", ignore = true)
+    @Mapping(target = "theSuggestedGroups", ignore = true)
+    @Mapping(target = "removeTheSuggestedGroups", ignore = true)
     WorkGroup toEntity(WorkGroupDTO workGroupDTO);
 
     default WorkGroup fromId(Long id) {

@@ -17,7 +17,6 @@ public interface WorkGroupInstSugMapper extends EntityMapper<WorkGroupInstSugDTO
 
     @Mapping(source = "groupChosenId", target = "groupChosen")
     @Mapping(source = "groupTypeRequiredId", target = "groupTypeRequired")
-    @Mapping(target = "removeSugWorkGroup", ignore = true)
     @Mapping(target = "removeGroupSuggested", ignore = true)
     WorkGroupInstSug toEntity(WorkGroupInstSugDTO workGroupInstSugDTO);
 
