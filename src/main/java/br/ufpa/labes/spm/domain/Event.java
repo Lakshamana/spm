@@ -34,7 +34,7 @@ public class Event implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theEvents")
-    private CatalogEvent theCatalogEvents;
+    private CatalogEvent theCatalogEvent;
 
     @ManyToOne
     @JsonIgnoreProperties("theEvents")
@@ -92,17 +92,17 @@ public class Event implements Serializable {
         this.isCreatedByApsee = isCreatedByApsee;
     }
 
-    public CatalogEvent getTheCatalogEvents() {
-        return theCatalogEvents;
+    public CatalogEvent getTheCatalogEvent() {
+        return theCatalogEvent;
     }
 
-    public Event theCatalogEvents(CatalogEvent catalogEvent) {
-        this.theCatalogEvents = catalogEvent;
+    public Event theCatalogEvent(CatalogEvent catalogEvent) {
+        this.theCatalogEvent = catalogEvent;
         return this;
     }
 
-    public void setTheCatalogEvents(CatalogEvent catalogEvent) {
-        this.theCatalogEvents = catalogEvent;
+    public void setTheCatalogEvent(CatalogEvent catalogEvent) {
+        this.theCatalogEvent = catalogEvent;
     }
 
     public SpmLog getTheLog() {

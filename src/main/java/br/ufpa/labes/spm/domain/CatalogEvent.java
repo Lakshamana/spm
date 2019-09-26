@@ -63,7 +63,7 @@ public class CatalogEvent implements Serializable {
     @JsonIgnoreProperties("theCatalogEvents")
     private Plain thePlain;
 
-    @OneToMany(mappedBy = "theCatalogEvents")
+    @OneToMany(mappedBy = "theCatalogEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Event> theEvents = new HashSet<>();
 
@@ -221,13 +221,13 @@ public class CatalogEvent implements Serializable {
 
     public CatalogEvent addTheEvent(Event event) {
         this.theEvents.add(event);
-        event.setTheCatalogEvents(this);
+        event.setTheCatalogEvent(this);
         return this;
     }
 
     public CatalogEvent removeTheEvent(Event event) {
         this.theEvents.remove(event);
-        event.setTheCatalogEvents(null);
+        event.setTheCatalogEvent(null);
         return this;
     }
 

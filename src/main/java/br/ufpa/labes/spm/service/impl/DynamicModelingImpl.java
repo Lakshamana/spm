@@ -10144,7 +10144,7 @@ System.out.println("salva :"+pmodel.getPmState());
 			state = plain.getTheEnactionDescription().getState();
 		} else { // decomposed
 			Decomposed decomposed = (Decomposed) activity;
-			state = decomposed.getTheReferedProcessModel().getPmStatus().name();
+			state = decomposed.getTheReferedProcessModel().getPmState();
 		}
 
 		return (state);

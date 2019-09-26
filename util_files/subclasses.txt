@@ -54,3 +54,5 @@ Event CatalogEvent
 Event GlobalActivityEvent
 Event ConnectionEvent
 Event ProcessEvent
+ReqAgent RequiredPeople
+ReqWorkGroup RequiredPeople

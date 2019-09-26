@@ -74,7 +74,7 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "event",
-            "otherEntityRelationshipName": "theCatalogEvents",
+            "otherEntityRelationshipName": "theCatalogEvent",
             "relationshipName": "theEvent"
         },
         {

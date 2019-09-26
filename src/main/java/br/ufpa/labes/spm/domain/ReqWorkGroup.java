@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "req_work_group")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ReqWorkGroup implements Serializable {
+public class ReqWorkGroup extends RequiredPeople implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

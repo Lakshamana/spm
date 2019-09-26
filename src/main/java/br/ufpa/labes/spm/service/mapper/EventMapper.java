@@ -11,12 +11,12 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {CatalogEventMapper.class, SpmLogMapper.class, EventTypeMapper.class})
 public interface EventMapper extends EntityMapper<EventDTO, Event> {
 
-    @Mapping(source = "theCatalogEvents.id", target = "theCatalogEventsId")
+    @Mapping(source = "theCatalogEvent.id", target = "theCatalogEventId")
     @Mapping(source = "theLog.id", target = "theLogId")
     @Mapping(source = "theEventType.id", target = "theEventTypeId")
     EventDTO toDto(Event event);
 
-    @Mapping(source = "theCatalogEventsId", target = "theCatalogEvents")
+    @Mapping(source = "theCatalogEventId", target = "theCatalogEvent")
     @Mapping(source = "theLogId", target = "theLog")
     @Mapping(source = "theEventTypeId", target = "theEventType")
     Event toEntity(EventDTO eventDTO);

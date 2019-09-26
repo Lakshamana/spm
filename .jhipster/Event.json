@@ -20,7 +20,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "catalogEvent",
             "otherEntityRelationshipName": "theEvent",
-            "relationshipName": "theCatalogEvents",
+            "relationshipName": "theCatalogEvent",
             "otherEntityField": "id"
         },
         {
