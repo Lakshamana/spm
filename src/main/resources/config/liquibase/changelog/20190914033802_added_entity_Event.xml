@@ -28,6 +28,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="the_catalog_events_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
             <column name="the_log_id" type="bigint">
                 <constraints nullable="true" />
             </column>

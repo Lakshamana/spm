@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "catalog_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CatalogEvent extends Event implements Serializable {
+public class CatalogEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,6 +62,10 @@ public class CatalogEvent extends Event implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("theCatalogEvents")
     private Plain thePlain;
+
+    @OneToMany(mappedBy = "theCatalogEvents")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Event> theEvents = new HashSet<>();
 
     @OneToMany(mappedBy = "theCatalogEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -204,6 +208,31 @@ public class CatalogEvent extends Event implements Serializable {
 
     public void setThePlain(Plain plain) {
         this.thePlain = plain;
+    }
+
+    public Set<Event> getTheEvents() {
+        return theEvents;
+    }
+
+    public CatalogEvent theEvents(Set<Event> events) {
+        this.theEvents = events;
+        return this;
+    }
+
+    public CatalogEvent addTheEvent(Event event) {
+        this.theEvents.add(event);
+        event.setTheCatalogEvents(this);
+        return this;
+    }
+
+    public CatalogEvent removeTheEvent(Event event) {
+        this.theEvents.remove(event);
+        event.setTheCatalogEvents(null);
+        return this;
+    }
+
+    public void setTheEvents(Set<Event> events) {
+        this.theEvents = events;
     }
 
     public Set<CatalogEvent> getTheCatalogEvents() {

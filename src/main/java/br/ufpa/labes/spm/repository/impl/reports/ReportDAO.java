@@ -73,7 +73,7 @@ public class ReportDAO implements IReportDAO {
         "from "
             + Agent.class.getName()
             + " as agent "
-            + "where agent.isActive is true order by agent.name";
+            + "where agent.isIsActive is true order by agent.name";
 
     Query query = this.getPersistenceContext().createQuery(queryString);
 
@@ -313,7 +313,7 @@ public class ReportDAO implements IReportDAO {
 
       if (agent == null || role == null) continue;
 
-      if (agent.isActive()) {
+      if (agent.isIsActive()) {
         entry[0] = role.getName();
         entry[1] = agent.getName();
         entry[2] = agentPlaysRole.getSinceDate();
@@ -353,7 +353,7 @@ public class ReportDAO implements IReportDAO {
           });
 
       for (Agent agent : agents) {
-        if (agent.isActive()) {
+        if (agent.isIsActive()) {
           Object[] entry = new Object[2];
 
           entry[0] = group.getName();
@@ -782,7 +782,7 @@ public class ReportDAO implements IReportDAO {
             + Task.class.getName()
             + " as task joinCon task.theNormal.theRequiredPeople as reqPeople "
             + "where reqPeople.theNormal.ident = task.theNormal.ident "
-            + "and task.theProcessAgenda.theTaskAgenda.theAgent.isActive is true "
+            + "and task.theProcessAgenda.theTaskAgenda.theAgent.isIsActive is true "
             + (agentIdent != null
                 ? "and task.theProcessAgenda.theTaskAgenda.theAgent.ident= :agentIdent and (reqPeople.oid in ("
                     + ReqWorkGroupHql
@@ -1037,21 +1037,21 @@ public class ReportDAO implements IReportDAO {
         entry[2] = "Consumable";
         entry[3] = new Double(consumable.getCost());
         entry[4] = consumable.getUnit();
-        entry[5] = consumable.getConsumableStatus().name();
+        entry[5] = consumable.getState();
       } else if (resource instanceof Exclusive) {
         Exclusive exclusive = (Exclusive) resource;
 
         entry[2] = "Exclusive";
         entry[3] = new Double(exclusive.getCost());
         entry[4] = exclusive.getUnitOfCost();
-        entry[5] = exclusive.getExclusiveStatus().name();
+        entry[5] = exclusive.getState();
       } else if (resource instanceof Shareable) {
         Shareable shareable = (Shareable) resource;
 
         entry[2] = "Shareable";
         entry[3] = new Double(shareable.getCost());
         entry[4] = shareable.getUnitOfCost();
-        entry[5] = shareable.getShareableStatus().name();
+        entry[5] = shareable.getState();
       }
 
       result.add(entry);
@@ -1089,7 +1089,7 @@ public class ReportDAO implements IReportDAO {
             + "metric.value, metric.unit, metric.periodBegin, metric.periodEnd "
             + "from "
             + AgentMetric.class.getName()
-            + " as metric where metric.agent.isActive is true "
+            + " as metric where metric.agent.isIsActive is true "
             + (agentId != null ? "and metric.agent.ident = :agentId " : "")
             + "order by metric.agent.name";
 
@@ -1191,7 +1191,7 @@ public class ReportDAO implements IReportDAO {
         if (activity instanceof Normal) {
           Normal normal = (Normal) activity;
 
-          actEntry[3] = normal.getTheEnactionDescription().getThePlain().getPlainStatus().name();
+          actEntry[3] = normal.getTheEnactionDescription().getState();
 
           actEntry[4] = normal.getPlannedBegin();
 

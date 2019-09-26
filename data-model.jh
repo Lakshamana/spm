@@ -512,6 +512,7 @@ entity ResourceEvent {} //extends Event
 entity SpmLog {}
 
 relationship ManyToOne {
+    Event{theCatalogEvents} to CatalogEvent{theEvent},
     CatalogEvent{theResourceEvent} to ResourceEvent{theCatalogEvents},
     CatalogEvent{theProcessModelEvent} to ProcessModelEvent{theCatalogEvents},
     CatalogEvent{theAgendaEvent} to AgendaEvent{theCatalogEvents},

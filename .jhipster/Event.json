@@ -18,6 +18,13 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theEvent",
+            "relationshipName": "theCatalogEvents",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "spmLog",
             "otherEntityRelationshipName": "theEvent",
             "relationshipName": "theLog",

@@ -637,6 +637,7 @@ public class CacheConfiguration {
       createCache(cm, br.ufpa.labes.spm.domain.MultipleCon.class.getName() + ".theJoinConToMultipleCons");
       createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceChosenSuggestions");
       createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceSuggestions");
+      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theEvents");
       // jhipster-needle-ehcache-add-entry
     };
   }

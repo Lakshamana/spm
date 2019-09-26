@@ -73,6 +73,12 @@
         },
         {
             "relationshipType": "one-to-many",
+            "otherEntityName": "event",
+            "otherEntityRelationshipName": "theCatalogEvents",
+            "relationshipName": "theEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
             "otherEntityName": "catalogEvent",
             "otherEntityRelationshipName": "theCatalogEvent",
             "relationshipName": "theCatalogEvents"

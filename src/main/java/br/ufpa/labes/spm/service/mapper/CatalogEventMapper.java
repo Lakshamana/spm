@@ -31,6 +31,8 @@ public interface CatalogEventMapper extends EntityMapper<CatalogEventDTO, Catalo
     @Mapping(source = "theModelingActivityEventId", target = "theModelingActivityEvent")
     @Mapping(source = "theProcessEventId", target = "theProcessEvent")
     @Mapping(source = "thePlainId", target = "thePlain")
+    @Mapping(target = "theEvents", ignore = true)
+    @Mapping(target = "removeTheEvent", ignore = true)
     @Mapping(target = "theCatalogEvents", ignore = true)
     @Mapping(target = "removeTheCatalogEvents", ignore = true)
     CatalogEvent toEntity(CatalogEventDTO catalogEventDTO);

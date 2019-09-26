@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -18,7 +14,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,6 +31,10 @@ public class Event implements Serializable {
 
     @Column(name = "is_created_by_apsee")
     private Boolean isCreatedByApsee;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theEvents")
+    private CatalogEvent theCatalogEvents;
 
     @ManyToOne
     @JsonIgnoreProperties("theEvents")
@@ -91,6 +90,19 @@ public class Event implements Serializable {
 
     public void setIsCreatedByApsee(Boolean isCreatedByApsee) {
         this.isCreatedByApsee = isCreatedByApsee;
+    }
+
+    public CatalogEvent getTheCatalogEvents() {
+        return theCatalogEvents;
+    }
+
+    public Event theCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents = catalogEvent;
+        return this;
+    }
+
+    public void setTheCatalogEvents(CatalogEvent catalogEvent) {
+        this.theCatalogEvents = catalogEvent;
     }
 
     public SpmLog getTheLog() {

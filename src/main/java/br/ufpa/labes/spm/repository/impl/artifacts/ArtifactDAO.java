@@ -86,8 +86,8 @@ public class ArtifactDAO extends BaseDAO<Artifact, String> implements IArtifactD
         String latestVersion = inputArtifactsArray[i].getLatestVersion();
         String fileName = inputArtifactsArray[i].getFileName();
         String repositoryIdent = null;
-        if (inputArtifactsArray[i].getTheVCSRepository() != null)
-          repositoryIdent = inputArtifactsArray[i].getTheVCSRepository().getIdent();
+        if (inputArtifactsArray[i].getTheRepository() != null)
+          repositoryIdent = inputArtifactsArray[i].getTheRepository().getIdent();
 
         artifactDescriptors[i] =
             new SimpleArtifactDescriptorDTO(
@@ -133,8 +133,8 @@ public class ArtifactDAO extends BaseDAO<Artifact, String> implements IArtifactD
         String fileName = outputArtifactsArray[i].getFileName();
 
         String repositoryIdent = null;
-        if (outputArtifactsArray[i].getTheVCSRepository() != null)
-          repositoryIdent = outputArtifactsArray[i].getTheVCSRepository().getIdent();
+        if (outputArtifactsArray[i].getTheRepository() != null)
+          repositoryIdent = outputArtifactsArray[i].getTheRepository().getIdent();
 
         artifactDescriptors[i] =
             new SimpleArtifactDescriptorDTO(
