@@ -1,8 +1,10 @@
 package br.ufpa.labes.spm.service.dto;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.Author} entity.
@@ -11,6 +13,7 @@ public class AuthorDTO implements Serializable {
 
     private Long id;
 
+    
     private String uid;
 
     private Integer version;
@@ -25,8 +28,10 @@ public class AuthorDTO implements Serializable {
 
     private String country;
 
-    private String photoURL;
+    @Lob
+    private byte[] photo;
 
+    private String photoContentType;
 
     private Long userId;
 
@@ -96,12 +101,20 @@ public class AuthorDTO implements Serializable {
         this.country = country;
     }
 
-    public String getPhotoURL() {
-        return photoURL;
+    public byte[] getPhoto() {
+        return photo;
     }
 
-    public void setPhotoURL(String photoURL) {
-        this.photoURL = photoURL;
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public String getPhotoContentType() {
+        return photoContentType;
+    }
+
+    public void setPhotoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
     }
 
     public Long getUserId() {
@@ -152,7 +165,7 @@ public class AuthorDTO implements Serializable {
             ", interests='" + getInterests() + "'" +
             ", city='" + getCity() + "'" +
             ", country='" + getCountry() + "'" +
-            ", photoURL='" + getPhotoURL() + "'" +
+            ", photo='" + getPhoto() + "'" +
             ", user=" + getUserId() +
             "}";
     }

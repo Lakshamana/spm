@@ -8,14 +8,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link AgentInstSuggestionToAgent} and its DTO {@link AgentInstSuggestionToAgentDTO}.
  */
-@Mapper(componentModel = "spring", uses = {PeopleInstSugMapper.class, AgentMapper.class})
+@Mapper(componentModel = "spring", uses = {AgentInstSugMapper.class, AgentMapper.class})
 public interface AgentInstSuggestionToAgentMapper extends EntityMapper<AgentInstSuggestionToAgentDTO, AgentInstSuggestionToAgent> {
 
-    @Mapping(source = "theInstAgSug.id", target = "theInstAgSugId")
+    @Mapping(source = "theInstAgSugg.id", target = "theInstAgSuggId")
     @Mapping(source = "theAgent.id", target = "theAgentId")
     AgentInstSuggestionToAgentDTO toDto(AgentInstSuggestionToAgent agentInstSuggestionToAgent);
 
-    @Mapping(source = "theInstAgSugId", target = "theInstAgSug")
+    @Mapping(source = "theInstAgSuggId", target = "theInstAgSugg")
     @Mapping(source = "theAgentId", target = "theAgent")
     AgentInstSuggestionToAgent toEntity(AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO);
 

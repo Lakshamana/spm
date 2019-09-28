@@ -13,8 +13,8 @@ public interface BranchANDConMapper extends EntityMapper<BranchANDConDTO, Branch
 
 
     @Mapping(target = "removeToMultipleCon", ignore = true)
-    @Mapping(target = "fromActivities", ignore = true)
-    @Mapping(target = "removeFromActivity", ignore = true)
+    @Mapping(target = "toActivities", ignore = true)
+    @Mapping(target = "removeToActivity", ignore = true)
     BranchANDCon toEntity(BranchANDConDTO branchANDConDTO);
 
     default BranchANDCon fromId(Long id) {

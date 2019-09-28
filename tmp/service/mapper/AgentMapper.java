@@ -8,17 +8,17 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Agent} and its DTO {@link AgentDTO}.
  */
-@Mapper(componentModel = "spring", uses = {TaskAgendaMapper.class, SpmConfigurationMapper.class, EventMapper.class, ProcessMapper.class, WorkGroupMapper.class, CompanyUnitMapper.class, EmailConfigurationMapper.class})
+@Mapper(componentModel = "spring", uses = {TaskAgendaMapper.class, SpmConfigurationMapper.class, ResourceEventMapper.class, ProcessMapper.class, WorkGroupMapper.class, CompanyUnitMapper.class, EmailConfigurationMapper.class})
 public interface AgentMapper extends EntityMapper<AgentDTO, Agent> {
 
     @Mapping(source = "theTaskAgenda.id", target = "theTaskAgendaId")
-    @Mapping(source = "spmconfiguration.id", target = "configurationId")
+    @Mapping(source = "configuration.id", target = "configurationId")
     @Mapping(source = "theResourceEvent.id", target = "theResourceEventId")
     @Mapping(source = "theEmailConfiguration.id", target = "theEmailConfigurationId")
     AgentDTO toDto(Agent agent);
 
     @Mapping(source = "theTaskAgendaId", target = "theTaskAgenda")
-    @Mapping(source = "configurationId", target = "spmconfiguration")
+    @Mapping(source = "configurationId", target = "configuration")
     @Mapping(target = "delegates", ignore = true)
     @Mapping(target = "removeDelegates", ignore = true)
     @Mapping(target = "isDelegatedFors", ignore = true)
@@ -34,8 +34,8 @@ public interface AgentMapper extends EntityMapper<AgentDTO, Agent> {
     @Mapping(target = "theManagedOrgUnits", ignore = true)
     @Mapping(target = "removeTheManagedOrgUnits", ignore = true)
     @Mapping(source = "theResourceEventId", target = "theResourceEvent")
-    @Mapping(target = "removeTheProcesses", ignore = true)
-    @Mapping(target = "removeTheWorkGroups", ignore = true)
+    @Mapping(target = "removeTheProcess", ignore = true)
+    @Mapping(target = "removeTheWorkGroup", ignore = true)
     @Mapping(target = "removeTheOrgUnits", ignore = true)
     @Mapping(target = "theChatMessage", ignore = true)
     @Mapping(source = "theEmailConfigurationId", target = "theEmailConfiguration")

@@ -11,16 +11,16 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {MetricTypeMapper.class})
 public interface MetricDefinitionMapper extends EntityMapper<MetricDefinitionDTO, MetricDefinition> {
 
-    @Mapping(source = "theMetricType.id", target = "theMetricTypeId")
+    @Mapping(source = "metricType.id", target = "metricTypeId")
     MetricDefinitionDTO toDto(MetricDefinition metricDefinition);
 
     @Mapping(target = "units", ignore = true)
     @Mapping(target = "removeUnits", ignore = true)
-    @Mapping(source = "theMetricTypeId", target = "theMetricType")
-    @Mapping(target = "theEstimations", ignore = true)
-    @Mapping(target = "removeTheEstimation", ignore = true)
-    @Mapping(target = "theMetrics", ignore = true)
-    @Mapping(target = "removeTheMetric", ignore = true)
+    @Mapping(source = "metricTypeId", target = "metricType")
+    @Mapping(target = "estimations", ignore = true)
+    @Mapping(target = "removeEstimation", ignore = true)
+    @Mapping(target = "metrics", ignore = true)
+    @Mapping(target = "removeMetric", ignore = true)
     MetricDefinition toEntity(MetricDefinitionDTO metricDefinitionDTO);
 
     default MetricDefinition fromId(Long id) {

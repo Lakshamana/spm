@@ -53,7 +53,7 @@ public class ToolParameterService {
      */
     @Transactional(readOnly = true)
     public List<ToolParameterDTO> findAll() {
-        log.debug("Request to get all ToolParameter");
+        log.debug("Request to get all ToolParameters");
         return toolParameterRepository.findAll().stream()
             .map(toolParameterMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));

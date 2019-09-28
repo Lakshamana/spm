@@ -17,8 +17,8 @@ public interface ActivityInstantiatedMapper extends EntityMapper<ActivityInstant
 
     @Mapping(source = "theInstantiationPolicyLogId", target = "theInstantiationPolicyLog")
     @Mapping(source = "theActivityId", target = "theActivity")
-    @Mapping(target = "theInstSugs", ignore = true)
-    @Mapping(target = "removeTheInstSug", ignore = true)
+    @Mapping(target = "theInstantiationSuggestions", ignore = true)
+    @Mapping(target = "removeTheInstantiationSuggestion", ignore = true)
     ActivityInstantiated toEntity(ActivityInstantiatedDTO activityInstantiatedDTO);
 
     default ActivityInstantiated fromId(Long id) {

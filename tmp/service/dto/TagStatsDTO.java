@@ -14,7 +14,7 @@ public class TagStatsDTO implements Serializable {
 
     private Long tagId;
 
-    private Long theAssetId;
+    private Long assetId;
 
     public Long getId() {
         return id;
@@ -40,12 +40,12 @@ public class TagStatsDTO implements Serializable {
         this.tagId = tagId;
     }
 
-    public Long getTheAssetId() {
-        return theAssetId;
+    public Long getAssetId() {
+        return assetId;
     }
 
-    public void setTheAssetId(Long assetId) {
-        this.theAssetId = assetId;
+    public void setAssetId(Long assetId) {
+        this.assetId = assetId;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class TagStatsDTO implements Serializable {
             "id=" + getId() +
             ", count=" + getCount() +
             ", tag=" + getTagId() +
-            ", theAsset=" + getTheAssetId() +
+            ", asset=" + getAssetId() +
             "}";
     }
 }

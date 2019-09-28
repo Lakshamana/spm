@@ -15,8 +15,8 @@ public interface StructureMapper extends EntityMapper<StructureDTO, Structure> {
     StructureDTO toDto(Structure structure);
 
     @Mapping(source = "rootElementId", target = "rootElement")
-    @Mapping(target = "theVCSRepositories", ignore = true)
-    @Mapping(target = "removeTheVCSRepository", ignore = true)
+    @Mapping(target = "theRepositories", ignore = true)
+    @Mapping(target = "removeTheRepository", ignore = true)
     Structure toEntity(StructureDTO structureDTO);
 
     default Structure fromId(Long id) {

@@ -1,10 +1,10 @@
 package br.ufpa.labes.spm.service.dto;
 import java.time.LocalDate;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
-import br.ufpa.labes.spm.domain.enumeration.AssetVisibility;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.Asset} entity.
@@ -13,6 +13,7 @@ public class AssetDTO implements Serializable {
 
     private Long id;
 
+    
     private String uid;
 
     private LocalDate creationDate;
@@ -32,8 +33,6 @@ public class AssetDTO implements Serializable {
     private String latestVersion;
 
     private Boolean readOnly;
-
-    private AssetVisibility assetVisibility;
 
 
     private Long statsId;
@@ -134,14 +133,6 @@ public class AssetDTO implements Serializable {
         this.readOnly = readOnly;
     }
 
-    public AssetVisibility getAssetVisibility() {
-        return assetVisibility;
-    }
-
-    public void setAssetVisibility(AssetVisibility assetVisibility) {
-        this.assetVisibility = assetVisibility;
-    }
-
     public Long getStatsId() {
         return statsId;
     }
@@ -217,7 +208,6 @@ public class AssetDTO implements Serializable {
             ", path='" + getPath() + "'" +
             ", latestVersion='" + getLatestVersion() + "'" +
             ", readOnly='" + isReadOnly() + "'" +
-            ", assetVisibility='" + getAssetVisibility() + "'" +
             ", stats=" + getStatsId() +
             ", owner=" + getOwnerId() +
             "}";

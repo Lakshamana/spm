@@ -16,7 +16,7 @@ public interface VCSRepositoryMapper extends EntityMapper<VCSRepositoryDTO, VCSR
 
     @Mapping(source = "theStructureId", target = "theStructure")
     @Mapping(target = "theArtifacts", ignore = true)
-    @Mapping(target = "removeTheArtifact", ignore = true)
+    @Mapping(target = "removeTheArtifacts", ignore = true)
     VCSRepository toEntity(VCSRepositoryDTO vCSRepositoryDTO);
 
     default VCSRepository fromId(Long id) {

@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -13,12 +11,6 @@ public class InstantiationSuggestionDTO implements Serializable {
 
 
     private Long theActivityInstantiatedId;
-
-    private Long chosenResourceId;
-
-    private Long requiredResourceTypeId;
-
-    private Set<ResourceDTO> sugRsrcs = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -34,30 +26,6 @@ public class InstantiationSuggestionDTO implements Serializable {
 
     public void setTheActivityInstantiatedId(Long activityInstantiatedId) {
         this.theActivityInstantiatedId = activityInstantiatedId;
-    }
-
-    public Long getChosenResourceId() {
-        return chosenResourceId;
-    }
-
-    public void setChosenResourceId(Long resourceId) {
-        this.chosenResourceId = resourceId;
-    }
-
-    public Long getRequiredResourceTypeId() {
-        return requiredResourceTypeId;
-    }
-
-    public void setRequiredResourceTypeId(Long typeId) {
-        this.requiredResourceTypeId = typeId;
-    }
-
-    public Set<ResourceDTO> getSugRsrcs() {
-        return sugRsrcs;
-    }
-
-    public void setSugRsrcs(Set<ResourceDTO> resources) {
-        this.sugRsrcs = resources;
     }
 
     @Override
@@ -86,8 +54,6 @@ public class InstantiationSuggestionDTO implements Serializable {
         return "InstantiationSuggestionDTO{" +
             "id=" + getId() +
             ", theActivityInstantiated=" + getTheActivityInstantiatedId() +
-            ", chosenResource=" + getChosenResourceId() +
-            ", requiredResourceType=" + getRequiredResourceTypeId() +
             "}";
     }
 }

@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ToolDefinition} and its DTO {@link ToolDefinitionDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ToolTypeMapper.class, TypeMapper.class})
+@Mapper(componentModel = "spring", uses = {ToolTypeMapper.class, ArtifactTypeMapper.class})
 public interface ToolDefinitionMapper extends EntityMapper<ToolDefinitionDTO, ToolDefinition> {
 
     @Mapping(source = "theToolType.id", target = "theToolTypeId")

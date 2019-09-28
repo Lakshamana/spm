@@ -10,7 +10,7 @@ public class ResourceMetricDTO implements Serializable {
     private Long id;
 
 
-    private Long theResourceId;
+    private Long resourceId;
 
     public Long getId() {
         return id;
@@ -20,12 +20,12 @@ public class ResourceMetricDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getTheResourceId() {
-        return theResourceId;
+    public Long getResourceId() {
+        return resourceId;
     }
 
-    public void setTheResourceId(Long resourceId) {
-        this.theResourceId = resourceId;
+    public void setResourceId(Long resourceId) {
+        this.resourceId = resourceId;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ResourceMetricDTO implements Serializable {
     public String toString() {
         return "ResourceMetricDTO{" +
             "id=" + getId() +
-            ", theResource=" + getTheResourceId() +
+            ", resource=" + getResourceId() +
             "}";
     }
 }

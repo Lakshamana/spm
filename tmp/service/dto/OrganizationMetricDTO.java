@@ -10,9 +10,9 @@ public class OrganizationMetricDTO implements Serializable {
     private Long id;
 
 
-    private Long theOrganizationId;
+    private Long organizationId;
 
-    private Long theCompanyId;
+    private Long companyId;
 
     public Long getId() {
         return id;
@@ -22,20 +22,20 @@ public class OrganizationMetricDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getTheOrganizationId() {
-        return theOrganizationId;
+    public Long getOrganizationId() {
+        return organizationId;
     }
 
-    public void setTheOrganizationId(Long organizationId) {
-        this.theOrganizationId = organizationId;
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
     }
 
-    public Long getTheCompanyId() {
-        return theCompanyId;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setTheCompanyId(Long companyId) {
-        this.theCompanyId = companyId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     @Override
@@ -63,8 +63,8 @@ public class OrganizationMetricDTO implements Serializable {
     public String toString() {
         return "OrganizationMetricDTO{" +
             "id=" + getId() +
-            ", theOrganization=" + getTheOrganizationId() +
-            ", theCompany=" + getTheCompanyId() +
+            ", organization=" + getOrganizationId() +
+            ", company=" + getCompanyId() +
             "}";
     }
 }

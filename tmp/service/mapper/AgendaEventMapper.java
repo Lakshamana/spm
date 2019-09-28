@@ -8,12 +8,17 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link AgendaEvent} and its DTO {@link AgendaEventDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {TaskMapper.class, NormalMapper.class})
 public interface AgendaEventMapper extends EntityMapper<AgendaEventDTO, AgendaEvent> {
 
+    @Mapping(source = "theTask.id", target = "theTaskId")
+    @Mapping(source = "theNormal.id", target = "theNormalId")
+    AgendaEventDTO toDto(AgendaEvent agendaEvent);
 
-    @Mapping(target = "theCatalogEventToAgenda", ignore = true)
-    @Mapping(target = "removeTheCatalogEventToAgenda", ignore = true)
+    @Mapping(source = "theTaskId", target = "theTask")
+    @Mapping(source = "theNormalId", target = "theNormal")
+    @Mapping(target = "theCatalogEvents", ignore = true)
+    @Mapping(target = "removeTheCatalogEvents", ignore = true)
     AgendaEvent toEntity(AgendaEventDTO agendaEventDTO);
 
     default AgendaEvent fromId(Long id) {

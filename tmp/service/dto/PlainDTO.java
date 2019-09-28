@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Lob;
-import br.ufpa.labes.spm.domain.enumeration.PlainStatus;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.Plain} entity.
@@ -13,10 +12,6 @@ public class PlainDTO implements Serializable {
 
     @Lob
     private String requirements;
-
-    private PlainStatus plainStatus;
-
-    private Boolean automatic;
 
 
     private Long theEnactionDescriptionId;
@@ -35,22 +30,6 @@ public class PlainDTO implements Serializable {
 
     public void setRequirements(String requirements) {
         this.requirements = requirements;
-    }
-
-    public PlainStatus getPlainStatus() {
-        return plainStatus;
-    }
-
-    public void setPlainStatus(PlainStatus plainStatus) {
-        this.plainStatus = plainStatus;
-    }
-
-    public Boolean isAutomatic() {
-        return automatic;
-    }
-
-    public void setAutomatic(Boolean automatic) {
-        this.automatic = automatic;
     }
 
     public Long getTheEnactionDescriptionId() {
@@ -87,8 +66,6 @@ public class PlainDTO implements Serializable {
         return "PlainDTO{" +
             "id=" + getId() +
             ", requirements='" + getRequirements() + "'" +
-            ", plainStatus='" + getPlainStatus() + "'" +
-            ", automatic='" + isAutomatic() + "'" +
             ", theEnactionDescription=" + getTheEnactionDescriptionId() +
             "}";
     }

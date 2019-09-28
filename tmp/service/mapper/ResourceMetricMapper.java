@@ -11,10 +11,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {ResourceMapper.class})
 public interface ResourceMetricMapper extends EntityMapper<ResourceMetricDTO, ResourceMetric> {
 
-    @Mapping(source = "theResource.id", target = "theResourceId")
+    @Mapping(source = "resource.id", target = "resourceId")
     ResourceMetricDTO toDto(ResourceMetric resourceMetric);
 
-    @Mapping(source = "theResourceId", target = "theResource")
+    @Mapping(source = "resourceId", target = "resource")
     ResourceMetric toEntity(ResourceMetricDTO resourceMetricDTO);
 
     default ResourceMetric fromId(Long id) {

@@ -8,15 +8,13 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Metric} and its DTO {@link MetricDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MetricDefinitionMapper.class, ActivityMapper.class})
+@Mapper(componentModel = "spring", uses = {MetricDefinitionMapper.class})
 public interface MetricMapper extends EntityMapper<MetricDTO, Metric> {
 
-    @Mapping(source = "theMetricDefinition.id", target = "theMetricDefinitionId")
-    @Mapping(source = "theActivity.id", target = "theActivityId")
+    @Mapping(source = "metricDefinition.id", target = "metricDefinitionId")
     MetricDTO toDto(Metric metric);
 
-    @Mapping(source = "theMetricDefinitionId", target = "theMetricDefinition")
-    @Mapping(source = "theActivityId", target = "theActivity")
+    @Mapping(source = "metricDefinitionId", target = "metricDefinition")
     Metric toEntity(MetricDTO metricDTO);
 
     default Metric fromId(Long id) {

@@ -12,12 +12,12 @@ import org.mapstruct.*;
 public interface AssetRelationshipMapper extends EntityMapper<AssetRelationshipDTO, AssetRelationship> {
 
     @Mapping(source = "kind.id", target = "kindId")
-    @Mapping(source = "theAsset.id", target = "theAssetId")
+    @Mapping(source = "asset.id", target = "assetId")
     @Mapping(source = "relatedAsset.id", target = "relatedAssetId")
     AssetRelationshipDTO toDto(AssetRelationship assetRelationship);
 
     @Mapping(source = "kindId", target = "kind")
-    @Mapping(source = "theAssetId", target = "theAsset")
+    @Mapping(source = "assetId", target = "asset")
     @Mapping(source = "relatedAssetId", target = "relatedAsset")
     AssetRelationship toEntity(AssetRelationshipDTO assetRelationshipDTO);
 

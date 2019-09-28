@@ -15,11 +15,11 @@ public interface AuthorMapper extends EntityMapper<AuthorDTO, Author> {
     AuthorDTO toDto(Author author);
 
     @Mapping(source = "userId", target = "user")
+    @Mapping(target = "stats", ignore = true)
+    @Mapping(target = "removeStats", ignore = true)
     @Mapping(target = "removeAuthorsFollowed", ignore = true)
-    @Mapping(target = "theAssets", ignore = true)
-    @Mapping(target = "removeTheAssets", ignore = true)
-    @Mapping(target = "theAuthorStats", ignore = true)
-    @Mapping(target = "removeTheAuthorStats", ignore = true)
+    @Mapping(target = "assets", ignore = true)
+    @Mapping(target = "removeAssets", ignore = true)
     @Mapping(target = "theLessonLearneds", ignore = true)
     @Mapping(target = "removeTheLessonLearned", ignore = true)
     @Mapping(target = "sentMessages", ignore = true)
@@ -32,8 +32,8 @@ public interface AuthorMapper extends EntityMapper<AuthorDTO, Author> {
     @Mapping(target = "removeAssetsFollowed", ignore = true)
     @Mapping(target = "collaborateOnAssets", ignore = true)
     @Mapping(target = "removeCollaborateOnAssets", ignore = true)
-    @Mapping(target = "theAuthors", ignore = true)
-    @Mapping(target = "removeTheAuthor", ignore = true)
+    @Mapping(target = "followers", ignore = true)
+    @Mapping(target = "removeFollowers", ignore = true)
     Author toEntity(AuthorDTO authorDTO);
 
     default Author fromId(Long id) {

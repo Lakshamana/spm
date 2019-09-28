@@ -16,10 +16,11 @@ public interface CompanyMapper extends EntityMapper<CompanyDTO, Company> {
     @Mapping(target = "removeOrganizationMetric", ignore = true)
     @Mapping(target = "theCompanyEstimations", ignore = true)
     @Mapping(target = "removeTheCompanyEstimation", ignore = true)
-    @Mapping(target = "theCompanyUnits", ignore = true)
-    @Mapping(target = "removeTheCompanyUnit", ignore = true)
-    @Mapping(target = "theDevelopingSystems", ignore = true)
-    @Mapping(target = "removeTheDevelopingSystem", ignore = true)
+    @Mapping(target = "theDriver", ignore = true)
+    @Mapping(target = "theOrganizationalUnits", ignore = true)
+    @Mapping(target = "removeTheOrganizationalUnits", ignore = true)
+    @Mapping(target = "theSystems", ignore = true)
+    @Mapping(target = "removeTheSystem", ignore = true)
     Company toEntity(CompanyDTO companyDTO);
 
     default Company fromId(Long id) {

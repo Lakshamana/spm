@@ -11,9 +11,11 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {MultipleConMapper.class, ActivityMapper.class})
 public interface JoinConMapper extends EntityMapper<JoinConDTO, JoinCon> {
 
+    @Mapping(source = "toMultipleCon.id", target = "toMultipleConId")
     @Mapping(source = "toActivity.id", target = "toActivityId")
     JoinConDTO toDto(JoinCon joinCon);
 
+    @Mapping(source = "toMultipleConId", target = "toMultipleCon")
     @Mapping(target = "removeFromMultipleCon", ignore = true)
     @Mapping(source = "toActivityId", target = "toActivity")
     @Mapping(target = "fromActivities", ignore = true)

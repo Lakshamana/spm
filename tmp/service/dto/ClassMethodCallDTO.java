@@ -10,6 +10,8 @@ public class ClassMethodCallDTO implements Serializable {
 
     private Long id;
 
+    private String ident;
+
     private String className;
 
     private String methodName;
@@ -24,6 +26,14 @@ public class ClassMethodCallDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIdent() {
+        return ident;
+    }
+
+    public void setIdent(String ident) {
+        this.ident = ident;
     }
 
     public String getClassName() {
@@ -75,6 +85,7 @@ public class ClassMethodCallDTO implements Serializable {
     public String toString() {
         return "ClassMethodCallDTO{" +
             "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
             ", className='" + getClassName() + "'" +
             ", methodName='" + getMethodName() + "'" +
             ", description='" + getDescription() + "'" +

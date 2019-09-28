@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
-import br.ufpa.labes.spm.domain.enumeration.WebAPSEEObjectType;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.WebAPSEEObject} entity.
@@ -16,8 +15,6 @@ public class WebAPSEEObjectDTO implements Serializable {
 
     @NotNull
     private String className;
-
-    private WebAPSEEObjectType webAPSEEObjectType;
 
 
     private Long theGraphicCoordinateId;
@@ -44,14 +41,6 @@ public class WebAPSEEObjectDTO implements Serializable {
 
     public void setClassName(String className) {
         this.className = className;
-    }
-
-    public WebAPSEEObjectType getWebAPSEEObjectType() {
-        return webAPSEEObjectType;
-    }
-
-    public void setWebAPSEEObjectType(WebAPSEEObjectType webAPSEEObjectType) {
-        this.webAPSEEObjectType = webAPSEEObjectType;
     }
 
     public Long getTheGraphicCoordinateId() {
@@ -89,7 +78,6 @@ public class WebAPSEEObjectDTO implements Serializable {
             "id=" + getId() +
             ", theReferredOid=" + getTheReferredOid() +
             ", className='" + getClassName() + "'" +
-            ", webAPSEEObjectType='" + getWebAPSEEObjectType() + "'" +
             ", theGraphicCoordinate=" + getTheGraphicCoordinateId() +
             "}";
     }

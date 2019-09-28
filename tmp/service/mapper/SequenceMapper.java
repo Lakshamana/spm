@@ -11,10 +11,11 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {DependencyMapper.class})
 public interface SequenceMapper extends EntityMapper<SequenceDTO, Sequence> {
 
-    @Mapping(source = "theDependency.id", target = "theDependencyId")
+    @Mapping(source = "theDependencyToMultipleSequences.id", target = "theDependencyToMultipleSequencesId")
     SequenceDTO toDto(Sequence sequence);
 
-    @Mapping(source = "theDependencyId", target = "theDependency")
+    @Mapping(source = "theDependencyToMultipleSequencesId", target = "theDependencyToMultipleSequences")
+    @Mapping(target = "theDependency", ignore = true)
     Sequence toEntity(SequenceDTO sequenceDTO);
 
     default Sequence fromId(Long id) {

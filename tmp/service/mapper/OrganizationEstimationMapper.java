@@ -12,11 +12,11 @@ import org.mapstruct.*;
 public interface OrganizationEstimationMapper extends EntityMapper<OrganizationEstimationDTO, OrganizationEstimation> {
 
     @Mapping(source = "theOrganization.id", target = "theOrganizationId")
-    @Mapping(source = "theCompany.id", target = "theCompanyId")
+    @Mapping(source = "company.id", target = "companyId")
     OrganizationEstimationDTO toDto(OrganizationEstimation organizationEstimation);
 
     @Mapping(source = "theOrganizationId", target = "theOrganization")
-    @Mapping(source = "theCompanyId", target = "theCompany")
+    @Mapping(source = "companyId", target = "company")
     OrganizationEstimation toEntity(OrganizationEstimationDTO organizationEstimationDTO);
 
     default OrganizationEstimation fromId(Long id) {

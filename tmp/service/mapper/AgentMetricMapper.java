@@ -11,10 +11,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {AgentMapper.class})
 public interface AgentMetricMapper extends EntityMapper<AgentMetricDTO, AgentMetric> {
 
-    @Mapping(source = "theAgent.id", target = "theAgentId")
+    @Mapping(source = "agent.id", target = "agentId")
     AgentMetricDTO toDto(AgentMetric agentMetric);
 
-    @Mapping(source = "theAgentId", target = "theAgent")
+    @Mapping(source = "agentId", target = "agent")
     AgentMetric toEntity(AgentMetricDTO agentMetricDTO);
 
     default AgentMetric fromId(Long id) {

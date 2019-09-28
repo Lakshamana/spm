@@ -17,6 +17,8 @@ public interface ReqAgentMapper extends EntityMapper<ReqAgentDTO, ReqAgent> {
 
     @Mapping(source = "theAgentId", target = "theAgent")
     @Mapping(source = "theRoleId", target = "theRole")
+    @Mapping(target = "theReqAgentRequiresAbilities", ignore = true)
+    @Mapping(target = "removeTheReqAgentRequiresAbility", ignore = true)
     ReqAgent toEntity(ReqAgentDTO reqAgentDTO);
 
     default ReqAgent fromId(Long id) {

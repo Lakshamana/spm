@@ -60,7 +60,7 @@ entity Agent {
     name String
     eMail String
     costHour Float
-    password String
+    passwordHash String
     tipoUser Integer
     isActive Boolean
     online Boolean

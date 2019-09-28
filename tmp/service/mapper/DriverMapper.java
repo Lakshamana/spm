@@ -8,13 +8,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Driver} and its DTO {@link DriverDTO}.
  */
-@Mapper(componentModel = "spring", uses = {PluginMapper.class})
+@Mapper(componentModel = "spring", uses = {PluginMapper.class, CompanyMapper.class})
 public interface DriverMapper extends EntityMapper<DriverDTO, Driver> {
 
     @Mapping(source = "thePlugin.id", target = "thePluginId")
+    @Mapping(source = "company.id", target = "companyId")
     DriverDTO toDto(Driver driver);
 
     @Mapping(source = "thePluginId", target = "thePlugin")
+    @Mapping(source = "companyId", target = "company")
     Driver toEntity(DriverDTO driverDTO);
 
     default Driver fromId(Long id) {

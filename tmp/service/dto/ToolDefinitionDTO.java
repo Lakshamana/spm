@@ -22,7 +22,7 @@ public class ToolDefinitionDTO implements Serializable {
 
     private Long theToolTypeId;
 
-    private Set<TypeDTO> theArtifactTypes = new HashSet<>();
+    private Set<ArtifactTypeDTO> theArtifactTypes = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -64,12 +64,12 @@ public class ToolDefinitionDTO implements Serializable {
         this.theToolTypeId = toolTypeId;
     }
 
-    public Set<TypeDTO> getTheArtifactTypes() {
+    public Set<ArtifactTypeDTO> getTheArtifactTypes() {
         return theArtifactTypes;
     }
 
-    public void setTheArtifactTypes(Set<TypeDTO> types) {
-        this.theArtifactTypes = types;
+    public void setTheArtifactTypes(Set<ArtifactTypeDTO> artifactTypes) {
+        this.theArtifactTypes = artifactTypes;
     }
 
     @Override

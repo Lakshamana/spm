@@ -1,9 +1,6 @@
 package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
-import br.ufpa.labes.spm.domain.enumeration.EmailSecurityLevels;
-import br.ufpa.labes.spm.domain.enumeration.EmailNotificationConfig;
-import br.ufpa.labes.spm.domain.enumeration.EmailProcessStatusNotifications;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.EmailConfiguration} entity.
@@ -22,11 +19,7 @@ public class EmailConfigurationDTO implements Serializable {
 
     private Boolean taskDelegated;
 
-    private EmailSecurityLevels securityLevels;
-
-    private EmailNotificationConfig notificationConfig;
-
-    private EmailProcessStatusNotifications processNotifications;
+    private Boolean decisionBranchCond;
 
 
     public Long getId() {
@@ -77,28 +70,12 @@ public class EmailConfigurationDTO implements Serializable {
         this.taskDelegated = taskDelegated;
     }
 
-    public EmailSecurityLevels getSecurityLevels() {
-        return securityLevels;
+    public Boolean isDecisionBranchCond() {
+        return decisionBranchCond;
     }
 
-    public void setSecurityLevels(EmailSecurityLevels securityLevels) {
-        this.securityLevels = securityLevels;
-    }
-
-    public EmailNotificationConfig getNotificationConfig() {
-        return notificationConfig;
-    }
-
-    public void setNotificationConfig(EmailNotificationConfig notificationConfig) {
-        this.notificationConfig = notificationConfig;
-    }
-
-    public EmailProcessStatusNotifications getProcessNotifications() {
-        return processNotifications;
-    }
-
-    public void setProcessNotifications(EmailProcessStatusNotifications processNotifications) {
-        this.processNotifications = processNotifications;
+    public void setDecisionBranchCond(Boolean decisionBranchCond) {
+        this.decisionBranchCond = decisionBranchCond;
     }
 
     @Override
@@ -131,9 +108,7 @@ public class EmailConfigurationDTO implements Serializable {
             ", consumableResourceAmount='" + isConsumableResourceAmount() + "'" +
             ", activityInstantied='" + isActivityInstantied() + "'" +
             ", taskDelegated='" + isTaskDelegated() + "'" +
-            ", securityLevels='" + getSecurityLevels() + "'" +
-            ", notificationConfig='" + getNotificationConfig() + "'" +
-            ", processNotifications='" + getProcessNotifications() + "'" +
+            ", decisionBranchCond='" + isDecisionBranchCond() + "'" +
             "}";
     }
 }

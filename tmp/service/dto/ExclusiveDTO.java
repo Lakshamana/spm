@@ -1,7 +1,6 @@
 package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
-import br.ufpa.labes.spm.domain.enumeration.ExclusiveStatus;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.Exclusive} entity.
@@ -10,7 +9,7 @@ public class ExclusiveDTO implements Serializable {
 
     private Long id;
 
-    private ExclusiveStatus exclusiveStatus;
+    private String state;
 
     private String unitOfCost;
 
@@ -23,12 +22,12 @@ public class ExclusiveDTO implements Serializable {
         this.id = id;
     }
 
-    public ExclusiveStatus getExclusiveStatus() {
-        return exclusiveStatus;
+    public String getState() {
+        return state;
     }
 
-    public void setExclusiveStatus(ExclusiveStatus exclusiveStatus) {
-        this.exclusiveStatus = exclusiveStatus;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getUnitOfCost() {
@@ -64,7 +63,7 @@ public class ExclusiveDTO implements Serializable {
     public String toString() {
         return "ExclusiveDTO{" +
             "id=" + getId() +
-            ", exclusiveStatus='" + getExclusiveStatus() + "'" +
+            ", state='" + getState() + "'" +
             ", unitOfCost='" + getUnitOfCost() + "'" +
             "}";
     }

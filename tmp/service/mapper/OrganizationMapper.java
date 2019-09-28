@@ -12,10 +12,10 @@ import org.mapstruct.*;
 public interface OrganizationMapper extends EntityMapper<OrganizationDTO, Organization> {
 
 
-    @Mapping(target = "theOrganizationMetrics", ignore = true)
-    @Mapping(target = "removeTheOrganizationMetric", ignore = true)
-    @Mapping(target = "theOrganizationEstimations", ignore = true)
-    @Mapping(target = "removeTheOrganizationEstimation", ignore = true)
+    @Mapping(target = "organizationMetrics", ignore = true)
+    @Mapping(target = "removeOrganizationMetric", ignore = true)
+    @Mapping(target = "organizationEstimations", ignore = true)
+    @Mapping(target = "removeOrganizationEstimation", ignore = true)
     Organization toEntity(OrganizationDTO organizationDTO);
 
     default Organization fromId(Long id) {

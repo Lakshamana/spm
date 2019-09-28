@@ -11,10 +11,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {MetricDefinitionMapper.class})
 public interface EstimationMapper extends EntityMapper<EstimationDTO, Estimation> {
 
-    @Mapping(source = "theMetricDefinition.id", target = "theMetricDefinitionId")
+    @Mapping(source = "metricDefinition.id", target = "metricDefinitionId")
     EstimationDTO toDto(Estimation estimation);
 
-    @Mapping(source = "theMetricDefinitionId", target = "theMetricDefinition")
+    @Mapping(source = "metricDefinitionId", target = "metricDefinition")
     Estimation toEntity(EstimationDTO estimationDTO);
 
     default Estimation fromId(Long id) {

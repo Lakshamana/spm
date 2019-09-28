@@ -11,10 +11,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {ProcessMapper.class})
 public interface ProcessMetricMapper extends EntityMapper<ProcessMetricDTO, ProcessMetric> {
 
-    @Mapping(source = "theProcess.id", target = "theProcessId")
+    @Mapping(source = "process.id", target = "processId")
     ProcessMetricDTO toDto(ProcessMetric processMetric);
 
-    @Mapping(source = "theProcessId", target = "theProcess")
+    @Mapping(source = "processId", target = "process")
     ProcessMetric toEntity(ProcessMetricDTO processMetricDTO);
 
     default ProcessMetric fromId(Long id) {

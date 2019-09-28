@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Service Implementation for managing {@link Sequence}.
@@ -59,6 +60,21 @@ public class SequenceService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
+
+    /**
+    *  Get all the sequences where TheDependency is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true) 
+    public List<SequenceDTO> findAllWhereTheDependencyIsNull() {
+        log.debug("Request to get all sequences where TheDependency is null");
+        return StreamSupport
+            .stream(sequenceRepository.findAll().spliterator(), false)
+            .filter(sequence -> sequence.getTheDependency() == null)
+            .map(sequenceMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
     /**
      * Get one sequence by id.

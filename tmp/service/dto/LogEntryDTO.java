@@ -2,7 +2,6 @@ package br.ufpa.labes.spm.service.dto;
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.util.Objects;
-import br.ufpa.labes.spm.domain.enumeration.OperationEnum;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.LogEntry} entity.
@@ -13,7 +12,7 @@ public class LogEntryDTO implements Serializable {
 
     private LocalDate date;
 
-    private OperationEnum operationEnum;
+    private String operation;
 
     private String className;
 
@@ -38,12 +37,12 @@ public class LogEntryDTO implements Serializable {
         this.date = date;
     }
 
-    public OperationEnum getOperationEnum() {
-        return operationEnum;
+    public String getOperation() {
+        return operation;
     }
 
-    public void setOperationEnum(OperationEnum operationEnum) {
-        this.operationEnum = operationEnum;
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
     public String getClassName() {
@@ -96,7 +95,7 @@ public class LogEntryDTO implements Serializable {
         return "LogEntryDTO{" +
             "id=" + getId() +
             ", date='" + getDate() + "'" +
-            ", operationEnum='" + getOperationEnum() + "'" +
+            ", operation='" + getOperation() + "'" +
             ", className='" + getClassName() + "'" +
             ", uid='" + getUid() + "'" +
             ", user=" + getUserId() +

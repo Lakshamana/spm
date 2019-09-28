@@ -11,12 +11,12 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {TemplateMapper.class})
 public interface DescriptionMapper extends EntityMapper<DescriptionDTO, Description> {
 
-    @Mapping(source = "theTemplateOldVersion.id", target = "theTemplateOldVersionId")
-    @Mapping(source = "theTemplateNewVersion.id", target = "theTemplateNewVersionId")
+    @Mapping(source = "theOldVersion.id", target = "theOldVersionId")
+    @Mapping(source = "theNewVersion.id", target = "theNewVersionId")
     DescriptionDTO toDto(Description description);
 
-    @Mapping(source = "theTemplateOldVersionId", target = "theTemplateOldVersion")
-    @Mapping(source = "theTemplateNewVersionId", target = "theTemplateNewVersion")
+    @Mapping(source = "theOldVersionId", target = "theOldVersion")
+    @Mapping(source = "theNewVersionId", target = "theNewVersion")
     @Mapping(target = "descTemplateOriginalVersions", ignore = true)
     @Mapping(target = "removeDescTemplateOriginalVersion", ignore = true)
     Description toEntity(DescriptionDTO descriptionDTO);

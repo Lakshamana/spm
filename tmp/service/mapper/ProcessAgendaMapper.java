@@ -15,10 +15,10 @@ public interface ProcessAgendaMapper extends EntityMapper<ProcessAgendaDTO, Proc
     @Mapping(source = "theProcess.id", target = "theProcessId")
     ProcessAgendaDTO toDto(ProcessAgenda processAgenda);
 
-    @Mapping(source = "theTaskAgendaId", target = "theTaskAgenda")
-    @Mapping(source = "theProcessId", target = "theProcess")
     @Mapping(target = "theTasks", ignore = true)
     @Mapping(target = "removeTheTask", ignore = true)
+    @Mapping(source = "theTaskAgendaId", target = "theTaskAgenda")
+    @Mapping(source = "theProcessId", target = "theProcess")
     ProcessAgenda toEntity(ProcessAgendaDTO processAgendaDTO);
 
     default ProcessAgenda fromId(Long id) {

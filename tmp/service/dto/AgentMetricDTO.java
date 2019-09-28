@@ -10,7 +10,7 @@ public class AgentMetricDTO implements Serializable {
     private Long id;
 
 
-    private Long theAgentId;
+    private Long agentId;
 
     public Long getId() {
         return id;
@@ -20,12 +20,12 @@ public class AgentMetricDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getTheAgentId() {
-        return theAgentId;
+    public Long getAgentId() {
+        return agentId;
     }
 
-    public void setTheAgentId(Long agentId) {
-        this.theAgentId = agentId;
+    public void setAgentId(Long agentId) {
+        this.agentId = agentId;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class AgentMetricDTO implements Serializable {
     public String toString() {
         return "AgentMetricDTO{" +
             "id=" + getId() +
-            ", theAgent=" + getTheAgentId() +
+            ", agent=" + getAgentId() +
             "}";
     }
 }

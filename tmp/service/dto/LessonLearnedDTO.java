@@ -21,7 +21,7 @@ public class LessonLearnedDTO implements Serializable {
 
     private Long authorId;
 
-    private Long theAssetId;
+    private Long assetId;
 
     public Long getId() {
         return id;
@@ -63,12 +63,12 @@ public class LessonLearnedDTO implements Serializable {
         this.authorId = authorId;
     }
 
-    public Long getTheAssetId() {
-        return theAssetId;
+    public Long getAssetId() {
+        return assetId;
     }
 
-    public void setTheAssetId(Long assetId) {
-        this.theAssetId = assetId;
+    public void setAssetId(Long assetId) {
+        this.assetId = assetId;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class LessonLearnedDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", creationDate='" + getCreationDate() + "'" +
             ", author=" + getAuthorId() +
-            ", theAsset=" + getTheAssetId() +
+            ", asset=" + getAssetId() +
             "}";
     }
 }

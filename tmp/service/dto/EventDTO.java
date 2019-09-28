@@ -19,19 +19,11 @@ public class EventDTO implements Serializable {
     private Boolean isCreatedByApsee;
 
 
-    private Long theCatalogEventsId;
-
-    private Long theTaskId;
+    private Long theCatalogEventId;
 
     private Long theLogId;
 
     private Long theEventTypeId;
-
-    private Long theActivityId;
-
-    private Long thePlainId;
-
-    private Long theAgentId;
 
     public Long getId() {
         return id;
@@ -65,20 +57,12 @@ public class EventDTO implements Serializable {
         this.isCreatedByApsee = isCreatedByApsee;
     }
 
-    public Long getTheCatalogEventsId() {
-        return theCatalogEventsId;
+    public Long getTheCatalogEventId() {
+        return theCatalogEventId;
     }
 
-    public void setTheCatalogEventsId(Long catalogEventId) {
-        this.theCatalogEventsId = catalogEventId;
-    }
-
-    public Long getTheTaskId() {
-        return theTaskId;
-    }
-
-    public void setTheTaskId(Long taskId) {
-        this.theTaskId = taskId;
+    public void setTheCatalogEventId(Long catalogEventId) {
+        this.theCatalogEventId = catalogEventId;
     }
 
     public Long getTheLogId() {
@@ -95,30 +79,6 @@ public class EventDTO implements Serializable {
 
     public void setTheEventTypeId(Long eventTypeId) {
         this.theEventTypeId = eventTypeId;
-    }
-
-    public Long getTheActivityId() {
-        return theActivityId;
-    }
-
-    public void setTheActivityId(Long activityId) {
-        this.theActivityId = activityId;
-    }
-
-    public Long getThePlainId() {
-        return thePlainId;
-    }
-
-    public void setThePlainId(Long plainId) {
-        this.thePlainId = plainId;
-    }
-
-    public Long getTheAgentId() {
-        return theAgentId;
-    }
-
-    public void setTheAgentId(Long agentId) {
-        this.theAgentId = agentId;
     }
 
     @Override
@@ -149,13 +109,9 @@ public class EventDTO implements Serializable {
             ", why='" + getWhy() + "'" +
             ", when='" + getWhen() + "'" +
             ", isCreatedByApsee='" + isIsCreatedByApsee() + "'" +
-            ", theCatalogEvents=" + getTheCatalogEventsId() +
-            ", theTask=" + getTheTaskId() +
+            ", theCatalogEvent=" + getTheCatalogEventId() +
             ", theLog=" + getTheLogId() +
             ", theEventType=" + getTheEventTypeId() +
-            ", theActivity=" + getTheActivityId() +
-            ", thePlain=" + getThePlainId() +
-            ", theAgent=" + getTheAgentId() +
             "}";
     }
 }

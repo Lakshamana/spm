@@ -370,10 +370,10 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 		typesToConvert.put(2, WebAPSEENodePosition.ARTIFACTCONNODE);
 		typesToConvert.put(3, WebAPSEENodePosition.REQRESOURCENODE);
 		typesToConvert.put(4, WebAPSEENodePosition.BRANCHConNODE);
-		typesToConvert.put(5, WebAPSEENodePosition.JOINConNODE);
+		typesToConvert.put(5, WebAPSEENodePosition.JOINNODE);
 		typesToConvert.put(6, WebAPSEENodePosition.ACTIVITYNODE);
 		typesToConvert.put(7, WebAPSEENodePosition.ACTIVITYNODE);
-		typesToConvert.put(8, WebAPSEENodePosition.REQWorkGroupNODE);
+		typesToConvert.put(8, WebAPSEENodePosition.REQGROUPNODE);
 
 		return typesToConvert.get(nodeTypeFromFlex);
 	}
@@ -459,7 +459,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 			if (processState.equals(Process.NOT_STARTED) || processState.equals(Process.ENACTING)) {
 
-				String ProcessModelState = pmodel.getPmStatus().name();
+				String ProcessModelState = pmodel.getPmState();
 				if (!(ProcessModelState.equals(ProcessModel.CANCELED) || ProcessModelState.equals(ProcessModel.FAILED) || ProcessModelState
 						.equals(ProcessModel.FINISHED))) {
 
@@ -564,7 +564,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			}
 		} else if (actDecomposed != null) { // Rule C1.2 and C1.3
 
-			String decomposedState = pmodel.getPmStatus().name();
+			String decomposedState = pmodel.getPmState();
 			if (!(decomposedState.equals(ProcessModel.CANCELED) || decomposedState.equals(ProcessModel.FAILED) || decomposedState
 					.equals(ProcessModel.FINISHED))) {
 
@@ -771,7 +771,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 
 			if (processState.equals(Process.NOT_STARTED) || processState.equals(Process.ENACTING)) {
 
-				String ProcessModelState = pmodel.getPmStatus().name();
+				String ProcessModelState = pmodel.getPmState();
 				if (!(ProcessModelState.equals(ProcessModel.CANCELED) || ProcessModelState.equals(ProcessModel.FAILED) || ProcessModelState
 						.equals(ProcessModel.FINISHED))) {
 
@@ -823,7 +823,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 			}
 		} else if (actDecomposed != null) { // Rule C1.2 and C1.3
 
-			String decomposedState = pmodel.getPmStatus().name();
+			String decomposedState = pmodel.getPmState();
 			if (!(decomposedState.equals(ProcessModel.CANCELED) || decomposedState.equals(ProcessModel.FAILED) || decomposedState
 					.equals(ProcessModel.FINISHED))) {
 				// TODO Adapt for new coordinates model
@@ -2590,7 +2590,7 @@ public class EasyModelingServicesImpl implements EasyModelingServices {
 	private void replanningDecomposedDates(Decomposed decomposed, Activity predecessor, Object[] greaterPredecessor,CalendarDTO utilsDays) {
 
 		ProcessModel processModel = decomposed.getTheReferedProcessModel();
-		String state = processModel.getPmStatus().name();
+		String state = processModel.getPmState();
 
 		if (!(state.equals(ProcessModel.FINISHED) || state.equals(ProcessModel.FAILED) || state.equals(ProcessModel.CANCELED))) { // It
 																																	// means

@@ -8,15 +8,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link AuthorStat} and its DTO {@link AuthorStatDTO}.
  */
-@Mapper(componentModel = "spring", uses = {AuthorMapper.class, AssetMapper.class})
+@Mapper(componentModel = "spring", uses = {AssetMapper.class, AuthorMapper.class})
 public interface AuthorStatMapper extends EntityMapper<AuthorStatDTO, AuthorStat> {
 
+    @Mapping(source = "asset.id", target = "assetId")
     @Mapping(source = "author.id", target = "authorId")
-    @Mapping(source = "theAsset.id", target = "theAssetId")
     AuthorStatDTO toDto(AuthorStat authorStat);
 
+    @Mapping(source = "assetId", target = "asset")
     @Mapping(source = "authorId", target = "author")
-    @Mapping(source = "theAssetId", target = "theAsset")
     AuthorStat toEntity(AuthorStatDTO authorStatDTO);
 
     default AuthorStat fromId(Long id) {

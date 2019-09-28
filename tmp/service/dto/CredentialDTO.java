@@ -1,7 +1,6 @@
 package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
-import br.ufpa.labes.spm.domain.enumeration.OperationEnum;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.Credential} entity.
@@ -13,8 +12,6 @@ public class CredentialDTO implements Serializable {
     private String className;
 
     private String uid;
-
-    private OperationEnum operationEnum;
 
 
     private Long userId;
@@ -41,14 +38,6 @@ public class CredentialDTO implements Serializable {
 
     public void setUid(String uid) {
         this.uid = uid;
-    }
-
-    public OperationEnum getOperationEnum() {
-        return operationEnum;
-    }
-
-    public void setOperationEnum(OperationEnum operationEnum) {
-        this.operationEnum = operationEnum;
     }
 
     public Long getUserId() {
@@ -86,7 +75,6 @@ public class CredentialDTO implements Serializable {
             "id=" + getId() +
             ", className='" + getClassName() + "'" +
             ", uid='" + getUid() + "'" +
-            ", operationEnum='" + getOperationEnum() + "'" +
             ", user=" + getUserId() +
             "}";
     }

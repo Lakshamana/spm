@@ -11,14 +11,13 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {})
 public interface NodeMapper extends EntityMapper<NodeDTO, Node> {
 
-    @Mapping(source = "theNode.id", target = "theNodeId")
+    @Mapping(source = "parentNode.id", target = "parentNodeId")
     NodeDTO toDto(Node node);
 
     @Mapping(target = "children", ignore = true)
     @Mapping(target = "removeChildren", ignore = true)
-    @Mapping(source = "theNodeId", target = "theNode")
-    @Mapping(target = "theStructures", ignore = true)
-    @Mapping(target = "removeTheStructure", ignore = true)
+    @Mapping(target = "theStructure", ignore = true)
+    @Mapping(source = "parentNodeId", target = "parentNode")
     Node toEntity(NodeDTO nodeDTO);
 
     default Node fromId(Long id) {

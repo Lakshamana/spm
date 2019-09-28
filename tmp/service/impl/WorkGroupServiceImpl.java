@@ -21,35 +21,35 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional
-public class WorkWorkGroupServiceImpl implements WorkGroupService {
+public class WorkGroupServiceImpl implements WorkGroupService {
 
     private final Logger log = LoggerFactory.getLogger(WorkGroupServiceImpl.class);
 
-    private final WorkWorkGroupRepository WorkGroupRepository;
+    private final WorkGroupRepository workGroupRepository;
 
-    private final WorkWorkGroupMapper WorkGroupMapper;
+    private final WorkGroupMapper workGroupMapper;
 
-    public WorkWorkGroupServiceImpl(WorkWorkGroupRepository workWorkGroupRepository, WorkWorkGroupMapper WorkGroupMapper) {
-        this.workWorkGroupRepository = WorkGroupRepository;
-        this.workWorkGroupMapper = WorkGroupMapper;
+    public WorkGroupServiceImpl(WorkGroupRepository workGroupRepository, WorkGroupMapper workGroupMapper) {
+        this.workGroupRepository = workGroupRepository;
+        this.workGroupMapper = workGroupMapper;
     }
 
     /**
-     * Save a WorkGroup.
+     * Save a workGroup.
      *
-     * @param WorkGroupDTO the entity to save.
+     * @param workGroupDTO the entity to save.
      * @return the persisted entity.
      */
     @Override
-    public WorkWorkGroupDTO save(WorkWorkGroupDTO WorkGroupDTO) {
-        log.debug("Request to save WorkWorkGroup : {}", WorkGroupDTO);
-        WorkWorkGroup workWorkGroup = workWorkGroupMapper.toEntity(WorkGroupDTO);
-        workWorkGroup = workWorkGroupRepository.save(WorkGroup);
-        return workWorkGroupMapper.toDto(WorkGroup);
+    public WorkGroupDTO save(WorkGroupDTO workGroupDTO) {
+        log.debug("Request to save WorkGroup : {}", workGroupDTO);
+        WorkGroup workGroup = workGroupMapper.toEntity(workGroupDTO);
+        workGroup = workGroupRepository.save(workGroup);
+        return workGroupMapper.toDto(workGroup);
     }
 
     /**
-     * Get all the WorkGroups.
+     * Get all the workGroups.
      *
      * @return the list of entities.
      */
@@ -57,14 +57,14 @@ public class WorkWorkGroupServiceImpl implements WorkGroupService {
     @Transactional(readOnly = true)
     public List<WorkGroupDTO> findAll() {
         log.debug("Request to get all WorkGroups");
-        return WorkGroupRepository.findAll().stream()
-            .map(WorkGroupMapper::toDto)
+        return workGroupRepository.findAll().stream()
+            .map(workGroupMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
     /**
-     * Get one WorkGroup by id.
+     * Get one workGroup by id.
      *
      * @param id the id of the entity.
      * @return the entity.
@@ -73,18 +73,18 @@ public class WorkWorkGroupServiceImpl implements WorkGroupService {
     @Transactional(readOnly = true)
     public Optional<WorkGroupDTO> findOne(Long id) {
         log.debug("Request to get WorkGroup : {}", id);
-        return WorkGroupRepository.findById(id)
-            .map(WorkGroupMapper::toDto);
+        return workGroupRepository.findById(id)
+            .map(workGroupMapper::toDto);
     }
 
     /**
-     * Delete the WorkGroup by id.
+     * Delete the workGroup by id.
      *
      * @param id the id of the entity.
      */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete WorkGroup : {}", id);
-        WorkGroupRepository.deleteById(id);
+        workGroupRepository.deleteById(id);
     }
 }

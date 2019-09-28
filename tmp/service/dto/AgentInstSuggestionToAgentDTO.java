@@ -12,7 +12,7 @@ public class AgentInstSuggestionToAgentDTO implements Serializable {
     private Float orderCriteriaResult;
 
 
-    private Long theInstAgSugId;
+    private Long theInstAgSuggId;
 
     private Long theAgentId;
 
@@ -32,12 +32,12 @@ public class AgentInstSuggestionToAgentDTO implements Serializable {
         this.orderCriteriaResult = orderCriteriaResult;
     }
 
-    public Long getTheInstAgSugId() {
-        return theInstAgSugId;
+    public Long getTheInstAgSuggId() {
+        return theInstAgSuggId;
     }
 
-    public void setTheInstAgSugId(Long peopleInstSugId) {
-        this.theInstAgSugId = peopleInstSugId;
+    public void setTheInstAgSuggId(Long agentInstSugId) {
+        this.theInstAgSuggId = agentInstSugId;
     }
 
     public Long getTheAgentId() {
@@ -74,7 +74,7 @@ public class AgentInstSuggestionToAgentDTO implements Serializable {
         return "AgentInstSuggestionToAgentDTO{" +
             "id=" + getId() +
             ", orderCriteriaResult=" + getOrderCriteriaResult() +
-            ", theInstAgSug=" + getTheInstAgSugId() +
+            ", theInstAgSugg=" + getTheInstAgSuggId() +
             ", theAgent=" + getTheAgentId() +
             "}";
     }

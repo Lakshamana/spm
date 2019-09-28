@@ -17,11 +17,13 @@ public interface ArtifactTypeMapper extends EntityMapper<ArtifactTypeDTO, Artifa
     @Mapping(target = "theArtifactCons", ignore = true)
     @Mapping(target = "removeTheArtifactCon", ignore = true)
     @Mapping(target = "theInvolvedArtifacts", ignore = true)
-    @Mapping(target = "removeTheInvolvedArtifact", ignore = true)
+    @Mapping(target = "removeTheInvolvedArtifacts", ignore = true)
     @Mapping(target = "theSubroutines", ignore = true)
     @Mapping(target = "removeTheSubroutine", ignore = true)
     @Mapping(target = "theToolParameters", ignore = true)
-    @Mapping(target = "removeTheToolParameter", ignore = true)
+    @Mapping(target = "removeTheToolParameters", ignore = true)
+    @Mapping(target = "theToolDefinitions", ignore = true)
+    @Mapping(target = "removeTheToolDefinition", ignore = true)
     ArtifactType toEntity(ArtifactTypeDTO artifactTypeDTO);
 
     default ArtifactType fromId(Long id) {

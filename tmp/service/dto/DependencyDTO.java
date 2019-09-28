@@ -12,6 +12,8 @@ public class DependencyDTO implements Serializable {
     private String kindDep;
 
 
+    private Long theSequenceId;
+
     public Long getId() {
         return id;
     }
@@ -26,6 +28,14 @@ public class DependencyDTO implements Serializable {
 
     public void setKindDep(String kindDep) {
         this.kindDep = kindDep;
+    }
+
+    public Long getTheSequenceId() {
+        return theSequenceId;
+    }
+
+    public void setTheSequenceId(Long sequenceId) {
+        this.theSequenceId = sequenceId;
     }
 
     @Override
@@ -54,6 +64,7 @@ public class DependencyDTO implements Serializable {
         return "DependencyDTO{" +
             "id=" + getId() +
             ", kindDep='" + getKindDep() + "'" +
+            ", theSequence=" + getTheSequenceId() +
             "}";
     }
 }

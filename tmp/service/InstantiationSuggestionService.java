@@ -7,8 +7,6 @@ import br.ufpa.labes.spm.service.mapper.InstantiationSuggestionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,20 +54,11 @@ public class InstantiationSuggestionService {
     @Transactional(readOnly = true)
     public List<InstantiationSuggestionDTO> findAll() {
         log.debug("Request to get all InstantiationSuggestions");
-        return instantiationSuggestionRepository.findAllWithEagerRelationships().stream()
+        return instantiationSuggestionRepository.findAll().stream()
             .map(instantiationSuggestionMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    /**
-     * Get all the instantiationSuggestions with eager load of many-to-many relationships.
-     *
-     * @return the list of entities.
-     */
-    public Page<InstantiationSuggestionDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return instantiationSuggestionRepository.findAllWithEagerRelationships(pageable).map(instantiationSuggestionMapper::toDto);
-    }
-    
 
     /**
      * Get one instantiationSuggestion by id.
@@ -80,7 +69,7 @@ public class InstantiationSuggestionService {
     @Transactional(readOnly = true)
     public Optional<InstantiationSuggestionDTO> findOne(Long id) {
         log.debug("Request to get InstantiationSuggestion : {}", id);
-        return instantiationSuggestionRepository.findOneWithEagerRelationships(id)
+        return instantiationSuggestionRepository.findById(id)
             .map(instantiationSuggestionMapper::toDto);
     }
 

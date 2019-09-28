@@ -13,7 +13,7 @@ public interface PrimitiveTypeMapper extends EntityMapper<PrimitiveTypeDTO, Prim
 
 
     @Mapping(target = "theToolParameters", ignore = true)
-    @Mapping(target = "removeTheToolParameter", ignore = true)
+    @Mapping(target = "removeTheToolParameters", ignore = true)
     PrimitiveType toEntity(PrimitiveTypeDTO primitiveTypeDTO);
 
     default PrimitiveType fromId(Long id) {

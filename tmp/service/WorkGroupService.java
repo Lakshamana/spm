@@ -11,15 +11,15 @@ import java.util.Optional;
 public interface WorkGroupService {
 
     /**
-     * Save a WorkGroup.
+     * Save a workGroup.
      *
-     * @param WorkGroupDTO the entity to save.
+     * @param workGroupDTO the entity to save.
      * @return the persisted entity.
      */
-    WorkWorkGroupDTO save(WorkWorkGroupDTO WorkGroupDTO);
+    WorkGroupDTO save(WorkGroupDTO workGroupDTO);
 
     /**
-     * Get all the WorkGroups.
+     * Get all the workGroups.
      *
      * @return the list of entities.
      */
@@ -27,7 +27,7 @@ public interface WorkGroupService {
 
 
     /**
-     * Get the "id" WorkGroup.
+     * Get the "id" workGroup.
      *
      * @param id the id of the entity.
      * @return the entity.
@@ -35,7 +35,7 @@ public interface WorkGroupService {
     Optional<WorkGroupDTO> findOne(Long id);
 
     /**
-     * Delete the "id" WorkGroup.
+     * Delete the "id" workGroup.
      *
      * @param id the id of the entity.
      */

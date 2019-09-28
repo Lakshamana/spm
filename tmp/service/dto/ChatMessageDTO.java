@@ -1,8 +1,9 @@
 package br.ufpa.labes.spm.service.dto;
-import java.time.LocalDate;
+import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the {@link br.ufpa.labes.spm.domain.ChatMessage} entity.
@@ -13,13 +14,14 @@ public class ChatMessageDTO implements Serializable {
 
     private String ident;
 
+    @Lob
     private String text;
 
     @NotNull
-    private LocalDate timestamp;
+    private Instant timestamp;
 
 
-    private Long fromAgentId;
+    private Long deId;
 
     public Long getId() {
         return id;
@@ -45,20 +47,20 @@ public class ChatMessageDTO implements Serializable {
         this.text = text;
     }
 
-    public LocalDate getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDate timestamp) {
+    public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
     }
 
-    public Long getFromAgentId() {
-        return fromAgentId;
+    public Long getDeId() {
+        return deId;
     }
 
-    public void setFromAgentId(Long agentId) {
-        this.fromAgentId = agentId;
+    public void setDeId(Long agentId) {
+        this.deId = agentId;
     }
 
     @Override
@@ -89,7 +91,7 @@ public class ChatMessageDTO implements Serializable {
             ", ident='" + getIdent() + "'" +
             ", text='" + getText() + "'" +
             ", timestamp='" + getTimestamp() + "'" +
-            ", fromAgent=" + getFromAgentId() +
+            ", de=" + getDeId() +
             "}";
     }
 }

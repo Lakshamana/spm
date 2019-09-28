@@ -11,11 +11,11 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {MultipleConMapper.class, ActivityMapper.class})
 public interface BranchConMapper extends EntityMapper<BranchConDTO, BranchCon> {
 
-    @Mapping(source = "fromMultipleCon.id", target = "fromMultipleConId")
+    @Mapping(source = "fromMultipleConnection.id", target = "fromMultipleConnectionId")
     @Mapping(source = "fromActivity.id", target = "fromActivityId")
     BranchConDTO toDto(BranchCon branchCon);
 
-    @Mapping(source = "fromMultipleConId", target = "fromMultipleCon")
+    @Mapping(source = "fromMultipleConnectionId", target = "fromMultipleConnection")
     @Mapping(source = "fromActivityId", target = "fromActivity")
     BranchCon toEntity(BranchConDTO branchConDTO);
 

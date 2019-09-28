@@ -53,7 +53,7 @@ public class ParameterService {
      */
     @Transactional(readOnly = true)
     public List<ParameterDTO> findAll() {
-        log.debug("Request to get all Parameter");
+        log.debug("Request to get all Parameters");
         return parameterRepository.findAll().stream()
             .map(parameterMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));

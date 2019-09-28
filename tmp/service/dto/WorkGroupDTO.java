@@ -17,12 +17,12 @@ public class WorkGroupDTO implements Serializable {
     @Lob
     private String description;
 
-    private Boolean active;
+    private Boolean isActive;
 
 
-    private Long theWorkGroupTypeId;
+    private Long theGroupTypeId;
 
-    private Long superWorkGroupId;
+    private Long superGroupId;
 
     public Long getId() {
         return id;
@@ -56,28 +56,28 @@ public class WorkGroupDTO implements Serializable {
         this.description = description;
     }
 
-    public Boolean isActive() {
-        return active;
+    public Boolean isIsActive() {
+        return isActive;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
-    public Long getTheWorkGroupTypeId() {
-        return theWorkGroupTypeId;
+    public Long getTheGroupTypeId() {
+        return theGroupTypeId;
     }
 
-    public void setTheWorkGroupTypeId(Long workGroupTypeId) {
-        this.theWorkGroupTypeId = workGroupTypeId;
+    public void setTheGroupTypeId(Long workGroupTypeId) {
+        this.theGroupTypeId = workGroupTypeId;
     }
 
-    public Long getSuperWorkGroupId() {
-        return superWorkGroupId;
+    public Long getSuperGroupId() {
+        return superGroupId;
     }
 
-    public void setSuperWorkGroupId(Long workGroupId) {
-        this.superWorkGroupId = workGroupId;
+    public void setSuperGroupId(Long workGroupId) {
+        this.superGroupId = workGroupId;
     }
 
     @Override
@@ -108,9 +108,9 @@ public class WorkGroupDTO implements Serializable {
             ", ident='" + getIdent() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", active='" + isActive() + "'" +
-            ", theWorkGroupType=" + getTheWorkGroupTypeId() +
-            ", superWorkGroup=" + getSuperWorkGroupId() +
+            ", isActive='" + isIsActive() + "'" +
+            ", theGroupType=" + getTheGroupTypeId() +
+            ", superGroup=" + getSuperGroupId() +
             "}";
     }
 }

@@ -66,15 +66,15 @@ public class SpmConfigurationServiceImpl implements SpmConfigurationService {
 
 
     /**
-    *  Get all the spmConfigurations where TheAgent is {@code null}.
+    *  Get all the spmConfigurations where Agent is {@code null}.
      *  @return the list of entities.
      */
     @Transactional(readOnly = true) 
-    public List<SpmConfigurationDTO> findAllWhereTheAgentIsNull() {
-        log.debug("Request to get all spmConfigurations where TheAgent is null");
+    public List<SpmConfigurationDTO> findAllWhereAgentIsNull() {
+        log.debug("Request to get all spmConfigurations where Agent is null");
         return StreamSupport
             .stream(spmConfigurationRepository.findAll().spliterator(), false)
-            .filter(spmConfiguration -> spmConfiguration.getTheAgent() == null)
+            .filter(spmConfiguration -> spmConfiguration.getAgent() == null)
             .map(spmConfigurationMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Service Implementation for managing {@link Node}.
@@ -59,6 +60,21 @@ public class NodeService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
+
+    /**
+    *  Get all the nodes where TheStructure is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true) 
+    public List<NodeDTO> findAllWhereTheStructureIsNull() {
+        log.debug("Request to get all nodes where TheStructure is null");
+        return StreamSupport
+            .stream(nodeRepository.findAll().spliterator(), false)
+            .filter(node -> node.getTheStructure() == null)
+            .map(nodeMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
     /**
      * Get one node by id.

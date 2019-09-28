@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ReqAgentRequiresAbility} and its DTO {@link ReqAgentRequiresAbilityDTO}.
  */
-@Mapper(componentModel = "spring", uses = {RequiredPeopleMapper.class, AbilityMapper.class})
+@Mapper(componentModel = "spring", uses = {ReqAgentMapper.class, AbilityMapper.class})
 public interface ReqAgentRequiresAbilityMapper extends EntityMapper<ReqAgentRequiresAbilityDTO, ReqAgentRequiresAbility> {
 
     @Mapping(source = "theReqAgent.id", target = "theReqAgentId")

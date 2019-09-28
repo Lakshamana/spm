@@ -24,44 +24,44 @@ public class WorkGroupTypeService {
 
     private final Logger log = LoggerFactory.getLogger(WorkGroupTypeService.class);
 
-    private final WorkWorkGroupTypeRepository WorkGroupTypeRepository;
+    private final WorkGroupTypeRepository workGroupTypeRepository;
 
-    private final WorkWorkGroupTypeMapper WorkGroupTypeMapper;
+    private final WorkGroupTypeMapper workGroupTypeMapper;
 
-    public WorkWorkGroupTypeService(WorkWorkGroupTypeRepository workWorkGroupTypeRepository, WorkWorkGroupTypeMapper WorkGroupTypeMapper) {
-        this.workWorkGroupTypeRepository = WorkGroupTypeRepository;
-        this.workWorkGroupTypeMapper = WorkGroupTypeMapper;
+    public WorkGroupTypeService(WorkGroupTypeRepository workGroupTypeRepository, WorkGroupTypeMapper workGroupTypeMapper) {
+        this.workGroupTypeRepository = workGroupTypeRepository;
+        this.workGroupTypeMapper = workGroupTypeMapper;
     }
 
     /**
-     * Save a WorkGroupType.
+     * Save a workGroupType.
      *
-     * @param WorkGroupTypeDTO the entity to save.
+     * @param workGroupTypeDTO the entity to save.
      * @return the persisted entity.
      */
-    public WorkWorkGroupTypeDTO save(WorkWorkGroupTypeDTO WorkGroupTypeDTO) {
-        log.debug("Request to save WorkWorkGroupType : {}", WorkGroupTypeDTO);
-        WorkWorkGroupType workWorkGroupType = workWorkGroupTypeMapper.toEntity(WorkGroupTypeDTO);
-        workWorkGroupType = workWorkGroupTypeRepository.save(WorkGroupType);
-        return workWorkGroupTypeMapper.toDto(WorkGroupType);
+    public WorkGroupTypeDTO save(WorkGroupTypeDTO workGroupTypeDTO) {
+        log.debug("Request to save WorkGroupType : {}", workGroupTypeDTO);
+        WorkGroupType workGroupType = workGroupTypeMapper.toEntity(workGroupTypeDTO);
+        workGroupType = workGroupTypeRepository.save(workGroupType);
+        return workGroupTypeMapper.toDto(workGroupType);
     }
 
     /**
-     * Get all the WorkGroupTypes.
+     * Get all the workGroupTypes.
      *
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public List<WorkGroupTypeDTO> findAll() {
         log.debug("Request to get all WorkGroupTypes");
-        return WorkGroupTypeRepository.findAll().stream()
-            .map(WorkGroupTypeMapper::toDto)
+        return workGroupTypeRepository.findAll().stream()
+            .map(workGroupTypeMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
     /**
-     * Get one WorkGroupType by id.
+     * Get one workGroupType by id.
      *
      * @param id the id of the entity.
      * @return the entity.
@@ -69,17 +69,17 @@ public class WorkGroupTypeService {
     @Transactional(readOnly = true)
     public Optional<WorkGroupTypeDTO> findOne(Long id) {
         log.debug("Request to get WorkGroupType : {}", id);
-        return WorkGroupTypeRepository.findById(id)
-            .map(WorkGroupTypeMapper::toDto);
+        return workGroupTypeRepository.findById(id)
+            .map(workGroupTypeMapper::toDto);
     }
 
     /**
-     * Delete the WorkGroupType by id.
+     * Delete the workGroupType by id.
      *
      * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete WorkGroupType : {}", id);
-        WorkGroupTypeRepository.deleteById(id);
+        workGroupTypeRepository.deleteById(id);
     }
 }

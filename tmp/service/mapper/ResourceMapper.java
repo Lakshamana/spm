@@ -12,27 +12,31 @@ import org.mapstruct.*;
 public interface ResourceMapper extends EntityMapper<ResourceDTO, Resource> {
 
     @Mapping(source = "belongsTo.id", target = "belongsToId")
+    @Mapping(source = "requires.id", target = "requiresId")
     @Mapping(source = "theResourceType.id", target = "theResourceTypeId")
     ResourceDTO toDto(Resource resource);
 
     @Mapping(source = "belongsToId", target = "belongsTo")
+    @Mapping(source = "requiresId", target = "requires")
     @Mapping(source = "theResourceTypeId", target = "theResourceType")
     @Mapping(target = "theResourceEvents", ignore = true)
     @Mapping(target = "removeTheResourceEvent", ignore = true)
     @Mapping(target = "theRequiredResources", ignore = true)
     @Mapping(target = "removeTheRequiredResource", ignore = true)
-    @Mapping(target = "instSugToResources", ignore = true)
-    @Mapping(target = "removeInstSugToResource", ignore = true)
+    @Mapping(target = "theResourceChosenSuggestions", ignore = true)
+    @Mapping(target = "removeTheResourceChosenSuggestions", ignore = true)
     @Mapping(target = "theResourcePossibleUses", ignore = true)
     @Mapping(target = "removeTheResourcePossibleUse", ignore = true)
     @Mapping(target = "theResourceMetrics", ignore = true)
     @Mapping(target = "removeTheResourceMetric", ignore = true)
     @Mapping(target = "theResourceEstimations", ignore = true)
     @Mapping(target = "removeTheResourceEstimation", ignore = true)
-    @Mapping(target = "theResources", ignore = true)
-    @Mapping(target = "removeTheResource", ignore = true)
-    @Mapping(target = "instSuggestions", ignore = true)
-    @Mapping(target = "removeInstSuggestions", ignore = true)
+    @Mapping(target = "possesses", ignore = true)
+    @Mapping(target = "removePossess", ignore = true)
+    @Mapping(target = "isRequireds", ignore = true)
+    @Mapping(target = "removeIsRequired", ignore = true)
+    @Mapping(target = "theResourceSuggestions", ignore = true)
+    @Mapping(target = "removeTheResourceSuggestions", ignore = true)
     Resource toEntity(ResourceDTO resourceDTO);
 
     default Resource fromId(Long id) {

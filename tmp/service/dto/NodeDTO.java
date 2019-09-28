@@ -1,101 +1,94 @@
 package br.ufpa.labes.spm.service.dto;
-
+import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Node} entity.
+ */
+public class NodeDTO implements Serializable {
 
-@SuppressWarnings("serial")
-public class NodeDTO implements Serializable{
-	private Long id;
+    private Long id;
 
-	private String ident;
+    private String ident;
 
+    private String data;
 
-	private String data;
-
-	@IgnoreMapping
-    private StructureDTO theStructureDTO;
-
-	@IgnoreMapping
-    private List<NodeDTO> children;
+    
+    private String serviceFileId;
 
 
-    public NodeDTO() {
-    	super();
-    	this.children = new ArrayList<NodeDTO>();
-		this.setIdent("");
+    private Long parentNodeId;
 
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public String getIdent() {
+        return ident;
+    }
 
-	public String getIdent() {
-		return ident;
-	}
+    public void setIdent(String ident) {
+        this.ident = ident;
+    }
 
-	public void setIdent(String ident) {
-		this.ident = ident;
-	}
+    public String getData() {
+        return data;
+    }
 
-	public List<NodeDTO> getChildren() {
-		return children;
-	}
+    public void setData(String data) {
+        this.data = data;
+    }
 
-	public void setChildren(List<NodeDTO> children) {
-		this.children = children;
-	}
+    public String getServiceFileId() {
+        return serviceFileId;
+    }
 
-	public String getData() {
-		return data;
-	}
+    public void setServiceFileId(String serviceFileId) {
+        this.serviceFileId = serviceFileId;
+    }
 
-	public void setData(String data) {
-		this.data = data;
-	}
+    public Long getParentNodeId() {
+        return parentNodeId;
+    }
 
-	public StructureDTO getTheStructureDTO() {
-		return theStructureDTO;
-	}
+    public void setParentNodeId(Long nodeId) {
+        this.parentNodeId = nodeId;
+    }
 
-	public void setTheStructureDTO(StructureDTO theStructureDTO) {
-		this.theStructureDTO = theStructureDTO;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-	@Override
-	public String toString() {
-		return "NodeDTO [ident=" + ident + ", children=" + children + "]";
-	}
+        NodeDTO nodeDTO = (NodeDTO) o;
+        if (nodeDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), nodeDTO.getId());
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((ident == null) ? 0 : ident.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		NodeDTO other = (NodeDTO) obj;
-		if (ident == null) {
-			if (other.ident != null)
-				return false;
-		} else if (!ident.equals(other.ident))
-			return false;
-		return true;
-	}
+    @Override
+    public String toString() {
+        return "NodeDTO{" +
+            "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
+            ", data='" + getData() + "'" +
+            ", serviceFileId='" + getServiceFileId() + "'" +
+            ", parentNode=" + getParentNodeId() +
+            "}";
+    }
 }
