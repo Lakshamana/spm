@@ -446,9 +446,9 @@ public class CriticalPathMethod {
 		}
 		else if (conn instanceof JoinCon) {
 			JoinCon join = (JoinCon)conn;
-			if(join.getToActivities() != null)
-			    succ.add(join.getToActivities());
-			if(joinCon.getToMultipleCon() != null)
+			if(join.getToActivity() != null)
+			    succ.add(join.getToActivity());
+			if(join.getToMultipleCon() != null)
 			    succ.addAll(this.getSuccessors(join.getToMultipleCon()));
 		}
 		return succ;
@@ -467,7 +467,7 @@ public class CriticalPathMethod {
 			Activity act = branch.getFromActivity();
 			if (act != null)
 				pred.add(act);
-			MultipleCon multi = branch.getFromMultipleCon();
+			MultipleCon multi = branch.getFromMultipleConnection();
 			if (multi != null)
 				pred.add(multi);
 		} else if (conn instanceof JoinCon) {

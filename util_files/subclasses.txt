@@ -32,6 +32,7 @@ Connection MultipleCon
 Connection ArtifactCon
 Connection SimpleCon
 BranchCon BranchANDCon
+BranchConCond BranchCon
 SimpleCon Sequence
 SimpleCon Feedback
 Resource Consumable
