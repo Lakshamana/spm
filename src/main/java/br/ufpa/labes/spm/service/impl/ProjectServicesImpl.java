@@ -100,7 +100,7 @@ import br.ufpa.labes.spm.domain.ProcessModelEvent;
 import br.ufpa.labes.spm.domain.ResourceEvent;
 import br.ufpa.labes.spm.domain.Company;
 import br.ufpa.labes.spm.domain.Project;
-import br.ufpa.labes.spm.domain.System;
+import br.ufpa.labes.spm.domain.DevelopingSystem;
 import br.ufpa.labes.spm.domain.Organization;
 import br.ufpa.labes.spm.domain.ArtifactParam;
 import br.ufpa.labes.spm.domain.Automatic;
@@ -1438,8 +1438,8 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	private void loadSystem(Element organizational) {
-		Element system = organizational.getChild(System.class.getSimpleName());
-		System sys = (System) this.buildOrgObject(system);
+		Element system = organizational.getChild(DevelopingSystem.class.getSimpleName());
+		DevelopingSystem sys = (System) this.buildOrgObject(system);
 		if(sys == null) return;
 		// Setting organization...
 		Element orgElm = system.getChild("TheOrganization");
@@ -1462,7 +1462,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			Element sysElm = element.getChild("TheSystem");
 			if(sysElm != null){
 				String sysKey = sysElm.getAttributeValue("REF");
-				project.insertIntoTheSystem((System) this.organizational.get(sysKey));
+				project.insertIntoTheSystem((DevelopingSystem) this.organizational.get(sysKey));
 			}
 			project.setIdent(project.getName());
 		}

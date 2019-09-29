@@ -1214,7 +1214,7 @@ public class ReportDAO implements IReportDAO {
 
           actEntry[2] = actEntry[2] + "<D>";
 
-          actEntry[3] = decomposed.getTheReferedProcessModel().getPmStatus();
+          actEntry[3] = decomposed.getTheReferedProcessModel().getPmState();
 
           actEntry[6] = 0.0;
 

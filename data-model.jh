@@ -513,14 +513,14 @@ entity SpmLog {}
 
 relationship ManyToOne {
     Event{theCatalogEvent} to CatalogEvent{theEvent},
-    CatalogEvent{theResourceEvent} to ResourceEvent{theCatalogEvents},
-    CatalogEvent{theProcessModelEvent} to ProcessModelEvent{theCatalogEvents},
-    CatalogEvent{theAgendaEvent} to AgendaEvent{theCatalogEvents},
-    CatalogEvent{theCatalogEvent} to CatalogEvent{theCatalogEvents},
-    CatalogEvent{theConnectionEvent} to ConnectionEvent{theCatalogEvents},
-    CatalogEvent{theGlobalActivityEvent} to GlobalActivityEvent{theCatalogEvents},
-    CatalogEvent{theModelingActivityEvent} to ModelingActivityEvent{theCatalogEvents},
-    CatalogEvent{theProcessEvent} to ProcessEvent{theCatalogEvents},
+    ResourceEvent{theCatalogEvents} to CatalogEvent{theResourceEvent},
+    ProcessModelEvent{theCatalogEvents} to CatalogEvent{theProcessModelEvent},
+    AgendaEvent{theCatalogEvents} to CatalogEvent{theAgendaEvent},
+    CatalogEvent{theCatalogEvents} to CatalogEvent{theCatalogEvent},
+    ConnectionEvent{theCatalogEvents} to CatalogEvent{theConnectionEvent},
+    GlobalActivityEvent{theCatalogEvents} to CatalogEvent{theGlobalActivityEvent},
+    ModelingActivityEvent{theCatalogEvents} to CatalogEvent{theModelingActivityEvent},
+    ProcessEvent{theCatalogEvents} to CatalogEvent{theProcessEvent},
 
     AgendaEvent{theTask} to Task{theAgendaEvent},
     AgendaEvent{theNormal} to Normal{theAgendaEvent}
