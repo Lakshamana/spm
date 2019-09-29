@@ -219,8 +219,8 @@ entity ArtifactTask {
 
 relationship ManyToOne {
     Artifact{theArtifactType} to ArtifactType{theArtifact}
-    Artifact{derivedTo} to Artifact{derivedFrom},
-    Artifact{possess} to Artifact{belongsTo},
+    Artifact{derivedFrom} to Artifact{derivedTo},
+    Artifact{belongsTo} to Artifact{possess},
     Artifact{theRepository} to VCSRepository{theArtifacts},
 
     ArtifactTask{theArtifact} to Artifact{theArtifactTasks},

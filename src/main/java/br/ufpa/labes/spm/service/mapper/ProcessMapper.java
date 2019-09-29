@@ -1,6 +1,6 @@
 package br.ufpa.labes.spm.service.mapper;
 
-import br.ufpa.labes.spm.domain.*;
+import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.service.dto.ProcessDTO;
 
 import org.mapstruct.*;

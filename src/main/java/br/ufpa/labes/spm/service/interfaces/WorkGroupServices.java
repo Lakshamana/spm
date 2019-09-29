@@ -3,8 +3,9 @@ package br.ufpa.labes.spm.service.interfaces;
 
 import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.AgentsDTO;
+import br.ufpa.labes.spm.service.dto.GroupDTO;
+import br.ufpa.labes.spm.service.dto.GroupsDTO;
 import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
-import br.ufpa.labes.spm.service.dto.WorkGroupsDTO;
 import br.ufpa.labes.spm.service.dto.TypesDTO;
 
 @Remote
@@ -12,13 +13,13 @@ public interface WorkGroupServices {
 
 	public TypesDTO getWorkGroupTypes();
 
-	public WorkGroupDTO saveWorkGroup(WorkGroupDTO WorkGroupDTO);
+	public GroupDTO saveWorkGroup(GroupDTO groupDTO);
 
-	public WorkGroupsDTO getWorkGroups();
+	public GroupsDTO getWorkGroups();
 
-	public WorkGroupDTO getWorkGroup(String WorkGroupName);
+	public GroupDTO getWorkGroup(String WorkGroupName);
 
-	public WorkGroupsDTO getWorkGroups(String searchTerm, String typeFilter, Boolean ativoFilter);
+	public GroupsDTO getWorkGroups(String searchTerm, String typeFilter, Boolean ativoFilter);
 
 	public AgentsDTO getAgents();
 

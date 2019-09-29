@@ -260,7 +260,7 @@ public class AgentServicesImpl implements AgentServices {
 		// agent.setArtifactMngPassword(agentDTO.getArtifactMngPassword());
 		agent.setEmail(agentDTO.getEmail());
 		agent.setCostHour(agentDTO.getCostHour());
-		agent.setActive(agentDTO.isActive());
+		agent.setIsActive(agentDTO.getIsActive());
 		// agent.setDescription(agentDTO.getDescription());
 		agent.setUpload(agentDTO.getUpload());
 	}
@@ -335,7 +335,7 @@ public class AgentServicesImpl implements AgentServices {
 
 			for (AgentHasAbility agentHasAbility : agent
 					.getTheAgentHasAbilities()) {
-				agentHasAbility.removeFromTheAbility();
+				agentHasAbility.removeTheAbility();
 				agentHasAbility.setTheAgent(null);
 				agentHasAbilityDAO.daoDelete(agentHasAbility);
 			}
@@ -717,8 +717,8 @@ public class AgentServicesImpl implements AgentServices {
 	public AgentDTO saveWorkGroupToAgent(AgentDTO agentDTO) {
 		agent = this.getAgentForName(agentDTO.getName());
 
-		if (!agentDTO.getWorkGroupToAgent().isEmpty()) {
-			for (String WorkGroupName : agentDTO.getWorkGroupToAgent()) {
+		if (!agentDTO.getGroupToAgent().isEmpty()) {
+			for (String WorkGroupName : agentDTO.getGroupToAgent()) {
 				WorkGroup WorkGroup = this.getWorkGroupFromName(WorkGroupName);
 				if (WorkGroup != null) {
 
@@ -1142,9 +1142,9 @@ public class AgentServicesImpl implements AgentServices {
 				agentDTO.setWorkingCost(custoDoTrabalho);
 			}
 
-			agentDTO.setWorkGroupToAgent(new ArrayList<String>());
+			agentDTO.setGroupToAgent(new ArrayList<String>());
 			for (WorkGroup WorkGroup : agent.getTheWorkGroups()) {
-				agentDTO.getWorkGroupToAgent().add(WorkGroup.getName());
+				agentDTO.getGroupToAgent().add(WorkGroup.getName());
 			}
 
 			agentDTO.setAbilityToAgent(new ArrayList<String>());

@@ -22,20 +22,20 @@
 
 # 1.
 # olddir="$HOME/Documentos/spm_root/SPMServices/ejbModule/org/qrconsult/spm/model"
+olddir='tmp'
 newdir='src/main/java/br/ufpa/labes/spm/domain'
-olddir=$newdir
-newdir='tmp'
 diffs='util_files/entitydiffs.txt'
+filesuffix='txt'
 
 # 2.
-models=`find "$olddir" -regextype posix-extended -regex '(.*).java' | sed -e '/policies/d' -e '/IPersistent/d' -e '/help/d' -e '/knowledge/d' -e '/enumeration/d'`
+models=`find "$olddir" -regextype posix-extended -regex "(.*).$filesuffix" | sed -e '/policies/d' -e '/IPersistent/d' -e '/help/d' -e '/knowledge/d' -e '/enumeration/d'`
 # models="$olddir/connections/Branch.java"
 pathcount=`echo "$models" | tr ' ' '\n' | head -1 | tr '/' '\n' | wc -l`
 
 # 3.
 for m in $models; do
   new=''
-  ename=`echo "$m" | cut -d/ -f "$pathcount" | sed -r 's/(.*).java/\1/'`
+  ename=`echo "$m" | cut -d/ -f "$pathcount" | sed -r "s/(.*).$filesuffix/\1/"`
   # package=`echo "$m" | cut -d/ -f12`
   # seek=`cat "$diffs" | grep -w "$ename" | awk '{print $2}'`
 
@@ -45,8 +45,8 @@ for m in $models; do
   #   new=$ename
   # fi
 
-  file="$newdir/$ename.txt"
-  echo entity: $m
+  file="$newdir/$ename.java"
+  echo entity: $m, $file
 
   if test -f $file; then
     # 3.1

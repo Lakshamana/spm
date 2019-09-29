@@ -7,7 +7,7 @@
         Added the constraints for entity VCSRepository.
     -->
     <changeSet id="20190914033815-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="the_structure_id"
                                  baseTableName="vcs_repository"
                                  constraintName="fk_vcs_repository_the_structure_id"

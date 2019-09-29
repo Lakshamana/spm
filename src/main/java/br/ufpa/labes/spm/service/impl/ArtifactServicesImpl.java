@@ -136,7 +136,7 @@ public class ArtifactServicesImpl implements ArtifactServices {
 					artifact.setTheArtifactType(artifactType);
 					artifact.setPathName(artifactDTO.getPathName());
 					artifact.setIsTemplate(artifactDTO.isIsTemplate());
-					artifact.setActive(artifactDTO.isIsActive());
+					artifact.setIsActive(artifactDTO.isIsActive());
 				}
 
 				for (Artifact derived : artifact.getDerivedTo()) { //Quebrar todas as

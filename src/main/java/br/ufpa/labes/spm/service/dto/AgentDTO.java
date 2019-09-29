@@ -210,16 +210,6 @@ public class AgentDTO implements Serializable {
 		this.roleIdentsToAgent = roleIdentsToAgent;
 	}
 
-
-	@XmlTransient
-	public String getEmail() {
-		return email;
-	}
-
-	public void seteMail(String eMail) {
-		this.email = eMail;
-	}
-
 //	@XmlTransient
 	public String getUpload() {
 		return upload;
@@ -282,7 +272,7 @@ public class AgentDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Name: " + this.getName() + "; Email: " + this.getEMail();
+		return "Name: " + this.getName() + "; Email: " + this.getEmail();
 	}
 
 	@XmlTransient

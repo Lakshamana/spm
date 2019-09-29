@@ -14,17 +14,17 @@ import br.ufpa.labes.spm.repository.interfaces.types.IWorkGroupTypeDAO;
 import br.ufpa.labes.spm.repository.interfaces.types.ITypeDAO;
 import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.AgentsDTO;
-import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
+import br.ufpa.labes.spm.service.dto.GroupDTO;
 import br.ufpa.labes.spm.service.dto.GroupsDTO;
 import br.ufpa.labes.spm.service.dto.TypesDTO;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.domain.ArtifactType;
-import br.ufpa.labes.spm.domain.GroupType;
+import br.ufpa.labes.spm.domain.WorkGroupType;
 import br.ufpa.labes.spm.domain.Type;
-import br.ufpa.labes.spm.service.interfaces.GroupServices;
+import br.ufpa.labes.spm.service.interfaces.WorkGroupServices;
 
-public class GroupServicesImpl implements GroupServices {
+public class GroupServicesImpl implements WorkGroupServices {
 
 	private static final String GROUP_CLASS_NAME = WorkGroup.class.getSimpleName();
 
@@ -77,10 +77,10 @@ public class GroupServicesImpl implements GroupServices {
 	}
 
 	@Override
-	public WorkGroupDTO saveGroup(WorkGroupDTO groupDTO) {
+	public GroupDTO saveWorkGroup(GroupDTO groupDTO) {
 		WorkGroup group = null;
 		WorkGroup superGroup = this.retrieveGroup(groupDTO.getSuperGroup());
-		GroupType theGroupType = (GroupType) typeDAO.retrieveBySecondaryKey(groupDTO.getTheGroupType());
+		WorkGroupType theGroupType = (WorkGroupType) typeDAO.retrieveBySecondaryKey(groupDTO.getTheGroupType());
 
 //		group = this.retrieveGroup(groupDTO.getName());
 		group = groupDAO.retrieveBySecondaryKey(groupDTO.getIdent());
@@ -125,7 +125,7 @@ public class GroupServicesImpl implements GroupServices {
 		return false;
 	}
 
-	private void updateDependencies(WorkGroupDTO groupDTO, WorkGroup group) {
+	private void updateDependencies(GroupDTO groupDTO, WorkGroup group) {
 		if(!groupDTO.getAgents().isEmpty()) {
 			for (String agentName : groupDTO.getAgents()) {
 				Agent agent = getAgentFromDatabase(agentName);
@@ -139,10 +139,10 @@ public class GroupServicesImpl implements GroupServices {
 	}
 
 	@Override
-	public WorkGroupDTO getGroup(String groupIdent) {
+	public GroupDTO getGroup(String groupIdent) {
 //		WorkGroup result = this.retrieveGroup(groupIdent);
 		WorkGroup result = groupDAO.retrieveBySecondaryKey(groupIdent);
-		WorkGroupDTO groupDTO = null;
+		GroupDTO groupDTO = null;
 
 		if(result != null) {
 			groupDTO = this.convertGroupToGroupDTO(result);
@@ -153,7 +153,7 @@ public class GroupServicesImpl implements GroupServices {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public WorksGroupsDTO getWorkGroups(String searchTerm, String typeFilter, Boolean ativoFilter) {
+	public GroupsDTO getWorkGroups(String searchTerm, String typeFilter, Boolean ativoFilter) {
 		String activeFilter = (ativoFilter == null) ? "" : " and group.isActive is :orgFilter" ;
 
 		String hql;
@@ -174,7 +174,7 @@ public class GroupServicesImpl implements GroupServices {
 		}
 
 		List<WorkGroup> resultado = query.getResultList();
-		GroupsDTO groupsDTO = new GroupsDTO(new ArrayList<WorkGroupDTO>());
+		GroupsDTO groupsDTO = new GroupsDTO(new ArrayList<GroupDTO>());
 		groupsDTO = this.convertGroupsToGroupsDTO(resultado);
 
 		return groupsDTO;
@@ -262,11 +262,11 @@ public class GroupServicesImpl implements GroupServices {
 		return result;
 	}
 
-	private WorkGroupDTO convertGroupToGroupDTO(WorkGroup group) {
+	private GroupDTO convertGroupToGroupDTO(WorkGroup group) {
 		try {
 
-			WorkGroupDTO groupDTO = new WorkGroupDTO();
-			groupDTO = (WorkGroupDTO) this.converter.getDTO(group, WorkGroupDTO.class);
+			GroupDTO groupDTO = new GroupDTO();
+			groupDTO = (GroupDTO) this.converter.getDTO(group, GroupDTO.class);
 			String superGroup = (group.getSuperGroup() != null) ? group.getSuperGroup().getName() : "";
 			String theGroupType = (group.getTheGroupType() != null) ? group.getTheGroupType().getIdent() : "";
 			groupDTO.setSuperGroup(superGroup);
@@ -286,7 +286,7 @@ public class GroupServicesImpl implements GroupServices {
 		return null;
 	}
 
-	private WorkGroup convertGroupDTOToGroup(WorkGroupDTO groupDTO) {
+	private WorkGroup convertGroupDTOToGroup(GroupDTO groupDTO) {
 		try {
 
 			WorkGroup group = new WorkGroup();
@@ -301,20 +301,20 @@ public class GroupServicesImpl implements GroupServices {
 	}
 
 	private GroupsDTO convertGroupsToGroupsDTO(List<WorkGroup> groups) {
-		GroupsDTO groupsDTO = new GroupsDTO(new ArrayList<WorkGroupDTO>());
+		GroupsDTO groupsDTO = new GroupsDTO(new ArrayList<GroupDTO>());
 		for (WorkGroup group : groups) {
-			WorkGroupDTO groupDTO = this.convertGroupToGroupDTO(group);
+			GroupDTO groupDTO = this.convertGroupToGroupDTO(group);
 			groupsDTO.addGroupDTO(groupDTO);
 		}
 
 		return groupsDTO;
 	}
 
-	private List<String> getGroupSubordinados(GroupsDTO groupsDTO, WorkGroupDTO groupDTO) {
+	private List<String> getGroupSubordinados(GroupsDTO groupsDTO, GroupDTO groupDTO) {
 		List<String> subordinados = new ArrayList<String>();
 
 		for (int j = 0; j < groupsDTO.size(); j++) {
-			WorkGroupDTO subordinadoGroupDTO = groupsDTO.getGroupDTO(j);
+			GroupDTO subordinadoGroupDTO = groupsDTO.getGroupDTO(j);
 			boolean isSubordinadoAoGrupo = (subordinadoGroupDTO.getSuperGroup() != null)
 					? subordinadoGroupDTO.getSuperGroup().equals(groupDTO.getName()) : false;
 			System.out.println(groupDTO.getName() + " <----> " + groupDTO.getSuperGroup() + " ==> " + isSubordinadoAoGrupo);

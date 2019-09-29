@@ -50,8 +50,8 @@ import br.ufpa.labes.spm.repository.interfaces.processModelGraphic.IWebAPSEEObje
 import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessDAO;
 import br.ufpa.labes.spm.repository.interfaces.processModels.IProcessModelDAO;
 import br.ufpa.labes.spm.repository.interfaces.taskagenda.ITaskDAO;
-import br.ufpa.labes.spm.service.dto.ProjectCost;
-import br.ufpa.labes.spm.service.dto.ProjectStatistic;
+import br.ufpa.labes.spm.service.dto.dashboard.ProjectCost;
+import br.ufpa.labes.spm.service.dto.dashboard.ProjectStatistic;
 import br.ufpa.labes.spm.service.dto.dashboard.Time;
 import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.AgentsDTO;
