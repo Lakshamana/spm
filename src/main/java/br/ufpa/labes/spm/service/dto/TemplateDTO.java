@@ -1,70 +1,37 @@
 package br.ufpa.labes.spm.service.dto;
+
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.List;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Template} entity.
- */
+
+@SuppressWarnings("serial")
 public class TemplateDTO implements Serializable {
+	private String ident;
+	private String templateState;
+	private List<ProcessModelDTO> theInstances;
 
-    private Long id;
+	public String getTemplateState() {
+		return templateState;
+	}
 
-    private String templateState;
+	public void setTemplateState(String templateState) {
+		this.templateState = templateState;
+	}
 
+	public List<ProcessModelDTO> getTheInstances() {
+		return theInstances;
+	}
 
-    private Long theOriginalVersionDescriptionId;
+	public void setTheInstances(List<ProcessModelDTO> theInstances) {
+		this.theInstances = theInstances;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public String getIdent() {
+		return ident;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setIdent(String ident) {
+		this.ident = ident;
+	}
 
-    public String getTemplateState() {
-        return templateState;
-    }
-
-    public void setTemplateState(String templateState) {
-        this.templateState = templateState;
-    }
-
-    public Long getTheOriginalVersionDescriptionId() {
-        return theOriginalVersionDescriptionId;
-    }
-
-    public void setTheOriginalVersionDescriptionId(Long descriptionId) {
-        this.theOriginalVersionDescriptionId = descriptionId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        TemplateDTO templateDTO = (TemplateDTO) o;
-        if (templateDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), templateDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "TemplateDTO{" +
-            "id=" + getId() +
-            ", templateState='" + getTemplateState() + "'" +
-            ", theOriginalVersionDescription=" + getTheOriginalVersionDescriptionId() +
-            "}";
-    }
 }

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import br.ufpa.labes.spm.annotations.IgnoreMapping;
-import br.ufpa.labes.spm.service.dto.ProjectDTO;
 
 
 @SuppressWarnings("serial")

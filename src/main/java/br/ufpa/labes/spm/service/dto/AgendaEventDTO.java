@@ -1,70 +1,41 @@
 package br.ufpa.labes.spm.service.dto;
-import java.io.Serializable;
-import java.util.Objects;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.AgendaEvent} entity.
- */
+import java.io.Serializable;
+import java.util.Date;
+
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
+
+@SuppressWarnings("serial")
 public class AgendaEventDTO implements Serializable {
 
-    private Long id;
+	@IgnoreMapping
+	private String catalogEvent;
+
+	private Date when;
+
+	public AgendaEventDTO() {}
+
+	public AgendaEventDTO(String catalogEvent, Date when) {
+		super();
+		this.catalogEvent = catalogEvent;
+		this.when = when;
+	}
+
+	public String getCatalogEvent() {
+		return catalogEvent;
+	}
+
+	public void setCatalogEvent(String catalogEvent) {
+		this.catalogEvent = catalogEvent;
+	}
+
+	public Date getWhen() {
+		return when;
+	}
+
+	public void setWhen(Date when) {
+		this.when = when;
+	}
 
 
-    private Long theTaskId;
-
-    private Long theNormalId;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getTheTaskId() {
-        return theTaskId;
-    }
-
-    public void setTheTaskId(Long taskId) {
-        this.theTaskId = taskId;
-    }
-
-    public Long getTheNormalId() {
-        return theNormalId;
-    }
-
-    public void setTheNormalId(Long normalId) {
-        this.theNormalId = normalId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        AgendaEventDTO agendaEventDTO = (AgendaEventDTO) o;
-        if (agendaEventDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), agendaEventDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "AgendaEventDTO{" +
-            "id=" + getId() +
-            ", theTask=" + getTheTaskId() +
-            ", theNormal=" + getTheNormalId() +
-            "}";
-    }
 }

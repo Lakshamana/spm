@@ -1,81 +1,68 @@
 package br.ufpa.labes.spm.service.dto;
-import java.io.Serializable;
-import java.util.Objects;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.AgentHasAbility} entity.
- */
+import java.io.Serializable;
+
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
+
+@SuppressWarnings("serial")
 public class AgentHasAbilityDTO implements Serializable {
 
-    private Long id;
+	private Long id;
 
-    private Integer degree;
+	private Integer degree;
+	@IgnoreMapping
+	private String theAgent;
+	@IgnoreMapping
+	private String theAbility;
+	@IgnoreMapping
+	private String descriptionTheAbility;
 
+	public AgentHasAbilityDTO() {}
 
-    private Long theAgentId;
+	public AgentHasAbilityDTO(Integer degree, String theAgent, String theAbility) {
+		this.degree = degree;
+		this.theAgent = theAgent;
+		this.theAbility = theAbility;
+	}
 
-    private Long theAbilityId;
+	public Long getId() {
+		return id;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Integer getDegree() {
+		return degree;
+	}
 
-    public Integer getDegree() {
-        return degree;
-    }
+	public void setDegree(Integer degree) {
+		this.degree = degree;
+	}
 
-    public void setDegree(Integer degree) {
-        this.degree = degree;
-    }
+	public String getTheAgent() {
+		return theAgent;
+	}
 
-    public Long getTheAgentId() {
-        return theAgentId;
-    }
+	public void setTheAgent(String theAgent) {
+		this.theAgent = theAgent;
+	}
 
-    public void setTheAgentId(Long agentId) {
-        this.theAgentId = agentId;
-    }
+	public String getTheAbility() {
+		return theAbility;
+	}
 
-    public Long getTheAbilityId() {
-        return theAbilityId;
-    }
+	public void setTheAbility(String theAbility) {
+		this.theAbility = theAbility;
+	}
 
-    public void setTheAbilityId(Long abilityId) {
-        this.theAbilityId = abilityId;
-    }
+	public String getDescriptionTheAbility() {
+		return descriptionTheAbility;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	public void setDescriptionTheAbility(String descriptionTheAbility) {
+		this.descriptionTheAbility = descriptionTheAbility;
+	}
 
-        AgentHasAbilityDTO agentHasAbilityDTO = (AgentHasAbilityDTO) o;
-        if (agentHasAbilityDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), agentHasAbilityDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "AgentHasAbilityDTO{" +
-            "id=" + getId() +
-            ", degree=" + getDegree() +
-            ", theAgent=" + getTheAgentId() +
-            ", theAbility=" + getTheAbilityId() +
-            "}";
-    }
 }

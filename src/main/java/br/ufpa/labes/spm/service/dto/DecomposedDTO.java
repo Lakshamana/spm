@@ -1,59 +1,38 @@
 package br.ufpa.labes.spm.service.dto;
-import java.io.Serializable;
-import java.util.Objects;
-
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Decomposed} entity.
- */
-public class DecomposedDTO implements Serializable {
-
-    private Long id;
 
 
-    private Long theReferedProcessModelId;
+@SuppressWarnings("serial")
+public class DecomposedDTO extends ActivityDTO {
 
-    public Long getId() {
-        return id;
-    }
+	private ActivitysDTO normals;
+	private DecomposedDTO decomposed;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public DecomposedDTO() {}
 
-    public Long getTheReferedProcessModelId() {
-        return theReferedProcessModelId;
-    }
+	public DecomposedDTO(ActivitysDTO activitysDTO) {
+		this.normals = activitysDTO;
+	}
 
-    public void setTheReferedProcessModelId(Long processModelId) {
-        this.theReferedProcessModelId = processModelId;
-    }
+	public DecomposedDTO(ActivitysDTO normals, DecomposedDTO decomposed) {
+		this.normals = normals;
+		this.decomposed = decomposed;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	public ActivitysDTO getNormals() {
+		return normals;
+	}
+	public void setNormals(ActivitysDTO normals) {
+		this.normals = normals;
+	}
+	public DecomposedDTO getDecomposed() {
+		return decomposed;
+	}
+	public void setDecomposed(DecomposedDTO decomposed) {
+		this.decomposed = decomposed;
+	}
 
-        DecomposedDTO decomposedDTO = (DecomposedDTO) o;
-        if (decomposedDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), decomposedDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "DecomposedDTO{" +
-            "id=" + getId() +
-            ", theReferedProcessModel=" + getTheReferedProcessModelId() +
-            "}";
-    }
+	@Override
+	public String toString() {
+		return "[ident: " + this.getIdent() + "\n" + this.normals.getActivitys() + " ]";
+	}
 }

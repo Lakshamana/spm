@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.ufpa.labes.spm.service.dto.ArtifactDTO;
 
 @SuppressWarnings("serial")
 public class ResourcesDTO implements Serializable {

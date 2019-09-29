@@ -5,7 +5,7 @@ import java.util.List;
 
 import br.ufpa.labes.spm.service.dto.ProjectDTO;
 import br.ufpa.labes.spm.service.dto.DevelopingSystemDTO;
-import br.ufpa.labes.spm.service.dto.SystemsDTO;
+import br.ufpa.labes.spm.service.dto.DevelopingSystemsDTO;
 
 
 public interface SystemServices {
@@ -15,9 +15,9 @@ public interface SystemServices {
 
 	public Boolean removeSystem(DevelopingSystemDTO systemDTO);
 
-	public SystemsDTO getSystems(String termoBusca, String domainFilter);
+	public DevelopingSystemsDTO getSystems(String termoBusca, String domainFilter);
 
-	public SystemsDTO getSystems();
+	public DevelopingSystemsDTO getSystems();
 
 	public Boolean removeProjectToSystem(DevelopingSystemDTO systemDTO);
 

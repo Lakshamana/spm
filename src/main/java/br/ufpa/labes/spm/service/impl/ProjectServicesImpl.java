@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -677,7 +678,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		return project;
 	}
 
-	private void saveProjectProcess(Project project, List<Agent> agents) {
+	private void saveProjectProcess(Project project, Set<Agent> agents) {
 		Process process = project.getProcessRefered();
 
 		if(process == null) {

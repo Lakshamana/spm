@@ -1,104 +1,115 @@
 package br.ufpa.labes.spm.service.dto;
-import java.time.LocalDate;
+
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.Date;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Metric} entity.
- */
-public class MetricDTO implements Serializable {
-
-    private Long id;
-
-    private Float value;
-
-    private String unit;
-
-    private LocalDate periodBegin;
-
-    private LocalDate periodEnd;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 
-    private Long metricDefinitionId;
 
-    public Long getId() {
-        return id;
-    }
+public class MetricDTO implements Serializable{
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public Float getValue() {
-        return value;
-    }
 
-    public void setValue(Float value) {
-        this.value = value;
-    }
+	private Long id;
 
-    public String getUnit() {
-        return unit;
-    }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
+	private Float value;
 
-    public LocalDate getPeriodBegin() {
-        return periodBegin;
-    }
 
-    public void setPeriodBegin(LocalDate periodBegin) {
-        this.periodBegin = periodBegin;
-    }
+	private String unit;
 
-    public LocalDate getPeriodEnd() {
-        return periodEnd;
-    }
 
-    public void setPeriodEnd(LocalDate periodEnd) {
-        this.periodEnd = periodEnd;
-    }
+	private Date periodBegin;
 
-    public Long getMetricDefinitionId() {
-        return metricDefinitionId;
-    }
 
-    public void setMetricDefinitionId(Long metricDefinitionId) {
-        this.metricDefinitionId = metricDefinitionId;
-    }
+	private Date periodEnd;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	@IgnoreMapping
+	private String metricDefinition;
 
-        MetricDTO metricDTO = (MetricDTO) o;
-        if (metricDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), metricDTO.getId());
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
+	private Integer index;
 
-    @Override
-    public String toString() {
-        return "MetricDTO{" +
-            "id=" + getId() +
-            ", value=" + getValue() +
-            ", unit='" + getUnit() + "'" +
-            ", periodBegin='" + getPeriodBegin() + "'" +
-            ", periodEnd='" + getPeriodEnd() + "'" +
-            ", metricDefinition=" + getMetricDefinitionId() +
-            "}";
-    }
+
+	public MetricDTO() {
+		id = null;
+		value = null;
+		unit = "";
+
+		metricDefinition = "";
+	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public float getValue() {
+		return value;
+	}
+
+
+	public void setValue(float value) {
+		this.value = value;
+	}
+
+
+	public String getUnit() {
+		return unit;
+	}
+
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+
+	public Date getPeriodBegin() {
+		return periodBegin;
+	}
+
+
+	public void setPeriodBegin(Date periodBegin) {
+		this.periodBegin = periodBegin;
+	}
+
+
+	public Date getPeriodEnd() {
+		return periodEnd;
+	}
+
+
+	public void setPeriodEnd(Date periodEnd) {
+		this.periodEnd = periodEnd;
+	}
+
+
+	public String getMetricDefinition() {
+		return metricDefinition;
+	}
+
+
+	public void setMetricDefinition(String metricDefinition) {
+		this.metricDefinition = metricDefinition;
+	}
+
+
+	public Integer getIndex() {
+		return index;
+	}
+
+
+	public void setIndex(Integer index) {
+		this.index = index;
+	}
+
+
+
 }

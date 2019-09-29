@@ -1,81 +1,66 @@
 package br.ufpa.labes.spm.service.dto;
+
 import java.io.Serializable;
-import java.util.Objects;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Estimation} entity.
- */
-public class EstimationDTO implements Serializable {
-
-    private Long id;
-
-    private Float value;
-
-    private String unit;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 
-    private Long metricDefinitionId;
 
-    public Long getId() {
-        return id;
-    }
+public class EstimationDTO implements Serializable{
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	private Long id;
+	private Float value;
+	private String unit;
+	@IgnoreMapping
+	private String metricDefinition;
 
-    public Float getValue() {
-        return value;
-    }
 
-    public void setValue(Float value) {
-        this.value = value;
-    }
+	public EstimationDTO() {
+		id = null;
+		value = null;
+		unit = "";
+		metricDefinition = null;
+	}
 
-    public String getUnit() {
-        return unit;
-    }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Long getMetricDefinitionId() {
-        return metricDefinitionId;
-    }
 
-    public void setMetricDefinitionId(Long metricDefinitionId) {
-        this.metricDefinitionId = metricDefinitionId;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
 
-        EstimationDTO estimationDTO = (EstimationDTO) o;
-        if (estimationDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), estimationDTO.getId());
-    }
+	public Float getValue() {
+		return value;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
 
-    @Override
-    public String toString() {
-        return "EstimationDTO{" +
-            "id=" + getId() +
-            ", value=" + getValue() +
-            ", unit='" + getUnit() + "'" +
-            ", metricDefinition=" + getMetricDefinitionId() +
-            "}";
-    }
+	public void setValue(Float value) {
+		this.value = value;
+	}
+
+
+	public String getUnit() {
+		return unit;
+	}
+
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+
+	public String getMetricDefinition() {
+		return metricDefinition;
+	}
+
+
+	public void setMetricDefinition(String metricDefinition) {
+		this.metricDefinition = metricDefinition;
+	}
+
+
 }

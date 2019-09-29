@@ -1,181 +1,189 @@
 package br.ufpa.labes.spm.service.dto;
+
 import java.io.Serializable;
-import java.util.Objects;
-import javax.persistence.Lob;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Company} entity.
- */
-public class CompanyDTO implements Serializable {
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
-    private Long id;
+@SuppressWarnings("serial")
+public class CompanyDTO implements Serializable{
+	private Long id;
+	private String ident;
+	private String cnpj;
+	private String fantasyName;
+	private String socialReason;
+	private String acronym;
+	private String address;
+	private String phone;
+	private String description;
+	private String url;
+	private Boolean automaticInstantiation;
 
-    private String ident;
+	@IgnoreMapping
+	private Collection<String> policyEnabled;
+	@IgnoreMapping
+	private Collection<String> theSystem;
+	@IgnoreMapping
+	private Collection<String> organizationMetric;
+	@IgnoreMapping
+	private Collection<String> organizationEstimation;
+	@IgnoreMapping
+	private List<CompanyUnitDTO> theOrganizationalUnits;
+	public CompanyDTO(){
+		ident = "";
+		cnpj = "";
+		fantasyName = "";
+		socialReason = "";
+		acronym = "";
+		address = "";
+		phone = "";
+		description = "";
+		automaticInstantiation = new Boolean(false);
 
-    private String cnpj;
+		policyEnabled = new ArrayList<String>();
+		theSystem = new ArrayList<String>();
+		organizationMetric = new ArrayList<String>();
+		organizationEstimation = new ArrayList<String>();
+		setTheOrganizationalUnits(new ArrayList<CompanyUnitDTO>());
+	}
 
-    private String fantasyName;
+	public Long getId() {
+		return id;
+	}
 
-    private String socialReason;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    private String acronym;
+	public String getIdent() {
+		return ident;
+	}
 
-    private String address;
+	public void setIdent(String ident) {
+		this.ident = ident;
+	}
 
-    private String phone;
+	public String getCnpj() {
+		return cnpj;
+	}
 
-    @Lob
-    private String description;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
 
-    @Lob
-    private byte[] image;
+	public String getFantasyName() {
+		return fantasyName;
+	}
 
-    private String imageContentType;
-    private String url;
+	public void setFantasyName(String fantasyName) {
+		this.fantasyName = fantasyName;
+	}
 
-    private Boolean automaticInstantiation;
+	public String getSocialReason() {
+		return socialReason;
+	}
 
+	public void setSocialReason(String socialReason) {
+		this.socialReason = socialReason;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public String getAcronym() {
+		return acronym;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setAcronym(String acronym) {
+		this.acronym = acronym;
+	}
 
-    public String getIdent() {
-        return ident;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public void setIdent(String ident) {
-        this.ident = ident;
-    }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    public String getCnpj() {
-        return cnpj;
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    public String getFantasyName() {
-        return fantasyName;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setFantasyName(String fantasyName) {
-        this.fantasyName = fantasyName;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getSocialReason() {
-        return socialReason;
-    }
+	/*public Blob getImage() {
+		return image;
+	}
 
-    public void setSocialReason(String socialReason) {
-        this.socialReason = socialReason;
-    }
+	public void setImage(Blob image) {
+		this.image = image;
+	}*/
 
-    public String getAcronym() {
-        return acronym;
-    }
+	public Boolean isAutomaticInstantiation() {
+		return automaticInstantiation;
+	}
 
-    public void setAcronym(String acronym) {
-        this.acronym = acronym;
-    }
+	public void setAutomaticInstantiation(Boolean automaticInstantiation) {
+		this.automaticInstantiation = automaticInstantiation;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    public String getPhone() {
-        return phone;
-    }
+	@Override
+	public String toString() {
+		return "CompanyDTO [id=" + id + ", ident=" + ident + ", cnpj=" + cnpj
+				+ ", fantasyName=" + fantasyName + ", socialReason="
+				+ socialReason + ", acronym=" + acronym + ", address="
+				+ address + ", phone=" + phone + ", description=" + description
+				+ "]";
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ident == null) ? 0 : ident.hashCode());
+		return result;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CompanyDTO other = (CompanyDTO) obj;
+		if (ident == null) {
+			if (other.ident != null)
+				return false;
+		} else if (!ident.equals(other.ident))
+			return false;
+		return true;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public List<CompanyUnitDTO> getTheOrganizationalUnits() {
+		return theOrganizationalUnits;
+	}
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-    public String getImageContentType() {
-        return imageContentType;
-    }
-
-    public void setImageContentType(String imageContentType) {
-        this.imageContentType = imageContentType;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Boolean isAutomaticInstantiation() {
-        return automaticInstantiation;
-    }
-
-    public void setAutomaticInstantiation(Boolean automaticInstantiation) {
-        this.automaticInstantiation = automaticInstantiation;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        CompanyDTO companyDTO = (CompanyDTO) o;
-        if (companyDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), companyDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "CompanyDTO{" +
-            "id=" + getId() +
-            ", ident='" + getIdent() + "'" +
-            ", cnpj='" + getCnpj() + "'" +
-            ", fantasyName='" + getFantasyName() + "'" +
-            ", socialReason='" + getSocialReason() + "'" +
-            ", acronym='" + getAcronym() + "'" +
-            ", address='" + getAddress() + "'" +
-            ", phone='" + getPhone() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", image='" + getImage() + "'" +
-            ", url='" + getUrl() + "'" +
-            ", automaticInstantiation='" + isAutomaticInstantiation() + "'" +
-            "}";
-    }
+	public void setTheOrganizationalUnits(List<CompanyUnitDTO> theOrganizationalUnits) {
+		this.theOrganizationalUnits = theOrganizationalUnits;
+	}
 }

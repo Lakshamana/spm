@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import br.ufpa.labes.spm.annotations.IgnoreMapping;
-import br.ufpa.labes.spm.service.dto.ProjectDTO;
-import br.ufpa.labes.spm.service.dto.SimpleUpdateDTO;
 
 @SuppressWarnings("serial")
 public class ProjectCopyDTO implements Serializable {

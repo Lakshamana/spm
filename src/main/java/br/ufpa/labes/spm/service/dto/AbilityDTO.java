@@ -1,94 +1,65 @@
 package br.ufpa.labes.spm.service.dto;
+
 import java.io.Serializable;
-import java.util.Objects;
-import javax.persistence.Lob;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Ability} entity.
- */
-public class AbilityDTO implements Serializable {
-
-    private Long id;
-
-    private String ident;
-
-    private String name;
-
-    @Lob
-    private String description;
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 
-    private Long theAbilityTypeId;
+@SuppressWarnings("serial")
+public class AbilityDTO implements Serializable{
+	private Long id;
+	private String ident;
+	@IgnoreMapping
+	private String abilityType;
+	private String name;
+	private String description;
 
-    public Long getId() {
-        return id;
-    }
+	public AbilityDTO() {
+		this.id = null;
+		this.ident = " ";
+		this.name = " ";
+		this.description = " ";
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getIdent() {
-        return ident;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setIdent(String ident) {
-        this.ident = ident;
-    }
+	public String getIdent() {
+		return ident;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setIdent(String ident) {
+		this.ident = ident;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public Long getTheAbilityTypeId() {
-        return theAbilityTypeId;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setTheAbilityTypeId(Long abilityTypeId) {
-        this.theAbilityTypeId = abilityTypeId;
-    }
+	public String getAbilityType() {
+		return abilityType;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	public void setAbilityType(String abilityType) {
+		this.abilityType = abilityType;
+	}
 
-        AbilityDTO abilityDTO = (AbilityDTO) o;
-        if (abilityDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), abilityDTO.getId());
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "AbilityDTO{" +
-            "id=" + getId() +
-            ", ident='" + getIdent() + "'" +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", theAbilityType=" + getTheAbilityTypeId() +
-            "}";
-    }
 }

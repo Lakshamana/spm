@@ -1,116 +1,124 @@
+
 package br.ufpa.labes.spm.service.dto;
+
 import java.io.Serializable;
-import java.util.Objects;
-import javax.persistence.Lob;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.CompanyUnit} entity.
- */
+import br.ufpa.labes.spm.annotations.IgnoreMapping;
+
+@SuppressWarnings("serial")
 public class CompanyUnitDTO implements Serializable {
+	private Long id;
+	private String ident;
+	private String name;
+	private String description;
 
-    private Long id;
+	@IgnoreMapping
+	private String theAgent;
+	@IgnoreMapping
+	private CompanyUnitDTO theCommand;
+	@IgnoreMapping
+	private List<CompanyUnitDTO> theSubordinates;
+	@IgnoreMapping
+	private List<String> theUnitAgents;
 
-    private String ident;
+	public CompanyUnitDTO(){
+		ident = "";
+		name = "";
+		description = "";
+		theSubordinates = new ArrayList<CompanyUnitDTO>();
+		theUnitAgents = new ArrayList<String>();
+	}
 
-    private String name;
+	public String getIdent() {
+		return ident;
+	}
+	public void setIdent(String ident) {
+		this.ident = ident;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    @Lob
-    private String description;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CompanyUnitDTO other = (CompanyUnitDTO) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
 
-    private Long theOrganizationId;
+	public String getTheAgent() {
+		return theAgent;
+	}
 
-    private Long theCommandId;
+	public void setTheAgent(String theAgent) {
+		this.theAgent = theAgent;
+	}
 
-    private Long theAgentId;
+	public Long getId() {
+		return id;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public CompanyUnitDTO getTheCommand() {
+		return theCommand;
+	}
 
-    public String getIdent() {
-        return ident;
-    }
+	public void setTheCommand(CompanyUnitDTO theCommand) {
+		this.theCommand = theCommand;
+	}
 
-    public void setIdent(String ident) {
-        this.ident = ident;
-    }
+	public List<CompanyUnitDTO> getTheSubordinates() {
+		return theSubordinates;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setTheSubordinates(List<CompanyUnitDTO> theSubordinates) {
+		this.theSubordinates = theSubordinates;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public List<String> getTheUnitAgents() {
+		return theUnitAgents;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setTheUnitAgents(List<String> theUnitAgents) {
+		this.theUnitAgents = theUnitAgents;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getTheOrganizationId() {
-        return theOrganizationId;
-    }
-
-    public void setTheOrganizationId(Long companyId) {
-        this.theOrganizationId = companyId;
-    }
-
-    public Long getTheCommandId() {
-        return theCommandId;
-    }
-
-    public void setTheCommandId(Long companyUnitId) {
-        this.theCommandId = companyUnitId;
-    }
-
-    public Long getTheAgentId() {
-        return theAgentId;
-    }
-
-    public void setTheAgentId(Long agentId) {
-        this.theAgentId = agentId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        CompanyUnitDTO companyUnitDTO = (CompanyUnitDTO) o;
-        if (companyUnitDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), companyUnitDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "CompanyUnitDTO{" +
-            "id=" + getId() +
-            ", ident='" + getIdent() + "'" +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", theOrganization=" + getTheOrganizationId() +
-            ", theCommand=" + getTheCommandId() +
-            ", theAgent=" + getTheAgentId() +
-            "}";
-    }
+	@Override
+	public String toString() {
+		if (theCommand == null)
+			return "CompanyUnitDTO [name=" + name + "]";
+		else return "CompanyUnitDTO [name=" + name + ", theCommand=" + theCommand.getName() +"]";
+	}
 }

@@ -1,136 +1,89 @@
 package br.ufpa.labes.spm.service.dto;
+
 import java.io.Serializable;
-import java.util.Objects;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.Driver} entity.
- */
-public class DriverDTO implements Serializable {
-
-    private Long id;
-
-    private String tipo;
-
-    private String appKey;
-
-    private String appSecret;
-
-    private String appKeyGoogle;
-
-    private String appSecretGoogle;
-
-    private String requestUrl;
+@SuppressWarnings("serial")
+public class DriverDTO implements Serializable{
 
 
-    private Long thePluginId;
+	/**
+	 *
+	 */
+	private String appKeyGoogle;
 
-    private Long companyId;
 
-    public Long getId() {
-        return id;
-    }
+	private String appSecretGoogle;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	private Long id;
 
-    public String getTipo() {
-        return tipo;
-    }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+	private String tipo;
 
-    public String getAppKey() {
-        return appKey;
-    }
 
-    public void setAppKey(String appKey) {
-        this.appKey = appKey;
-    }
+	private String appKey;
 
-    public String getAppSecret() {
-        return appSecret;
-    }
 
-    public void setAppSecret(String appSecret) {
-        this.appSecret = appSecret;
-    }
+	private String appSecret;
 
-    public String getAppKeyGoogle() {
-        return appKeyGoogle;
-    }
 
-    public void setAppKeyGoogle(String appKeyGoogle) {
-        this.appKeyGoogle = appKeyGoogle;
-    }
+	private String requestUrl;
 
-    public String getAppSecretGoogle() {
-        return appSecretGoogle;
-    }
 
-    public void setAppSecretGoogle(String appSecretGoogle) {
-        this.appSecretGoogle = appSecretGoogle;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getRequestUrl() {
-        return requestUrl;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setRequestUrl(String requestUrl) {
-        this.requestUrl = requestUrl;
-    }
+	public String getTipo() {
+		return tipo;
+	}
 
-    public Long getThePluginId() {
-        return thePluginId;
-    }
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 
-    public void setThePluginId(Long pluginId) {
-        this.thePluginId = pluginId;
-    }
+	public String getAppKey() {
+		return appKey;
+	}
 
-    public Long getCompanyId() {
-        return companyId;
-    }
+	public void setAppKey(String appKey) {
+		this.appKey = appKey;
+	}
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
+	public String getAppSecret() {
+		return appSecret;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	public void setAppSecret(String appSecret) {
+		this.appSecret = appSecret;
+	}
 
-        DriverDTO driverDTO = (DriverDTO) o;
-        if (driverDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), driverDTO.getId());
-    }
+	public String getRequestUrl() {
+		return requestUrl;
+	}
+	public void setRequestUrl(String requestUrl) {
+		this.requestUrl = requestUrl;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
+	public String getAppKeyGoogle() {
+		return appKeyGoogle;
+	}
 
-    @Override
-    public String toString() {
-        return "DriverDTO{" +
-            "id=" + getId() +
-            ", tipo='" + getTipo() + "'" +
-            ", appKey='" + getAppKey() + "'" +
-            ", appSecret='" + getAppSecret() + "'" +
-            ", appKeyGoogle='" + getAppKeyGoogle() + "'" +
-            ", appSecretGoogle='" + getAppSecretGoogle() + "'" +
-            ", requestUrl='" + getRequestUrl() + "'" +
-            ", thePlugin=" + getThePluginId() +
-            ", company=" + getCompanyId() +
-            "}";
-    }
+
+	public void setAppKeyGoogle(String appKeyGoogle) {
+		this.appKeyGoogle = appKeyGoogle;
+	}
+
+	public String getAppSecretGoogle() {
+		return appSecretGoogle;
+	}
+
+
+	public void setAppSecretGoogle(String appSecretGoogle) {
+		this.appSecretGoogle = appSecretGoogle;
+	}
+
 }
