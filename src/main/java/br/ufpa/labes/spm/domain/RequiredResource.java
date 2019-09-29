@@ -121,4 +121,26 @@ public class RequiredResource implements Serializable {
             ", amountNeeded=" + getAmountNeeded() +
             "}";
     }
+
+    public void removeFromTheResourceType(){
+      if (this.theResourceType!=null){
+        this.theResourceType.removeTheRequiredResource(this);
+      }
+    }
+
+    public void insertIntoTheResourceType(ResourceType theResourceType){
+      theResourceType.addTheRequiredResource(this);
+    }
+
+    public void removeFromTheNormal(){
+      if (this.theNormal!=null){
+        this.theNormal.removeTheRequiredResource(this);
+      }
+    }
+
+    public void insertIntoTheNormal(Normal theNormal){
+      theNormal.addTheRequiredResource(this);
+    }
+
+
 }

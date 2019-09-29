@@ -169,4 +169,6 @@ public class JoinCon extends MultipleCon implements Serializable {
             ", kindJoin='" + getKindJoin() + "'" +
             "}";
     }
+
+
 }

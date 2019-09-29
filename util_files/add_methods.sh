@@ -71,9 +71,9 @@ for m in $models; do
     done
 
     # add input methods to new class
-    echo -e "$inputs"
-    # sed -i "s/^}$//" $file
-    # echo -e "$inputs" >> $file
-    # echo -e '}' >> $file
+    # echo -e "$inputs"
+    sed -i "s/^}$//" $file
+    echo -e "$inputs" >> $file
+    echo -e '}' >> $file
   fi
 done

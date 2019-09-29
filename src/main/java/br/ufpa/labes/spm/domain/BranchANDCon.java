@@ -117,4 +117,12 @@ public class BranchANDCon extends BranchCon implements Serializable {
             "id=" + getId() +
             "}";
     }
+
+    public BranchANDCon removeFromActivity(Activity activity) {
+        this.fromActivities.remove(activity);
+        activity.getToBranchANDCons().remove(this);
+        return this;
+    }
+
+
 }

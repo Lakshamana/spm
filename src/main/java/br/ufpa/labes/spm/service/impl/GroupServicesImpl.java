@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.qrconsult.spm.converter.core.Converter;
-import org.qrconsult.spm.converter.core.ConverterImpl;
+import br.ufpa.labes.spm.converter.Converter;
+import br.ufpa.labes.spm.converter.ConverterImpl;
 import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IWorkGroupDAO;

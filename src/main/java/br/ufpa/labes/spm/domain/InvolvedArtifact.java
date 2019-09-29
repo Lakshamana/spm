@@ -121,4 +121,47 @@ public class InvolvedArtifact implements Serializable {
             "id=" + getId() +
             "}";
     }
+
+    public void removeFromTheArtifacts(){
+      if (this.theArtifact!=null){
+        this.theArtifact.removeTheInvolvedArtifacts(this);
+      }
+    }
+
+    public void insertIntoTheArtifacts(Artifact theArtifact){
+      theArtifact.addTheInvolvedArtifacts(this);
+    }
+
+    public void removeFromTheArtifactType(){
+      if (this.theArtifactType!=null){
+        this.theArtifactType.removeTheInvolvedArtifacts(this);
+      }
+    }
+
+    public void insertIntoTheArtifactType(ArtifactType theArtifactType){
+      theArtifactType.addTheInvolvedArtifacts(this);
+    }
+
+    public void removeFromInInvolvedArtifacts(){
+      if (this.inInvolvedArtifacts!=null){
+        this.inInvolvedArtifacts.removeInvolvedArtifactToNormal(this);
+      }
+    }
+
+    public void insertIntoInInvolvedArtifacts(Normal inInvolvedArtifacts){
+      inInvolvedArtifacts.addInvolvedArtifactToNormal(this);
+    }
+
+    public void removeFromOutInvolvedArtifacts(){
+      if (this.outInvolvedArtifacts!=null){
+        this.outInvolvedArtifacts.removeInvolvedArtifactFromNormal(this);
+      }
+    }
+
+    public void insertIntoOutInvolvedArtifacts(Normal outInvolvedArtifacts){
+      if(outInvolvedArtifacts != null)
+        outInvolvedArtifacts.addInvolvedArtifactFromNormal(this);
+    }
+
+
 }

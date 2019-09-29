@@ -9,8 +9,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.qrconsult.spm.converter.core.Converter;
-import org.qrconsult.spm.converter.core.ConverterImpl;
+import br.ufpa.labes.spm.converter.Converter;
+import br.ufpa.labes.spm.converter.ConverterImpl;
 import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAbilityDAO;
 import br.ufpa.labes.spm.repository.interfaces.agent.IAgentAffinityAgentDAO;
@@ -197,7 +197,7 @@ public class AgentServicesImpl implements AgentServices {
 
 			SpmConfiguration spmconfiguration = new SpmConfiguration();
 			spmconfiguration.setFiltro("ID,teste,teste");
-			spmconfiguration.setTheAgent(agentRetorno);
+			spmconfiguration.setAgent(agentRetorno);
 			spmconfiguration.setIdioma(config.getIdioma());
 			spmconfiguration.setSenhaEmRecuperacao(false);
 
@@ -324,7 +324,7 @@ public class AgentServicesImpl implements AgentServices {
 		if (agent != null) {
 			if(!query.getResultList().isEmpty()) {
 				SpmConfiguration config = query.getResultList().get(0);
-				config.setTheAgent(null);
+				config.setAgent(null);
 				confiDAO.daoDelete(config);
 			}
 			if(!query2.getResultList().isEmpty()) {
@@ -335,7 +335,7 @@ public class AgentServicesImpl implements AgentServices {
 
 			for (AgentHasAbility agentHasAbility : agent
 					.getTheAgentHasAbilities()) {
-				agentHasAbility.removeTheAbility();
+				agentHasAbility.removeFromTheAbility();
 				agentHasAbility.setTheAgent(null);
 				agentHasAbilityDAO.daoDelete(agentHasAbility);
 			}
