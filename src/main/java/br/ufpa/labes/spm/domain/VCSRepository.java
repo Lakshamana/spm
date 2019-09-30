@@ -17,6 +17,27 @@ import java.util.Set;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class VCSRepository implements Serializable {
 
+    public static final transient String
+    CVS = "CVS",
+    SVN = "SVN";
+
+    public static final transient String
+    CVS_PSERVER_CONNECTIONTYPE = "pserver",
+    CVS_SERVER_CONNECTIONTYPE = "server",
+    CVS_SSHSERVER_CONNECTIONTYPE = "sshserver",
+    SVN_HTTP_PROTOCOL = "http",
+    SVN_HTTPS_PROTOCOL = "https";
+
+    public static final transient String
+    CVS_PSERVER_PORT = "2401",
+    CVS_SERVER_PORT = "504",
+    CVS_SSHSERVER_PORT = "22",
+    SVN_HTTP_PORT = "80",
+    SVN_HTTPS_PORT = "443";
+
+    public static final transient String
+    DEFAULT_REPOSITORY = "default";
+
     private static final long serialVersionUID = 1L;
 
     @Id

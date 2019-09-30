@@ -9,7 +9,7 @@ import br.ufpa.labes.spm.domain.WebAPSEEObject;
 
 public interface IWebAPSEEObjectDAO extends IBaseDAO<WebAPSEEObject, String> {
 
-  public WebAPSEEObject retrieveWebAPSEEObject(Integer theReferredOid, String className)
+  public WebAPSEEObject retrieveWebAPSEEObject(Long theReferredOid, String className)
       throws DAOException;
 
   public Collection<GraphicCoordinate> retrieveProcessCoordinates(String processId)

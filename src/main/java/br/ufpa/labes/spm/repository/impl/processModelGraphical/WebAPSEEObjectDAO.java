@@ -21,7 +21,7 @@ public class WebAPSEEObjectDAO extends BaseDAO<WebAPSEEObject, String>
     super(businessClass);
   }
 
-  public WebAPSEEObject retrieveWebAPSEEObject(Integer theReferredOid, String className)
+  public WebAPSEEObject retrieveWebAPSEEObject(Long theReferredOid, String className)
       throws DAOException {
 
     Query query =

@@ -20,21 +20,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.jdom.Attribute;
-import org.jdom.Content;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Text;
-import org.jdom.filter.AbstractFilter;
-import org.jdom.filter.ElementFilter;
-import org.jdom.filter.Filter;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Attribute;
+import org.jdom2.Content;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Text;
+import org.jdom2.filter.AbstractFilter;
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.filter.Filter;
+import org.jdom2.input.SAXBuilder;
 import br.ufpa.labes.spm.converter.Converter;
 import br.ufpa.labes.spm.converter.ConverterImpl;
 import br.ufpa.labes.spm.exceptions.ImplementationException;
@@ -263,7 +264,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 		//Load activities
 		processXML.append("<ACTIVITIES>\n");
-		Collection<Activity> activities = pModel.getTheActivity();
+		Collection<Activity> activities = pModel.getTheActivities();
 		Collection<Normal> theNormal = new ArrayList<Normal>();
 		for (Iterator<Activity> iterator = activities.iterator(); iterator.hasNext();) {
 			Activity activity = (Activity) iterator.next();
@@ -350,7 +351,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		processXML.append("<RESOURCES>\n");
 		for (Iterator<Normal> iterator = theNormal.iterator(); iterator.hasNext();) {
 			Normal normal = (Normal) iterator.next();
-			Collection<RequiredResource> resources = normal.getTheRequiredResource();
+			Collection<RequiredResource> resources = normal.getTheRequiredResources();
 			for (Iterator<RequiredResource> iterator2 = resources.iterator(); iterator2.hasNext();) {
 				RequiredResource requiredResource = (RequiredResource) iterator2.next();
 				if(requiredResource.getTheResource()!=null){
@@ -375,25 +376,25 @@ public class ProjectServicesImpl implements ProjectServices {
 		for (Iterator<Activity> iterator = activities.iterator(); iterator.hasNext();) {
 			Activity activity = (Activity) iterator.next();
 
-			Collection<ArtifactCon> fromArtCon = activity.getFromArtifactCon();
+			Collection<ArtifactCon> fromArtCon = activity.getFromArtifactCons();
 			for (Iterator<ArtifactCon> iterator2 = fromArtCon.iterator(); iterator2.hasNext();) {
 				ArtifactCon artifactCon = (ArtifactCon) iterator2.next();
 				processXML.append(getArtifactConTag(artifactCon));
 			}
 
-			Collection<BranchANDCon> fromBranch = activity.getFromBranchANDCon();
-			for (Iterator<BranchANDCon> iterator2 = fromBranchCon.iterator(); iterator2.hasNext();) {
+			Collection<BranchANDCon> fromBranch = activity.getFromBranchANDCons();
+			for (Iterator<BranchANDCon> iterator2 = fromBranch.iterator(); iterator2.hasNext();) {
 				BranchANDCon branchAND = (BranchANDCon) iterator2.next();
-				processXML.append(getBranchTag(branchANDCon));
+				processXML.append(getBranchTag(branchAND));
 			}
 
-			Collection<JoinCon> fromJoin = activity.getFromJoinCon();
-			for (Iterator<JoinCon> iterator2 = fromJoinCon.iterator(); iterator2.hasNext();) {
+			Collection<JoinCon> fromJoin = activity.getFromJoinCons();
+			for (Iterator<JoinCon> iterator2 = fromJoin.iterator(); iterator2.hasNext();) {
 				JoinCon join = (JoinCon) iterator2.next();
-				processXML.append(getJoinTag(joinCon));
+				processXML.append(getJoinTag(join));
 			}
 
-			Collection<SimpleCon> fromSimpleCon = activity.getFromSimpleCon();
+			Collection<SimpleCon> fromSimpleCon = activity.getFromSimpleCons();
 			for (Iterator<SimpleCon> iterator2 = fromSimpleCon.iterator(); iterator2.hasNext();) {
 				SimpleCon simpleCon = (SimpleCon) iterator2.next();
 				if(simpleCon instanceof Sequence)
@@ -402,25 +403,25 @@ public class ProjectServicesImpl implements ProjectServices {
 					processXML.append(getFeedbackTag(simpleCon));
 			}
 
-			Collection<ArtifactCon> toArtCon = activity.getToArtifactCon();
+			Collection<ArtifactCon> toArtCon = activity.getToArtifactCons();
 			for (Iterator<ArtifactCon> iterator2 = toArtCon.iterator(); iterator2.hasNext();) {
 				ArtifactCon artifactCon2 = (ArtifactCon) iterator2.next();
 				processXML.append(getArtifactConTag(artifactCon2));
 			}
 
-			Collection<BranchCon> toBranch = activity.getToBranchCon();
-			for (Iterator<BranchCon> iterator2 = toBranchCon.iterator(); iterator2.hasNext();) {
+			Collection<BranchCon> toBranch = activity.getToBranchCons();
+			for (Iterator<BranchCon> iterator2 = toBranch.iterator(); iterator2.hasNext();) {
 				BranchCon branch = (BranchCon) iterator2.next();
-				processXML.append(getBranchTag((BranchANDCon)branchCon));
+				processXML.append(getBranchTag((BranchANDCon)branch));
 			}
 
-			Collection<JoinCon> toJoin = activity.getToJoinCon();
-			for (Iterator<JoinCon> iterator2 = toJoinCon.iterator(); iterator2.hasNext();) {
+			Collection<JoinCon> toJoin = activity.getToJoinCons();
+			for (Iterator<JoinCon> iterator2 = toJoin.iterator(); iterator2.hasNext();) {
 				JoinCon join = (JoinCon) iterator2.next();
-				processXML.append(getJoinTag(joinCon));
+				processXML.append(getJoinTag(join));
 			}
 
-			Collection<SimpleCon> toSimpleCon = activity.getToSimpleCon();
+			Collection<SimpleCon> toSimpleCon = activity.getToSimpleCons();
 			for (Iterator<SimpleCon> iterator2 = toSimpleCon.iterator(); iterator2.hasNext();) {
 				SimpleCon simpleCon = (SimpleCon) iterator2.next();
 				processXML.append(getSequenceTag(simpleCon));
@@ -445,7 +446,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	private String getFeedbackTag(SimpleCon simpleCon) throws DAOException{
 		StringBuffer seqXML = new StringBuffer();
 		seqXML.append("<FEEDBACK ID=\"" + simpleCon.getId() + "\">\n");
-		seqXML.append("<CONDITION>" + ((Feedback)simpleCon).getTheCondition().getThePolExpression().toString() + "</CONDITION>\n");
+		// seqXML.append("<CONDITION>" + ((Feedback)simpleCon).getTheCondition().getThePolExpression().toString() + "</CONDITION>\n");
 		seqXML.append("<TO ID=\"" + simpleCon.getToActivity().getIdent() + "\"/>\n");
 		seqXML.append("<FROM ID=\"" + simpleCon.getFromActivity().getIdent() + "\"/>\n");
 		seqXML.append(getPositionTag(simpleCon.getId(), simpleCon.getClass().getSimpleName()));
@@ -456,8 +457,8 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	private String getJoinTag(JoinCon joinCon) throws DAOException{
 		StringBuffer joinConXML = new StringBuffer();
-		joinXML.append("<JOIN ID=\"" + joinCon.getId() + "\">\n");
-		joinXML.append("<DEPENDENCY>" + joinCon.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
+		joinConXML.append("<JOIN ID=\"" + joinCon.getId() + "\">\n");
+		joinConXML.append("<DEPENDENCY>" + joinCon.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
 
 		//TO
 		Activity toActivity = joinCon.getToActivity();
@@ -469,7 +470,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		}
 
 		//FROM
-		Collection<Activity> fromActivities = joinCon.getFromActivity();
+		Collection<Activity> fromActivities = joinCon.getFromActivities();
 		if(fromActivities!=null){
 			joinConXML.append("<FROM_ACTIVITY>\n");
 			for (Iterator<Activity> iterator3 = fromActivities.iterator(); iterator3.hasNext();) {
@@ -479,7 +480,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			joinConXML.append("</FROM_ACTIVITY>\n");
 		}
 
-		Collection<MultipleCon> fromMultipleCon = joinCon.getFromMultipleCon();
+		Collection<MultipleCon> fromMultipleCon = joinCon.getFromMultipleCons();
 		if(fromMultipleCon!=null){
 			joinConXML.append("<FROM_MULTIPLECON>\n");
 			for (Iterator<MultipleCon> iterator3 = fromMultipleCon.iterator(); iterator3.hasNext();) {
@@ -490,16 +491,16 @@ public class ProjectServicesImpl implements ProjectServices {
 		}
 
 		//POSITION
-		joinXML.append(getPositionTag(join.getId(), joinCon.getClass().getSimpleName()));
-		joinXML.append("</JOINCon>\n");
+		joinConXML.append(getPositionTag(joinCon.getId(), joinCon.getClass().getSimpleName()));
+		joinConXML.append("</JOINCon>\n");
 
 		return joinConXML.toString();
 	}
 
 	private String getBranchTag(BranchANDCon branchCon) throws DAOException{
 		StringBuffer branchConXML = new StringBuffer();
-		branchXML.append("<BRANCH ID=\"" + branchCon.getId() + "\">\n");
-		branchXML.append("<DEPENDENCY>" + branchCon.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
+		branchConXML.append("<BRANCH ID=\"" + branchCon.getId() + "\">\n");
+		branchConXML.append("<DEPENDENCY>" + branchCon.getTheDependency().getKindDep() + "</DEPENDENCY>\n");
 
 		//FROM
 		Activity fromActivity = branchCon.getFromActivity();
@@ -511,7 +512,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		}
 
 		//TO
-		Collection<Activity> toActivities = branchCon.getToActivity();
+		Collection<Activity> toActivities = branchCon.getToActivities();
 		if(toActivities!=null){
 			branchConXML.append("<TO_ACTIVITY>\n");
 			for (Iterator<Activity> iterator3 = toActivities.iterator(); iterator3.hasNext();) {
@@ -521,7 +522,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			branchConXML.append("</TO_ACTIVITY>\n");
 		}
 
-		Collection<MultipleCon> toMultipleCon = branchCon.getToMultipleCon();
+		Collection<MultipleCon> toMultipleCon = branchCon.getToMultipleCons();
 		if(toMultipleCon!=null){
 			branchConXML.append("<TO_MULTIPLECON>\n");
 			for (Iterator<MultipleCon> iterator3 = toMultipleCon.iterator(); iterator3.hasNext();) {
@@ -532,8 +533,8 @@ public class ProjectServicesImpl implements ProjectServices {
 		}
 
 		//POSITION
-		branchXML.append(getPositionTag(branch.getId(), branchCon.getClass().getSimpleName()));
-		branchXML.append("</BRANCHCon>\n");
+		branchConXML.append(getPositionTag(branchCon.getId(), branchCon.getClass().getSimpleName()));
+		branchConXML.append("</BRANCHCon>\n");
 
 		return branchConXML.toString();
 	}
@@ -551,7 +552,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		else artConXML.append("<ARTIFACTTYPE></ARTIFACTTYPE>\n");
 
 		//FROM
-		Collection<Activity> fromActivities = artifactCon.getFromActivity();
+		Collection<Activity> fromActivities = artifactCon.getFromActivities();
 		if(fromActivities!=null){
 			artConXML.append("<FROM>\n");
 			for (Iterator<Activity> iterator3 = fromActivities.iterator(); iterator3.hasNext();) {
@@ -563,7 +564,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 		//TO
 
-		Collection<Activity> toActivities = artifactCon.getToActivity();
+		Collection<Activity> toActivities = artifactCon.getToActivities();
 		if(toActivities!=null){
 			artConXML.append("<TO>\n");
 			for (Iterator<Activity> iterator3 = toActivities.iterator(); iterator3.hasNext();) {
@@ -965,7 +966,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		cost.setEstimatedCost(custoEstimado);
 		cost.setRealCost(custoReal);
 
-		return cost;
+    return cost;
 	}
 
 	private ProjectStatistic convertProjectToProjectStatistic(Project project) {
@@ -1184,7 +1185,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			projectDTO = (ProjectDTO) converter.getDTO(project, ProjectDTO.class);
 			if(project.getProcessRefered() != null) {
 				projectDTO.setProcessRefered(project.getProcessRefered().getIdent());
-				projectDTO.setpState(project.getProcessRefered().getpStatus().name());
+				projectDTO.setpState(project.getProcessRefered().getpState());
 
 				float time = processEstimationDAO.getHoursEstimationForProject(project.getIdent());
 //				int hours = (int) time;
@@ -1194,7 +1195,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 				projectDTO.setEstimatedHours(hours);
 				projectDTO.setEstimatedMinutes(minutes);
-				List<Agent> agents = (List<Agent>) project.getProcessRefered().getTheAgent();
+				List<Agent> agents = (List<Agent>) project.getProcessRefered().getTheAgents();
 				projectDTO.setProcess(project.getProcessRefered().getId().toString());
 				List<String> agentNames = getAgentNames(agents);
 				projectDTO.setAgents(agentNames);
@@ -1213,10 +1214,10 @@ public class ProjectServicesImpl implements ProjectServices {
 	private ProcessDTO convertProcessToProcessDTO(Process process) {
 		ProcessDTO processDTO = new ProcessDTO();
 		processDTO.setIdent(process.getIdent());
-		processDTO.setPState(process.getpStatus().name());
+		processDTO.setPState(process.getpState());
 
 		if(process.getTheProcessModel() != null) {
-			process.getTheProcessModel().getTheActivity();
+			process.getTheProcessModel().getTheActivities();
 		}
 
 //		processDTO.setActivitys(activitys);
@@ -1462,7 +1463,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			Element sysElm = element.getChild("TheSystem");
 			if(sysElm != null){
 				String sysKey = sysElm.getAttributeValue("REF");
-				project.insertIntoTheSystem((DevelopingSystem) this.organizational.get(sysKey));
+				project.setTheSystem((DevelopingSystem) this.organizational.get(sysKey));
 			}
 			project.setIdent(project.getName());
 		}
@@ -1477,7 +1478,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(artifact == null) continue;
 			// Setting type...
 			String typeKey = element.getChild("TheArtifactType").getAttributeValue("REF");
-			artifact.insertIntoTheArtifactType((ArtifactType) this.organizational.get(typeKey));
+			artifact.setTheArtifactType((ArtifactType) this.organizational.get(typeKey));
 		}
 
 		iter = artifacts.iterator();
@@ -1510,7 +1511,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(ability == null) continue;
 			// Setting type...
 			String typeKey = element.getChild("TheAbilityType").getAttributeValue("REF");
-			ability.insertIntoTheAbilityType((AbilityType) this.organizational.get(typeKey));
+			ability.setTheAbilityType((AbilityType) this.organizational.get(typeKey));
 
 			this.organizational.put(element.getAttributeValue("KEY"), ability);
 		}
@@ -1525,7 +1526,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(role == null) continue;
 			// Setting type...
 			String typeKey = element.getChild("TheRoleType").getAttributeValue("REF");
-			role.insertIntoTheRoleType((RoleType) this.organizational.get(typeKey));
+			role.setTheRoleType((RoleType) this.organizational.get(typeKey));
 		}
 
 
@@ -1537,7 +1538,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			Element subordElm = element.getChild("Subordinate");
 			if(subordElm != null){
 				String subordKey = subordElm.getAttributeValue("REF");
-				role.insertIntoSubordinate((Role) this.organizational.get(subordKey));
+				role.setSubordinate((Role) this.organizational.get(subordKey));
 			}
 		}
 	}
@@ -1576,13 +1577,13 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(WorkGroup == null) continue;
 			// Setting type...
 			String typeKey = element.getChild("TheWorkGroupType").getAttributeValue("REF");
-			WorkGroup.insertIntoTheWorkGroupType((WorkGroupType) this.organizational.get(typeKey));
+			WorkGroup.setTheGroupType((WorkGroupType) this.organizational.get(typeKey));
 
 			// Setting super WorkGroup...
 			Element superElm = element.getChild("SuperWorkGroup");
 			if(superElm != null){
 				String superKey = superElm.getAttributeValue("REF");
-				WorkGroup.insertIntoSuperWorkGroup((WorkGroup) this.organizational.get(superKey));
+				WorkGroup.setSuperGroup((WorkGroup) this.organizational.get(superKey));
 			}
 
 			// Setting agents...
@@ -1593,7 +1594,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				while (iterItens.hasNext()) {
 					Element agentElm = (Element) iterItens.next();
 					String agentKey = agentElm.getValue();
-					WorkGroup.insertIntoTheAgent((Agent) this.organizational.get(agentKey));
+					WorkGroup.addTheAgent((Agent) this.organizational.get(agentKey));
 				}
 			}
 
@@ -1626,13 +1627,13 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(resource == null) continue;
 			// Setting type...
 			String typeKey = element.getChild("TheResourceType").getAttributeValue("REF");
-			resource.insertIntoTheResourceType((ResourceType) this.organizational.get(typeKey));
+			resource.setTheResourceType((ResourceType) this.organizational.get(typeKey));
 
 			// Setting belongsTo...
 			Element belongsToElm = element.getChild("BelongsTo");
 			if(belongsToElm != null){
 				String belongsToKey = belongsToElm.getAttributeValue("REF");
-				resource.insertIntoBelongsTo((Resource) this.organizational.get(belongsToKey));
+				resource.setBelongsTo((Resource) this.organizational.get(belongsToKey));
 			}
 
 			this.organizational.put(element.getAttributeValue("KEY"), resource);
@@ -1648,7 +1649,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(toolDef == null) continue;
 			// Setting type...
 			String typeKey = element.getChild("TheToolType").getAttributeValue("REF");
-			toolDef.insertIntoTheToolType((ToolType) this.organizational.get(typeKey));
+			toolDef.setTheToolType((ToolType) this.organizational.get(typeKey));
 
 			// Setting artifact types...
 			Element artTypes = element.getChild("TheArtifactType");
@@ -1658,7 +1659,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				while (iterItens.hasNext()) {
 					Element artTypeElm = (Element) iterItens.next();
 					String artTypeKey = artTypeElm.getValue();
-					toolDef.insertIntoTheArtifactType((ArtifactType) this.organizational.get(artTypeKey));
+					toolDef.addTheArtifactTypes((ArtifactType) this.organizational.get(artTypeKey));
 				}
 			}
 
@@ -1679,7 +1680,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(subroutine == null) continue;
 			// Setting type...
 			String typeKey = element.getChild("TheArtifactType").getAttributeValue("REF");
-			subroutine.insertIntoTheArtifactType((ArtifactType) this.organizational.get(typeKey));
+			subroutine.setTheArtifactType((ArtifactType) this.organizational.get(typeKey));
 
 			this.organizational.put(element.getAttributeValue("KEY"), subroutine);
 		}
@@ -1705,20 +1706,20 @@ public class ProjectServicesImpl implements ProjectServices {
 
 			// Setting artifact type...
 			String typeKey = element.getChild("TheArtifactType").getAttributeValue("REF");
-			toolParams.insertIntoTheArtifactType((ArtifactType) this.organizational.get(typeKey));
+			toolParams.setTheArtifactType((ArtifactType) this.organizational.get(typeKey));
 
 			// Setting primitive type...
 			Element primitiveElm = element.getChild("ThePrimitiveType");
 			if(primitiveElm != null){
 				String primitiveKey = primitiveElm.getAttributeValue("REF");
-				toolParams.insertIntoThePrimitiveType((PrimitiveType) this.organizational.get(primitiveKey));
+				toolParams.setThePrimitiveType((PrimitiveType) this.organizational.get(primitiveKey));
 			}
 
 			// Setting subroutine...
 			Element subroutineElm = element.getChild("TheSubroutine");
 			if(subroutineElm != null){
 				String subroutineKey = subroutineElm.getAttributeValue("REF");
-				toolParams.insertIntoTheSubroutine((Subroutine) this.organizational.get(subroutineKey));
+				toolParams.setTheSubroutine((Subroutine) this.organizational.get(subroutineKey));
 			}
 
 			this.persistObject(toolParams, null);
@@ -1755,8 +1756,8 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(!this.isAssociativeExists(AgentAffinityAgent.class, fromAffinity, toAffinity)){
 
 				AgentAffinityAgent aaa = new AgentAffinityAgent();
-				aaa.insertIntoToAffinity(toAffinity);
-				aaa.insertIntoFromAffinity(fromAffinity);
+				aaa.setToAffinity(toAffinity);
+				aaa.setFromAffinity(fromAffinity);
 				aaa.setDegree(Integer.valueOf(aaaElm.getChildText("Degree")));
 
 				aaa = (AgentAffinityAgent) this.persistObject(aaa, null);
@@ -3281,32 +3282,32 @@ public class ProjectServicesImpl implements ProjectServices {
 		}
 	}
 
-	private void loadPolRequiredOperand(Element processComponents){
-		List<Element> requireds = processComponents.getChildren(PolRequiredOperand.class.getSimpleName());
-		Iterator<Element> iter = requireds.iterator();
-		while (iter.hasNext()) {
-			Element reqElm = (Element) iter.next();
-			PolRequiredOperand polReq = new PolRequiredOperand();
-			polReq.setLabel(reqElm.getChildText("Label"));
-			polReq.setRequiredType(reqElm.getChildText("RequiredType"));
+	// private void loadPolRequiredOperand(Element processComponents){
+	// 	List<Element> requireds = processComponents.getChildren(PolRequiredOperand.class.getSimpleName());
+	// 	Iterator<Element> iter = requireds.iterator();
+	// 	while (iter.hasNext()) {
+	// 		Element reqElm = (Element) iter.next();
+	// 		PolRequiredOperand polReq = new PolRequiredOperand();
+	// 		polReq.setLabel(reqElm.getChildText("Label"));
+	// 		polReq.setRequiredType(reqElm.getChildText("RequiredType"));
 
-			Element isRequiredByElm = reqElm.getChild("IsRequiredBy");
-			if(isRequiredByElm != null){
-				String isRequiredByKey = isRequiredByElm.getAttributeValue("REF");
-				polReq.insertIntoIsRequiredBy((PolMethodOperator) this.processComponents.get(isRequiredByKey));
-			}
+	// 		Element isRequiredByElm = reqElm.getChild("IsRequiredBy");
+	// 		if(isRequiredByElm != null){
+	// 			String isRequiredByKey = isRequiredByElm.getAttributeValue("REF");
+	// 			polReq.insertIntoIsRequiredBy((PolMethodOperator) this.processComponents.get(isRequiredByKey));
+	// 		}
 
-			Element operandElm = reqElm.getChild("ThePolOperand");
-			if(operandElm != null){
-				String operandKey = operandElm.getAttributeValue("REF");
-				polReq.insertIntoThePolOperand((PolOperand) this.processComponents.get(operandKey));
-			}
+	// 		Element operandElm = reqElm.getChild("ThePolOperand");
+	// 		if(operandElm != null){
+	// 			String operandKey = operandElm.getAttributeValue("REF");
+	// 			polReq.insertIntoThePolOperand((PolOperand) this.processComponents.get(operandKey));
+	// 		}
 
-			this.persistObject(polReq, null);
+	// 		this.persistObject(polReq, null);
 
-			this.processComponents.put(reqElm.getAttributeValue("KEY"), polReq);
-		}
-	}
+	// 		this.processComponents.put(reqElm.getAttributeValue("KEY"), polReq);
+	// 	}
+	// }
 
 	private void loadParameters(Element processComponents, Element organizational) {
 
@@ -3326,13 +3327,13 @@ public class ProjectServicesImpl implements ProjectServices {
 				Element autoElm = paramElm.getChild("TheAutomatic");
 				if(autoElm != null){
 					String autoKey = autoElm.getAttributeValue("REF");
-					artParam.insertIntoTheAutomatic((Automatic) this.processComponents.get(autoKey));
+					artParam.setTheAutomatic((Automatic) this.processComponents.get(autoKey));
 				}
 
 				Element artElm = paramElm.getChild("TheArtifact");
 				if(artElm != null){
 					String artKey = artElm.getAttributeValue("REF");
-					artParam.insertIntoTheArtifacts((Artifact) this.organizational.get(artKey));
+					artParam.setTheArtifact((Artifact) this.organizational.get(artKey));
 				}
 
 				this.persistObject(artParam, null);
@@ -3347,7 +3348,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				Element autoElm = paramElm.getChild("TheAutomatic");
 				if(autoElm != null){
 					String autoKey = autoElm.getAttributeValue("REF");
-					priParam.insertIntoTheAutomatic((Automatic) this.processComponents.get(autoKey));
+					priParam.setTheAutomatic((Automatic) this.processComponents.get(autoKey));
 				}
 
 				this.persistObject(priParam, null);
@@ -3370,7 +3371,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			String ref = webapObjXML.getChildText("ReferredOid");
 			Object obj = this.processComponents.get(ref);
 
-			Integer newOid = this.getId(obj);
+			Long newOid = this.getId(obj);
 			if(newOid == null) continue;
 
 			wobj.setTheReferredOid(newOid);
@@ -3520,7 +3521,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	 * Auxiliary Methods
 	 */
 
-	private Integer getId(Object obj){
+	private Long getId(Object obj){
 		if(obj == null) return null;
 
 		try {
@@ -3966,7 +3967,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				agentDTO.setRoleToAgent(new ArrayList<String>());
 
 				for (AgentPlaysRole agentPlayRole : agent
-						.getTheAgentPlaysRole()) {
+						.getTheAgentPlaysRoles()) {
 					agentDTO.getRoleToAgent().add(
 							agentPlayRole.getTheRole().getName());
 				}
@@ -3975,14 +3976,14 @@ public class ProjectServicesImpl implements ProjectServices {
 				agentDTO.setRoleToAgent(new ArrayList<String>());
 			}
 
-			agentDTO.setWorkGroupToAgent(new ArrayList<String>());
+			agentDTO.setGroupToAgent(new ArrayList<String>());
 			for (WorkGroup WorkGroup : agent.getTheWorkGroups()) {
-				agentDTO.getWorkGroupToAgent().add(WorkGroup.getName());
+				agentDTO.getGroupToAgent().add(WorkGroup.getName());
 			}
 
 			agentDTO.setAbilityToAgent(new ArrayList<String>());
 			for (AgentHasAbility agentHasAbility : agent
-					.getTheAgentHasAbility()) {
+					.getTheAgentHasAbilities()) {
 				String abilityName = agentHasAbility.getTheAbility().getName();
 
 				agentDTO.getAbilityToAgent().add(abilityName);
@@ -3990,7 +3991,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 			agentDTO.setAfinityToAgent(new ArrayList<String>());
 			for (AgentAffinityAgent agentAffinityAgent : agent
-					.getFromAgentAffinity()) {
+					.getFromAgentAffinities()) {
 				String fromAffinityName = agentAffinityAgent.getFromAffinity()
 						.getName();
 
@@ -4048,7 +4049,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public AgentsDTO getAgentsFromProjects(String theProcess_oid,Integer agent_oid) {
+	public AgentsDTO getAgentsFromProjects(String theProcess_oid,Long agent_oid) {
 
 		String hql_project = "SELECT agent FROM " + AGENT_CLASSNAME + " as agent," +
 						" "+TASKAGENDA_CLASSNAME+" as taskagenda,"+PROCESS_AGENDA_CLASSNAME+" as processagenda"+
@@ -4064,7 +4065,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		return convertAgentsToAgentsDTO(agentList);
 	}
 
-	public AgentsDTO getAgentsOnline(Integer agent_oid) {
+	public AgentsDTO getAgentsOnline(Long agent_oid) {
 
 
 		String hql_project = "SELECT agent FROM " + AGENT_CLASSNAME + " as agent" +

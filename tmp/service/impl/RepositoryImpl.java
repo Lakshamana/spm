@@ -2,8 +2,10 @@ package br.ufpa.labes.spm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Query;
 
@@ -12,8 +14,8 @@ import org.qrconsult.spm.artifactManagement.interfaces.ArtifactVersionControlRem
 import org.qrconsult.spm.beans.ArtifactMngContent;
 import org.qrconsult.spm.beans.ArtifactMngDownload;
 import org.qrconsult.spm.beans.ArtifactMngParamDownload;
-import org.qrconsult.spm.converter.core.Converter;
-import org.qrconsult.spm.converter.core.ConverterImpl;
+import br.ufpa.labes.spm.converter.Converter;
+import br.ufpa.labes.spm.converter.ConverterImpl;
 import br.ufpa.labes.spm.exceptions.ImplementationException;
 import br.ufpa.labes.spm.repository.interfaces.artifacts.IArtifactDAO;
 import br.ufpa.labes.spm.repository.interfaces.organizationPolicies.INodeDAO;
@@ -30,7 +32,7 @@ import br.ufpa.labes.spm.domain.Artifact;
 import br.ufpa.labes.spm.domain.ArtifactCon;
 import br.ufpa.labes.spm.domain.Node;
 import br.ufpa.labes.spm.domain.Project;
-import br.ufpa.labes.spm.domain.Repository;
+import br.ufpa.labes.spm.domain.VCSRepository;
 import br.ufpa.labes.spm.domain.Structure;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.service.interfaces.RepositoryServices;
@@ -56,7 +58,7 @@ public class RepositoryImpl implements RepositoryServices{
 	@Override
 	public RepositoryDTO Salvar(RepositoryDTO repositoryDTO) {
 		try {
-			Repository repository = (Repository) converter.getEntity(repositoryDTO, Repository.class);
+			VCSRepository repository = (VCSRepository) converter.getEntity(repositoryDTO, VCSRepository.class);
 
 			if (repositoryDAO.retrieveBySecondaryKey(repositoryDTO.getIdent()) == null){
 
@@ -86,8 +88,8 @@ public class RepositoryImpl implements RepositoryServices{
 		return repositoryDTO;
 	}
 
-	private List<Node> convertNodes(List<NodeDTO> children, NodeDTO father) throws ImplementationException {
-		List<Node> nodes = new ArrayList<Node>();
+	private Set<Node> convertNodes(List<NodeDTO> children, NodeDTO father) throws ImplementationException {
+		Set<Node> nodes = new HashSet<Node>();
 
 		for (NodeDTO nodeDTO : children) {
 
@@ -100,8 +102,8 @@ public class RepositoryImpl implements RepositoryServices{
 		return nodes;
 	}
 
-	private List<NodeDTO> convertNodesToNodesDTO(List<Node> children, Node father) throws ImplementationException {
-		List<NodeDTO> nodesDTO = new ArrayList<NodeDTO>();
+	private Set<NodeDTO> convertNodesToNodesDTO(Set<Node> children, Node father) throws ImplementationException {
+		Set<NodeDTO> nodesDTO = new HashSet<NodeDTO>();
 		for (Node node : children) {
 
 			NodeDTO nodeDTO = (NodeDTO) converter.getDTO(node, NodeDTO.class);
@@ -118,11 +120,11 @@ public class RepositoryImpl implements RepositoryServices{
 		String hql;
 		Query query;
 
-		hql = "select repository from "+Repository.class.getSimpleName()+" as repository where repository.ident = :repname";
+		hql = "select repository from "+VCSRepository.class.getSimpleName()+" as repository where repository.ident = :repname";
 		query = repositoryDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("repname", ident);
-		List<Repository> result = query.getResultList();
-		Repository re = null;
+		List<VCSRepository> result = query.getResultList();
+		VCSRepository re = null;
 		if(!result.isEmpty()){
 			re = result.get(0);
 		}
@@ -142,10 +144,10 @@ public class RepositoryImpl implements RepositoryServices{
 		String hql;
 		Query query;
 
-		hql = "select rep from "+Repository.class.getSimpleName()+" as rep ";
+		hql = "select rep from "+VCSRepository.class.getSimpleName()+" as rep ";
 		query = repositoryDAO.getPersistenceContext().createQuery(hql);
 
-		List<Repository> reys = new ArrayList<Repository>();
+		List<VCSRepository> reys = new ArrayList<VCSRepository>();
 		reys = query.getResultList();
 		if(reys.isEmpty()){
 			return null;
@@ -153,7 +155,7 @@ public class RepositoryImpl implements RepositoryServices{
 
 		List<RepositoryDTO> rep  = new ArrayList<RepositoryDTO>();
 		RepositoryDTO re;
-		for (Repository repository : reys) {
+		for (VCSRepository repository : reys) {
 			re = new RepositoryDTO();
 			try {
 				re = (RepositoryDTO) converter.getDTO(repository, RepositoryDTO.class);
@@ -171,10 +173,10 @@ public class RepositoryImpl implements RepositoryServices{
 		String hql;
 		Query query;
 
-		hql = "select rep from "+Repository.class.getSimpleName()+" as rep ";
+		hql = "select rep from "+VCSRepository.class.getSimpleName()+" as rep ";
 		query = repositoryDAO.getPersistenceContext().createQuery(hql);
 
-		List<Repository> reys = new ArrayList<Repository>();
+		List<VCSRepository> reys = new ArrayList<VCSRepository>();
 		reys = query.getResultList();
 		if(reys.isEmpty()){
 			return null;
@@ -203,7 +205,7 @@ public class RepositoryImpl implements RepositoryServices{
 		Converter converter = new ConverterImpl();
 		RepositoryDTO repositoryDTO = null;
 		try {
-			Repository repository = repositoryDAO.retrieveBySecondaryKey(ident) ;
+			VCSRepository repository = repositoryDAO.retrieveBySecondaryKey(ident) ;
 
 
 			if (repository != null){
@@ -238,7 +240,7 @@ public class RepositoryImpl implements RepositoryServices{
 	@Override
 	public RepositoryDTO getRepos(String ident)  {
 		Converter converter = new ConverterImpl();
-		Repository rep = repositoryDAO.retrieveBySecondaryKey(ident) ;
+		VCSRepository rep = repositoryDAO.retrieveBySecondaryKey(ident) ;
 		StructureDTO struc = null;
 		NodeDTO nodeRoot = null;
 		if (rep != null){
@@ -270,8 +272,8 @@ public class RepositoryImpl implements RepositoryServices{
 		}
 	}
 
-	private List<NodeDTO> converterNodesDTO(List<Node> nodes,StructureDTO structure,NodeDTO father) throws ImplementationException{
-		List<NodeDTO> nos = new ArrayList<NodeDTO>();
+	private Set<NodeDTO> converterNodesDTO(List<Node> nodes,StructureDTO structure,NodeDTO father) throws ImplementationException{
+    Set<NodeDTO> nos = new HashSet<NodeDTO>();
 		Converter converter = new ConverterImpl();
 		for (Node node : nodes) {
 			NodeDTO nodeDTO = (NodeDTO) converter.getDTO(node, NodeDTO.class);
@@ -284,8 +286,8 @@ public class RepositoryImpl implements RepositoryServices{
 		return nos;
 	}
 
-	private List<NodeDTO> converterFilhosDTO(List<Node> nodes,StructureDTO structure,NodeDTO father) throws ImplementationException {
-		List<NodeDTO> nos = new ArrayList<NodeDTO>();
+	private Set<NodeDTO> converterFilhosDTO(Set<Node> nodes,StructureDTO structure,NodeDTO father) throws ImplementationException {
+		Set<NodeDTO> nos = new HashSet<NodeDTO>();
 		Converter converter = new ConverterImpl();
 		for (Node node : nodes) {
 			NodeDTO nodeDTO = (NodeDTO) converter.getDTO(node, NodeDTO.class);
@@ -318,7 +320,7 @@ public class RepositoryImpl implements RepositoryServices{
 
 		for (int i = 0; i < params.length; i++) {
 			ArtifactMngParamDownload param = params[i];
-			Repository repository = artifactManager.getRepositoryByArtifact(param.getArtifactIdent());
+			VCSRepository repository = artifactManager.getRepositoryByArtifact(param.getArtifactIdent());
 			RepositoryDTO repositoryDTO = new RepositoryDTO();
 			try {
 				repositoryDTO = (RepositoryDTO) converter.getDTO(repository, RepositoryDTO.class);
@@ -348,12 +350,12 @@ public class RepositoryImpl implements RepositoryServices{
 			//Verify WHO can be the upload
 			System.out.println("entrou aqui");
 			Artifact artifact = (Artifact) artifactDAO.retrieveBySecondaryKey( artifact_id );
-			System.out.println(artifact.getTheArtifactCon());
-			Collection artCon = artifact.getTheArtifactCon();
+			System.out.println(artifact.getTheArtifactCons());
+			Collection artCon = artifact.getTheArtifactCons();
 			for(Iterator it = artCon.iterator();it.hasNext();){
 				ArtifactCon con = (ArtifactCon) it.next();
 				System.out.println(con);
-				Collection fromActs = con.getFromActivity();
+				Collection fromActs = con.getFromActivities();
 				System.out.println(fromActs);
 				for(Iterator it2 = fromActs.iterator();it2.hasNext();){
 					Activity act = (Activity) it2.next();
@@ -371,7 +373,7 @@ public class RepositoryImpl implements RepositoryServices{
 
 	@Override
 	public String getRepositoryToImport(String processIdent, String artifactIdent) {
-		Repository repository = getRepositoryByArtifact(artifactIdent);
+		VCSRepository repository = getRepositoryByArtifact(artifactIdent);
 		/*NÃO ENTENDI ISTO, FAZER DEPOIS
 		 * if(processIdent.equals(Messages.getString("server.Artifacts.ArtifactTemplates")))
 			repository = getDefaultRepository();*/
@@ -382,10 +384,10 @@ public class RepositoryImpl implements RepositoryServices{
 		}else return "";
 	}
 
-	public Repository getRepositoryByArtifact(String artifactIdent){
+	public VCSRepository getRepositoryByArtifact(String artifactIdent){
 		//Get the repository by the artifact repository
 		String hql = "select repository from "
-				+ Repository.class.getName()
+				+ VCSRepository.class.getName()
 				+ " as repository, "
 				+ Artifact.class.getName()
 				+" as artifact "
@@ -397,7 +399,7 @@ public class RepositoryImpl implements RepositoryServices{
 
 		List result = query.getResultList();
 		if(result != null && result.size() > 0){
-			return (Repository) result.get(0);
+			return (VCSRepository) result.get(0);
 		}
 		return null;
 	}
@@ -406,7 +408,7 @@ public class RepositoryImpl implements RepositoryServices{
 	public RepositoryDTO getRepositoryDTOByArtifact(String artifactIdent){
 		//Get the repository by the artifact repository
 		String hql = "select repository from "
-				+ Repository.class.getName()
+				+ VCSRepository.class.getName()
 				+ " as repository, "
 				+ Artifact.class.getName()
 				+" as artifact "
@@ -427,10 +429,10 @@ public class RepositoryImpl implements RepositoryServices{
 		return null;
 	}
 
-	public Repository getRepositoryByProject(String projectIdent) {
+	public VCSRepository getRepositoryByProject(String projectIdent) {
 		//Get the repository by the project repository
 		String hql = "select repository from "
-				+ Repository.class.getName()
+				+ VCSRepository.class.getName()
 				+ " as repository, "
 				+ Project.class.getName()
 				+" as project "
@@ -442,7 +444,7 @@ public class RepositoryImpl implements RepositoryServices{
 
 		List result = query.getResultList();
 		if(result != null && result.size() > 0){
-			return (Repository) result.get(0);
+			return (VCSRepository) result.get(0);
 		}
 		return null;
 	}

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.service.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.Set;
 
 import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
@@ -19,12 +19,12 @@ public class NodeDTO implements Serializable{
     private StructureDTO theStructureDTO;
 
 	@IgnoreMapping
-    private List<NodeDTO> children;
+    private Set<NodeDTO> children;
 
 
     public NodeDTO() {
     	super();
-    	this.children = new ArrayList<NodeDTO>();
+    	this.children = new Set<NodeDTO>();
 		this.setIdent("");
 
 	}
@@ -45,11 +45,11 @@ public class NodeDTO implements Serializable{
 		this.ident = ident;
 	}
 
-	public List<NodeDTO> getChildren() {
+	public Set<NodeDTO> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<NodeDTO> children) {
+	public void setChildren(Set<NodeDTO> children) {
 		this.children = children;
 	}
 

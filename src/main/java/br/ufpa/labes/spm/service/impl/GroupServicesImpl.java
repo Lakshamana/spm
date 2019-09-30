@@ -42,11 +42,11 @@ public class GroupServicesImpl implements WorkGroupServices {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public TypesDTO getGroupTypes() {
+	public TypesDTO getWorkGroupTypes() {
 		String hql;
 		List<Type> typesLists = new ArrayList<Type>();
 
-		hql = "from " + GroupType.class.getSimpleName();
+		hql = "from " + WorkGroupType.class.getSimpleName();
 		query = typeDAO.getPersistenceContext().createQuery(hql);
 		typesLists = query.getResultList();
 
@@ -64,7 +64,7 @@ public class GroupServicesImpl implements WorkGroupServices {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public GroupsDTO getGroups() {
+	public GroupsDTO getWorkGroups() {
 		String hql = "SELECT group FROM " + GROUP_CLASS_NAME + " as group";
 		query = groupDAO.getPersistenceContext().createQuery(hql);
 		List<WorkGroup> result = query.getResultList();
@@ -108,13 +108,13 @@ public class GroupServicesImpl implements WorkGroupServices {
 	}
 
 	@Override
-	public Boolean removeGroup(String groupName) {
+	public Boolean removeWorkGroup(String groupName) {
 		WorkGroup group = this.retrieveGroup(groupName);
 		if(group != null) {
-			for(Agent agent : group.getTheAgentss()) {
+			for(Agent agent : group.getTheAgents()) {
 				agent.getTheWorkGroups().remove(group);
 			}
-			group.getTheAgentss().clear();
+			group.getTheAgents().clear();
 
 			groupDAO.update(group);
 
@@ -139,7 +139,7 @@ public class GroupServicesImpl implements WorkGroupServices {
 	}
 
 	@Override
-	public GroupDTO getGroup(String groupIdent) {
+	public GroupDTO getWorkGroup(String groupIdent) {
 //		WorkGroup result = this.retrieveGroup(groupIdent);
 		WorkGroup result = groupDAO.retrieveBySecondaryKey(groupIdent);
 		GroupDTO groupDTO = null;
