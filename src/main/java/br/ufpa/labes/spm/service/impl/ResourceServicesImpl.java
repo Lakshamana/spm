@@ -201,8 +201,8 @@ public class ResourceServicesImpl implements ResourceServices{
 			if (resource.getBelongsTo() != null)
 				resourceDTO.setBelongsTo(resource.getBelongsTo().getName());
 			if (resource.getTheResourceType() != null)
-				resourceDTO.setTheResourceType(resource.getTheResourceType().getIdent());
-			for (Resource require : resource.getTheRequiredResources()) {
+        resourceDTO.setTheResourceType(resource.getTheResourceType().getIdent());
+			for (Resource require : resource.getRequires()) {
 				resourceDTO.getRequires().add(require.getName());
 			}
 		} catch (ImplementationException e) {

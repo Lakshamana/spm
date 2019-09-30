@@ -1,9 +1,10 @@
 package br.ufpa.labes.spm.service.dto;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+import java.util.LocalDate;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -16,8 +17,8 @@ public class ProjectDTO implements Serializable {
 	private String ident;
 	private String description;
 	private String name;
-	private Date begin_date;
-	private Date end_date;
+	private LocalDate begin_date;
+	private LocalDate end_date;
 	private boolean active;
 
 	@IgnoreMapping
@@ -40,7 +41,7 @@ public class ProjectDTO implements Serializable {
 	private String pState;
 
 	public ProjectDTO() {
-//		this.begin_date = new Date();
+//		this.begin_date = new LocalDate();
 		this.artifacts = new ArrayList<String>();
 		this.agents = new ArrayList<String>();
 	}
@@ -69,27 +70,27 @@ public class ProjectDTO implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getBegin_date() {
+	public LocalDate getBegin_date() {
 		return begin_date;
 	}
 
-	public void setBegin_date(Date begin_date) {
+	public void setBegin_date(LocalDate begin_date) {
 		this.begin_date = begin_date;
 	}
 
 	public String getBegin_dateString() {
 		String date = "";
 		if(begin_date != null)
-			date = begin_date.getDay() + "-" + begin_date.getMonth() + "-" + begin_date.getYear();
+			date = begin_date.getDayOfMonth() + "-" + begin_date.getMonth() + "-" + begin_date.getYear();
 
 		return date;
 	}
 
-	public Date getEnd_date() {
+	public LocalDate getEnd_date() {
 		return end_date;
 	}
 
-	public void setEnd_date(Date end_date) {
+	public void setEnd_date(LocalDate end_date) {
 		this.end_date = end_date;
 	}
 

@@ -3,8 +3,8 @@ package br.ufpa.labes.spm.service.interfaces;
 import java.util.List;
 
 
-import br.ufpa.labes.spm.service.dto.ProjectCost;
-import br.ufpa.labes.spm.service.dto.ProjectStatistic;
+import br.ufpa.labes.spm.service.dto.dashboard.ProjectCost;
+import br.ufpa.labes.spm.service.dto.dashboard.ProjectStatistic;
 import br.ufpa.labes.spm.service.dto.AgentsDTO;
 import br.ufpa.labes.spm.service.dto.ArtifactsDTO;
 import br.ufpa.labes.spm.service.dto.ProjectDTO;
@@ -13,7 +13,6 @@ import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.exceptions.WebapseeException;
 import br.ufpa.labes.spm.domain.Project;
 
-@Remote
 public interface ProjectServices {
 
 	public ProjectDTO getProject(String projectName);
@@ -50,7 +49,7 @@ public interface ProjectServices {
 
 	public ProjectDTO executeProcess(String projectName) throws DAOException, WebapseeException;
 
-	public AgentsDTO getAgentsFromProjects(String theProcess_oid, Integer agent_oid);
+	public AgentsDTO getAgentsFromProjects(String theProcess_oid, Long agent_oid);
 
 	public AgentsDTO getAgentsOnline(Integer agent_oid);
 
@@ -62,5 +61,5 @@ public interface ProjectServices {
 
 	public ProjectDTO getProjectByIdent(String ident);
 
-	public ProjectCost getProjectCost(Integer projectId);
+	public ProjectCost getProjectCost(Long projectId);
 }

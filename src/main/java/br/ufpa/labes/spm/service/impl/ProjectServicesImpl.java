@@ -60,7 +60,7 @@ import br.ufpa.labes.spm.service.dto.ArtifactDTO;
 import br.ufpa.labes.spm.service.dto.ArtifactsDTO;
 import br.ufpa.labes.spm.service.dto.ProjectDTO;
 import br.ufpa.labes.spm.service.dto.ProjectsDTO;
-import br.ufpa.labes.spm.service.dto.ResourcesCostPlanItem;
+// import br.ufpa.labes.spm.service.dto.ResourcesCostPlanItem;
 import br.ufpa.labes.spm.service.dto.ProcessDTO;
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.exceptions.WebapseeException;
@@ -157,7 +157,7 @@ import br.ufpa.labes.spm.domain.ResourceType;
 import br.ufpa.labes.spm.domain.RoleType;
 import br.ufpa.labes.spm.domain.ToolType;
 import br.ufpa.labes.spm.domain.Type;
-import org.qrconsult.spm.process.interfaces.IProcessExporter;
+// import org.qrconsult.spm.process.interfaces.IProcessExporter;
 import br.ufpa.labes.spm.service.interfaces.EnactmentEngineLocal;
 import br.ufpa.labes.spm.service.interfaces.ProjectServices;
 import br.ufpa.labes.spm.service.interfaces.ReportServices;
@@ -629,8 +629,8 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Agent> getAgentsFromProcess(Process processRefered) {
-		List<Agent> result = Collections.emptyList();
+	private Set<Agent> getAgentsFromProcess(Process processRefered) {
+		Set<Agent> result = Collections.emptyList();
 		String hql = "SELECT DISTINCT a FROM " + AGENT_CLASSNAME + " a JOINCon a.theProcess p WHERE p.ident = :ident)";
 		query = agentDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("ident", processRefered.getIdent());
@@ -646,8 +646,8 @@ public class ProjectServicesImpl implements ProjectServices {
 		Project project = null;
 
 		ProjectDTO dto =  this.getProject(projectDTO.getName());
-		List<Artifact> artifacts = getArtifactsFromNames(projectDTO.getArtifacts());
-		List<Agent> agents = getAgentsFromNames(projectDTO.getAgents());
+		Set<Artifact> artifacts = getArtifactsFromNames(projectDTO.getArtifacts());
+		Set<Agent> agents = getAgentsFromNames(projectDTO.getAgents());
 
 		project = this.getProjectFromName(projectDTO.getName());
 
@@ -673,8 +673,8 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	private Project updateProjectFromDTO(ProjectDTO projectDTO, Project project) {
-		project.setBegin_date(projectDTO.getBegin_date());
-		project.setEnd_date(projectDTO.getEnd_date());
+		project.setBeginDate(projectDTO.getBegin_date());
+		project.setEndDate(projectDTO.getEnd_date());
 		project.setDescription(projectDTO.getDescription());
 		return project;
 	}
@@ -714,7 +714,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	@Override
 	public ProjectsDTO getProjects() {
-		List<Project> projects = getAllProjects();
+		Set<Project> projects = getAllProjects();
 		return this.convertProjectsToProjectsDTO(projects);
 	}
 
@@ -798,11 +798,11 @@ public class ProjectServicesImpl implements ProjectServices {
 	@SuppressWarnings("unchecked")
 	public ArtifactsDTO getFinalArtifactsAvailableForProjects() {
 		ArtifactsDTO artifactsDTO = new ArtifactsDTO(new ArrayList<ArtifactDTO>());
-		List<Artifact> artifacts = new ArrayList<Artifact>();
+		Set<Artifact> artifacts = new HashSet<Artifact>();
 		query = artifactDAO.getPersistenceContext().createQuery("SELECT o FROM Artifact o");
 		artifacts = query.getResultList();
 
-		List<Artifact> artifactsNotAvailableForProjects = new ArrayList<Artifact>();
+		Set<Artifact> artifactsNotAvailableForProjects = new HashSet<Artifact>();
 		for (Project project : this.getAllProjects()) {
 			artifactsNotAvailableForProjects.addAll(project.getFinalArtifacts());
 		}
@@ -836,7 +836,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		return false;
 	}
 
-	private List<Task> getTasksForProject(String projectName) {
+	private Set<Task> getTasksForProject(String projectName) {
 		String hql = "select o from " + TASK_CLASSNAME + " o where o.theNormal.ident like :projectName";
 		query = projectDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("projectName", projectName + "%");
@@ -846,7 +846,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Project> getAllProjects() {
+	private Set<Project> getAllProjects() {
 		String hql = "select o from " + PROJECT_CLASSNAME + " o";
 		query = projectDAO.getPersistenceContext().createQuery(hql);
 
@@ -855,7 +855,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Project> getProjectsUser(int oid) {
+	private Set<Project> getProjectsUser(int oid) {
 		String hql = "select o from " + PROJECT_CLASSNAME + " o where ";
 		query = projectDAO.getPersistenceContext().createQuery(hql);
 
@@ -908,13 +908,13 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	@Override
-	public List<ProjectStatistic> getProjectsForDashboard() {
-		List<Project> projects = this.getAllProjects();
-		List<ProjectStatistic> result = new ArrayList<ProjectStatistic>();
+	public Set<ProjectStatistic> getProjectsForDashboard() {
+		Set<Project> projects = this.getAllProjects();
+		Set<ProjectStatistic> result = new HashSet<ProjectStatistic>();
 
 		for (Project project : projects) {
 			ProjectStatistic statistic = convertProjectToProjectStatistic(project);
-//			List<ResourcesCostPlanItem> planoDeCustos = reportServices.generateResourcesCostPlanReport(project.getIdent());
+//			Set<ResourcesCostPlanItem> planoDeCustos = reportServices.generateResourcesCostPlanReport(project.getIdent());
 //
 //			Double exclusivesCost = 0.0, consumablesCost = 0.0, shareablesCost = 0.0,
 //					humansRealCost = 0.0, humansEstimatedCost = 0.0, activitiesCost = 0.0;
@@ -945,7 +945,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	@Override
 	public ProjectCost getProjectCost(Integer projectId) {
 		Project project = this.getProjectForId(projectId);
-		List<ResourcesCostPlanItem> planoDeCustos = reportServices.generateResourcesCostPlanReport(project.getIdent());
+		Set<ResourcesCostPlanItem> planoDeCustos = reportServices.generateResourcesCostPlanReport(project.getIdent());
 
 		Double exclusivesCost = 0.0, consumablesCost = 0.0, shareablesCost = 0.0,
 				humansRealCost = 0.0, humansEstimatedCost = 0.0, activitiesCost = 0.0;
@@ -970,7 +970,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	private ProjectStatistic convertProjectToProjectStatistic(Project project) {
-		List<Task> tasks = this.getTasksForProject(project.getIdent());
+		Set<Task> tasks = this.getTasksForProject(project.getIdent());
 		int numberOfTasks = tasks.size();
 		int finishedTasks = 0;
 		int delayedTasks = 0;
@@ -1083,7 +1083,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	@SuppressWarnings("unchecked")
 	private Agent getAgentFromName(String agentName) {
 		String hql;
-		List<Agent> result = null;
+		Set<Agent> result = null;
 
 		hql = "select agent from "+ Agent.class.getSimpleName() +" as agent where agent.name = :agentName";
 		query = agentDAO.getPersistenceContext().createQuery(hql);
@@ -1100,8 +1100,8 @@ public class ProjectServicesImpl implements ProjectServices {
 		}
 	}
 
-	private List<Agent> getAgentsFromNames(Collection<String> agents) {
-		List<Agent> result = new ArrayList<Agent>();
+	private Set<Agent> getAgentsFromNames(Collection<String> agents) {
+		Set<Agent> result = new HashSet<Agent>();
 		Agent agent = null;
 
 		for (String agentName : agents) {
@@ -1115,8 +1115,8 @@ public class ProjectServicesImpl implements ProjectServices {
 		return result;
 	}
 
-	private List<Artifact> getArtifactsFromNames(Collection<String> artifacts) {
-		List<Artifact> result = new ArrayList<Artifact>();
+	private Set<Artifact> getArtifactsFromNames(Collection<String> artifacts) {
+		Set<Artifact> result = new HashSet<Artifact>();
 		Artifact artifact = null;
 		for (String artifactName : artifacts) {
 			artifact = this.getArtifact(artifactName);
@@ -1128,8 +1128,8 @@ public class ProjectServicesImpl implements ProjectServices {
 		return result;
 	}
 
-	private List<String> getArtifactNames(Collection<Artifact> artifacts) {
-		List<String> names = new ArrayList<String>();
+	private Set<String> getArtifactNames(Collection<Artifact> artifacts) {
+		Set<String> names = new HashSet<String>();
 		if(!artifacts.isEmpty()) {
 			for (Artifact artifact : artifacts) {
 				names.add(artifact.getName());
@@ -1195,9 +1195,9 @@ public class ProjectServicesImpl implements ProjectServices {
 
 				projectDTO.setEstimatedHours(hours);
 				projectDTO.setEstimatedMinutes(minutes);
-				List<Agent> agents = (List<Agent>) project.getProcessRefered().getTheAgents();
+				Set<Agent> agents = (List<Agent>) project.getProcessRefered().getTheAgents();
 				projectDTO.setProcess(project.getProcessRefered().getId().toString());
-				List<String> agentNames = getAgentNames(agents);
+				Set<String> agentNames = getAgentNames(agents);
 				projectDTO.setAgents(agentNames);
 			} else {
 				projectDTO.setpState(Process.NOT_STARTED);
@@ -1224,15 +1224,15 @@ public class ProjectServicesImpl implements ProjectServices {
 		return processDTO;
 	}
 
-	private List<String> getAgentNames(List<Agent> agents) {
-		List<String> agentNames = new ArrayList<String>();
+	private Set<String> getAgentNames(List<Agent> agents) {
+		Set<String> agentNames = new HashSet<String>();
 		for (Agent agent : agents) {
 			agentNames.add(agent.getName());
 		}
 		return agentNames;
 	}
 
-	private ProjectsDTO convertProjectsToProjectsDTO(List<Project> projects) {
+	private ProjectsDTO convertProjectsToProjectsDTO(Set<Project> projects) {
 		ProjectsDTO projectsDTO = new ProjectsDTO(new ArrayList<ProjectDTO>());
 		for (Project project : projects) {
 			ProjectDTO projectDTO = this.convertProjectToProjectDTO(project);
@@ -1397,7 +1397,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		ElementFilter eventTypeFilter = new ElementFilter(EventType.class.getSimpleName());
 		ElementFilter WorkGroupTypeFilter = new ElementFilter(WorkGroupType.class.getSimpleName());
 		ElementFilter metricTypeFilter = new ElementFilter(MetricType.class.getSimpleName());
-		ElementFilter policyTypeFilter = new ElementFilter(PolicyType.class.getSimpleName());
+		// ElementFilter policyTypeFilter = new ElementFilter(PolicyType.class.getSimpleName());
 		ElementFilter resourceTypeFilter = new ElementFilter(ResourceType.class.getSimpleName());
 		ElementFilter roleTypeFilter = new ElementFilter(RoleType.class.getSimpleName());
 		ElementFilter toolTypeFilter = new ElementFilter(ToolType.class.getSimpleName());
@@ -1407,7 +1407,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		typeFilter = ((AbstractFilter) typeFilter.or((Filter) eventTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(WorkGroupTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(metricTypeFilter));
-		typeFilter = ((AbstractFilter) typeFilter.or(policyTypeFilter));
+		// typeFilter = ((AbstractFilter) typeFilter.or(policyTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(resourceTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(roleTypeFilter));
 		typeFilter = ((AbstractFilter) typeFilter.or(toolTypeFilter));
@@ -1428,7 +1428,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				Type type = (Type) this.organizational.get(typeKey);
 				String superKey = superTypeElm.getAttributeValue("REF");
 				Type superType = (Type) this.organizational.get(superKey);
-				type.insertIntoSuperType(superType);
+				type.setSuperType(superType);
 			}
 		}
 	}
@@ -1786,8 +1786,8 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(!this.isAssociativeExists(AgentHasAbility.class, agent, ability)){
 
 				AgentHasAbility aha = new AgentHasAbility();
-				aha.insertIntoTheAbility(ability);
-				aha.insertIntoTheAgent(agent);
+				aha.setTheAbility(ability);
+				aha.setTheAgent(agent);
 				aha.setDegree(Integer.valueOf(ahaElm.getChildText("Degree")));
 
 				aha = (AgentHasAbility) this.persistObject(aha, null);
@@ -2197,7 +2197,6 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	private void loadConnection(Element processComponents) {
-
 		ElementFilter artifactConFilter = new ElementFilter(ArtifactCon.class.getSimpleName());
 		ElementFilter sequenceFilter = new ElementFilter(Sequence.class.getSimpleName());
 		ElementFilter feedbackFilter = new ElementFilter(Feedback.class.getSimpleName());
@@ -2287,8 +2286,8 @@ public class ProjectServicesImpl implements ProjectServices {
 					feedback.insertIntoToActivity((Activity) this.processComponents.get(toRef));
 				}
 
-				Element conditionElm = connectionElm.getChild("TheCondition");
-				this.processComponents.put(conditionElm.getAttributeValue("REF"), feedback.getTheCondition());
+				// Element conditionElm = connectionElm.getChild("TheCondition");
+				// this.processComponents.put(conditionElm.getAttributeValue("REF"), feedback.getTheCondition());
 
 				feedback = (Feedback) this.persistObject(feedback, null);
 				this.processComponents.put(key, feedback);
@@ -2299,7 +2298,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				Element fromActivityElm = connectionElm.getChild("FromActivity");
 				if(fromActivityElm != null){
 					String fromRef = fromActivityElm.getAttributeValue("REF");
-					branchANDCon.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchAND.setFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				Element toActivities = connectionElm.getChild("ToActivity");
@@ -2309,17 +2308,17 @@ public class ProjectServicesImpl implements ProjectServices {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						branchANDCon.insertIntoToActivity((Activity) this.processComponents.get(itemRef));
+						branchAND.addToActivity((Activity) this.processComponents.get(itemRef));
 					}
 				}
 
 				// Not needed! It'll be settled by the artifact connection
-				// branchANDCon.insertIntoFromArtifactCon(null);
+				// branchAND.insertIntoFromArtifactCon(null);
 
 				Element fromMultipleCon = connectionElm.getChild("FromMultipleConnection");
 				if(fromMultipleCon != null){
 					String fromRef = fromMultipleCon.getAttributeValue("REF");
-					branchANDCon.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchAND.setFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				Element toMultipleCons = connectionElm.getChild("ToMultipleCon");
@@ -2329,12 +2328,12 @@ public class ProjectServicesImpl implements ProjectServices {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						branchANDCon.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(itemRef));
+						branchAND.addToMultipleCon((MultipleCon) this.processComponents.get(itemRef));
 					}
 				}
 
-				branchAND = (BranchANDCon) this.persistObject(branchANDCon, null);
-				this.processComponents.put(key, branchANDCon);
+				branchAND = (BranchANDCon) this.persistObject(branchAND, null);
+				this.processComponents.put(key, branchAND);
 			}
 			else if(connection instanceof BranchConCond){
 				BranchConCond branchCond = (BranchConCond) connection;
@@ -2342,7 +2341,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				Element fromActivityElm = connectionElm.getChild("FromActivity");
 				if(fromActivityElm != null){
 					String fromRef = fromActivityElm.getAttributeValue("REF");
-					branchConCond.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchCond.setFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				// Not needed! It'll be settled by the associative class
@@ -2354,14 +2353,14 @@ public class ProjectServicesImpl implements ProjectServices {
 				Element fromMultipleCon = connectionElm.getChild("FromMultipleConnection");
 				if(fromMultipleCon != null){
 					String fromRef = fromMultipleCon.getAttributeValue("REF");
-					branchConCond.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					branchCond.setFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				// Not needed! It'll be settled by the associative class
 				// branchCond.insertIntoTheBranchConCondToMultipleCon(null);
 
-				branchCond = (BranchConCond) this.persistObject(branchConCond, null);
-				this.processComponents.put(key, branchConCond);
+				branchCond = (BranchConCond) this.persistObject(branchCond, null);
+				this.processComponents.put(key, branchCond);
 			}
 			else if(connection instanceof JoinCon){
 				JoinCon join = (JoinCon) connection;
@@ -2373,18 +2372,18 @@ public class ProjectServicesImpl implements ProjectServices {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						joinCon.insertIntoFromActivity((Activity) this.processComponents.get(itemRef));
+						join.addFromActivity((Activity) this.processComponents.get(itemRef));
 					}
 				}
 
 				Element toActivityElm = connectionElm.getChild("ToActivity");
 				if(toActivityElm != null){
 					String toRef = toActivityElm.getAttributeValue("REF");
-					joinCon.insertIntoToActivity((Activity) this.processComponents.get(toRef));
+					join.setToActivity((Activity) this.processComponents.get(toRef));
 				}
 
 				// Not needed! It'll be settled by the artifact connection
-				// joinCon.insertIntoFromArtifactCon(null);
+				// join.insertIntoFromArtifactCon(null);
 
 				Element fromMultipleCons = connectionElm.getChild("FromMultipleCon");
 				if(fromMultipleCons != null){
@@ -2393,18 +2392,18 @@ public class ProjectServicesImpl implements ProjectServices {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						joinCon.insertIntoFromMultipleCon((MultipleCon) this.processComponents.get(itemRef));
+						join.addFromMultipleCon((MultipleCon) this.processComponents.get(itemRef));
 					}
 				}
 
 				Element toMultipleConElm = connectionElm.getChild("ToMultipleCon");
 				if(toMultipleConElm != null){
 					String toRef = toMultipleConElm.getAttributeValue("REF");
-					joinCon.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(toRef));
+					join.setToMultipleCon((MultipleCon) this.processComponents.get(toRef));
 				}
 
-				join = (JoinCon) this.persistObject(joinCon, null);
-				this.processComponents.put(key, joinCon);
+				join = (JoinCon) this.persistObject(join, null);
+				this.processComponents.put(key, join);
 			}
 		}
 
@@ -2421,7 +2420,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				while (iterItens.hasNext()) {
 					Element item = (Element) iterItens.next();
 					String itemRef = item.getValue();
-					artifactCon.insertIntoToMultipleCon((MultipleCon) this.processComponents.get(itemRef));
+					artifactCon.addToMultipleCon((MultipleCon) this.processComponents.get(itemRef));
 				}
 			}
 		}
@@ -2465,9 +2464,9 @@ public class ProjectServicesImpl implements ProjectServices {
 			Process process = (Process) this.processComponents.get(processRef);
 
 			ProcessAgenda processAgenda = new ProcessAgenda();
-			taskAgenda.insertIntoTheProcessAgenda(processAgenda);
+			taskAgenda.addTheProcessAgenda(processAgenda);
 
-			process.insertIntoTheProcessAgenda(processAgenda);
+			process.addTheProcessAgenda(processAgenda);
 
 			this.persistObject(processAgenda, null);
 			this.processComponents.put(processAgendaKey, processAgenda);
@@ -2475,814 +2474,809 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	private void loadTask(Element processComponents) {
-		List<Element> tasks = processComponents.getChildren(Task.class.getSimpleName());
-		Iterator<Element> iter = tasks.iterator();
-		while (iter.hasNext()) {
-			Element taskElm = (Element) iter.next();
-			String key = taskElm.getAttributeValue("KEY");
+		// List<Element> tasks = processComponents.getChildren(Task.class.getSimpleName());
+		// Iterator<Element> iter = tasks.iterator();
+		// while (iter.hasNext()) {
+		// 	Element taskElm = (Element) iter.next();
+		// 	String key = taskElm.getAttributeValue("KEY");
 
-			Task task = new Task();
-			task.setBeginDate((Date) this.buildAttribute(Date.class, taskElm.getChildText("BeginDate")));
-			task.setEndDate((Date) this.buildAttribute(Date.class, taskElm.getChildText("EndDate")));
-			task.setDateDelegatedFrom((Date) this.buildAttribute(Date.class, taskElm.getChildText("DateDelegatedFrom")));
-			task.setDateDelegatedFrom((Date) this.buildAttribute(Date.class, taskElm.getChildText("DateDelegatedTo")));
-			task.setLocalState(taskElm.getChildText("LocalState"));
-			task.setWorkingHours((Float) this.buildAttribute(Float.class, taskElm.getChildText("WorkingHours")));
+		// 	Task task = new Task();
+		// 	task.setBeginDate((Date) this.buildAttribute(Date.class, taskElm.getChildText("BeginDate")));
+		// 	task.setEndDate((Date) this.buildAttribute(Date.class, taskElm.getChildText("EndDate")));
+		// 	task.setDateDelegatedFrom((Date) this.buildAttribute(Date.class, taskElm.getChildText("DateDelegatedFrom")));
+		// 	task.setDateDelegatedFrom((Date) this.buildAttribute(Date.class, taskElm.getChildText("DateDelegatedTo")));
+		// 	task.setLocalState(taskElm.getChildText("LocalState"));
+		// 	task.setWorkingHours((Float) this.buildAttribute(Float.class, taskElm.getChildText("WorkingHours")));
 
-			Element delegatedToElm = taskElm.getChild("DelegatedTo");
-			if(delegatedToElm != null){
-				String delegatedToKey = delegatedToElm.getAttributeValue("REF");
-				task.insertIntoDelegatedTo((Agent) this.organizational.get(delegatedToKey));
-			}
+		// 	Element delegatedToElm = taskElm.getChild("DelegatedTo");
+		// 	if(delegatedToElm != null){
+		// 		String delegatedToKey = delegatedToElm.getAttributeValue("REF");
+		// 		task.insertIntoDelegatedTo((Agent) this.organizational.get(delegatedToKey));
+		// 	}
 
-			Element delegatedFromElm = taskElm.getChild("DelegatedFrom");
-			if(delegatedFromElm != null){
-				String delegatedFromKey = delegatedFromElm.getAttributeValue("REF");
-				task.insertIntoDelegatedFrom((Agent) this.organizational.get(delegatedFromKey));
-			}
+		// 	Element delegatedFromElm = taskElm.getChild("DelegatedFrom");
+		// 	if(delegatedFromElm != null){
+		// 		String delegatedFromKey = delegatedFromElm.getAttributeValue("REF");
+		// 		task.insertIntoDelegatedFrom((Agent) this.organizational.get(delegatedFromKey));
+		// 	}
 
-			Element normElm = taskElm.getChild("TheNormal");
-			if(normElm != null){
-				String normKey = normElm.getAttributeValue("REF");
-				task.insertIntoTheNormal((Normal) this.processComponents.get(normKey));
-			}
+		// 	Element normElm = taskElm.getChild("TheNormal");
+		// 	if(normElm != null){
+		// 		String normKey = normElm.getAttributeValue("REF");
+		// 		task.insertIntoTheNormal((Normal) this.processComponents.get(normKey));
+		// 	}
 
-			Element agendaElm = taskElm.getChild("TheProcessAgenda");
-			if(agendaElm != null){
-				String agendaKey = agendaElm.getAttributeValue("REF");
-				task.insertIntoTheProcessAgenda((ProcessAgenda) this.processComponents.get(agendaKey));
-			}
+		// 	Element agendaElm = taskElm.getChild("TheProcessAgenda");
+		// 	if(agendaElm != null){
+		// 		String agendaKey = agendaElm.getAttributeValue("REF");
+		// 		task.insertIntoTheProcessAgenda((ProcessAgenda) this.processComponents.get(agendaKey));
+		// 	}
 
-			this.persistObject(task, null);
+		// 	this.persistObject(task, null);
 
-			this.processComponents.put(key, task);
-		}
+		// 	this.processComponents.put(key, task);
+		// }
 	}
 
 	private void loadEvent(Element processComponents) {
 
-		// Estimation filters
-		ElementFilter agendaEvtFilter = new ElementFilter(AgendaEvent.class.getSimpleName());
-		ElementFilter connectionEvtFilter = new ElementFilter(ConnectionEvent.class.getSimpleName());
-		ElementFilter globalActivityEvtFilter = new ElementFilter(GlobalActivityEvent.class.getSimpleName());
-		ElementFilter modelingActivityEvtFilter = new ElementFilter(ModelingActivityEvent.class.getSimpleName());
-		ElementFilter processEvtFilter = new ElementFilter(ProcessEvent.class.getSimpleName());
-		ElementFilter processModelEvtFilter = new ElementFilter(ProcessModelEvent.class.getSimpleName());
-		ElementFilter resourceEvtFilter = new ElementFilter(ResourceEvent.class.getSimpleName());
+		// // Estimation filters
+		// ElementFilter agendaEvtFilter = new ElementFilter(AgendaEvent.class.getSimpleName());
+		// ElementFilter connectionEvtFilter = new ElementFilter(ConnectionEvent.class.getSimpleName());
+		// ElementFilter globalActivityEvtFilter = new ElementFilter(GlobalActivityEvent.class.getSimpleName());
+		// ElementFilter modelingActivityEvtFilter = new ElementFilter(ModelingActivityEvent.class.getSimpleName());
+		// ElementFilter processEvtFilter = new ElementFilter(ProcessEvent.class.getSimpleName());
+		// ElementFilter processModelEvtFilter = new ElementFilter(ProcessModelEvent.class.getSimpleName());
+		// ElementFilter resourceEvtFilter = new ElementFilter(ResourceEvent.class.getSimpleName());
 
-		AbstractFilter eventFilter = ((AbstractFilter) agendaEvtFilter.or(connectionEvtFilter));
-		eventFilter = ((AbstractFilter) eventFilter.or(globalActivityEvtFilter));
-		eventFilter = ((AbstractFilter) eventFilter.or(modelingActivityEvtFilter));
-		eventFilter = ((AbstractFilter) eventFilter.or(processEvtFilter));
-		eventFilter = ((AbstractFilter) eventFilter.or(processModelEvtFilter));
-		eventFilter = ((AbstractFilter) eventFilter.or(resourceEvtFilter));
+		// AbstractFilter eventFilter = ((AbstractFilter) agendaEvtFilter.or(connectionEvtFilter));
+		// eventFilter = ((AbstractFilter) eventFilter.or(globalActivityEvtFilter));
+		// eventFilter = ((AbstractFilter) eventFilter.or(modelingActivityEvtFilter));
+		// eventFilter = ((AbstractFilter) eventFilter.or(processEvtFilter));
+		// eventFilter = ((AbstractFilter) eventFilter.or(processModelEvtFilter));
+		// eventFilter = ((AbstractFilter) eventFilter.or(resourceEvtFilter));
 
-		Iterator<Element> iter = processComponents.getDescendants(eventFilter);
-		while (iter.hasNext()) {
-			Element eventElm = (Element) iter.next();
-			String key = eventElm.getAttributeValue("KEY");
+		// Iterator<Element> iter = processComponents.getDescendants(eventFilter);
+		// while (iter.hasNext()) {
+		// 	Element eventElm = (Element) iter.next();
+		// 	String key = eventElm.getAttributeValue("KEY");
 
-			if(eventElm.getQualifiedName().equals(AgendaEvent.class.getSimpleName())){
-				AgendaEvent event = new AgendaEvent();
+		// 	if(eventElm.getQualifiedName().equals(AgendaEvent.class.getSimpleName())){
+		// 		AgendaEvent event = new AgendaEvent();
 
-				event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
-				event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
-				event.setWhy(eventElm.getChildText("Why"));
+		// 		event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
+		// 		event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
+		// 		event.setWhy(eventElm.getChildText("Why"));
 
-				String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
-				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
+		// 		String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
+		// 		event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
-				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
+		// 		String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
+		// 		event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
-				String taskKey = eventElm.getChild("TheTask").getAttributeValue("REF");
-				event.insertIntoTheTask((Task) this.processComponents.get(taskKey));
+		// 		String taskKey = eventElm.getChild("TheTask").getAttributeValue("REF");
+		// 		event.insertIntoTheTask((Task) this.processComponents.get(taskKey));
 
-				this.persistObject(event, null);
-				this.processComponents.put(key, event);
-			}
-			else if(eventElm.getQualifiedName().equals(ConnectionEvent.class.getSimpleName())){
-				ConnectionEvent event = new ConnectionEvent();
+		// 		this.persistObject(event, null);
+		// 		this.processComponents.put(key, event);
+		// 	}
+		// 	else if(eventElm.getQualifiedName().equals(ConnectionEvent.class.getSimpleName())){
+		// 		ConnectionEvent event = new ConnectionEvent();
 
-				event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
-				event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
-				event.setWhy(eventElm.getChildText("Why"));
+		// 		event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
+		// 		event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
+		// 		event.setWhy(eventElm.getChildText("Why"));
 
-				String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
-				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
+		// 		String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
+		// 		event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
-				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
+		// 		String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
+		// 		event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
-				this.persistObject(event, null);
-				this.processComponents.put(key, event);
-			}
-			else if(eventElm.getQualifiedName().equals(GlobalActivityEvent.class.getSimpleName())){
-				GlobalActivityEvent event = new GlobalActivityEvent();
+		// 		this.persistObject(event, null);
+		// 		this.processComponents.put(key, event);
+		// 	}
+		// 	else if(eventElm.getQualifiedName().equals(GlobalActivityEvent.class.getSimpleName())){
+		// 		GlobalActivityEvent event = new GlobalActivityEvent();
 
-				event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
-				event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
-				event.setWhy(eventElm.getChildText("Why"));
+		// 		event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
+		// 		event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
+		// 		event.setWhy(eventElm.getChildText("Why"));
 
-				String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
-				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
+		// 		String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
+		// 		event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
-				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
+		// 		String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
+		// 		event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
-				String actKey = eventElm.getChild("ThePlain").getAttributeValue("REF");
-				event.insertIntoTheActivity((Plain) this.processComponents.get(actKey));
+		// 		String actKey = eventElm.getChild("ThePlain").getAttributeValue("REF");
+		// 		event.insertIntoTheActivity((Plain) this.processComponents.get(actKey));
 
-				this.persistObject(event, null);
-				this.processComponents.put(key, event);
-			}
-			else if(eventElm.getQualifiedName().equals(ModelingActivityEvent.class.getSimpleName())){
-				ModelingActivityEvent event = new ModelingActivityEvent();
+		// 		this.persistObject(event, null);
+		// 		this.processComponents.put(key, event);
+		// 	}
+		// 	else if(eventElm.getQualifiedName().equals(ModelingActivityEvent.class.getSimpleName())){
+		// 		ModelingActivityEvent event = new ModelingActivityEvent();
 
-				event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
-				event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
-				event.setWhy(eventElm.getChildText("Why"));
+		// 		event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
+		// 		event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
+		// 		event.setWhy(eventElm.getChildText("Why"));
 
-				String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
-				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
+		// 		String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
+		// 		event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
-				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
+		// 		String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
+		// 		event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
-				String actKey = eventElm.getChild("TheActivity").getAttributeValue("REF");
-				event.insertIntoTheActivity((Activity) this.processComponents.get(actKey));
+		// 		String actKey = eventElm.getChild("TheActivity").getAttributeValue("REF");
+		// 		event.insertIntoTheActivity((Activity) this.processComponents.get(actKey));
 
-				Element agentElm = eventElm.getChild("TheAgent");
-				if(agentElm != null){
-					String agentKey = agentElm.getAttributeValue("REF");
-					event.insertIntoTheAgent((Agent) this.organizational.get(agentKey));
-				}
+		// 		Element agentElm = eventElm.getChild("TheAgent");
+		// 		if(agentElm != null){
+		// 			String agentKey = agentElm.getAttributeValue("REF");
+		// 			event.insertIntoTheAgent((Agent) this.organizational.get(agentKey));
+		// 		}
 
-				this.persistObject(event, null);
-				this.processComponents.put(key, event);
-			}
-			else if(eventElm.getQualifiedName().equals(ProcessEvent.class.getSimpleName())){
-				ProcessEvent event = new ProcessEvent();
+		// 		this.persistObject(event, null);
+		// 		this.processComponents.put(key, event);
+		// 	}
+		// 	else if(eventElm.getQualifiedName().equals(ProcessEvent.class.getSimpleName())){
+		// 		ProcessEvent event = new ProcessEvent();
 
-				event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
-				event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
-				event.setWhy(eventElm.getChildText("Why"));
+		// 		event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
+		// 		event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
+		// 		event.setWhy(eventElm.getChildText("Why"));
 
-				String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
-				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
+		// 		String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
+		// 		event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
-				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
+		// 		String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
+		// 		event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
-				String processKey = eventElm.getChild("TheProcess").getAttributeValue("REF");
-				event.insertIntoTheProcess((Process) this.processComponents.get(processKey));
+		// 		String processKey = eventElm.getChild("TheProcess").getAttributeValue("REF");
+		// 		event.insertIntoTheProcess((Process) this.processComponents.get(processKey));
 
-				this.persistObject(event, null);
-				this.processComponents.put(key, event);
-			}
-			else if(eventElm.getQualifiedName().equals(ProcessModelEvent.class.getSimpleName())){
-				ProcessModelEvent event = new ProcessModelEvent();
+		// 		this.persistObject(event, null);
+		// 		this.processComponents.put(key, event);
+		// 	}
+		// 	else if(eventElm.getQualifiedName().equals(ProcessModelEvent.class.getSimpleName())){
+		// 		ProcessModelEvent event = new ProcessModelEvent();
 
-				event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
-				event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
-				event.setWhy(eventElm.getChildText("Why"));
+		// 		event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
+		// 		event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
+		// 		event.setWhy(eventElm.getChildText("Why"));
 
-				String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
-				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
+		// 		String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
+		// 		event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
-				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
+		// 		String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
+		// 		event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
-				String procModelKey = eventElm.getChild("TheProcessModel").getAttributeValue("REF");
-				event.insertIntoTheProcessModel((ProcessModel) this.processComponents.get(procModelKey));
+		// 		String procModelKey = eventElm.getChild("TheProcessModel").getAttributeValue("REF");
+		// 		event.insertIntoTheProcessModel((ProcessModel) this.processComponents.get(procModelKey));
 
-				this.persistObject(event, null);
-				this.processComponents.put(key, event);
-			}
-			else if(eventElm.getQualifiedName().equals(ResourceEvent.class.getSimpleName())){
-				ResourceEvent event = new ResourceEvent();
+		// 		this.persistObject(event, null);
+		// 		this.processComponents.put(key, event);
+		// 	}
+		// 	else if(eventElm.getQualifiedName().equals(ResourceEvent.class.getSimpleName())){
+		// 		ResourceEvent event = new ResourceEvent();
 
-				event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
-				event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
-				event.setWhy(eventElm.getChildText("Why"));
+		// 		event.setIsCreatedByApsee((Boolean) this.buildAttribute(Boolean.class, eventElm.getChildText("IsCreatedByApsee")));
+		// 		event.setWhen((Date) this.buildAttribute(Date.class, eventElm.getChildText("When")));
+		// 		event.setWhy(eventElm.getChildText("Why"));
 
-				String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
-				event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
+		// 		String typeKey = eventElm.getChild("TheEventType").getAttributeValue("REF");
+		// 		event.insertIntoTheEventType((EventType) this.organizational.get(typeKey));
 
-				String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
-				event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
+		// 		String logKey = eventElm.getChild("TheLog").getAttributeValue("REF");
+		// 		event.insertIntoTheLog((SpmLog) this.processComponents.get(logKey));
 
-				Element normElm = eventElm.getChild("TheNormal");
-				if(normElm != null){
-					String actKey = normElm.getAttributeValue("REF");
-					event.insertIntoTheNormal((Normal) this.processComponents.get(actKey));
-				}
+		// 		Element normElm = eventElm.getChild("TheNormal");
+		// 		if(normElm != null){
+		// 			String actKey = normElm.getAttributeValue("REF");
+		// 			event.insertIntoTheNormal((Normal) this.processComponents.get(actKey));
+		// 		}
 
-				String resourceKey = eventElm.getChild("TheResource").getAttributeValue("REF");
-				event.insertIntoTheResource((Resource) this.processComponents.get(resourceKey));
+		// 		String resourceKey = eventElm.getChild("TheResource").getAttributeValue("REF");
+		// 		event.insertIntoTheResource((Resource) this.processComponents.get(resourceKey));
 
-				this.persistObject(event, null);
-				this.processComponents.put(key, event);
-			}
-		}
+		// 		this.persistObject(event, null);
+		// 		this.processComponents.put(key, event);
+		// 	}
+		// }
 	}
 
 	private void loadCatalogEvent(Element processComponents) {
+		// List<Element> catalogs = processComponents.getChildren(CatalogEvents.class.getSimpleName());
+		// Iterator<Element> iter = catalogs.iterator();
+		// while (iter.hasNext()) {
+		// 	Element catalogElm = (Element) iter.next();
+		// 	CatalogEvents catalog = null;
 
-		List<Element> catalogs = processComponents.getChildren(CatalogEvents.class.getSimpleName());
-		Iterator<Element> iter = catalogs.iterator();
-		while (iter.hasNext()) {
-			Element catalogElm = (Element) iter.next();
-			CatalogEvents catalog = null;
+		// 	Element evtElm = catalogElm.getChild("TheGlobalActivityEvent");
+		// 	if(evtElm != null){
+		// 		String key = evtElm.getAttributeValue("REF");
+		// 		GlobalActivityEvent event = (GlobalActivityEvent) this.processComponents.get(key);
+		// 		catalog = event.getTheCatalogEvents();
+		// 		catalog.setDescription(catalogElm.getChildText("Description"));
 
-			Element evtElm = catalogElm.getChild("TheGlobalActivityEvent");
-			if(evtElm != null){
-				String key = evtElm.getAttributeValue("REF");
-				GlobalActivityEvent event = (GlobalActivityEvent) this.processComponents.get(key);
-				catalog = event.getTheCatalogEvents();
-				catalog.setDescription(catalogElm.getChildText("Description"));
+		// 		this.persistObject(catalog, null);
+		// 		continue;
+		// 	}
 
-				this.persistObject(catalog, null);
-				continue;
-			}
+		// 	evtElm = catalogElm.getChild("TheProcessModelEvent");
+		// 	if(evtElm != null){
+		// 		String key = evtElm.getAttributeValue("REF");
+		// 		ProcessModelEvent event = (ProcessModelEvent) this.processComponents.get(key);
+		// 		catalog = event.getTheCatalogEvents();
+		// 		catalog.setDescription(catalogElm.getChildText("Description"));
 
-			evtElm = catalogElm.getChild("TheProcessModelEvent");
-			if(evtElm != null){
-				String key = evtElm.getAttributeValue("REF");
-				ProcessModelEvent event = (ProcessModelEvent) this.processComponents.get(key);
-				catalog = event.getTheCatalogEvents();
-				catalog.setDescription(catalogElm.getChildText("Description"));
+		// 		this.persistObject(catalog, null);
+		// 		continue;
+		// 	}
 
-				this.persistObject(catalog, null);
-				continue;
-			}
+		// 	evtElm = catalogElm.getChild("TheResourceEvent");
+		// 	if(evtElm != null){
+		// 		String key = evtElm.getAttributeValue("REF");
+		// 		ResourceEvent event = (ResourceEvent) this.processComponents.get(key);
+		// 		catalog = event.getTheCatalogEvents();
+		// 		catalog.setDescription(catalogElm.getChildText("Description"));
 
-			evtElm = catalogElm.getChild("TheResourceEvent");
-			if(evtElm != null){
-				String key = evtElm.getAttributeValue("REF");
-				ResourceEvent event = (ResourceEvent) this.processComponents.get(key);
-				catalog = event.getTheCatalogEvents();
-				catalog.setDescription(catalogElm.getChildText("Description"));
+		// 		this.persistObject(catalog, null);
+		// 		continue;
+		// 	}
 
-				this.persistObject(catalog, null);
-				continue;
-			}
+		// 	evtElm = catalogElm.getChild("TheAgendaEvent");
+		// 	if(evtElm != null){
+		// 		String key = evtElm.getAttributeValue("REF");
+		// 		AgendaEvent event = (AgendaEvent) this.processComponents.get(key);
+		// 		catalog = event.getTheCatalogEvents();
+		// 		catalog.setDescription(catalogElm.getChildText("Description"));
 
-			evtElm = catalogElm.getChild("TheAgendaEvent");
-			if(evtElm != null){
-				String key = evtElm.getAttributeValue("REF");
-				AgendaEvent event = (AgendaEvent) this.processComponents.get(key);
-				catalog = event.getTheCatalogEvents();
-				catalog.setDescription(catalogElm.getChildText("Description"));
+		// 		this.persistObject(catalog, null);
+		// 		continue;
+		// 	}
 
-				this.persistObject(catalog, null);
-				continue;
-			}
+		// 	evtElm = catalogElm.getChild("TheProcessEvent");
+		// 	if(evtElm != null){
+		// 		String key = evtElm.getAttributeValue("REF");
+		// 		ProcessEvent event = (ProcessEvent) this.processComponents.get(key);
+		// 		catalog = event.getTheCatalogEvents();
+		// 		catalog.setDescription(catalogElm.getChildText("Description"));
 
-			evtElm = catalogElm.getChild("TheProcessEvent");
-			if(evtElm != null){
-				String key = evtElm.getAttributeValue("REF");
-				ProcessEvent event = (ProcessEvent) this.processComponents.get(key);
-				catalog = event.getTheCatalogEvents();
-				catalog.setDescription(catalogElm.getChildText("Description"));
+		// 		this.persistObject(catalog, null);
+		// 		continue;
+		// 	}
 
-				this.persistObject(catalog, null);
-				continue;
-			}
+		// 	evtElm = catalogElm.getChild("TheModelingActivityEvent");
+		// 	if(evtElm != null){
+		// 		String key = evtElm.getAttributeValue("REF");
+		// 		ModelingActivityEvent event = (ModelingActivityEvent) this.processComponents.get(key);
+		// 		catalog = event.getTheCatalogEvents();
+		// 		catalog.setDescription(catalogElm.getChildText("Description"));
 
-			evtElm = catalogElm.getChild("TheModelingActivityEvent");
-			if(evtElm != null){
-				String key = evtElm.getAttributeValue("REF");
-				ModelingActivityEvent event = (ModelingActivityEvent) this.processComponents.get(key);
-				catalog = event.getTheCatalogEvents();
-				catalog.setDescription(catalogElm.getChildText("Description"));
+		// 		this.persistObject(catalog, null);
+		// 		continue;
+		// 	}
 
-				this.persistObject(catalog, null);
-				continue;
-			}
+		// 	evtElm = catalogElm.getChild("TheConnectionEvent");
+		// 	if(evtElm != null){
+		// 		String key = evtElm.getAttributeValue("REF");
+		// 		ConnectionEvent event = (ConnectionEvent) this.processComponents.get(key);
+		// 		catalog = event.getTheCatalogEvents();
+		// 		catalog.setDescription(catalogElm.getChildText("Description"));
 
-			evtElm = catalogElm.getChild("TheConnectionEvent");
-			if(evtElm != null){
-				String key = evtElm.getAttributeValue("REF");
-				ConnectionEvent event = (ConnectionEvent) this.processComponents.get(key);
-				catalog = event.getTheCatalogEvents();
-				catalog.setDescription(catalogElm.getChildText("Description"));
-
-				this.persistObject(catalog, null);
-				continue;
-			}
-		}
+		// 		this.persistObject(catalog, null);
+		// 		continue;
+		// 	}
+		// }
 	}
 
 	private void loadMetricAndEstimation(Element processComponents,	Element organizational) {
+// 		// Estimation filters
+// 		ElementFilter activityEstFilter = new ElementFilter(ActivityEstimation.class.getSimpleName());
+// 		ElementFilter agentEstFilter = new ElementFilter(AgentEstimation.class.getSimpleName());
+// 		ElementFilter artifactEstFilter = new ElementFilter(ArtifactEstimation.class.getSimpleName());
+// 		ElementFilter WorkGroupEstFilter = new ElementFilter(WorkGroupEstimation.class.getSimpleName());
+// 		ElementFilter organizationEstFilter = new ElementFilter(OrganizationEstimation.class.getSimpleName());
+// 		ElementFilter processEstFilter = new ElementFilter(ProcessEstimation.class.getSimpleName());
+// 		ElementFilter resourceEstFilter = new ElementFilter(ResourceEstimation.class.getSimpleName());
+
+// 		AbstractFilter estimationFilter = ((AbstractFilter) activityEstFilter.or(agentEstFilter));
+// 		estimationFilter = ((AbstractFilter) estimationFilter.or(artifactEstFilter));
+// 		estimationFilter = ((AbstractFilter) estimationFilter.or(WorkGroupEstFilter));
+// 		estimationFilter = ((AbstractFilter) estimationFilter.or(organizationEstFilter));
+// 		estimationFilter = ((AbstractFilter) estimationFilter.or(processEstFilter));
+// 		estimationFilter = ((AbstractFilter) estimationFilter.or(resourceEstFilter));
+
+// 		// Metric filters
+// 		ElementFilter activityMetFilter = new ElementFilter(ActivityMetric.class.getSimpleName());
+// 		ElementFilter agentMetFilter = new ElementFilter(AgentMetric.class.getSimpleName());
+// 		ElementFilter artifactMetFilter = new ElementFilter(ArtifactMetric.class.getSimpleName());
+// 		ElementFilter WorkGroupMetFilter = new ElementFilter(WorkGroupMetric.class.getSimpleName());
+// 		ElementFilter organizationMetFilter = new ElementFilter(OrganizationMetric.class.getSimpleName());
+// 		ElementFilter processMetFilter = new ElementFilter(ProcessMetric.class.getSimpleName());
+// 		ElementFilter resourceMetFilter = new ElementFilter(ResourceMetric.class.getSimpleName());
+
+// 		AbstractFilter metricFilter = ((AbstractFilter) activityMetFilter.or(agentMetFilter));
+// 		metricFilter = ((AbstractFilter) metricFilter.or(artifactMetFilter));
+// 		metricFilter = ((AbstractFilter) metricFilter.or(WorkGroupMetFilter));
+// 		metricFilter = ((AbstractFilter) metricFilter.or(organizationMetFilter));
+// 		metricFilter = ((AbstractFilter) metricFilter.or(processMetFilter));
+// 		metricFilter = ((AbstractFilter) metricFilter.or(resourceMetFilter));
+
+// 		Iterator<Element> iterEst = processComponents.getDescendants(estimationFilter);
+// 		while (iterEst.hasNext()) {
+// 			Element estElm = (Element) iterEst.next();
+
+// 			String key = estElm.getAttributeValue("KEY");
+// 			if(estElm.getQualifiedName().equals(ActivityEstimation.class.getSimpleName())){
+// 				ActivityEstimation est = new ActivityEstimation();
+// 				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
+// 				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
+
+// 				Element actElm = estElm.getChild("Activity");
+// 				if(actElm == null) continue; // Inconsistency handle
+// 				String actKey = actElm.getAttributeValue("REF");
+// 				est.insertIntoActivity((Activity) this.processComponents.get(actKey));
+
+// 				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(est, null);
+
+// 				this.processComponents.put(key, est);
+// 			}
+// 			else if(estElm.getQualifiedName().equals(AgentEstimation.class.getSimpleName())){
+// 				AgentEstimation est = new AgentEstimation();
+// 				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
+// 				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
+
+// 				String agKey = estElm.getChild("Agent").getAttributeValue("REF");
+// 				est.insertIntoAgent((Agent) this.organizational.get(agKey));
+
+// 				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(est, null);
+
+// 				this.processComponents.put(key, est);
+// 			}
+// 			else if(estElm.getQualifiedName().equals(ArtifactEstimation.class.getSimpleName())){
+// 				ArtifactEstimation est = new ArtifactEstimation();
+// 				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
+// 				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
+
+// 				String artKey = estElm.getChild("Artifact").getAttributeValue("REF");
+// 				est.insertIntoArtifact((Artifact) this.organizational.get(artKey));
+
+// 				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(est, null);
+
+// 				this.processComponents.put(key, est);
+// 			}
+// 			else if(estElm.getQualifiedName().equals(WorkGroupEstimation.class.getSimpleName())){
+// 				WorkGroupEstimation est = new WorkGroupEstimation();
+// 				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
+// 				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
+
+// 				String WorkGroupKey = estElm.getChild("WorkGroup").getAttributeValue("REF");
+// 				est.insertIntoWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
+
+// 				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(est, null);
+
+// 				this.processComponents.put(key, est);
+// 			}
+// 			else if(estElm.getQualifiedName().equals(OrganizationEstimation.class.getSimpleName())){
+// 				OrganizationEstimation est = new OrganizationEstimation();
+// 				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
+// 				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
 
-		// Estimation filters
-		ElementFilter activityEstFilter = new ElementFilter(ActivityEstimation.class.getSimpleName());
-		ElementFilter agentEstFilter = new ElementFilter(AgentEstimation.class.getSimpleName());
-		ElementFilter artifactEstFilter = new ElementFilter(ArtifactEstimation.class.getSimpleName());
-		ElementFilter WorkGroupEstFilter = new ElementFilter(WorkGroupEstimation.class.getSimpleName());
-		ElementFilter organizationEstFilter = new ElementFilter(OrganizationEstimation.class.getSimpleName());
-		ElementFilter processEstFilter = new ElementFilter(ProcessEstimation.class.getSimpleName());
-		ElementFilter resourceEstFilter = new ElementFilter(ResourceEstimation.class.getSimpleName());
-
-		AbstractFilter estimationFilter = ((AbstractFilter) activityEstFilter.or(agentEstFilter));
-		estimationFilter = ((AbstractFilter) estimationFilter.or(artifactEstFilter));
-		estimationFilter = ((AbstractFilter) estimationFilter.or(WorkGroupEstFilter));
-		estimationFilter = ((AbstractFilter) estimationFilter.or(organizationEstFilter));
-		estimationFilter = ((AbstractFilter) estimationFilter.or(processEstFilter));
-		estimationFilter = ((AbstractFilter) estimationFilter.or(resourceEstFilter));
-
-		// Metric filters
-		ElementFilter activityMetFilter = new ElementFilter(ActivityMetric.class.getSimpleName());
-		ElementFilter agentMetFilter = new ElementFilter(AgentMetric.class.getSimpleName());
-		ElementFilter artifactMetFilter = new ElementFilter(ArtifactMetric.class.getSimpleName());
-		ElementFilter WorkGroupMetFilter = new ElementFilter(WorkGroupMetric.class.getSimpleName());
-		ElementFilter organizationMetFilter = new ElementFilter(OrganizationMetric.class.getSimpleName());
-		ElementFilter processMetFilter = new ElementFilter(ProcessMetric.class.getSimpleName());
-		ElementFilter resourceMetFilter = new ElementFilter(ResourceMetric.class.getSimpleName());
-
-		AbstractFilter metricFilter = ((AbstractFilter) activityMetFilter.or(agentMetFilter));
-		metricFilter = ((AbstractFilter) metricFilter.or(artifactMetFilter));
-		metricFilter = ((AbstractFilter) metricFilter.or(WorkGroupMetFilter));
-		metricFilter = ((AbstractFilter) metricFilter.or(organizationMetFilter));
-		metricFilter = ((AbstractFilter) metricFilter.or(processMetFilter));
-		metricFilter = ((AbstractFilter) metricFilter.or(resourceMetFilter));
-
-		Iterator<Element> iterEst = processComponents.getDescendants(estimationFilter);
-		while (iterEst.hasNext()) {
-			Element estElm = (Element) iterEst.next();
-
-			String key = estElm.getAttributeValue("KEY");
-			if(estElm.getQualifiedName().equals(ActivityEstimation.class.getSimpleName())){
-				ActivityEstimation est = new ActivityEstimation();
-				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
-				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
-
-				Element actElm = estElm.getChild("Activity");
-				if(actElm == null) continue; // Inconsistency handle
-				String actKey = actElm.getAttributeValue("REF");
-				est.insertIntoActivity((Activity) this.processComponents.get(actKey));
-
-				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
-				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(est, null);
-
-				this.processComponents.put(key, est);
-			}
-			else if(estElm.getQualifiedName().equals(AgentEstimation.class.getSimpleName())){
-				AgentEstimation est = new AgentEstimation();
-				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
-				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
-
-				String agKey = estElm.getChild("Agent").getAttributeValue("REF");
-				est.insertIntoAgent((Agent) this.organizational.get(agKey));
-
-				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
-				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(est, null);
-
-				this.processComponents.put(key, est);
-			}
-			else if(estElm.getQualifiedName().equals(ArtifactEstimation.class.getSimpleName())){
-				ArtifactEstimation est = new ArtifactEstimation();
-				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
-				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
-
-				String artKey = estElm.getChild("Artifact").getAttributeValue("REF");
-				est.insertIntoArtifact((Artifact) this.organizational.get(artKey));
-
-				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
-				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(est, null);
-
-				this.processComponents.put(key, est);
-			}
-			else if(estElm.getQualifiedName().equals(WorkGroupEstimation.class.getSimpleName())){
-				WorkGroupEstimation est = new WorkGroupEstimation();
-				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
-				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
-
-				String WorkGroupKey = estElm.getChild("WorkGroup").getAttributeValue("REF");
-				est.insertIntoWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
-
-				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
-				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(est, null);
-
-				this.processComponents.put(key, est);
-			}
-			else if(estElm.getQualifiedName().equals(OrganizationEstimation.class.getSimpleName())){
-				OrganizationEstimation est = new OrganizationEstimation();
-				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
-				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
+// 				String orgKey = estElm.getChild("Organization").getAttributeValue("REF");
+// 				Company company = new Company();
+// 				est.insertIntoOrganization(company);
+// //				est.insertIntoOrganization((Organization) this.organizational.get(orgKey));
+
+// 				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(est, null);
+
+// 				this.processComponents.put(key, est);
+// 			}
+// 			else if(estElm.getQualifiedName().equals(ProcessEstimation.class.getSimpleName())){
+// 				ProcessEstimation est = new ProcessEstimation();
+// 				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
+// 				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
 
-				String orgKey = estElm.getChild("Organization").getAttributeValue("REF");
-				Company company = new Company();
-				est.insertIntoOrganization(company);
-//				est.insertIntoOrganization((Organization) this.organizational.get(orgKey));
-
-				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
-				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(est, null);
-
-				this.processComponents.put(key, est);
-			}
-			else if(estElm.getQualifiedName().equals(ProcessEstimation.class.getSimpleName())){
-				ProcessEstimation est = new ProcessEstimation();
-				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
-				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
-
-				String procKey = estElm.getChild("Process").getAttributeValue("REF");
-				est.insertIntoProcess((Process) this.organizational.get(procKey));
-
-				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
-				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(est, null);
-
-				this.processComponents.put(key, est);
-			}
-			else if(estElm.getQualifiedName().equals(ResourceEstimation.class.getSimpleName())){
-				ResourceEstimation est = new ResourceEstimation();
-				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
-				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
-
-				String resKey = estElm.getChild("Resource").getAttributeValue("REF");
-				est.insertIntoResource((Resource) this.organizational.get(resKey));
-
-				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
-				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(est, null);
-
-				this.processComponents.put(key, est);
-			}
-		}
-
-		// Create Metrics
-		Iterator<Element> iterMet = processComponents.getDescendants(metricFilter);
-		while (iterMet.hasNext()) {
-			Element metElm = (Element) iterEst.next();
-
-			String key = metElm.getAttributeValue("KEY");
-			if(metElm.getQualifiedName().equals(ActivityMetric.class.getSimpleName())){
-				ActivityMetric met = new ActivityMetric();
-				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
-				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
-				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
-				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
-
-				String actKey = metElm.getChild("Activity").getAttributeValue("REF");
-				met.insertIntoActivity((Activity) this.processComponents.get(actKey));
-
-				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
-				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(met, null);
-
-				this.processComponents.put(key, met);
-			}
-			else if(metElm.getQualifiedName().equals(AgentMetric.class.getSimpleName())){
-				AgentMetric met = new AgentMetric();
-				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
-				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
-				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
-				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
-
-				String agKey = metElm.getChild("Agent").getAttributeValue("REF");
-				met.insertIntoAgent((Agent) this.organizational.get(agKey));
-
-				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
-				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(met, null);
-
-				this.processComponents.put(key, met);
-			}
-			else if(metElm.getQualifiedName().equals(ArtifactMetric.class.getSimpleName())){
-				ArtifactMetric met = new ArtifactMetric();
-				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
-				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
-				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
-				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
-
-				String artKey = metElm.getChild("Artifact").getAttributeValue("REF");
-				met.insertIntoArtifact((Artifact) this.organizational.get(artKey));
-
-				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
-				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(met, null);
-
-				this.processComponents.put(key, met);
-			}
-			else if(metElm.getQualifiedName().equals(WorkGroupMetric.class.getSimpleName())){
-				WorkGroupMetric met = new WorkGroupMetric();
-				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
-				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
-				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
-				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
-
-				String WorkGroupKey = metElm.getChild("WorkGroup").getAttributeValue("REF");
-				met.insertIntoWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
-
-				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
-				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(met, null);
-
-				this.processComponents.put(key, met);
-			}
-			else if(metElm.getQualifiedName().equals(OrganizationMetric.class.getSimpleName())){
-				OrganizationMetric met = new OrganizationMetric();
-				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
-				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
-				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
-				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
-
-				String orgKey = metElm.getChild("Organization").getAttributeValue("REF");
-				Company company = new Company();
-				met.insertIntoOrganization(company);
-//				met.insertIntoOrganization((Organization) this.organizational.get(orgKey));
-
-				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
-				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(met, null);
-
-				this.processComponents.put(key, met);
-			}
-			else if(metElm.getQualifiedName().equals(ProcessMetric.class.getSimpleName())){
-				ProcessMetric met = new ProcessMetric();
-				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
-				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
-				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
-				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
-
-				String procKey = metElm.getChild("Process").getAttributeValue("REF");
-				met.insertIntoProcess((Process) this.organizational.get(procKey));
-
-				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
-				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(met, null);
-
-				this.processComponents.put(key, met);
-			}
-			else if(metElm.getQualifiedName().equals(ResourceMetric.class.getSimpleName())){
-				ResourceMetric met = new ResourceMetric();
-				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
-				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
-				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
-				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
-
-				String resKey = metElm.getChild("Resource").getAttributeValue("REF");
-				met.insertIntoResource((Resource) this.organizational.get(resKey));
-
-				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
-				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
-
-				this.persistObject(met, null);
-
-				this.processComponents.put(key, met);
-			}
-		}
+// 				String procKey = estElm.getChild("Process").getAttributeValue("REF");
+// 				est.insertIntoProcess((Process) this.organizational.get(procKey));
+
+// 				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(est, null);
+
+// 				this.processComponents.put(key, est);
+// 			}
+// 			else if(estElm.getQualifiedName().equals(ResourceEstimation.class.getSimpleName())){
+// 				ResourceEstimation est = new ResourceEstimation();
+// 				est.setValue((Float) this.buildAttribute(Float.class, estElm.getChildText("Value")));
+// 				est.setUnit((String) this.buildAttribute(String.class, estElm.getChildText("Unit")));
+
+// 				String resKey = estElm.getChild("Resource").getAttributeValue("REF");
+// 				est.insertIntoResource((Resource) this.organizational.get(resKey));
+
+// 				String metDefKey = estElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				est.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(est, null);
+
+// 				this.processComponents.put(key, est);
+// 			}
+// 		}
+
+// 		// Create Metrics
+// 		Iterator<Element> iterMet = processComponents.getDescendants(metricFilter);
+// 		while (iterMet.hasNext()) {
+// 			Element metElm = (Element) iterEst.next();
+
+// 			String key = metElm.getAttributeValue("KEY");
+// 			if(metElm.getQualifiedName().equals(ActivityMetric.class.getSimpleName())){
+// 				ActivityMetric met = new ActivityMetric();
+// 				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
+// 				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
+// 				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
+// 				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
+
+// 				String actKey = metElm.getChild("Activity").getAttributeValue("REF");
+// 				met.insertIntoActivity((Activity) this.processComponents.get(actKey));
+
+// 				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(met, null);
+
+// 				this.processComponents.put(key, met);
+// 			}
+// 			else if(metElm.getQualifiedName().equals(AgentMetric.class.getSimpleName())){
+// 				AgentMetric met = new AgentMetric();
+// 				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
+// 				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
+// 				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
+// 				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
+
+// 				String agKey = metElm.getChild("Agent").getAttributeValue("REF");
+// 				met.insertIntoAgent((Agent) this.organizational.get(agKey));
+
+// 				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(met, null);
+
+// 				this.processComponents.put(key, met);
+// 			}
+// 			else if(metElm.getQualifiedName().equals(ArtifactMetric.class.getSimpleName())){
+// 				ArtifactMetric met = new ArtifactMetric();
+// 				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
+// 				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
+// 				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
+// 				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
+
+// 				String artKey = metElm.getChild("Artifact").getAttributeValue("REF");
+// 				met.insertIntoArtifact((Artifact) this.organizational.get(artKey));
+
+// 				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(met, null);
+
+// 				this.processComponents.put(key, met);
+// 			}
+// 			else if(metElm.getQualifiedName().equals(WorkGroupMetric.class.getSimpleName())){
+// 				WorkGroupMetric met = new WorkGroupMetric();
+// 				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
+// 				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
+// 				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
+// 				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
+
+// 				String WorkGroupKey = metElm.getChild("WorkGroup").getAttributeValue("REF");
+// 				met.insertIntoWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
+
+// 				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(met, null);
+
+// 				this.processComponents.put(key, met);
+// 			}
+// 			else if(metElm.getQualifiedName().equals(OrganizationMetric.class.getSimpleName())){
+// 				OrganizationMetric met = new OrganizationMetric();
+// 				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
+// 				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
+// 				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
+// 				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
+
+// 				String orgKey = metElm.getChild("Organization").getAttributeValue("REF");
+// 				Company company = new Company();
+// 				met.insertIntoOrganization(company);
+// //				met.insertIntoOrganization((Organization) this.organizational.get(orgKey));
+
+// 				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(met, null);
+
+// 				this.processComponents.put(key, met);
+// 			}
+// 			else if(metElm.getQualifiedName().equals(ProcessMetric.class.getSimpleName())){
+// 				ProcessMetric met = new ProcessMetric();
+// 				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
+// 				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
+// 				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
+// 				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
+
+// 				String procKey = metElm.getChild("Process").getAttributeValue("REF");
+// 				met.insertIntoProcess((Process) this.organizational.get(procKey));
+
+// 				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(met, null);
+
+// 				this.processComponents.put(key, met);
+// 			}
+// 			else if(metElm.getQualifiedName().equals(ResourceMetric.class.getSimpleName())){
+// 				ResourceMetric met = new ResourceMetric();
+// 				met.setValue((Float) this.buildAttribute(Float.class, metElm.getChildText("Value")));
+// 				met.setUnit((String) this.buildAttribute(String.class, metElm.getChildText("Unit")));
+// 				met.setPeriodBegin((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodBegin")));
+// 				met.setPeriodEnd((Date) this.buildAttribute(Date.class, metElm.getChildText("PeriodEnd")));
+
+// 				String resKey = metElm.getChild("Resource").getAttributeValue("REF");
+// 				met.insertIntoResource((Resource) this.organizational.get(resKey));
+
+// 				String metDefKey = metElm.getChild("MetricDefinition").getAttributeValue("REF");
+// 				met.insertIntoMetricDefinition((MetricDefinition) this.organizational.get(metDefKey));
+
+// 				this.persistObject(met, null);
+
+// 				this.processComponents.put(key, met);
+// 			}
+// 		}
 	}
 
 	private void loadPolCondition(Element processComponents){
+		// List<Element> conditions = processComponents.getChildren(PolCondition.class.getSimpleName());
+		// Iterator<Element> iter = conditions.iterator();
+		// while (iter.hasNext()) {
+		// 	Element condElm = (Element) iter.next();
+		// 	Element exprElm = condElm.getChild("ThePolExpression");
 
-		List<Element> conditions = processComponents.getChildren(PolCondition.class.getSimpleName());
-		Iterator<Element> iter = conditions.iterator();
-		while (iter.hasNext()) {
-			Element condElm = (Element) iter.next();
-			Element exprElm = condElm.getChild("ThePolExpression");
+		// 	PolCondition cond = (PolCondition) this.processComponents.get(condElm.getAttributeValue("KEY"));
+		// 	PolExpression expression = cond.getThePolExpression();
 
-			PolCondition cond = (PolCondition) this.processComponents.get(condElm.getAttributeValue("KEY"));
-			PolExpression expression = cond.getThePolExpression();
+		// 	this.processComponents.put(exprElm.getAttributeValue("KEY"), expression);
+		// }
 
-			this.processComponents.put(exprElm.getAttributeValue("KEY"), expression);
-		}
+		// this.loadPolObject(processComponents);
 
-		this.loadPolObject(processComponents);
+		// this.loadPolOperand(processComponents);
 
-		this.loadPolOperand(processComponents);
+		// this.loadPolRelation(processComponents);
 
-		this.loadPolRelation(processComponents);
+		// List<Element> expressions = processComponents.getChildren(PolExpression.class.getSimpleName());
+		// Iterator<Element> iterExpr = expressions.iterator();
+		// while (iterExpr.hasNext()) {
+		// 	Element exprElm = (Element) iter.next();
+		// 	PolExpression expression = (PolExpression) this.processComponents.get(exprElm.getAttributeValue("KEY"));
+		// 	expression.setNotExpression((Boolean) this.buildAttribute(Boolean.class, exprElm.getChildText("NotExpression")));
 
-		List<Element> expressions = processComponents.getChildren(PolExpression.class.getSimpleName());
-		Iterator<Element> iterExpr = expressions.iterator();
-		while (iterExpr.hasNext()) {
-			Element exprElm = (Element) iter.next();
-			PolExpression expression = (PolExpression) this.processComponents.get(exprElm.getAttributeValue("KEY"));
-			expression.setNotExpression((Boolean) this.buildAttribute(Boolean.class, exprElm.getChildText("NotExpression")));
+		// 	Element operandElm = exprElm.getChild("ThePolOperand");
+		// 	if(operandElm != null){
+		// 		String operandKey = operandElm.getAttributeValue("REF");
+		// 		expression.insertIntoThePolOperand((PolOperand) this.processComponents.get(operandKey));
+		// 	}
 
-			Element operandElm = exprElm.getChild("ThePolOperand");
-			if(operandElm != null){
-				String operandKey = operandElm.getAttributeValue("REF");
-				expression.insertIntoThePolOperand((PolOperand) this.processComponents.get(operandKey));
-			}
+		// 	this.persistObject(expression, null);
 
-			this.persistObject(expression, null);
+		// 	this.processComponents.put(exprElm.getAttributeValue("KEY"), expression);
+		// }
 
-			this.processComponents.put(exprElm.getAttributeValue("KEY"), expression);
-		}
+		// this.loadPolConnection(processComponents);
 
-		this.loadPolConnection(processComponents);
-
-		// Last one to be loaded
-		this.loadPolRequiredOperand(processComponents);
+		// // Last one to be loaded
+		// this.loadPolRequiredOperand(processComponents);
 	}
 
 	private void loadPolOperand(Element processComponents){
-		List<Element> operands = processComponents.getChildren(PolOperand.class.getSimpleName());
-		Iterator<Element> iterOperands = operands.iterator();
-		while (iterOperands.hasNext()) {
-			Element operandElm = (Element) iterOperands.next();
-			PolOperand polOperand = new PolOperand();
-			Element objElm = operandElm.getChild("ThePolObject");
-			if(objElm != null){
-				polOperand.insertIntoThePolObject((PolObject) this.processComponents.get(objElm.getAttributeValue("REF")));
-			}
+		// List<Element> operands = processComponents.getChildren(PolOperand.class.getSimpleName());
+		// Iterator<Element> iterOperands = operands.iterator();
+		// while (iterOperands.hasNext()) {
+		// 	Element operandElm = (Element) iterOperands.next();
+		// 	PolOperand polOperand = new PolOperand();
+		// 	Element objElm = operandElm.getChild("ThePolObject");
+		// 	if(objElm != null){
+		// 		polOperand.insertIntoThePolObject((PolObject) this.processComponents.get(objElm.getAttributeValue("REF")));
+		// 	}
 
-			this.persistObject(polOperand, null);
+		// 	this.persistObject(polOperand, null);
 
-			this.processComponents.put(operandElm.getAttributeValue("KEY"), polOperand);
-		}
+		// 	this.processComponents.put(operandElm.getAttributeValue("KEY"), polOperand);
+		// }
 
-		this.loadPolAssociation(processComponents);
+		// this.loadPolAssociation(processComponents);
 
-		this.loadPolOperator(processComponents);
+		// this.loadPolOperator(processComponents);
 
-		iterOperands = operands.iterator();
-		while (iterOperands.hasNext()) {
-			Element operandElm = (Element) iterOperands.next();
-			PolOperand polOperand = (PolOperand) this.processComponents.get(operandElm.getAttributeValue("KEY"));
+		// iterOperands = operands.iterator();
+		// while (iterOperands.hasNext()) {
+		// 	Element operandElm = (Element) iterOperands.next();
+		// 	PolOperand polOperand = (PolOperand) this.processComponents.get(operandElm.getAttributeValue("KEY"));
 
-			Element assocElm = operandElm.getChild("TheAssociation");
-			if(assocElm != null){
-				polOperand.insertIntoTheAssociation((PolAssociation) this.processComponents.get(assocElm.getAttributeValue("REF")));
-			}
+		// 	Element assocElm = operandElm.getChild("TheAssociation");
+		// 	if(assocElm != null){
+		// 		polOperand.insertIntoTheAssociation((PolAssociation) this.processComponents.get(assocElm.getAttributeValue("REF")));
+		// 	}
 
-			Element operElm = operandElm.getChild("ThePolOperator");
-			if(operElm != null){
-				polOperand.insertIntoThePolOperator((PolOperator) this.processComponents.get(operElm.getAttributeValue("REF")));
-			}
+		// 	Element operElm = operandElm.getChild("ThePolOperator");
+		// 	if(operElm != null){
+		// 		polOperand.insertIntoThePolOperator((PolOperator) this.processComponents.get(operElm.getAttributeValue("REF")));
+		// 	}
 
-			this.persistObject(polOperand, null);
-		}
+		// 	this.persistObject(polOperand, null);
+		// }
 	}
 
 	private void loadPolAssociation(Element processComponents){
-		List<Element> associations = processComponents.getChildren(PolAssociation.class.getSimpleName());
-		Iterator<Element> iterAssociations = associations.iterator();
-		while (iterAssociations.hasNext()) {
-			Element assocElm = (Element) iterAssociations.next();
-			PolAssociation polAssociation = new PolAssociation();
-			polAssociation.setKindComparison(assocElm.getChildText("KindComparison"));
+		// List<Element> associations = processComponents.getChildren(PolAssociation.class.getSimpleName());
+		// Iterator<Element> iterAssociations = associations.iterator();
+		// while (iterAssociations.hasNext()) {
+		// 	Element assocElm = (Element) iterAssociations.next();
+		// 	PolAssociation polAssociation = new PolAssociation();
+		// 	polAssociation.setKindComparison(assocElm.getChildText("KindComparison"));
 
-			Element operandElm = assocElm.getChild("ThePolOperand");
-			if(operandElm != null){
-				String operandKey = operandElm.getAttributeValue("REF");
-				polAssociation.insertIntoThePolOperand((PolOperand) this.processComponents.get(operandKey));
-			}
+		// 	Element operandElm = assocElm.getChild("ThePolOperand");
+		// 	if(operandElm != null){
+		// 		String operandKey = operandElm.getAttributeValue("REF");
+		// 		polAssociation.insertIntoThePolOperand((PolOperand) this.processComponents.get(operandKey));
+		// 	}
 
-			this.persistObject(polAssociation, null);
+		// 	this.persistObject(polAssociation, null);
 
-			this.processComponents.put(assocElm.getAttributeValue("KEY"), polAssociation);
-		}
+		// 	this.processComponents.put(assocElm.getAttributeValue("KEY"), polAssociation);
+		// }
 	}
 
 	private void loadPolConnection(Element processComponents){
-		List<Element> connections = processComponents.getChildren(PolConnection.class.getSimpleName());
-		Iterator<Element> iter = connections.iterator();
-		while (iter.hasNext()) {
-			Element connElm = (Element) iter.next();
-			PolConnection polConn = new PolConnection();
-			polConn.setConType(connElm.getChildText("ConType"));
+		// List<Element> connections = processComponents.getChildren(PolConnection.class.getSimpleName());
+		// Iterator<Element> iter = connections.iterator();
+		// while (iter.hasNext()) {
+		// 	Element connElm = (Element) iter.next();
+		// 	PolConnection polConn = new PolConnection();
+		// 	polConn.setConType(connElm.getChildText("ConType"));
 
-			Element exprElm = connElm.getChild("ThePolExpression");
-			PolExpression expression = (PolExpression) this.processComponents.get(exprElm.getAttributeValue("REF"));
-			polConn.insertIntoThePolExpression(expression);
+		// 	Element exprElm = connElm.getChild("ThePolExpression");
+		// 	PolExpression expression = (PolExpression) this.processComponents.get(exprElm.getAttributeValue("REF"));
+		// 	polConn.insertIntoThePolExpression(expression);
 
-			this.persistObject(polConn, null);
+		// 	this.persistObject(polConn, null);
 
-			this.processComponents.put(connElm.getAttributeValue("KEY"), polConn);
-		}
+		// 	this.processComponents.put(connElm.getAttributeValue("KEY"), polConn);
+		// }
 	}
 
 	private void loadPolRelation(Element processComponents){
-		List<Element> relations = processComponents.getChildren(PolRelation.class.getSimpleName());
-		Iterator<Element> iterRelations = relations.iterator();
-		while (iterRelations.hasNext()) {
-			Element relElm = (Element) iterRelations.next();
-			PolRelation polRelation = new PolRelation();
-			polRelation.setKindComparison(relElm.getChildText("KindComparison"));
+		// List<Element> relations = processComponents.getChildren(PolRelation.class.getSimpleName());
+		// Iterator<Element> iterRelations = relations.iterator();
+		// while (iterRelations.hasNext()) {
+		// 	Element relElm = (Element) iterRelations.next();
+		// 	PolRelation polRelation = new PolRelation();
+		// 	polRelation.setKindComparison(relElm.getChildText("KindComparison"));
 
-			Element operandElm = relElm.getChild("ThePolOperand");
-			if(operandElm != null){
-				String operandKey = operandElm.getAttributeValue("REF");
-				polRelation.insertIntoThePolOperand((PolOperand) this.processComponents.get(operandKey));
-			}
+		// 	Element operandElm = relElm.getChild("ThePolOperand");
+		// 	if(operandElm != null){
+		// 		String operandKey = operandElm.getAttributeValue("REF");
+		// 		polRelation.insertIntoThePolOperand((PolOperand) this.processComponents.get(operandKey));
+		// 	}
 
-			this.persistObject(polRelation, null);
+		// 	this.persistObject(polRelation, null);
 
-			this.processComponents.put(relElm.getAttributeValue("KEY"), polRelation);
-		}
+		// 	this.processComponents.put(relElm.getAttributeValue("KEY"), polRelation);
+		// }
 	}
 
 	private void loadPolOperator(Element processComponents){
+		// ElementFilter methodOperator = new ElementFilter(PolMethodOperator.class.getSimpleName());
+		// ElementFilter reservedWordOperator = new ElementFilter(PolReservedWordOperator.class.getSimpleName());
 
-		ElementFilter methodOperator = new ElementFilter(PolMethodOperator.class.getSimpleName());
-		ElementFilter reservedWordOperator = new ElementFilter(PolReservedWordOperator.class.getSimpleName());
+		// AbstractFilter operator = (AbstractFilter) methodOperator.or(reservedWordOperator);
 
-		AbstractFilter operator = (AbstractFilter) methodOperator.or(reservedWordOperator);
+		// Iterator<Element> iter = processComponents.getDescendants(operator);
+		// while (iter.hasNext()) {
+		// 	Element operElm = (Element) iter.next();
 
-		Iterator<Element> iter = processComponents.getDescendants(operator);
-		while (iter.hasNext()) {
-			Element operElm = (Element) iter.next();
+		// 	if(operElm.getQualifiedName().equals(PolMethodOperator.class.getSimpleName())){
+		// 		PolMethodOperator polMethodOperator = new PolMethodOperator();
+		// 		polMethodOperator.setIdent(operElm.getChildText("Ident"));
+		// 		polMethodOperator.setType(operElm.getChildText("Type"));
+		// 		polMethodOperator.setResult(operElm.getChildText("Result"));
 
-			if(operElm.getQualifiedName().equals(PolMethodOperator.class.getSimpleName())){
-				PolMethodOperator polMethodOperator = new PolMethodOperator();
-				polMethodOperator.setIdent(operElm.getChildText("Ident"));
-				polMethodOperator.setType(operElm.getChildText("Type"));
-				polMethodOperator.setResult(operElm.getChildText("Result"));
+		// 		this.persistObject(polMethodOperator, null);
 
-				this.persistObject(polMethodOperator, null);
+		// 		this.processComponents.put(operElm.getAttributeValue("KEY"), polMethodOperator);
+		// 	}
+		// 	else{ //operElm.getQualifiedName().equals(PolReservedWordOperator.class.getSimpleName())
+		// 		PolReservedWordOperator polReservedWordOperator = new PolReservedWordOperator();
+		// 		polReservedWordOperator.setKindReservedWord(operElm.getChildText("KindReservedWord"));
 
-				this.processComponents.put(operElm.getAttributeValue("KEY"), polMethodOperator);
-			}
-			else{ //operElm.getQualifiedName().equals(PolReservedWordOperator.class.getSimpleName())
-				PolReservedWordOperator polReservedWordOperator = new PolReservedWordOperator();
-				polReservedWordOperator.setKindReservedWord(operElm.getChildText("KindReservedWord"));
+		// 		this.persistObject(polReservedWordOperator, null);
 
-				this.persistObject(polReservedWordOperator, null);
+		// 		this.processComponents.put(operElm.getAttributeValue("KEY"), polReservedWordOperator);
+		// 	}
+		// }
 
-				this.processComponents.put(operElm.getAttributeValue("KEY"), polReservedWordOperator);
-			}
-		}
+		// iter = processComponents.getDescendants(operator);
+		// while (iter.hasNext()) {
+		// 	Element operElm = (Element) iter.next();
+		// 	String key = operElm.getAttributeValue("KEY");
+		// 	PolOperator polOperator = (PolOperator) this.processComponents.get(key);
 
-		iter = processComponents.getDescendants(operator);
-		while (iter.hasNext()) {
-			Element operElm = (Element) iter.next();
-			String key = operElm.getAttributeValue("KEY");
-			PolOperator polOperator = (PolOperator) this.processComponents.get(key);
-
-			Element next = operElm.getChild("NextOperator");
-			if(next != null){
-				polOperator.insertIntoNextOperator((PolOperator) this.processComponents.get(next.getAttributeValue("REF")));
-			}
-		}
+		// 	Element next = operElm.getChild("NextOperator");
+		// 	if(next != null){
+		// 		polOperator.insertIntoNextOperator((PolOperator) this.processComponents.get(next.getAttributeValue("REF")));
+		// 	}
+		// }
 	}
 
 	private void loadPolObject(Element processComponents){
+		// List<Element> interfaces = processComponents.getChildren(PolInterface.class.getSimpleName());
+		// Iterator<Element> iterInterfaces = interfaces.iterator();
+		// while (iterInterfaces.hasNext()) {
+		// 	Element interfaceElm = (Element) iterInterfaces.next();
+		// 	PolInterface polInterface = new PolInterface();
+		// 	polInterface.setLabel(interfaceElm.getChildText("Label"));
+		// 	polInterface.setPolApseeType(interfaceElm.getChildText("PolApseeType"));
+		// 	polInterface.setPolApseeIdent(interfaceElm.getChildText("PolApseeIdent"));
 
-		List<Element> interfaces = processComponents.getChildren(PolInterface.class.getSimpleName());
-		Iterator<Element> iterInterfaces = interfaces.iterator();
-		while (iterInterfaces.hasNext()) {
-			Element interfaceElm = (Element) iterInterfaces.next();
-			PolInterface polInterface = new PolInterface();
-			polInterface.setLabel(interfaceElm.getChildText("Label"));
-			polInterface.setPolApseeType(interfaceElm.getChildText("PolApseeType"));
-			polInterface.setPolApseeIdent(interfaceElm.getChildText("PolApseeIdent"));
+		// 	this.persistObject(polInterface, null);
 
-			this.persistObject(polInterface, null);
+		// 	this.processComponents.put(interfaceElm.getAttributeValue("KEY"), polInterface);
+		// }
 
-			this.processComponents.put(interfaceElm.getAttributeValue("KEY"), polInterface);
-		}
+		// ElementFilter objValueFilter = new ElementFilter(PolObjValue.class.getSimpleName());
+		// ElementFilter objInterfaceFilter = new ElementFilter(PolObjectInterface.class.getSimpleName());
+		// AbstractFilter objFilter = (AbstractFilter) objValueFilter.or(objInterfaceFilter);
 
-		ElementFilter objValueFilter = new ElementFilter(PolObjValue.class.getSimpleName());
-		ElementFilter objInterfaceFilter = new ElementFilter(PolObjectInterface.class.getSimpleName());
-		AbstractFilter objFilter = (AbstractFilter) objValueFilter.or(objInterfaceFilter);
+		// Iterator<Element> iter = processComponents.getDescendants(objFilter);
+		// while (iter.hasNext()) {
+		// 	Element objElm = (Element) iter.next();
+		// 	if(objElm.getQualifiedName().equals(PolObjValue.class.getSimpleName())){
+		// 		PolObjValue value = new PolObjValue();
+		// 		value.setObjectType(objElm.getChildText("ObjectType"));
+		// 		value.setObjectValue(objElm.getChildText("ObjectValue"));
 
-		Iterator<Element> iter = processComponents.getDescendants(objFilter);
-		while (iter.hasNext()) {
-			Element objElm = (Element) iter.next();
-			if(objElm.getQualifiedName().equals(PolObjValue.class.getSimpleName())){
-				PolObjValue value = new PolObjValue();
-				value.setObjectType(objElm.getChildText("ObjectType"));
-				value.setObjectValue(objElm.getChildText("ObjectValue"));
+		// 		this.persistObject(value, null);
 
-				this.persistObject(value, null);
+		// 		this.processComponents.put(objElm.getAttributeValue("KEY"), value);
+		// 	}
+		// 	else{ //objElm.getQualifiedName().equals(PolObjInterface.class.getSimpleName())
+		// 		PolObjectInterface objInterface = new PolObjectInterface();
+		// 		String interfaceKey = objElm.getChild("ThePolInterface").getAttributeValue("REF");
+		// 		objInterface.insertIntoThePolInterface((PolInterface) this.processComponents.get(interfaceKey));
+		// 		this.persistObject(objInterface, null);
 
-				this.processComponents.put(objElm.getAttributeValue("KEY"), value);
-			}
-			else{ //objElm.getQualifiedName().equals(PolObjInterface.class.getSimpleName())
-				PolObjectInterface objInterface = new PolObjectInterface();
-				String interfaceKey = objElm.getChild("ThePolInterface").getAttributeValue("REF");
-				objInterface.insertIntoThePolInterface((PolInterface) this.processComponents.get(interfaceKey));
-				this.persistObject(objInterface, null);
-
-				this.processComponents.put(objElm.getAttributeValue("KEY"), objInterface);
-			}
-		}
+		// 		this.processComponents.put(objElm.getAttributeValue("KEY"), objInterface);
+		// 	}
+		// }
 	}
 
-	// private void loadPolRequiredOperand(Element processComponents){
+	private void loadPolRequiredOperand(Element processComponents){
 	// 	List<Element> requireds = processComponents.getChildren(PolRequiredOperand.class.getSimpleName());
 	// 	Iterator<Element> iter = requireds.iterator();
 	// 	while (iter.hasNext()) {
@@ -3307,55 +3301,54 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	// 		this.processComponents.put(reqElm.getAttributeValue("KEY"), polReq);
 	// 	}
-	// }
+	}
 
 	private void loadParameters(Element processComponents, Element organizational) {
+		// ElementFilter artifactParam = new ElementFilter(ArtifactParam.class.getSimpleName());
+		// ElementFilter primitiveParam = new ElementFilter(PrimitiveParam.class.getSimpleName());
 
-		ElementFilter artifactParam = new ElementFilter(ArtifactParam.class.getSimpleName());
-		ElementFilter primitiveParam = new ElementFilter(PrimitiveParam.class.getSimpleName());
+		// AbstractFilter parameters = (AbstractFilter) artifactParam.or(primitiveParam);
+		// Iterator<Element> iter = processComponents.getDescendants(parameters);
+		// while (iter.hasNext()) {
+		// 	Element paramElm = (Element) iter.next();
+		// 	String key = paramElm.getAttributeValue("KEY");
+		// 	if(paramElm.getQualifiedName().equals(ArtifactParam.class.getSimpleName())){
 
-		AbstractFilter parameters = (AbstractFilter) artifactParam.or(primitiveParam);
-		Iterator<Element> iter = processComponents.getDescendants(parameters);
-		while (iter.hasNext()) {
-			Element paramElm = (Element) iter.next();
-			String key = paramElm.getAttributeValue("KEY");
-			if(paramElm.getQualifiedName().equals(ArtifactParam.class.getSimpleName())){
+		// 		ArtifactParam artParam = new ArtifactParam();
+		// 		artParam.setDescription(paramElm.getChildText("Description"));
 
-				ArtifactParam artParam = new ArtifactParam();
-				artParam.setDescription(paramElm.getChildText("Description"));
+		// 		Element autoElm = paramElm.getChild("TheAutomatic");
+		// 		if(autoElm != null){
+		// 			String autoKey = autoElm.getAttributeValue("REF");
+		// 			artParam.setTheAutomatic((Automatic) this.processComponents.get(autoKey));
+		// 		}
 
-				Element autoElm = paramElm.getChild("TheAutomatic");
-				if(autoElm != null){
-					String autoKey = autoElm.getAttributeValue("REF");
-					artParam.setTheAutomatic((Automatic) this.processComponents.get(autoKey));
-				}
+		// 		Element artElm = paramElm.getChild("TheArtifact");
+		// 		if(artElm != null){
+		// 			String artKey = artElm.getAttributeValue("REF");
+		// 			artParam.setTheArtifact((Artifact) this.organizational.get(artKey));
+		// 		}
 
-				Element artElm = paramElm.getChild("TheArtifact");
-				if(artElm != null){
-					String artKey = artElm.getAttributeValue("REF");
-					artParam.setTheArtifact((Artifact) this.organizational.get(artKey));
-				}
+		// 		this.persistObject(artParam, null);
 
-				this.persistObject(artParam, null);
+		// 		this.processComponents.put(key, artParam);
+		// 	}
+		// 	else{ //paramElm.getQualifiedName().equals(PrimitiveParam.class.getSimpleName())
 
-				this.processComponents.put(key, artParam);
-			}
-			else{ //paramElm.getQualifiedName().equals(PrimitiveParam.class.getSimpleName())
+		// 		PrimitiveParam priParam = new PrimitiveParam();
+		// 		priParam.setDescription(paramElm.getChildText("Description"));
 
-				PrimitiveParam priParam = new PrimitiveParam();
-				priParam.setDescription(paramElm.getChildText("Description"));
+		// 		Element autoElm = paramElm.getChild("TheAutomatic");
+		// 		if(autoElm != null){
+		// 			String autoKey = autoElm.getAttributeValue("REF");
+		// 			priParam.setTheAutomatic((Automatic) this.processComponents.get(autoKey));
+		// 		}
 
-				Element autoElm = paramElm.getChild("TheAutomatic");
-				if(autoElm != null){
-					String autoKey = autoElm.getAttributeValue("REF");
-					priParam.setTheAutomatic((Automatic) this.processComponents.get(autoKey));
-				}
+		// 		this.persistObject(priParam, null);
 
-				this.persistObject(priParam, null);
-
-				this.processComponents.put(key, priParam);
-			}
-		}
+		// 		this.processComponents.put(key, priParam);
+		// 	}
+		// }
 	}
 
 	private void loadProcessModelGraphicalDescriptor(String processId, Element coordinatesXML) {
@@ -3376,7 +3369,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 			wobj.setTheReferredOid(newOid);
 
-			gc.insertIntoTheObjectReference(wobj);
+			gc.setTheObjectReference(wobj);
 			gc.setTheProcess(processId);
 			gc.setVisible(Boolean.valueOf(graphCoordXML.getChildText("Visible")));
 			gc.setX(Integer.valueOf(graphCoordXML.getChildText("X")));
@@ -3392,129 +3385,128 @@ public class ProjectServicesImpl implements ProjectServices {
 	 * Import Process Associative Objects
 	 */
 	private void loadProcessAssociatives(Element associatives) {
+		// List<Element> artTasks = associatives.getChildren(ArtifactTask.class.getSimpleName());
+		// Iterator<Element> iterArtTasks = artTasks.iterator();
+		// while (iterArtTasks.hasNext()) {
+		// 	Element artTaskElm = (Element) iterArtTasks.next();
 
-		List<Element> artTasks = associatives.getChildren(ArtifactTask.class.getSimpleName());
-		Iterator<Element> iterArtTasks = artTasks.iterator();
-		while (iterArtTasks.hasNext()) {
-			Element artTaskElm = (Element) iterArtTasks.next();
+		// 	String key = artTaskElm.getAttributeValue("KEY");
 
-			String key = artTaskElm.getAttributeValue("KEY");
+		// 	Element taskElm = artTaskElm.getChild("TheTask");
+		// 	String toKey = taskElm.getAttributeValue("REF");
 
-			Element taskElm = artTaskElm.getChild("TheTask");
-			String toKey = taskElm.getAttributeValue("REF");
+		// 	Task task = (Task) this.processComponents.get(toKey);
 
-			Task task = (Task) this.processComponents.get(toKey);
+		// 	Element artElm = artTaskElm.getChild("TheArtifact");
+		// 	String fromKey = artElm.getAttributeValue("REF");
 
-			Element artElm = artTaskElm.getChild("TheArtifact");
-			String fromKey = artElm.getAttributeValue("REF");
+		// 	Artifact artifact = (Artifact) this.organizational.get(fromKey);
 
-			Artifact artifact = (Artifact) this.organizational.get(fromKey);
+		// 	if(!this.isAssociativeExists(ArtifactTask.class, artifact, task)){
 
-			if(!this.isAssociativeExists(ArtifactTask.class, artifact, task)){
+		// 		ArtifactTask artTask = new ArtifactTask();
+		// 		artTask.insertIntoTheArtifacts(artifact);
+		// 		artTask.insertIntoTheTask(task);
+		// 		artTask.setInWorkspaceVersion(artTaskElm.getChildText("InWorkspaceVersion"));
+		// 		artTask.setOutWorkspaceVersion(artTaskElm.getChildText("OutWorkspaceVersion"));
 
-				ArtifactTask artTask = new ArtifactTask();
-				artTask.insertIntoTheArtifacts(artifact);
-				artTask.insertIntoTheTask(task);
-				artTask.setInWorkspaceVersion(artTaskElm.getChildText("InWorkspaceVersion"));
-				artTask.setOutWorkspaceVersion(artTaskElm.getChildText("OutWorkspaceVersion"));
+		// 		artTask = (ArtifactTask) this.persistObject(artTask, null);
 
-				artTask = (ArtifactTask) this.persistObject(artTask, null);
+		// 		this.associatives.put(key, artTask);
+		// 	}
+		// }
 
-				this.associatives.put(key, artTask);
-			}
-		}
+		// List<Element> bctas = associatives.getChildren(BranchConCondToActivity.class.getSimpleName());
+		// Iterator<Element> iterbctas = bctas.iterator();
+		// while (iterbctas.hasNext()) {
+		// 	Element bctaElm = (Element) iterbctas.next();
 
-		List<Element> bctas = associatives.getChildren(BranchConCondToActivity.class.getSimpleName());
-		Iterator<Element> iterbctas = bctas.iterator();
-		while (iterbctas.hasNext()) {
-			Element bctaElm = (Element) iterbctas.next();
+		// 	String key = bctaElm.getAttributeValue("KEY");
 
-			String key = bctaElm.getAttributeValue("KEY");
+		// 	Element branchCondElm = bctaElm.getChild("TheBranchConCond");
+		// 	String branchCondKey = branchConCondElm.getAttributeValue("REF");
 
-			Element branchCondElm = bctaElm.getChild("TheBranchConCond");
-			String branchCondKey = branchConCondElm.getAttributeValue("REF");
+		// 	BranchConCond branchCond = (BranchConCond) this.processComponents.get(branchConCondKey);
 
-			BranchConCond branchCond = (BranchConCond) this.processComponents.get(branchConCondKey);
+		// 	Element actElm = bctaElm.getChild("TheActivity");
+		// 	String actKey = actElm.getAttributeValue("REF");
 
-			Element actElm = bctaElm.getChild("TheActivity");
-			String actKey = actElm.getAttributeValue("REF");
+		// 	Activity activity = (Activity) this.processComponents.get(actKey);
 
-			Activity activity = (Activity) this.processComponents.get(actKey);
+		// 	if(!this.isAssociativeExists(BranchConCondToActivity.class, branchConCond, activity)){
 
-			if(!this.isAssociativeExists(BranchConCondToActivity.class, branchConCond, activity)){
+		// 		BranchConCondToActivity bcta = new BranchConCondToActivity();
+		// 		bcta.insertIntoTheBranchCond(branchConCond);
+		// 		bcta.insertIntoTheActivity(activity);
 
-				BranchConCondToActivity bcta = new BranchConCondToActivity();
-				bcta.insertIntoTheBranchCond(branchConCond);
-				bcta.insertIntoTheActivity(activity);
+		// 		this.processComponents.put(bctaElm.getChild("TheCondition").getAttributeValue("REF"), bcta.getTheCondition());
 
-				this.processComponents.put(bctaElm.getChild("TheCondition").getAttributeValue("REF"), bcta.getTheCondition());
+		// 		bcta = (BranchConCondToActivity) this.persistObject(bcta, null);
 
-				bcta = (BranchConCondToActivity) this.persistObject(bcta, null);
+		// 		this.associatives.put(key, bcta);
+		// 	}
+		// }
 
-				this.associatives.put(key, bcta);
-			}
-		}
+		// List<Element> bctms = associatives.getChildren(BranchConCondToMultipleCon.class.getSimpleName());
+		// Iterator<Element> iterbctms = bctas.iterator();
+		// while (iterbctms.hasNext()) {
+		// 	Element bctmElm = (Element) iterbctms.next();
 
-		List<Element> bctms = associatives.getChildren(BranchConCondToMultipleCon.class.getSimpleName());
-		Iterator<Element> iterbctms = bctas.iterator();
-		while (iterbctms.hasNext()) {
-			Element bctmElm = (Element) iterbctms.next();
+		// 	String key = bctmElm.getAttributeValue("KEY");
 
-			String key = bctmElm.getAttributeValue("KEY");
+		// 	Element branchCondElm = bctmElm.getChild("TheBranchConCond");
+		// 	String branchCondKey = branchConCondElm.getAttributeValue("REF");
 
-			Element branchCondElm = bctmElm.getChild("TheBranchConCond");
-			String branchCondKey = branchConCondElm.getAttributeValue("REF");
+		// 	BranchConCond branchCond = (BranchConCond) this.processComponents.get(branchConCondKey);
 
-			BranchConCond branchCond = (BranchConCond) this.processComponents.get(branchConCondKey);
+		// 	Element mcElm = bctmElm.getChild("TheMultipleCon");
+		// 	String mcKey = mcElm.getAttributeValue("REF");
 
-			Element mcElm = bctmElm.getChild("TheMultipleCon");
-			String mcKey = mcElm.getAttributeValue("REF");
+		// 	MultipleCon multipleCon = (MultipleCon) this.processComponents.get(mcKey);
 
-			MultipleCon multipleCon = (MultipleCon) this.processComponents.get(mcKey);
+		// 	if(!this.isAssociativeExists(BranchConCondToMultipleCon.class, branchConCond, multipleCon)){
 
-			if(!this.isAssociativeExists(BranchConCondToMultipleCon.class, branchConCond, multipleCon)){
+		// 		BranchConCondToMultipleCon bctm = new BranchConCondToMultipleCon();
+		// 		bctm.insertIntoTheBranchCond(branchConCond);
+		// 		bctm.insertIntoTheMultipleCon(multipleCon);
 
-				BranchConCondToMultipleCon bctm = new BranchConCondToMultipleCon();
-				bctm.insertIntoTheBranchCond(branchConCond);
-				bctm.insertIntoTheMultipleCon(multipleCon);
+		// 		this.processComponents.put(bctmElm.getChild("TheCondition").getAttributeValue("REF"), bctm.getTheCondition());
 
-				this.processComponents.put(bctmElm.getChild("TheCondition").getAttributeValue("REF"), bctm.getTheCondition());
+		// 		bctm = (BranchConCondToMultipleCon) this.persistObject(bctm, null);
 
-				bctm = (BranchConCondToMultipleCon) this.persistObject(bctm, null);
+		// 		this.associatives.put(key, bctm);
+		// 	}
+		// }
 
-				this.associatives.put(key, bctm);
-			}
-		}
+		// List<Element> rras = associatives.getChildren(ReqAgentRequiresAbility.class.getSimpleName());
+		// Iterator<Element> iterrras = rras.iterator();
+		// while (iterrras.hasNext()) {
+		// 	Element rraElm = (Element) iterrras.next();
 
-		List<Element> rras = associatives.getChildren(ReqAgentRequiresAbility.class.getSimpleName());
-		Iterator<Element> iterrras = rras.iterator();
-		while (iterrras.hasNext()) {
-			Element rraElm = (Element) iterrras.next();
+		// 	String key = rraElm.getAttributeValue("KEY");
 
-			String key = rraElm.getAttributeValue("KEY");
+		// 	Element reqElm = rraElm.getChild("TheReqAgent");
+		// 	String reqKey = reqElm.getAttributeValue("REF");
 
-			Element reqElm = rraElm.getChild("TheReqAgent");
-			String reqKey = reqElm.getAttributeValue("REF");
+		// 	ReqAgent reqAgent = (ReqAgent) this.processComponents.get(reqKey);
 
-			ReqAgent reqAgent = (ReqAgent) this.processComponents.get(reqKey);
+		// 	Element abilityElm = rraElm.getChild("TheAbility");
+		// 	String abilityKey = abilityElm.getAttributeValue("REF");
 
-			Element abilityElm = rraElm.getChild("TheAbility");
-			String abilityKey = abilityElm.getAttributeValue("REF");
+		// 	Ability ability = (Ability) this.organizational.get(abilityKey);
 
-			Ability ability = (Ability) this.organizational.get(abilityKey);
+		// 	if(!this.isAssociativeExists(ReqAgentRequiresAbility.class, reqAgent, ability)){
 
-			if(!this.isAssociativeExists(ReqAgentRequiresAbility.class, reqAgent, ability)){
+		// 		ReqAgentRequiresAbility rra = new ReqAgentRequiresAbility();
+		// 		rra.insertIntoTheReqAgent(reqAgent);
+		// 		rra.insertIntoTheAbility(ability);
+		// 		rra.setDegree(Integer.valueOf(rraElm.getChildText("Degree")));
 
-				ReqAgentRequiresAbility rra = new ReqAgentRequiresAbility();
-				rra.insertIntoTheReqAgent(reqAgent);
-				rra.insertIntoTheAbility(ability);
-				rra.setDegree(Integer.valueOf(rraElm.getChildText("Degree")));
+		// 		rra = (ReqAgentRequiresAbility) this.persistObject(rra, null);
 
-				rra = (ReqAgentRequiresAbility) this.persistObject(rra, null);
-
-				this.associatives.put(key, rra);
-			}
-		}
+		// 		this.associatives.put(key, rra);
+		// 	}
+		// }
 	}
 
 	/*
@@ -3528,7 +3520,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			Class[] types = null;
 			Method get = obj.getClass().getMethod("getId", types);
 			Object[] params = null;
-			Long oid = (Integer) get.invoke(obj, params);
+			Long oid = (Long) get.invoke(obj, params);
 			return oid;
 		} catch (SecurityException e) {
 			e.printStackTrace();
@@ -3655,7 +3647,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		Object[] parameter = { obj };
 
 		Object[] nullparam = null;
-		Long oid = (Integer) UtilReflection.invokeMethod(obj, "getId", nullparam);
+		Long oid = (Long) UtilReflection.invokeMethod(obj, "getId", nullparam);
 		Object isPersisted = null;
 
 //		if(oid != null) {
@@ -3803,8 +3795,8 @@ public class ProjectServicesImpl implements ProjectServices {
 				if (content.getParentElement().getParentElement() != null) {
 
 					if (((Element) content.getParent().getParent()).getQualifiedName().equals("SEQUENCENODE")
-						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("BRANCHConNODE")
-						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("JOINConNODE")
+						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("BRANCHNODE")
+						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("JOINNODE")
 						|| ((Element) content.getParent().getParent()).getQualifiedName().equals("ARTIFACTCONNODE")) {
 
 						if(((Element) content.getParent()).getQualifiedName().equals("IDENT")){
@@ -3948,8 +3940,8 @@ public class ProjectServicesImpl implements ProjectServices {
 		return false;
 	}
 
-	private AgentsDTO convertAgentsToAgentsDTO(List<Agent> agentList ) {
-		List<AgentDTO> agente =  new ArrayList<AgentDTO>();
+	private AgentsDTO convertAgentsToAgentsDTO(Set<Agent> agentList ) {
+    Set<AgentDTO> agente = new HashSet<AgentDTO>();
 
 		for (Agent agent : agentList) {
 
@@ -4059,7 +4051,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		query = agentDAO.getPersistenceContext().createQuery(hql_project);
 		query.setParameter( "theProcess_oid", theProcess_oid );
 		query.setParameter( "agent_oid", agent_oid );
-		List<Agent> agentList = new ArrayList<Agent>();
+		Set<Agent> agentList = new HashSet<Agent>();
 		agentList.addAll(query.getResultList());
 
 		return convertAgentsToAgentsDTO(agentList);
@@ -4073,7 +4065,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 		query = agentDAO.getPersistenceContext().createQuery(hql_project);
 		query.setParameter( "agent_oid", agent_oid );
-	    List<Agent> agentList = new ArrayList<Agent>();
+	    Set<Agent> agentList = new HashSet<Agent>();
 		agentList.addAll(query.getResultList());
 
 		return convertAgentsToAgentsDTO(agentList);
