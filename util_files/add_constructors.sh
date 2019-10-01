@@ -27,7 +27,7 @@ diffs='util_files/entitydiffs.txt'
 
 # 2.
 # models=`find "$olddir" -regextype posix-extended -regex '(.*).java' | sed -e '/policies/d' -e '/IPersistent/d' -e '/help/d' -e '/knowledge/d'`
-models="$olddir/activities/Activity.java"
+models="$olddir/agent/AgentPlaysRole.java"
 
 # 3.
 for m in $models; do
@@ -53,7 +53,7 @@ for m in $models; do
     if [[ $constructors != '' ]]; then
       inputs=''
       list=`echo "$constructors" | tr ';' "\n"`
-      for mthd in $list; doconst trigger = 'jhipster-needle-entity-add-field'
+      for mthd in $list; do
         method=`echo $mthd | tr '_' ' '`
         # echo method: $method
         selfclose=`echo $method | grep {}`
@@ -69,7 +69,8 @@ for m in $models; do
 
       # add input methods to new class
       # echo -e "$inputs"
-      echo -e "$(node util_files/insert.js "$inputs" "$file")"
+      trigger='jhipster-needle-entity-add-field'
+      echo -e "$(node util_files/insert.js "$inputs" "$file" $trigger)" > $file
       # sed -i "s/^}$//" $file
       # echo -e "$inputs" >> $file
       # echo -e '}' >> $file

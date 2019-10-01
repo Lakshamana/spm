@@ -33,6 +33,22 @@ public class AgentAffinityAgent implements Serializable {
     private Agent fromAffinity;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+	public AgentAffinityAgent() {
+		this.degree = new Integer(0);
+		this.toAffinity = null; // must be set explicitely
+		this.fromAffinity = null; // must be set explicitely
+	}
+	public AgentAffinityAgent(Agent fromAffinity, Agent toAffinity) {
+		this.degree = new Integer(0);
+		this.setFromAffinity(fromAffinity);
+		this.setToAffinity(toAffinity);
+	}
+	public AgentAffinityAgent(Integer degree, Agent fromAffinity, Agent toAffinity) {
+		this.degree = degree;
+		this.setFromAffinity(fromAffinity);
+		this.setToAffinity(toAffinity);
+	}
+
     public Long getId() {
         return id;
     }
