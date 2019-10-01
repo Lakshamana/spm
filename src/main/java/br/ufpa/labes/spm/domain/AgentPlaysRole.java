@@ -35,12 +35,12 @@ public class AgentPlaysRole implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 	public AgentPlaysRole() {
-		this.since_date = new Date();
+		this.sinceDate = LocalDate.now();
 		this.theRole = null;
 		this.theAgent = null;
 	}
 	public AgentPlaysRole(Role theRole, Agent theAgent) {
-		this.since_date = new Date();
+		this.sinceDate = LocalDate.now();
 		this.theRole = theRole;
 		this.theAgent = theAgent;
 	}

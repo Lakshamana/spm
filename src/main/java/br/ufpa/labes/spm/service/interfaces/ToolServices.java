@@ -1,11 +1,9 @@
 package br.ufpa.labes.spm.service.interfaces;
 
-import javax.ejb.Remote;
 import br.ufpa.labes.spm.service.dto.ToolDTO;
 import br.ufpa.labes.spm.service.dto.ToolsDTO;
 import br.ufpa.labes.spm.service.dto.TypesDTO;
 
-@Remote
 public interface ToolServices {
 	public TypesDTO getToolTypes();
 

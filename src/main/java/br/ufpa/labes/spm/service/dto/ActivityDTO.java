@@ -29,7 +29,7 @@ public class ActivityDTO implements Serializable {
 	private String actualBegin;
 	private String actualEnd;
 	private boolean isDelegable;
-	private int id;
+	private Long id;
 	private String parent;
 
 	@IgnoreMapping
@@ -191,11 +191,11 @@ public class ActivityDTO implements Serializable {
 		this.isDelegable = isDelegable;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

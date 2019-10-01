@@ -1,11 +1,9 @@
 package br.ufpa.labes.spm.service.interfaces;
 
-import javax.ejb.Remote;
 
 import br.ufpa.labes.spm.service.dto.CompaniesDTO;
 import br.ufpa.labes.spm.service.dto.CompanyDTO;
 
-@Remote
 public interface CompanyServices {
 	public CompanyDTO saveCompany(CompanyDTO companyDTO);
 	public CompaniesDTO getCompanies();
