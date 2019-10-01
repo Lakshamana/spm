@@ -2,8 +2,6 @@ package br.ufpa.labes.spm.service.interfaces;
 
 import java.util.List;
 
-
-import org.qrconsult.spm.beans.editor.WebAPSEEVO;
 import br.ufpa.labes.spm.service.dto.TypeDTO;
 import br.ufpa.labes.spm.service.dto.TypesDTO;
 
@@ -23,6 +21,6 @@ public interface TypeServices {
 
 	public TypesDTO getTypes(String termoBusca, String domainFilter, boolean orgFilter);
 
-	public List<WebAPSEEVO> getTypesVO(String domain);
+	public List<br.ufpa.labes.spm.beans.editor.WebAPSEEVO> getTypesVO(String domain);
 
 }
