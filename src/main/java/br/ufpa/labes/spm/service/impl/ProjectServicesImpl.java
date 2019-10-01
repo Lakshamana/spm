@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -160,7 +161,7 @@ import br.ufpa.labes.spm.domain.Type;
 // import org.qrconsult.spm.process.interfaces.IProcessExporter;
 import br.ufpa.labes.spm.service.interfaces.EnactmentEngineLocal;
 import br.ufpa.labes.spm.service.interfaces.ProjectServices;
-import br.ufpa.labes.spm.service.interfaces.ReportServices;
+// import br.ufpa.labes.spm.service.interfaces.ReportServices;
 import br.ufpa.labes.spm.util.UtilReflection;
 
 public class ProjectServicesImpl implements ProjectServices {
@@ -203,7 +204,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	IReportDAO reportDAO;
 
-	ReportServices reportServices;
+	// ReportServices reportServices;
 
 	EnactmentEngineLocal enactmentEngineLocal;
 
@@ -630,15 +631,11 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	@SuppressWarnings("unchecked")
 	private Set<Agent> getAgentsFromProcess(Process processRefered) {
-		Set<Agent> result = Collections.emptyList();
 		String hql = "SELECT DISTINCT a FROM " + AGENT_CLASSNAME + " a JOINCon a.theProcess p WHERE p.ident = :ident)";
 		query = agentDAO.getPersistenceContext().createQuery(hql);
 		query.setParameter("ident", processRefered.getIdent());
-
-		result = query.getResultList();
-
-
-		return result;
+    List<Agent> result = query.getResultList();
+    return result.stream().collect(Collectors.toSet());
 	}
 
 	@Override
@@ -714,7 +711,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	@Override
 	public ProjectsDTO getProjects() {
-		Set<Project> projects = getAllProjects();
+		List<Project> projects = getAllProjects().stream().collect(Collectors.toList());
 		return this.convertProjectsToProjectsDTO(projects);
 	}
 
@@ -798,7 +795,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	@SuppressWarnings("unchecked")
 	public ArtifactsDTO getFinalArtifactsAvailableForProjects() {
 		ArtifactsDTO artifactsDTO = new ArtifactsDTO(new ArrayList<ArtifactDTO>());
-		Set<Artifact> artifacts = new HashSet<Artifact>();
+		List<Artifact> artifacts = new ArrayList<Artifact>();
 		query = artifactDAO.getPersistenceContext().createQuery("SELECT o FROM Artifact o");
 		artifacts = query.getResultList();
 
@@ -842,7 +839,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		query.setParameter("projectName", projectName + "%");
 
 		List<Task> result = query.getResultList();
-		return result;
+		return result.stream().collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -851,16 +848,16 @@ public class ProjectServicesImpl implements ProjectServices {
 		query = projectDAO.getPersistenceContext().createQuery(hql);
 
 		List<Project> projects = query.getResultList();
-		return projects;
+		return projects.stream().collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
-	private Set<Project> getProjectsUser(int oid) {
+	private Set<Project> getProjectsUser(Long oid) {
 		String hql = "select o from " + PROJECT_CLASSNAME + " o where ";
 		query = projectDAO.getPersistenceContext().createQuery(hql);
 
 		List<Project> projects = query.getResultList();
-		return projects;
+		return projects.stream().collect(Collectors.toSet());
 	}
 
 	@Override
@@ -943,30 +940,31 @@ public class ProjectServicesImpl implements ProjectServices {
 	}
 
 	@Override
-	public ProjectCost getProjectCost(Integer projectId) {
-		Project project = this.getProjectForId(projectId);
-		Set<ResourcesCostPlanItem> planoDeCustos = reportServices.generateResourcesCostPlanReport(project.getIdent());
+	public ProjectCost getProjectCost(Long projectId) {
+		// Project project = this.getProjectForId(projectId);
+		// Set<ResourcesCostPlanItem> planoDeCustos = reportServices.generateResourcesCostPlanReport(project.getIdent());
 
-		Double exclusivesCost = 0.0, consumablesCost = 0.0, shareablesCost = 0.0,
-				humansRealCost = 0.0, humansEstimatedCost = 0.0, activitiesCost = 0.0;
+		// Double exclusivesCost = 0.0, consumablesCost = 0.0, shareablesCost = 0.0,
+		// 		humansRealCost = 0.0, humansEstimatedCost = 0.0, activitiesCost = 0.0;
 
-		for (ResourcesCostPlanItem unidadeDeCusto : planoDeCustos) {
-			exclusivesCost += unidadeDeCusto.exclusivesTotalCost();
-			consumablesCost += unidadeDeCusto.consumablesTotalCost();
-			shareablesCost += unidadeDeCusto.exclusivesTotalCost();
-			humansEstimatedCost += unidadeDeCusto.humansEstimatedCost();
-			humansRealCost += unidadeDeCusto.humansRealTotalCost();
-			activitiesCost += unidadeDeCusto.activitiesTotalCost();
-		}
+		// for (ResourcesCostPlanItem unidadeDeCusto : planoDeCustos) {
+		// 	exclusivesCost += unidadeDeCusto.exclusivesTotalCost();
+		// 	consumablesCost += unidadeDeCusto.consumablesTotalCost();
+		// 	shareablesCost += unidadeDeCusto.exclusivesTotalCost();
+		// 	humansEstimatedCost += unidadeDeCusto.humansEstimatedCost();
+		// 	humansRealCost += unidadeDeCusto.humansRealTotalCost();
+		// 	activitiesCost += unidadeDeCusto.activitiesTotalCost();
+		// }
 
-		Double custoEstimado = exclusivesCost + consumablesCost + shareablesCost + humansEstimatedCost + activitiesCost;
-		Double custoReal = exclusivesCost + consumablesCost + shareablesCost + humansRealCost + activitiesCost;
+		// Double custoEstimado = exclusivesCost + consumablesCost + shareablesCost + humansEstimatedCost + activitiesCost;
+		// Double custoReal = exclusivesCost + consumablesCost + shareablesCost + humansRealCost + activitiesCost;
 
-		ProjectCost cost = new ProjectCost();
-		cost.setEstimatedCost(custoEstimado);
-		cost.setRealCost(custoReal);
+		// ProjectCost cost = new ProjectCost();
+		// cost.setEstimatedCost(custoEstimado);
+		// cost.setRealCost(custoReal);
 
-    return cost;
+    // return cost;
+    return null;
 	}
 
 	private ProjectStatistic convertProjectToProjectStatistic(Project project) {
@@ -1018,10 +1016,10 @@ public class ProjectServicesImpl implements ProjectServices {
 		boolean plannedEndNotNull = task.getTheNormal().getPlannedEnd() != null;
 
 		if(isTaskRunning && plannedEndNotNull) {
-			if(endDateNotNull ) {
-				isTaskDelayed = task.getTheNormal().getPlannedEnd().before(task.getEndDate());
+			if(endDateNotNull) {
+				isTaskDelayed = task.getTheNormal().getPlannedEnd().isBefore(task.getEndDate());
 			} else {
-				isTaskDelayed = task.getTheNormal().getPlannedEnd().before(new Date());
+				isTaskDelayed = task.getTheNormal().getPlannedEnd().isBefore(LocalDate.now());
 			}
 		}
 
@@ -1083,7 +1081,7 @@ public class ProjectServicesImpl implements ProjectServices {
 	@SuppressWarnings("unchecked")
 	private Agent getAgentFromName(String agentName) {
 		String hql;
-		Set<Agent> result = null;
+		List<Agent> result = null;
 
 		hql = "select agent from "+ Agent.class.getSimpleName() +" as agent where agent.name = :agentName";
 		query = agentDAO.getPersistenceContext().createQuery(hql);
@@ -1195,7 +1193,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 				projectDTO.setEstimatedHours(hours);
 				projectDTO.setEstimatedMinutes(minutes);
-				Set<Agent> agents = (List<Agent>) project.getProcessRefered().getTheAgents();
+				Set<Agent> agents = project.getProcessRefered().getTheAgents();
 				projectDTO.setProcess(project.getProcessRefered().getId().toString());
 				Set<String> agentNames = getAgentNames(agents);
 				projectDTO.setAgents(agentNames);
@@ -1224,7 +1222,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		return processDTO;
 	}
 
-	private Set<String> getAgentNames(List<Agent> agents) {
+	private Set<String> getAgentNames(Set<Agent> agents) {
 		Set<String> agentNames = new HashSet<String>();
 		for (Agent agent : agents) {
 			agentNames.add(agent.getName());
@@ -1232,7 +1230,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		return agentNames;
 	}
 
-	private ProjectsDTO convertProjectsToProjectsDTO(Set<Project> projects) {
+	private ProjectsDTO convertProjectsToProjectsDTO(List<Project> projects) {
 		ProjectsDTO projectsDTO = new ProjectsDTO(new ArrayList<ProjectDTO>());
 		for (Project project : projects) {
 			ProjectDTO projectDTO = this.convertProjectToProjectDTO(project);
@@ -1246,11 +1244,11 @@ public class ProjectServicesImpl implements ProjectServices {
 	public String exportProcess(String processId, boolean exportArtifactVersions) {
 //		exporter = new ProcessExporter(dao);
 		String xml = "";
-		try {
-			xml = exporter.exportProcess(processId, exportArtifactVersions);
-		} catch (WebapseeException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// 	xml = exporter.exportProcess(processId, exportArtifactVersions);
+		// } catch (WebapseeException e) {
+		// 	e.printStackTrace();
+		// }
 
 		return xml;
 	}
@@ -1285,7 +1283,7 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	Process process;
 
-	IProcessExporter exporter;
+	// IProcessExporter exporter;
 
 	@Override
 	public void importProcess(String processId, String xml) {
@@ -1440,14 +1438,14 @@ public class ProjectServicesImpl implements ProjectServices {
 
 	private void loadSystem(Element organizational) {
 		Element system = organizational.getChild(DevelopingSystem.class.getSimpleName());
-		DevelopingSystem sys = (System) this.buildOrgObject(system);
+		DevelopingSystem sys = (DevelopingSystem) this.buildOrgObject(system);
 		if(sys == null) return;
 		// Setting organization...
 		Element orgElm = system.getChild("TheOrganization");
 		if(orgElm != null){
 			String orgKey = orgElm.getAttributeValue("REF");
 			Company company = new Company();
-			sys.insertIntoTheOrganization(company);
+			sys.setTheOrganization(company);
 //			sys.insertIntoTheOrganization((Organization) this.organizational.get(orgKey));
 		}
 	}
@@ -1490,14 +1488,14 @@ public class ProjectServicesImpl implements ProjectServices {
 			Element belongsToElm = element.getChild("BelongsTo");
 			if(belongsToElm != null){
 				String belongsToKey = belongsToElm.getAttributeValue("REF");
-				artifact.insertIntoBelongsTo((Artifact) this.organizational.get(belongsToKey));
+				artifact.setBelongsTo((Artifact) this.organizational.get(belongsToKey));
 			}
 
 			// Setting derivedFrom...
 			Element derivedFromElm = element.getChild("BelongsTo");
 			if(derivedFromElm != null){
 				String derivedFromKey = derivedFromElm.getAttributeValue("REF");
-				artifact.insertIntoDerivedFrom((Artifact) this.organizational.get(derivedFromKey));
+				artifact.setDerivedFrom((Artifact) this.organizational.get(derivedFromKey));
 			}
 		}
 	}
@@ -1817,10 +1815,10 @@ public class ProjectServicesImpl implements ProjectServices {
 
 				AgentPlaysRole apr = new AgentPlaysRole();
 				if(role != null)
-					apr.insertIntoTheRole(role);
+					apr.setTheRole(role);
 				if(agent != null)
-					apr.insertIntoTheAgent(agent);
-				apr.setSince_date((Date) this.buildAttribute(Date.class, aprElm.getChildText("Since_date")));
+					apr.setTheAgent(agent);
+				apr.setSinceDate((LocalDate) this.buildAttribute(Date.class, aprElm.getChildText("Since_date")));
 
 				apr = (AgentPlaysRole) this.persistObject(apr, null);
 
@@ -1847,9 +1845,9 @@ public class ProjectServicesImpl implements ProjectServices {
 
 			if(!this.isAssociativeExists(RoleNeedsAbility.class, role, ability)){
 
-				RoleNeedsAbility rna = new RoleNeedsAbility();
-				rna.insertIntoTheRole(role);
-				rna.insertIntoTheAbility(ability);
+        RoleNeedsAbility rna = new RoleNeedsAbility();
+				rna.setTheRole(role);
+				rna.setTheAbility(ability);
 				rna.setDegree(Integer.valueOf(rnaElm.getChildText("Degree")));
 
 				rna = (RoleNeedsAbility) this.persistObject(rna, null);
@@ -1927,7 +1925,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		Element activityType = processElm.getChild("TheActivityType");
 		if(activityType != null){
 			String typeKey = activityType.getAttributeValue("REF");
-			process.insertIntoTheActivityType((ActivityType) this.organizational.get(typeKey));
+			process.setTheActivityType((ActivityType) this.organizational.get(typeKey));
 		}
 
 		// Setting project...
@@ -1935,7 +1933,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		if(projectElm != null){
 			String projectKey = projectElm.getAttributeValue("KEY");
 			Project project = (Project) this.organizational.get(projectKey);
-			project.insertIntoProcessRefered(process);
+			project.setProcessRefered(process);
 			this.organizational.put(projectElm.getAttributeValue("KEY"), project);
 			process.setIdent(project.getIdent());
 		}
@@ -1948,7 +1946,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			while (iterItens.hasNext()) {
 				Element agentElm = (Element) iterItens.next();
 				String agentKey = agentElm.getValue();
-				process.insertIntoTheAgent((Agent) this.organizational.get(agentKey));
+				process.addTheAgent((Agent) this.organizational.get(agentKey));
 			}
 		}
 
@@ -1991,7 +1989,7 @@ public class ProjectServicesImpl implements ProjectServices {
 					Element item = (Element) iterItens.next();
 					if(item != null){
 						String actKey = item.getValue();
-						processModel.insertIntoTheActivity((Activity) this.processComponents.get(actKey));
+						processModel.addTheActivity((Activity) this.processComponents.get(actKey));
 					}
 				}
 			}
@@ -2004,7 +2002,7 @@ public class ProjectServicesImpl implements ProjectServices {
 					Element item = (Element) iterConnItens.next();
 					if(item != null){
 						String connKey = item.getValue();
-						processModel.insertIntoTheConnection((Connection) this.processComponents.get(connKey));
+						processModel.addTheConnection((Connection) this.processComponents.get(connKey));
 					}
 				}
 			}
@@ -2022,13 +2020,13 @@ public class ProjectServicesImpl implements ProjectServices {
 			Element enactionDescElm = (Element) iter.next();
 			EnactionDescription enactionDesc = new EnactionDescription();
 			enactionDesc.setState(enactionDescElm.getChildText("State"));
-			enactionDesc.setActualBegin((Date) this.buildAttribute(Date.class, enactionDescElm.getChildText("ActualBegin")));
-			enactionDesc.setActualEnd((Date) this.buildAttribute(Date.class, enactionDescElm.getChildText("ActualEnd")));
+			enactionDesc.setActualBegin((LocalDate) this.buildAttribute(Date.class, enactionDescElm.getChildText("ActualBegin")));
+			enactionDesc.setActualEnd((LocalDate) this.buildAttribute(Date.class, enactionDescElm.getChildText("ActualEnd")));
 
 			Element plainElm = enactionDescElm.getChild("ThePlain");
 			if(plainElm != null){
 				String plainKey = plainElm.getAttributeValue("REF");
-				enactionDesc.insertIntoThePlain((Plain) this.processComponents.get(plainKey));
+				enactionDesc.setThePlain((Plain) this.processComponents.get(plainKey));
 			}
 
 			this.persistObject(enactionDesc, null);
@@ -2056,14 +2054,14 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(actTypeElm != null){
 				String typeKey = actTypeElm.getAttributeValue("REF");
 				ActivityType actType = (ActivityType) this.organizational.get(typeKey);
-				activity.insertIntoTheActivityType(actType);
+				activity.setTheActivityType(actType);
 			}
 
 			Element versionElm = actElm.getChild("IsVersion");
 			if(versionElm != null){
 				String versionKey = versionElm.getAttributeValue("REF");
 				Activity actVersion = (Activity) this.organizational.get(versionKey);
-				activity.insertIntoIsVersion(actVersion);
+				activity.addHasVersions(actVersion);
 			}
 		}
 	}
@@ -2109,7 +2107,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				Element WorkGroupTypeElm = requiredPeopleElm.getChild("TheWorkGroupType");
 				if(WorkGroupTypeElm == null) continue; // Inconsistency handle
 				String WorkGroupTypeKey = WorkGroupTypeElm.getAttributeValue("REF");
-				reqWorkGroup.insertIntoTheWorkGroupType((WorkGroupType) this.organizational.get(WorkGroupTypeKey));
+				reqWorkGroup.setTheWorkGroupType((WorkGroupType) this.organizational.get(WorkGroupTypeKey));
 
 				String normalKey = requiredPeopleElm.getChild("TheNormal").getAttributeValue("REF");
 				reqWorkGroup.insertIntoTheNormal((Normal) this.processComponents.get(normalKey));
@@ -2117,7 +2115,7 @@ public class ProjectServicesImpl implements ProjectServices {
 				Element WorkGroupElm = requiredPeopleElm.getChild("TheWorkGroup");
 				if(WorkGroupElm != null){
 					String WorkGroupKey = WorkGroupElm.getAttributeValue("REF");
-					reqWorkGroup.insertIntoTheWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
+					reqWorkGroup.setTheWorkGroup((WorkGroup) this.organizational.get(WorkGroupKey));
 				}
 
 				this.persistObject(reqWorkGroup, null);
@@ -2148,7 +2146,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			Element resourceElm = requiredResourceElm.getChild("TheResource");
 			if(resourceElm != null){
 				String resourceKey = resourceElm.getAttributeValue("REF");
-				reqResource.insertIntoTheResource((Resource) this.organizational.get(resourceKey));
+				reqResource.setTheResource((Resource) this.organizational.get(resourceKey));
 			}
 
 			this.persistObject(reqResource, null);
@@ -2206,9 +2204,9 @@ public class ProjectServicesImpl implements ProjectServices {
 
 		AbstractFilter connectionFilter = ((AbstractFilter) artifactConFilter.or(sequenceFilter));
 		connectionFilter = ((AbstractFilter) connectionFilter.or(feedbackFilter));
-		connectionFilter = ((AbstractFilter) connectionFilter.or(branchANDConFilter));
-		connectionFilter = ((AbstractFilter) connectionFilter.or(branchConCondFilter));
-		connectionFilter = ((AbstractFilter) connectionFilter.or(joinConFilter));
+		connectionFilter = ((AbstractFilter) connectionFilter.or(branchANDFilter));
+		connectionFilter = ((AbstractFilter) connectionFilter.or(branchCondFilter));
+		connectionFilter = ((AbstractFilter) connectionFilter.or(joinFilter));
 
 		Iterator<Element> iter = processComponents.getDescendants(connectionFilter);
 		while (iter.hasNext()) {
@@ -2227,7 +2225,7 @@ public class ProjectServicesImpl implements ProjectServices {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						artifactCon.insertIntoFromActivity((Activity) this.processComponents.get(itemRef));
+						artifactCon.addFromActivity((Activity) this.processComponents.get(itemRef));
 					}
 				}
 
@@ -2238,16 +2236,16 @@ public class ProjectServicesImpl implements ProjectServices {
 					while (iterItens.hasNext()) {
 						Element item = (Element) iterItens.next();
 						String itemRef = item.getValue();
-						artifactCon.insertIntoToActivity((Activity) this.processComponents.get(itemRef));
+						artifactCon.addToActivity((Activity) this.processComponents.get(itemRef));
 					}
 				}
 
 				Element artTypeElm = connectionElm.getChild("TheArtifactType");
-				artifactCon.insertIntoTheArtifactType((ArtifactType) this.organizational.get(artTypeElm.getAttributeValue("REF")));
+				artifactCon.setTheArtifactType((ArtifactType) this.organizational.get(artTypeElm.getAttributeValue("REF")));
 
 				Element artElm = connectionElm.getChild("TheArtifact");
 				if(artElm != null){
-					artifactCon.insertIntoTheArtifacts((Artifact) this.organizational.get(artElm.getAttributeValue("REF")));
+					artifactCon.setTheArtifact((Artifact) this.organizational.get(artElm.getAttributeValue("REF")));
 				}
 
 				artifactCon = (ArtifactCon) this.persistObject(artifactCon, null);
@@ -2259,13 +2257,13 @@ public class ProjectServicesImpl implements ProjectServices {
 				Element fromActivityElm = connectionElm.getChild("FromActivity");
 				if(fromActivityElm != null){
 					String fromRef = fromActivityElm.getAttributeValue("REF");
-					sequence.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					sequence.setFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				Element toActivityElm = connectionElm.getChild("ToActivity");
 				if(toActivityElm != null){
 					String toRef = toActivityElm.getAttributeValue("REF");
-					sequence.insertIntoToActivity((Activity) this.processComponents.get(toRef));
+					sequence.setToActivity((Activity) this.processComponents.get(toRef));
 				}
 
 				sequence = (Sequence) this.persistObject(sequence, null);
@@ -2277,13 +2275,13 @@ public class ProjectServicesImpl implements ProjectServices {
 				Element fromActivityElm = connectionElm.getChild("FromActivity");
 				if(fromActivityElm != null){
 					String fromRef = fromActivityElm.getAttributeValue("REF");
-					feedback.insertIntoFromActivity((Activity) this.processComponents.get(fromRef));
+					feedback.setFromActivity((Activity) this.processComponents.get(fromRef));
 				}
 
 				Element toActivityElm = connectionElm.getChild("ToActivity");
 				if(toActivityElm != null){
 					String toRef = toActivityElm.getAttributeValue("REF");
-					feedback.insertIntoToActivity((Activity) this.processComponents.get(toRef));
+					feedback.setToActivity((Activity) this.processComponents.get(toRef));
 				}
 
 				// Element conditionElm = connectionElm.getChild("TheCondition");
@@ -3940,7 +3938,7 @@ public class ProjectServicesImpl implements ProjectServices {
 		return false;
 	}
 
-	private AgentsDTO convertAgentsToAgentsDTO(Set<Agent> agentList ) {
+	private AgentsDTO convertAgentsToAgentsDTO(Set<Agent> agentList) {
     Set<AgentDTO> agente = new HashSet<AgentDTO>();
 
 		for (Agent agent : agentList) {

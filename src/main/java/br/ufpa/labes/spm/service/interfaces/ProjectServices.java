@@ -1,7 +1,6 @@
 package br.ufpa.labes.spm.service.interfaces;
 
-import java.util.List;
-
+import java.util.Set;
 
 import br.ufpa.labes.spm.service.dto.dashboard.ProjectCost;
 import br.ufpa.labes.spm.service.dto.dashboard.ProjectStatistic;
@@ -51,11 +50,11 @@ public interface ProjectServices {
 
 	public AgentsDTO getAgentsFromProjects(String theProcess_oid, Long agent_oid);
 
-	public AgentsDTO getAgentsOnline(Integer agent_oid);
+	public AgentsDTO getAgentsOnline(Long agent_oid);
 
 	public ProjectDTO getProjectById(Long oid);
 
-	public List<ProjectStatistic> getProjectsForDashboard();
+  public Set<ProjectStatistic> getProjectsForDashboard();
 
 	public ProjectStatistic getProjectForDashboard(Long oid);
 

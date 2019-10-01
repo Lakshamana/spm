@@ -29,7 +29,7 @@ public class ProjectStatistic implements Serializable {
     this.cost = new ProjectCost();
   }
 
-  public void generateCostLink(Integer id) {
+  public void generateCostLink(Long id) {
     String url = id.toString();
   }
 
