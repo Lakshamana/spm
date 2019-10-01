@@ -1,13 +1,10 @@
 package br.ufpa.labes.spm.service.interfaces;
 
-import javax.ejb.Local;
-
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.exceptions.WebapseeException;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.ProcessModel;
 
-@Local
 public interface EnactmentEngineLocal {
 
 	public void searchForFiredConnections(Integer pmodel_id, String why) throws WebapseeException;

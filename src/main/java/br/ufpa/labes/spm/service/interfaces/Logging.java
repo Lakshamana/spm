@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.service.interfaces;
 
-import javax.ejb.Local;
-
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.domain.Plain;
 import br.ufpa.labes.spm.domain.BranchCon;
@@ -12,7 +10,6 @@ import br.ufpa.labes.spm.domain.ProcessModel;
 import br.ufpa.labes.spm.domain.Resource;
 import br.ufpa.labes.spm.domain.Task;
 
-@Local
 public interface Logging {
 
 	public abstract void registerModelingActivityEvent(Activity activity,

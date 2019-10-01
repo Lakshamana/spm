@@ -163,7 +163,7 @@ public class TagStatsResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(tagStats.getId().intValue())))
             .andExpect(jsonPath("$.[*].count").value(hasItem(DEFAULT_COUNT.intValue())));
     }
-    
+
     @Test
     @Transactional
     public void getTagStats() throws Exception {
