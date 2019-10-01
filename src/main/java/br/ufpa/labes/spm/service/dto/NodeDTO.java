@@ -1,6 +1,7 @@
 package br.ufpa.labes.spm.service.dto;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class NodeDTO implements Serializable{
 
     public NodeDTO() {
     	super();
-    	this.children = new Set<NodeDTO>();
+    	this.children = new HashSet<NodeDTO>();
 		this.setIdent("");
 
 	}

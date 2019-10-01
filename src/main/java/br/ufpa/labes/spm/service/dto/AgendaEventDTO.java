@@ -9,7 +9,9 @@ import br.ufpa.labes.spm.annotations.IgnoreMapping;
 public class AgendaEventDTO implements Serializable {
 
 	@IgnoreMapping
-	private String catalogEvent;
+  private String catalogEvent;
+
+  private Long id;
 
 	private Date when;
 
@@ -37,5 +39,11 @@ public class AgendaEventDTO implements Serializable {
 		this.when = when;
 	}
 
+  public Long getId() {
+    return id;
+  }
 
+  public void setId(Long id) {
+    this.id = id;
+  }
 }

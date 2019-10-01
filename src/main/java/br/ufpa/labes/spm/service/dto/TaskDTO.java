@@ -1,7 +1,7 @@
 package br.ufpa.labes.spm.service.dto;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -18,9 +18,9 @@ public class TaskDTO implements Serializable {
 
 	private String localState;
 
-	private Date beginDate;
+	private LocalDate beginDate;
 
-	private Date endDate;
+	private LocalDate endDate;
 
 	private Float workingHours;
 
@@ -28,9 +28,9 @@ public class TaskDTO implements Serializable {
 
 	private Time realWorkingTime;
 
-	private Date dateDelegatedTo;
+	private LocalDate dateDelegatedTo;
 
-	private Date dateDelegatedFrom;
+	private LocalDate dateDelegatedFrom;
 
 	@IgnoreMapping
 	private Float howLong;
@@ -39,10 +39,10 @@ public class TaskDTO implements Serializable {
 	private String howLongUnit;
 
 	@IgnoreMapping
-	private Date plannedBegin;
+	private LocalDate plannedBegin;
 
 	@IgnoreMapping
-	private Date plannedEnd;
+	private LocalDate plannedEnd;
 
 	@IgnoreMapping
 	private String script;
@@ -61,9 +61,9 @@ public class TaskDTO implements Serializable {
 
 	public TaskDTO() {}
 
-	public TaskDTO(Long id, String name, String localState, Date beginDate,
-			Date endDate, Float workingHours, Date dateDelegatedTo,
-			Date dateDelegatedFrom, String theNormal) {
+	public TaskDTO(Long id, String name, String localState, LocalDate beginDate,
+			LocalDate endDate, Float workingHours, LocalDate dateDelegatedTo,
+			LocalDate dateDelegatedFrom, String theNormal) {
 		this.id = id;
 		this.name = name;;
 		this.localState = localState;
@@ -75,10 +75,10 @@ public class TaskDTO implements Serializable {
 		this.theNormal = theNormal;
 	}
 
-	public TaskDTO(Long id, String name, String localState, Date beginDate,
-			Date endDate, Float workingHours, Date dateDelegatedTo,
-			Date dateDelegatedFrom, Float howLong, String howLongUnit,
-			Date plannedBegin, Date plannedEnd, String script,
+	public TaskDTO(Long id, String name, String localState, LocalDate beginDate,
+			LocalDate endDate, Float workingHours, LocalDate dateDelegatedTo,
+			LocalDate dateDelegatedFrom, Float howLong, String howLongUnit,
+			LocalDate plannedBegin, LocalDate plannedEnd, String script,
 			String theNormal, String agent) {
 		this.id = id;
 		this.name = name;
@@ -121,19 +121,19 @@ public class TaskDTO implements Serializable {
 		this.localState = localState;
 	}
 
-	public Date getBeginDate() {
+	public LocalDate getBeginDate() {
 		return beginDate;
 	}
 
-	public void setBeginDate(Date beginDate) {
+	public void setBeginDate(LocalDate beginDate) {
 		this.beginDate = beginDate;
 	}
 
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 
@@ -145,20 +145,20 @@ public class TaskDTO implements Serializable {
 		this.workingHours = workingHours;
 	}
 
-	public Date getDateDelegatedTo() {
+	public LocalDate getDateDelegatedTo() {
 		return dateDelegatedTo;
 	}
 
-	public void setDateDelegatedTo(Date dateDelegatedTo) {
+	public void setDateDelegatedTo(LocalDate dateDelegatedTo) {
 
 		this.dateDelegatedTo = dateDelegatedTo;
 	}
 
-	public Date getDateDelegatedFrom() {
+	public LocalDate getDateDelegatedFrom() {
 		return dateDelegatedFrom;
 	}
 
-	public void setDateDelegatedFrom(Date dateDelegatedFrom) {
+	public void setDateDelegatedFrom(LocalDate dateDelegatedFrom) {
 		this.dateDelegatedFrom = dateDelegatedFrom;
 	}
 
@@ -203,19 +203,19 @@ public class TaskDTO implements Serializable {
 		this.howLongUnit = howLongUnit;
 	}
 
-	public Date getPlannedBegin() {
+	public LocalDate getPlannedBegin() {
 		return plannedBegin;
 	}
 
-	public void setPlannedBegin(Date plannedBegin) {
+	public void setPlannedBegin(LocalDate plannedBegin) {
 		this.plannedBegin = plannedBegin;
 	}
 
-	public Date getPlannedEnd() {
+	public LocalDate getPlannedEnd() {
 		return plannedEnd;
 	}
 
-	public void setPlannedEnd(Date plannedEnd) {
+	public void setPlannedEnd(LocalDate plannedEnd) {
 		this.plannedEnd = plannedEnd;
 	}
 

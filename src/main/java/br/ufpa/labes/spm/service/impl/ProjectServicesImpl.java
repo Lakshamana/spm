@@ -3946,7 +3946,7 @@ public class ProjectServicesImpl implements ProjectServices {
 			agente.add(this.convertAgentToAgentDTO(agent));
 		}
 
-		return new AgentsDTO(agente);
+		return new AgentsDTO(agente.stream().collect(Collectors.toList()));
 	}
 
 	private AgentDTO convertAgentToAgentDTO(Agent agent) {

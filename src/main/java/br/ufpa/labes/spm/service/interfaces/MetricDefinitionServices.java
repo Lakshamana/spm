@@ -1,11 +1,8 @@
 package br.ufpa.labes.spm.service.interfaces;
 
-import javax.ejb.Remote;
-
 import br.ufpa.labes.spm.service.dto.MetricDefinitionDTO;
 import br.ufpa.labes.spm.service.dto.MetricDefinitionsDTO;
 
-@Remote
 public interface MetricDefinitionServices {
 	public MetricDefinitionDTO saveMetricDefinition(MetricDefinitionDTO metricDefinitionDTO);
 	public String[] getMetricTypes();

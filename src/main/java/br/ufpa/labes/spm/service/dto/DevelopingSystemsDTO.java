@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class SystemsDTO implements Serializable{
+public class DevelopingSystemsDTO implements Serializable{
 	private String[] nameSystemas;
 	private String[] nomeProjetos;
 	private List<SystemDTO> systemsDTO;
 
-	public SystemsDTO() {
+	public DevelopingSystemsDTO() {
 		this.setNameSystemas(new String[0]);
 		this.setNomeProjetos(new String[0]);
 		systemsDTO = new ArrayList<SystemDTO>();

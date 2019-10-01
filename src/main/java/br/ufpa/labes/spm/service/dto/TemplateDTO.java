@@ -3,18 +3,26 @@ package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.List;
 
-
 @SuppressWarnings("serial")
 public class TemplateDTO implements Serializable {
-	private String ident;
-	private String templateState;
-	private List<ProcessModelDTO> theInstances;
+  private String ident;
+  private String templateState;
+  private Long id;
+  private List<ProcessModelDTO> theInstances;
 
-	public String getTemplateState() {
-		return templateState;
-	}
+  public String getTemplateState() {
+    return templateState;
+  }
 
-	public void setTemplateState(String templateState) {
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setTemplateState(String templateState) {
 		this.templateState = templateState;
 	}
 

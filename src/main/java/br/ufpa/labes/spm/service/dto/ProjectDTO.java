@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LocalDate;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
