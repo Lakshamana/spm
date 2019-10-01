@@ -7,7 +7,6 @@ import org.qrconsult.spm.beans.editor.WebAPSEEVO;
 import br.ufpa.labes.spm.service.dto.TypeDTO;
 import br.ufpa.labes.spm.service.dto.TypesDTO;
 
-@Remote
 public interface TypeServices {
 
 	public String[] getRootTypes( String typeClassName );

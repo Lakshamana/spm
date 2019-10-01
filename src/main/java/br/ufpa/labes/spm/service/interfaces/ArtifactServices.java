@@ -9,7 +9,6 @@ import br.ufpa.labes.spm.service.dto.ArtifactsDTO;
 import br.ufpa.labes.spm.service.dto.TypesDTO;
 import br.ufpa.labes.spm.exceptions.DAOException;
 
-@Remote
 public interface ArtifactServices {
 
 	public ArtifactDTO getArtifact(String artifactIdent);

@@ -10,7 +10,6 @@ import br.ufpa.labes.spm.exceptions.UserDeniedException;
 import br.ufpa.labes.spm.exceptions.UserInvalidException;
 import br.ufpa.labes.spm.exceptions.UserNotManagerException;
 
-@Remote
 public interface NotificationServices {
 
 	public abstract boolean isAgent(String name, String password) throws RemoteException;

@@ -7,7 +7,6 @@ import br.ufpa.labes.spm.service.dto.CalendarDTO;
 import br.ufpa.labes.spm.service.dto.CalendarsDTO;
 import br.ufpa.labes.spm.service.dto.ProjectDTO;
 
-@Remote
 public interface CalendarServices {
 
 

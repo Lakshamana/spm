@@ -17,7 +17,6 @@ import br.ufpa.labes.spm.exceptions.WebapseeException;
  * @version 1.0
  */
 
-@Remote
 public interface EnactmentEngine {
 
 	/**

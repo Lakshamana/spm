@@ -8,7 +8,6 @@ import br.ufpa.labes.spm.service.dto.ProjectsDTO;
 import br.ufpa.labes.spm.service.dto.ProcessDTO;
 import br.ufpa.labes.spm.service.dto.ProcessesDTO;
 
-@Remote
 public interface ProcessServices {
 
 	public ProjectsDTO getProjectsForAgent(String agentIdent);

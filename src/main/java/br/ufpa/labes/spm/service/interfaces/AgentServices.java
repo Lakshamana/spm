@@ -14,7 +14,6 @@ import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
 import br.ufpa.labes.spm.service.dto.RoleDTO;
 import br.ufpa.labes.spm.domain.Agent;
 
-@Remote
 public interface AgentServices {
 	public AgentDTO getAgent(String nameAgent);
 

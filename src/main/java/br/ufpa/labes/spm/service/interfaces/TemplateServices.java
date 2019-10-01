@@ -9,7 +9,6 @@ import br.ufpa.labes.spm.service.dto.TemplateDTO;
 import br.ufpa.labes.spm.exceptions.DAOException;
 import br.ufpa.labes.spm.exceptions.WebapseeException;
 
-@Remote
 public interface TemplateServices {
 
 	public Boolean createTemplate(String ident);

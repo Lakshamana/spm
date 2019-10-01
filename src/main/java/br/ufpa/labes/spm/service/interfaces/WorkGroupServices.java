@@ -8,7 +8,6 @@ import br.ufpa.labes.spm.service.dto.GroupsDTO;
 import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
 import br.ufpa.labes.spm.service.dto.TypesDTO;
 
-@Remote
 public interface WorkGroupServices {
 
 	public TypesDTO getWorkGroupTypes();

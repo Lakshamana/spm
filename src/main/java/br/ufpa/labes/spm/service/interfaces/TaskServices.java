@@ -9,7 +9,6 @@ import br.ufpa.labes.spm.exceptions.WebapseeException;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.domain.ProcessModel;
 
-@Remote
 public interface TaskServices {
 
 	public void executeProcess (String processId);

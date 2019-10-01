@@ -4,7 +4,6 @@ package br.ufpa.labes.spm.service.interfaces;
 import br.ufpa.labes.spm.service.dto.ActivityDTO;
 import br.ufpa.labes.spm.service.dto.ActivitysDTO;
 
-@Remote
 public interface GanttServices {
 
 	public ActivitysDTO getGanttActivities(String processIdent);

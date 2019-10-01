@@ -8,7 +8,6 @@ import br.ufpa.labes.spm.service.dto.AgentDTO;
 import br.ufpa.labes.spm.service.dto.RoleDTO;
 import br.ufpa.labes.spm.service.dto.RolesDTO;
 
-@Remote
 public interface RoleServices {
 	public RoleDTO getRole(String nameRole);
 

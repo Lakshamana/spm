@@ -15,7 +15,6 @@ import br.ufpa.labes.spm.domain.ClassMethodCall;
 import br.ufpa.labes.spm.domain.Script;
 import br.ufpa.labes.spm.domain.ArtifactType;
 
-@Remote
 public interface DynamicModeling {
 
 	/**

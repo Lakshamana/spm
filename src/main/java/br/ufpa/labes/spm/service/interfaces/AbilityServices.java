@@ -4,7 +4,6 @@ package br.ufpa.labes.spm.service.interfaces;
 import br.ufpa.labes.spm.service.dto.AbilityDTO;
 import br.ufpa.labes.spm.service.dto.AbilitysDTO;
 
-@Remote
 public interface AbilityServices {
 	public String[] getAbilityTypes();
 
