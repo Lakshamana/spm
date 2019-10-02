@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Plugin;
 import br.ufpa.labes.spm.repository.PluginRepository;
-import br.ufpa.labes.spm.service.PluginService;
-import br.ufpa.labes.spm.service.dto.PluginDTO;
-import br.ufpa.labes.spm.service.mapper.PluginMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -51,12 +48,6 @@ public class PluginResourceIT {
     private PluginRepository pluginRepository;
 
     @Autowired
-    private PluginMapper pluginMapper;
-
-    @Autowired
-    private PluginService pluginService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -78,7 +69,7 @@ public class PluginResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PluginResource pluginResource = new PluginResource(pluginService);
+        final PluginResource pluginResource = new PluginResource(pluginRepository);
         this.restPluginMockMvc = MockMvcBuilders.standaloneSetup(pluginResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -125,10 +116,9 @@ public class PluginResourceIT {
         int databaseSizeBeforeCreate = pluginRepository.findAll().size();
 
         // Create the Plugin
-        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
         restPluginMockMvc.perform(post("/api/plugins")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plugin)))
             .andExpect(status().isCreated());
 
         // Validate the Plugin in the database
@@ -147,12 +137,11 @@ public class PluginResourceIT {
 
         // Create the Plugin with an existing ID
         plugin.setId(1L);
-        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPluginMockMvc.perform(post("/api/plugins")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plugin)))
             .andExpect(status().isBadRequest());
 
         // Validate the Plugin in the database
@@ -169,11 +158,10 @@ public class PluginResourceIT {
         plugin.setDeveloperName(null);
 
         // Create the Plugin, which fails.
-        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
 
         restPluginMockMvc.perform(post("/api/plugins")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plugin)))
             .andExpect(status().isBadRequest());
 
         List<Plugin> pluginList = pluginRepository.findAll();
@@ -188,11 +176,10 @@ public class PluginResourceIT {
         plugin.setConfigFilePath(null);
 
         // Create the Plugin, which fails.
-        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
 
         restPluginMockMvc.perform(post("/api/plugins")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plugin)))
             .andExpect(status().isBadRequest());
 
         List<Plugin> pluginList = pluginRepository.findAll();
@@ -255,11 +242,10 @@ public class PluginResourceIT {
             .name(UPDATED_NAME)
             .developerName(UPDATED_DEVELOPER_NAME)
             .configFilePath(UPDATED_CONFIG_FILE_PATH);
-        PluginDTO pluginDTO = pluginMapper.toDto(updatedPlugin);
 
         restPluginMockMvc.perform(put("/api/plugins")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedPlugin)))
             .andExpect(status().isOk());
 
         // Validate the Plugin in the database
@@ -277,12 +263,11 @@ public class PluginResourceIT {
         int databaseSizeBeforeUpdate = pluginRepository.findAll().size();
 
         // Create the Plugin
-        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restPluginMockMvc.perform(put("/api/plugins")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plugin)))
             .andExpect(status().isBadRequest());
 
         // Validate the Plugin in the database
@@ -321,28 +306,5 @@ public class PluginResourceIT {
         assertThat(plugin1).isNotEqualTo(plugin2);
         plugin1.setId(null);
         assertThat(plugin1).isNotEqualTo(plugin2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(PluginDTO.class);
-        PluginDTO pluginDTO1 = new PluginDTO();
-        pluginDTO1.setId(1L);
-        PluginDTO pluginDTO2 = new PluginDTO();
-        assertThat(pluginDTO1).isNotEqualTo(pluginDTO2);
-        pluginDTO2.setId(pluginDTO1.getId());
-        assertThat(pluginDTO1).isEqualTo(pluginDTO2);
-        pluginDTO2.setId(2L);
-        assertThat(pluginDTO1).isNotEqualTo(pluginDTO2);
-        pluginDTO1.setId(null);
-        assertThat(pluginDTO1).isNotEqualTo(pluginDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(pluginMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(pluginMapper.fromId(null)).isNull();
     }
 }

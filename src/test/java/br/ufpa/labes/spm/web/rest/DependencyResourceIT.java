@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Dependency;
 import br.ufpa.labes.spm.repository.DependencyRepository;
-import br.ufpa.labes.spm.service.DependencyService;
-import br.ufpa.labes.spm.service.dto.DependencyDTO;
-import br.ufpa.labes.spm.service.mapper.DependencyMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class DependencyResourceIT {
     private DependencyRepository dependencyRepository;
 
     @Autowired
-    private DependencyMapper dependencyMapper;
-
-    @Autowired
-    private DependencyService dependencyService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class DependencyResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final DependencyResource dependencyResource = new DependencyResource(dependencyService);
+        final DependencyResource dependencyResource = new DependencyResource(dependencyRepository);
         this.restDependencyMockMvc = MockMvcBuilders.standaloneSetup(dependencyResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class DependencyResourceIT {
         int databaseSizeBeforeCreate = dependencyRepository.findAll().size();
 
         // Create the Dependency
-        DependencyDTO dependencyDTO = dependencyMapper.toDto(dependency);
         restDependencyMockMvc.perform(post("/api/dependencies")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dependencyDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(dependency)))
             .andExpect(status().isCreated());
 
         // Validate the Dependency in the database
@@ -135,12 +125,11 @@ public class DependencyResourceIT {
 
         // Create the Dependency with an existing ID
         dependency.setId(1L);
-        DependencyDTO dependencyDTO = dependencyMapper.toDto(dependency);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDependencyMockMvc.perform(post("/api/dependencies")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dependencyDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(dependency)))
             .andExpect(status().isBadRequest());
 
         // Validate the Dependency in the database
@@ -199,11 +188,10 @@ public class DependencyResourceIT {
         em.detach(updatedDependency);
         updatedDependency
             .kindDep(UPDATED_KIND_DEP);
-        DependencyDTO dependencyDTO = dependencyMapper.toDto(updatedDependency);
 
         restDependencyMockMvc.perform(put("/api/dependencies")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dependencyDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedDependency)))
             .andExpect(status().isOk());
 
         // Validate the Dependency in the database
@@ -219,12 +207,11 @@ public class DependencyResourceIT {
         int databaseSizeBeforeUpdate = dependencyRepository.findAll().size();
 
         // Create the Dependency
-        DependencyDTO dependencyDTO = dependencyMapper.toDto(dependency);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDependencyMockMvc.perform(put("/api/dependencies")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dependencyDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(dependency)))
             .andExpect(status().isBadRequest());
 
         // Validate the Dependency in the database
@@ -263,28 +250,5 @@ public class DependencyResourceIT {
         assertThat(dependency1).isNotEqualTo(dependency2);
         dependency1.setId(null);
         assertThat(dependency1).isNotEqualTo(dependency2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DependencyDTO.class);
-        DependencyDTO dependencyDTO1 = new DependencyDTO();
-        dependencyDTO1.setId(1L);
-        DependencyDTO dependencyDTO2 = new DependencyDTO();
-        assertThat(dependencyDTO1).isNotEqualTo(dependencyDTO2);
-        dependencyDTO2.setId(dependencyDTO1.getId());
-        assertThat(dependencyDTO1).isEqualTo(dependencyDTO2);
-        dependencyDTO2.setId(2L);
-        assertThat(dependencyDTO1).isNotEqualTo(dependencyDTO2);
-        dependencyDTO1.setId(null);
-        assertThat(dependencyDTO1).isNotEqualTo(dependencyDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(dependencyMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(dependencyMapper.fromId(null)).isNull();
     }
 }

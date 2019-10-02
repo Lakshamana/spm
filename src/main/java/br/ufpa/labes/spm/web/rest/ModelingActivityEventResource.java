@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ModelingActivityEventService;
+import br.ufpa.labes.spm.domain.ModelingActivityEvent;
+import br.ufpa.labes.spm.repository.ModelingActivityEventRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ModelingActivityEventDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ModelingActivityEventResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ModelingActivityEventService modelingActivityEventService;
+    private final ModelingActivityEventRepository modelingActivityEventRepository;
 
-    public ModelingActivityEventResource(ModelingActivityEventService modelingActivityEventService) {
-        this.modelingActivityEventService = modelingActivityEventService;
+    public ModelingActivityEventResource(ModelingActivityEventRepository modelingActivityEventRepository) {
+        this.modelingActivityEventRepository = modelingActivityEventRepository;
     }
 
     /**
      * {@code POST  /modeling-activity-events} : Create a new modelingActivityEvent.
      *
-     * @param modelingActivityEventDTO the modelingActivityEventDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new modelingActivityEventDTO, or with status {@code 400 (Bad Request)} if the modelingActivityEvent has already an ID.
+     * @param modelingActivityEvent the modelingActivityEvent to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new modelingActivityEvent, or with status {@code 400 (Bad Request)} if the modelingActivityEvent has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/modeling-activity-events")
-    public ResponseEntity<ModelingActivityEventDTO> createModelingActivityEvent(@RequestBody ModelingActivityEventDTO modelingActivityEventDTO) throws URISyntaxException {
-        log.debug("REST request to save ModelingActivityEvent : {}", modelingActivityEventDTO);
-        if (modelingActivityEventDTO.getId() != null) {
+    public ResponseEntity<ModelingActivityEvent> createModelingActivityEvent(@RequestBody ModelingActivityEvent modelingActivityEvent) throws URISyntaxException {
+        log.debug("REST request to save ModelingActivityEvent : {}", modelingActivityEvent);
+        if (modelingActivityEvent.getId() != null) {
             throw new BadRequestAlertException("A new modelingActivityEvent cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ModelingActivityEventDTO result = modelingActivityEventService.save(modelingActivityEventDTO);
+        ModelingActivityEvent result = modelingActivityEventRepository.save(modelingActivityEvent);
         return ResponseEntity.created(new URI("/api/modeling-activity-events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ModelingActivityEventResource {
     /**
      * {@code PUT  /modeling-activity-events} : Updates an existing modelingActivityEvent.
      *
-     * @param modelingActivityEventDTO the modelingActivityEventDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated modelingActivityEventDTO,
-     * or with status {@code 400 (Bad Request)} if the modelingActivityEventDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the modelingActivityEventDTO couldn't be updated.
+     * @param modelingActivityEvent the modelingActivityEvent to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated modelingActivityEvent,
+     * or with status {@code 400 (Bad Request)} if the modelingActivityEvent is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the modelingActivityEvent couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/modeling-activity-events")
-    public ResponseEntity<ModelingActivityEventDTO> updateModelingActivityEvent(@RequestBody ModelingActivityEventDTO modelingActivityEventDTO) throws URISyntaxException {
-        log.debug("REST request to update ModelingActivityEvent : {}", modelingActivityEventDTO);
-        if (modelingActivityEventDTO.getId() == null) {
+    public ResponseEntity<ModelingActivityEvent> updateModelingActivityEvent(@RequestBody ModelingActivityEvent modelingActivityEvent) throws URISyntaxException {
+        log.debug("REST request to update ModelingActivityEvent : {}", modelingActivityEvent);
+        if (modelingActivityEvent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ModelingActivityEventDTO result = modelingActivityEventService.save(modelingActivityEventDTO);
+        ModelingActivityEvent result = modelingActivityEventRepository.save(modelingActivityEvent);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, modelingActivityEventDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, modelingActivityEvent.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ModelingActivityEventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of modelingActivityEvents in body.
      */
     @GetMapping("/modeling-activity-events")
-    public List<ModelingActivityEventDTO> getAllModelingActivityEvents() {
+    public List<ModelingActivityEvent> getAllModelingActivityEvents() {
         log.debug("REST request to get all ModelingActivityEvents");
-        return modelingActivityEventService.findAll();
+        return modelingActivityEventRepository.findAll();
     }
 
     /**
      * {@code GET  /modeling-activity-events/:id} : get the "id" modelingActivityEvent.
      *
-     * @param id the id of the modelingActivityEventDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the modelingActivityEventDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the modelingActivityEvent to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the modelingActivityEvent, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/modeling-activity-events/{id}")
-    public ResponseEntity<ModelingActivityEventDTO> getModelingActivityEvent(@PathVariable Long id) {
+    public ResponseEntity<ModelingActivityEvent> getModelingActivityEvent(@PathVariable Long id) {
         log.debug("REST request to get ModelingActivityEvent : {}", id);
-        Optional<ModelingActivityEventDTO> modelingActivityEventDTO = modelingActivityEventService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(modelingActivityEventDTO);
+        Optional<ModelingActivityEvent> modelingActivityEvent = modelingActivityEventRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(modelingActivityEvent);
     }
 
     /**
      * {@code DELETE  /modeling-activity-events/:id} : delete the "id" modelingActivityEvent.
      *
-     * @param id the id of the modelingActivityEventDTO to delete.
+     * @param id the id of the modelingActivityEvent to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/modeling-activity-events/{id}")
     public ResponseEntity<Void> deleteModelingActivityEvent(@PathVariable Long id) {
         log.debug("REST request to delete ModelingActivityEvent : {}", id);
-        modelingActivityEventService.delete(id);
+        modelingActivityEventRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

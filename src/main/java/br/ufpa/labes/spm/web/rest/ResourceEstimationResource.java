@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ResourceEstimationService;
+import br.ufpa.labes.spm.domain.ResourceEstimation;
+import br.ufpa.labes.spm.repository.ResourceEstimationRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ResourceEstimationDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ResourceEstimationResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ResourceEstimationService resourceEstimationService;
+    private final ResourceEstimationRepository resourceEstimationRepository;
 
-    public ResourceEstimationResource(ResourceEstimationService resourceEstimationService) {
-        this.resourceEstimationService = resourceEstimationService;
+    public ResourceEstimationResource(ResourceEstimationRepository resourceEstimationRepository) {
+        this.resourceEstimationRepository = resourceEstimationRepository;
     }
 
     /**
      * {@code POST  /resource-estimations} : Create a new resourceEstimation.
      *
-     * @param resourceEstimationDTO the resourceEstimationDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new resourceEstimationDTO, or with status {@code 400 (Bad Request)} if the resourceEstimation has already an ID.
+     * @param resourceEstimation the resourceEstimation to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new resourceEstimation, or with status {@code 400 (Bad Request)} if the resourceEstimation has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/resource-estimations")
-    public ResponseEntity<ResourceEstimationDTO> createResourceEstimation(@RequestBody ResourceEstimationDTO resourceEstimationDTO) throws URISyntaxException {
-        log.debug("REST request to save ResourceEstimation : {}", resourceEstimationDTO);
-        if (resourceEstimationDTO.getId() != null) {
+    public ResponseEntity<ResourceEstimation> createResourceEstimation(@RequestBody ResourceEstimation resourceEstimation) throws URISyntaxException {
+        log.debug("REST request to save ResourceEstimation : {}", resourceEstimation);
+        if (resourceEstimation.getId() != null) {
             throw new BadRequestAlertException("A new resourceEstimation cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ResourceEstimationDTO result = resourceEstimationService.save(resourceEstimationDTO);
+        ResourceEstimation result = resourceEstimationRepository.save(resourceEstimation);
         return ResponseEntity.created(new URI("/api/resource-estimations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ResourceEstimationResource {
     /**
      * {@code PUT  /resource-estimations} : Updates an existing resourceEstimation.
      *
-     * @param resourceEstimationDTO the resourceEstimationDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated resourceEstimationDTO,
-     * or with status {@code 400 (Bad Request)} if the resourceEstimationDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the resourceEstimationDTO couldn't be updated.
+     * @param resourceEstimation the resourceEstimation to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated resourceEstimation,
+     * or with status {@code 400 (Bad Request)} if the resourceEstimation is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the resourceEstimation couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/resource-estimations")
-    public ResponseEntity<ResourceEstimationDTO> updateResourceEstimation(@RequestBody ResourceEstimationDTO resourceEstimationDTO) throws URISyntaxException {
-        log.debug("REST request to update ResourceEstimation : {}", resourceEstimationDTO);
-        if (resourceEstimationDTO.getId() == null) {
+    public ResponseEntity<ResourceEstimation> updateResourceEstimation(@RequestBody ResourceEstimation resourceEstimation) throws URISyntaxException {
+        log.debug("REST request to update ResourceEstimation : {}", resourceEstimation);
+        if (resourceEstimation.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ResourceEstimationDTO result = resourceEstimationService.save(resourceEstimationDTO);
+        ResourceEstimation result = resourceEstimationRepository.save(resourceEstimation);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, resourceEstimationDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, resourceEstimation.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ResourceEstimationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of resourceEstimations in body.
      */
     @GetMapping("/resource-estimations")
-    public List<ResourceEstimationDTO> getAllResourceEstimations() {
+    public List<ResourceEstimation> getAllResourceEstimations() {
         log.debug("REST request to get all ResourceEstimations");
-        return resourceEstimationService.findAll();
+        return resourceEstimationRepository.findAll();
     }
 
     /**
      * {@code GET  /resource-estimations/:id} : get the "id" resourceEstimation.
      *
-     * @param id the id of the resourceEstimationDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the resourceEstimationDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the resourceEstimation to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the resourceEstimation, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/resource-estimations/{id}")
-    public ResponseEntity<ResourceEstimationDTO> getResourceEstimation(@PathVariable Long id) {
+    public ResponseEntity<ResourceEstimation> getResourceEstimation(@PathVariable Long id) {
         log.debug("REST request to get ResourceEstimation : {}", id);
-        Optional<ResourceEstimationDTO> resourceEstimationDTO = resourceEstimationService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(resourceEstimationDTO);
+        Optional<ResourceEstimation> resourceEstimation = resourceEstimationRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(resourceEstimation);
     }
 
     /**
      * {@code DELETE  /resource-estimations/:id} : delete the "id" resourceEstimation.
      *
-     * @param id the id of the resourceEstimationDTO to delete.
+     * @param id the id of the resourceEstimation to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/resource-estimations/{id}")
     public ResponseEntity<Void> deleteResourceEstimation(@PathVariable Long id) {
         log.debug("REST request to delete ResourceEstimation : {}", id);
-        resourceEstimationService.delete(id);
+        resourceEstimationRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

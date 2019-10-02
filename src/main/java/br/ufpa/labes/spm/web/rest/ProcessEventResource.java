@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ProcessEventService;
+import br.ufpa.labes.spm.domain.ProcessEvent;
+import br.ufpa.labes.spm.repository.ProcessEventRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ProcessEventDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ProcessEventResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ProcessEventService processEventService;
+    private final ProcessEventRepository processEventRepository;
 
-    public ProcessEventResource(ProcessEventService processEventService) {
-        this.processEventService = processEventService;
+    public ProcessEventResource(ProcessEventRepository processEventRepository) {
+        this.processEventRepository = processEventRepository;
     }
 
     /**
      * {@code POST  /process-events} : Create a new processEvent.
      *
-     * @param processEventDTO the processEventDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new processEventDTO, or with status {@code 400 (Bad Request)} if the processEvent has already an ID.
+     * @param processEvent the processEvent to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new processEvent, or with status {@code 400 (Bad Request)} if the processEvent has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/process-events")
-    public ResponseEntity<ProcessEventDTO> createProcessEvent(@RequestBody ProcessEventDTO processEventDTO) throws URISyntaxException {
-        log.debug("REST request to save ProcessEvent : {}", processEventDTO);
-        if (processEventDTO.getId() != null) {
+    public ResponseEntity<ProcessEvent> createProcessEvent(@RequestBody ProcessEvent processEvent) throws URISyntaxException {
+        log.debug("REST request to save ProcessEvent : {}", processEvent);
+        if (processEvent.getId() != null) {
             throw new BadRequestAlertException("A new processEvent cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ProcessEventDTO result = processEventService.save(processEventDTO);
+        ProcessEvent result = processEventRepository.save(processEvent);
         return ResponseEntity.created(new URI("/api/process-events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ProcessEventResource {
     /**
      * {@code PUT  /process-events} : Updates an existing processEvent.
      *
-     * @param processEventDTO the processEventDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated processEventDTO,
-     * or with status {@code 400 (Bad Request)} if the processEventDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the processEventDTO couldn't be updated.
+     * @param processEvent the processEvent to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated processEvent,
+     * or with status {@code 400 (Bad Request)} if the processEvent is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the processEvent couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/process-events")
-    public ResponseEntity<ProcessEventDTO> updateProcessEvent(@RequestBody ProcessEventDTO processEventDTO) throws URISyntaxException {
-        log.debug("REST request to update ProcessEvent : {}", processEventDTO);
-        if (processEventDTO.getId() == null) {
+    public ResponseEntity<ProcessEvent> updateProcessEvent(@RequestBody ProcessEvent processEvent) throws URISyntaxException {
+        log.debug("REST request to update ProcessEvent : {}", processEvent);
+        if (processEvent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ProcessEventDTO result = processEventService.save(processEventDTO);
+        ProcessEvent result = processEventRepository.save(processEvent);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, processEventDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, processEvent.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ProcessEventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of processEvents in body.
      */
     @GetMapping("/process-events")
-    public List<ProcessEventDTO> getAllProcessEvents() {
+    public List<ProcessEvent> getAllProcessEvents() {
         log.debug("REST request to get all ProcessEvents");
-        return processEventService.findAll();
+        return processEventRepository.findAll();
     }
 
     /**
      * {@code GET  /process-events/:id} : get the "id" processEvent.
      *
-     * @param id the id of the processEventDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the processEventDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the processEvent to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the processEvent, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/process-events/{id}")
-    public ResponseEntity<ProcessEventDTO> getProcessEvent(@PathVariable Long id) {
+    public ResponseEntity<ProcessEvent> getProcessEvent(@PathVariable Long id) {
         log.debug("REST request to get ProcessEvent : {}", id);
-        Optional<ProcessEventDTO> processEventDTO = processEventService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(processEventDTO);
+        Optional<ProcessEvent> processEvent = processEventRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(processEvent);
     }
 
     /**
      * {@code DELETE  /process-events/:id} : delete the "id" processEvent.
      *
-     * @param id the id of the processEventDTO to delete.
+     * @param id the id of the processEvent to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/process-events/{id}")
     public ResponseEntity<Void> deleteProcessEvent(@PathVariable Long id) {
         log.debug("REST request to delete ProcessEvent : {}", id);
-        processEventService.delete(id);
+        processEventRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

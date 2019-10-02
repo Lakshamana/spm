@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Normal;
 import br.ufpa.labes.spm.repository.NormalRepository;
-import br.ufpa.labes.spm.service.NormalService;
-import br.ufpa.labes.spm.service.dto.NormalDTO;
-import br.ufpa.labes.spm.service.mapper.NormalMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -69,12 +66,6 @@ public class NormalResourceIT {
     private NormalRepository normalRepository;
 
     @Autowired
-    private NormalMapper normalMapper;
-
-    @Autowired
-    private NormalService normalService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -96,7 +87,7 @@ public class NormalResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final NormalResource normalResource = new NormalResource(normalService);
+        final NormalResource normalResource = new NormalResource(normalRepository);
         this.restNormalMockMvc = MockMvcBuilders.standaloneSetup(normalResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -151,10 +142,9 @@ public class NormalResourceIT {
         int databaseSizeBeforeCreate = normalRepository.findAll().size();
 
         // Create the Normal
-        NormalDTO normalDTO = normalMapper.toDto(normal);
         restNormalMockMvc.perform(post("/api/normals")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(normalDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(normal)))
             .andExpect(status().isCreated());
 
         // Validate the Normal in the database
@@ -177,12 +167,11 @@ public class NormalResourceIT {
 
         // Create the Normal with an existing ID
         normal.setId(1L);
-        NormalDTO normalDTO = normalMapper.toDto(normal);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restNormalMockMvc.perform(post("/api/normals")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(normalDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(normal)))
             .andExpect(status().isBadRequest());
 
         // Validate the Normal in the database
@@ -259,11 +248,10 @@ public class NormalResourceIT {
             .script(UPDATED_SCRIPT)
             .delegable(UPDATED_DELEGABLE)
             .autoAllocable(UPDATED_AUTO_ALLOCABLE);
-        NormalDTO normalDTO = normalMapper.toDto(updatedNormal);
 
         restNormalMockMvc.perform(put("/api/normals")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(normalDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedNormal)))
             .andExpect(status().isOk());
 
         // Validate the Normal in the database
@@ -285,12 +273,11 @@ public class NormalResourceIT {
         int databaseSizeBeforeUpdate = normalRepository.findAll().size();
 
         // Create the Normal
-        NormalDTO normalDTO = normalMapper.toDto(normal);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restNormalMockMvc.perform(put("/api/normals")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(normalDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(normal)))
             .andExpect(status().isBadRequest());
 
         // Validate the Normal in the database
@@ -329,28 +316,5 @@ public class NormalResourceIT {
         assertThat(normal1).isNotEqualTo(normal2);
         normal1.setId(null);
         assertThat(normal1).isNotEqualTo(normal2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(NormalDTO.class);
-        NormalDTO normalDTO1 = new NormalDTO();
-        normalDTO1.setId(1L);
-        NormalDTO normalDTO2 = new NormalDTO();
-        assertThat(normalDTO1).isNotEqualTo(normalDTO2);
-        normalDTO2.setId(normalDTO1.getId());
-        assertThat(normalDTO1).isEqualTo(normalDTO2);
-        normalDTO2.setId(2L);
-        assertThat(normalDTO1).isNotEqualTo(normalDTO2);
-        normalDTO1.setId(null);
-        assertThat(normalDTO1).isNotEqualTo(normalDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(normalMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(normalMapper.fromId(null)).isNull();
     }
 }

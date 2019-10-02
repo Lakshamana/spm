@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.SimpleConService;
+import br.ufpa.labes.spm.domain.SimpleCon;
+import br.ufpa.labes.spm.repository.SimpleConRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.SimpleConDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class SimpleConResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final SimpleConService simpleConService;
+    private final SimpleConRepository simpleConRepository;
 
-    public SimpleConResource(SimpleConService simpleConService) {
-        this.simpleConService = simpleConService;
+    public SimpleConResource(SimpleConRepository simpleConRepository) {
+        this.simpleConRepository = simpleConRepository;
     }
 
     /**
      * {@code POST  /simple-cons} : Create a new simpleCon.
      *
-     * @param simpleConDTO the simpleConDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new simpleConDTO, or with status {@code 400 (Bad Request)} if the simpleCon has already an ID.
+     * @param simpleCon the simpleCon to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new simpleCon, or with status {@code 400 (Bad Request)} if the simpleCon has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/simple-cons")
-    public ResponseEntity<SimpleConDTO> createSimpleCon(@RequestBody SimpleConDTO simpleConDTO) throws URISyntaxException {
-        log.debug("REST request to save SimpleCon : {}", simpleConDTO);
-        if (simpleConDTO.getId() != null) {
+    public ResponseEntity<SimpleCon> createSimpleCon(@RequestBody SimpleCon simpleCon) throws URISyntaxException {
+        log.debug("REST request to save SimpleCon : {}", simpleCon);
+        if (simpleCon.getId() != null) {
             throw new BadRequestAlertException("A new simpleCon cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        SimpleConDTO result = simpleConService.save(simpleConDTO);
+        SimpleCon result = simpleConRepository.save(simpleCon);
         return ResponseEntity.created(new URI("/api/simple-cons/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class SimpleConResource {
     /**
      * {@code PUT  /simple-cons} : Updates an existing simpleCon.
      *
-     * @param simpleConDTO the simpleConDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated simpleConDTO,
-     * or with status {@code 400 (Bad Request)} if the simpleConDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the simpleConDTO couldn't be updated.
+     * @param simpleCon the simpleCon to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated simpleCon,
+     * or with status {@code 400 (Bad Request)} if the simpleCon is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the simpleCon couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/simple-cons")
-    public ResponseEntity<SimpleConDTO> updateSimpleCon(@RequestBody SimpleConDTO simpleConDTO) throws URISyntaxException {
-        log.debug("REST request to update SimpleCon : {}", simpleConDTO);
-        if (simpleConDTO.getId() == null) {
+    public ResponseEntity<SimpleCon> updateSimpleCon(@RequestBody SimpleCon simpleCon) throws URISyntaxException {
+        log.debug("REST request to update SimpleCon : {}", simpleCon);
+        if (simpleCon.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        SimpleConDTO result = simpleConService.save(simpleConDTO);
+        SimpleCon result = simpleConRepository.save(simpleCon);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, simpleConDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, simpleCon.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class SimpleConResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of simpleCons in body.
      */
     @GetMapping("/simple-cons")
-    public List<SimpleConDTO> getAllSimpleCons() {
+    public List<SimpleCon> getAllSimpleCons() {
         log.debug("REST request to get all SimpleCons");
-        return simpleConService.findAll();
+        return simpleConRepository.findAll();
     }
 
     /**
      * {@code GET  /simple-cons/:id} : get the "id" simpleCon.
      *
-     * @param id the id of the simpleConDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the simpleConDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the simpleCon to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the simpleCon, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/simple-cons/{id}")
-    public ResponseEntity<SimpleConDTO> getSimpleCon(@PathVariable Long id) {
+    public ResponseEntity<SimpleCon> getSimpleCon(@PathVariable Long id) {
         log.debug("REST request to get SimpleCon : {}", id);
-        Optional<SimpleConDTO> simpleConDTO = simpleConService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(simpleConDTO);
+        Optional<SimpleCon> simpleCon = simpleConRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(simpleCon);
     }
 
     /**
      * {@code DELETE  /simple-cons/:id} : delete the "id" simpleCon.
      *
-     * @param id the id of the simpleConDTO to delete.
+     * @param id the id of the simpleCon to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/simple-cons/{id}")
     public ResponseEntity<Void> deleteSimpleCon(@PathVariable Long id) {
         log.debug("REST request to delete SimpleCon : {}", id);
-        simpleConService.delete(id);
+        simpleConRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

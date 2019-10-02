@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ReqAgentRequiresAbility;
 import br.ufpa.labes.spm.repository.ReqAgentRequiresAbilityRepository;
-import br.ufpa.labes.spm.service.ReqAgentRequiresAbilityService;
-import br.ufpa.labes.spm.service.dto.ReqAgentRequiresAbilityDTO;
-import br.ufpa.labes.spm.service.mapper.ReqAgentRequiresAbilityMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,12 +43,6 @@ public class ReqAgentRequiresAbilityResourceIT {
     private ReqAgentRequiresAbilityRepository reqAgentRequiresAbilityRepository;
 
     @Autowired
-    private ReqAgentRequiresAbilityMapper reqAgentRequiresAbilityMapper;
-
-    @Autowired
-    private ReqAgentRequiresAbilityService reqAgentRequiresAbilityService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +64,7 @@ public class ReqAgentRequiresAbilityResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ReqAgentRequiresAbilityResource reqAgentRequiresAbilityResource = new ReqAgentRequiresAbilityResource(reqAgentRequiresAbilityService);
+        final ReqAgentRequiresAbilityResource reqAgentRequiresAbilityResource = new ReqAgentRequiresAbilityResource(reqAgentRequiresAbilityRepository);
         this.restReqAgentRequiresAbilityMockMvc = MockMvcBuilders.standaloneSetup(reqAgentRequiresAbilityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -116,10 +107,9 @@ public class ReqAgentRequiresAbilityResourceIT {
         int databaseSizeBeforeCreate = reqAgentRequiresAbilityRepository.findAll().size();
 
         // Create the ReqAgentRequiresAbility
-        ReqAgentRequiresAbilityDTO reqAgentRequiresAbilityDTO = reqAgentRequiresAbilityMapper.toDto(reqAgentRequiresAbility);
         restReqAgentRequiresAbilityMockMvc.perform(post("/api/req-agent-requires-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqAgentRequiresAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reqAgentRequiresAbility)))
             .andExpect(status().isCreated());
 
         // Validate the ReqAgentRequiresAbility in the database
@@ -136,12 +126,11 @@ public class ReqAgentRequiresAbilityResourceIT {
 
         // Create the ReqAgentRequiresAbility with an existing ID
         reqAgentRequiresAbility.setId(1L);
-        ReqAgentRequiresAbilityDTO reqAgentRequiresAbilityDTO = reqAgentRequiresAbilityMapper.toDto(reqAgentRequiresAbility);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restReqAgentRequiresAbilityMockMvc.perform(post("/api/req-agent-requires-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqAgentRequiresAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reqAgentRequiresAbility)))
             .andExpect(status().isBadRequest());
 
         // Validate the ReqAgentRequiresAbility in the database
@@ -200,11 +189,10 @@ public class ReqAgentRequiresAbilityResourceIT {
         em.detach(updatedReqAgentRequiresAbility);
         updatedReqAgentRequiresAbility
             .degree(UPDATED_DEGREE);
-        ReqAgentRequiresAbilityDTO reqAgentRequiresAbilityDTO = reqAgentRequiresAbilityMapper.toDto(updatedReqAgentRequiresAbility);
 
         restReqAgentRequiresAbilityMockMvc.perform(put("/api/req-agent-requires-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqAgentRequiresAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedReqAgentRequiresAbility)))
             .andExpect(status().isOk());
 
         // Validate the ReqAgentRequiresAbility in the database
@@ -220,12 +208,11 @@ public class ReqAgentRequiresAbilityResourceIT {
         int databaseSizeBeforeUpdate = reqAgentRequiresAbilityRepository.findAll().size();
 
         // Create the ReqAgentRequiresAbility
-        ReqAgentRequiresAbilityDTO reqAgentRequiresAbilityDTO = reqAgentRequiresAbilityMapper.toDto(reqAgentRequiresAbility);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restReqAgentRequiresAbilityMockMvc.perform(put("/api/req-agent-requires-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqAgentRequiresAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reqAgentRequiresAbility)))
             .andExpect(status().isBadRequest());
 
         // Validate the ReqAgentRequiresAbility in the database
@@ -264,28 +251,5 @@ public class ReqAgentRequiresAbilityResourceIT {
         assertThat(reqAgentRequiresAbility1).isNotEqualTo(reqAgentRequiresAbility2);
         reqAgentRequiresAbility1.setId(null);
         assertThat(reqAgentRequiresAbility1).isNotEqualTo(reqAgentRequiresAbility2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ReqAgentRequiresAbilityDTO.class);
-        ReqAgentRequiresAbilityDTO reqAgentRequiresAbilityDTO1 = new ReqAgentRequiresAbilityDTO();
-        reqAgentRequiresAbilityDTO1.setId(1L);
-        ReqAgentRequiresAbilityDTO reqAgentRequiresAbilityDTO2 = new ReqAgentRequiresAbilityDTO();
-        assertThat(reqAgentRequiresAbilityDTO1).isNotEqualTo(reqAgentRequiresAbilityDTO2);
-        reqAgentRequiresAbilityDTO2.setId(reqAgentRequiresAbilityDTO1.getId());
-        assertThat(reqAgentRequiresAbilityDTO1).isEqualTo(reqAgentRequiresAbilityDTO2);
-        reqAgentRequiresAbilityDTO2.setId(2L);
-        assertThat(reqAgentRequiresAbilityDTO1).isNotEqualTo(reqAgentRequiresAbilityDTO2);
-        reqAgentRequiresAbilityDTO1.setId(null);
-        assertThat(reqAgentRequiresAbilityDTO1).isNotEqualTo(reqAgentRequiresAbilityDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(reqAgentRequiresAbilityMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(reqAgentRequiresAbilityMapper.fromId(null)).isNull();
     }
 }

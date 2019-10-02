@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AgentInstSug;
 import br.ufpa.labes.spm.repository.AgentInstSugRepository;
-import br.ufpa.labes.spm.service.AgentInstSugService;
-import br.ufpa.labes.spm.service.dto.AgentInstSugDTO;
-import br.ufpa.labes.spm.service.mapper.AgentInstSugMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class AgentInstSugResourceIT {
     private AgentInstSugRepository agentInstSugRepository;
 
     @Autowired
-    private AgentInstSugMapper agentInstSugMapper;
-
-    @Autowired
-    private AgentInstSugService agentInstSugService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class AgentInstSugResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgentInstSugResource agentInstSugResource = new AgentInstSugResource(agentInstSugService);
+        final AgentInstSugResource agentInstSugResource = new AgentInstSugResource(agentInstSugRepository);
         this.restAgentInstSugMockMvc = MockMvcBuilders.standaloneSetup(agentInstSugResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class AgentInstSugResourceIT {
         int databaseSizeBeforeCreate = agentInstSugRepository.findAll().size();
 
         // Create the AgentInstSug
-        AgentInstSugDTO agentInstSugDTO = agentInstSugMapper.toDto(agentInstSug);
         restAgentInstSugMockMvc.perform(post("/api/agent-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentInstSug)))
             .andExpect(status().isCreated());
 
         // Validate the AgentInstSug in the database
@@ -129,12 +119,11 @@ public class AgentInstSugResourceIT {
 
         // Create the AgentInstSug with an existing ID
         agentInstSug.setId(1L);
-        AgentInstSugDTO agentInstSugDTO = agentInstSugMapper.toDto(agentInstSug);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAgentInstSugMockMvc.perform(post("/api/agent-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentInstSug)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentInstSug in the database
@@ -189,11 +178,10 @@ public class AgentInstSugResourceIT {
         AgentInstSug updatedAgentInstSug = agentInstSugRepository.findById(agentInstSug.getId()).get();
         // Disconnect from session so that the updates on updatedAgentInstSug are not directly saved in db
         em.detach(updatedAgentInstSug);
-        AgentInstSugDTO agentInstSugDTO = agentInstSugMapper.toDto(updatedAgentInstSug);
 
         restAgentInstSugMockMvc.perform(put("/api/agent-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAgentInstSug)))
             .andExpect(status().isOk());
 
         // Validate the AgentInstSug in the database
@@ -208,12 +196,11 @@ public class AgentInstSugResourceIT {
         int databaseSizeBeforeUpdate = agentInstSugRepository.findAll().size();
 
         // Create the AgentInstSug
-        AgentInstSugDTO agentInstSugDTO = agentInstSugMapper.toDto(agentInstSug);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAgentInstSugMockMvc.perform(put("/api/agent-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentInstSug)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentInstSug in the database
@@ -252,28 +239,5 @@ public class AgentInstSugResourceIT {
         assertThat(agentInstSug1).isNotEqualTo(agentInstSug2);
         agentInstSug1.setId(null);
         assertThat(agentInstSug1).isNotEqualTo(agentInstSug2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgentInstSugDTO.class);
-        AgentInstSugDTO agentInstSugDTO1 = new AgentInstSugDTO();
-        agentInstSugDTO1.setId(1L);
-        AgentInstSugDTO agentInstSugDTO2 = new AgentInstSugDTO();
-        assertThat(agentInstSugDTO1).isNotEqualTo(agentInstSugDTO2);
-        agentInstSugDTO2.setId(agentInstSugDTO1.getId());
-        assertThat(agentInstSugDTO1).isEqualTo(agentInstSugDTO2);
-        agentInstSugDTO2.setId(2L);
-        assertThat(agentInstSugDTO1).isNotEqualTo(agentInstSugDTO2);
-        agentInstSugDTO1.setId(null);
-        assertThat(agentInstSugDTO1).isNotEqualTo(agentInstSugDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(agentInstSugMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(agentInstSugMapper.fromId(null)).isNull();
     }
 }

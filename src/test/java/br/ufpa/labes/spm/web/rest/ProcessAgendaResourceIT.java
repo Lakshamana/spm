@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ProcessAgenda;
 import br.ufpa.labes.spm.repository.ProcessAgendaRepository;
-import br.ufpa.labes.spm.service.ProcessAgendaService;
-import br.ufpa.labes.spm.service.dto.ProcessAgendaDTO;
-import br.ufpa.labes.spm.service.mapper.ProcessAgendaMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ProcessAgendaResourceIT {
     private ProcessAgendaRepository processAgendaRepository;
 
     @Autowired
-    private ProcessAgendaMapper processAgendaMapper;
-
-    @Autowired
-    private ProcessAgendaService processAgendaService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ProcessAgendaResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ProcessAgendaResource processAgendaResource = new ProcessAgendaResource(processAgendaService);
+        final ProcessAgendaResource processAgendaResource = new ProcessAgendaResource(processAgendaRepository);
         this.restProcessAgendaMockMvc = MockMvcBuilders.standaloneSetup(processAgendaResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ProcessAgendaResourceIT {
         int databaseSizeBeforeCreate = processAgendaRepository.findAll().size();
 
         // Create the ProcessAgenda
-        ProcessAgendaDTO processAgendaDTO = processAgendaMapper.toDto(processAgenda);
         restProcessAgendaMockMvc.perform(post("/api/process-agenda")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processAgendaDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processAgenda)))
             .andExpect(status().isCreated());
 
         // Validate the ProcessAgenda in the database
@@ -129,12 +119,11 @@ public class ProcessAgendaResourceIT {
 
         // Create the ProcessAgenda with an existing ID
         processAgenda.setId(1L);
-        ProcessAgendaDTO processAgendaDTO = processAgendaMapper.toDto(processAgenda);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProcessAgendaMockMvc.perform(post("/api/process-agenda")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processAgendaDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processAgenda)))
             .andExpect(status().isBadRequest());
 
         // Validate the ProcessAgenda in the database
@@ -189,11 +178,10 @@ public class ProcessAgendaResourceIT {
         ProcessAgenda updatedProcessAgenda = processAgendaRepository.findById(processAgenda.getId()).get();
         // Disconnect from session so that the updates on updatedProcessAgenda are not directly saved in db
         em.detach(updatedProcessAgenda);
-        ProcessAgendaDTO processAgendaDTO = processAgendaMapper.toDto(updatedProcessAgenda);
 
         restProcessAgendaMockMvc.perform(put("/api/process-agenda")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processAgendaDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedProcessAgenda)))
             .andExpect(status().isOk());
 
         // Validate the ProcessAgenda in the database
@@ -208,12 +196,11 @@ public class ProcessAgendaResourceIT {
         int databaseSizeBeforeUpdate = processAgendaRepository.findAll().size();
 
         // Create the ProcessAgenda
-        ProcessAgendaDTO processAgendaDTO = processAgendaMapper.toDto(processAgenda);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProcessAgendaMockMvc.perform(put("/api/process-agenda")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processAgendaDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processAgenda)))
             .andExpect(status().isBadRequest());
 
         // Validate the ProcessAgenda in the database
@@ -252,28 +239,5 @@ public class ProcessAgendaResourceIT {
         assertThat(processAgenda1).isNotEqualTo(processAgenda2);
         processAgenda1.setId(null);
         assertThat(processAgenda1).isNotEqualTo(processAgenda2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProcessAgendaDTO.class);
-        ProcessAgendaDTO processAgendaDTO1 = new ProcessAgendaDTO();
-        processAgendaDTO1.setId(1L);
-        ProcessAgendaDTO processAgendaDTO2 = new ProcessAgendaDTO();
-        assertThat(processAgendaDTO1).isNotEqualTo(processAgendaDTO2);
-        processAgendaDTO2.setId(processAgendaDTO1.getId());
-        assertThat(processAgendaDTO1).isEqualTo(processAgendaDTO2);
-        processAgendaDTO2.setId(2L);
-        assertThat(processAgendaDTO1).isNotEqualTo(processAgendaDTO2);
-        processAgendaDTO1.setId(null);
-        assertThat(processAgendaDTO1).isNotEqualTo(processAgendaDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(processAgendaMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(processAgendaMapper.fromId(null)).isNull();
     }
 }

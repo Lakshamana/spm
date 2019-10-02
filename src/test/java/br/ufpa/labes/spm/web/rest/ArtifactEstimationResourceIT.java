@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ArtifactEstimation;
 import br.ufpa.labes.spm.repository.ArtifactEstimationRepository;
-import br.ufpa.labes.spm.service.ArtifactEstimationService;
-import br.ufpa.labes.spm.service.dto.ArtifactEstimationDTO;
-import br.ufpa.labes.spm.service.mapper.ArtifactEstimationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ArtifactEstimationResourceIT {
     private ArtifactEstimationRepository artifactEstimationRepository;
 
     @Autowired
-    private ArtifactEstimationMapper artifactEstimationMapper;
-
-    @Autowired
-    private ArtifactEstimationService artifactEstimationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ArtifactEstimationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ArtifactEstimationResource artifactEstimationResource = new ArtifactEstimationResource(artifactEstimationService);
+        final ArtifactEstimationResource artifactEstimationResource = new ArtifactEstimationResource(artifactEstimationRepository);
         this.restArtifactEstimationMockMvc = MockMvcBuilders.standaloneSetup(artifactEstimationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ArtifactEstimationResourceIT {
         int databaseSizeBeforeCreate = artifactEstimationRepository.findAll().size();
 
         // Create the ArtifactEstimation
-        ArtifactEstimationDTO artifactEstimationDTO = artifactEstimationMapper.toDto(artifactEstimation);
         restArtifactEstimationMockMvc.perform(post("/api/artifact-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactEstimation)))
             .andExpect(status().isCreated());
 
         // Validate the ArtifactEstimation in the database
@@ -129,12 +119,11 @@ public class ArtifactEstimationResourceIT {
 
         // Create the ArtifactEstimation with an existing ID
         artifactEstimation.setId(1L);
-        ArtifactEstimationDTO artifactEstimationDTO = artifactEstimationMapper.toDto(artifactEstimation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restArtifactEstimationMockMvc.perform(post("/api/artifact-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactEstimation in the database
@@ -189,11 +178,10 @@ public class ArtifactEstimationResourceIT {
         ArtifactEstimation updatedArtifactEstimation = artifactEstimationRepository.findById(artifactEstimation.getId()).get();
         // Disconnect from session so that the updates on updatedArtifactEstimation are not directly saved in db
         em.detach(updatedArtifactEstimation);
-        ArtifactEstimationDTO artifactEstimationDTO = artifactEstimationMapper.toDto(updatedArtifactEstimation);
 
         restArtifactEstimationMockMvc.perform(put("/api/artifact-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedArtifactEstimation)))
             .andExpect(status().isOk());
 
         // Validate the ArtifactEstimation in the database
@@ -208,12 +196,11 @@ public class ArtifactEstimationResourceIT {
         int databaseSizeBeforeUpdate = artifactEstimationRepository.findAll().size();
 
         // Create the ArtifactEstimation
-        ArtifactEstimationDTO artifactEstimationDTO = artifactEstimationMapper.toDto(artifactEstimation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restArtifactEstimationMockMvc.perform(put("/api/artifact-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactEstimation in the database
@@ -252,28 +239,5 @@ public class ArtifactEstimationResourceIT {
         assertThat(artifactEstimation1).isNotEqualTo(artifactEstimation2);
         artifactEstimation1.setId(null);
         assertThat(artifactEstimation1).isNotEqualTo(artifactEstimation2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ArtifactEstimationDTO.class);
-        ArtifactEstimationDTO artifactEstimationDTO1 = new ArtifactEstimationDTO();
-        artifactEstimationDTO1.setId(1L);
-        ArtifactEstimationDTO artifactEstimationDTO2 = new ArtifactEstimationDTO();
-        assertThat(artifactEstimationDTO1).isNotEqualTo(artifactEstimationDTO2);
-        artifactEstimationDTO2.setId(artifactEstimationDTO1.getId());
-        assertThat(artifactEstimationDTO1).isEqualTo(artifactEstimationDTO2);
-        artifactEstimationDTO2.setId(2L);
-        assertThat(artifactEstimationDTO1).isNotEqualTo(artifactEstimationDTO2);
-        artifactEstimationDTO1.setId(null);
-        assertThat(artifactEstimationDTO1).isNotEqualTo(artifactEstimationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(artifactEstimationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(artifactEstimationMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ProcessModel;
 import br.ufpa.labes.spm.repository.ProcessModelRepository;
-import br.ufpa.labes.spm.service.ProcessModelService;
-import br.ufpa.labes.spm.service.dto.ProcessModelDTO;
-import br.ufpa.labes.spm.service.mapper.ProcessModelMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +45,6 @@ public class ProcessModelResourceIT {
     private ProcessModelRepository processModelRepository;
 
     @Autowired
-    private ProcessModelMapper processModelMapper;
-
-    @Autowired
-    private ProcessModelService processModelService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +66,7 @@ public class ProcessModelResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ProcessModelResource processModelResource = new ProcessModelResource(processModelService);
+        final ProcessModelResource processModelResource = new ProcessModelResource(processModelRepository);
         this.restProcessModelMockMvc = MockMvcBuilders.standaloneSetup(processModelResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,10 +111,9 @@ public class ProcessModelResourceIT {
         int databaseSizeBeforeCreate = processModelRepository.findAll().size();
 
         // Create the ProcessModel
-        ProcessModelDTO processModelDTO = processModelMapper.toDto(processModel);
         restProcessModelMockMvc.perform(post("/api/process-models")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processModel)))
             .andExpect(status().isCreated());
 
         // Validate the ProcessModel in the database
@@ -141,12 +131,11 @@ public class ProcessModelResourceIT {
 
         // Create the ProcessModel with an existing ID
         processModel.setId(1L);
-        ProcessModelDTO processModelDTO = processModelMapper.toDto(processModel);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProcessModelMockMvc.perform(post("/api/process-models")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processModel)))
             .andExpect(status().isBadRequest());
 
         // Validate the ProcessModel in the database
@@ -208,11 +197,10 @@ public class ProcessModelResourceIT {
         updatedProcessModel
             .requirements(UPDATED_REQUIREMENTS)
             .pmState(UPDATED_PM_STATE);
-        ProcessModelDTO processModelDTO = processModelMapper.toDto(updatedProcessModel);
 
         restProcessModelMockMvc.perform(put("/api/process-models")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedProcessModel)))
             .andExpect(status().isOk());
 
         // Validate the ProcessModel in the database
@@ -229,12 +217,11 @@ public class ProcessModelResourceIT {
         int databaseSizeBeforeUpdate = processModelRepository.findAll().size();
 
         // Create the ProcessModel
-        ProcessModelDTO processModelDTO = processModelMapper.toDto(processModel);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProcessModelMockMvc.perform(put("/api/process-models")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processModel)))
             .andExpect(status().isBadRequest());
 
         // Validate the ProcessModel in the database
@@ -273,28 +260,5 @@ public class ProcessModelResourceIT {
         assertThat(processModel1).isNotEqualTo(processModel2);
         processModel1.setId(null);
         assertThat(processModel1).isNotEqualTo(processModel2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProcessModelDTO.class);
-        ProcessModelDTO processModelDTO1 = new ProcessModelDTO();
-        processModelDTO1.setId(1L);
-        ProcessModelDTO processModelDTO2 = new ProcessModelDTO();
-        assertThat(processModelDTO1).isNotEqualTo(processModelDTO2);
-        processModelDTO2.setId(processModelDTO1.getId());
-        assertThat(processModelDTO1).isEqualTo(processModelDTO2);
-        processModelDTO2.setId(2L);
-        assertThat(processModelDTO1).isNotEqualTo(processModelDTO2);
-        processModelDTO1.setId(null);
-        assertThat(processModelDTO1).isNotEqualTo(processModelDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(processModelMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(processModelMapper.fromId(null)).isNull();
     }
 }

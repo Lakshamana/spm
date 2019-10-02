@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Plain;
 import br.ufpa.labes.spm.repository.PlainRepository;
-import br.ufpa.labes.spm.service.PlainService;
-import br.ufpa.labes.spm.service.dto.PlainDTO;
-import br.ufpa.labes.spm.service.mapper.PlainMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,12 +43,6 @@ public class PlainResourceIT {
     private PlainRepository plainRepository;
 
     @Autowired
-    private PlainMapper plainMapper;
-
-    @Autowired
-    private PlainService plainService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +64,7 @@ public class PlainResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PlainResource plainResource = new PlainResource(plainService);
+        final PlainResource plainResource = new PlainResource(plainRepository);
         this.restPlainMockMvc = MockMvcBuilders.standaloneSetup(plainResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -116,10 +107,9 @@ public class PlainResourceIT {
         int databaseSizeBeforeCreate = plainRepository.findAll().size();
 
         // Create the Plain
-        PlainDTO plainDTO = plainMapper.toDto(plain);
         restPlainMockMvc.perform(post("/api/plains")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plain)))
             .andExpect(status().isCreated());
 
         // Validate the Plain in the database
@@ -136,12 +126,11 @@ public class PlainResourceIT {
 
         // Create the Plain with an existing ID
         plain.setId(1L);
-        PlainDTO plainDTO = plainMapper.toDto(plain);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPlainMockMvc.perform(post("/api/plains")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plain)))
             .andExpect(status().isBadRequest());
 
         // Validate the Plain in the database
@@ -200,11 +189,10 @@ public class PlainResourceIT {
         em.detach(updatedPlain);
         updatedPlain
             .requirements(UPDATED_REQUIREMENTS);
-        PlainDTO plainDTO = plainMapper.toDto(updatedPlain);
 
         restPlainMockMvc.perform(put("/api/plains")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedPlain)))
             .andExpect(status().isOk());
 
         // Validate the Plain in the database
@@ -220,12 +208,11 @@ public class PlainResourceIT {
         int databaseSizeBeforeUpdate = plainRepository.findAll().size();
 
         // Create the Plain
-        PlainDTO plainDTO = plainMapper.toDto(plain);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restPlainMockMvc.perform(put("/api/plains")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(plainDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(plain)))
             .andExpect(status().isBadRequest());
 
         // Validate the Plain in the database
@@ -264,28 +251,5 @@ public class PlainResourceIT {
         assertThat(plain1).isNotEqualTo(plain2);
         plain1.setId(null);
         assertThat(plain1).isNotEqualTo(plain2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(PlainDTO.class);
-        PlainDTO plainDTO1 = new PlainDTO();
-        plainDTO1.setId(1L);
-        PlainDTO plainDTO2 = new PlainDTO();
-        assertThat(plainDTO1).isNotEqualTo(plainDTO2);
-        plainDTO2.setId(plainDTO1.getId());
-        assertThat(plainDTO1).isEqualTo(plainDTO2);
-        plainDTO2.setId(2L);
-        assertThat(plainDTO1).isNotEqualTo(plainDTO2);
-        plainDTO1.setId(null);
-        assertThat(plainDTO1).isNotEqualTo(plainDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(plainMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(plainMapper.fromId(null)).isNull();
     }
 }

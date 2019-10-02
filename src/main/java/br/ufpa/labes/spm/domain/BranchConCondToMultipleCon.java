@@ -11,7 +11,7 @@ import java.io.Serializable;
  * A BranchConCondToMultipleCon.
  */
 @Entity
-@Table(name = "bcon_cond_to_mcon")
+@Table(name = "b_con_cond_t_m_con")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class BranchConCondToMultipleCon implements Serializable {
 

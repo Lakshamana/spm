@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "catalog_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CatalogEvent implements Serializable {
+public class CatalogEvent extends Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

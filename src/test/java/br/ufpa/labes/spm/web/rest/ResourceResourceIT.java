@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Resource;
 import br.ufpa.labes.spm.repository.ResourceRepository;
-import br.ufpa.labes.spm.service.ResourceService;
-import br.ufpa.labes.spm.service.dto.ResourceDTO;
-import br.ufpa.labes.spm.service.mapper.ResourceMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -77,15 +74,6 @@ public class ResourceResourceIT {
     private ResourceRepository resourceRepositoryMock;
 
     @Autowired
-    private ResourceMapper resourceMapper;
-
-    @Mock
-    private ResourceService resourceServiceMock;
-
-    @Autowired
-    private ResourceService resourceService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -107,7 +95,7 @@ public class ResourceResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ResourceResource resourceResource = new ResourceResource(resourceService);
+        final ResourceResource resourceResource = new ResourceResource(resourceRepository);
         this.restResourceMockMvc = MockMvcBuilders.standaloneSetup(resourceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -164,10 +152,9 @@ public class ResourceResourceIT {
         int databaseSizeBeforeCreate = resourceRepository.findAll().size();
 
         // Create the Resource
-        ResourceDTO resourceDTO = resourceMapper.toDto(resource);
         restResourceMockMvc.perform(post("/api/resources")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resource)))
             .andExpect(status().isCreated());
 
         // Validate the Resource in the database
@@ -191,12 +178,11 @@ public class ResourceResourceIT {
 
         // Create the Resource with an existing ID
         resource.setId(1L);
-        ResourceDTO resourceDTO = resourceMapper.toDto(resource);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restResourceMockMvc.perform(post("/api/resources")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resource)))
             .andExpect(status().isBadRequest());
 
         // Validate the Resource in the database
@@ -228,8 +214,8 @@ public class ResourceResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllResourcesWithEagerRelationshipsIsEnabled() throws Exception {
-        ResourceResource resourceResource = new ResourceResource(resourceServiceMock);
-        when(resourceServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ResourceResource resourceResource = new ResourceResource(resourceRepositoryMock);
+        when(resourceRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restResourceMockMvc = MockMvcBuilders.standaloneSetup(resourceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -240,13 +226,13 @@ public class ResourceResourceIT {
         restResourceMockMvc.perform(get("/api/resources?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(resourceServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(resourceRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllResourcesWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ResourceResource resourceResource = new ResourceResource(resourceServiceMock);
-            when(resourceServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ResourceResource resourceResource = new ResourceResource(resourceRepositoryMock);
+            when(resourceRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restResourceMockMvc = MockMvcBuilders.standaloneSetup(resourceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -256,7 +242,7 @@ public class ResourceResourceIT {
         restResourceMockMvc.perform(get("/api/resources?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(resourceServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(resourceRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -309,11 +295,10 @@ public class ResourceResourceIT {
             .currency(UPDATED_CURRENCY)
             .cost(UPDATED_COST)
             .isActive(UPDATED_IS_ACTIVE);
-        ResourceDTO resourceDTO = resourceMapper.toDto(updatedResource);
 
         restResourceMockMvc.perform(put("/api/resources")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedResource)))
             .andExpect(status().isOk());
 
         // Validate the Resource in the database
@@ -336,12 +321,11 @@ public class ResourceResourceIT {
         int databaseSizeBeforeUpdate = resourceRepository.findAll().size();
 
         // Create the Resource
-        ResourceDTO resourceDTO = resourceMapper.toDto(resource);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restResourceMockMvc.perform(put("/api/resources")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resource)))
             .andExpect(status().isBadRequest());
 
         // Validate the Resource in the database
@@ -380,28 +364,5 @@ public class ResourceResourceIT {
         assertThat(resource1).isNotEqualTo(resource2);
         resource1.setId(null);
         assertThat(resource1).isNotEqualTo(resource2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ResourceDTO.class);
-        ResourceDTO resourceDTO1 = new ResourceDTO();
-        resourceDTO1.setId(1L);
-        ResourceDTO resourceDTO2 = new ResourceDTO();
-        assertThat(resourceDTO1).isNotEqualTo(resourceDTO2);
-        resourceDTO2.setId(resourceDTO1.getId());
-        assertThat(resourceDTO1).isEqualTo(resourceDTO2);
-        resourceDTO2.setId(2L);
-        assertThat(resourceDTO1).isNotEqualTo(resourceDTO2);
-        resourceDTO1.setId(null);
-        assertThat(resourceDTO1).isNotEqualTo(resourceDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(resourceMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(resourceMapper.fromId(null)).isNull();
     }
 }

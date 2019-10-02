@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.SimpleCon;
 import br.ufpa.labes.spm.repository.SimpleConRepository;
-import br.ufpa.labes.spm.service.SimpleConService;
-import br.ufpa.labes.spm.service.dto.SimpleConDTO;
-import br.ufpa.labes.spm.service.mapper.SimpleConMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class SimpleConResourceIT {
     private SimpleConRepository simpleConRepository;
 
     @Autowired
-    private SimpleConMapper simpleConMapper;
-
-    @Autowired
-    private SimpleConService simpleConService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class SimpleConResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SimpleConResource simpleConResource = new SimpleConResource(simpleConService);
+        final SimpleConResource simpleConResource = new SimpleConResource(simpleConRepository);
         this.restSimpleConMockMvc = MockMvcBuilders.standaloneSetup(simpleConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class SimpleConResourceIT {
         int databaseSizeBeforeCreate = simpleConRepository.findAll().size();
 
         // Create the SimpleCon
-        SimpleConDTO simpleConDTO = simpleConMapper.toDto(simpleCon);
         restSimpleConMockMvc.perform(post("/api/simple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(simpleConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(simpleCon)))
             .andExpect(status().isCreated());
 
         // Validate the SimpleCon in the database
@@ -129,12 +119,11 @@ public class SimpleConResourceIT {
 
         // Create the SimpleCon with an existing ID
         simpleCon.setId(1L);
-        SimpleConDTO simpleConDTO = simpleConMapper.toDto(simpleCon);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restSimpleConMockMvc.perform(post("/api/simple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(simpleConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(simpleCon)))
             .andExpect(status().isBadRequest());
 
         // Validate the SimpleCon in the database
@@ -189,11 +178,10 @@ public class SimpleConResourceIT {
         SimpleCon updatedSimpleCon = simpleConRepository.findById(simpleCon.getId()).get();
         // Disconnect from session so that the updates on updatedSimpleCon are not directly saved in db
         em.detach(updatedSimpleCon);
-        SimpleConDTO simpleConDTO = simpleConMapper.toDto(updatedSimpleCon);
 
         restSimpleConMockMvc.perform(put("/api/simple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(simpleConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedSimpleCon)))
             .andExpect(status().isOk());
 
         // Validate the SimpleCon in the database
@@ -208,12 +196,11 @@ public class SimpleConResourceIT {
         int databaseSizeBeforeUpdate = simpleConRepository.findAll().size();
 
         // Create the SimpleCon
-        SimpleConDTO simpleConDTO = simpleConMapper.toDto(simpleCon);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restSimpleConMockMvc.perform(put("/api/simple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(simpleConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(simpleCon)))
             .andExpect(status().isBadRequest());
 
         // Validate the SimpleCon in the database
@@ -252,28 +239,5 @@ public class SimpleConResourceIT {
         assertThat(simpleCon1).isNotEqualTo(simpleCon2);
         simpleCon1.setId(null);
         assertThat(simpleCon1).isNotEqualTo(simpleCon2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(SimpleConDTO.class);
-        SimpleConDTO simpleConDTO1 = new SimpleConDTO();
-        simpleConDTO1.setId(1L);
-        SimpleConDTO simpleConDTO2 = new SimpleConDTO();
-        assertThat(simpleConDTO1).isNotEqualTo(simpleConDTO2);
-        simpleConDTO2.setId(simpleConDTO1.getId());
-        assertThat(simpleConDTO1).isEqualTo(simpleConDTO2);
-        simpleConDTO2.setId(2L);
-        assertThat(simpleConDTO1).isNotEqualTo(simpleConDTO2);
-        simpleConDTO1.setId(null);
-        assertThat(simpleConDTO1).isNotEqualTo(simpleConDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(simpleConMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(simpleConMapper.fromId(null)).isNull();
     }
 }

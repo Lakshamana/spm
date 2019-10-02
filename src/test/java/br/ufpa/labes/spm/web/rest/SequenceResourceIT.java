@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Sequence;
 import br.ufpa.labes.spm.repository.SequenceRepository;
-import br.ufpa.labes.spm.service.SequenceService;
-import br.ufpa.labes.spm.service.dto.SequenceDTO;
-import br.ufpa.labes.spm.service.mapper.SequenceMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class SequenceResourceIT {
     private SequenceRepository sequenceRepository;
 
     @Autowired
-    private SequenceMapper sequenceMapper;
-
-    @Autowired
-    private SequenceService sequenceService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class SequenceResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SequenceResource sequenceResource = new SequenceResource(sequenceService);
+        final SequenceResource sequenceResource = new SequenceResource(sequenceRepository);
         this.restSequenceMockMvc = MockMvcBuilders.standaloneSetup(sequenceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class SequenceResourceIT {
         int databaseSizeBeforeCreate = sequenceRepository.findAll().size();
 
         // Create the Sequence
-        SequenceDTO sequenceDTO = sequenceMapper.toDto(sequence);
         restSequenceMockMvc.perform(post("/api/sequences")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(sequenceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(sequence)))
             .andExpect(status().isCreated());
 
         // Validate the Sequence in the database
@@ -129,12 +119,11 @@ public class SequenceResourceIT {
 
         // Create the Sequence with an existing ID
         sequence.setId(1L);
-        SequenceDTO sequenceDTO = sequenceMapper.toDto(sequence);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restSequenceMockMvc.perform(post("/api/sequences")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(sequenceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(sequence)))
             .andExpect(status().isBadRequest());
 
         // Validate the Sequence in the database
@@ -189,11 +178,10 @@ public class SequenceResourceIT {
         Sequence updatedSequence = sequenceRepository.findById(sequence.getId()).get();
         // Disconnect from session so that the updates on updatedSequence are not directly saved in db
         em.detach(updatedSequence);
-        SequenceDTO sequenceDTO = sequenceMapper.toDto(updatedSequence);
 
         restSequenceMockMvc.perform(put("/api/sequences")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(sequenceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedSequence)))
             .andExpect(status().isOk());
 
         // Validate the Sequence in the database
@@ -208,12 +196,11 @@ public class SequenceResourceIT {
         int databaseSizeBeforeUpdate = sequenceRepository.findAll().size();
 
         // Create the Sequence
-        SequenceDTO sequenceDTO = sequenceMapper.toDto(sequence);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restSequenceMockMvc.perform(put("/api/sequences")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(sequenceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(sequence)))
             .andExpect(status().isBadRequest());
 
         // Validate the Sequence in the database
@@ -252,28 +239,5 @@ public class SequenceResourceIT {
         assertThat(sequence1).isNotEqualTo(sequence2);
         sequence1.setId(null);
         assertThat(sequence1).isNotEqualTo(sequence2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(SequenceDTO.class);
-        SequenceDTO sequenceDTO1 = new SequenceDTO();
-        sequenceDTO1.setId(1L);
-        SequenceDTO sequenceDTO2 = new SequenceDTO();
-        assertThat(sequenceDTO1).isNotEqualTo(sequenceDTO2);
-        sequenceDTO2.setId(sequenceDTO1.getId());
-        assertThat(sequenceDTO1).isEqualTo(sequenceDTO2);
-        sequenceDTO2.setId(2L);
-        assertThat(sequenceDTO1).isNotEqualTo(sequenceDTO2);
-        sequenceDTO1.setId(null);
-        assertThat(sequenceDTO1).isNotEqualTo(sequenceDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(sequenceMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(sequenceMapper.fromId(null)).isNull();
     }
 }

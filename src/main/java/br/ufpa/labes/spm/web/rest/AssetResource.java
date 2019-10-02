@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AssetService;
+import br.ufpa.labes.spm.domain.Asset;
+import br.ufpa.labes.spm.repository.AssetRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AssetDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -33,26 +33,26 @@ public class AssetResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AssetService assetService;
+    private final AssetRepository assetRepository;
 
-    public AssetResource(AssetService assetService) {
-        this.assetService = assetService;
+    public AssetResource(AssetRepository assetRepository) {
+        this.assetRepository = assetRepository;
     }
 
     /**
      * {@code POST  /assets} : Create a new asset.
      *
-     * @param assetDTO the assetDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new assetDTO, or with status {@code 400 (Bad Request)} if the asset has already an ID.
+     * @param asset the asset to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new asset, or with status {@code 400 (Bad Request)} if the asset has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/assets")
-    public ResponseEntity<AssetDTO> createAsset(@Valid @RequestBody AssetDTO assetDTO) throws URISyntaxException {
-        log.debug("REST request to save Asset : {}", assetDTO);
-        if (assetDTO.getId() != null) {
+    public ResponseEntity<Asset> createAsset(@Valid @RequestBody Asset asset) throws URISyntaxException {
+        log.debug("REST request to save Asset : {}", asset);
+        if (asset.getId() != null) {
             throw new BadRequestAlertException("A new asset cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AssetDTO result = assetService.save(assetDTO);
+        Asset result = assetRepository.save(asset);
         return ResponseEntity.created(new URI("/api/assets/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -61,21 +61,21 @@ public class AssetResource {
     /**
      * {@code PUT  /assets} : Updates an existing asset.
      *
-     * @param assetDTO the assetDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated assetDTO,
-     * or with status {@code 400 (Bad Request)} if the assetDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the assetDTO couldn't be updated.
+     * @param asset the asset to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated asset,
+     * or with status {@code 400 (Bad Request)} if the asset is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the asset couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/assets")
-    public ResponseEntity<AssetDTO> updateAsset(@Valid @RequestBody AssetDTO assetDTO) throws URISyntaxException {
-        log.debug("REST request to update Asset : {}", assetDTO);
-        if (assetDTO.getId() == null) {
+    public ResponseEntity<Asset> updateAsset(@Valid @RequestBody Asset asset) throws URISyntaxException {
+        log.debug("REST request to update Asset : {}", asset);
+        if (asset.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AssetDTO result = assetService.save(assetDTO);
+        Asset result = assetRepository.save(asset);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, assetDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, asset.getId().toString()))
             .body(result);
     }
 
@@ -86,34 +86,34 @@ public class AssetResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assets in body.
      */
     @GetMapping("/assets")
-    public List<AssetDTO> getAllAssets(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<Asset> getAllAssets(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Assets");
-        return assetService.findAll();
+        return assetRepository.findAllWithEagerRelationships();
     }
 
     /**
      * {@code GET  /assets/:id} : get the "id" asset.
      *
-     * @param id the id of the assetDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the assetDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the asset to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the asset, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/assets/{id}")
-    public ResponseEntity<AssetDTO> getAsset(@PathVariable Long id) {
+    public ResponseEntity<Asset> getAsset(@PathVariable Long id) {
         log.debug("REST request to get Asset : {}", id);
-        Optional<AssetDTO> assetDTO = assetService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(assetDTO);
+        Optional<Asset> asset = assetRepository.findOneWithEagerRelationships(id);
+        return ResponseUtil.wrapOrNotFound(asset);
     }
 
     /**
      * {@code DELETE  /assets/:id} : delete the "id" asset.
      *
-     * @param id the id of the assetDTO to delete.
+     * @param id the id of the asset to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/assets/{id}")
     public ResponseEntity<Void> deleteAsset(@PathVariable Long id) {
         log.debug("REST request to delete Asset : {}", id);
-        assetService.delete(id);
+        assetRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

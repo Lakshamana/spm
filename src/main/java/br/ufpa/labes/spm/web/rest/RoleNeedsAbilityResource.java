@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.RoleNeedsAbilityService;
+import br.ufpa.labes.spm.domain.RoleNeedsAbility;
+import br.ufpa.labes.spm.repository.RoleNeedsAbilityRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.RoleNeedsAbilityDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class RoleNeedsAbilityResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final RoleNeedsAbilityService roleNeedsAbilityService;
+    private final RoleNeedsAbilityRepository roleNeedsAbilityRepository;
 
-    public RoleNeedsAbilityResource(RoleNeedsAbilityService roleNeedsAbilityService) {
-        this.roleNeedsAbilityService = roleNeedsAbilityService;
+    public RoleNeedsAbilityResource(RoleNeedsAbilityRepository roleNeedsAbilityRepository) {
+        this.roleNeedsAbilityRepository = roleNeedsAbilityRepository;
     }
 
     /**
      * {@code POST  /role-needs-abilities} : Create a new roleNeedsAbility.
      *
-     * @param roleNeedsAbilityDTO the roleNeedsAbilityDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new roleNeedsAbilityDTO, or with status {@code 400 (Bad Request)} if the roleNeedsAbility has already an ID.
+     * @param roleNeedsAbility the roleNeedsAbility to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new roleNeedsAbility, or with status {@code 400 (Bad Request)} if the roleNeedsAbility has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/role-needs-abilities")
-    public ResponseEntity<RoleNeedsAbilityDTO> createRoleNeedsAbility(@RequestBody RoleNeedsAbilityDTO roleNeedsAbilityDTO) throws URISyntaxException {
-        log.debug("REST request to save RoleNeedsAbility : {}", roleNeedsAbilityDTO);
-        if (roleNeedsAbilityDTO.getId() != null) {
+    public ResponseEntity<RoleNeedsAbility> createRoleNeedsAbility(@RequestBody RoleNeedsAbility roleNeedsAbility) throws URISyntaxException {
+        log.debug("REST request to save RoleNeedsAbility : {}", roleNeedsAbility);
+        if (roleNeedsAbility.getId() != null) {
             throw new BadRequestAlertException("A new roleNeedsAbility cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        RoleNeedsAbilityDTO result = roleNeedsAbilityService.save(roleNeedsAbilityDTO);
+        RoleNeedsAbility result = roleNeedsAbilityRepository.save(roleNeedsAbility);
         return ResponseEntity.created(new URI("/api/role-needs-abilities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class RoleNeedsAbilityResource {
     /**
      * {@code PUT  /role-needs-abilities} : Updates an existing roleNeedsAbility.
      *
-     * @param roleNeedsAbilityDTO the roleNeedsAbilityDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated roleNeedsAbilityDTO,
-     * or with status {@code 400 (Bad Request)} if the roleNeedsAbilityDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the roleNeedsAbilityDTO couldn't be updated.
+     * @param roleNeedsAbility the roleNeedsAbility to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated roleNeedsAbility,
+     * or with status {@code 400 (Bad Request)} if the roleNeedsAbility is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the roleNeedsAbility couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/role-needs-abilities")
-    public ResponseEntity<RoleNeedsAbilityDTO> updateRoleNeedsAbility(@RequestBody RoleNeedsAbilityDTO roleNeedsAbilityDTO) throws URISyntaxException {
-        log.debug("REST request to update RoleNeedsAbility : {}", roleNeedsAbilityDTO);
-        if (roleNeedsAbilityDTO.getId() == null) {
+    public ResponseEntity<RoleNeedsAbility> updateRoleNeedsAbility(@RequestBody RoleNeedsAbility roleNeedsAbility) throws URISyntaxException {
+        log.debug("REST request to update RoleNeedsAbility : {}", roleNeedsAbility);
+        if (roleNeedsAbility.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        RoleNeedsAbilityDTO result = roleNeedsAbilityService.save(roleNeedsAbilityDTO);
+        RoleNeedsAbility result = roleNeedsAbilityRepository.save(roleNeedsAbility);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, roleNeedsAbilityDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, roleNeedsAbility.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class RoleNeedsAbilityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of roleNeedsAbilities in body.
      */
     @GetMapping("/role-needs-abilities")
-    public List<RoleNeedsAbilityDTO> getAllRoleNeedsAbilities() {
+    public List<RoleNeedsAbility> getAllRoleNeedsAbilities() {
         log.debug("REST request to get all RoleNeedsAbilities");
-        return roleNeedsAbilityService.findAll();
+        return roleNeedsAbilityRepository.findAll();
     }
 
     /**
      * {@code GET  /role-needs-abilities/:id} : get the "id" roleNeedsAbility.
      *
-     * @param id the id of the roleNeedsAbilityDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the roleNeedsAbilityDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the roleNeedsAbility to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the roleNeedsAbility, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/role-needs-abilities/{id}")
-    public ResponseEntity<RoleNeedsAbilityDTO> getRoleNeedsAbility(@PathVariable Long id) {
+    public ResponseEntity<RoleNeedsAbility> getRoleNeedsAbility(@PathVariable Long id) {
         log.debug("REST request to get RoleNeedsAbility : {}", id);
-        Optional<RoleNeedsAbilityDTO> roleNeedsAbilityDTO = roleNeedsAbilityService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(roleNeedsAbilityDTO);
+        Optional<RoleNeedsAbility> roleNeedsAbility = roleNeedsAbilityRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(roleNeedsAbility);
     }
 
     /**
      * {@code DELETE  /role-needs-abilities/:id} : delete the "id" roleNeedsAbility.
      *
-     * @param id the id of the roleNeedsAbilityDTO to delete.
+     * @param id the id of the roleNeedsAbility to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/role-needs-abilities/{id}")
     public ResponseEntity<Void> deleteRoleNeedsAbility(@PathVariable Long id) {
         log.debug("REST request to delete RoleNeedsAbility : {}", id);
-        roleNeedsAbilityService.delete(id);
+        roleNeedsAbilityRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AbilityService;
+import br.ufpa.labes.spm.domain.Ability;
+import br.ufpa.labes.spm.repository.AbilityRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AbilityDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class AbilityResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AbilityService abilityService;
+    private final AbilityRepository abilityRepository;
 
-    public AbilityResource(AbilityService abilityService) {
-        this.abilityService = abilityService;
+    public AbilityResource(AbilityRepository abilityRepository) {
+        this.abilityRepository = abilityRepository;
     }
 
     /**
      * {@code POST  /abilities} : Create a new ability.
      *
-     * @param abilityDTO the abilityDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new abilityDTO, or with status {@code 400 (Bad Request)} if the ability has already an ID.
+     * @param ability the ability to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new ability, or with status {@code 400 (Bad Request)} if the ability has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/abilities")
-    public ResponseEntity<AbilityDTO> createAbility(@RequestBody AbilityDTO abilityDTO) throws URISyntaxException {
-        log.debug("REST request to save Ability : {}", abilityDTO);
-        if (abilityDTO.getId() != null) {
+    public ResponseEntity<Ability> createAbility(@RequestBody Ability ability) throws URISyntaxException {
+        log.debug("REST request to save Ability : {}", ability);
+        if (ability.getId() != null) {
             throw new BadRequestAlertException("A new ability cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AbilityDTO result = abilityService.save(abilityDTO);
+        Ability result = abilityRepository.save(ability);
         return ResponseEntity.created(new URI("/api/abilities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class AbilityResource {
     /**
      * {@code PUT  /abilities} : Updates an existing ability.
      *
-     * @param abilityDTO the abilityDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated abilityDTO,
-     * or with status {@code 400 (Bad Request)} if the abilityDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the abilityDTO couldn't be updated.
+     * @param ability the ability to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated ability,
+     * or with status {@code 400 (Bad Request)} if the ability is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the ability couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/abilities")
-    public ResponseEntity<AbilityDTO> updateAbility(@RequestBody AbilityDTO abilityDTO) throws URISyntaxException {
-        log.debug("REST request to update Ability : {}", abilityDTO);
-        if (abilityDTO.getId() == null) {
+    public ResponseEntity<Ability> updateAbility(@RequestBody Ability ability) throws URISyntaxException {
+        log.debug("REST request to update Ability : {}", ability);
+        if (ability.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AbilityDTO result = abilityService.save(abilityDTO);
+        Ability result = abilityRepository.save(ability);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, abilityDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ability.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class AbilityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of abilities in body.
      */
     @GetMapping("/abilities")
-    public List<AbilityDTO> getAllAbilities() {
+    public List<Ability> getAllAbilities() {
         log.debug("REST request to get all Abilities");
-        return abilityService.findAll();
+        return abilityRepository.findAll();
     }
 
     /**
      * {@code GET  /abilities/:id} : get the "id" ability.
      *
-     * @param id the id of the abilityDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the abilityDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the ability to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the ability, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/abilities/{id}")
-    public ResponseEntity<AbilityDTO> getAbility(@PathVariable Long id) {
+    public ResponseEntity<Ability> getAbility(@PathVariable Long id) {
         log.debug("REST request to get Ability : {}", id);
-        Optional<AbilityDTO> abilityDTO = abilityService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(abilityDTO);
+        Optional<Ability> ability = abilityRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(ability);
     }
 
     /**
      * {@code DELETE  /abilities/:id} : delete the "id" ability.
      *
-     * @param id the id of the abilityDTO to delete.
+     * @param id the id of the ability to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/abilities/{id}")
     public ResponseEntity<Void> deleteAbility(@PathVariable Long id) {
         log.debug("REST request to delete Ability : {}", id);
-        abilityService.delete(id);
+        abilityRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

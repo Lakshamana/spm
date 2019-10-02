@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AgentEstimation;
 import br.ufpa.labes.spm.repository.AgentEstimationRepository;
-import br.ufpa.labes.spm.service.AgentEstimationService;
-import br.ufpa.labes.spm.service.dto.AgentEstimationDTO;
-import br.ufpa.labes.spm.service.mapper.AgentEstimationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class AgentEstimationResourceIT {
     private AgentEstimationRepository agentEstimationRepository;
 
     @Autowired
-    private AgentEstimationMapper agentEstimationMapper;
-
-    @Autowired
-    private AgentEstimationService agentEstimationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class AgentEstimationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgentEstimationResource agentEstimationResource = new AgentEstimationResource(agentEstimationService);
+        final AgentEstimationResource agentEstimationResource = new AgentEstimationResource(agentEstimationRepository);
         this.restAgentEstimationMockMvc = MockMvcBuilders.standaloneSetup(agentEstimationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class AgentEstimationResourceIT {
         int databaseSizeBeforeCreate = agentEstimationRepository.findAll().size();
 
         // Create the AgentEstimation
-        AgentEstimationDTO agentEstimationDTO = agentEstimationMapper.toDto(agentEstimation);
         restAgentEstimationMockMvc.perform(post("/api/agent-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentEstimation)))
             .andExpect(status().isCreated());
 
         // Validate the AgentEstimation in the database
@@ -129,12 +119,11 @@ public class AgentEstimationResourceIT {
 
         // Create the AgentEstimation with an existing ID
         agentEstimation.setId(1L);
-        AgentEstimationDTO agentEstimationDTO = agentEstimationMapper.toDto(agentEstimation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAgentEstimationMockMvc.perform(post("/api/agent-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentEstimation in the database
@@ -189,11 +178,10 @@ public class AgentEstimationResourceIT {
         AgentEstimation updatedAgentEstimation = agentEstimationRepository.findById(agentEstimation.getId()).get();
         // Disconnect from session so that the updates on updatedAgentEstimation are not directly saved in db
         em.detach(updatedAgentEstimation);
-        AgentEstimationDTO agentEstimationDTO = agentEstimationMapper.toDto(updatedAgentEstimation);
 
         restAgentEstimationMockMvc.perform(put("/api/agent-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAgentEstimation)))
             .andExpect(status().isOk());
 
         // Validate the AgentEstimation in the database
@@ -208,12 +196,11 @@ public class AgentEstimationResourceIT {
         int databaseSizeBeforeUpdate = agentEstimationRepository.findAll().size();
 
         // Create the AgentEstimation
-        AgentEstimationDTO agentEstimationDTO = agentEstimationMapper.toDto(agentEstimation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAgentEstimationMockMvc.perform(put("/api/agent-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentEstimation in the database
@@ -252,28 +239,5 @@ public class AgentEstimationResourceIT {
         assertThat(agentEstimation1).isNotEqualTo(agentEstimation2);
         agentEstimation1.setId(null);
         assertThat(agentEstimation1).isNotEqualTo(agentEstimation2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgentEstimationDTO.class);
-        AgentEstimationDTO agentEstimationDTO1 = new AgentEstimationDTO();
-        agentEstimationDTO1.setId(1L);
-        AgentEstimationDTO agentEstimationDTO2 = new AgentEstimationDTO();
-        assertThat(agentEstimationDTO1).isNotEqualTo(agentEstimationDTO2);
-        agentEstimationDTO2.setId(agentEstimationDTO1.getId());
-        assertThat(agentEstimationDTO1).isEqualTo(agentEstimationDTO2);
-        agentEstimationDTO2.setId(2L);
-        assertThat(agentEstimationDTO1).isNotEqualTo(agentEstimationDTO2);
-        agentEstimationDTO1.setId(null);
-        assertThat(agentEstimationDTO1).isNotEqualTo(agentEstimationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(agentEstimationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(agentEstimationMapper.fromId(null)).isNull();
     }
 }

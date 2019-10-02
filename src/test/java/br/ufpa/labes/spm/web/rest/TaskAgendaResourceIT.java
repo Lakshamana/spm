@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.TaskAgenda;
 import br.ufpa.labes.spm.repository.TaskAgendaRepository;
-import br.ufpa.labes.spm.service.TaskAgendaService;
-import br.ufpa.labes.spm.service.dto.TaskAgendaDTO;
-import br.ufpa.labes.spm.service.mapper.TaskAgendaMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class TaskAgendaResourceIT {
     private TaskAgendaRepository taskAgendaRepository;
 
     @Autowired
-    private TaskAgendaMapper taskAgendaMapper;
-
-    @Autowired
-    private TaskAgendaService taskAgendaService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class TaskAgendaResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TaskAgendaResource taskAgendaResource = new TaskAgendaResource(taskAgendaService);
+        final TaskAgendaResource taskAgendaResource = new TaskAgendaResource(taskAgendaRepository);
         this.restTaskAgendaMockMvc = MockMvcBuilders.standaloneSetup(taskAgendaResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class TaskAgendaResourceIT {
         int databaseSizeBeforeCreate = taskAgendaRepository.findAll().size();
 
         // Create the TaskAgenda
-        TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(taskAgenda);
         restTaskAgendaMockMvc.perform(post("/api/task-agenda")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(taskAgenda)))
             .andExpect(status().isCreated());
 
         // Validate the TaskAgenda in the database
@@ -129,12 +119,11 @@ public class TaskAgendaResourceIT {
 
         // Create the TaskAgenda with an existing ID
         taskAgenda.setId(1L);
-        TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(taskAgenda);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restTaskAgendaMockMvc.perform(post("/api/task-agenda")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(taskAgenda)))
             .andExpect(status().isBadRequest());
 
         // Validate the TaskAgenda in the database
@@ -189,11 +178,10 @@ public class TaskAgendaResourceIT {
         TaskAgenda updatedTaskAgenda = taskAgendaRepository.findById(taskAgenda.getId()).get();
         // Disconnect from session so that the updates on updatedTaskAgenda are not directly saved in db
         em.detach(updatedTaskAgenda);
-        TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(updatedTaskAgenda);
 
         restTaskAgendaMockMvc.perform(put("/api/task-agenda")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedTaskAgenda)))
             .andExpect(status().isOk());
 
         // Validate the TaskAgenda in the database
@@ -208,12 +196,11 @@ public class TaskAgendaResourceIT {
         int databaseSizeBeforeUpdate = taskAgendaRepository.findAll().size();
 
         // Create the TaskAgenda
-        TaskAgendaDTO taskAgendaDTO = taskAgendaMapper.toDto(taskAgenda);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTaskAgendaMockMvc.perform(put("/api/task-agenda")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskAgendaDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(taskAgenda)))
             .andExpect(status().isBadRequest());
 
         // Validate the TaskAgenda in the database
@@ -252,28 +239,5 @@ public class TaskAgendaResourceIT {
         assertThat(taskAgenda1).isNotEqualTo(taskAgenda2);
         taskAgenda1.setId(null);
         assertThat(taskAgenda1).isNotEqualTo(taskAgenda2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(TaskAgendaDTO.class);
-        TaskAgendaDTO taskAgendaDTO1 = new TaskAgendaDTO();
-        taskAgendaDTO1.setId(1L);
-        TaskAgendaDTO taskAgendaDTO2 = new TaskAgendaDTO();
-        assertThat(taskAgendaDTO1).isNotEqualTo(taskAgendaDTO2);
-        taskAgendaDTO2.setId(taskAgendaDTO1.getId());
-        assertThat(taskAgendaDTO1).isEqualTo(taskAgendaDTO2);
-        taskAgendaDTO2.setId(2L);
-        assertThat(taskAgendaDTO1).isNotEqualTo(taskAgendaDTO2);
-        taskAgendaDTO1.setId(null);
-        assertThat(taskAgendaDTO1).isNotEqualTo(taskAgendaDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(taskAgendaMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(taskAgendaMapper.fromId(null)).isNull();
     }
 }

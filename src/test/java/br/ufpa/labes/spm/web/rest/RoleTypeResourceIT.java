@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.RoleType;
 import br.ufpa.labes.spm.repository.RoleTypeRepository;
-import br.ufpa.labes.spm.service.RoleTypeService;
-import br.ufpa.labes.spm.service.dto.RoleTypeDTO;
-import br.ufpa.labes.spm.service.mapper.RoleTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class RoleTypeResourceIT {
     private RoleTypeRepository roleTypeRepository;
 
     @Autowired
-    private RoleTypeMapper roleTypeMapper;
-
-    @Autowired
-    private RoleTypeService roleTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class RoleTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RoleTypeResource roleTypeResource = new RoleTypeResource(roleTypeService);
+        final RoleTypeResource roleTypeResource = new RoleTypeResource(roleTypeRepository);
         this.restRoleTypeMockMvc = MockMvcBuilders.standaloneSetup(roleTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class RoleTypeResourceIT {
         int databaseSizeBeforeCreate = roleTypeRepository.findAll().size();
 
         // Create the RoleType
-        RoleTypeDTO roleTypeDTO = roleTypeMapper.toDto(roleType);
         restRoleTypeMockMvc.perform(post("/api/role-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(roleType)))
             .andExpect(status().isCreated());
 
         // Validate the RoleType in the database
@@ -129,12 +119,11 @@ public class RoleTypeResourceIT {
 
         // Create the RoleType with an existing ID
         roleType.setId(1L);
-        RoleTypeDTO roleTypeDTO = roleTypeMapper.toDto(roleType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restRoleTypeMockMvc.perform(post("/api/role-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(roleType)))
             .andExpect(status().isBadRequest());
 
         // Validate the RoleType in the database
@@ -189,11 +178,10 @@ public class RoleTypeResourceIT {
         RoleType updatedRoleType = roleTypeRepository.findById(roleType.getId()).get();
         // Disconnect from session so that the updates on updatedRoleType are not directly saved in db
         em.detach(updatedRoleType);
-        RoleTypeDTO roleTypeDTO = roleTypeMapper.toDto(updatedRoleType);
 
         restRoleTypeMockMvc.perform(put("/api/role-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedRoleType)))
             .andExpect(status().isOk());
 
         // Validate the RoleType in the database
@@ -208,12 +196,11 @@ public class RoleTypeResourceIT {
         int databaseSizeBeforeUpdate = roleTypeRepository.findAll().size();
 
         // Create the RoleType
-        RoleTypeDTO roleTypeDTO = roleTypeMapper.toDto(roleType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restRoleTypeMockMvc.perform(put("/api/role-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(roleType)))
             .andExpect(status().isBadRequest());
 
         // Validate the RoleType in the database
@@ -252,28 +239,5 @@ public class RoleTypeResourceIT {
         assertThat(roleType1).isNotEqualTo(roleType2);
         roleType1.setId(null);
         assertThat(roleType1).isNotEqualTo(roleType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RoleTypeDTO.class);
-        RoleTypeDTO roleTypeDTO1 = new RoleTypeDTO();
-        roleTypeDTO1.setId(1L);
-        RoleTypeDTO roleTypeDTO2 = new RoleTypeDTO();
-        assertThat(roleTypeDTO1).isNotEqualTo(roleTypeDTO2);
-        roleTypeDTO2.setId(roleTypeDTO1.getId());
-        assertThat(roleTypeDTO1).isEqualTo(roleTypeDTO2);
-        roleTypeDTO2.setId(2L);
-        assertThat(roleTypeDTO1).isNotEqualTo(roleTypeDTO2);
-        roleTypeDTO1.setId(null);
-        assertThat(roleTypeDTO1).isNotEqualTo(roleTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(roleTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(roleTypeMapper.fromId(null)).isNull();
     }
 }

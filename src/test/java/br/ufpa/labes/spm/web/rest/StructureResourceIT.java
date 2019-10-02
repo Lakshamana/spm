@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Structure;
 import br.ufpa.labes.spm.repository.StructureRepository;
-import br.ufpa.labes.spm.service.StructureService;
-import br.ufpa.labes.spm.service.dto.StructureDTO;
-import br.ufpa.labes.spm.service.mapper.StructureMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class StructureResourceIT {
     private StructureRepository structureRepository;
 
     @Autowired
-    private StructureMapper structureMapper;
-
-    @Autowired
-    private StructureService structureService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class StructureResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final StructureResource structureResource = new StructureResource(structureService);
+        final StructureResource structureResource = new StructureResource(structureRepository);
         this.restStructureMockMvc = MockMvcBuilders.standaloneSetup(structureResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class StructureResourceIT {
         int databaseSizeBeforeCreate = structureRepository.findAll().size();
 
         // Create the Structure
-        StructureDTO structureDTO = structureMapper.toDto(structure);
         restStructureMockMvc.perform(post("/api/structures")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(structureDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(structure)))
             .andExpect(status().isCreated());
 
         // Validate the Structure in the database
@@ -129,12 +119,11 @@ public class StructureResourceIT {
 
         // Create the Structure with an existing ID
         structure.setId(1L);
-        StructureDTO structureDTO = structureMapper.toDto(structure);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restStructureMockMvc.perform(post("/api/structures")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(structureDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(structure)))
             .andExpect(status().isBadRequest());
 
         // Validate the Structure in the database
@@ -189,11 +178,10 @@ public class StructureResourceIT {
         Structure updatedStructure = structureRepository.findById(structure.getId()).get();
         // Disconnect from session so that the updates on updatedStructure are not directly saved in db
         em.detach(updatedStructure);
-        StructureDTO structureDTO = structureMapper.toDto(updatedStructure);
 
         restStructureMockMvc.perform(put("/api/structures")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(structureDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedStructure)))
             .andExpect(status().isOk());
 
         // Validate the Structure in the database
@@ -208,12 +196,11 @@ public class StructureResourceIT {
         int databaseSizeBeforeUpdate = structureRepository.findAll().size();
 
         // Create the Structure
-        StructureDTO structureDTO = structureMapper.toDto(structure);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restStructureMockMvc.perform(put("/api/structures")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(structureDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(structure)))
             .andExpect(status().isBadRequest());
 
         // Validate the Structure in the database
@@ -252,28 +239,5 @@ public class StructureResourceIT {
         assertThat(structure1).isNotEqualTo(structure2);
         structure1.setId(null);
         assertThat(structure1).isNotEqualTo(structure2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(StructureDTO.class);
-        StructureDTO structureDTO1 = new StructureDTO();
-        structureDTO1.setId(1L);
-        StructureDTO structureDTO2 = new StructureDTO();
-        assertThat(structureDTO1).isNotEqualTo(structureDTO2);
-        structureDTO2.setId(structureDTO1.getId());
-        assertThat(structureDTO1).isEqualTo(structureDTO2);
-        structureDTO2.setId(2L);
-        assertThat(structureDTO1).isNotEqualTo(structureDTO2);
-        structureDTO1.setId(null);
-        assertThat(structureDTO1).isNotEqualTo(structureDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(structureMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(structureMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.LessonLearned;
 import br.ufpa.labes.spm.repository.LessonLearnedRepository;
-import br.ufpa.labes.spm.service.LessonLearnedService;
-import br.ufpa.labes.spm.service.dto.LessonLearnedDTO;
-import br.ufpa.labes.spm.service.mapper.LessonLearnedMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -55,12 +52,6 @@ public class LessonLearnedResourceIT {
     private LessonLearnedRepository lessonLearnedRepository;
 
     @Autowired
-    private LessonLearnedMapper lessonLearnedMapper;
-
-    @Autowired
-    private LessonLearnedService lessonLearnedService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -82,7 +73,7 @@ public class LessonLearnedResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final LessonLearnedResource lessonLearnedResource = new LessonLearnedResource(lessonLearnedService);
+        final LessonLearnedResource lessonLearnedResource = new LessonLearnedResource(lessonLearnedRepository);
         this.restLessonLearnedMockMvc = MockMvcBuilders.standaloneSetup(lessonLearnedResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -129,10 +120,9 @@ public class LessonLearnedResourceIT {
         int databaseSizeBeforeCreate = lessonLearnedRepository.findAll().size();
 
         // Create the LessonLearned
-        LessonLearnedDTO lessonLearnedDTO = lessonLearnedMapper.toDto(lessonLearned);
         restLessonLearnedMockMvc.perform(post("/api/lesson-learneds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(lessonLearnedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(lessonLearned)))
             .andExpect(status().isCreated());
 
         // Validate the LessonLearned in the database
@@ -151,12 +141,11 @@ public class LessonLearnedResourceIT {
 
         // Create the LessonLearned with an existing ID
         lessonLearned.setId(1L);
-        LessonLearnedDTO lessonLearnedDTO = lessonLearnedMapper.toDto(lessonLearned);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restLessonLearnedMockMvc.perform(post("/api/lesson-learneds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(lessonLearnedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(lessonLearned)))
             .andExpect(status().isBadRequest());
 
         // Validate the LessonLearned in the database
@@ -221,11 +210,10 @@ public class LessonLearnedResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .creationDate(UPDATED_CREATION_DATE);
-        LessonLearnedDTO lessonLearnedDTO = lessonLearnedMapper.toDto(updatedLessonLearned);
 
         restLessonLearnedMockMvc.perform(put("/api/lesson-learneds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(lessonLearnedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedLessonLearned)))
             .andExpect(status().isOk());
 
         // Validate the LessonLearned in the database
@@ -243,12 +231,11 @@ public class LessonLearnedResourceIT {
         int databaseSizeBeforeUpdate = lessonLearnedRepository.findAll().size();
 
         // Create the LessonLearned
-        LessonLearnedDTO lessonLearnedDTO = lessonLearnedMapper.toDto(lessonLearned);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restLessonLearnedMockMvc.perform(put("/api/lesson-learneds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(lessonLearnedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(lessonLearned)))
             .andExpect(status().isBadRequest());
 
         // Validate the LessonLearned in the database
@@ -287,28 +274,5 @@ public class LessonLearnedResourceIT {
         assertThat(lessonLearned1).isNotEqualTo(lessonLearned2);
         lessonLearned1.setId(null);
         assertThat(lessonLearned1).isNotEqualTo(lessonLearned2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(LessonLearnedDTO.class);
-        LessonLearnedDTO lessonLearnedDTO1 = new LessonLearnedDTO();
-        lessonLearnedDTO1.setId(1L);
-        LessonLearnedDTO lessonLearnedDTO2 = new LessonLearnedDTO();
-        assertThat(lessonLearnedDTO1).isNotEqualTo(lessonLearnedDTO2);
-        lessonLearnedDTO2.setId(lessonLearnedDTO1.getId());
-        assertThat(lessonLearnedDTO1).isEqualTo(lessonLearnedDTO2);
-        lessonLearnedDTO2.setId(2L);
-        assertThat(lessonLearnedDTO1).isNotEqualTo(lessonLearnedDTO2);
-        lessonLearnedDTO1.setId(null);
-        assertThat(lessonLearnedDTO1).isNotEqualTo(lessonLearnedDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(lessonLearnedMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(lessonLearnedMapper.fromId(null)).isNull();
     }
 }

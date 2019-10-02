@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ProcessEstimationService;
+import br.ufpa.labes.spm.domain.ProcessEstimation;
+import br.ufpa.labes.spm.repository.ProcessEstimationRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ProcessEstimationDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ProcessEstimationResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ProcessEstimationService processEstimationService;
+    private final ProcessEstimationRepository processEstimationRepository;
 
-    public ProcessEstimationResource(ProcessEstimationService processEstimationService) {
-        this.processEstimationService = processEstimationService;
+    public ProcessEstimationResource(ProcessEstimationRepository processEstimationRepository) {
+        this.processEstimationRepository = processEstimationRepository;
     }
 
     /**
      * {@code POST  /process-estimations} : Create a new processEstimation.
      *
-     * @param processEstimationDTO the processEstimationDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new processEstimationDTO, or with status {@code 400 (Bad Request)} if the processEstimation has already an ID.
+     * @param processEstimation the processEstimation to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new processEstimation, or with status {@code 400 (Bad Request)} if the processEstimation has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/process-estimations")
-    public ResponseEntity<ProcessEstimationDTO> createProcessEstimation(@RequestBody ProcessEstimationDTO processEstimationDTO) throws URISyntaxException {
-        log.debug("REST request to save ProcessEstimation : {}", processEstimationDTO);
-        if (processEstimationDTO.getId() != null) {
+    public ResponseEntity<ProcessEstimation> createProcessEstimation(@RequestBody ProcessEstimation processEstimation) throws URISyntaxException {
+        log.debug("REST request to save ProcessEstimation : {}", processEstimation);
+        if (processEstimation.getId() != null) {
             throw new BadRequestAlertException("A new processEstimation cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ProcessEstimationDTO result = processEstimationService.save(processEstimationDTO);
+        ProcessEstimation result = processEstimationRepository.save(processEstimation);
         return ResponseEntity.created(new URI("/api/process-estimations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ProcessEstimationResource {
     /**
      * {@code PUT  /process-estimations} : Updates an existing processEstimation.
      *
-     * @param processEstimationDTO the processEstimationDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated processEstimationDTO,
-     * or with status {@code 400 (Bad Request)} if the processEstimationDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the processEstimationDTO couldn't be updated.
+     * @param processEstimation the processEstimation to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated processEstimation,
+     * or with status {@code 400 (Bad Request)} if the processEstimation is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the processEstimation couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/process-estimations")
-    public ResponseEntity<ProcessEstimationDTO> updateProcessEstimation(@RequestBody ProcessEstimationDTO processEstimationDTO) throws URISyntaxException {
-        log.debug("REST request to update ProcessEstimation : {}", processEstimationDTO);
-        if (processEstimationDTO.getId() == null) {
+    public ResponseEntity<ProcessEstimation> updateProcessEstimation(@RequestBody ProcessEstimation processEstimation) throws URISyntaxException {
+        log.debug("REST request to update ProcessEstimation : {}", processEstimation);
+        if (processEstimation.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ProcessEstimationDTO result = processEstimationService.save(processEstimationDTO);
+        ProcessEstimation result = processEstimationRepository.save(processEstimation);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, processEstimationDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, processEstimation.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ProcessEstimationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of processEstimations in body.
      */
     @GetMapping("/process-estimations")
-    public List<ProcessEstimationDTO> getAllProcessEstimations() {
+    public List<ProcessEstimation> getAllProcessEstimations() {
         log.debug("REST request to get all ProcessEstimations");
-        return processEstimationService.findAll();
+        return processEstimationRepository.findAll();
     }
 
     /**
      * {@code GET  /process-estimations/:id} : get the "id" processEstimation.
      *
-     * @param id the id of the processEstimationDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the processEstimationDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the processEstimation to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the processEstimation, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/process-estimations/{id}")
-    public ResponseEntity<ProcessEstimationDTO> getProcessEstimation(@PathVariable Long id) {
+    public ResponseEntity<ProcessEstimation> getProcessEstimation(@PathVariable Long id) {
         log.debug("REST request to get ProcessEstimation : {}", id);
-        Optional<ProcessEstimationDTO> processEstimationDTO = processEstimationService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(processEstimationDTO);
+        Optional<ProcessEstimation> processEstimation = processEstimationRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(processEstimation);
     }
 
     /**
      * {@code DELETE  /process-estimations/:id} : delete the "id" processEstimation.
      *
-     * @param id the id of the processEstimationDTO to delete.
+     * @param id the id of the processEstimation to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/process-estimations/{id}")
     public ResponseEntity<Void> deleteProcessEstimation(@PathVariable Long id) {
         log.debug("REST request to delete ProcessEstimation : {}", id);
-        processEstimationService.delete(id);
+        processEstimationRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

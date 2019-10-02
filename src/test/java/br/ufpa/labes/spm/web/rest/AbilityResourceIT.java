@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Ability;
 import br.ufpa.labes.spm.repository.AbilityRepository;
-import br.ufpa.labes.spm.service.AbilityService;
-import br.ufpa.labes.spm.service.dto.AbilityDTO;
-import br.ufpa.labes.spm.service.mapper.AbilityMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class AbilityResourceIT {
     private AbilityRepository abilityRepository;
 
     @Autowired
-    private AbilityMapper abilityMapper;
-
-    @Autowired
-    private AbilityService abilityService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class AbilityResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AbilityResource abilityResource = new AbilityResource(abilityService);
+        final AbilityResource abilityResource = new AbilityResource(abilityRepository);
         this.restAbilityMockMvc = MockMvcBuilders.standaloneSetup(abilityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -126,10 +117,9 @@ public class AbilityResourceIT {
         int databaseSizeBeforeCreate = abilityRepository.findAll().size();
 
         // Create the Ability
-        AbilityDTO abilityDTO = abilityMapper.toDto(ability);
         restAbilityMockMvc.perform(post("/api/abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(abilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(ability)))
             .andExpect(status().isCreated());
 
         // Validate the Ability in the database
@@ -148,12 +138,11 @@ public class AbilityResourceIT {
 
         // Create the Ability with an existing ID
         ability.setId(1L);
-        AbilityDTO abilityDTO = abilityMapper.toDto(ability);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAbilityMockMvc.perform(post("/api/abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(abilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(ability)))
             .andExpect(status().isBadRequest());
 
         // Validate the Ability in the database
@@ -218,11 +207,10 @@ public class AbilityResourceIT {
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION);
-        AbilityDTO abilityDTO = abilityMapper.toDto(updatedAbility);
 
         restAbilityMockMvc.perform(put("/api/abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(abilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAbility)))
             .andExpect(status().isOk());
 
         // Validate the Ability in the database
@@ -240,12 +228,11 @@ public class AbilityResourceIT {
         int databaseSizeBeforeUpdate = abilityRepository.findAll().size();
 
         // Create the Ability
-        AbilityDTO abilityDTO = abilityMapper.toDto(ability);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAbilityMockMvc.perform(put("/api/abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(abilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(ability)))
             .andExpect(status().isBadRequest());
 
         // Validate the Ability in the database
@@ -284,28 +271,5 @@ public class AbilityResourceIT {
         assertThat(ability1).isNotEqualTo(ability2);
         ability1.setId(null);
         assertThat(ability1).isNotEqualTo(ability2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AbilityDTO.class);
-        AbilityDTO abilityDTO1 = new AbilityDTO();
-        abilityDTO1.setId(1L);
-        AbilityDTO abilityDTO2 = new AbilityDTO();
-        assertThat(abilityDTO1).isNotEqualTo(abilityDTO2);
-        abilityDTO2.setId(abilityDTO1.getId());
-        assertThat(abilityDTO1).isEqualTo(abilityDTO2);
-        abilityDTO2.setId(2L);
-        assertThat(abilityDTO1).isNotEqualTo(abilityDTO2);
-        abilityDTO1.setId(null);
-        assertThat(abilityDTO1).isNotEqualTo(abilityDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(abilityMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(abilityMapper.fromId(null)).isNull();
     }
 }

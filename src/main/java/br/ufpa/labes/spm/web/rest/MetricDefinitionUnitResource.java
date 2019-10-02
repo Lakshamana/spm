@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.MetricDefinitionUnitService;
+import br.ufpa.labes.spm.domain.MetricDefinitionUnit;
+import br.ufpa.labes.spm.repository.MetricDefinitionUnitRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.MetricDefinitionUnitDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class MetricDefinitionUnitResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final MetricDefinitionUnitService metricDefinitionUnitService;
+    private final MetricDefinitionUnitRepository metricDefinitionUnitRepository;
 
-    public MetricDefinitionUnitResource(MetricDefinitionUnitService metricDefinitionUnitService) {
-        this.metricDefinitionUnitService = metricDefinitionUnitService;
+    public MetricDefinitionUnitResource(MetricDefinitionUnitRepository metricDefinitionUnitRepository) {
+        this.metricDefinitionUnitRepository = metricDefinitionUnitRepository;
     }
 
     /**
      * {@code POST  /metric-definition-units} : Create a new metricDefinitionUnit.
      *
-     * @param metricDefinitionUnitDTO the metricDefinitionUnitDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new metricDefinitionUnitDTO, or with status {@code 400 (Bad Request)} if the metricDefinitionUnit has already an ID.
+     * @param metricDefinitionUnit the metricDefinitionUnit to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new metricDefinitionUnit, or with status {@code 400 (Bad Request)} if the metricDefinitionUnit has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/metric-definition-units")
-    public ResponseEntity<MetricDefinitionUnitDTO> createMetricDefinitionUnit(@RequestBody MetricDefinitionUnitDTO metricDefinitionUnitDTO) throws URISyntaxException {
-        log.debug("REST request to save MetricDefinitionUnit : {}", metricDefinitionUnitDTO);
-        if (metricDefinitionUnitDTO.getId() != null) {
+    public ResponseEntity<MetricDefinitionUnit> createMetricDefinitionUnit(@RequestBody MetricDefinitionUnit metricDefinitionUnit) throws URISyntaxException {
+        log.debug("REST request to save MetricDefinitionUnit : {}", metricDefinitionUnit);
+        if (metricDefinitionUnit.getId() != null) {
             throw new BadRequestAlertException("A new metricDefinitionUnit cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        MetricDefinitionUnitDTO result = metricDefinitionUnitService.save(metricDefinitionUnitDTO);
+        MetricDefinitionUnit result = metricDefinitionUnitRepository.save(metricDefinitionUnit);
         return ResponseEntity.created(new URI("/api/metric-definition-units/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class MetricDefinitionUnitResource {
     /**
      * {@code PUT  /metric-definition-units} : Updates an existing metricDefinitionUnit.
      *
-     * @param metricDefinitionUnitDTO the metricDefinitionUnitDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated metricDefinitionUnitDTO,
-     * or with status {@code 400 (Bad Request)} if the metricDefinitionUnitDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the metricDefinitionUnitDTO couldn't be updated.
+     * @param metricDefinitionUnit the metricDefinitionUnit to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated metricDefinitionUnit,
+     * or with status {@code 400 (Bad Request)} if the metricDefinitionUnit is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the metricDefinitionUnit couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/metric-definition-units")
-    public ResponseEntity<MetricDefinitionUnitDTO> updateMetricDefinitionUnit(@RequestBody MetricDefinitionUnitDTO metricDefinitionUnitDTO) throws URISyntaxException {
-        log.debug("REST request to update MetricDefinitionUnit : {}", metricDefinitionUnitDTO);
-        if (metricDefinitionUnitDTO.getId() == null) {
+    public ResponseEntity<MetricDefinitionUnit> updateMetricDefinitionUnit(@RequestBody MetricDefinitionUnit metricDefinitionUnit) throws URISyntaxException {
+        log.debug("REST request to update MetricDefinitionUnit : {}", metricDefinitionUnit);
+        if (metricDefinitionUnit.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        MetricDefinitionUnitDTO result = metricDefinitionUnitService.save(metricDefinitionUnitDTO);
+        MetricDefinitionUnit result = metricDefinitionUnitRepository.save(metricDefinitionUnit);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, metricDefinitionUnitDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, metricDefinitionUnit.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class MetricDefinitionUnitResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of metricDefinitionUnits in body.
      */
     @GetMapping("/metric-definition-units")
-    public List<MetricDefinitionUnitDTO> getAllMetricDefinitionUnits() {
+    public List<MetricDefinitionUnit> getAllMetricDefinitionUnits() {
         log.debug("REST request to get all MetricDefinitionUnits");
-        return metricDefinitionUnitService.findAll();
+        return metricDefinitionUnitRepository.findAll();
     }
 
     /**
      * {@code GET  /metric-definition-units/:id} : get the "id" metricDefinitionUnit.
      *
-     * @param id the id of the metricDefinitionUnitDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the metricDefinitionUnitDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the metricDefinitionUnit to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the metricDefinitionUnit, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/metric-definition-units/{id}")
-    public ResponseEntity<MetricDefinitionUnitDTO> getMetricDefinitionUnit(@PathVariable Long id) {
+    public ResponseEntity<MetricDefinitionUnit> getMetricDefinitionUnit(@PathVariable Long id) {
         log.debug("REST request to get MetricDefinitionUnit : {}", id);
-        Optional<MetricDefinitionUnitDTO> metricDefinitionUnitDTO = metricDefinitionUnitService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(metricDefinitionUnitDTO);
+        Optional<MetricDefinitionUnit> metricDefinitionUnit = metricDefinitionUnitRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(metricDefinitionUnit);
     }
 
     /**
      * {@code DELETE  /metric-definition-units/:id} : delete the "id" metricDefinitionUnit.
      *
-     * @param id the id of the metricDefinitionUnitDTO to delete.
+     * @param id the id of the metricDefinitionUnit to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/metric-definition-units/{id}")
     public ResponseEntity<Void> deleteMetricDefinitionUnit(@PathVariable Long id) {
         log.debug("REST request to delete MetricDefinitionUnit : {}", id);
-        metricDefinitionUnitService.delete(id);
+        metricDefinitionUnitRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

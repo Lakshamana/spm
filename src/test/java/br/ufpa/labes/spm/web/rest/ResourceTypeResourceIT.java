@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ResourceType;
 import br.ufpa.labes.spm.repository.ResourceTypeRepository;
-import br.ufpa.labes.spm.service.ResourceTypeService;
-import br.ufpa.labes.spm.service.dto.ResourceTypeDTO;
-import br.ufpa.labes.spm.service.mapper.ResourceTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ResourceTypeResourceIT {
     private ResourceTypeRepository resourceTypeRepository;
 
     @Autowired
-    private ResourceTypeMapper resourceTypeMapper;
-
-    @Autowired
-    private ResourceTypeService resourceTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ResourceTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ResourceTypeResource resourceTypeResource = new ResourceTypeResource(resourceTypeService);
+        final ResourceTypeResource resourceTypeResource = new ResourceTypeResource(resourceTypeRepository);
         this.restResourceTypeMockMvc = MockMvcBuilders.standaloneSetup(resourceTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ResourceTypeResourceIT {
         int databaseSizeBeforeCreate = resourceTypeRepository.findAll().size();
 
         // Create the ResourceType
-        ResourceTypeDTO resourceTypeDTO = resourceTypeMapper.toDto(resourceType);
         restResourceTypeMockMvc.perform(post("/api/resource-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceType)))
             .andExpect(status().isCreated());
 
         // Validate the ResourceType in the database
@@ -129,12 +119,11 @@ public class ResourceTypeResourceIT {
 
         // Create the ResourceType with an existing ID
         resourceType.setId(1L);
-        ResourceTypeDTO resourceTypeDTO = resourceTypeMapper.toDto(resourceType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restResourceTypeMockMvc.perform(post("/api/resource-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceType)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourceType in the database
@@ -189,11 +178,10 @@ public class ResourceTypeResourceIT {
         ResourceType updatedResourceType = resourceTypeRepository.findById(resourceType.getId()).get();
         // Disconnect from session so that the updates on updatedResourceType are not directly saved in db
         em.detach(updatedResourceType);
-        ResourceTypeDTO resourceTypeDTO = resourceTypeMapper.toDto(updatedResourceType);
 
         restResourceTypeMockMvc.perform(put("/api/resource-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedResourceType)))
             .andExpect(status().isOk());
 
         // Validate the ResourceType in the database
@@ -208,12 +196,11 @@ public class ResourceTypeResourceIT {
         int databaseSizeBeforeUpdate = resourceTypeRepository.findAll().size();
 
         // Create the ResourceType
-        ResourceTypeDTO resourceTypeDTO = resourceTypeMapper.toDto(resourceType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restResourceTypeMockMvc.perform(put("/api/resource-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceType)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourceType in the database
@@ -252,28 +239,5 @@ public class ResourceTypeResourceIT {
         assertThat(resourceType1).isNotEqualTo(resourceType2);
         resourceType1.setId(null);
         assertThat(resourceType1).isNotEqualTo(resourceType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ResourceTypeDTO.class);
-        ResourceTypeDTO resourceTypeDTO1 = new ResourceTypeDTO();
-        resourceTypeDTO1.setId(1L);
-        ResourceTypeDTO resourceTypeDTO2 = new ResourceTypeDTO();
-        assertThat(resourceTypeDTO1).isNotEqualTo(resourceTypeDTO2);
-        resourceTypeDTO2.setId(resourceTypeDTO1.getId());
-        assertThat(resourceTypeDTO1).isEqualTo(resourceTypeDTO2);
-        resourceTypeDTO2.setId(2L);
-        assertThat(resourceTypeDTO1).isNotEqualTo(resourceTypeDTO2);
-        resourceTypeDTO1.setId(null);
-        assertThat(resourceTypeDTO1).isNotEqualTo(resourceTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(resourceTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(resourceTypeMapper.fromId(null)).isNull();
     }
 }

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AgentHasAbilityService;
+import br.ufpa.labes.spm.domain.AgentHasAbility;
+import br.ufpa.labes.spm.repository.AgentHasAbilityRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AgentHasAbilityDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class AgentHasAbilityResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AgentHasAbilityService agentHasAbilityService;
+    private final AgentHasAbilityRepository agentHasAbilityRepository;
 
-    public AgentHasAbilityResource(AgentHasAbilityService agentHasAbilityService) {
-        this.agentHasAbilityService = agentHasAbilityService;
+    public AgentHasAbilityResource(AgentHasAbilityRepository agentHasAbilityRepository) {
+        this.agentHasAbilityRepository = agentHasAbilityRepository;
     }
 
     /**
      * {@code POST  /agent-has-abilities} : Create a new agentHasAbility.
      *
-     * @param agentHasAbilityDTO the agentHasAbilityDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentHasAbilityDTO, or with status {@code 400 (Bad Request)} if the agentHasAbility has already an ID.
+     * @param agentHasAbility the agentHasAbility to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentHasAbility, or with status {@code 400 (Bad Request)} if the agentHasAbility has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/agent-has-abilities")
-    public ResponseEntity<AgentHasAbilityDTO> createAgentHasAbility(@RequestBody AgentHasAbilityDTO agentHasAbilityDTO) throws URISyntaxException {
-        log.debug("REST request to save AgentHasAbility : {}", agentHasAbilityDTO);
-        if (agentHasAbilityDTO.getId() != null) {
+    public ResponseEntity<AgentHasAbility> createAgentHasAbility(@RequestBody AgentHasAbility agentHasAbility) throws URISyntaxException {
+        log.debug("REST request to save AgentHasAbility : {}", agentHasAbility);
+        if (agentHasAbility.getId() != null) {
             throw new BadRequestAlertException("A new agentHasAbility cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AgentHasAbilityDTO result = agentHasAbilityService.save(agentHasAbilityDTO);
+        AgentHasAbility result = agentHasAbilityRepository.save(agentHasAbility);
         return ResponseEntity.created(new URI("/api/agent-has-abilities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class AgentHasAbilityResource {
     /**
      * {@code PUT  /agent-has-abilities} : Updates an existing agentHasAbility.
      *
-     * @param agentHasAbilityDTO the agentHasAbilityDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentHasAbilityDTO,
-     * or with status {@code 400 (Bad Request)} if the agentHasAbilityDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the agentHasAbilityDTO couldn't be updated.
+     * @param agentHasAbility the agentHasAbility to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentHasAbility,
+     * or with status {@code 400 (Bad Request)} if the agentHasAbility is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the agentHasAbility couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/agent-has-abilities")
-    public ResponseEntity<AgentHasAbilityDTO> updateAgentHasAbility(@RequestBody AgentHasAbilityDTO agentHasAbilityDTO) throws URISyntaxException {
-        log.debug("REST request to update AgentHasAbility : {}", agentHasAbilityDTO);
-        if (agentHasAbilityDTO.getId() == null) {
+    public ResponseEntity<AgentHasAbility> updateAgentHasAbility(@RequestBody AgentHasAbility agentHasAbility) throws URISyntaxException {
+        log.debug("REST request to update AgentHasAbility : {}", agentHasAbility);
+        if (agentHasAbility.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AgentHasAbilityDTO result = agentHasAbilityService.save(agentHasAbilityDTO);
+        AgentHasAbility result = agentHasAbilityRepository.save(agentHasAbility);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentHasAbilityDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentHasAbility.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class AgentHasAbilityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of agentHasAbilities in body.
      */
     @GetMapping("/agent-has-abilities")
-    public List<AgentHasAbilityDTO> getAllAgentHasAbilities() {
+    public List<AgentHasAbility> getAllAgentHasAbilities() {
         log.debug("REST request to get all AgentHasAbilities");
-        return agentHasAbilityService.findAll();
+        return agentHasAbilityRepository.findAll();
     }
 
     /**
      * {@code GET  /agent-has-abilities/:id} : get the "id" agentHasAbility.
      *
-     * @param id the id of the agentHasAbilityDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentHasAbilityDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the agentHasAbility to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentHasAbility, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/agent-has-abilities/{id}")
-    public ResponseEntity<AgentHasAbilityDTO> getAgentHasAbility(@PathVariable Long id) {
+    public ResponseEntity<AgentHasAbility> getAgentHasAbility(@PathVariable Long id) {
         log.debug("REST request to get AgentHasAbility : {}", id);
-        Optional<AgentHasAbilityDTO> agentHasAbilityDTO = agentHasAbilityService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(agentHasAbilityDTO);
+        Optional<AgentHasAbility> agentHasAbility = agentHasAbilityRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(agentHasAbility);
     }
 
     /**
      * {@code DELETE  /agent-has-abilities/:id} : delete the "id" agentHasAbility.
      *
-     * @param id the id of the agentHasAbilityDTO to delete.
+     * @param id the id of the agentHasAbility to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/agent-has-abilities/{id}")
     public ResponseEntity<Void> deleteAgentHasAbility(@PathVariable Long id) {
         log.debug("REST request to delete AgentHasAbility : {}", id);
-        agentHasAbilityService.delete(id);
+        agentHasAbilityRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

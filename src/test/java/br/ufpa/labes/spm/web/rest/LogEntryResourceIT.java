@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.LogEntry;
 import br.ufpa.labes.spm.repository.LogEntryRepository;
-import br.ufpa.labes.spm.service.LogEntryService;
-import br.ufpa.labes.spm.service.dto.LogEntryDTO;
-import br.ufpa.labes.spm.service.mapper.LogEntryMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -57,12 +54,6 @@ public class LogEntryResourceIT {
     private LogEntryRepository logEntryRepository;
 
     @Autowired
-    private LogEntryMapper logEntryMapper;
-
-    @Autowired
-    private LogEntryService logEntryService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -84,7 +75,7 @@ public class LogEntryResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final LogEntryResource logEntryResource = new LogEntryResource(logEntryService);
+        final LogEntryResource logEntryResource = new LogEntryResource(logEntryRepository);
         this.restLogEntryMockMvc = MockMvcBuilders.standaloneSetup(logEntryResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -133,10 +124,9 @@ public class LogEntryResourceIT {
         int databaseSizeBeforeCreate = logEntryRepository.findAll().size();
 
         // Create the LogEntry
-        LogEntryDTO logEntryDTO = logEntryMapper.toDto(logEntry);
         restLogEntryMockMvc.perform(post("/api/log-entries")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(logEntryDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(logEntry)))
             .andExpect(status().isCreated());
 
         // Validate the LogEntry in the database
@@ -156,12 +146,11 @@ public class LogEntryResourceIT {
 
         // Create the LogEntry with an existing ID
         logEntry.setId(1L);
-        LogEntryDTO logEntryDTO = logEntryMapper.toDto(logEntry);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restLogEntryMockMvc.perform(post("/api/log-entries")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(logEntryDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(logEntry)))
             .andExpect(status().isBadRequest());
 
         // Validate the LogEntry in the database
@@ -229,11 +218,10 @@ public class LogEntryResourceIT {
             .operation(UPDATED_OPERATION)
             .className(UPDATED_CLASS_NAME)
             .uid(UPDATED_UID);
-        LogEntryDTO logEntryDTO = logEntryMapper.toDto(updatedLogEntry);
 
         restLogEntryMockMvc.perform(put("/api/log-entries")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(logEntryDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedLogEntry)))
             .andExpect(status().isOk());
 
         // Validate the LogEntry in the database
@@ -252,12 +240,11 @@ public class LogEntryResourceIT {
         int databaseSizeBeforeUpdate = logEntryRepository.findAll().size();
 
         // Create the LogEntry
-        LogEntryDTO logEntryDTO = logEntryMapper.toDto(logEntry);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restLogEntryMockMvc.perform(put("/api/log-entries")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(logEntryDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(logEntry)))
             .andExpect(status().isBadRequest());
 
         // Validate the LogEntry in the database
@@ -296,28 +283,5 @@ public class LogEntryResourceIT {
         assertThat(logEntry1).isNotEqualTo(logEntry2);
         logEntry1.setId(null);
         assertThat(logEntry1).isNotEqualTo(logEntry2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(LogEntryDTO.class);
-        LogEntryDTO logEntryDTO1 = new LogEntryDTO();
-        logEntryDTO1.setId(1L);
-        LogEntryDTO logEntryDTO2 = new LogEntryDTO();
-        assertThat(logEntryDTO1).isNotEqualTo(logEntryDTO2);
-        logEntryDTO2.setId(logEntryDTO1.getId());
-        assertThat(logEntryDTO1).isEqualTo(logEntryDTO2);
-        logEntryDTO2.setId(2L);
-        assertThat(logEntryDTO1).isNotEqualTo(logEntryDTO2);
-        logEntryDTO1.setId(null);
-        assertThat(logEntryDTO1).isNotEqualTo(logEntryDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(logEntryMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(logEntryMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.CompanyUnit;
 import br.ufpa.labes.spm.repository.CompanyUnitRepository;
-import br.ufpa.labes.spm.service.CompanyUnitService;
-import br.ufpa.labes.spm.service.dto.CompanyUnitDTO;
-import br.ufpa.labes.spm.service.mapper.CompanyUnitMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class CompanyUnitResourceIT {
     private CompanyUnitRepository companyUnitRepository;
 
     @Autowired
-    private CompanyUnitMapper companyUnitMapper;
-
-    @Autowired
-    private CompanyUnitService companyUnitService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class CompanyUnitResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CompanyUnitResource companyUnitResource = new CompanyUnitResource(companyUnitService);
+        final CompanyUnitResource companyUnitResource = new CompanyUnitResource(companyUnitRepository);
         this.restCompanyUnitMockMvc = MockMvcBuilders.standaloneSetup(companyUnitResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -126,10 +117,9 @@ public class CompanyUnitResourceIT {
         int databaseSizeBeforeCreate = companyUnitRepository.findAll().size();
 
         // Create the CompanyUnit
-        CompanyUnitDTO companyUnitDTO = companyUnitMapper.toDto(companyUnit);
         restCompanyUnitMockMvc.perform(post("/api/company-units")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(companyUnitDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(companyUnit)))
             .andExpect(status().isCreated());
 
         // Validate the CompanyUnit in the database
@@ -148,12 +138,11 @@ public class CompanyUnitResourceIT {
 
         // Create the CompanyUnit with an existing ID
         companyUnit.setId(1L);
-        CompanyUnitDTO companyUnitDTO = companyUnitMapper.toDto(companyUnit);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCompanyUnitMockMvc.perform(post("/api/company-units")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(companyUnitDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(companyUnit)))
             .andExpect(status().isBadRequest());
 
         // Validate the CompanyUnit in the database
@@ -218,11 +207,10 @@ public class CompanyUnitResourceIT {
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION);
-        CompanyUnitDTO companyUnitDTO = companyUnitMapper.toDto(updatedCompanyUnit);
 
         restCompanyUnitMockMvc.perform(put("/api/company-units")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(companyUnitDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedCompanyUnit)))
             .andExpect(status().isOk());
 
         // Validate the CompanyUnit in the database
@@ -240,12 +228,11 @@ public class CompanyUnitResourceIT {
         int databaseSizeBeforeUpdate = companyUnitRepository.findAll().size();
 
         // Create the CompanyUnit
-        CompanyUnitDTO companyUnitDTO = companyUnitMapper.toDto(companyUnit);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCompanyUnitMockMvc.perform(put("/api/company-units")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(companyUnitDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(companyUnit)))
             .andExpect(status().isBadRequest());
 
         // Validate the CompanyUnit in the database
@@ -284,28 +271,5 @@ public class CompanyUnitResourceIT {
         assertThat(companyUnit1).isNotEqualTo(companyUnit2);
         companyUnit1.setId(null);
         assertThat(companyUnit1).isNotEqualTo(companyUnit2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(CompanyUnitDTO.class);
-        CompanyUnitDTO companyUnitDTO1 = new CompanyUnitDTO();
-        companyUnitDTO1.setId(1L);
-        CompanyUnitDTO companyUnitDTO2 = new CompanyUnitDTO();
-        assertThat(companyUnitDTO1).isNotEqualTo(companyUnitDTO2);
-        companyUnitDTO2.setId(companyUnitDTO1.getId());
-        assertThat(companyUnitDTO1).isEqualTo(companyUnitDTO2);
-        companyUnitDTO2.setId(2L);
-        assertThat(companyUnitDTO1).isNotEqualTo(companyUnitDTO2);
-        companyUnitDTO1.setId(null);
-        assertThat(companyUnitDTO1).isNotEqualTo(companyUnitDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(companyUnitMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(companyUnitMapper.fromId(null)).isNull();
     }
 }

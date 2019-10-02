@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.InstantiationPolicyLog;
 import br.ufpa.labes.spm.repository.InstantiationPolicyLogRepository;
-import br.ufpa.labes.spm.service.InstantiationPolicyLogService;
-import br.ufpa.labes.spm.service.dto.InstantiationPolicyLogDTO;
-import br.ufpa.labes.spm.service.mapper.InstantiationPolicyLogMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class InstantiationPolicyLogResourceIT {
     private InstantiationPolicyLogRepository instantiationPolicyLogRepository;
 
     @Autowired
-    private InstantiationPolicyLogMapper instantiationPolicyLogMapper;
-
-    @Autowired
-    private InstantiationPolicyLogService instantiationPolicyLogService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class InstantiationPolicyLogResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final InstantiationPolicyLogResource instantiationPolicyLogResource = new InstantiationPolicyLogResource(instantiationPolicyLogService);
+        final InstantiationPolicyLogResource instantiationPolicyLogResource = new InstantiationPolicyLogResource(instantiationPolicyLogRepository);
         this.restInstantiationPolicyLogMockMvc = MockMvcBuilders.standaloneSetup(instantiationPolicyLogResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class InstantiationPolicyLogResourceIT {
         int databaseSizeBeforeCreate = instantiationPolicyLogRepository.findAll().size();
 
         // Create the InstantiationPolicyLog
-        InstantiationPolicyLogDTO instantiationPolicyLogDTO = instantiationPolicyLogMapper.toDto(instantiationPolicyLog);
         restInstantiationPolicyLogMockMvc.perform(post("/api/instantiation-policy-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(instantiationPolicyLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(instantiationPolicyLog)))
             .andExpect(status().isCreated());
 
         // Validate the InstantiationPolicyLog in the database
@@ -129,12 +119,11 @@ public class InstantiationPolicyLogResourceIT {
 
         // Create the InstantiationPolicyLog with an existing ID
         instantiationPolicyLog.setId(1L);
-        InstantiationPolicyLogDTO instantiationPolicyLogDTO = instantiationPolicyLogMapper.toDto(instantiationPolicyLog);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInstantiationPolicyLogMockMvc.perform(post("/api/instantiation-policy-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(instantiationPolicyLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(instantiationPolicyLog)))
             .andExpect(status().isBadRequest());
 
         // Validate the InstantiationPolicyLog in the database
@@ -189,11 +178,10 @@ public class InstantiationPolicyLogResourceIT {
         InstantiationPolicyLog updatedInstantiationPolicyLog = instantiationPolicyLogRepository.findById(instantiationPolicyLog.getId()).get();
         // Disconnect from session so that the updates on updatedInstantiationPolicyLog are not directly saved in db
         em.detach(updatedInstantiationPolicyLog);
-        InstantiationPolicyLogDTO instantiationPolicyLogDTO = instantiationPolicyLogMapper.toDto(updatedInstantiationPolicyLog);
 
         restInstantiationPolicyLogMockMvc.perform(put("/api/instantiation-policy-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(instantiationPolicyLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedInstantiationPolicyLog)))
             .andExpect(status().isOk());
 
         // Validate the InstantiationPolicyLog in the database
@@ -208,12 +196,11 @@ public class InstantiationPolicyLogResourceIT {
         int databaseSizeBeforeUpdate = instantiationPolicyLogRepository.findAll().size();
 
         // Create the InstantiationPolicyLog
-        InstantiationPolicyLogDTO instantiationPolicyLogDTO = instantiationPolicyLogMapper.toDto(instantiationPolicyLog);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInstantiationPolicyLogMockMvc.perform(put("/api/instantiation-policy-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(instantiationPolicyLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(instantiationPolicyLog)))
             .andExpect(status().isBadRequest());
 
         // Validate the InstantiationPolicyLog in the database
@@ -252,28 +239,5 @@ public class InstantiationPolicyLogResourceIT {
         assertThat(instantiationPolicyLog1).isNotEqualTo(instantiationPolicyLog2);
         instantiationPolicyLog1.setId(null);
         assertThat(instantiationPolicyLog1).isNotEqualTo(instantiationPolicyLog2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(InstantiationPolicyLogDTO.class);
-        InstantiationPolicyLogDTO instantiationPolicyLogDTO1 = new InstantiationPolicyLogDTO();
-        instantiationPolicyLogDTO1.setId(1L);
-        InstantiationPolicyLogDTO instantiationPolicyLogDTO2 = new InstantiationPolicyLogDTO();
-        assertThat(instantiationPolicyLogDTO1).isNotEqualTo(instantiationPolicyLogDTO2);
-        instantiationPolicyLogDTO2.setId(instantiationPolicyLogDTO1.getId());
-        assertThat(instantiationPolicyLogDTO1).isEqualTo(instantiationPolicyLogDTO2);
-        instantiationPolicyLogDTO2.setId(2L);
-        assertThat(instantiationPolicyLogDTO1).isNotEqualTo(instantiationPolicyLogDTO2);
-        instantiationPolicyLogDTO1.setId(null);
-        assertThat(instantiationPolicyLogDTO1).isNotEqualTo(instantiationPolicyLogDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(instantiationPolicyLogMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(instantiationPolicyLogMapper.fromId(null)).isNull();
     }
 }

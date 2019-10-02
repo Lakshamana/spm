@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.VCSRepository;
 import br.ufpa.labes.spm.repository.VCSRepositoryRepository;
-import br.ufpa.labes.spm.service.VCSRepositoryService;
-import br.ufpa.labes.spm.service.dto.VCSRepositoryDTO;
-import br.ufpa.labes.spm.service.mapper.VCSRepositoryMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -69,12 +66,6 @@ public class VCSRepositoryResourceIT {
     private VCSRepositoryRepository vCSRepositoryRepository;
 
     @Autowired
-    private VCSRepositoryMapper vCSRepositoryMapper;
-
-    @Autowired
-    private VCSRepositoryService vCSRepositoryService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -96,7 +87,7 @@ public class VCSRepositoryResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final VCSRepositoryResource vCSRepositoryResource = new VCSRepositoryResource(vCSRepositoryService);
+        final VCSRepositoryResource vCSRepositoryResource = new VCSRepositoryResource(vCSRepositoryRepository);
         this.restVCSRepositoryMockMvc = MockMvcBuilders.standaloneSetup(vCSRepositoryResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -155,10 +146,9 @@ public class VCSRepositoryResourceIT {
         int databaseSizeBeforeCreate = vCSRepositoryRepository.findAll().size();
 
         // Create the VCSRepository
-        VCSRepositoryDTO vCSRepositoryDTO = vCSRepositoryMapper.toDto(vCSRepository);
         restVCSRepositoryMockMvc.perform(post("/api/vcs-repositories")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(vCSRepositoryDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(vCSRepository)))
             .andExpect(status().isCreated());
 
         // Validate the VCSRepository in the database
@@ -183,12 +173,11 @@ public class VCSRepositoryResourceIT {
 
         // Create the VCSRepository with an existing ID
         vCSRepository.setId(1L);
-        VCSRepositoryDTO vCSRepositoryDTO = vCSRepositoryMapper.toDto(vCSRepository);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restVCSRepositoryMockMvc.perform(post("/api/vcs-repositories")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(vCSRepositoryDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(vCSRepository)))
             .andExpect(status().isBadRequest());
 
         // Validate the VCSRepository in the database
@@ -271,11 +260,10 @@ public class VCSRepositoryResourceIT {
             .username(UPDATED_USERNAME)
             .password(UPDATED_PASSWORD)
             .defaultUser(UPDATED_DEFAULT_USER);
-        VCSRepositoryDTO vCSRepositoryDTO = vCSRepositoryMapper.toDto(updatedVCSRepository);
 
         restVCSRepositoryMockMvc.perform(put("/api/vcs-repositories")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(vCSRepositoryDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedVCSRepository)))
             .andExpect(status().isOk());
 
         // Validate the VCSRepository in the database
@@ -299,12 +287,11 @@ public class VCSRepositoryResourceIT {
         int databaseSizeBeforeUpdate = vCSRepositoryRepository.findAll().size();
 
         // Create the VCSRepository
-        VCSRepositoryDTO vCSRepositoryDTO = vCSRepositoryMapper.toDto(vCSRepository);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restVCSRepositoryMockMvc.perform(put("/api/vcs-repositories")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(vCSRepositoryDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(vCSRepository)))
             .andExpect(status().isBadRequest());
 
         // Validate the VCSRepository in the database
@@ -343,28 +330,5 @@ public class VCSRepositoryResourceIT {
         assertThat(vCSRepository1).isNotEqualTo(vCSRepository2);
         vCSRepository1.setId(null);
         assertThat(vCSRepository1).isNotEqualTo(vCSRepository2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(VCSRepositoryDTO.class);
-        VCSRepositoryDTO vCSRepositoryDTO1 = new VCSRepositoryDTO();
-        vCSRepositoryDTO1.setId(1L);
-        VCSRepositoryDTO vCSRepositoryDTO2 = new VCSRepositoryDTO();
-        assertThat(vCSRepositoryDTO1).isNotEqualTo(vCSRepositoryDTO2);
-        vCSRepositoryDTO2.setId(vCSRepositoryDTO1.getId());
-        assertThat(vCSRepositoryDTO1).isEqualTo(vCSRepositoryDTO2);
-        vCSRepositoryDTO2.setId(2L);
-        assertThat(vCSRepositoryDTO1).isNotEqualTo(vCSRepositoryDTO2);
-        vCSRepositoryDTO1.setId(null);
-        assertThat(vCSRepositoryDTO1).isNotEqualTo(vCSRepositoryDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(vCSRepositoryMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(vCSRepositoryMapper.fromId(null)).isNull();
     }
 }

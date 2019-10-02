@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ActivityType;
 import br.ufpa.labes.spm.repository.ActivityTypeRepository;
-import br.ufpa.labes.spm.service.ActivityTypeService;
-import br.ufpa.labes.spm.service.dto.ActivityTypeDTO;
-import br.ufpa.labes.spm.service.mapper.ActivityTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ActivityTypeResourceIT {
     private ActivityTypeRepository activityTypeRepository;
 
     @Autowired
-    private ActivityTypeMapper activityTypeMapper;
-
-    @Autowired
-    private ActivityTypeService activityTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ActivityTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ActivityTypeResource activityTypeResource = new ActivityTypeResource(activityTypeService);
+        final ActivityTypeResource activityTypeResource = new ActivityTypeResource(activityTypeRepository);
         this.restActivityTypeMockMvc = MockMvcBuilders.standaloneSetup(activityTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ActivityTypeResourceIT {
         int databaseSizeBeforeCreate = activityTypeRepository.findAll().size();
 
         // Create the ActivityType
-        ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(activityType);
         restActivityTypeMockMvc.perform(post("/api/activity-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityType)))
             .andExpect(status().isCreated());
 
         // Validate the ActivityType in the database
@@ -129,12 +119,11 @@ public class ActivityTypeResourceIT {
 
         // Create the ActivityType with an existing ID
         activityType.setId(1L);
-        ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(activityType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restActivityTypeMockMvc.perform(post("/api/activity-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityType)))
             .andExpect(status().isBadRequest());
 
         // Validate the ActivityType in the database
@@ -189,11 +178,10 @@ public class ActivityTypeResourceIT {
         ActivityType updatedActivityType = activityTypeRepository.findById(activityType.getId()).get();
         // Disconnect from session so that the updates on updatedActivityType are not directly saved in db
         em.detach(updatedActivityType);
-        ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(updatedActivityType);
 
         restActivityTypeMockMvc.perform(put("/api/activity-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedActivityType)))
             .andExpect(status().isOk());
 
         // Validate the ActivityType in the database
@@ -208,12 +196,11 @@ public class ActivityTypeResourceIT {
         int databaseSizeBeforeUpdate = activityTypeRepository.findAll().size();
 
         // Create the ActivityType
-        ActivityTypeDTO activityTypeDTO = activityTypeMapper.toDto(activityType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restActivityTypeMockMvc.perform(put("/api/activity-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityType)))
             .andExpect(status().isBadRequest());
 
         // Validate the ActivityType in the database
@@ -252,28 +239,5 @@ public class ActivityTypeResourceIT {
         assertThat(activityType1).isNotEqualTo(activityType2);
         activityType1.setId(null);
         assertThat(activityType1).isNotEqualTo(activityType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ActivityTypeDTO.class);
-        ActivityTypeDTO activityTypeDTO1 = new ActivityTypeDTO();
-        activityTypeDTO1.setId(1L);
-        ActivityTypeDTO activityTypeDTO2 = new ActivityTypeDTO();
-        assertThat(activityTypeDTO1).isNotEqualTo(activityTypeDTO2);
-        activityTypeDTO2.setId(activityTypeDTO1.getId());
-        assertThat(activityTypeDTO1).isEqualTo(activityTypeDTO2);
-        activityTypeDTO2.setId(2L);
-        assertThat(activityTypeDTO1).isNotEqualTo(activityTypeDTO2);
-        activityTypeDTO1.setId(null);
-        assertThat(activityTypeDTO1).isNotEqualTo(activityTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(activityTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(activityTypeMapper.fromId(null)).isNull();
     }
 }

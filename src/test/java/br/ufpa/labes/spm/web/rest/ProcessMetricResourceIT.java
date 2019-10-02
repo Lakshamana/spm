@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ProcessMetric;
 import br.ufpa.labes.spm.repository.ProcessMetricRepository;
-import br.ufpa.labes.spm.service.ProcessMetricService;
-import br.ufpa.labes.spm.service.dto.ProcessMetricDTO;
-import br.ufpa.labes.spm.service.mapper.ProcessMetricMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ProcessMetricResourceIT {
     private ProcessMetricRepository processMetricRepository;
 
     @Autowired
-    private ProcessMetricMapper processMetricMapper;
-
-    @Autowired
-    private ProcessMetricService processMetricService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ProcessMetricResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ProcessMetricResource processMetricResource = new ProcessMetricResource(processMetricService);
+        final ProcessMetricResource processMetricResource = new ProcessMetricResource(processMetricRepository);
         this.restProcessMetricMockMvc = MockMvcBuilders.standaloneSetup(processMetricResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ProcessMetricResourceIT {
         int databaseSizeBeforeCreate = processMetricRepository.findAll().size();
 
         // Create the ProcessMetric
-        ProcessMetricDTO processMetricDTO = processMetricMapper.toDto(processMetric);
         restProcessMetricMockMvc.perform(post("/api/process-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processMetric)))
             .andExpect(status().isCreated());
 
         // Validate the ProcessMetric in the database
@@ -129,12 +119,11 @@ public class ProcessMetricResourceIT {
 
         // Create the ProcessMetric with an existing ID
         processMetric.setId(1L);
-        ProcessMetricDTO processMetricDTO = processMetricMapper.toDto(processMetric);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProcessMetricMockMvc.perform(post("/api/process-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the ProcessMetric in the database
@@ -189,11 +178,10 @@ public class ProcessMetricResourceIT {
         ProcessMetric updatedProcessMetric = processMetricRepository.findById(processMetric.getId()).get();
         // Disconnect from session so that the updates on updatedProcessMetric are not directly saved in db
         em.detach(updatedProcessMetric);
-        ProcessMetricDTO processMetricDTO = processMetricMapper.toDto(updatedProcessMetric);
 
         restProcessMetricMockMvc.perform(put("/api/process-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedProcessMetric)))
             .andExpect(status().isOk());
 
         // Validate the ProcessMetric in the database
@@ -208,12 +196,11 @@ public class ProcessMetricResourceIT {
         int databaseSizeBeforeUpdate = processMetricRepository.findAll().size();
 
         // Create the ProcessMetric
-        ProcessMetricDTO processMetricDTO = processMetricMapper.toDto(processMetric);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProcessMetricMockMvc.perform(put("/api/process-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the ProcessMetric in the database
@@ -252,28 +239,5 @@ public class ProcessMetricResourceIT {
         assertThat(processMetric1).isNotEqualTo(processMetric2);
         processMetric1.setId(null);
         assertThat(processMetric1).isNotEqualTo(processMetric2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProcessMetricDTO.class);
-        ProcessMetricDTO processMetricDTO1 = new ProcessMetricDTO();
-        processMetricDTO1.setId(1L);
-        ProcessMetricDTO processMetricDTO2 = new ProcessMetricDTO();
-        assertThat(processMetricDTO1).isNotEqualTo(processMetricDTO2);
-        processMetricDTO2.setId(processMetricDTO1.getId());
-        assertThat(processMetricDTO1).isEqualTo(processMetricDTO2);
-        processMetricDTO2.setId(2L);
-        assertThat(processMetricDTO1).isNotEqualTo(processMetricDTO2);
-        processMetricDTO1.setId(null);
-        assertThat(processMetricDTO1).isNotEqualTo(processMetricDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(processMetricMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(processMetricMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Automatic;
 import br.ufpa.labes.spm.repository.AutomaticRepository;
-import br.ufpa.labes.spm.service.AutomaticService;
-import br.ufpa.labes.spm.service.dto.AutomaticDTO;
-import br.ufpa.labes.spm.service.mapper.AutomaticMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class AutomaticResourceIT {
     private AutomaticRepository automaticRepository;
 
     @Autowired
-    private AutomaticMapper automaticMapper;
-
-    @Autowired
-    private AutomaticService automaticService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class AutomaticResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AutomaticResource automaticResource = new AutomaticResource(automaticService);
+        final AutomaticResource automaticResource = new AutomaticResource(automaticRepository);
         this.restAutomaticMockMvc = MockMvcBuilders.standaloneSetup(automaticResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class AutomaticResourceIT {
         int databaseSizeBeforeCreate = automaticRepository.findAll().size();
 
         // Create the Automatic
-        AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
         restAutomaticMockMvc.perform(post("/api/automatics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(automatic)))
             .andExpect(status().isCreated());
 
         // Validate the Automatic in the database
@@ -129,12 +119,11 @@ public class AutomaticResourceIT {
 
         // Create the Automatic with an existing ID
         automatic.setId(1L);
-        AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAutomaticMockMvc.perform(post("/api/automatics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(automatic)))
             .andExpect(status().isBadRequest());
 
         // Validate the Automatic in the database
@@ -189,11 +178,10 @@ public class AutomaticResourceIT {
         Automatic updatedAutomatic = automaticRepository.findById(automatic.getId()).get();
         // Disconnect from session so that the updates on updatedAutomatic are not directly saved in db
         em.detach(updatedAutomatic);
-        AutomaticDTO automaticDTO = automaticMapper.toDto(updatedAutomatic);
 
         restAutomaticMockMvc.perform(put("/api/automatics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAutomatic)))
             .andExpect(status().isOk());
 
         // Validate the Automatic in the database
@@ -208,12 +196,11 @@ public class AutomaticResourceIT {
         int databaseSizeBeforeUpdate = automaticRepository.findAll().size();
 
         // Create the Automatic
-        AutomaticDTO automaticDTO = automaticMapper.toDto(automatic);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAutomaticMockMvc.perform(put("/api/automatics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(automaticDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(automatic)))
             .andExpect(status().isBadRequest());
 
         // Validate the Automatic in the database
@@ -252,28 +239,5 @@ public class AutomaticResourceIT {
         assertThat(automatic1).isNotEqualTo(automatic2);
         automatic1.setId(null);
         assertThat(automatic1).isNotEqualTo(automatic2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AutomaticDTO.class);
-        AutomaticDTO automaticDTO1 = new AutomaticDTO();
-        automaticDTO1.setId(1L);
-        AutomaticDTO automaticDTO2 = new AutomaticDTO();
-        assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
-        automaticDTO2.setId(automaticDTO1.getId());
-        assertThat(automaticDTO1).isEqualTo(automaticDTO2);
-        automaticDTO2.setId(2L);
-        assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
-        automaticDTO1.setId(null);
-        assertThat(automaticDTO1).isNotEqualTo(automaticDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(automaticMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(automaticMapper.fromId(null)).isNull();
     }
 }

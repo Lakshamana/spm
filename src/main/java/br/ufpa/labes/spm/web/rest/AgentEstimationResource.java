@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AgentEstimationService;
+import br.ufpa.labes.spm.domain.AgentEstimation;
+import br.ufpa.labes.spm.repository.AgentEstimationRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AgentEstimationDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class AgentEstimationResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AgentEstimationService agentEstimationService;
+    private final AgentEstimationRepository agentEstimationRepository;
 
-    public AgentEstimationResource(AgentEstimationService agentEstimationService) {
-        this.agentEstimationService = agentEstimationService;
+    public AgentEstimationResource(AgentEstimationRepository agentEstimationRepository) {
+        this.agentEstimationRepository = agentEstimationRepository;
     }
 
     /**
      * {@code POST  /agent-estimations} : Create a new agentEstimation.
      *
-     * @param agentEstimationDTO the agentEstimationDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentEstimationDTO, or with status {@code 400 (Bad Request)} if the agentEstimation has already an ID.
+     * @param agentEstimation the agentEstimation to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentEstimation, or with status {@code 400 (Bad Request)} if the agentEstimation has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/agent-estimations")
-    public ResponseEntity<AgentEstimationDTO> createAgentEstimation(@RequestBody AgentEstimationDTO agentEstimationDTO) throws URISyntaxException {
-        log.debug("REST request to save AgentEstimation : {}", agentEstimationDTO);
-        if (agentEstimationDTO.getId() != null) {
+    public ResponseEntity<AgentEstimation> createAgentEstimation(@RequestBody AgentEstimation agentEstimation) throws URISyntaxException {
+        log.debug("REST request to save AgentEstimation : {}", agentEstimation);
+        if (agentEstimation.getId() != null) {
             throw new BadRequestAlertException("A new agentEstimation cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AgentEstimationDTO result = agentEstimationService.save(agentEstimationDTO);
+        AgentEstimation result = agentEstimationRepository.save(agentEstimation);
         return ResponseEntity.created(new URI("/api/agent-estimations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class AgentEstimationResource {
     /**
      * {@code PUT  /agent-estimations} : Updates an existing agentEstimation.
      *
-     * @param agentEstimationDTO the agentEstimationDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentEstimationDTO,
-     * or with status {@code 400 (Bad Request)} if the agentEstimationDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the agentEstimationDTO couldn't be updated.
+     * @param agentEstimation the agentEstimation to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentEstimation,
+     * or with status {@code 400 (Bad Request)} if the agentEstimation is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the agentEstimation couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/agent-estimations")
-    public ResponseEntity<AgentEstimationDTO> updateAgentEstimation(@RequestBody AgentEstimationDTO agentEstimationDTO) throws URISyntaxException {
-        log.debug("REST request to update AgentEstimation : {}", agentEstimationDTO);
-        if (agentEstimationDTO.getId() == null) {
+    public ResponseEntity<AgentEstimation> updateAgentEstimation(@RequestBody AgentEstimation agentEstimation) throws URISyntaxException {
+        log.debug("REST request to update AgentEstimation : {}", agentEstimation);
+        if (agentEstimation.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AgentEstimationDTO result = agentEstimationService.save(agentEstimationDTO);
+        AgentEstimation result = agentEstimationRepository.save(agentEstimation);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentEstimationDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentEstimation.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class AgentEstimationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of agentEstimations in body.
      */
     @GetMapping("/agent-estimations")
-    public List<AgentEstimationDTO> getAllAgentEstimations() {
+    public List<AgentEstimation> getAllAgentEstimations() {
         log.debug("REST request to get all AgentEstimations");
-        return agentEstimationService.findAll();
+        return agentEstimationRepository.findAll();
     }
 
     /**
      * {@code GET  /agent-estimations/:id} : get the "id" agentEstimation.
      *
-     * @param id the id of the agentEstimationDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentEstimationDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the agentEstimation to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentEstimation, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/agent-estimations/{id}")
-    public ResponseEntity<AgentEstimationDTO> getAgentEstimation(@PathVariable Long id) {
+    public ResponseEntity<AgentEstimation> getAgentEstimation(@PathVariable Long id) {
         log.debug("REST request to get AgentEstimation : {}", id);
-        Optional<AgentEstimationDTO> agentEstimationDTO = agentEstimationService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(agentEstimationDTO);
+        Optional<AgentEstimation> agentEstimation = agentEstimationRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(agentEstimation);
     }
 
     /**
      * {@code DELETE  /agent-estimations/:id} : delete the "id" agentEstimation.
      *
-     * @param id the id of the agentEstimationDTO to delete.
+     * @param id the id of the agentEstimation to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/agent-estimations/{id}")
     public ResponseEntity<Void> deleteAgentEstimation(@PathVariable Long id) {
         log.debug("REST request to delete AgentEstimation : {}", id);
-        agentEstimationService.delete(id);
+        agentEstimationRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

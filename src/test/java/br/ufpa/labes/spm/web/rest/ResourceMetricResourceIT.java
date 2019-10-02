@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ResourceMetric;
 import br.ufpa.labes.spm.repository.ResourceMetricRepository;
-import br.ufpa.labes.spm.service.ResourceMetricService;
-import br.ufpa.labes.spm.service.dto.ResourceMetricDTO;
-import br.ufpa.labes.spm.service.mapper.ResourceMetricMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ResourceMetricResourceIT {
     private ResourceMetricRepository resourceMetricRepository;
 
     @Autowired
-    private ResourceMetricMapper resourceMetricMapper;
-
-    @Autowired
-    private ResourceMetricService resourceMetricService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ResourceMetricResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ResourceMetricResource resourceMetricResource = new ResourceMetricResource(resourceMetricService);
+        final ResourceMetricResource resourceMetricResource = new ResourceMetricResource(resourceMetricRepository);
         this.restResourceMetricMockMvc = MockMvcBuilders.standaloneSetup(resourceMetricResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ResourceMetricResourceIT {
         int databaseSizeBeforeCreate = resourceMetricRepository.findAll().size();
 
         // Create the ResourceMetric
-        ResourceMetricDTO resourceMetricDTO = resourceMetricMapper.toDto(resourceMetric);
         restResourceMetricMockMvc.perform(post("/api/resource-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceMetric)))
             .andExpect(status().isCreated());
 
         // Validate the ResourceMetric in the database
@@ -129,12 +119,11 @@ public class ResourceMetricResourceIT {
 
         // Create the ResourceMetric with an existing ID
         resourceMetric.setId(1L);
-        ResourceMetricDTO resourceMetricDTO = resourceMetricMapper.toDto(resourceMetric);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restResourceMetricMockMvc.perform(post("/api/resource-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourceMetric in the database
@@ -189,11 +178,10 @@ public class ResourceMetricResourceIT {
         ResourceMetric updatedResourceMetric = resourceMetricRepository.findById(resourceMetric.getId()).get();
         // Disconnect from session so that the updates on updatedResourceMetric are not directly saved in db
         em.detach(updatedResourceMetric);
-        ResourceMetricDTO resourceMetricDTO = resourceMetricMapper.toDto(updatedResourceMetric);
 
         restResourceMetricMockMvc.perform(put("/api/resource-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedResourceMetric)))
             .andExpect(status().isOk());
 
         // Validate the ResourceMetric in the database
@@ -208,12 +196,11 @@ public class ResourceMetricResourceIT {
         int databaseSizeBeforeUpdate = resourceMetricRepository.findAll().size();
 
         // Create the ResourceMetric
-        ResourceMetricDTO resourceMetricDTO = resourceMetricMapper.toDto(resourceMetric);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restResourceMetricMockMvc.perform(put("/api/resource-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourceMetric in the database
@@ -252,28 +239,5 @@ public class ResourceMetricResourceIT {
         assertThat(resourceMetric1).isNotEqualTo(resourceMetric2);
         resourceMetric1.setId(null);
         assertThat(resourceMetric1).isNotEqualTo(resourceMetric2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ResourceMetricDTO.class);
-        ResourceMetricDTO resourceMetricDTO1 = new ResourceMetricDTO();
-        resourceMetricDTO1.setId(1L);
-        ResourceMetricDTO resourceMetricDTO2 = new ResourceMetricDTO();
-        assertThat(resourceMetricDTO1).isNotEqualTo(resourceMetricDTO2);
-        resourceMetricDTO2.setId(resourceMetricDTO1.getId());
-        assertThat(resourceMetricDTO1).isEqualTo(resourceMetricDTO2);
-        resourceMetricDTO2.setId(2L);
-        assertThat(resourceMetricDTO1).isNotEqualTo(resourceMetricDTO2);
-        resourceMetricDTO1.setId(null);
-        assertThat(resourceMetricDTO1).isNotEqualTo(resourceMetricDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(resourceMetricMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(resourceMetricMapper.fromId(null)).isNull();
     }
 }

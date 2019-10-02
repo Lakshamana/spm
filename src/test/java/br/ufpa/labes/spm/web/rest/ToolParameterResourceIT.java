@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ToolParameter;
 import br.ufpa.labes.spm.repository.ToolParameterRepository;
-import br.ufpa.labes.spm.service.ToolParameterService;
-import br.ufpa.labes.spm.service.dto.ToolParameterDTO;
-import br.ufpa.labes.spm.service.mapper.ToolParameterMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +45,6 @@ public class ToolParameterResourceIT {
     private ToolParameterRepository toolParameterRepository;
 
     @Autowired
-    private ToolParameterMapper toolParameterMapper;
-
-    @Autowired
-    private ToolParameterService toolParameterService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +66,7 @@ public class ToolParameterResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ToolParameterResource toolParameterResource = new ToolParameterResource(toolParameterService);
+        final ToolParameterResource toolParameterResource = new ToolParameterResource(toolParameterRepository);
         this.restToolParameterMockMvc = MockMvcBuilders.standaloneSetup(toolParameterResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,10 +111,9 @@ public class ToolParameterResourceIT {
         int databaseSizeBeforeCreate = toolParameterRepository.findAll().size();
 
         // Create the ToolParameter
-        ToolParameterDTO toolParameterDTO = toolParameterMapper.toDto(toolParameter);
         restToolParameterMockMvc.perform(post("/api/tool-parameters")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolParameterDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(toolParameter)))
             .andExpect(status().isCreated());
 
         // Validate the ToolParameter in the database
@@ -141,12 +131,11 @@ public class ToolParameterResourceIT {
 
         // Create the ToolParameter with an existing ID
         toolParameter.setId(1L);
-        ToolParameterDTO toolParameterDTO = toolParameterMapper.toDto(toolParameter);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restToolParameterMockMvc.perform(post("/api/tool-parameters")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolParameterDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(toolParameter)))
             .andExpect(status().isBadRequest());
 
         // Validate the ToolParameter in the database
@@ -208,11 +197,10 @@ public class ToolParameterResourceIT {
         updatedToolParameter
             .label(UPDATED_LABEL)
             .separatorSymbol(UPDATED_SEPARATOR_SYMBOL);
-        ToolParameterDTO toolParameterDTO = toolParameterMapper.toDto(updatedToolParameter);
 
         restToolParameterMockMvc.perform(put("/api/tool-parameters")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolParameterDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedToolParameter)))
             .andExpect(status().isOk());
 
         // Validate the ToolParameter in the database
@@ -229,12 +217,11 @@ public class ToolParameterResourceIT {
         int databaseSizeBeforeUpdate = toolParameterRepository.findAll().size();
 
         // Create the ToolParameter
-        ToolParameterDTO toolParameterDTO = toolParameterMapper.toDto(toolParameter);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restToolParameterMockMvc.perform(put("/api/tool-parameters")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolParameterDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(toolParameter)))
             .andExpect(status().isBadRequest());
 
         // Validate the ToolParameter in the database
@@ -273,28 +260,5 @@ public class ToolParameterResourceIT {
         assertThat(toolParameter1).isNotEqualTo(toolParameter2);
         toolParameter1.setId(null);
         assertThat(toolParameter1).isNotEqualTo(toolParameter2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ToolParameterDTO.class);
-        ToolParameterDTO toolParameterDTO1 = new ToolParameterDTO();
-        toolParameterDTO1.setId(1L);
-        ToolParameterDTO toolParameterDTO2 = new ToolParameterDTO();
-        assertThat(toolParameterDTO1).isNotEqualTo(toolParameterDTO2);
-        toolParameterDTO2.setId(toolParameterDTO1.getId());
-        assertThat(toolParameterDTO1).isEqualTo(toolParameterDTO2);
-        toolParameterDTO2.setId(2L);
-        assertThat(toolParameterDTO1).isNotEqualTo(toolParameterDTO2);
-        toolParameterDTO1.setId(null);
-        assertThat(toolParameterDTO1).isNotEqualTo(toolParameterDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(toolParameterMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(toolParameterMapper.fromId(null)).isNull();
     }
 }

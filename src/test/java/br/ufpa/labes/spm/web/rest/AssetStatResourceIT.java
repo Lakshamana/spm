@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AssetStat;
 import br.ufpa.labes.spm.repository.AssetStatRepository;
-import br.ufpa.labes.spm.service.AssetStatService;
-import br.ufpa.labes.spm.service.dto.AssetStatDTO;
-import br.ufpa.labes.spm.service.mapper.AssetStatMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class AssetStatResourceIT {
     private AssetStatRepository assetStatRepository;
 
     @Autowired
-    private AssetStatMapper assetStatMapper;
-
-    @Autowired
-    private AssetStatService assetStatService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class AssetStatResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AssetStatResource assetStatResource = new AssetStatResource(assetStatService);
+        final AssetStatResource assetStatResource = new AssetStatResource(assetStatRepository);
         this.restAssetStatMockMvc = MockMvcBuilders.standaloneSetup(assetStatResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class AssetStatResourceIT {
         int databaseSizeBeforeCreate = assetStatRepository.findAll().size();
 
         // Create the AssetStat
-        AssetStatDTO assetStatDTO = assetStatMapper.toDto(assetStat);
         restAssetStatMockMvc.perform(post("/api/asset-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assetStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(assetStat)))
             .andExpect(status().isCreated());
 
         // Validate the AssetStat in the database
@@ -129,12 +119,11 @@ public class AssetStatResourceIT {
 
         // Create the AssetStat with an existing ID
         assetStat.setId(1L);
-        AssetStatDTO assetStatDTO = assetStatMapper.toDto(assetStat);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAssetStatMockMvc.perform(post("/api/asset-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assetStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(assetStat)))
             .andExpect(status().isBadRequest());
 
         // Validate the AssetStat in the database
@@ -189,11 +178,10 @@ public class AssetStatResourceIT {
         AssetStat updatedAssetStat = assetStatRepository.findById(assetStat.getId()).get();
         // Disconnect from session so that the updates on updatedAssetStat are not directly saved in db
         em.detach(updatedAssetStat);
-        AssetStatDTO assetStatDTO = assetStatMapper.toDto(updatedAssetStat);
 
         restAssetStatMockMvc.perform(put("/api/asset-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assetStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAssetStat)))
             .andExpect(status().isOk());
 
         // Validate the AssetStat in the database
@@ -208,12 +196,11 @@ public class AssetStatResourceIT {
         int databaseSizeBeforeUpdate = assetStatRepository.findAll().size();
 
         // Create the AssetStat
-        AssetStatDTO assetStatDTO = assetStatMapper.toDto(assetStat);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAssetStatMockMvc.perform(put("/api/asset-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assetStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(assetStat)))
             .andExpect(status().isBadRequest());
 
         // Validate the AssetStat in the database
@@ -252,28 +239,5 @@ public class AssetStatResourceIT {
         assertThat(assetStat1).isNotEqualTo(assetStat2);
         assetStat1.setId(null);
         assertThat(assetStat1).isNotEqualTo(assetStat2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AssetStatDTO.class);
-        AssetStatDTO assetStatDTO1 = new AssetStatDTO();
-        assetStatDTO1.setId(1L);
-        AssetStatDTO assetStatDTO2 = new AssetStatDTO();
-        assertThat(assetStatDTO1).isNotEqualTo(assetStatDTO2);
-        assetStatDTO2.setId(assetStatDTO1.getId());
-        assertThat(assetStatDTO1).isEqualTo(assetStatDTO2);
-        assetStatDTO2.setId(2L);
-        assertThat(assetStatDTO1).isNotEqualTo(assetStatDTO2);
-        assetStatDTO1.setId(null);
-        assertThat(assetStatDTO1).isNotEqualTo(assetStatDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(assetStatMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(assetStatMapper.fromId(null)).isNull();
     }
 }

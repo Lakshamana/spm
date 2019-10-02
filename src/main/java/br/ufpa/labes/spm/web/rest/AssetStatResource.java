@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AssetStatService;
+import br.ufpa.labes.spm.domain.AssetStat;
+import br.ufpa.labes.spm.repository.AssetStatRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AssetStatDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
@@ -33,26 +34,26 @@ public class AssetStatResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AssetStatService assetStatService;
+    private final AssetStatRepository assetStatRepository;
 
-    public AssetStatResource(AssetStatService assetStatService) {
-        this.assetStatService = assetStatService;
+    public AssetStatResource(AssetStatRepository assetStatRepository) {
+        this.assetStatRepository = assetStatRepository;
     }
 
     /**
      * {@code POST  /asset-stats} : Create a new assetStat.
      *
-     * @param assetStatDTO the assetStatDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new assetStatDTO, or with status {@code 400 (Bad Request)} if the assetStat has already an ID.
+     * @param assetStat the assetStat to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new assetStat, or with status {@code 400 (Bad Request)} if the assetStat has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/asset-stats")
-    public ResponseEntity<AssetStatDTO> createAssetStat(@RequestBody AssetStatDTO assetStatDTO) throws URISyntaxException {
-        log.debug("REST request to save AssetStat : {}", assetStatDTO);
-        if (assetStatDTO.getId() != null) {
+    public ResponseEntity<AssetStat> createAssetStat(@RequestBody AssetStat assetStat) throws URISyntaxException {
+        log.debug("REST request to save AssetStat : {}", assetStat);
+        if (assetStat.getId() != null) {
             throw new BadRequestAlertException("A new assetStat cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AssetStatDTO result = assetStatService.save(assetStatDTO);
+        AssetStat result = assetStatRepository.save(assetStat);
         return ResponseEntity.created(new URI("/api/asset-stats/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -61,21 +62,21 @@ public class AssetStatResource {
     /**
      * {@code PUT  /asset-stats} : Updates an existing assetStat.
      *
-     * @param assetStatDTO the assetStatDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated assetStatDTO,
-     * or with status {@code 400 (Bad Request)} if the assetStatDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the assetStatDTO couldn't be updated.
+     * @param assetStat the assetStat to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated assetStat,
+     * or with status {@code 400 (Bad Request)} if the assetStat is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the assetStat couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/asset-stats")
-    public ResponseEntity<AssetStatDTO> updateAssetStat(@RequestBody AssetStatDTO assetStatDTO) throws URISyntaxException {
-        log.debug("REST request to update AssetStat : {}", assetStatDTO);
-        if (assetStatDTO.getId() == null) {
+    public ResponseEntity<AssetStat> updateAssetStat(@RequestBody AssetStat assetStat) throws URISyntaxException {
+        log.debug("REST request to update AssetStat : {}", assetStat);
+        if (assetStat.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AssetStatDTO result = assetStatService.save(assetStatDTO);
+        AssetStat result = assetStatRepository.save(assetStat);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, assetStatDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, assetStat.getId().toString()))
             .body(result);
     }
 
@@ -87,38 +88,41 @@ public class AssetStatResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assetStats in body.
      */
     @GetMapping("/asset-stats")
-    public List<AssetStatDTO> getAllAssetStats(@RequestParam(required = false) String filter) {
+    public List<AssetStat> getAllAssetStats(@RequestParam(required = false) String filter) {
         if ("theasset-is-null".equals(filter)) {
             log.debug("REST request to get all AssetStats where theAsset is null");
-            return assetStatService.findAllWhereTheAssetIsNull();
+            return StreamSupport
+                .stream(assetStatRepository.findAll().spliterator(), false)
+                .filter(assetStat -> assetStat.getTheAsset() == null)
+                .collect(Collectors.toList());
         }
         log.debug("REST request to get all AssetStats");
-        return assetStatService.findAll();
+        return assetStatRepository.findAll();
     }
 
     /**
      * {@code GET  /asset-stats/:id} : get the "id" assetStat.
      *
-     * @param id the id of the assetStatDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the assetStatDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the assetStat to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the assetStat, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/asset-stats/{id}")
-    public ResponseEntity<AssetStatDTO> getAssetStat(@PathVariable Long id) {
+    public ResponseEntity<AssetStat> getAssetStat(@PathVariable Long id) {
         log.debug("REST request to get AssetStat : {}", id);
-        Optional<AssetStatDTO> assetStatDTO = assetStatService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(assetStatDTO);
+        Optional<AssetStat> assetStat = assetStatRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(assetStat);
     }
 
     /**
      * {@code DELETE  /asset-stats/:id} : delete the "id" assetStat.
      *
-     * @param id the id of the assetStatDTO to delete.
+     * @param id the id of the assetStat to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/asset-stats/{id}")
     public ResponseEntity<Void> deleteAssetStat(@PathVariable Long id) {
         log.debug("REST request to delete AssetStat : {}", id);
-        assetStatService.delete(id);
+        assetStatRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

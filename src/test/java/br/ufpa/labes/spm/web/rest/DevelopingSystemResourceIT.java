@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.DevelopingSystem;
 import br.ufpa.labes.spm.repository.DevelopingSystemRepository;
-import br.ufpa.labes.spm.service.DevelopingSystemService;
-import br.ufpa.labes.spm.service.dto.DevelopingSystemDTO;
-import br.ufpa.labes.spm.service.mapper.DevelopingSystemMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class DevelopingSystemResourceIT {
     private DevelopingSystemRepository developingSystemRepository;
 
     @Autowired
-    private DevelopingSystemMapper developingSystemMapper;
-
-    @Autowired
-    private DevelopingSystemService developingSystemService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class DevelopingSystemResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final DevelopingSystemResource developingSystemResource = new DevelopingSystemResource(developingSystemService);
+        final DevelopingSystemResource developingSystemResource = new DevelopingSystemResource(developingSystemRepository);
         this.restDevelopingSystemMockMvc = MockMvcBuilders.standaloneSetup(developingSystemResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -126,10 +117,9 @@ public class DevelopingSystemResourceIT {
         int databaseSizeBeforeCreate = developingSystemRepository.findAll().size();
 
         // Create the DevelopingSystem
-        DevelopingSystemDTO developingSystemDTO = developingSystemMapper.toDto(developingSystem);
         restDevelopingSystemMockMvc.perform(post("/api/developing-systems")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(developingSystemDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(developingSystem)))
             .andExpect(status().isCreated());
 
         // Validate the DevelopingSystem in the database
@@ -148,12 +138,11 @@ public class DevelopingSystemResourceIT {
 
         // Create the DevelopingSystem with an existing ID
         developingSystem.setId(1L);
-        DevelopingSystemDTO developingSystemDTO = developingSystemMapper.toDto(developingSystem);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDevelopingSystemMockMvc.perform(post("/api/developing-systems")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(developingSystemDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(developingSystem)))
             .andExpect(status().isBadRequest());
 
         // Validate the DevelopingSystem in the database
@@ -218,11 +207,10 @@ public class DevelopingSystemResourceIT {
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION);
-        DevelopingSystemDTO developingSystemDTO = developingSystemMapper.toDto(updatedDevelopingSystem);
 
         restDevelopingSystemMockMvc.perform(put("/api/developing-systems")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(developingSystemDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedDevelopingSystem)))
             .andExpect(status().isOk());
 
         // Validate the DevelopingSystem in the database
@@ -240,12 +228,11 @@ public class DevelopingSystemResourceIT {
         int databaseSizeBeforeUpdate = developingSystemRepository.findAll().size();
 
         // Create the DevelopingSystem
-        DevelopingSystemDTO developingSystemDTO = developingSystemMapper.toDto(developingSystem);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDevelopingSystemMockMvc.perform(put("/api/developing-systems")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(developingSystemDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(developingSystem)))
             .andExpect(status().isBadRequest());
 
         // Validate the DevelopingSystem in the database
@@ -284,28 +271,5 @@ public class DevelopingSystemResourceIT {
         assertThat(developingSystem1).isNotEqualTo(developingSystem2);
         developingSystem1.setId(null);
         assertThat(developingSystem1).isNotEqualTo(developingSystem2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DevelopingSystemDTO.class);
-        DevelopingSystemDTO developingSystemDTO1 = new DevelopingSystemDTO();
-        developingSystemDTO1.setId(1L);
-        DevelopingSystemDTO developingSystemDTO2 = new DevelopingSystemDTO();
-        assertThat(developingSystemDTO1).isNotEqualTo(developingSystemDTO2);
-        developingSystemDTO2.setId(developingSystemDTO1.getId());
-        assertThat(developingSystemDTO1).isEqualTo(developingSystemDTO2);
-        developingSystemDTO2.setId(2L);
-        assertThat(developingSystemDTO1).isNotEqualTo(developingSystemDTO2);
-        developingSystemDTO1.setId(null);
-        assertThat(developingSystemDTO1).isNotEqualTo(developingSystemDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(developingSystemMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(developingSystemMapper.fromId(null)).isNull();
     }
 }

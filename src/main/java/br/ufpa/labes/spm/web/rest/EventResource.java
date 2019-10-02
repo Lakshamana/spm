@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.EventService;
+import br.ufpa.labes.spm.domain.Event;
+import br.ufpa.labes.spm.repository.EventRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.EventDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class EventResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final EventService eventService;
+    private final EventRepository eventRepository;
 
-    public EventResource(EventService eventService) {
-        this.eventService = eventService;
+    public EventResource(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
     }
 
     /**
      * {@code POST  /events} : Create a new event.
      *
-     * @param eventDTO the eventDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new eventDTO, or with status {@code 400 (Bad Request)} if the event has already an ID.
+     * @param event the event to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new event, or with status {@code 400 (Bad Request)} if the event has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/events")
-    public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventDTO) throws URISyntaxException {
-        log.debug("REST request to save Event : {}", eventDTO);
-        if (eventDTO.getId() != null) {
+    public ResponseEntity<Event> createEvent(@RequestBody Event event) throws URISyntaxException {
+        log.debug("REST request to save Event : {}", event);
+        if (event.getId() != null) {
             throw new BadRequestAlertException("A new event cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        EventDTO result = eventService.save(eventDTO);
+        Event result = eventRepository.save(event);
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class EventResource {
     /**
      * {@code PUT  /events} : Updates an existing event.
      *
-     * @param eventDTO the eventDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated eventDTO,
-     * or with status {@code 400 (Bad Request)} if the eventDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the eventDTO couldn't be updated.
+     * @param event the event to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated event,
+     * or with status {@code 400 (Bad Request)} if the event is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the event couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/events")
-    public ResponseEntity<EventDTO> updateEvent(@RequestBody EventDTO eventDTO) throws URISyntaxException {
-        log.debug("REST request to update Event : {}", eventDTO);
-        if (eventDTO.getId() == null) {
+    public ResponseEntity<Event> updateEvent(@RequestBody Event event) throws URISyntaxException {
+        log.debug("REST request to update Event : {}", event);
+        if (event.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        EventDTO result = eventService.save(eventDTO);
+        Event result = eventRepository.save(event);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, eventDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, event.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class EventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of events in body.
      */
     @GetMapping("/events")
-    public List<EventDTO> getAllEvents() {
+    public List<Event> getAllEvents() {
         log.debug("REST request to get all Events");
-        return eventService.findAll();
+        return eventRepository.findAll();
     }
 
     /**
      * {@code GET  /events/:id} : get the "id" event.
      *
-     * @param id the id of the eventDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the eventDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the event to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the event, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/events/{id}")
-    public ResponseEntity<EventDTO> getEvent(@PathVariable Long id) {
+    public ResponseEntity<Event> getEvent(@PathVariable Long id) {
         log.debug("REST request to get Event : {}", id);
-        Optional<EventDTO> eventDTO = eventService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(eventDTO);
+        Optional<Event> event = eventRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(event);
     }
 
     /**
      * {@code DELETE  /events/:id} : delete the "id" event.
      *
-     * @param id the id of the eventDTO to delete.
+     * @param id the id of the event to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/events/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         log.debug("REST request to delete Event : {}", id);
-        eventService.delete(id);
+        eventRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

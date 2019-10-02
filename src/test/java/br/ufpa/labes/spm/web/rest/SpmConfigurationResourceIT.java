@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.SpmConfiguration;
 import br.ufpa.labes.spm.repository.SpmConfigurationRepository;
-import br.ufpa.labes.spm.service.SpmConfigurationService;
-import br.ufpa.labes.spm.service.dto.SpmConfigurationDTO;
-import br.ufpa.labes.spm.service.mapper.SpmConfigurationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,12 +60,6 @@ public class SpmConfigurationResourceIT {
     private SpmConfigurationRepository spmConfigurationRepository;
 
     @Autowired
-    private SpmConfigurationMapper spmConfigurationMapper;
-
-    @Autowired
-    private SpmConfigurationService spmConfigurationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -90,7 +81,7 @@ public class SpmConfigurationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SpmConfigurationResource spmConfigurationResource = new SpmConfigurationResource(spmConfigurationService);
+        final SpmConfigurationResource spmConfigurationResource = new SpmConfigurationResource(spmConfigurationRepository);
         this.restSpmConfigurationMockMvc = MockMvcBuilders.standaloneSetup(spmConfigurationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -145,10 +136,9 @@ public class SpmConfigurationResourceIT {
         int databaseSizeBeforeCreate = spmConfigurationRepository.findAll().size();
 
         // Create the SpmConfiguration
-        SpmConfigurationDTO spmConfigurationDTO = spmConfigurationMapper.toDto(spmConfiguration);
         restSpmConfigurationMockMvc.perform(post("/api/spm-configurations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(spmConfigurationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(spmConfiguration)))
             .andExpect(status().isCreated());
 
         // Validate the SpmConfiguration in the database
@@ -171,12 +161,11 @@ public class SpmConfigurationResourceIT {
 
         // Create the SpmConfiguration with an existing ID
         spmConfiguration.setId(1L);
-        SpmConfigurationDTO spmConfigurationDTO = spmConfigurationMapper.toDto(spmConfiguration);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restSpmConfigurationMockMvc.perform(post("/api/spm-configurations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(spmConfigurationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(spmConfiguration)))
             .andExpect(status().isBadRequest());
 
         // Validate the SpmConfiguration in the database
@@ -253,11 +242,10 @@ public class SpmConfigurationResourceIT {
             .graficoDeDesempenho(UPDATED_GRAFICO_DE_DESEMPENHO)
             .graficoDeTarefas(UPDATED_GRAFICO_DE_TAREFAS)
             .senhaEmRecuperacao(UPDATED_SENHA_EM_RECUPERACAO);
-        SpmConfigurationDTO spmConfigurationDTO = spmConfigurationMapper.toDto(updatedSpmConfiguration);
 
         restSpmConfigurationMockMvc.perform(put("/api/spm-configurations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(spmConfigurationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedSpmConfiguration)))
             .andExpect(status().isOk());
 
         // Validate the SpmConfiguration in the database
@@ -279,12 +267,11 @@ public class SpmConfigurationResourceIT {
         int databaseSizeBeforeUpdate = spmConfigurationRepository.findAll().size();
 
         // Create the SpmConfiguration
-        SpmConfigurationDTO spmConfigurationDTO = spmConfigurationMapper.toDto(spmConfiguration);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restSpmConfigurationMockMvc.perform(put("/api/spm-configurations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(spmConfigurationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(spmConfiguration)))
             .andExpect(status().isBadRequest());
 
         // Validate the SpmConfiguration in the database
@@ -323,28 +310,5 @@ public class SpmConfigurationResourceIT {
         assertThat(spmConfiguration1).isNotEqualTo(spmConfiguration2);
         spmConfiguration1.setId(null);
         assertThat(spmConfiguration1).isNotEqualTo(spmConfiguration2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(SpmConfigurationDTO.class);
-        SpmConfigurationDTO spmConfigurationDTO1 = new SpmConfigurationDTO();
-        spmConfigurationDTO1.setId(1L);
-        SpmConfigurationDTO spmConfigurationDTO2 = new SpmConfigurationDTO();
-        assertThat(spmConfigurationDTO1).isNotEqualTo(spmConfigurationDTO2);
-        spmConfigurationDTO2.setId(spmConfigurationDTO1.getId());
-        assertThat(spmConfigurationDTO1).isEqualTo(spmConfigurationDTO2);
-        spmConfigurationDTO2.setId(2L);
-        assertThat(spmConfigurationDTO1).isNotEqualTo(spmConfigurationDTO2);
-        spmConfigurationDTO1.setId(null);
-        assertThat(spmConfigurationDTO1).isNotEqualTo(spmConfigurationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(spmConfigurationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(spmConfigurationMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ResourcePossibleUse;
 import br.ufpa.labes.spm.repository.ResourcePossibleUseRepository;
-import br.ufpa.labes.spm.service.ResourcePossibleUseService;
-import br.ufpa.labes.spm.service.dto.ResourcePossibleUseDTO;
-import br.ufpa.labes.spm.service.mapper.ResourcePossibleUseMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -56,12 +53,6 @@ public class ResourcePossibleUseResourceIT {
     private ResourcePossibleUseRepository resourcePossibleUseRepository;
 
     @Autowired
-    private ResourcePossibleUseMapper resourcePossibleUseMapper;
-
-    @Autowired
-    private ResourcePossibleUseService resourcePossibleUseService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -83,7 +74,7 @@ public class ResourcePossibleUseResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ResourcePossibleUseResource resourcePossibleUseResource = new ResourcePossibleUseResource(resourcePossibleUseService);
+        final ResourcePossibleUseResource resourcePossibleUseResource = new ResourcePossibleUseResource(resourcePossibleUseRepository);
         this.restResourcePossibleUseMockMvc = MockMvcBuilders.standaloneSetup(resourcePossibleUseResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -130,10 +121,9 @@ public class ResourcePossibleUseResourceIT {
         int databaseSizeBeforeCreate = resourcePossibleUseRepository.findAll().size();
 
         // Create the ResourcePossibleUse
-        ResourcePossibleUseDTO resourcePossibleUseDTO = resourcePossibleUseMapper.toDto(resourcePossibleUse);
         restResourcePossibleUseMockMvc.perform(post("/api/resource-possible-uses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourcePossibleUseDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourcePossibleUse)))
             .andExpect(status().isCreated());
 
         // Validate the ResourcePossibleUse in the database
@@ -152,12 +142,11 @@ public class ResourcePossibleUseResourceIT {
 
         // Create the ResourcePossibleUse with an existing ID
         resourcePossibleUse.setId(1L);
-        ResourcePossibleUseDTO resourcePossibleUseDTO = resourcePossibleUseMapper.toDto(resourcePossibleUse);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restResourcePossibleUseMockMvc.perform(post("/api/resource-possible-uses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourcePossibleUseDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourcePossibleUse)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourcePossibleUse in the database
@@ -222,11 +211,10 @@ public class ResourcePossibleUseResourceIT {
             .begin(UPDATED_BEGIN)
             .end(UPDATED_END)
             .amountNeeded(UPDATED_AMOUNT_NEEDED);
-        ResourcePossibleUseDTO resourcePossibleUseDTO = resourcePossibleUseMapper.toDto(updatedResourcePossibleUse);
 
         restResourcePossibleUseMockMvc.perform(put("/api/resource-possible-uses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourcePossibleUseDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedResourcePossibleUse)))
             .andExpect(status().isOk());
 
         // Validate the ResourcePossibleUse in the database
@@ -244,12 +232,11 @@ public class ResourcePossibleUseResourceIT {
         int databaseSizeBeforeUpdate = resourcePossibleUseRepository.findAll().size();
 
         // Create the ResourcePossibleUse
-        ResourcePossibleUseDTO resourcePossibleUseDTO = resourcePossibleUseMapper.toDto(resourcePossibleUse);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restResourcePossibleUseMockMvc.perform(put("/api/resource-possible-uses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourcePossibleUseDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourcePossibleUse)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourcePossibleUse in the database
@@ -288,28 +275,5 @@ public class ResourcePossibleUseResourceIT {
         assertThat(resourcePossibleUse1).isNotEqualTo(resourcePossibleUse2);
         resourcePossibleUse1.setId(null);
         assertThat(resourcePossibleUse1).isNotEqualTo(resourcePossibleUse2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ResourcePossibleUseDTO.class);
-        ResourcePossibleUseDTO resourcePossibleUseDTO1 = new ResourcePossibleUseDTO();
-        resourcePossibleUseDTO1.setId(1L);
-        ResourcePossibleUseDTO resourcePossibleUseDTO2 = new ResourcePossibleUseDTO();
-        assertThat(resourcePossibleUseDTO1).isNotEqualTo(resourcePossibleUseDTO2);
-        resourcePossibleUseDTO2.setId(resourcePossibleUseDTO1.getId());
-        assertThat(resourcePossibleUseDTO1).isEqualTo(resourcePossibleUseDTO2);
-        resourcePossibleUseDTO2.setId(2L);
-        assertThat(resourcePossibleUseDTO1).isNotEqualTo(resourcePossibleUseDTO2);
-        resourcePossibleUseDTO1.setId(null);
-        assertThat(resourcePossibleUseDTO1).isNotEqualTo(resourcePossibleUseDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(resourcePossibleUseMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(resourcePossibleUseMapper.fromId(null)).isNull();
     }
 }

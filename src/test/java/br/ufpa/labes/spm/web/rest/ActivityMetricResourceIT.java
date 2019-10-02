@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ActivityMetric;
 import br.ufpa.labes.spm.repository.ActivityMetricRepository;
-import br.ufpa.labes.spm.service.ActivityMetricService;
-import br.ufpa.labes.spm.service.dto.ActivityMetricDTO;
-import br.ufpa.labes.spm.service.mapper.ActivityMetricMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ActivityMetricResourceIT {
     private ActivityMetricRepository activityMetricRepository;
 
     @Autowired
-    private ActivityMetricMapper activityMetricMapper;
-
-    @Autowired
-    private ActivityMetricService activityMetricService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ActivityMetricResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ActivityMetricResource activityMetricResource = new ActivityMetricResource(activityMetricService);
+        final ActivityMetricResource activityMetricResource = new ActivityMetricResource(activityMetricRepository);
         this.restActivityMetricMockMvc = MockMvcBuilders.standaloneSetup(activityMetricResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ActivityMetricResourceIT {
         int databaseSizeBeforeCreate = activityMetricRepository.findAll().size();
 
         // Create the ActivityMetric
-        ActivityMetricDTO activityMetricDTO = activityMetricMapper.toDto(activityMetric);
         restActivityMetricMockMvc.perform(post("/api/activity-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityMetric)))
             .andExpect(status().isCreated());
 
         // Validate the ActivityMetric in the database
@@ -129,12 +119,11 @@ public class ActivityMetricResourceIT {
 
         // Create the ActivityMetric with an existing ID
         activityMetric.setId(1L);
-        ActivityMetricDTO activityMetricDTO = activityMetricMapper.toDto(activityMetric);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restActivityMetricMockMvc.perform(post("/api/activity-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the ActivityMetric in the database
@@ -189,11 +178,10 @@ public class ActivityMetricResourceIT {
         ActivityMetric updatedActivityMetric = activityMetricRepository.findById(activityMetric.getId()).get();
         // Disconnect from session so that the updates on updatedActivityMetric are not directly saved in db
         em.detach(updatedActivityMetric);
-        ActivityMetricDTO activityMetricDTO = activityMetricMapper.toDto(updatedActivityMetric);
 
         restActivityMetricMockMvc.perform(put("/api/activity-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedActivityMetric)))
             .andExpect(status().isOk());
 
         // Validate the ActivityMetric in the database
@@ -208,12 +196,11 @@ public class ActivityMetricResourceIT {
         int databaseSizeBeforeUpdate = activityMetricRepository.findAll().size();
 
         // Create the ActivityMetric
-        ActivityMetricDTO activityMetricDTO = activityMetricMapper.toDto(activityMetric);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restActivityMetricMockMvc.perform(put("/api/activity-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the ActivityMetric in the database
@@ -252,28 +239,5 @@ public class ActivityMetricResourceIT {
         assertThat(activityMetric1).isNotEqualTo(activityMetric2);
         activityMetric1.setId(null);
         assertThat(activityMetric1).isNotEqualTo(activityMetric2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ActivityMetricDTO.class);
-        ActivityMetricDTO activityMetricDTO1 = new ActivityMetricDTO();
-        activityMetricDTO1.setId(1L);
-        ActivityMetricDTO activityMetricDTO2 = new ActivityMetricDTO();
-        assertThat(activityMetricDTO1).isNotEqualTo(activityMetricDTO2);
-        activityMetricDTO2.setId(activityMetricDTO1.getId());
-        assertThat(activityMetricDTO1).isEqualTo(activityMetricDTO2);
-        activityMetricDTO2.setId(2L);
-        assertThat(activityMetricDTO1).isNotEqualTo(activityMetricDTO2);
-        activityMetricDTO1.setId(null);
-        assertThat(activityMetricDTO1).isNotEqualTo(activityMetricDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(activityMetricMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(activityMetricMapper.fromId(null)).isNull();
     }
 }

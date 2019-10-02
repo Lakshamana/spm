@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Template;
 import br.ufpa.labes.spm.repository.TemplateRepository;
-import br.ufpa.labes.spm.service.TemplateService;
-import br.ufpa.labes.spm.service.dto.TemplateDTO;
-import br.ufpa.labes.spm.service.mapper.TemplateMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class TemplateResourceIT {
     private TemplateRepository templateRepository;
 
     @Autowired
-    private TemplateMapper templateMapper;
-
-    @Autowired
-    private TemplateService templateService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class TemplateResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TemplateResource templateResource = new TemplateResource(templateService);
+        final TemplateResource templateResource = new TemplateResource(templateRepository);
         this.restTemplateMockMvc = MockMvcBuilders.standaloneSetup(templateResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class TemplateResourceIT {
         int databaseSizeBeforeCreate = templateRepository.findAll().size();
 
         // Create the Template
-        TemplateDTO templateDTO = templateMapper.toDto(template);
         restTemplateMockMvc.perform(post("/api/templates")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(templateDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(template)))
             .andExpect(status().isCreated());
 
         // Validate the Template in the database
@@ -135,12 +125,11 @@ public class TemplateResourceIT {
 
         // Create the Template with an existing ID
         template.setId(1L);
-        TemplateDTO templateDTO = templateMapper.toDto(template);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restTemplateMockMvc.perform(post("/api/templates")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(templateDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(template)))
             .andExpect(status().isBadRequest());
 
         // Validate the Template in the database
@@ -199,11 +188,10 @@ public class TemplateResourceIT {
         em.detach(updatedTemplate);
         updatedTemplate
             .templateState(UPDATED_TEMPLATE_STATE);
-        TemplateDTO templateDTO = templateMapper.toDto(updatedTemplate);
 
         restTemplateMockMvc.perform(put("/api/templates")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(templateDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedTemplate)))
             .andExpect(status().isOk());
 
         // Validate the Template in the database
@@ -219,12 +207,11 @@ public class TemplateResourceIT {
         int databaseSizeBeforeUpdate = templateRepository.findAll().size();
 
         // Create the Template
-        TemplateDTO templateDTO = templateMapper.toDto(template);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTemplateMockMvc.perform(put("/api/templates")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(templateDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(template)))
             .andExpect(status().isBadRequest());
 
         // Validate the Template in the database
@@ -263,28 +250,5 @@ public class TemplateResourceIT {
         assertThat(template1).isNotEqualTo(template2);
         template1.setId(null);
         assertThat(template1).isNotEqualTo(template2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(TemplateDTO.class);
-        TemplateDTO templateDTO1 = new TemplateDTO();
-        templateDTO1.setId(1L);
-        TemplateDTO templateDTO2 = new TemplateDTO();
-        assertThat(templateDTO1).isNotEqualTo(templateDTO2);
-        templateDTO2.setId(templateDTO1.getId());
-        assertThat(templateDTO1).isEqualTo(templateDTO2);
-        templateDTO2.setId(2L);
-        assertThat(templateDTO1).isNotEqualTo(templateDTO2);
-        templateDTO1.setId(null);
-        assertThat(templateDTO1).isNotEqualTo(templateDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(templateMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(templateMapper.fromId(null)).isNull();
     }
 }

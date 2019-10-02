@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Activity;
 import br.ufpa.labes.spm.repository.ActivityRepository;
-import br.ufpa.labes.spm.service.ActivityService;
-import br.ufpa.labes.spm.service.dto.ActivityDTO;
-import br.ufpa.labes.spm.service.mapper.ActivityMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -59,15 +56,6 @@ public class ActivityResourceIT {
     private ActivityRepository activityRepositoryMock;
 
     @Autowired
-    private ActivityMapper activityMapper;
-
-    @Mock
-    private ActivityService activityServiceMock;
-
-    @Autowired
-    private ActivityService activityService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -89,7 +77,7 @@ public class ActivityResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ActivityResource activityResource = new ActivityResource(activityService);
+        final ActivityResource activityResource = new ActivityResource(activityRepository);
         this.restActivityMockMvc = MockMvcBuilders.standaloneSetup(activityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -136,10 +124,9 @@ public class ActivityResourceIT {
         int databaseSizeBeforeCreate = activityRepository.findAll().size();
 
         // Create the Activity
-        ActivityDTO activityDTO = activityMapper.toDto(activity);
         restActivityMockMvc.perform(post("/api/activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activity)))
             .andExpect(status().isCreated());
 
         // Validate the Activity in the database
@@ -158,12 +145,11 @@ public class ActivityResourceIT {
 
         // Create the Activity with an existing ID
         activity.setId(1L);
-        ActivityDTO activityDTO = activityMapper.toDto(activity);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restActivityMockMvc.perform(post("/api/activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activity)))
             .andExpect(status().isBadRequest());
 
         // Validate the Activity in the database
@@ -190,8 +176,8 @@ public class ActivityResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllActivitiesWithEagerRelationshipsIsEnabled() throws Exception {
-        ActivityResource activityResource = new ActivityResource(activityServiceMock);
-        when(activityServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ActivityResource activityResource = new ActivityResource(activityRepositoryMock);
+        when(activityRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restActivityMockMvc = MockMvcBuilders.standaloneSetup(activityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -202,13 +188,13 @@ public class ActivityResourceIT {
         restActivityMockMvc.perform(get("/api/activities?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(activityServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(activityRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllActivitiesWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ActivityResource activityResource = new ActivityResource(activityServiceMock);
-            when(activityServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ActivityResource activityResource = new ActivityResource(activityRepositoryMock);
+            when(activityRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restActivityMockMvc = MockMvcBuilders.standaloneSetup(activityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -218,7 +204,7 @@ public class ActivityResourceIT {
         restActivityMockMvc.perform(get("/api/activities?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(activityServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(activityRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -261,11 +247,10 @@ public class ActivityResourceIT {
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
             .isVersion(UPDATED_IS_VERSION);
-        ActivityDTO activityDTO = activityMapper.toDto(updatedActivity);
 
         restActivityMockMvc.perform(put("/api/activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedActivity)))
             .andExpect(status().isOk());
 
         // Validate the Activity in the database
@@ -283,12 +268,11 @@ public class ActivityResourceIT {
         int databaseSizeBeforeUpdate = activityRepository.findAll().size();
 
         // Create the Activity
-        ActivityDTO activityDTO = activityMapper.toDto(activity);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restActivityMockMvc.perform(put("/api/activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activity)))
             .andExpect(status().isBadRequest());
 
         // Validate the Activity in the database
@@ -327,28 +311,5 @@ public class ActivityResourceIT {
         assertThat(activity1).isNotEqualTo(activity2);
         activity1.setId(null);
         assertThat(activity1).isNotEqualTo(activity2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ActivityDTO.class);
-        ActivityDTO activityDTO1 = new ActivityDTO();
-        activityDTO1.setId(1L);
-        ActivityDTO activityDTO2 = new ActivityDTO();
-        assertThat(activityDTO1).isNotEqualTo(activityDTO2);
-        activityDTO2.setId(activityDTO1.getId());
-        assertThat(activityDTO1).isEqualTo(activityDTO2);
-        activityDTO2.setId(2L);
-        assertThat(activityDTO1).isNotEqualTo(activityDTO2);
-        activityDTO1.setId(null);
-        assertThat(activityDTO1).isNotEqualTo(activityDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(activityMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(activityMapper.fromId(null)).isNull();
     }
 }

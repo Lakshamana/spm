@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Decomposed;
 import br.ufpa.labes.spm.repository.DecomposedRepository;
-import br.ufpa.labes.spm.service.DecomposedService;
-import br.ufpa.labes.spm.service.dto.DecomposedDTO;
-import br.ufpa.labes.spm.service.mapper.DecomposedMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class DecomposedResourceIT {
     private DecomposedRepository decomposedRepository;
 
     @Autowired
-    private DecomposedMapper decomposedMapper;
-
-    @Autowired
-    private DecomposedService decomposedService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class DecomposedResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final DecomposedResource decomposedResource = new DecomposedResource(decomposedService);
+        final DecomposedResource decomposedResource = new DecomposedResource(decomposedRepository);
         this.restDecomposedMockMvc = MockMvcBuilders.standaloneSetup(decomposedResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class DecomposedResourceIT {
         int databaseSizeBeforeCreate = decomposedRepository.findAll().size();
 
         // Create the Decomposed
-        DecomposedDTO decomposedDTO = decomposedMapper.toDto(decomposed);
         restDecomposedMockMvc.perform(post("/api/decomposeds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(decomposedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(decomposed)))
             .andExpect(status().isCreated());
 
         // Validate the Decomposed in the database
@@ -129,12 +119,11 @@ public class DecomposedResourceIT {
 
         // Create the Decomposed with an existing ID
         decomposed.setId(1L);
-        DecomposedDTO decomposedDTO = decomposedMapper.toDto(decomposed);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDecomposedMockMvc.perform(post("/api/decomposeds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(decomposedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(decomposed)))
             .andExpect(status().isBadRequest());
 
         // Validate the Decomposed in the database
@@ -189,11 +178,10 @@ public class DecomposedResourceIT {
         Decomposed updatedDecomposed = decomposedRepository.findById(decomposed.getId()).get();
         // Disconnect from session so that the updates on updatedDecomposed are not directly saved in db
         em.detach(updatedDecomposed);
-        DecomposedDTO decomposedDTO = decomposedMapper.toDto(updatedDecomposed);
 
         restDecomposedMockMvc.perform(put("/api/decomposeds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(decomposedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedDecomposed)))
             .andExpect(status().isOk());
 
         // Validate the Decomposed in the database
@@ -208,12 +196,11 @@ public class DecomposedResourceIT {
         int databaseSizeBeforeUpdate = decomposedRepository.findAll().size();
 
         // Create the Decomposed
-        DecomposedDTO decomposedDTO = decomposedMapper.toDto(decomposed);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDecomposedMockMvc.perform(put("/api/decomposeds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(decomposedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(decomposed)))
             .andExpect(status().isBadRequest());
 
         // Validate the Decomposed in the database
@@ -252,28 +239,5 @@ public class DecomposedResourceIT {
         assertThat(decomposed1).isNotEqualTo(decomposed2);
         decomposed1.setId(null);
         assertThat(decomposed1).isNotEqualTo(decomposed2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DecomposedDTO.class);
-        DecomposedDTO decomposedDTO1 = new DecomposedDTO();
-        decomposedDTO1.setId(1L);
-        DecomposedDTO decomposedDTO2 = new DecomposedDTO();
-        assertThat(decomposedDTO1).isNotEqualTo(decomposedDTO2);
-        decomposedDTO2.setId(decomposedDTO1.getId());
-        assertThat(decomposedDTO1).isEqualTo(decomposedDTO2);
-        decomposedDTO2.setId(2L);
-        assertThat(decomposedDTO1).isNotEqualTo(decomposedDTO2);
-        decomposedDTO1.setId(null);
-        assertThat(decomposedDTO1).isNotEqualTo(decomposedDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(decomposedMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(decomposedMapper.fromId(null)).isNull();
     }
 }

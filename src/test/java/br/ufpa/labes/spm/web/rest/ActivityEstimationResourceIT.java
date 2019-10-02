@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ActivityEstimation;
 import br.ufpa.labes.spm.repository.ActivityEstimationRepository;
-import br.ufpa.labes.spm.service.ActivityEstimationService;
-import br.ufpa.labes.spm.service.dto.ActivityEstimationDTO;
-import br.ufpa.labes.spm.service.mapper.ActivityEstimationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ActivityEstimationResourceIT {
     private ActivityEstimationRepository activityEstimationRepository;
 
     @Autowired
-    private ActivityEstimationMapper activityEstimationMapper;
-
-    @Autowired
-    private ActivityEstimationService activityEstimationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ActivityEstimationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ActivityEstimationResource activityEstimationResource = new ActivityEstimationResource(activityEstimationService);
+        final ActivityEstimationResource activityEstimationResource = new ActivityEstimationResource(activityEstimationRepository);
         this.restActivityEstimationMockMvc = MockMvcBuilders.standaloneSetup(activityEstimationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ActivityEstimationResourceIT {
         int databaseSizeBeforeCreate = activityEstimationRepository.findAll().size();
 
         // Create the ActivityEstimation
-        ActivityEstimationDTO activityEstimationDTO = activityEstimationMapper.toDto(activityEstimation);
         restActivityEstimationMockMvc.perform(post("/api/activity-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityEstimation)))
             .andExpect(status().isCreated());
 
         // Validate the ActivityEstimation in the database
@@ -129,12 +119,11 @@ public class ActivityEstimationResourceIT {
 
         // Create the ActivityEstimation with an existing ID
         activityEstimation.setId(1L);
-        ActivityEstimationDTO activityEstimationDTO = activityEstimationMapper.toDto(activityEstimation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restActivityEstimationMockMvc.perform(post("/api/activity-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the ActivityEstimation in the database
@@ -189,11 +178,10 @@ public class ActivityEstimationResourceIT {
         ActivityEstimation updatedActivityEstimation = activityEstimationRepository.findById(activityEstimation.getId()).get();
         // Disconnect from session so that the updates on updatedActivityEstimation are not directly saved in db
         em.detach(updatedActivityEstimation);
-        ActivityEstimationDTO activityEstimationDTO = activityEstimationMapper.toDto(updatedActivityEstimation);
 
         restActivityEstimationMockMvc.perform(put("/api/activity-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedActivityEstimation)))
             .andExpect(status().isOk());
 
         // Validate the ActivityEstimation in the database
@@ -208,12 +196,11 @@ public class ActivityEstimationResourceIT {
         int databaseSizeBeforeUpdate = activityEstimationRepository.findAll().size();
 
         // Create the ActivityEstimation
-        ActivityEstimationDTO activityEstimationDTO = activityEstimationMapper.toDto(activityEstimation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restActivityEstimationMockMvc.perform(put("/api/activity-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the ActivityEstimation in the database
@@ -252,28 +239,5 @@ public class ActivityEstimationResourceIT {
         assertThat(activityEstimation1).isNotEqualTo(activityEstimation2);
         activityEstimation1.setId(null);
         assertThat(activityEstimation1).isNotEqualTo(activityEstimation2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ActivityEstimationDTO.class);
-        ActivityEstimationDTO activityEstimationDTO1 = new ActivityEstimationDTO();
-        activityEstimationDTO1.setId(1L);
-        ActivityEstimationDTO activityEstimationDTO2 = new ActivityEstimationDTO();
-        assertThat(activityEstimationDTO1).isNotEqualTo(activityEstimationDTO2);
-        activityEstimationDTO2.setId(activityEstimationDTO1.getId());
-        assertThat(activityEstimationDTO1).isEqualTo(activityEstimationDTO2);
-        activityEstimationDTO2.setId(2L);
-        assertThat(activityEstimationDTO1).isNotEqualTo(activityEstimationDTO2);
-        activityEstimationDTO1.setId(null);
-        assertThat(activityEstimationDTO1).isNotEqualTo(activityEstimationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(activityEstimationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(activityEstimationMapper.fromId(null)).isNull();
     }
 }

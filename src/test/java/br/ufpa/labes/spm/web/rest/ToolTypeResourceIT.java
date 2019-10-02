@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ToolType;
 import br.ufpa.labes.spm.repository.ToolTypeRepository;
-import br.ufpa.labes.spm.service.ToolTypeService;
-import br.ufpa.labes.spm.service.dto.ToolTypeDTO;
-import br.ufpa.labes.spm.service.mapper.ToolTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ToolTypeResourceIT {
     private ToolTypeRepository toolTypeRepository;
 
     @Autowired
-    private ToolTypeMapper toolTypeMapper;
-
-    @Autowired
-    private ToolTypeService toolTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ToolTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ToolTypeResource toolTypeResource = new ToolTypeResource(toolTypeService);
+        final ToolTypeResource toolTypeResource = new ToolTypeResource(toolTypeRepository);
         this.restToolTypeMockMvc = MockMvcBuilders.standaloneSetup(toolTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ToolTypeResourceIT {
         int databaseSizeBeforeCreate = toolTypeRepository.findAll().size();
 
         // Create the ToolType
-        ToolTypeDTO toolTypeDTO = toolTypeMapper.toDto(toolType);
         restToolTypeMockMvc.perform(post("/api/tool-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(toolType)))
             .andExpect(status().isCreated());
 
         // Validate the ToolType in the database
@@ -129,12 +119,11 @@ public class ToolTypeResourceIT {
 
         // Create the ToolType with an existing ID
         toolType.setId(1L);
-        ToolTypeDTO toolTypeDTO = toolTypeMapper.toDto(toolType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restToolTypeMockMvc.perform(post("/api/tool-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(toolType)))
             .andExpect(status().isBadRequest());
 
         // Validate the ToolType in the database
@@ -189,11 +178,10 @@ public class ToolTypeResourceIT {
         ToolType updatedToolType = toolTypeRepository.findById(toolType.getId()).get();
         // Disconnect from session so that the updates on updatedToolType are not directly saved in db
         em.detach(updatedToolType);
-        ToolTypeDTO toolTypeDTO = toolTypeMapper.toDto(updatedToolType);
 
         restToolTypeMockMvc.perform(put("/api/tool-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedToolType)))
             .andExpect(status().isOk());
 
         // Validate the ToolType in the database
@@ -208,12 +196,11 @@ public class ToolTypeResourceIT {
         int databaseSizeBeforeUpdate = toolTypeRepository.findAll().size();
 
         // Create the ToolType
-        ToolTypeDTO toolTypeDTO = toolTypeMapper.toDto(toolType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restToolTypeMockMvc.perform(put("/api/tool-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(toolType)))
             .andExpect(status().isBadRequest());
 
         // Validate the ToolType in the database
@@ -252,28 +239,5 @@ public class ToolTypeResourceIT {
         assertThat(toolType1).isNotEqualTo(toolType2);
         toolType1.setId(null);
         assertThat(toolType1).isNotEqualTo(toolType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ToolTypeDTO.class);
-        ToolTypeDTO toolTypeDTO1 = new ToolTypeDTO();
-        toolTypeDTO1.setId(1L);
-        ToolTypeDTO toolTypeDTO2 = new ToolTypeDTO();
-        assertThat(toolTypeDTO1).isNotEqualTo(toolTypeDTO2);
-        toolTypeDTO2.setId(toolTypeDTO1.getId());
-        assertThat(toolTypeDTO1).isEqualTo(toolTypeDTO2);
-        toolTypeDTO2.setId(2L);
-        assertThat(toolTypeDTO1).isNotEqualTo(toolTypeDTO2);
-        toolTypeDTO1.setId(null);
-        assertThat(toolTypeDTO1).isNotEqualTo(toolTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(toolTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(toolTypeMapper.fromId(null)).isNull();
     }
 }

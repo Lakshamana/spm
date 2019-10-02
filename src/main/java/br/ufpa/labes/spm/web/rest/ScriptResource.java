@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ScriptService;
+import br.ufpa.labes.spm.domain.Script;
+import br.ufpa.labes.spm.repository.ScriptRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ScriptDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ScriptResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ScriptService scriptService;
+    private final ScriptRepository scriptRepository;
 
-    public ScriptResource(ScriptService scriptService) {
-        this.scriptService = scriptService;
+    public ScriptResource(ScriptRepository scriptRepository) {
+        this.scriptRepository = scriptRepository;
     }
 
     /**
      * {@code POST  /scripts} : Create a new script.
      *
-     * @param scriptDTO the scriptDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new scriptDTO, or with status {@code 400 (Bad Request)} if the script has already an ID.
+     * @param script the script to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new script, or with status {@code 400 (Bad Request)} if the script has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/scripts")
-    public ResponseEntity<ScriptDTO> createScript(@RequestBody ScriptDTO scriptDTO) throws URISyntaxException {
-        log.debug("REST request to save Script : {}", scriptDTO);
-        if (scriptDTO.getId() != null) {
+    public ResponseEntity<Script> createScript(@RequestBody Script script) throws URISyntaxException {
+        log.debug("REST request to save Script : {}", script);
+        if (script.getId() != null) {
             throw new BadRequestAlertException("A new script cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ScriptDTO result = scriptService.save(scriptDTO);
+        Script result = scriptRepository.save(script);
         return ResponseEntity.created(new URI("/api/scripts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ScriptResource {
     /**
      * {@code PUT  /scripts} : Updates an existing script.
      *
-     * @param scriptDTO the scriptDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated scriptDTO,
-     * or with status {@code 400 (Bad Request)} if the scriptDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the scriptDTO couldn't be updated.
+     * @param script the script to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated script,
+     * or with status {@code 400 (Bad Request)} if the script is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the script couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/scripts")
-    public ResponseEntity<ScriptDTO> updateScript(@RequestBody ScriptDTO scriptDTO) throws URISyntaxException {
-        log.debug("REST request to update Script : {}", scriptDTO);
-        if (scriptDTO.getId() == null) {
+    public ResponseEntity<Script> updateScript(@RequestBody Script script) throws URISyntaxException {
+        log.debug("REST request to update Script : {}", script);
+        if (script.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ScriptDTO result = scriptService.save(scriptDTO);
+        Script result = scriptRepository.save(script);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, scriptDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, script.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ScriptResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of scripts in body.
      */
     @GetMapping("/scripts")
-    public List<ScriptDTO> getAllScripts() {
+    public List<Script> getAllScripts() {
         log.debug("REST request to get all Scripts");
-        return scriptService.findAll();
+        return scriptRepository.findAll();
     }
 
     /**
      * {@code GET  /scripts/:id} : get the "id" script.
      *
-     * @param id the id of the scriptDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the scriptDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the script to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the script, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/scripts/{id}")
-    public ResponseEntity<ScriptDTO> getScript(@PathVariable Long id) {
+    public ResponseEntity<Script> getScript(@PathVariable Long id) {
         log.debug("REST request to get Script : {}", id);
-        Optional<ScriptDTO> scriptDTO = scriptService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(scriptDTO);
+        Optional<Script> script = scriptRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(script);
     }
 
     /**
      * {@code DELETE  /scripts/:id} : delete the "id" script.
      *
-     * @param id the id of the scriptDTO to delete.
+     * @param id the id of the script to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/scripts/{id}")
     public ResponseEntity<Void> deleteScript(@PathVariable Long id) {
         log.debug("REST request to delete Script : {}", id);
-        scriptService.delete(id);
+        scriptRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

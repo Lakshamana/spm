@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ReqWorkGroup;
 import br.ufpa.labes.spm.repository.ReqWorkGroupRepository;
-import br.ufpa.labes.spm.service.ReqWorkGroupService;
-import br.ufpa.labes.spm.service.dto.ReqWorkGroupDTO;
-import br.ufpa.labes.spm.service.mapper.ReqWorkGroupMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ReqWorkGroupResourceIT {
     private ReqWorkGroupRepository reqWorkGroupRepository;
 
     @Autowired
-    private ReqWorkGroupMapper reqWorkGroupMapper;
-
-    @Autowired
-    private ReqWorkGroupService reqWorkGroupService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ReqWorkGroupResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ReqWorkGroupResource reqWorkGroupResource = new ReqWorkGroupResource(reqWorkGroupService);
+        final ReqWorkGroupResource reqWorkGroupResource = new ReqWorkGroupResource(reqWorkGroupRepository);
         this.restReqWorkGroupMockMvc = MockMvcBuilders.standaloneSetup(reqWorkGroupResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ReqWorkGroupResourceIT {
         int databaseSizeBeforeCreate = reqWorkGroupRepository.findAll().size();
 
         // Create the ReqWorkGroup
-        ReqWorkGroupDTO reqWorkGroupDTO = reqWorkGroupMapper.toDto(reqWorkGroup);
         restReqWorkGroupMockMvc.perform(post("/api/req-work-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqWorkGroupDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reqWorkGroup)))
             .andExpect(status().isCreated());
 
         // Validate the ReqWorkGroup in the database
@@ -129,12 +119,11 @@ public class ReqWorkGroupResourceIT {
 
         // Create the ReqWorkGroup with an existing ID
         reqWorkGroup.setId(1L);
-        ReqWorkGroupDTO reqWorkGroupDTO = reqWorkGroupMapper.toDto(reqWorkGroup);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restReqWorkGroupMockMvc.perform(post("/api/req-work-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqWorkGroupDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reqWorkGroup)))
             .andExpect(status().isBadRequest());
 
         // Validate the ReqWorkGroup in the database
@@ -189,11 +178,10 @@ public class ReqWorkGroupResourceIT {
         ReqWorkGroup updatedReqWorkGroup = reqWorkGroupRepository.findById(reqWorkGroup.getId()).get();
         // Disconnect from session so that the updates on updatedReqWorkGroup are not directly saved in db
         em.detach(updatedReqWorkGroup);
-        ReqWorkGroupDTO reqWorkGroupDTO = reqWorkGroupMapper.toDto(updatedReqWorkGroup);
 
         restReqWorkGroupMockMvc.perform(put("/api/req-work-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqWorkGroupDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedReqWorkGroup)))
             .andExpect(status().isOk());
 
         // Validate the ReqWorkGroup in the database
@@ -208,12 +196,11 @@ public class ReqWorkGroupResourceIT {
         int databaseSizeBeforeUpdate = reqWorkGroupRepository.findAll().size();
 
         // Create the ReqWorkGroup
-        ReqWorkGroupDTO reqWorkGroupDTO = reqWorkGroupMapper.toDto(reqWorkGroup);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restReqWorkGroupMockMvc.perform(put("/api/req-work-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqWorkGroupDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reqWorkGroup)))
             .andExpect(status().isBadRequest());
 
         // Validate the ReqWorkGroup in the database
@@ -252,28 +239,5 @@ public class ReqWorkGroupResourceIT {
         assertThat(reqWorkGroup1).isNotEqualTo(reqWorkGroup2);
         reqWorkGroup1.setId(null);
         assertThat(reqWorkGroup1).isNotEqualTo(reqWorkGroup2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ReqWorkGroupDTO.class);
-        ReqWorkGroupDTO reqWorkGroupDTO1 = new ReqWorkGroupDTO();
-        reqWorkGroupDTO1.setId(1L);
-        ReqWorkGroupDTO reqWorkGroupDTO2 = new ReqWorkGroupDTO();
-        assertThat(reqWorkGroupDTO1).isNotEqualTo(reqWorkGroupDTO2);
-        reqWorkGroupDTO2.setId(reqWorkGroupDTO1.getId());
-        assertThat(reqWorkGroupDTO1).isEqualTo(reqWorkGroupDTO2);
-        reqWorkGroupDTO2.setId(2L);
-        assertThat(reqWorkGroupDTO1).isNotEqualTo(reqWorkGroupDTO2);
-        reqWorkGroupDTO1.setId(null);
-        assertThat(reqWorkGroupDTO1).isNotEqualTo(reqWorkGroupDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(reqWorkGroupMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(reqWorkGroupMapper.fromId(null)).isNull();
     }
 }

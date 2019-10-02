@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.CatalogEventService;
+import br.ufpa.labes.spm.domain.CatalogEvent;
+import br.ufpa.labes.spm.repository.CatalogEventRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.CatalogEventDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class CatalogEventResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final CatalogEventService catalogEventService;
+    private final CatalogEventRepository catalogEventRepository;
 
-    public CatalogEventResource(CatalogEventService catalogEventService) {
-        this.catalogEventService = catalogEventService;
+    public CatalogEventResource(CatalogEventRepository catalogEventRepository) {
+        this.catalogEventRepository = catalogEventRepository;
     }
 
     /**
      * {@code POST  /catalog-events} : Create a new catalogEvent.
      *
-     * @param catalogEventDTO the catalogEventDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new catalogEventDTO, or with status {@code 400 (Bad Request)} if the catalogEvent has already an ID.
+     * @param catalogEvent the catalogEvent to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new catalogEvent, or with status {@code 400 (Bad Request)} if the catalogEvent has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/catalog-events")
-    public ResponseEntity<CatalogEventDTO> createCatalogEvent(@RequestBody CatalogEventDTO catalogEventDTO) throws URISyntaxException {
-        log.debug("REST request to save CatalogEvent : {}", catalogEventDTO);
-        if (catalogEventDTO.getId() != null) {
+    public ResponseEntity<CatalogEvent> createCatalogEvent(@RequestBody CatalogEvent catalogEvent) throws URISyntaxException {
+        log.debug("REST request to save CatalogEvent : {}", catalogEvent);
+        if (catalogEvent.getId() != null) {
             throw new BadRequestAlertException("A new catalogEvent cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        CatalogEventDTO result = catalogEventService.save(catalogEventDTO);
+        CatalogEvent result = catalogEventRepository.save(catalogEvent);
         return ResponseEntity.created(new URI("/api/catalog-events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class CatalogEventResource {
     /**
      * {@code PUT  /catalog-events} : Updates an existing catalogEvent.
      *
-     * @param catalogEventDTO the catalogEventDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated catalogEventDTO,
-     * or with status {@code 400 (Bad Request)} if the catalogEventDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the catalogEventDTO couldn't be updated.
+     * @param catalogEvent the catalogEvent to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated catalogEvent,
+     * or with status {@code 400 (Bad Request)} if the catalogEvent is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the catalogEvent couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/catalog-events")
-    public ResponseEntity<CatalogEventDTO> updateCatalogEvent(@RequestBody CatalogEventDTO catalogEventDTO) throws URISyntaxException {
-        log.debug("REST request to update CatalogEvent : {}", catalogEventDTO);
-        if (catalogEventDTO.getId() == null) {
+    public ResponseEntity<CatalogEvent> updateCatalogEvent(@RequestBody CatalogEvent catalogEvent) throws URISyntaxException {
+        log.debug("REST request to update CatalogEvent : {}", catalogEvent);
+        if (catalogEvent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        CatalogEventDTO result = catalogEventService.save(catalogEventDTO);
+        CatalogEvent result = catalogEventRepository.save(catalogEvent);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, catalogEventDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, catalogEvent.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class CatalogEventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of catalogEvents in body.
      */
     @GetMapping("/catalog-events")
-    public List<CatalogEventDTO> getAllCatalogEvents() {
+    public List<CatalogEvent> getAllCatalogEvents() {
         log.debug("REST request to get all CatalogEvents");
-        return catalogEventService.findAll();
+        return catalogEventRepository.findAll();
     }
 
     /**
      * {@code GET  /catalog-events/:id} : get the "id" catalogEvent.
      *
-     * @param id the id of the catalogEventDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the catalogEventDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the catalogEvent to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the catalogEvent, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/catalog-events/{id}")
-    public ResponseEntity<CatalogEventDTO> getCatalogEvent(@PathVariable Long id) {
+    public ResponseEntity<CatalogEvent> getCatalogEvent(@PathVariable Long id) {
         log.debug("REST request to get CatalogEvent : {}", id);
-        Optional<CatalogEventDTO> catalogEventDTO = catalogEventService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(catalogEventDTO);
+        Optional<CatalogEvent> catalogEvent = catalogEventRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(catalogEvent);
     }
 
     /**
      * {@code DELETE  /catalog-events/:id} : delete the "id" catalogEvent.
      *
-     * @param id the id of the catalogEventDTO to delete.
+     * @param id the id of the catalogEvent to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/catalog-events/{id}")
     public ResponseEntity<Void> deleteCatalogEvent(@PathVariable Long id) {
         log.debug("REST request to delete CatalogEvent : {}", id);
-        catalogEventService.delete(id);
+        catalogEventRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.BranchConCond;
 import br.ufpa.labes.spm.repository.BranchConCondRepository;
-import br.ufpa.labes.spm.service.BranchConCondService;
-import br.ufpa.labes.spm.service.dto.BranchConCondDTO;
-import br.ufpa.labes.spm.service.mapper.BranchConCondMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class BranchConCondResourceIT {
     private BranchConCondRepository branchConCondRepository;
 
     @Autowired
-    private BranchConCondMapper branchConCondMapper;
-
-    @Autowired
-    private BranchConCondService branchConCondService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class BranchConCondResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final BranchConCondResource branchConCondResource = new BranchConCondResource(branchConCondService);
+        final BranchConCondResource branchConCondResource = new BranchConCondResource(branchConCondRepository);
         this.restBranchConCondMockMvc = MockMvcBuilders.standaloneSetup(branchConCondResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class BranchConCondResourceIT {
         int databaseSizeBeforeCreate = branchConCondRepository.findAll().size();
 
         // Create the BranchConCond
-        BranchConCondDTO branchConCondDTO = branchConCondMapper.toDto(branchConCond);
         restBranchConCondMockMvc.perform(post("/api/branch-con-conds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchConCondDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(branchConCond)))
             .andExpect(status().isCreated());
 
         // Validate the BranchConCond in the database
@@ -135,12 +125,11 @@ public class BranchConCondResourceIT {
 
         // Create the BranchConCond with an existing ID
         branchConCond.setId(1L);
-        BranchConCondDTO branchConCondDTO = branchConCondMapper.toDto(branchConCond);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restBranchConCondMockMvc.perform(post("/api/branch-con-conds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchConCondDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(branchConCond)))
             .andExpect(status().isBadRequest());
 
         // Validate the BranchConCond in the database
@@ -199,11 +188,10 @@ public class BranchConCondResourceIT {
         em.detach(updatedBranchConCond);
         updatedBranchConCond
             .kindBranch(UPDATED_KIND_BRANCH);
-        BranchConCondDTO branchConCondDTO = branchConCondMapper.toDto(updatedBranchConCond);
 
         restBranchConCondMockMvc.perform(put("/api/branch-con-conds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchConCondDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedBranchConCond)))
             .andExpect(status().isOk());
 
         // Validate the BranchConCond in the database
@@ -219,12 +207,11 @@ public class BranchConCondResourceIT {
         int databaseSizeBeforeUpdate = branchConCondRepository.findAll().size();
 
         // Create the BranchConCond
-        BranchConCondDTO branchConCondDTO = branchConCondMapper.toDto(branchConCond);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restBranchConCondMockMvc.perform(put("/api/branch-con-conds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchConCondDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(branchConCond)))
             .andExpect(status().isBadRequest());
 
         // Validate the BranchConCond in the database
@@ -263,28 +250,5 @@ public class BranchConCondResourceIT {
         assertThat(branchConCond1).isNotEqualTo(branchConCond2);
         branchConCond1.setId(null);
         assertThat(branchConCond1).isNotEqualTo(branchConCond2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(BranchConCondDTO.class);
-        BranchConCondDTO branchConCondDTO1 = new BranchConCondDTO();
-        branchConCondDTO1.setId(1L);
-        BranchConCondDTO branchConCondDTO2 = new BranchConCondDTO();
-        assertThat(branchConCondDTO1).isNotEqualTo(branchConCondDTO2);
-        branchConCondDTO2.setId(branchConCondDTO1.getId());
-        assertThat(branchConCondDTO1).isEqualTo(branchConCondDTO2);
-        branchConCondDTO2.setId(2L);
-        assertThat(branchConCondDTO1).isNotEqualTo(branchConCondDTO2);
-        branchConCondDTO1.setId(null);
-        assertThat(branchConCondDTO1).isNotEqualTo(branchConCondDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(branchConCondMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(branchConCondMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AgentAffinityAgent;
 import br.ufpa.labes.spm.repository.AgentAffinityAgentRepository;
-import br.ufpa.labes.spm.service.AgentAffinityAgentService;
-import br.ufpa.labes.spm.service.dto.AgentAffinityAgentDTO;
-import br.ufpa.labes.spm.service.mapper.AgentAffinityAgentMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,12 +43,6 @@ public class AgentAffinityAgentResourceIT {
     private AgentAffinityAgentRepository agentAffinityAgentRepository;
 
     @Autowired
-    private AgentAffinityAgentMapper agentAffinityAgentMapper;
-
-    @Autowired
-    private AgentAffinityAgentService agentAffinityAgentService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +64,7 @@ public class AgentAffinityAgentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgentAffinityAgentResource agentAffinityAgentResource = new AgentAffinityAgentResource(agentAffinityAgentService);
+        final AgentAffinityAgentResource agentAffinityAgentResource = new AgentAffinityAgentResource(agentAffinityAgentRepository);
         this.restAgentAffinityAgentMockMvc = MockMvcBuilders.standaloneSetup(agentAffinityAgentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -116,10 +107,9 @@ public class AgentAffinityAgentResourceIT {
         int databaseSizeBeforeCreate = agentAffinityAgentRepository.findAll().size();
 
         // Create the AgentAffinityAgent
-        AgentAffinityAgentDTO agentAffinityAgentDTO = agentAffinityAgentMapper.toDto(agentAffinityAgent);
         restAgentAffinityAgentMockMvc.perform(post("/api/agent-affinity-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentAffinityAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentAffinityAgent)))
             .andExpect(status().isCreated());
 
         // Validate the AgentAffinityAgent in the database
@@ -136,12 +126,11 @@ public class AgentAffinityAgentResourceIT {
 
         // Create the AgentAffinityAgent with an existing ID
         agentAffinityAgent.setId(1L);
-        AgentAffinityAgentDTO agentAffinityAgentDTO = agentAffinityAgentMapper.toDto(agentAffinityAgent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAgentAffinityAgentMockMvc.perform(post("/api/agent-affinity-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentAffinityAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentAffinityAgent)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentAffinityAgent in the database
@@ -200,11 +189,10 @@ public class AgentAffinityAgentResourceIT {
         em.detach(updatedAgentAffinityAgent);
         updatedAgentAffinityAgent
             .degree(UPDATED_DEGREE);
-        AgentAffinityAgentDTO agentAffinityAgentDTO = agentAffinityAgentMapper.toDto(updatedAgentAffinityAgent);
 
         restAgentAffinityAgentMockMvc.perform(put("/api/agent-affinity-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentAffinityAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAgentAffinityAgent)))
             .andExpect(status().isOk());
 
         // Validate the AgentAffinityAgent in the database
@@ -220,12 +208,11 @@ public class AgentAffinityAgentResourceIT {
         int databaseSizeBeforeUpdate = agentAffinityAgentRepository.findAll().size();
 
         // Create the AgentAffinityAgent
-        AgentAffinityAgentDTO agentAffinityAgentDTO = agentAffinityAgentMapper.toDto(agentAffinityAgent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAgentAffinityAgentMockMvc.perform(put("/api/agent-affinity-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentAffinityAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentAffinityAgent)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentAffinityAgent in the database
@@ -264,28 +251,5 @@ public class AgentAffinityAgentResourceIT {
         assertThat(agentAffinityAgent1).isNotEqualTo(agentAffinityAgent2);
         agentAffinityAgent1.setId(null);
         assertThat(agentAffinityAgent1).isNotEqualTo(agentAffinityAgent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgentAffinityAgentDTO.class);
-        AgentAffinityAgentDTO agentAffinityAgentDTO1 = new AgentAffinityAgentDTO();
-        agentAffinityAgentDTO1.setId(1L);
-        AgentAffinityAgentDTO agentAffinityAgentDTO2 = new AgentAffinityAgentDTO();
-        assertThat(agentAffinityAgentDTO1).isNotEqualTo(agentAffinityAgentDTO2);
-        agentAffinityAgentDTO2.setId(agentAffinityAgentDTO1.getId());
-        assertThat(agentAffinityAgentDTO1).isEqualTo(agentAffinityAgentDTO2);
-        agentAffinityAgentDTO2.setId(2L);
-        assertThat(agentAffinityAgentDTO1).isNotEqualTo(agentAffinityAgentDTO2);
-        agentAffinityAgentDTO1.setId(null);
-        assertThat(agentAffinityAgentDTO1).isNotEqualTo(agentAffinityAgentDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(agentAffinityAgentMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(agentAffinityAgentMapper.fromId(null)).isNull();
     }
 }

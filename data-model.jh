@@ -1190,29 +1190,29 @@ relationship ManyToOne {
 }
 
 // Services
-service SpmConfiguration with serviceImpl
-service MetricDefinition with serviceImpl
-service Ability with serviceImpl
-service Company with serviceImpl
-service Metric with serviceImpl
-service Template with serviceImpl
-service WorkGroup with serviceImpl
-service VCSRepository with serviceImpl
-service ChatMessage with serviceImpl
-service Driver with serviceImpl
-service Agent with serviceImpl
-service Artifact with serviceImpl
-service Email with serviceImpl
-service Calendar with serviceImpl
-service Project with serviceImpl
-service Resource with serviceImpl
-service ToolDefinition with serviceImpl
-service Role with serviceImpl
-service Process with serviceImpl
-service Estimation with serviceImpl
-service Task with serviceImpl
-service Type with serviceImpl
-service DevelopingSystem with serviceImpl
+// service SpmConfiguration with serviceImpl
+// service MetricDefinition with serviceImpl
+// service Ability with serviceImpl
+// service Company with serviceImpl
+// service Metric with serviceImpl
+// service Template with serviceImpl
+// service WorkGroup with serviceImpl
+// service VCSRepository with serviceImpl
+// service ChatMessage with serviceImpl
+// service Driver with serviceImpl
+// service Agent with serviceImpl
+// service Artifact with serviceImpl
+// service Email with serviceImpl
+// service Calendar with serviceImpl
+// service Project with serviceImpl
+// service Resource with serviceImpl
+// service ToolDefinition with serviceImpl
+// service Role with serviceImpl
+// service Process with serviceImpl
+// service Estimation with serviceImpl
+// service Task with serviceImpl
+// service Type with serviceImpl
+// service DevelopingSystem with serviceImpl
 // service Notification with serviceImpl
 // service EasyModeling with serviceImpl
 // service Help with serviceImpl
@@ -1227,7 +1227,7 @@ service DevelopingSystem with serviceImpl
 // service Gantt with serviceImpl
 
 // DTOs
-dto * with mapstruct
+// dto * with mapstruct
 // dto AgentAffinityAgent with mapstruct
 // dto Agent with mapstruct
 // dto AgentHasAbility with mapstruct

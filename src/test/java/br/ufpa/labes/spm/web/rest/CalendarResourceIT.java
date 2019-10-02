@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Calendar;
 import br.ufpa.labes.spm.repository.CalendarRepository;
-import br.ufpa.labes.spm.service.CalendarService;
-import br.ufpa.labes.spm.service.dto.CalendarDTO;
-import br.ufpa.labes.spm.service.mapper.CalendarMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class CalendarResourceIT {
     private CalendarRepository calendarRepository;
 
     @Autowired
-    private CalendarMapper calendarMapper;
-
-    @Autowired
-    private CalendarService calendarService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class CalendarResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CalendarResource calendarResource = new CalendarResource(calendarService);
+        final CalendarResource calendarResource = new CalendarResource(calendarRepository);
         this.restCalendarMockMvc = MockMvcBuilders.standaloneSetup(calendarResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class CalendarResourceIT {
         int databaseSizeBeforeCreate = calendarRepository.findAll().size();
 
         // Create the Calendar
-        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
         restCalendarMockMvc.perform(post("/api/calendars")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(calendarDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(calendar)))
             .andExpect(status().isCreated());
 
         // Validate the Calendar in the database
@@ -135,12 +125,11 @@ public class CalendarResourceIT {
 
         // Create the Calendar with an existing ID
         calendar.setId(1L);
-        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCalendarMockMvc.perform(post("/api/calendars")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(calendarDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(calendar)))
             .andExpect(status().isBadRequest());
 
         // Validate the Calendar in the database
@@ -199,11 +188,10 @@ public class CalendarResourceIT {
         em.detach(updatedCalendar);
         updatedCalendar
             .name(UPDATED_NAME);
-        CalendarDTO calendarDTO = calendarMapper.toDto(updatedCalendar);
 
         restCalendarMockMvc.perform(put("/api/calendars")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(calendarDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedCalendar)))
             .andExpect(status().isOk());
 
         // Validate the Calendar in the database
@@ -219,12 +207,11 @@ public class CalendarResourceIT {
         int databaseSizeBeforeUpdate = calendarRepository.findAll().size();
 
         // Create the Calendar
-        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCalendarMockMvc.perform(put("/api/calendars")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(calendarDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(calendar)))
             .andExpect(status().isBadRequest());
 
         // Validate the Calendar in the database
@@ -263,28 +250,5 @@ public class CalendarResourceIT {
         assertThat(calendar1).isNotEqualTo(calendar2);
         calendar1.setId(null);
         assertThat(calendar1).isNotEqualTo(calendar2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(CalendarDTO.class);
-        CalendarDTO calendarDTO1 = new CalendarDTO();
-        calendarDTO1.setId(1L);
-        CalendarDTO calendarDTO2 = new CalendarDTO();
-        assertThat(calendarDTO1).isNotEqualTo(calendarDTO2);
-        calendarDTO2.setId(calendarDTO1.getId());
-        assertThat(calendarDTO1).isEqualTo(calendarDTO2);
-        calendarDTO2.setId(2L);
-        assertThat(calendarDTO1).isNotEqualTo(calendarDTO2);
-        calendarDTO1.setId(null);
-        assertThat(calendarDTO1).isNotEqualTo(calendarDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(calendarMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(calendarMapper.fromId(null)).isNull();
     }
 }

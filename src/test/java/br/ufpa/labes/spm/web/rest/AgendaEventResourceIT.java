@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AgendaEvent;
 import br.ufpa.labes.spm.repository.AgendaEventRepository;
-import br.ufpa.labes.spm.service.AgendaEventService;
-import br.ufpa.labes.spm.service.dto.AgendaEventDTO;
-import br.ufpa.labes.spm.service.mapper.AgendaEventMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class AgendaEventResourceIT {
     private AgendaEventRepository agendaEventRepository;
 
     @Autowired
-    private AgendaEventMapper agendaEventMapper;
-
-    @Autowired
-    private AgendaEventService agendaEventService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class AgendaEventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgendaEventResource agendaEventResource = new AgendaEventResource(agendaEventService);
+        final AgendaEventResource agendaEventResource = new AgendaEventResource(agendaEventRepository);
         this.restAgendaEventMockMvc = MockMvcBuilders.standaloneSetup(agendaEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class AgendaEventResourceIT {
         int databaseSizeBeforeCreate = agendaEventRepository.findAll().size();
 
         // Create the AgendaEvent
-        AgendaEventDTO agendaEventDTO = agendaEventMapper.toDto(agendaEvent);
         restAgendaEventMockMvc.perform(post("/api/agenda-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agendaEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agendaEvent)))
             .andExpect(status().isCreated());
 
         // Validate the AgendaEvent in the database
@@ -129,12 +119,11 @@ public class AgendaEventResourceIT {
 
         // Create the AgendaEvent with an existing ID
         agendaEvent.setId(1L);
-        AgendaEventDTO agendaEventDTO = agendaEventMapper.toDto(agendaEvent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAgendaEventMockMvc.perform(post("/api/agenda-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agendaEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agendaEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgendaEvent in the database
@@ -189,11 +178,10 @@ public class AgendaEventResourceIT {
         AgendaEvent updatedAgendaEvent = agendaEventRepository.findById(agendaEvent.getId()).get();
         // Disconnect from session so that the updates on updatedAgendaEvent are not directly saved in db
         em.detach(updatedAgendaEvent);
-        AgendaEventDTO agendaEventDTO = agendaEventMapper.toDto(updatedAgendaEvent);
 
         restAgendaEventMockMvc.perform(put("/api/agenda-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agendaEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAgendaEvent)))
             .andExpect(status().isOk());
 
         // Validate the AgendaEvent in the database
@@ -208,12 +196,11 @@ public class AgendaEventResourceIT {
         int databaseSizeBeforeUpdate = agendaEventRepository.findAll().size();
 
         // Create the AgendaEvent
-        AgendaEventDTO agendaEventDTO = agendaEventMapper.toDto(agendaEvent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAgendaEventMockMvc.perform(put("/api/agenda-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agendaEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agendaEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgendaEvent in the database
@@ -252,28 +239,5 @@ public class AgendaEventResourceIT {
         assertThat(agendaEvent1).isNotEqualTo(agendaEvent2);
         agendaEvent1.setId(null);
         assertThat(agendaEvent1).isNotEqualTo(agendaEvent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgendaEventDTO.class);
-        AgendaEventDTO agendaEventDTO1 = new AgendaEventDTO();
-        agendaEventDTO1.setId(1L);
-        AgendaEventDTO agendaEventDTO2 = new AgendaEventDTO();
-        assertThat(agendaEventDTO1).isNotEqualTo(agendaEventDTO2);
-        agendaEventDTO2.setId(agendaEventDTO1.getId());
-        assertThat(agendaEventDTO1).isEqualTo(agendaEventDTO2);
-        agendaEventDTO2.setId(2L);
-        assertThat(agendaEventDTO1).isNotEqualTo(agendaEventDTO2);
-        agendaEventDTO1.setId(null);
-        assertThat(agendaEventDTO1).isNotEqualTo(agendaEventDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(agendaEventMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(agendaEventMapper.fromId(null)).isNull();
     }
 }

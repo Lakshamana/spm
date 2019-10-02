@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.EstimationService;
+import br.ufpa.labes.spm.domain.Estimation;
+import br.ufpa.labes.spm.repository.EstimationRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.EstimationDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class EstimationResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final EstimationService estimationService;
+    private final EstimationRepository estimationRepository;
 
-    public EstimationResource(EstimationService estimationService) {
-        this.estimationService = estimationService;
+    public EstimationResource(EstimationRepository estimationRepository) {
+        this.estimationRepository = estimationRepository;
     }
 
     /**
      * {@code POST  /estimations} : Create a new estimation.
      *
-     * @param estimationDTO the estimationDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new estimationDTO, or with status {@code 400 (Bad Request)} if the estimation has already an ID.
+     * @param estimation the estimation to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new estimation, or with status {@code 400 (Bad Request)} if the estimation has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/estimations")
-    public ResponseEntity<EstimationDTO> createEstimation(@RequestBody EstimationDTO estimationDTO) throws URISyntaxException {
-        log.debug("REST request to save Estimation : {}", estimationDTO);
-        if (estimationDTO.getId() != null) {
+    public ResponseEntity<Estimation> createEstimation(@RequestBody Estimation estimation) throws URISyntaxException {
+        log.debug("REST request to save Estimation : {}", estimation);
+        if (estimation.getId() != null) {
             throw new BadRequestAlertException("A new estimation cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        EstimationDTO result = estimationService.save(estimationDTO);
+        Estimation result = estimationRepository.save(estimation);
         return ResponseEntity.created(new URI("/api/estimations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class EstimationResource {
     /**
      * {@code PUT  /estimations} : Updates an existing estimation.
      *
-     * @param estimationDTO the estimationDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated estimationDTO,
-     * or with status {@code 400 (Bad Request)} if the estimationDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the estimationDTO couldn't be updated.
+     * @param estimation the estimation to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated estimation,
+     * or with status {@code 400 (Bad Request)} if the estimation is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the estimation couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/estimations")
-    public ResponseEntity<EstimationDTO> updateEstimation(@RequestBody EstimationDTO estimationDTO) throws URISyntaxException {
-        log.debug("REST request to update Estimation : {}", estimationDTO);
-        if (estimationDTO.getId() == null) {
+    public ResponseEntity<Estimation> updateEstimation(@RequestBody Estimation estimation) throws URISyntaxException {
+        log.debug("REST request to update Estimation : {}", estimation);
+        if (estimation.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        EstimationDTO result = estimationService.save(estimationDTO);
+        Estimation result = estimationRepository.save(estimation);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, estimationDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, estimation.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class EstimationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of estimations in body.
      */
     @GetMapping("/estimations")
-    public List<EstimationDTO> getAllEstimations() {
+    public List<Estimation> getAllEstimations() {
         log.debug("REST request to get all Estimations");
-        return estimationService.findAll();
+        return estimationRepository.findAll();
     }
 
     /**
      * {@code GET  /estimations/:id} : get the "id" estimation.
      *
-     * @param id the id of the estimationDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the estimationDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the estimation to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the estimation, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/estimations/{id}")
-    public ResponseEntity<EstimationDTO> getEstimation(@PathVariable Long id) {
+    public ResponseEntity<Estimation> getEstimation(@PathVariable Long id) {
         log.debug("REST request to get Estimation : {}", id);
-        Optional<EstimationDTO> estimationDTO = estimationService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(estimationDTO);
+        Optional<Estimation> estimation = estimationRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(estimation);
     }
 
     /**
      * {@code DELETE  /estimations/:id} : delete the "id" estimation.
      *
-     * @param id the id of the estimationDTO to delete.
+     * @param id the id of the estimation to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/estimations/{id}")
     public ResponseEntity<Void> deleteEstimation(@PathVariable Long id) {
         log.debug("REST request to delete Estimation : {}", id);
-        estimationService.delete(id);
+        estimationRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

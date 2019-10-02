@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Agent;
 import br.ufpa.labes.spm.repository.AgentRepository;
-import br.ufpa.labes.spm.service.AgentService;
-import br.ufpa.labes.spm.service.dto.AgentDTO;
-import br.ufpa.labes.spm.service.mapper.AgentMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -88,15 +85,6 @@ public class AgentResourceIT {
     private AgentRepository agentRepositoryMock;
 
     @Autowired
-    private AgentMapper agentMapper;
-
-    @Mock
-    private AgentService agentServiceMock;
-
-    @Autowired
-    private AgentService agentService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -118,7 +106,7 @@ public class AgentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgentResource agentResource = new AgentResource(agentService);
+        final AgentResource agentResource = new AgentResource(agentRepository);
         this.restAgentMockMvc = MockMvcBuilders.standaloneSetup(agentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -183,10 +171,9 @@ public class AgentResourceIT {
         int databaseSizeBeforeCreate = agentRepository.findAll().size();
 
         // Create the Agent
-        AgentDTO agentDTO = agentMapper.toDto(agent);
         restAgentMockMvc.perform(post("/api/agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agent)))
             .andExpect(status().isCreated());
 
         // Validate the Agent in the database
@@ -214,12 +201,11 @@ public class AgentResourceIT {
 
         // Create the Agent with an existing ID
         agent.setId(1L);
-        AgentDTO agentDTO = agentMapper.toDto(agent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAgentMockMvc.perform(post("/api/agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agent)))
             .andExpect(status().isBadRequest());
 
         // Validate the Agent in the database
@@ -255,8 +241,8 @@ public class AgentResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllAgentsWithEagerRelationshipsIsEnabled() throws Exception {
-        AgentResource agentResource = new AgentResource(agentServiceMock);
-        when(agentServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        AgentResource agentResource = new AgentResource(agentRepositoryMock);
+        when(agentRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restAgentMockMvc = MockMvcBuilders.standaloneSetup(agentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -267,13 +253,13 @@ public class AgentResourceIT {
         restAgentMockMvc.perform(get("/api/agents?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(agentServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(agentRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllAgentsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        AgentResource agentResource = new AgentResource(agentServiceMock);
-            when(agentServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        AgentResource agentResource = new AgentResource(agentRepositoryMock);
+            when(agentRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restAgentMockMvc = MockMvcBuilders.standaloneSetup(agentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -283,7 +269,7 @@ public class AgentResourceIT {
         restAgentMockMvc.perform(get("/api/agents?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(agentServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(agentRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -344,11 +330,10 @@ public class AgentResourceIT {
             .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
             .upload(UPDATED_UPLOAD)
             .description(UPDATED_DESCRIPTION);
-        AgentDTO agentDTO = agentMapper.toDto(updatedAgent);
 
         restAgentMockMvc.perform(put("/api/agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAgent)))
             .andExpect(status().isOk());
 
         // Validate the Agent in the database
@@ -375,12 +360,11 @@ public class AgentResourceIT {
         int databaseSizeBeforeUpdate = agentRepository.findAll().size();
 
         // Create the Agent
-        AgentDTO agentDTO = agentMapper.toDto(agent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAgentMockMvc.perform(put("/api/agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agent)))
             .andExpect(status().isBadRequest());
 
         // Validate the Agent in the database
@@ -419,28 +403,5 @@ public class AgentResourceIT {
         assertThat(agent1).isNotEqualTo(agent2);
         agent1.setId(null);
         assertThat(agent1).isNotEqualTo(agent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgentDTO.class);
-        AgentDTO agentDTO1 = new AgentDTO();
-        agentDTO1.setId(1L);
-        AgentDTO agentDTO2 = new AgentDTO();
-        assertThat(agentDTO1).isNotEqualTo(agentDTO2);
-        agentDTO2.setId(agentDTO1.getId());
-        assertThat(agentDTO1).isEqualTo(agentDTO2);
-        agentDTO2.setId(2L);
-        assertThat(agentDTO1).isNotEqualTo(agentDTO2);
-        agentDTO1.setId(null);
-        assertThat(agentDTO1).isNotEqualTo(agentDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(agentMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(agentMapper.fromId(null)).isNull();
     }
 }

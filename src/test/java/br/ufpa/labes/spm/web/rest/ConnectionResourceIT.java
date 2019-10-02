@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Connection;
 import br.ufpa.labes.spm.repository.ConnectionRepository;
-import br.ufpa.labes.spm.service.ConnectionService;
-import br.ufpa.labes.spm.service.dto.ConnectionDTO;
-import br.ufpa.labes.spm.service.mapper.ConnectionMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class ConnectionResourceIT {
     private ConnectionRepository connectionRepository;
 
     @Autowired
-    private ConnectionMapper connectionMapper;
-
-    @Autowired
-    private ConnectionService connectionService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class ConnectionResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ConnectionResource connectionResource = new ConnectionResource(connectionService);
+        final ConnectionResource connectionResource = new ConnectionResource(connectionRepository);
         this.restConnectionMockMvc = MockMvcBuilders.standaloneSetup(connectionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class ConnectionResourceIT {
         int databaseSizeBeforeCreate = connectionRepository.findAll().size();
 
         // Create the Connection
-        ConnectionDTO connectionDTO = connectionMapper.toDto(connection);
         restConnectionMockMvc.perform(post("/api/connections")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(connection)))
             .andExpect(status().isCreated());
 
         // Validate the Connection in the database
@@ -135,12 +125,11 @@ public class ConnectionResourceIT {
 
         // Create the Connection with an existing ID
         connection.setId(1L);
-        ConnectionDTO connectionDTO = connectionMapper.toDto(connection);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restConnectionMockMvc.perform(post("/api/connections")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(connection)))
             .andExpect(status().isBadRequest());
 
         // Validate the Connection in the database
@@ -199,11 +188,10 @@ public class ConnectionResourceIT {
         em.detach(updatedConnection);
         updatedConnection
             .ident(UPDATED_IDENT);
-        ConnectionDTO connectionDTO = connectionMapper.toDto(updatedConnection);
 
         restConnectionMockMvc.perform(put("/api/connections")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedConnection)))
             .andExpect(status().isOk());
 
         // Validate the Connection in the database
@@ -219,12 +207,11 @@ public class ConnectionResourceIT {
         int databaseSizeBeforeUpdate = connectionRepository.findAll().size();
 
         // Create the Connection
-        ConnectionDTO connectionDTO = connectionMapper.toDto(connection);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restConnectionMockMvc.perform(put("/api/connections")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(connection)))
             .andExpect(status().isBadRequest());
 
         // Validate the Connection in the database
@@ -263,28 +250,5 @@ public class ConnectionResourceIT {
         assertThat(connection1).isNotEqualTo(connection2);
         connection1.setId(null);
         assertThat(connection1).isNotEqualTo(connection2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ConnectionDTO.class);
-        ConnectionDTO connectionDTO1 = new ConnectionDTO();
-        connectionDTO1.setId(1L);
-        ConnectionDTO connectionDTO2 = new ConnectionDTO();
-        assertThat(connectionDTO1).isNotEqualTo(connectionDTO2);
-        connectionDTO2.setId(connectionDTO1.getId());
-        assertThat(connectionDTO1).isEqualTo(connectionDTO2);
-        connectionDTO2.setId(2L);
-        assertThat(connectionDTO1).isNotEqualTo(connectionDTO2);
-        connectionDTO1.setId(null);
-        assertThat(connectionDTO1).isNotEqualTo(connectionDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(connectionMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(connectionMapper.fromId(null)).isNull();
     }
 }

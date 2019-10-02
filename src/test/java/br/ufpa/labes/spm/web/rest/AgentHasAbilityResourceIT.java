@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AgentHasAbility;
 import br.ufpa.labes.spm.repository.AgentHasAbilityRepository;
-import br.ufpa.labes.spm.service.AgentHasAbilityService;
-import br.ufpa.labes.spm.service.dto.AgentHasAbilityDTO;
-import br.ufpa.labes.spm.service.mapper.AgentHasAbilityMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,12 +43,6 @@ public class AgentHasAbilityResourceIT {
     private AgentHasAbilityRepository agentHasAbilityRepository;
 
     @Autowired
-    private AgentHasAbilityMapper agentHasAbilityMapper;
-
-    @Autowired
-    private AgentHasAbilityService agentHasAbilityService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +64,7 @@ public class AgentHasAbilityResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgentHasAbilityResource agentHasAbilityResource = new AgentHasAbilityResource(agentHasAbilityService);
+        final AgentHasAbilityResource agentHasAbilityResource = new AgentHasAbilityResource(agentHasAbilityRepository);
         this.restAgentHasAbilityMockMvc = MockMvcBuilders.standaloneSetup(agentHasAbilityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -116,10 +107,9 @@ public class AgentHasAbilityResourceIT {
         int databaseSizeBeforeCreate = agentHasAbilityRepository.findAll().size();
 
         // Create the AgentHasAbility
-        AgentHasAbilityDTO agentHasAbilityDTO = agentHasAbilityMapper.toDto(agentHasAbility);
         restAgentHasAbilityMockMvc.perform(post("/api/agent-has-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentHasAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentHasAbility)))
             .andExpect(status().isCreated());
 
         // Validate the AgentHasAbility in the database
@@ -136,12 +126,11 @@ public class AgentHasAbilityResourceIT {
 
         // Create the AgentHasAbility with an existing ID
         agentHasAbility.setId(1L);
-        AgentHasAbilityDTO agentHasAbilityDTO = agentHasAbilityMapper.toDto(agentHasAbility);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAgentHasAbilityMockMvc.perform(post("/api/agent-has-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentHasAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentHasAbility)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentHasAbility in the database
@@ -200,11 +189,10 @@ public class AgentHasAbilityResourceIT {
         em.detach(updatedAgentHasAbility);
         updatedAgentHasAbility
             .degree(UPDATED_DEGREE);
-        AgentHasAbilityDTO agentHasAbilityDTO = agentHasAbilityMapper.toDto(updatedAgentHasAbility);
 
         restAgentHasAbilityMockMvc.perform(put("/api/agent-has-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentHasAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAgentHasAbility)))
             .andExpect(status().isOk());
 
         // Validate the AgentHasAbility in the database
@@ -220,12 +208,11 @@ public class AgentHasAbilityResourceIT {
         int databaseSizeBeforeUpdate = agentHasAbilityRepository.findAll().size();
 
         // Create the AgentHasAbility
-        AgentHasAbilityDTO agentHasAbilityDTO = agentHasAbilityMapper.toDto(agentHasAbility);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAgentHasAbilityMockMvc.perform(put("/api/agent-has-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentHasAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentHasAbility)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentHasAbility in the database
@@ -264,28 +251,5 @@ public class AgentHasAbilityResourceIT {
         assertThat(agentHasAbility1).isNotEqualTo(agentHasAbility2);
         agentHasAbility1.setId(null);
         assertThat(agentHasAbility1).isNotEqualTo(agentHasAbility2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgentHasAbilityDTO.class);
-        AgentHasAbilityDTO agentHasAbilityDTO1 = new AgentHasAbilityDTO();
-        agentHasAbilityDTO1.setId(1L);
-        AgentHasAbilityDTO agentHasAbilityDTO2 = new AgentHasAbilityDTO();
-        assertThat(agentHasAbilityDTO1).isNotEqualTo(agentHasAbilityDTO2);
-        agentHasAbilityDTO2.setId(agentHasAbilityDTO1.getId());
-        assertThat(agentHasAbilityDTO1).isEqualTo(agentHasAbilityDTO2);
-        agentHasAbilityDTO2.setId(2L);
-        assertThat(agentHasAbilityDTO1).isNotEqualTo(agentHasAbilityDTO2);
-        agentHasAbilityDTO1.setId(null);
-        assertThat(agentHasAbilityDTO1).isNotEqualTo(agentHasAbilityDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(agentHasAbilityMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(agentHasAbilityMapper.fromId(null)).isNull();
     }
 }

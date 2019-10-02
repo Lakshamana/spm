@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ChatLog;
 import br.ufpa.labes.spm.repository.ChatLogRepository;
-import br.ufpa.labes.spm.service.ChatLogService;
-import br.ufpa.labes.spm.service.dto.ChatLogDTO;
-import br.ufpa.labes.spm.service.mapper.ChatLogMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -59,15 +56,6 @@ public class ChatLogResourceIT {
     private ChatLogRepository chatLogRepositoryMock;
 
     @Autowired
-    private ChatLogMapper chatLogMapper;
-
-    @Mock
-    private ChatLogService chatLogServiceMock;
-
-    @Autowired
-    private ChatLogService chatLogService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -89,7 +77,7 @@ public class ChatLogResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ChatLogResource chatLogResource = new ChatLogResource(chatLogService);
+        final ChatLogResource chatLogResource = new ChatLogResource(chatLogRepository);
         this.restChatLogMockMvc = MockMvcBuilders.standaloneSetup(chatLogResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -134,10 +122,9 @@ public class ChatLogResourceIT {
         int databaseSizeBeforeCreate = chatLogRepository.findAll().size();
 
         // Create the ChatLog
-        ChatLogDTO chatLogDTO = chatLogMapper.toDto(chatLog);
         restChatLogMockMvc.perform(post("/api/chat-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(chatLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(chatLog)))
             .andExpect(status().isCreated());
 
         // Validate the ChatLog in the database
@@ -155,12 +142,11 @@ public class ChatLogResourceIT {
 
         // Create the ChatLog with an existing ID
         chatLog.setId(1L);
-        ChatLogDTO chatLogDTO = chatLogMapper.toDto(chatLog);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restChatLogMockMvc.perform(post("/api/chat-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(chatLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(chatLog)))
             .andExpect(status().isBadRequest());
 
         // Validate the ChatLog in the database
@@ -186,8 +172,8 @@ public class ChatLogResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllChatLogsWithEagerRelationshipsIsEnabled() throws Exception {
-        ChatLogResource chatLogResource = new ChatLogResource(chatLogServiceMock);
-        when(chatLogServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ChatLogResource chatLogResource = new ChatLogResource(chatLogRepositoryMock);
+        when(chatLogRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restChatLogMockMvc = MockMvcBuilders.standaloneSetup(chatLogResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -198,13 +184,13 @@ public class ChatLogResourceIT {
         restChatLogMockMvc.perform(get("/api/chat-logs?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(chatLogServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(chatLogRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllChatLogsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ChatLogResource chatLogResource = new ChatLogResource(chatLogServiceMock);
-            when(chatLogServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ChatLogResource chatLogResource = new ChatLogResource(chatLogRepositoryMock);
+            when(chatLogRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restChatLogMockMvc = MockMvcBuilders.standaloneSetup(chatLogResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -214,7 +200,7 @@ public class ChatLogResourceIT {
         restChatLogMockMvc.perform(get("/api/chat-logs?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(chatLogServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(chatLogRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -255,11 +241,10 @@ public class ChatLogResourceIT {
         updatedChatLog
             .log(UPDATED_LOG)
             .date(UPDATED_DATE);
-        ChatLogDTO chatLogDTO = chatLogMapper.toDto(updatedChatLog);
 
         restChatLogMockMvc.perform(put("/api/chat-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(chatLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedChatLog)))
             .andExpect(status().isOk());
 
         // Validate the ChatLog in the database
@@ -276,12 +261,11 @@ public class ChatLogResourceIT {
         int databaseSizeBeforeUpdate = chatLogRepository.findAll().size();
 
         // Create the ChatLog
-        ChatLogDTO chatLogDTO = chatLogMapper.toDto(chatLog);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restChatLogMockMvc.perform(put("/api/chat-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(chatLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(chatLog)))
             .andExpect(status().isBadRequest());
 
         // Validate the ChatLog in the database
@@ -320,28 +304,5 @@ public class ChatLogResourceIT {
         assertThat(chatLog1).isNotEqualTo(chatLog2);
         chatLog1.setId(null);
         assertThat(chatLog1).isNotEqualTo(chatLog2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ChatLogDTO.class);
-        ChatLogDTO chatLogDTO1 = new ChatLogDTO();
-        chatLogDTO1.setId(1L);
-        ChatLogDTO chatLogDTO2 = new ChatLogDTO();
-        assertThat(chatLogDTO1).isNotEqualTo(chatLogDTO2);
-        chatLogDTO2.setId(chatLogDTO1.getId());
-        assertThat(chatLogDTO1).isEqualTo(chatLogDTO2);
-        chatLogDTO2.setId(2L);
-        assertThat(chatLogDTO1).isNotEqualTo(chatLogDTO2);
-        chatLogDTO1.setId(null);
-        assertThat(chatLogDTO1).isNotEqualTo(chatLogDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(chatLogMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(chatLogMapper.fromId(null)).isNull();
     }
 }

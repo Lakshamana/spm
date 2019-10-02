@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ToolParameterService;
+import br.ufpa.labes.spm.domain.ToolParameter;
+import br.ufpa.labes.spm.repository.ToolParameterRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ToolParameterDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ToolParameterResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ToolParameterService toolParameterService;
+    private final ToolParameterRepository toolParameterRepository;
 
-    public ToolParameterResource(ToolParameterService toolParameterService) {
-        this.toolParameterService = toolParameterService;
+    public ToolParameterResource(ToolParameterRepository toolParameterRepository) {
+        this.toolParameterRepository = toolParameterRepository;
     }
 
     /**
      * {@code POST  /tool-parameters} : Create a new toolParameter.
      *
-     * @param toolParameterDTO the toolParameterDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new toolParameterDTO, or with status {@code 400 (Bad Request)} if the toolParameter has already an ID.
+     * @param toolParameter the toolParameter to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new toolParameter, or with status {@code 400 (Bad Request)} if the toolParameter has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/tool-parameters")
-    public ResponseEntity<ToolParameterDTO> createToolParameter(@RequestBody ToolParameterDTO toolParameterDTO) throws URISyntaxException {
-        log.debug("REST request to save ToolParameter : {}", toolParameterDTO);
-        if (toolParameterDTO.getId() != null) {
+    public ResponseEntity<ToolParameter> createToolParameter(@RequestBody ToolParameter toolParameter) throws URISyntaxException {
+        log.debug("REST request to save ToolParameter : {}", toolParameter);
+        if (toolParameter.getId() != null) {
             throw new BadRequestAlertException("A new toolParameter cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ToolParameterDTO result = toolParameterService.save(toolParameterDTO);
+        ToolParameter result = toolParameterRepository.save(toolParameter);
         return ResponseEntity.created(new URI("/api/tool-parameters/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ToolParameterResource {
     /**
      * {@code PUT  /tool-parameters} : Updates an existing toolParameter.
      *
-     * @param toolParameterDTO the toolParameterDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated toolParameterDTO,
-     * or with status {@code 400 (Bad Request)} if the toolParameterDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the toolParameterDTO couldn't be updated.
+     * @param toolParameter the toolParameter to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated toolParameter,
+     * or with status {@code 400 (Bad Request)} if the toolParameter is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the toolParameter couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/tool-parameters")
-    public ResponseEntity<ToolParameterDTO> updateToolParameter(@RequestBody ToolParameterDTO toolParameterDTO) throws URISyntaxException {
-        log.debug("REST request to update ToolParameter : {}", toolParameterDTO);
-        if (toolParameterDTO.getId() == null) {
+    public ResponseEntity<ToolParameter> updateToolParameter(@RequestBody ToolParameter toolParameter) throws URISyntaxException {
+        log.debug("REST request to update ToolParameter : {}", toolParameter);
+        if (toolParameter.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ToolParameterDTO result = toolParameterService.save(toolParameterDTO);
+        ToolParameter result = toolParameterRepository.save(toolParameter);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, toolParameterDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, toolParameter.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ToolParameterResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of toolParameters in body.
      */
     @GetMapping("/tool-parameters")
-    public List<ToolParameterDTO> getAllToolParameters() {
+    public List<ToolParameter> getAllToolParameters() {
         log.debug("REST request to get all ToolParameters");
-        return toolParameterService.findAll();
+        return toolParameterRepository.findAll();
     }
 
     /**
      * {@code GET  /tool-parameters/:id} : get the "id" toolParameter.
      *
-     * @param id the id of the toolParameterDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the toolParameterDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the toolParameter to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the toolParameter, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/tool-parameters/{id}")
-    public ResponseEntity<ToolParameterDTO> getToolParameter(@PathVariable Long id) {
+    public ResponseEntity<ToolParameter> getToolParameter(@PathVariable Long id) {
         log.debug("REST request to get ToolParameter : {}", id);
-        Optional<ToolParameterDTO> toolParameterDTO = toolParameterService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(toolParameterDTO);
+        Optional<ToolParameter> toolParameter = toolParameterRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(toolParameter);
     }
 
     /**
      * {@code DELETE  /tool-parameters/:id} : delete the "id" toolParameter.
      *
-     * @param id the id of the toolParameterDTO to delete.
+     * @param id the id of the toolParameter to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/tool-parameters/{id}")
     public ResponseEntity<Void> deleteToolParameter(@PathVariable Long id) {
         log.debug("REST request to delete ToolParameter : {}", id);
-        toolParameterService.delete(id);
+        toolParameterRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

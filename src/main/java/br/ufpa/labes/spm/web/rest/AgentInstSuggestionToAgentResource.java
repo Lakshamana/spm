@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AgentInstSuggestionToAgentService;
+import br.ufpa.labes.spm.domain.AgentInstSuggestionToAgent;
+import br.ufpa.labes.spm.repository.AgentInstSuggestionToAgentRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AgentInstSuggestionToAgentDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class AgentInstSuggestionToAgentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AgentInstSuggestionToAgentService agentInstSuggestionToAgentService;
+    private final AgentInstSuggestionToAgentRepository agentInstSuggestionToAgentRepository;
 
-    public AgentInstSuggestionToAgentResource(AgentInstSuggestionToAgentService agentInstSuggestionToAgentService) {
-        this.agentInstSuggestionToAgentService = agentInstSuggestionToAgentService;
+    public AgentInstSuggestionToAgentResource(AgentInstSuggestionToAgentRepository agentInstSuggestionToAgentRepository) {
+        this.agentInstSuggestionToAgentRepository = agentInstSuggestionToAgentRepository;
     }
 
     /**
      * {@code POST  /agent-inst-suggestion-to-agents} : Create a new agentInstSuggestionToAgent.
      *
-     * @param agentInstSuggestionToAgentDTO the agentInstSuggestionToAgentDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentInstSuggestionToAgentDTO, or with status {@code 400 (Bad Request)} if the agentInstSuggestionToAgent has already an ID.
+     * @param agentInstSuggestionToAgent the agentInstSuggestionToAgent to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentInstSuggestionToAgent, or with status {@code 400 (Bad Request)} if the agentInstSuggestionToAgent has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/agent-inst-suggestion-to-agents")
-    public ResponseEntity<AgentInstSuggestionToAgentDTO> createAgentInstSuggestionToAgent(@RequestBody AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO) throws URISyntaxException {
-        log.debug("REST request to save AgentInstSuggestionToAgent : {}", agentInstSuggestionToAgentDTO);
-        if (agentInstSuggestionToAgentDTO.getId() != null) {
+    public ResponseEntity<AgentInstSuggestionToAgent> createAgentInstSuggestionToAgent(@RequestBody AgentInstSuggestionToAgent agentInstSuggestionToAgent) throws URISyntaxException {
+        log.debug("REST request to save AgentInstSuggestionToAgent : {}", agentInstSuggestionToAgent);
+        if (agentInstSuggestionToAgent.getId() != null) {
             throw new BadRequestAlertException("A new agentInstSuggestionToAgent cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AgentInstSuggestionToAgentDTO result = agentInstSuggestionToAgentService.save(agentInstSuggestionToAgentDTO);
+        AgentInstSuggestionToAgent result = agentInstSuggestionToAgentRepository.save(agentInstSuggestionToAgent);
         return ResponseEntity.created(new URI("/api/agent-inst-suggestion-to-agents/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class AgentInstSuggestionToAgentResource {
     /**
      * {@code PUT  /agent-inst-suggestion-to-agents} : Updates an existing agentInstSuggestionToAgent.
      *
-     * @param agentInstSuggestionToAgentDTO the agentInstSuggestionToAgentDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentInstSuggestionToAgentDTO,
-     * or with status {@code 400 (Bad Request)} if the agentInstSuggestionToAgentDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the agentInstSuggestionToAgentDTO couldn't be updated.
+     * @param agentInstSuggestionToAgent the agentInstSuggestionToAgent to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentInstSuggestionToAgent,
+     * or with status {@code 400 (Bad Request)} if the agentInstSuggestionToAgent is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the agentInstSuggestionToAgent couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/agent-inst-suggestion-to-agents")
-    public ResponseEntity<AgentInstSuggestionToAgentDTO> updateAgentInstSuggestionToAgent(@RequestBody AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO) throws URISyntaxException {
-        log.debug("REST request to update AgentInstSuggestionToAgent : {}", agentInstSuggestionToAgentDTO);
-        if (agentInstSuggestionToAgentDTO.getId() == null) {
+    public ResponseEntity<AgentInstSuggestionToAgent> updateAgentInstSuggestionToAgent(@RequestBody AgentInstSuggestionToAgent agentInstSuggestionToAgent) throws URISyntaxException {
+        log.debug("REST request to update AgentInstSuggestionToAgent : {}", agentInstSuggestionToAgent);
+        if (agentInstSuggestionToAgent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AgentInstSuggestionToAgentDTO result = agentInstSuggestionToAgentService.save(agentInstSuggestionToAgentDTO);
+        AgentInstSuggestionToAgent result = agentInstSuggestionToAgentRepository.save(agentInstSuggestionToAgent);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentInstSuggestionToAgentDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentInstSuggestionToAgent.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class AgentInstSuggestionToAgentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of agentInstSuggestionToAgents in body.
      */
     @GetMapping("/agent-inst-suggestion-to-agents")
-    public List<AgentInstSuggestionToAgentDTO> getAllAgentInstSuggestionToAgents() {
+    public List<AgentInstSuggestionToAgent> getAllAgentInstSuggestionToAgents() {
         log.debug("REST request to get all AgentInstSuggestionToAgents");
-        return agentInstSuggestionToAgentService.findAll();
+        return agentInstSuggestionToAgentRepository.findAll();
     }
 
     /**
      * {@code GET  /agent-inst-suggestion-to-agents/:id} : get the "id" agentInstSuggestionToAgent.
      *
-     * @param id the id of the agentInstSuggestionToAgentDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentInstSuggestionToAgentDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the agentInstSuggestionToAgent to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentInstSuggestionToAgent, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/agent-inst-suggestion-to-agents/{id}")
-    public ResponseEntity<AgentInstSuggestionToAgentDTO> getAgentInstSuggestionToAgent(@PathVariable Long id) {
+    public ResponseEntity<AgentInstSuggestionToAgent> getAgentInstSuggestionToAgent(@PathVariable Long id) {
         log.debug("REST request to get AgentInstSuggestionToAgent : {}", id);
-        Optional<AgentInstSuggestionToAgentDTO> agentInstSuggestionToAgentDTO = agentInstSuggestionToAgentService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(agentInstSuggestionToAgentDTO);
+        Optional<AgentInstSuggestionToAgent> agentInstSuggestionToAgent = agentInstSuggestionToAgentRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(agentInstSuggestionToAgent);
     }
 
     /**
      * {@code DELETE  /agent-inst-suggestion-to-agents/:id} : delete the "id" agentInstSuggestionToAgent.
      *
-     * @param id the id of the agentInstSuggestionToAgentDTO to delete.
+     * @param id the id of the agentInstSuggestionToAgent to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/agent-inst-suggestion-to-agents/{id}")
     public ResponseEntity<Void> deleteAgentInstSuggestionToAgent(@PathVariable Long id) {
         log.debug("REST request to delete AgentInstSuggestionToAgent : {}", id);
-        agentInstSuggestionToAgentService.delete(id);
+        agentInstSuggestionToAgentRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

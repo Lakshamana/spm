@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.MultipleCon;
 import br.ufpa.labes.spm.repository.MultipleConRepository;
-import br.ufpa.labes.spm.service.MultipleConService;
-import br.ufpa.labes.spm.service.dto.MultipleConDTO;
-import br.ufpa.labes.spm.service.mapper.MultipleConMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class MultipleConResourceIT {
     private MultipleConRepository multipleConRepository;
 
     @Autowired
-    private MultipleConMapper multipleConMapper;
-
-    @Autowired
-    private MultipleConService multipleConService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class MultipleConResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MultipleConResource multipleConResource = new MultipleConResource(multipleConService);
+        final MultipleConResource multipleConResource = new MultipleConResource(multipleConRepository);
         this.restMultipleConMockMvc = MockMvcBuilders.standaloneSetup(multipleConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class MultipleConResourceIT {
         int databaseSizeBeforeCreate = multipleConRepository.findAll().size();
 
         // Create the MultipleCon
-        MultipleConDTO multipleConDTO = multipleConMapper.toDto(multipleCon);
         restMultipleConMockMvc.perform(post("/api/multiple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(multipleConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(multipleCon)))
             .andExpect(status().isCreated());
 
         // Validate the MultipleCon in the database
@@ -135,12 +125,11 @@ public class MultipleConResourceIT {
 
         // Create the MultipleCon with an existing ID
         multipleCon.setId(1L);
-        MultipleConDTO multipleConDTO = multipleConMapper.toDto(multipleCon);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMultipleConMockMvc.perform(post("/api/multiple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(multipleConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(multipleCon)))
             .andExpect(status().isBadRequest());
 
         // Validate the MultipleCon in the database
@@ -199,11 +188,10 @@ public class MultipleConResourceIT {
         em.detach(updatedMultipleCon);
         updatedMultipleCon
             .fired(UPDATED_FIRED);
-        MultipleConDTO multipleConDTO = multipleConMapper.toDto(updatedMultipleCon);
 
         restMultipleConMockMvc.perform(put("/api/multiple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(multipleConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedMultipleCon)))
             .andExpect(status().isOk());
 
         // Validate the MultipleCon in the database
@@ -219,12 +207,11 @@ public class MultipleConResourceIT {
         int databaseSizeBeforeUpdate = multipleConRepository.findAll().size();
 
         // Create the MultipleCon
-        MultipleConDTO multipleConDTO = multipleConMapper.toDto(multipleCon);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMultipleConMockMvc.perform(put("/api/multiple-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(multipleConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(multipleCon)))
             .andExpect(status().isBadRequest());
 
         // Validate the MultipleCon in the database
@@ -263,28 +250,5 @@ public class MultipleConResourceIT {
         assertThat(multipleCon1).isNotEqualTo(multipleCon2);
         multipleCon1.setId(null);
         assertThat(multipleCon1).isNotEqualTo(multipleCon2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MultipleConDTO.class);
-        MultipleConDTO multipleConDTO1 = new MultipleConDTO();
-        multipleConDTO1.setId(1L);
-        MultipleConDTO multipleConDTO2 = new MultipleConDTO();
-        assertThat(multipleConDTO1).isNotEqualTo(multipleConDTO2);
-        multipleConDTO2.setId(multipleConDTO1.getId());
-        assertThat(multipleConDTO1).isEqualTo(multipleConDTO2);
-        multipleConDTO2.setId(2L);
-        assertThat(multipleConDTO1).isNotEqualTo(multipleConDTO2);
-        multipleConDTO1.setId(null);
-        assertThat(multipleConDTO1).isNotEqualTo(multipleConDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(multipleConMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(multipleConMapper.fromId(null)).isNull();
     }
 }

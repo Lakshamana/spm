@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Subroutine;
 import br.ufpa.labes.spm.repository.SubroutineRepository;
-import br.ufpa.labes.spm.service.SubroutineService;
-import br.ufpa.labes.spm.service.dto.SubroutineDTO;
-import br.ufpa.labes.spm.service.mapper.SubroutineMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class SubroutineResourceIT {
     private SubroutineRepository subroutineRepository;
 
     @Autowired
-    private SubroutineMapper subroutineMapper;
-
-    @Autowired
-    private SubroutineService subroutineService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class SubroutineResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SubroutineResource subroutineResource = new SubroutineResource(subroutineService);
+        final SubroutineResource subroutineResource = new SubroutineResource(subroutineRepository);
         this.restSubroutineMockMvc = MockMvcBuilders.standaloneSetup(subroutineResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class SubroutineResourceIT {
         int databaseSizeBeforeCreate = subroutineRepository.findAll().size();
 
         // Create the Subroutine
-        SubroutineDTO subroutineDTO = subroutineMapper.toDto(subroutine);
         restSubroutineMockMvc.perform(post("/api/subroutines")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(subroutine)))
             .andExpect(status().isCreated());
 
         // Validate the Subroutine in the database
@@ -129,12 +119,11 @@ public class SubroutineResourceIT {
 
         // Create the Subroutine with an existing ID
         subroutine.setId(1L);
-        SubroutineDTO subroutineDTO = subroutineMapper.toDto(subroutine);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restSubroutineMockMvc.perform(post("/api/subroutines")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(subroutine)))
             .andExpect(status().isBadRequest());
 
         // Validate the Subroutine in the database
@@ -189,11 +178,10 @@ public class SubroutineResourceIT {
         Subroutine updatedSubroutine = subroutineRepository.findById(subroutine.getId()).get();
         // Disconnect from session so that the updates on updatedSubroutine are not directly saved in db
         em.detach(updatedSubroutine);
-        SubroutineDTO subroutineDTO = subroutineMapper.toDto(updatedSubroutine);
 
         restSubroutineMockMvc.perform(put("/api/subroutines")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedSubroutine)))
             .andExpect(status().isOk());
 
         // Validate the Subroutine in the database
@@ -208,12 +196,11 @@ public class SubroutineResourceIT {
         int databaseSizeBeforeUpdate = subroutineRepository.findAll().size();
 
         // Create the Subroutine
-        SubroutineDTO subroutineDTO = subroutineMapper.toDto(subroutine);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restSubroutineMockMvc.perform(put("/api/subroutines")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(subroutineDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(subroutine)))
             .andExpect(status().isBadRequest());
 
         // Validate the Subroutine in the database
@@ -252,28 +239,5 @@ public class SubroutineResourceIT {
         assertThat(subroutine1).isNotEqualTo(subroutine2);
         subroutine1.setId(null);
         assertThat(subroutine1).isNotEqualTo(subroutine2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(SubroutineDTO.class);
-        SubroutineDTO subroutineDTO1 = new SubroutineDTO();
-        subroutineDTO1.setId(1L);
-        SubroutineDTO subroutineDTO2 = new SubroutineDTO();
-        assertThat(subroutineDTO1).isNotEqualTo(subroutineDTO2);
-        subroutineDTO2.setId(subroutineDTO1.getId());
-        assertThat(subroutineDTO1).isEqualTo(subroutineDTO2);
-        subroutineDTO2.setId(2L);
-        assertThat(subroutineDTO1).isNotEqualTo(subroutineDTO2);
-        subroutineDTO1.setId(null);
-        assertThat(subroutineDTO1).isNotEqualTo(subroutineDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(subroutineMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(subroutineMapper.fromId(null)).isNull();
     }
 }

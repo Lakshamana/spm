@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.BranchConService;
+import br.ufpa.labes.spm.domain.BranchCon;
+import br.ufpa.labes.spm.repository.BranchConRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.BranchConDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class BranchConResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final BranchConService branchConService;
+    private final BranchConRepository branchConRepository;
 
-    public BranchConResource(BranchConService branchConService) {
-        this.branchConService = branchConService;
+    public BranchConResource(BranchConRepository branchConRepository) {
+        this.branchConRepository = branchConRepository;
     }
 
     /**
      * {@code POST  /branch-cons} : Create a new branchCon.
      *
-     * @param branchConDTO the branchConDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new branchConDTO, or with status {@code 400 (Bad Request)} if the branchCon has already an ID.
+     * @param branchCon the branchCon to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new branchCon, or with status {@code 400 (Bad Request)} if the branchCon has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/branch-cons")
-    public ResponseEntity<BranchConDTO> createBranchCon(@RequestBody BranchConDTO branchConDTO) throws URISyntaxException {
-        log.debug("REST request to save BranchCon : {}", branchConDTO);
-        if (branchConDTO.getId() != null) {
+    public ResponseEntity<BranchCon> createBranchCon(@RequestBody BranchCon branchCon) throws URISyntaxException {
+        log.debug("REST request to save BranchCon : {}", branchCon);
+        if (branchCon.getId() != null) {
             throw new BadRequestAlertException("A new branchCon cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        BranchConDTO result = branchConService.save(branchConDTO);
+        BranchCon result = branchConRepository.save(branchCon);
         return ResponseEntity.created(new URI("/api/branch-cons/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class BranchConResource {
     /**
      * {@code PUT  /branch-cons} : Updates an existing branchCon.
      *
-     * @param branchConDTO the branchConDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated branchConDTO,
-     * or with status {@code 400 (Bad Request)} if the branchConDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the branchConDTO couldn't be updated.
+     * @param branchCon the branchCon to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated branchCon,
+     * or with status {@code 400 (Bad Request)} if the branchCon is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the branchCon couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/branch-cons")
-    public ResponseEntity<BranchConDTO> updateBranchCon(@RequestBody BranchConDTO branchConDTO) throws URISyntaxException {
-        log.debug("REST request to update BranchCon : {}", branchConDTO);
-        if (branchConDTO.getId() == null) {
+    public ResponseEntity<BranchCon> updateBranchCon(@RequestBody BranchCon branchCon) throws URISyntaxException {
+        log.debug("REST request to update BranchCon : {}", branchCon);
+        if (branchCon.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        BranchConDTO result = branchConService.save(branchConDTO);
+        BranchCon result = branchConRepository.save(branchCon);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, branchConDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, branchCon.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class BranchConResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of branchCons in body.
      */
     @GetMapping("/branch-cons")
-    public List<BranchConDTO> getAllBranchCons() {
+    public List<BranchCon> getAllBranchCons() {
         log.debug("REST request to get all BranchCons");
-        return branchConService.findAll();
+        return branchConRepository.findAll();
     }
 
     /**
      * {@code GET  /branch-cons/:id} : get the "id" branchCon.
      *
-     * @param id the id of the branchConDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the branchConDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the branchCon to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the branchCon, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/branch-cons/{id}")
-    public ResponseEntity<BranchConDTO> getBranchCon(@PathVariable Long id) {
+    public ResponseEntity<BranchCon> getBranchCon(@PathVariable Long id) {
         log.debug("REST request to get BranchCon : {}", id);
-        Optional<BranchConDTO> branchConDTO = branchConService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(branchConDTO);
+        Optional<BranchCon> branchCon = branchConRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(branchCon);
     }
 
     /**
      * {@code DELETE  /branch-cons/:id} : delete the "id" branchCon.
      *
-     * @param id the id of the branchConDTO to delete.
+     * @param id the id of the branchCon to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/branch-cons/{id}")
     public ResponseEntity<Void> deleteBranchCon(@PathVariable Long id) {
         log.debug("REST request to delete BranchCon : {}", id);
-        branchConService.delete(id);
+        branchConRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

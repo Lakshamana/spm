@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AutomaticService;
+import br.ufpa.labes.spm.domain.Automatic;
+import br.ufpa.labes.spm.repository.AutomaticRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AutomaticDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class AutomaticResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AutomaticService automaticService;
+    private final AutomaticRepository automaticRepository;
 
-    public AutomaticResource(AutomaticService automaticService) {
-        this.automaticService = automaticService;
+    public AutomaticResource(AutomaticRepository automaticRepository) {
+        this.automaticRepository = automaticRepository;
     }
 
     /**
      * {@code POST  /automatics} : Create a new automatic.
      *
-     * @param automaticDTO the automaticDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new automaticDTO, or with status {@code 400 (Bad Request)} if the automatic has already an ID.
+     * @param automatic the automatic to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new automatic, or with status {@code 400 (Bad Request)} if the automatic has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/automatics")
-    public ResponseEntity<AutomaticDTO> createAutomatic(@RequestBody AutomaticDTO automaticDTO) throws URISyntaxException {
-        log.debug("REST request to save Automatic : {}", automaticDTO);
-        if (automaticDTO.getId() != null) {
+    public ResponseEntity<Automatic> createAutomatic(@RequestBody Automatic automatic) throws URISyntaxException {
+        log.debug("REST request to save Automatic : {}", automatic);
+        if (automatic.getId() != null) {
             throw new BadRequestAlertException("A new automatic cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AutomaticDTO result = automaticService.save(automaticDTO);
+        Automatic result = automaticRepository.save(automatic);
         return ResponseEntity.created(new URI("/api/automatics/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class AutomaticResource {
     /**
      * {@code PUT  /automatics} : Updates an existing automatic.
      *
-     * @param automaticDTO the automaticDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated automaticDTO,
-     * or with status {@code 400 (Bad Request)} if the automaticDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the automaticDTO couldn't be updated.
+     * @param automatic the automatic to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated automatic,
+     * or with status {@code 400 (Bad Request)} if the automatic is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the automatic couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/automatics")
-    public ResponseEntity<AutomaticDTO> updateAutomatic(@RequestBody AutomaticDTO automaticDTO) throws URISyntaxException {
-        log.debug("REST request to update Automatic : {}", automaticDTO);
-        if (automaticDTO.getId() == null) {
+    public ResponseEntity<Automatic> updateAutomatic(@RequestBody Automatic automatic) throws URISyntaxException {
+        log.debug("REST request to update Automatic : {}", automatic);
+        if (automatic.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AutomaticDTO result = automaticService.save(automaticDTO);
+        Automatic result = automaticRepository.save(automatic);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, automaticDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, automatic.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class AutomaticResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of automatics in body.
      */
     @GetMapping("/automatics")
-    public List<AutomaticDTO> getAllAutomatics() {
+    public List<Automatic> getAllAutomatics() {
         log.debug("REST request to get all Automatics");
-        return automaticService.findAll();
+        return automaticRepository.findAll();
     }
 
     /**
      * {@code GET  /automatics/:id} : get the "id" automatic.
      *
-     * @param id the id of the automaticDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the automaticDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the automatic to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the automatic, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/automatics/{id}")
-    public ResponseEntity<AutomaticDTO> getAutomatic(@PathVariable Long id) {
+    public ResponseEntity<Automatic> getAutomatic(@PathVariable Long id) {
         log.debug("REST request to get Automatic : {}", id);
-        Optional<AutomaticDTO> automaticDTO = automaticService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(automaticDTO);
+        Optional<Automatic> automatic = automaticRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(automatic);
     }
 
     /**
      * {@code DELETE  /automatics/:id} : delete the "id" automatic.
      *
-     * @param id the id of the automaticDTO to delete.
+     * @param id the id of the automatic to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/automatics/{id}")
     public ResponseEntity<Void> deleteAutomatic(@PathVariable Long id) {
         log.debug("REST request to delete Automatic : {}", id);
-        automaticService.delete(id);
+        automaticRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ConnectionType;
 import br.ufpa.labes.spm.repository.ConnectionTypeRepository;
-import br.ufpa.labes.spm.service.ConnectionTypeService;
-import br.ufpa.labes.spm.service.dto.ConnectionTypeDTO;
-import br.ufpa.labes.spm.service.mapper.ConnectionTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ConnectionTypeResourceIT {
     private ConnectionTypeRepository connectionTypeRepository;
 
     @Autowired
-    private ConnectionTypeMapper connectionTypeMapper;
-
-    @Autowired
-    private ConnectionTypeService connectionTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ConnectionTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ConnectionTypeResource connectionTypeResource = new ConnectionTypeResource(connectionTypeService);
+        final ConnectionTypeResource connectionTypeResource = new ConnectionTypeResource(connectionTypeRepository);
         this.restConnectionTypeMockMvc = MockMvcBuilders.standaloneSetup(connectionTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ConnectionTypeResourceIT {
         int databaseSizeBeforeCreate = connectionTypeRepository.findAll().size();
 
         // Create the ConnectionType
-        ConnectionTypeDTO connectionTypeDTO = connectionTypeMapper.toDto(connectionType);
         restConnectionTypeMockMvc.perform(post("/api/connection-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(connectionType)))
             .andExpect(status().isCreated());
 
         // Validate the ConnectionType in the database
@@ -129,12 +119,11 @@ public class ConnectionTypeResourceIT {
 
         // Create the ConnectionType with an existing ID
         connectionType.setId(1L);
-        ConnectionTypeDTO connectionTypeDTO = connectionTypeMapper.toDto(connectionType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restConnectionTypeMockMvc.perform(post("/api/connection-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(connectionType)))
             .andExpect(status().isBadRequest());
 
         // Validate the ConnectionType in the database
@@ -189,11 +178,10 @@ public class ConnectionTypeResourceIT {
         ConnectionType updatedConnectionType = connectionTypeRepository.findById(connectionType.getId()).get();
         // Disconnect from session so that the updates on updatedConnectionType are not directly saved in db
         em.detach(updatedConnectionType);
-        ConnectionTypeDTO connectionTypeDTO = connectionTypeMapper.toDto(updatedConnectionType);
 
         restConnectionTypeMockMvc.perform(put("/api/connection-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedConnectionType)))
             .andExpect(status().isOk());
 
         // Validate the ConnectionType in the database
@@ -208,12 +196,11 @@ public class ConnectionTypeResourceIT {
         int databaseSizeBeforeUpdate = connectionTypeRepository.findAll().size();
 
         // Create the ConnectionType
-        ConnectionTypeDTO connectionTypeDTO = connectionTypeMapper.toDto(connectionType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restConnectionTypeMockMvc.perform(put("/api/connection-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(connectionType)))
             .andExpect(status().isBadRequest());
 
         // Validate the ConnectionType in the database
@@ -252,28 +239,5 @@ public class ConnectionTypeResourceIT {
         assertThat(connectionType1).isNotEqualTo(connectionType2);
         connectionType1.setId(null);
         assertThat(connectionType1).isNotEqualTo(connectionType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ConnectionTypeDTO.class);
-        ConnectionTypeDTO connectionTypeDTO1 = new ConnectionTypeDTO();
-        connectionTypeDTO1.setId(1L);
-        ConnectionTypeDTO connectionTypeDTO2 = new ConnectionTypeDTO();
-        assertThat(connectionTypeDTO1).isNotEqualTo(connectionTypeDTO2);
-        connectionTypeDTO2.setId(connectionTypeDTO1.getId());
-        assertThat(connectionTypeDTO1).isEqualTo(connectionTypeDTO2);
-        connectionTypeDTO2.setId(2L);
-        assertThat(connectionTypeDTO1).isNotEqualTo(connectionTypeDTO2);
-        connectionTypeDTO1.setId(null);
-        assertThat(connectionTypeDTO1).isNotEqualTo(connectionTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(connectionTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(connectionTypeMapper.fromId(null)).isNull();
     }
 }

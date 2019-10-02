@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Estimation;
 import br.ufpa.labes.spm.repository.EstimationRepository;
-import br.ufpa.labes.spm.service.EstimationService;
-import br.ufpa.labes.spm.service.dto.EstimationDTO;
-import br.ufpa.labes.spm.service.mapper.EstimationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -49,12 +46,6 @@ public class EstimationResourceIT {
     private EstimationRepository estimationRepository;
 
     @Autowired
-    private EstimationMapper estimationMapper;
-
-    @Autowired
-    private EstimationService estimationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -76,7 +67,7 @@ public class EstimationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EstimationResource estimationResource = new EstimationResource(estimationService);
+        final EstimationResource estimationResource = new EstimationResource(estimationRepository);
         this.restEstimationMockMvc = MockMvcBuilders.standaloneSetup(estimationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -121,10 +112,9 @@ public class EstimationResourceIT {
         int databaseSizeBeforeCreate = estimationRepository.findAll().size();
 
         // Create the Estimation
-        EstimationDTO estimationDTO = estimationMapper.toDto(estimation);
         restEstimationMockMvc.perform(post("/api/estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(estimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(estimation)))
             .andExpect(status().isCreated());
 
         // Validate the Estimation in the database
@@ -142,12 +132,11 @@ public class EstimationResourceIT {
 
         // Create the Estimation with an existing ID
         estimation.setId(1L);
-        EstimationDTO estimationDTO = estimationMapper.toDto(estimation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEstimationMockMvc.perform(post("/api/estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(estimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(estimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the Estimation in the database
@@ -209,11 +198,10 @@ public class EstimationResourceIT {
         updatedEstimation
             .value(UPDATED_VALUE)
             .unit(UPDATED_UNIT);
-        EstimationDTO estimationDTO = estimationMapper.toDto(updatedEstimation);
 
         restEstimationMockMvc.perform(put("/api/estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(estimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedEstimation)))
             .andExpect(status().isOk());
 
         // Validate the Estimation in the database
@@ -230,12 +218,11 @@ public class EstimationResourceIT {
         int databaseSizeBeforeUpdate = estimationRepository.findAll().size();
 
         // Create the Estimation
-        EstimationDTO estimationDTO = estimationMapper.toDto(estimation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restEstimationMockMvc.perform(put("/api/estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(estimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(estimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the Estimation in the database
@@ -274,28 +261,5 @@ public class EstimationResourceIT {
         assertThat(estimation1).isNotEqualTo(estimation2);
         estimation1.setId(null);
         assertThat(estimation1).isNotEqualTo(estimation2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(EstimationDTO.class);
-        EstimationDTO estimationDTO1 = new EstimationDTO();
-        estimationDTO1.setId(1L);
-        EstimationDTO estimationDTO2 = new EstimationDTO();
-        assertThat(estimationDTO1).isNotEqualTo(estimationDTO2);
-        estimationDTO2.setId(estimationDTO1.getId());
-        assertThat(estimationDTO1).isEqualTo(estimationDTO2);
-        estimationDTO2.setId(2L);
-        assertThat(estimationDTO1).isNotEqualTo(estimationDTO2);
-        estimationDTO1.setId(null);
-        assertThat(estimationDTO1).isNotEqualTo(estimationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(estimationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(estimationMapper.fromId(null)).isNull();
     }
 }

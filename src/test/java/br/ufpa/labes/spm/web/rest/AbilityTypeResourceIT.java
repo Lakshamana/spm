@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AbilityType;
 import br.ufpa.labes.spm.repository.AbilityTypeRepository;
-import br.ufpa.labes.spm.service.AbilityTypeService;
-import br.ufpa.labes.spm.service.dto.AbilityTypeDTO;
-import br.ufpa.labes.spm.service.mapper.AbilityTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class AbilityTypeResourceIT {
     private AbilityTypeRepository abilityTypeRepository;
 
     @Autowired
-    private AbilityTypeMapper abilityTypeMapper;
-
-    @Autowired
-    private AbilityTypeService abilityTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class AbilityTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AbilityTypeResource abilityTypeResource = new AbilityTypeResource(abilityTypeService);
+        final AbilityTypeResource abilityTypeResource = new AbilityTypeResource(abilityTypeRepository);
         this.restAbilityTypeMockMvc = MockMvcBuilders.standaloneSetup(abilityTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class AbilityTypeResourceIT {
         int databaseSizeBeforeCreate = abilityTypeRepository.findAll().size();
 
         // Create the AbilityType
-        AbilityTypeDTO abilityTypeDTO = abilityTypeMapper.toDto(abilityType);
         restAbilityTypeMockMvc.perform(post("/api/ability-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(abilityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(abilityType)))
             .andExpect(status().isCreated());
 
         // Validate the AbilityType in the database
@@ -129,12 +119,11 @@ public class AbilityTypeResourceIT {
 
         // Create the AbilityType with an existing ID
         abilityType.setId(1L);
-        AbilityTypeDTO abilityTypeDTO = abilityTypeMapper.toDto(abilityType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAbilityTypeMockMvc.perform(post("/api/ability-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(abilityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(abilityType)))
             .andExpect(status().isBadRequest());
 
         // Validate the AbilityType in the database
@@ -189,11 +178,10 @@ public class AbilityTypeResourceIT {
         AbilityType updatedAbilityType = abilityTypeRepository.findById(abilityType.getId()).get();
         // Disconnect from session so that the updates on updatedAbilityType are not directly saved in db
         em.detach(updatedAbilityType);
-        AbilityTypeDTO abilityTypeDTO = abilityTypeMapper.toDto(updatedAbilityType);
 
         restAbilityTypeMockMvc.perform(put("/api/ability-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(abilityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAbilityType)))
             .andExpect(status().isOk());
 
         // Validate the AbilityType in the database
@@ -208,12 +196,11 @@ public class AbilityTypeResourceIT {
         int databaseSizeBeforeUpdate = abilityTypeRepository.findAll().size();
 
         // Create the AbilityType
-        AbilityTypeDTO abilityTypeDTO = abilityTypeMapper.toDto(abilityType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAbilityTypeMockMvc.perform(put("/api/ability-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(abilityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(abilityType)))
             .andExpect(status().isBadRequest());
 
         // Validate the AbilityType in the database
@@ -252,28 +239,5 @@ public class AbilityTypeResourceIT {
         assertThat(abilityType1).isNotEqualTo(abilityType2);
         abilityType1.setId(null);
         assertThat(abilityType1).isNotEqualTo(abilityType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AbilityTypeDTO.class);
-        AbilityTypeDTO abilityTypeDTO1 = new AbilityTypeDTO();
-        abilityTypeDTO1.setId(1L);
-        AbilityTypeDTO abilityTypeDTO2 = new AbilityTypeDTO();
-        assertThat(abilityTypeDTO1).isNotEqualTo(abilityTypeDTO2);
-        abilityTypeDTO2.setId(abilityTypeDTO1.getId());
-        assertThat(abilityTypeDTO1).isEqualTo(abilityTypeDTO2);
-        abilityTypeDTO2.setId(2L);
-        assertThat(abilityTypeDTO1).isNotEqualTo(abilityTypeDTO2);
-        abilityTypeDTO1.setId(null);
-        assertThat(abilityTypeDTO1).isNotEqualTo(abilityTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(abilityTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(abilityTypeMapper.fromId(null)).isNull();
     }
 }

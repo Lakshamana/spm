@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ActivityService;
+import br.ufpa.labes.spm.domain.Activity;
+import br.ufpa.labes.spm.repository.ActivityRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ActivityDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ActivityResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ActivityService activityService;
+    private final ActivityRepository activityRepository;
 
-    public ActivityResource(ActivityService activityService) {
-        this.activityService = activityService;
+    public ActivityResource(ActivityRepository activityRepository) {
+        this.activityRepository = activityRepository;
     }
 
     /**
      * {@code POST  /activities} : Create a new activity.
      *
-     * @param activityDTO the activityDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new activityDTO, or with status {@code 400 (Bad Request)} if the activity has already an ID.
+     * @param activity the activity to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new activity, or with status {@code 400 (Bad Request)} if the activity has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/activities")
-    public ResponseEntity<ActivityDTO> createActivity(@RequestBody ActivityDTO activityDTO) throws URISyntaxException {
-        log.debug("REST request to save Activity : {}", activityDTO);
-        if (activityDTO.getId() != null) {
+    public ResponseEntity<Activity> createActivity(@RequestBody Activity activity) throws URISyntaxException {
+        log.debug("REST request to save Activity : {}", activity);
+        if (activity.getId() != null) {
             throw new BadRequestAlertException("A new activity cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ActivityDTO result = activityService.save(activityDTO);
+        Activity result = activityRepository.save(activity);
         return ResponseEntity.created(new URI("/api/activities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ActivityResource {
     /**
      * {@code PUT  /activities} : Updates an existing activity.
      *
-     * @param activityDTO the activityDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated activityDTO,
-     * or with status {@code 400 (Bad Request)} if the activityDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the activityDTO couldn't be updated.
+     * @param activity the activity to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated activity,
+     * or with status {@code 400 (Bad Request)} if the activity is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the activity couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/activities")
-    public ResponseEntity<ActivityDTO> updateActivity(@RequestBody ActivityDTO activityDTO) throws URISyntaxException {
-        log.debug("REST request to update Activity : {}", activityDTO);
-        if (activityDTO.getId() == null) {
+    public ResponseEntity<Activity> updateActivity(@RequestBody Activity activity) throws URISyntaxException {
+        log.debug("REST request to update Activity : {}", activity);
+        if (activity.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ActivityDTO result = activityService.save(activityDTO);
+        Activity result = activityRepository.save(activity);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, activityDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, activity.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ActivityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of activities in body.
      */
     @GetMapping("/activities")
-    public List<ActivityDTO> getAllActivities(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<Activity> getAllActivities(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Activities");
-        return activityService.findAll();
+        return activityRepository.findAllWithEagerRelationships();
     }
 
     /**
      * {@code GET  /activities/:id} : get the "id" activity.
      *
-     * @param id the id of the activityDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the activityDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the activity to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the activity, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/activities/{id}")
-    public ResponseEntity<ActivityDTO> getActivity(@PathVariable Long id) {
+    public ResponseEntity<Activity> getActivity(@PathVariable Long id) {
         log.debug("REST request to get Activity : {}", id);
-        Optional<ActivityDTO> activityDTO = activityService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(activityDTO);
+        Optional<Activity> activity = activityRepository.findOneWithEagerRelationships(id);
+        return ResponseUtil.wrapOrNotFound(activity);
     }
 
     /**
      * {@code DELETE  /activities/:id} : delete the "id" activity.
      *
-     * @param id the id of the activityDTO to delete.
+     * @param id the id of the activity to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/activities/{id}")
     public ResponseEntity<Void> deleteActivity(@PathVariable Long id) {
         log.debug("REST request to delete Activity : {}", id);
-        activityService.delete(id);
+        activityRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

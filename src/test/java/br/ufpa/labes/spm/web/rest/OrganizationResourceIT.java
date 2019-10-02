@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Organization;
 import br.ufpa.labes.spm.repository.OrganizationRepository;
-import br.ufpa.labes.spm.service.OrganizationService;
-import br.ufpa.labes.spm.service.dto.OrganizationDTO;
-import br.ufpa.labes.spm.service.mapper.OrganizationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class OrganizationResourceIT {
     private OrganizationRepository organizationRepository;
 
     @Autowired
-    private OrganizationMapper organizationMapper;
-
-    @Autowired
-    private OrganizationService organizationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class OrganizationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final OrganizationResource organizationResource = new OrganizationResource(organizationService);
+        final OrganizationResource organizationResource = new OrganizationResource(organizationRepository);
         this.restOrganizationMockMvc = MockMvcBuilders.standaloneSetup(organizationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class OrganizationResourceIT {
         int databaseSizeBeforeCreate = organizationRepository.findAll().size();
 
         // Create the Organization
-        OrganizationDTO organizationDTO = organizationMapper.toDto(organization);
         restOrganizationMockMvc.perform(post("/api/organizations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(organization)))
             .andExpect(status().isCreated());
 
         // Validate the Organization in the database
@@ -135,12 +125,11 @@ public class OrganizationResourceIT {
 
         // Create the Organization with an existing ID
         organization.setId(1L);
-        OrganizationDTO organizationDTO = organizationMapper.toDto(organization);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restOrganizationMockMvc.perform(post("/api/organizations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(organization)))
             .andExpect(status().isBadRequest());
 
         // Validate the Organization in the database
@@ -199,11 +188,10 @@ public class OrganizationResourceIT {
         em.detach(updatedOrganization);
         updatedOrganization
             .domain(UPDATED_DOMAIN);
-        OrganizationDTO organizationDTO = organizationMapper.toDto(updatedOrganization);
 
         restOrganizationMockMvc.perform(put("/api/organizations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedOrganization)))
             .andExpect(status().isOk());
 
         // Validate the Organization in the database
@@ -219,12 +207,11 @@ public class OrganizationResourceIT {
         int databaseSizeBeforeUpdate = organizationRepository.findAll().size();
 
         // Create the Organization
-        OrganizationDTO organizationDTO = organizationMapper.toDto(organization);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restOrganizationMockMvc.perform(put("/api/organizations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(organization)))
             .andExpect(status().isBadRequest());
 
         // Validate the Organization in the database
@@ -263,28 +250,5 @@ public class OrganizationResourceIT {
         assertThat(organization1).isNotEqualTo(organization2);
         organization1.setId(null);
         assertThat(organization1).isNotEqualTo(organization2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(OrganizationDTO.class);
-        OrganizationDTO organizationDTO1 = new OrganizationDTO();
-        organizationDTO1.setId(1L);
-        OrganizationDTO organizationDTO2 = new OrganizationDTO();
-        assertThat(organizationDTO1).isNotEqualTo(organizationDTO2);
-        organizationDTO2.setId(organizationDTO1.getId());
-        assertThat(organizationDTO1).isEqualTo(organizationDTO2);
-        organizationDTO2.setId(2L);
-        assertThat(organizationDTO1).isNotEqualTo(organizationDTO2);
-        organizationDTO1.setId(null);
-        assertThat(organizationDTO1).isNotEqualTo(organizationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(organizationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(organizationMapper.fromId(null)).isNull();
     }
 }

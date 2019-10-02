@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ModelingActivityEvent;
 import br.ufpa.labes.spm.repository.ModelingActivityEventRepository;
-import br.ufpa.labes.spm.service.ModelingActivityEventService;
-import br.ufpa.labes.spm.service.dto.ModelingActivityEventDTO;
-import br.ufpa.labes.spm.service.mapper.ModelingActivityEventMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ModelingActivityEventResourceIT {
     private ModelingActivityEventRepository modelingActivityEventRepository;
 
     @Autowired
-    private ModelingActivityEventMapper modelingActivityEventMapper;
-
-    @Autowired
-    private ModelingActivityEventService modelingActivityEventService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ModelingActivityEventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ModelingActivityEventResource modelingActivityEventResource = new ModelingActivityEventResource(modelingActivityEventService);
+        final ModelingActivityEventResource modelingActivityEventResource = new ModelingActivityEventResource(modelingActivityEventRepository);
         this.restModelingActivityEventMockMvc = MockMvcBuilders.standaloneSetup(modelingActivityEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ModelingActivityEventResourceIT {
         int databaseSizeBeforeCreate = modelingActivityEventRepository.findAll().size();
 
         // Create the ModelingActivityEvent
-        ModelingActivityEventDTO modelingActivityEventDTO = modelingActivityEventMapper.toDto(modelingActivityEvent);
         restModelingActivityEventMockMvc.perform(post("/api/modeling-activity-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(modelingActivityEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(modelingActivityEvent)))
             .andExpect(status().isCreated());
 
         // Validate the ModelingActivityEvent in the database
@@ -129,12 +119,11 @@ public class ModelingActivityEventResourceIT {
 
         // Create the ModelingActivityEvent with an existing ID
         modelingActivityEvent.setId(1L);
-        ModelingActivityEventDTO modelingActivityEventDTO = modelingActivityEventMapper.toDto(modelingActivityEvent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restModelingActivityEventMockMvc.perform(post("/api/modeling-activity-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(modelingActivityEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(modelingActivityEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the ModelingActivityEvent in the database
@@ -189,11 +178,10 @@ public class ModelingActivityEventResourceIT {
         ModelingActivityEvent updatedModelingActivityEvent = modelingActivityEventRepository.findById(modelingActivityEvent.getId()).get();
         // Disconnect from session so that the updates on updatedModelingActivityEvent are not directly saved in db
         em.detach(updatedModelingActivityEvent);
-        ModelingActivityEventDTO modelingActivityEventDTO = modelingActivityEventMapper.toDto(updatedModelingActivityEvent);
 
         restModelingActivityEventMockMvc.perform(put("/api/modeling-activity-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(modelingActivityEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedModelingActivityEvent)))
             .andExpect(status().isOk());
 
         // Validate the ModelingActivityEvent in the database
@@ -208,12 +196,11 @@ public class ModelingActivityEventResourceIT {
         int databaseSizeBeforeUpdate = modelingActivityEventRepository.findAll().size();
 
         // Create the ModelingActivityEvent
-        ModelingActivityEventDTO modelingActivityEventDTO = modelingActivityEventMapper.toDto(modelingActivityEvent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restModelingActivityEventMockMvc.perform(put("/api/modeling-activity-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(modelingActivityEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(modelingActivityEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the ModelingActivityEvent in the database
@@ -252,28 +239,5 @@ public class ModelingActivityEventResourceIT {
         assertThat(modelingActivityEvent1).isNotEqualTo(modelingActivityEvent2);
         modelingActivityEvent1.setId(null);
         assertThat(modelingActivityEvent1).isNotEqualTo(modelingActivityEvent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ModelingActivityEventDTO.class);
-        ModelingActivityEventDTO modelingActivityEventDTO1 = new ModelingActivityEventDTO();
-        modelingActivityEventDTO1.setId(1L);
-        ModelingActivityEventDTO modelingActivityEventDTO2 = new ModelingActivityEventDTO();
-        assertThat(modelingActivityEventDTO1).isNotEqualTo(modelingActivityEventDTO2);
-        modelingActivityEventDTO2.setId(modelingActivityEventDTO1.getId());
-        assertThat(modelingActivityEventDTO1).isEqualTo(modelingActivityEventDTO2);
-        modelingActivityEventDTO2.setId(2L);
-        assertThat(modelingActivityEventDTO1).isNotEqualTo(modelingActivityEventDTO2);
-        modelingActivityEventDTO1.setId(null);
-        assertThat(modelingActivityEventDTO1).isNotEqualTo(modelingActivityEventDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(modelingActivityEventMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(modelingActivityEventMapper.fromId(null)).isNull();
     }
 }

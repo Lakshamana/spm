@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AgentInstSugService;
+import br.ufpa.labes.spm.domain.AgentInstSug;
+import br.ufpa.labes.spm.repository.AgentInstSugRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AgentInstSugDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class AgentInstSugResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AgentInstSugService agentInstSugService;
+    private final AgentInstSugRepository agentInstSugRepository;
 
-    public AgentInstSugResource(AgentInstSugService agentInstSugService) {
-        this.agentInstSugService = agentInstSugService;
+    public AgentInstSugResource(AgentInstSugRepository agentInstSugRepository) {
+        this.agentInstSugRepository = agentInstSugRepository;
     }
 
     /**
      * {@code POST  /agent-inst-sugs} : Create a new agentInstSug.
      *
-     * @param agentInstSugDTO the agentInstSugDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentInstSugDTO, or with status {@code 400 (Bad Request)} if the agentInstSug has already an ID.
+     * @param agentInstSug the agentInstSug to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentInstSug, or with status {@code 400 (Bad Request)} if the agentInstSug has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/agent-inst-sugs")
-    public ResponseEntity<AgentInstSugDTO> createAgentInstSug(@RequestBody AgentInstSugDTO agentInstSugDTO) throws URISyntaxException {
-        log.debug("REST request to save AgentInstSug : {}", agentInstSugDTO);
-        if (agentInstSugDTO.getId() != null) {
+    public ResponseEntity<AgentInstSug> createAgentInstSug(@RequestBody AgentInstSug agentInstSug) throws URISyntaxException {
+        log.debug("REST request to save AgentInstSug : {}", agentInstSug);
+        if (agentInstSug.getId() != null) {
             throw new BadRequestAlertException("A new agentInstSug cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AgentInstSugDTO result = agentInstSugService.save(agentInstSugDTO);
+        AgentInstSug result = agentInstSugRepository.save(agentInstSug);
         return ResponseEntity.created(new URI("/api/agent-inst-sugs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class AgentInstSugResource {
     /**
      * {@code PUT  /agent-inst-sugs} : Updates an existing agentInstSug.
      *
-     * @param agentInstSugDTO the agentInstSugDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentInstSugDTO,
-     * or with status {@code 400 (Bad Request)} if the agentInstSugDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the agentInstSugDTO couldn't be updated.
+     * @param agentInstSug the agentInstSug to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentInstSug,
+     * or with status {@code 400 (Bad Request)} if the agentInstSug is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the agentInstSug couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/agent-inst-sugs")
-    public ResponseEntity<AgentInstSugDTO> updateAgentInstSug(@RequestBody AgentInstSugDTO agentInstSugDTO) throws URISyntaxException {
-        log.debug("REST request to update AgentInstSug : {}", agentInstSugDTO);
-        if (agentInstSugDTO.getId() == null) {
+    public ResponseEntity<AgentInstSug> updateAgentInstSug(@RequestBody AgentInstSug agentInstSug) throws URISyntaxException {
+        log.debug("REST request to update AgentInstSug : {}", agentInstSug);
+        if (agentInstSug.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AgentInstSugDTO result = agentInstSugService.save(agentInstSugDTO);
+        AgentInstSug result = agentInstSugRepository.save(agentInstSug);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentInstSugDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentInstSug.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class AgentInstSugResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of agentInstSugs in body.
      */
     @GetMapping("/agent-inst-sugs")
-    public List<AgentInstSugDTO> getAllAgentInstSugs() {
+    public List<AgentInstSug> getAllAgentInstSugs() {
         log.debug("REST request to get all AgentInstSugs");
-        return agentInstSugService.findAll();
+        return agentInstSugRepository.findAll();
     }
 
     /**
      * {@code GET  /agent-inst-sugs/:id} : get the "id" agentInstSug.
      *
-     * @param id the id of the agentInstSugDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentInstSugDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the agentInstSug to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentInstSug, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/agent-inst-sugs/{id}")
-    public ResponseEntity<AgentInstSugDTO> getAgentInstSug(@PathVariable Long id) {
+    public ResponseEntity<AgentInstSug> getAgentInstSug(@PathVariable Long id) {
         log.debug("REST request to get AgentInstSug : {}", id);
-        Optional<AgentInstSugDTO> agentInstSugDTO = agentInstSugService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(agentInstSugDTO);
+        Optional<AgentInstSug> agentInstSug = agentInstSugRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(agentInstSug);
     }
 
     /**
      * {@code DELETE  /agent-inst-sugs/:id} : delete the "id" agentInstSug.
      *
-     * @param id the id of the agentInstSugDTO to delete.
+     * @param id the id of the agentInstSug to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/agent-inst-sugs/{id}")
     public ResponseEntity<Void> deleteAgentInstSug(@PathVariable Long id) {
         log.debug("REST request to delete AgentInstSug : {}", id);
-        agentInstSugService.delete(id);
+        agentInstSugRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

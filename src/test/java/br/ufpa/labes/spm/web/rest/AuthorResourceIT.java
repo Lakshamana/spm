@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Author;
 import br.ufpa.labes.spm.repository.AuthorRepository;
-import br.ufpa.labes.spm.service.AuthorService;
-import br.ufpa.labes.spm.service.dto.AuthorDTO;
-import br.ufpa.labes.spm.service.mapper.AuthorMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -78,15 +75,6 @@ public class AuthorResourceIT {
     private AuthorRepository authorRepositoryMock;
 
     @Autowired
-    private AuthorMapper authorMapper;
-
-    @Mock
-    private AuthorService authorServiceMock;
-
-    @Autowired
-    private AuthorService authorService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -108,7 +96,7 @@ public class AuthorResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AuthorResource authorResource = new AuthorResource(authorService);
+        final AuthorResource authorResource = new AuthorResource(authorRepository);
         this.restAuthorMockMvc = MockMvcBuilders.standaloneSetup(authorResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -167,10 +155,9 @@ public class AuthorResourceIT {
         int databaseSizeBeforeCreate = authorRepository.findAll().size();
 
         // Create the Author
-        AuthorDTO authorDTO = authorMapper.toDto(author);
         restAuthorMockMvc.perform(post("/api/authors")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(authorDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(author)))
             .andExpect(status().isCreated());
 
         // Validate the Author in the database
@@ -195,12 +182,11 @@ public class AuthorResourceIT {
 
         // Create the Author with an existing ID
         author.setId(1L);
-        AuthorDTO authorDTO = authorMapper.toDto(author);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAuthorMockMvc.perform(post("/api/authors")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(authorDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(author)))
             .andExpect(status().isBadRequest());
 
         // Validate the Author in the database
@@ -233,8 +219,8 @@ public class AuthorResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllAuthorsWithEagerRelationshipsIsEnabled() throws Exception {
-        AuthorResource authorResource = new AuthorResource(authorServiceMock);
-        when(authorServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        AuthorResource authorResource = new AuthorResource(authorRepositoryMock);
+        when(authorRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restAuthorMockMvc = MockMvcBuilders.standaloneSetup(authorResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -245,13 +231,13 @@ public class AuthorResourceIT {
         restAuthorMockMvc.perform(get("/api/authors?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(authorServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(authorRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllAuthorsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        AuthorResource authorResource = new AuthorResource(authorServiceMock);
-            when(authorServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        AuthorResource authorResource = new AuthorResource(authorRepositoryMock);
+            when(authorRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restAuthorMockMvc = MockMvcBuilders.standaloneSetup(authorResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -261,7 +247,7 @@ public class AuthorResourceIT {
         restAuthorMockMvc.perform(get("/api/authors?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(authorServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(authorRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -316,11 +302,10 @@ public class AuthorResourceIT {
             .country(UPDATED_COUNTRY)
             .photo(UPDATED_PHOTO)
             .photoContentType(UPDATED_PHOTO_CONTENT_TYPE);
-        AuthorDTO authorDTO = authorMapper.toDto(updatedAuthor);
 
         restAuthorMockMvc.perform(put("/api/authors")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(authorDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAuthor)))
             .andExpect(status().isOk());
 
         // Validate the Author in the database
@@ -344,12 +329,11 @@ public class AuthorResourceIT {
         int databaseSizeBeforeUpdate = authorRepository.findAll().size();
 
         // Create the Author
-        AuthorDTO authorDTO = authorMapper.toDto(author);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAuthorMockMvc.perform(put("/api/authors")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(authorDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(author)))
             .andExpect(status().isBadRequest());
 
         // Validate the Author in the database
@@ -388,28 +372,5 @@ public class AuthorResourceIT {
         assertThat(author1).isNotEqualTo(author2);
         author1.setId(null);
         assertThat(author1).isNotEqualTo(author2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AuthorDTO.class);
-        AuthorDTO authorDTO1 = new AuthorDTO();
-        authorDTO1.setId(1L);
-        AuthorDTO authorDTO2 = new AuthorDTO();
-        assertThat(authorDTO1).isNotEqualTo(authorDTO2);
-        authorDTO2.setId(authorDTO1.getId());
-        assertThat(authorDTO1).isEqualTo(authorDTO2);
-        authorDTO2.setId(2L);
-        assertThat(authorDTO1).isNotEqualTo(authorDTO2);
-        authorDTO1.setId(null);
-        assertThat(authorDTO1).isNotEqualTo(authorDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(authorMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(authorMapper.fromId(null)).isNull();
     }
 }

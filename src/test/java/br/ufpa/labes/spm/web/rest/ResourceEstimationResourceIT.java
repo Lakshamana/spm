@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ResourceEstimation;
 import br.ufpa.labes.spm.repository.ResourceEstimationRepository;
-import br.ufpa.labes.spm.service.ResourceEstimationService;
-import br.ufpa.labes.spm.service.dto.ResourceEstimationDTO;
-import br.ufpa.labes.spm.service.mapper.ResourceEstimationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ResourceEstimationResourceIT {
     private ResourceEstimationRepository resourceEstimationRepository;
 
     @Autowired
-    private ResourceEstimationMapper resourceEstimationMapper;
-
-    @Autowired
-    private ResourceEstimationService resourceEstimationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ResourceEstimationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ResourceEstimationResource resourceEstimationResource = new ResourceEstimationResource(resourceEstimationService);
+        final ResourceEstimationResource resourceEstimationResource = new ResourceEstimationResource(resourceEstimationRepository);
         this.restResourceEstimationMockMvc = MockMvcBuilders.standaloneSetup(resourceEstimationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ResourceEstimationResourceIT {
         int databaseSizeBeforeCreate = resourceEstimationRepository.findAll().size();
 
         // Create the ResourceEstimation
-        ResourceEstimationDTO resourceEstimationDTO = resourceEstimationMapper.toDto(resourceEstimation);
         restResourceEstimationMockMvc.perform(post("/api/resource-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceEstimation)))
             .andExpect(status().isCreated());
 
         // Validate the ResourceEstimation in the database
@@ -129,12 +119,11 @@ public class ResourceEstimationResourceIT {
 
         // Create the ResourceEstimation with an existing ID
         resourceEstimation.setId(1L);
-        ResourceEstimationDTO resourceEstimationDTO = resourceEstimationMapper.toDto(resourceEstimation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restResourceEstimationMockMvc.perform(post("/api/resource-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourceEstimation in the database
@@ -189,11 +178,10 @@ public class ResourceEstimationResourceIT {
         ResourceEstimation updatedResourceEstimation = resourceEstimationRepository.findById(resourceEstimation.getId()).get();
         // Disconnect from session so that the updates on updatedResourceEstimation are not directly saved in db
         em.detach(updatedResourceEstimation);
-        ResourceEstimationDTO resourceEstimationDTO = resourceEstimationMapper.toDto(updatedResourceEstimation);
 
         restResourceEstimationMockMvc.perform(put("/api/resource-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedResourceEstimation)))
             .andExpect(status().isOk());
 
         // Validate the ResourceEstimation in the database
@@ -208,12 +196,11 @@ public class ResourceEstimationResourceIT {
         int databaseSizeBeforeUpdate = resourceEstimationRepository.findAll().size();
 
         // Create the ResourceEstimation
-        ResourceEstimationDTO resourceEstimationDTO = resourceEstimationMapper.toDto(resourceEstimation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restResourceEstimationMockMvc.perform(put("/api/resource-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourceEstimation in the database
@@ -252,28 +239,5 @@ public class ResourceEstimationResourceIT {
         assertThat(resourceEstimation1).isNotEqualTo(resourceEstimation2);
         resourceEstimation1.setId(null);
         assertThat(resourceEstimation1).isNotEqualTo(resourceEstimation2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ResourceEstimationDTO.class);
-        ResourceEstimationDTO resourceEstimationDTO1 = new ResourceEstimationDTO();
-        resourceEstimationDTO1.setId(1L);
-        ResourceEstimationDTO resourceEstimationDTO2 = new ResourceEstimationDTO();
-        assertThat(resourceEstimationDTO1).isNotEqualTo(resourceEstimationDTO2);
-        resourceEstimationDTO2.setId(resourceEstimationDTO1.getId());
-        assertThat(resourceEstimationDTO1).isEqualTo(resourceEstimationDTO2);
-        resourceEstimationDTO2.setId(2L);
-        assertThat(resourceEstimationDTO1).isNotEqualTo(resourceEstimationDTO2);
-        resourceEstimationDTO1.setId(null);
-        assertThat(resourceEstimationDTO1).isNotEqualTo(resourceEstimationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(resourceEstimationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(resourceEstimationMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.CatalogEvent;
 import br.ufpa.labes.spm.repository.CatalogEventRepository;
-import br.ufpa.labes.spm.service.CatalogEventService;
-import br.ufpa.labes.spm.service.dto.CatalogEventDTO;
-import br.ufpa.labes.spm.service.mapper.CatalogEventMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,12 +43,6 @@ public class CatalogEventResourceIT {
     private CatalogEventRepository catalogEventRepository;
 
     @Autowired
-    private CatalogEventMapper catalogEventMapper;
-
-    @Autowired
-    private CatalogEventService catalogEventService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +64,7 @@ public class CatalogEventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CatalogEventResource catalogEventResource = new CatalogEventResource(catalogEventService);
+        final CatalogEventResource catalogEventResource = new CatalogEventResource(catalogEventRepository);
         this.restCatalogEventMockMvc = MockMvcBuilders.standaloneSetup(catalogEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -116,10 +107,9 @@ public class CatalogEventResourceIT {
         int databaseSizeBeforeCreate = catalogEventRepository.findAll().size();
 
         // Create the CatalogEvent
-        CatalogEventDTO catalogEventDTO = catalogEventMapper.toDto(catalogEvent);
         restCatalogEventMockMvc.perform(post("/api/catalog-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(catalogEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(catalogEvent)))
             .andExpect(status().isCreated());
 
         // Validate the CatalogEvent in the database
@@ -136,12 +126,11 @@ public class CatalogEventResourceIT {
 
         // Create the CatalogEvent with an existing ID
         catalogEvent.setId(1L);
-        CatalogEventDTO catalogEventDTO = catalogEventMapper.toDto(catalogEvent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCatalogEventMockMvc.perform(post("/api/catalog-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(catalogEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(catalogEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the CatalogEvent in the database
@@ -200,11 +189,10 @@ public class CatalogEventResourceIT {
         em.detach(updatedCatalogEvent);
         updatedCatalogEvent
             .description(UPDATED_DESCRIPTION);
-        CatalogEventDTO catalogEventDTO = catalogEventMapper.toDto(updatedCatalogEvent);
 
         restCatalogEventMockMvc.perform(put("/api/catalog-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(catalogEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedCatalogEvent)))
             .andExpect(status().isOk());
 
         // Validate the CatalogEvent in the database
@@ -220,12 +208,11 @@ public class CatalogEventResourceIT {
         int databaseSizeBeforeUpdate = catalogEventRepository.findAll().size();
 
         // Create the CatalogEvent
-        CatalogEventDTO catalogEventDTO = catalogEventMapper.toDto(catalogEvent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCatalogEventMockMvc.perform(put("/api/catalog-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(catalogEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(catalogEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the CatalogEvent in the database
@@ -264,28 +251,5 @@ public class CatalogEventResourceIT {
         assertThat(catalogEvent1).isNotEqualTo(catalogEvent2);
         catalogEvent1.setId(null);
         assertThat(catalogEvent1).isNotEqualTo(catalogEvent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(CatalogEventDTO.class);
-        CatalogEventDTO catalogEventDTO1 = new CatalogEventDTO();
-        catalogEventDTO1.setId(1L);
-        CatalogEventDTO catalogEventDTO2 = new CatalogEventDTO();
-        assertThat(catalogEventDTO1).isNotEqualTo(catalogEventDTO2);
-        catalogEventDTO2.setId(catalogEventDTO1.getId());
-        assertThat(catalogEventDTO1).isEqualTo(catalogEventDTO2);
-        catalogEventDTO2.setId(2L);
-        assertThat(catalogEventDTO1).isNotEqualTo(catalogEventDTO2);
-        catalogEventDTO1.setId(null);
-        assertThat(catalogEventDTO1).isNotEqualTo(catalogEventDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(catalogEventMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(catalogEventMapper.fromId(null)).isNull();
     }
 }

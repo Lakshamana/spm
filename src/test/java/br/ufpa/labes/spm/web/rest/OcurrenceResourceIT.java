@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Ocurrence;
 import br.ufpa.labes.spm.repository.OcurrenceRepository;
-import br.ufpa.labes.spm.service.OcurrenceService;
-import br.ufpa.labes.spm.service.dto.OcurrenceDTO;
-import br.ufpa.labes.spm.service.mapper.OcurrenceMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -57,12 +54,6 @@ public class OcurrenceResourceIT {
     private OcurrenceRepository ocurrenceRepository;
 
     @Autowired
-    private OcurrenceMapper ocurrenceMapper;
-
-    @Autowired
-    private OcurrenceService ocurrenceService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -84,7 +75,7 @@ public class OcurrenceResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final OcurrenceResource ocurrenceResource = new OcurrenceResource(ocurrenceService);
+        final OcurrenceResource ocurrenceResource = new OcurrenceResource(ocurrenceRepository);
         this.restOcurrenceMockMvc = MockMvcBuilders.standaloneSetup(ocurrenceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -131,10 +122,9 @@ public class OcurrenceResourceIT {
         int databaseSizeBeforeCreate = ocurrenceRepository.findAll().size();
 
         // Create the Ocurrence
-        OcurrenceDTO ocurrenceDTO = ocurrenceMapper.toDto(ocurrence);
         restOcurrenceMockMvc.perform(post("/api/ocurrences")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ocurrenceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(ocurrence)))
             .andExpect(status().isCreated());
 
         // Validate the Ocurrence in the database
@@ -153,12 +143,11 @@ public class OcurrenceResourceIT {
 
         // Create the Ocurrence with an existing ID
         ocurrence.setId(1L);
-        OcurrenceDTO ocurrenceDTO = ocurrenceMapper.toDto(ocurrence);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restOcurrenceMockMvc.perform(post("/api/ocurrences")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ocurrenceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(ocurrence)))
             .andExpect(status().isBadRequest());
 
         // Validate the Ocurrence in the database
@@ -223,11 +212,10 @@ public class OcurrenceResourceIT {
             .date(UPDATED_DATE)
             .time(UPDATED_TIME)
             .event(UPDATED_EVENT);
-        OcurrenceDTO ocurrenceDTO = ocurrenceMapper.toDto(updatedOcurrence);
 
         restOcurrenceMockMvc.perform(put("/api/ocurrences")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ocurrenceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedOcurrence)))
             .andExpect(status().isOk());
 
         // Validate the Ocurrence in the database
@@ -245,12 +233,11 @@ public class OcurrenceResourceIT {
         int databaseSizeBeforeUpdate = ocurrenceRepository.findAll().size();
 
         // Create the Ocurrence
-        OcurrenceDTO ocurrenceDTO = ocurrenceMapper.toDto(ocurrence);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restOcurrenceMockMvc.perform(put("/api/ocurrences")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ocurrenceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(ocurrence)))
             .andExpect(status().isBadRequest());
 
         // Validate the Ocurrence in the database
@@ -289,28 +276,5 @@ public class OcurrenceResourceIT {
         assertThat(ocurrence1).isNotEqualTo(ocurrence2);
         ocurrence1.setId(null);
         assertThat(ocurrence1).isNotEqualTo(ocurrence2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(OcurrenceDTO.class);
-        OcurrenceDTO ocurrenceDTO1 = new OcurrenceDTO();
-        ocurrenceDTO1.setId(1L);
-        OcurrenceDTO ocurrenceDTO2 = new OcurrenceDTO();
-        assertThat(ocurrenceDTO1).isNotEqualTo(ocurrenceDTO2);
-        ocurrenceDTO2.setId(ocurrenceDTO1.getId());
-        assertThat(ocurrenceDTO1).isEqualTo(ocurrenceDTO2);
-        ocurrenceDTO2.setId(2L);
-        assertThat(ocurrenceDTO1).isNotEqualTo(ocurrenceDTO2);
-        ocurrenceDTO1.setId(null);
-        assertThat(ocurrenceDTO1).isNotEqualTo(ocurrenceDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(ocurrenceMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(ocurrenceMapper.fromId(null)).isNull();
     }
 }

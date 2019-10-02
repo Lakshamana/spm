@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AgentInstSuggestionToAgent;
 import br.ufpa.labes.spm.repository.AgentInstSuggestionToAgentRepository;
-import br.ufpa.labes.spm.service.AgentInstSuggestionToAgentService;
-import br.ufpa.labes.spm.service.dto.AgentInstSuggestionToAgentDTO;
-import br.ufpa.labes.spm.service.mapper.AgentInstSuggestionToAgentMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,12 +43,6 @@ public class AgentInstSuggestionToAgentResourceIT {
     private AgentInstSuggestionToAgentRepository agentInstSuggestionToAgentRepository;
 
     @Autowired
-    private AgentInstSuggestionToAgentMapper agentInstSuggestionToAgentMapper;
-
-    @Autowired
-    private AgentInstSuggestionToAgentService agentInstSuggestionToAgentService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +64,7 @@ public class AgentInstSuggestionToAgentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgentInstSuggestionToAgentResource agentInstSuggestionToAgentResource = new AgentInstSuggestionToAgentResource(agentInstSuggestionToAgentService);
+        final AgentInstSuggestionToAgentResource agentInstSuggestionToAgentResource = new AgentInstSuggestionToAgentResource(agentInstSuggestionToAgentRepository);
         this.restAgentInstSuggestionToAgentMockMvc = MockMvcBuilders.standaloneSetup(agentInstSuggestionToAgentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -116,10 +107,9 @@ public class AgentInstSuggestionToAgentResourceIT {
         int databaseSizeBeforeCreate = agentInstSuggestionToAgentRepository.findAll().size();
 
         // Create the AgentInstSuggestionToAgent
-        AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO = agentInstSuggestionToAgentMapper.toDto(agentInstSuggestionToAgent);
         restAgentInstSuggestionToAgentMockMvc.perform(post("/api/agent-inst-suggestion-to-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentInstSuggestionToAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentInstSuggestionToAgent)))
             .andExpect(status().isCreated());
 
         // Validate the AgentInstSuggestionToAgent in the database
@@ -136,12 +126,11 @@ public class AgentInstSuggestionToAgentResourceIT {
 
         // Create the AgentInstSuggestionToAgent with an existing ID
         agentInstSuggestionToAgent.setId(1L);
-        AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO = agentInstSuggestionToAgentMapper.toDto(agentInstSuggestionToAgent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAgentInstSuggestionToAgentMockMvc.perform(post("/api/agent-inst-suggestion-to-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentInstSuggestionToAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentInstSuggestionToAgent)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentInstSuggestionToAgent in the database
@@ -200,11 +189,10 @@ public class AgentInstSuggestionToAgentResourceIT {
         em.detach(updatedAgentInstSuggestionToAgent);
         updatedAgentInstSuggestionToAgent
             .orderCriteriaResult(UPDATED_ORDER_CRITERIA_RESULT);
-        AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO = agentInstSuggestionToAgentMapper.toDto(updatedAgentInstSuggestionToAgent);
 
         restAgentInstSuggestionToAgentMockMvc.perform(put("/api/agent-inst-suggestion-to-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentInstSuggestionToAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAgentInstSuggestionToAgent)))
             .andExpect(status().isOk());
 
         // Validate the AgentInstSuggestionToAgent in the database
@@ -220,12 +208,11 @@ public class AgentInstSuggestionToAgentResourceIT {
         int databaseSizeBeforeUpdate = agentInstSuggestionToAgentRepository.findAll().size();
 
         // Create the AgentInstSuggestionToAgent
-        AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO = agentInstSuggestionToAgentMapper.toDto(agentInstSuggestionToAgent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAgentInstSuggestionToAgentMockMvc.perform(put("/api/agent-inst-suggestion-to-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentInstSuggestionToAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentInstSuggestionToAgent)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentInstSuggestionToAgent in the database
@@ -264,28 +251,5 @@ public class AgentInstSuggestionToAgentResourceIT {
         assertThat(agentInstSuggestionToAgent1).isNotEqualTo(agentInstSuggestionToAgent2);
         agentInstSuggestionToAgent1.setId(null);
         assertThat(agentInstSuggestionToAgent1).isNotEqualTo(agentInstSuggestionToAgent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgentInstSuggestionToAgentDTO.class);
-        AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO1 = new AgentInstSuggestionToAgentDTO();
-        agentInstSuggestionToAgentDTO1.setId(1L);
-        AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO2 = new AgentInstSuggestionToAgentDTO();
-        assertThat(agentInstSuggestionToAgentDTO1).isNotEqualTo(agentInstSuggestionToAgentDTO2);
-        agentInstSuggestionToAgentDTO2.setId(agentInstSuggestionToAgentDTO1.getId());
-        assertThat(agentInstSuggestionToAgentDTO1).isEqualTo(agentInstSuggestionToAgentDTO2);
-        agentInstSuggestionToAgentDTO2.setId(2L);
-        assertThat(agentInstSuggestionToAgentDTO1).isNotEqualTo(agentInstSuggestionToAgentDTO2);
-        agentInstSuggestionToAgentDTO1.setId(null);
-        assertThat(agentInstSuggestionToAgentDTO1).isNotEqualTo(agentInstSuggestionToAgentDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(agentInstSuggestionToAgentMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(agentInstSuggestionToAgentMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.EventType;
 import br.ufpa.labes.spm.repository.EventTypeRepository;
-import br.ufpa.labes.spm.service.EventTypeService;
-import br.ufpa.labes.spm.service.dto.EventTypeDTO;
-import br.ufpa.labes.spm.service.mapper.EventTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class EventTypeResourceIT {
     private EventTypeRepository eventTypeRepository;
 
     @Autowired
-    private EventTypeMapper eventTypeMapper;
-
-    @Autowired
-    private EventTypeService eventTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class EventTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EventTypeResource eventTypeResource = new EventTypeResource(eventTypeService);
+        final EventTypeResource eventTypeResource = new EventTypeResource(eventTypeRepository);
         this.restEventTypeMockMvc = MockMvcBuilders.standaloneSetup(eventTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class EventTypeResourceIT {
         int databaseSizeBeforeCreate = eventTypeRepository.findAll().size();
 
         // Create the EventType
-        EventTypeDTO eventTypeDTO = eventTypeMapper.toDto(eventType);
         restEventTypeMockMvc.perform(post("/api/event-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(eventTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(eventType)))
             .andExpect(status().isCreated());
 
         // Validate the EventType in the database
@@ -129,12 +119,11 @@ public class EventTypeResourceIT {
 
         // Create the EventType with an existing ID
         eventType.setId(1L);
-        EventTypeDTO eventTypeDTO = eventTypeMapper.toDto(eventType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEventTypeMockMvc.perform(post("/api/event-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(eventTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(eventType)))
             .andExpect(status().isBadRequest());
 
         // Validate the EventType in the database
@@ -189,11 +178,10 @@ public class EventTypeResourceIT {
         EventType updatedEventType = eventTypeRepository.findById(eventType.getId()).get();
         // Disconnect from session so that the updates on updatedEventType are not directly saved in db
         em.detach(updatedEventType);
-        EventTypeDTO eventTypeDTO = eventTypeMapper.toDto(updatedEventType);
 
         restEventTypeMockMvc.perform(put("/api/event-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(eventTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedEventType)))
             .andExpect(status().isOk());
 
         // Validate the EventType in the database
@@ -208,12 +196,11 @@ public class EventTypeResourceIT {
         int databaseSizeBeforeUpdate = eventTypeRepository.findAll().size();
 
         // Create the EventType
-        EventTypeDTO eventTypeDTO = eventTypeMapper.toDto(eventType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restEventTypeMockMvc.perform(put("/api/event-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(eventTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(eventType)))
             .andExpect(status().isBadRequest());
 
         // Validate the EventType in the database
@@ -252,28 +239,5 @@ public class EventTypeResourceIT {
         assertThat(eventType1).isNotEqualTo(eventType2);
         eventType1.setId(null);
         assertThat(eventType1).isNotEqualTo(eventType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(EventTypeDTO.class);
-        EventTypeDTO eventTypeDTO1 = new EventTypeDTO();
-        eventTypeDTO1.setId(1L);
-        EventTypeDTO eventTypeDTO2 = new EventTypeDTO();
-        assertThat(eventTypeDTO1).isNotEqualTo(eventTypeDTO2);
-        eventTypeDTO2.setId(eventTypeDTO1.getId());
-        assertThat(eventTypeDTO1).isEqualTo(eventTypeDTO2);
-        eventTypeDTO2.setId(2L);
-        assertThat(eventTypeDTO1).isNotEqualTo(eventTypeDTO2);
-        eventTypeDTO1.setId(null);
-        assertThat(eventTypeDTO1).isNotEqualTo(eventTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(eventTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(eventTypeMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Event;
 import br.ufpa.labes.spm.repository.EventRepository;
-import br.ufpa.labes.spm.service.EventService;
-import br.ufpa.labes.spm.service.dto.EventDTO;
-import br.ufpa.labes.spm.service.mapper.EventMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -55,12 +52,6 @@ public class EventResourceIT {
     private EventRepository eventRepository;
 
     @Autowired
-    private EventMapper eventMapper;
-
-    @Autowired
-    private EventService eventService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -82,7 +73,7 @@ public class EventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EventResource eventResource = new EventResource(eventService);
+        final EventResource eventResource = new EventResource(eventRepository);
         this.restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -129,10 +120,9 @@ public class EventResourceIT {
         int databaseSizeBeforeCreate = eventRepository.findAll().size();
 
         // Create the Event
-        EventDTO eventDTO = eventMapper.toDto(event);
         restEventMockMvc.perform(post("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(eventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(event)))
             .andExpect(status().isCreated());
 
         // Validate the Event in the database
@@ -151,12 +141,11 @@ public class EventResourceIT {
 
         // Create the Event with an existing ID
         event.setId(1L);
-        EventDTO eventDTO = eventMapper.toDto(event);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEventMockMvc.perform(post("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(eventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(event)))
             .andExpect(status().isBadRequest());
 
         // Validate the Event in the database
@@ -221,11 +210,10 @@ public class EventResourceIT {
             .why(UPDATED_WHY)
             .when(UPDATED_WHEN)
             .isCreatedByApsee(UPDATED_IS_CREATED_BY_APSEE);
-        EventDTO eventDTO = eventMapper.toDto(updatedEvent);
 
         restEventMockMvc.perform(put("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(eventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedEvent)))
             .andExpect(status().isOk());
 
         // Validate the Event in the database
@@ -243,12 +231,11 @@ public class EventResourceIT {
         int databaseSizeBeforeUpdate = eventRepository.findAll().size();
 
         // Create the Event
-        EventDTO eventDTO = eventMapper.toDto(event);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restEventMockMvc.perform(put("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(eventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(event)))
             .andExpect(status().isBadRequest());
 
         // Validate the Event in the database
@@ -287,28 +274,5 @@ public class EventResourceIT {
         assertThat(event1).isNotEqualTo(event2);
         event1.setId(null);
         assertThat(event1).isNotEqualTo(event2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(EventDTO.class);
-        EventDTO eventDTO1 = new EventDTO();
-        eventDTO1.setId(1L);
-        EventDTO eventDTO2 = new EventDTO();
-        assertThat(eventDTO1).isNotEqualTo(eventDTO2);
-        eventDTO2.setId(eventDTO1.getId());
-        assertThat(eventDTO1).isEqualTo(eventDTO2);
-        eventDTO2.setId(2L);
-        assertThat(eventDTO1).isNotEqualTo(eventDTO2);
-        eventDTO1.setId(null);
-        assertThat(eventDTO1).isNotEqualTo(eventDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(eventMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(eventMapper.fromId(null)).isNull();
     }
 }

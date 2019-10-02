@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.JoinConService;
+import br.ufpa.labes.spm.domain.JoinCon;
+import br.ufpa.labes.spm.repository.JoinConRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.JoinConDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class JoinConResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final JoinConService joinConService;
+    private final JoinConRepository joinConRepository;
 
-    public JoinConResource(JoinConService joinConService) {
-        this.joinConService = joinConService;
+    public JoinConResource(JoinConRepository joinConRepository) {
+        this.joinConRepository = joinConRepository;
     }
 
     /**
      * {@code POST  /join-cons} : Create a new joinCon.
      *
-     * @param joinConDTO the joinConDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new joinConDTO, or with status {@code 400 (Bad Request)} if the joinCon has already an ID.
+     * @param joinCon the joinCon to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new joinCon, or with status {@code 400 (Bad Request)} if the joinCon has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/join-cons")
-    public ResponseEntity<JoinConDTO> createJoinCon(@RequestBody JoinConDTO joinConDTO) throws URISyntaxException {
-        log.debug("REST request to save JoinCon : {}", joinConDTO);
-        if (joinConDTO.getId() != null) {
+    public ResponseEntity<JoinCon> createJoinCon(@RequestBody JoinCon joinCon) throws URISyntaxException {
+        log.debug("REST request to save JoinCon : {}", joinCon);
+        if (joinCon.getId() != null) {
             throw new BadRequestAlertException("A new joinCon cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        JoinConDTO result = joinConService.save(joinConDTO);
+        JoinCon result = joinConRepository.save(joinCon);
         return ResponseEntity.created(new URI("/api/join-cons/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class JoinConResource {
     /**
      * {@code PUT  /join-cons} : Updates an existing joinCon.
      *
-     * @param joinConDTO the joinConDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated joinConDTO,
-     * or with status {@code 400 (Bad Request)} if the joinConDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the joinConDTO couldn't be updated.
+     * @param joinCon the joinCon to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated joinCon,
+     * or with status {@code 400 (Bad Request)} if the joinCon is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the joinCon couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/join-cons")
-    public ResponseEntity<JoinConDTO> updateJoinCon(@RequestBody JoinConDTO joinConDTO) throws URISyntaxException {
-        log.debug("REST request to update JoinCon : {}", joinConDTO);
-        if (joinConDTO.getId() == null) {
+    public ResponseEntity<JoinCon> updateJoinCon(@RequestBody JoinCon joinCon) throws URISyntaxException {
+        log.debug("REST request to update JoinCon : {}", joinCon);
+        if (joinCon.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        JoinConDTO result = joinConService.save(joinConDTO);
+        JoinCon result = joinConRepository.save(joinCon);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, joinConDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, joinCon.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class JoinConResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of joinCons in body.
      */
     @GetMapping("/join-cons")
-    public List<JoinConDTO> getAllJoinCons(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<JoinCon> getAllJoinCons(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all JoinCons");
-        return joinConService.findAll();
+        return joinConRepository.findAllWithEagerRelationships();
     }
 
     /**
      * {@code GET  /join-cons/:id} : get the "id" joinCon.
      *
-     * @param id the id of the joinConDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the joinConDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the joinCon to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the joinCon, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/join-cons/{id}")
-    public ResponseEntity<JoinConDTO> getJoinCon(@PathVariable Long id) {
+    public ResponseEntity<JoinCon> getJoinCon(@PathVariable Long id) {
         log.debug("REST request to get JoinCon : {}", id);
-        Optional<JoinConDTO> joinConDTO = joinConService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(joinConDTO);
+        Optional<JoinCon> joinCon = joinConRepository.findOneWithEagerRelationships(id);
+        return ResponseUtil.wrapOrNotFound(joinCon);
     }
 
     /**
      * {@code DELETE  /join-cons/:id} : delete the "id" joinCon.
      *
-     * @param id the id of the joinConDTO to delete.
+     * @param id the id of the joinCon to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/join-cons/{id}")
     public ResponseEntity<Void> deleteJoinCon(@PathVariable Long id) {
         log.debug("REST request to delete JoinCon : {}", id);
-        joinConService.delete(id);
+        joinConRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

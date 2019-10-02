@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ClassMethodCallService;
+import br.ufpa.labes.spm.domain.ClassMethodCall;
+import br.ufpa.labes.spm.repository.ClassMethodCallRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ClassMethodCallDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ClassMethodCallResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ClassMethodCallService classMethodCallService;
+    private final ClassMethodCallRepository classMethodCallRepository;
 
-    public ClassMethodCallResource(ClassMethodCallService classMethodCallService) {
-        this.classMethodCallService = classMethodCallService;
+    public ClassMethodCallResource(ClassMethodCallRepository classMethodCallRepository) {
+        this.classMethodCallRepository = classMethodCallRepository;
     }
 
     /**
      * {@code POST  /class-method-calls} : Create a new classMethodCall.
      *
-     * @param classMethodCallDTO the classMethodCallDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new classMethodCallDTO, or with status {@code 400 (Bad Request)} if the classMethodCall has already an ID.
+     * @param classMethodCall the classMethodCall to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new classMethodCall, or with status {@code 400 (Bad Request)} if the classMethodCall has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/class-method-calls")
-    public ResponseEntity<ClassMethodCallDTO> createClassMethodCall(@RequestBody ClassMethodCallDTO classMethodCallDTO) throws URISyntaxException {
-        log.debug("REST request to save ClassMethodCall : {}", classMethodCallDTO);
-        if (classMethodCallDTO.getId() != null) {
+    public ResponseEntity<ClassMethodCall> createClassMethodCall(@RequestBody ClassMethodCall classMethodCall) throws URISyntaxException {
+        log.debug("REST request to save ClassMethodCall : {}", classMethodCall);
+        if (classMethodCall.getId() != null) {
             throw new BadRequestAlertException("A new classMethodCall cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ClassMethodCallDTO result = classMethodCallService.save(classMethodCallDTO);
+        ClassMethodCall result = classMethodCallRepository.save(classMethodCall);
         return ResponseEntity.created(new URI("/api/class-method-calls/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ClassMethodCallResource {
     /**
      * {@code PUT  /class-method-calls} : Updates an existing classMethodCall.
      *
-     * @param classMethodCallDTO the classMethodCallDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated classMethodCallDTO,
-     * or with status {@code 400 (Bad Request)} if the classMethodCallDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the classMethodCallDTO couldn't be updated.
+     * @param classMethodCall the classMethodCall to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated classMethodCall,
+     * or with status {@code 400 (Bad Request)} if the classMethodCall is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the classMethodCall couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/class-method-calls")
-    public ResponseEntity<ClassMethodCallDTO> updateClassMethodCall(@RequestBody ClassMethodCallDTO classMethodCallDTO) throws URISyntaxException {
-        log.debug("REST request to update ClassMethodCall : {}", classMethodCallDTO);
-        if (classMethodCallDTO.getId() == null) {
+    public ResponseEntity<ClassMethodCall> updateClassMethodCall(@RequestBody ClassMethodCall classMethodCall) throws URISyntaxException {
+        log.debug("REST request to update ClassMethodCall : {}", classMethodCall);
+        if (classMethodCall.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ClassMethodCallDTO result = classMethodCallService.save(classMethodCallDTO);
+        ClassMethodCall result = classMethodCallRepository.save(classMethodCall);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, classMethodCallDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, classMethodCall.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ClassMethodCallResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of classMethodCalls in body.
      */
     @GetMapping("/class-method-calls")
-    public List<ClassMethodCallDTO> getAllClassMethodCalls() {
+    public List<ClassMethodCall> getAllClassMethodCalls() {
         log.debug("REST request to get all ClassMethodCalls");
-        return classMethodCallService.findAll();
+        return classMethodCallRepository.findAll();
     }
 
     /**
      * {@code GET  /class-method-calls/:id} : get the "id" classMethodCall.
      *
-     * @param id the id of the classMethodCallDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the classMethodCallDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the classMethodCall to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the classMethodCall, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/class-method-calls/{id}")
-    public ResponseEntity<ClassMethodCallDTO> getClassMethodCall(@PathVariable Long id) {
+    public ResponseEntity<ClassMethodCall> getClassMethodCall(@PathVariable Long id) {
         log.debug("REST request to get ClassMethodCall : {}", id);
-        Optional<ClassMethodCallDTO> classMethodCallDTO = classMethodCallService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(classMethodCallDTO);
+        Optional<ClassMethodCall> classMethodCall = classMethodCallRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(classMethodCall);
     }
 
     /**
      * {@code DELETE  /class-method-calls/:id} : delete the "id" classMethodCall.
      *
-     * @param id the id of the classMethodCallDTO to delete.
+     * @param id the id of the classMethodCall to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/class-method-calls/{id}")
     public ResponseEntity<Void> deleteClassMethodCall(@PathVariable Long id) {
         log.debug("REST request to delete ClassMethodCall : {}", id);
-        classMethodCallService.delete(id);
+        classMethodCallRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

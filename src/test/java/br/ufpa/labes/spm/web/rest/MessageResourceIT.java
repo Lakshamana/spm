@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Message;
 import br.ufpa.labes.spm.repository.MessageRepository;
-import br.ufpa.labes.spm.service.MessageService;
-import br.ufpa.labes.spm.service.dto.MessageDTO;
-import br.ufpa.labes.spm.service.mapper.MessageMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class MessageResourceIT {
     private MessageRepository messageRepository;
 
     @Autowired
-    private MessageMapper messageMapper;
-
-    @Autowired
-    private MessageService messageService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class MessageResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MessageResource messageResource = new MessageResource(messageService);
+        final MessageResource messageResource = new MessageResource(messageRepository);
         this.restMessageMockMvc = MockMvcBuilders.standaloneSetup(messageResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -124,10 +115,9 @@ public class MessageResourceIT {
         int databaseSizeBeforeCreate = messageRepository.findAll().size();
 
         // Create the Message
-        MessageDTO messageDTO = messageMapper.toDto(message);
         restMessageMockMvc.perform(post("/api/messages")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(messageDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(message)))
             .andExpect(status().isCreated());
 
         // Validate the Message in the database
@@ -145,12 +135,11 @@ public class MessageResourceIT {
 
         // Create the Message with an existing ID
         message.setId(1L);
-        MessageDTO messageDTO = messageMapper.toDto(message);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMessageMockMvc.perform(post("/api/messages")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(messageDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(message)))
             .andExpect(status().isBadRequest());
 
         // Validate the Message in the database
@@ -212,11 +201,10 @@ public class MessageResourceIT {
         updatedMessage
             .content(UPDATED_CONTENT)
             .time(UPDATED_TIME);
-        MessageDTO messageDTO = messageMapper.toDto(updatedMessage);
 
         restMessageMockMvc.perform(put("/api/messages")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(messageDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedMessage)))
             .andExpect(status().isOk());
 
         // Validate the Message in the database
@@ -233,12 +221,11 @@ public class MessageResourceIT {
         int databaseSizeBeforeUpdate = messageRepository.findAll().size();
 
         // Create the Message
-        MessageDTO messageDTO = messageMapper.toDto(message);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMessageMockMvc.perform(put("/api/messages")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(messageDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(message)))
             .andExpect(status().isBadRequest());
 
         // Validate the Message in the database
@@ -277,28 +264,5 @@ public class MessageResourceIT {
         assertThat(message1).isNotEqualTo(message2);
         message1.setId(null);
         assertThat(message1).isNotEqualTo(message2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MessageDTO.class);
-        MessageDTO messageDTO1 = new MessageDTO();
-        messageDTO1.setId(1L);
-        MessageDTO messageDTO2 = new MessageDTO();
-        assertThat(messageDTO1).isNotEqualTo(messageDTO2);
-        messageDTO2.setId(messageDTO1.getId());
-        assertThat(messageDTO1).isEqualTo(messageDTO2);
-        messageDTO2.setId(2L);
-        assertThat(messageDTO1).isNotEqualTo(messageDTO2);
-        messageDTO1.setId(null);
-        assertThat(messageDTO1).isNotEqualTo(messageDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(messageMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(messageMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ArtifactMetric;
 import br.ufpa.labes.spm.repository.ArtifactMetricRepository;
-import br.ufpa.labes.spm.service.ArtifactMetricService;
-import br.ufpa.labes.spm.service.dto.ArtifactMetricDTO;
-import br.ufpa.labes.spm.service.mapper.ArtifactMetricMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ArtifactMetricResourceIT {
     private ArtifactMetricRepository artifactMetricRepository;
 
     @Autowired
-    private ArtifactMetricMapper artifactMetricMapper;
-
-    @Autowired
-    private ArtifactMetricService artifactMetricService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ArtifactMetricResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ArtifactMetricResource artifactMetricResource = new ArtifactMetricResource(artifactMetricService);
+        final ArtifactMetricResource artifactMetricResource = new ArtifactMetricResource(artifactMetricRepository);
         this.restArtifactMetricMockMvc = MockMvcBuilders.standaloneSetup(artifactMetricResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ArtifactMetricResourceIT {
         int databaseSizeBeforeCreate = artifactMetricRepository.findAll().size();
 
         // Create the ArtifactMetric
-        ArtifactMetricDTO artifactMetricDTO = artifactMetricMapper.toDto(artifactMetric);
         restArtifactMetricMockMvc.perform(post("/api/artifact-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactMetric)))
             .andExpect(status().isCreated());
 
         // Validate the ArtifactMetric in the database
@@ -129,12 +119,11 @@ public class ArtifactMetricResourceIT {
 
         // Create the ArtifactMetric with an existing ID
         artifactMetric.setId(1L);
-        ArtifactMetricDTO artifactMetricDTO = artifactMetricMapper.toDto(artifactMetric);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restArtifactMetricMockMvc.perform(post("/api/artifact-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactMetric in the database
@@ -189,11 +178,10 @@ public class ArtifactMetricResourceIT {
         ArtifactMetric updatedArtifactMetric = artifactMetricRepository.findById(artifactMetric.getId()).get();
         // Disconnect from session so that the updates on updatedArtifactMetric are not directly saved in db
         em.detach(updatedArtifactMetric);
-        ArtifactMetricDTO artifactMetricDTO = artifactMetricMapper.toDto(updatedArtifactMetric);
 
         restArtifactMetricMockMvc.perform(put("/api/artifact-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedArtifactMetric)))
             .andExpect(status().isOk());
 
         // Validate the ArtifactMetric in the database
@@ -208,12 +196,11 @@ public class ArtifactMetricResourceIT {
         int databaseSizeBeforeUpdate = artifactMetricRepository.findAll().size();
 
         // Create the ArtifactMetric
-        ArtifactMetricDTO artifactMetricDTO = artifactMetricMapper.toDto(artifactMetric);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restArtifactMetricMockMvc.perform(put("/api/artifact-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactMetric in the database
@@ -252,28 +239,5 @@ public class ArtifactMetricResourceIT {
         assertThat(artifactMetric1).isNotEqualTo(artifactMetric2);
         artifactMetric1.setId(null);
         assertThat(artifactMetric1).isNotEqualTo(artifactMetric2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ArtifactMetricDTO.class);
-        ArtifactMetricDTO artifactMetricDTO1 = new ArtifactMetricDTO();
-        artifactMetricDTO1.setId(1L);
-        ArtifactMetricDTO artifactMetricDTO2 = new ArtifactMetricDTO();
-        assertThat(artifactMetricDTO1).isNotEqualTo(artifactMetricDTO2);
-        artifactMetricDTO2.setId(artifactMetricDTO1.getId());
-        assertThat(artifactMetricDTO1).isEqualTo(artifactMetricDTO2);
-        artifactMetricDTO2.setId(2L);
-        assertThat(artifactMetricDTO1).isNotEqualTo(artifactMetricDTO2);
-        artifactMetricDTO1.setId(null);
-        assertThat(artifactMetricDTO1).isNotEqualTo(artifactMetricDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(artifactMetricMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(artifactMetricMapper.fromId(null)).isNull();
     }
 }

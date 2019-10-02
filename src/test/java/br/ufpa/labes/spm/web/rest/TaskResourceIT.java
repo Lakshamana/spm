@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Task;
 import br.ufpa.labes.spm.repository.TaskRepository;
-import br.ufpa.labes.spm.service.TaskService;
-import br.ufpa.labes.spm.service.dto.TaskDTO;
-import br.ufpa.labes.spm.service.mapper.TaskMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -67,12 +64,6 @@ public class TaskResourceIT {
     private TaskRepository taskRepository;
 
     @Autowired
-    private TaskMapper taskMapper;
-
-    @Autowired
-    private TaskService taskService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -94,7 +85,7 @@ public class TaskResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TaskResource taskResource = new TaskResource(taskService);
+        final TaskResource taskResource = new TaskResource(taskRepository);
         this.restTaskMockMvc = MockMvcBuilders.standaloneSetup(taskResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -147,10 +138,9 @@ public class TaskResourceIT {
         int databaseSizeBeforeCreate = taskRepository.findAll().size();
 
         // Create the Task
-        TaskDTO taskDTO = taskMapper.toDto(task);
         restTaskMockMvc.perform(post("/api/tasks")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(task)))
             .andExpect(status().isCreated());
 
         // Validate the Task in the database
@@ -172,12 +162,11 @@ public class TaskResourceIT {
 
         // Create the Task with an existing ID
         task.setId(1L);
-        TaskDTO taskDTO = taskMapper.toDto(task);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restTaskMockMvc.perform(post("/api/tasks")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(task)))
             .andExpect(status().isBadRequest());
 
         // Validate the Task in the database
@@ -251,11 +240,10 @@ public class TaskResourceIT {
             .workingHours(UPDATED_WORKING_HOURS)
             .dateDelegatedTo(UPDATED_DATE_DELEGATED_TO)
             .dateDelegatedFrom(UPDATED_DATE_DELEGATED_FROM);
-        TaskDTO taskDTO = taskMapper.toDto(updatedTask);
 
         restTaskMockMvc.perform(put("/api/tasks")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedTask)))
             .andExpect(status().isOk());
 
         // Validate the Task in the database
@@ -276,12 +264,11 @@ public class TaskResourceIT {
         int databaseSizeBeforeUpdate = taskRepository.findAll().size();
 
         // Create the Task
-        TaskDTO taskDTO = taskMapper.toDto(task);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTaskMockMvc.perform(put("/api/tasks")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(taskDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(task)))
             .andExpect(status().isBadRequest());
 
         // Validate the Task in the database
@@ -320,28 +307,5 @@ public class TaskResourceIT {
         assertThat(task1).isNotEqualTo(task2);
         task1.setId(null);
         assertThat(task1).isNotEqualTo(task2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(TaskDTO.class);
-        TaskDTO taskDTO1 = new TaskDTO();
-        taskDTO1.setId(1L);
-        TaskDTO taskDTO2 = new TaskDTO();
-        assertThat(taskDTO1).isNotEqualTo(taskDTO2);
-        taskDTO2.setId(taskDTO1.getId());
-        assertThat(taskDTO1).isEqualTo(taskDTO2);
-        taskDTO2.setId(2L);
-        assertThat(taskDTO1).isNotEqualTo(taskDTO2);
-        taskDTO1.setId(null);
-        assertThat(taskDTO1).isNotEqualTo(taskDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(taskMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(taskMapper.fromId(null)).isNull();
     }
 }

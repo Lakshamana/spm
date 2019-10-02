@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.GraphicCoordinate;
 import br.ufpa.labes.spm.repository.GraphicCoordinateRepository;
-import br.ufpa.labes.spm.service.GraphicCoordinateService;
-import br.ufpa.labes.spm.service.dto.GraphicCoordinateDTO;
-import br.ufpa.labes.spm.service.mapper.GraphicCoordinateMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -56,12 +53,6 @@ public class GraphicCoordinateResourceIT {
     private GraphicCoordinateRepository graphicCoordinateRepository;
 
     @Autowired
-    private GraphicCoordinateMapper graphicCoordinateMapper;
-
-    @Autowired
-    private GraphicCoordinateService graphicCoordinateService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -83,7 +74,7 @@ public class GraphicCoordinateResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final GraphicCoordinateResource graphicCoordinateResource = new GraphicCoordinateResource(graphicCoordinateService);
+        final GraphicCoordinateResource graphicCoordinateResource = new GraphicCoordinateResource(graphicCoordinateRepository);
         this.restGraphicCoordinateMockMvc = MockMvcBuilders.standaloneSetup(graphicCoordinateResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -132,10 +123,9 @@ public class GraphicCoordinateResourceIT {
         int databaseSizeBeforeCreate = graphicCoordinateRepository.findAll().size();
 
         // Create the GraphicCoordinate
-        GraphicCoordinateDTO graphicCoordinateDTO = graphicCoordinateMapper.toDto(graphicCoordinate);
         restGraphicCoordinateMockMvc.perform(post("/api/graphic-coordinates")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(graphicCoordinateDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(graphicCoordinate)))
             .andExpect(status().isCreated());
 
         // Validate the GraphicCoordinate in the database
@@ -155,12 +145,11 @@ public class GraphicCoordinateResourceIT {
 
         // Create the GraphicCoordinate with an existing ID
         graphicCoordinate.setId(1L);
-        GraphicCoordinateDTO graphicCoordinateDTO = graphicCoordinateMapper.toDto(graphicCoordinate);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restGraphicCoordinateMockMvc.perform(post("/api/graphic-coordinates")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(graphicCoordinateDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(graphicCoordinate)))
             .andExpect(status().isBadRequest());
 
         // Validate the GraphicCoordinate in the database
@@ -228,11 +217,10 @@ public class GraphicCoordinateResourceIT {
             .y(UPDATED_Y)
             .visible(UPDATED_VISIBLE)
             .theProcess(UPDATED_THE_PROCESS);
-        GraphicCoordinateDTO graphicCoordinateDTO = graphicCoordinateMapper.toDto(updatedGraphicCoordinate);
 
         restGraphicCoordinateMockMvc.perform(put("/api/graphic-coordinates")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(graphicCoordinateDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedGraphicCoordinate)))
             .andExpect(status().isOk());
 
         // Validate the GraphicCoordinate in the database
@@ -251,12 +239,11 @@ public class GraphicCoordinateResourceIT {
         int databaseSizeBeforeUpdate = graphicCoordinateRepository.findAll().size();
 
         // Create the GraphicCoordinate
-        GraphicCoordinateDTO graphicCoordinateDTO = graphicCoordinateMapper.toDto(graphicCoordinate);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restGraphicCoordinateMockMvc.perform(put("/api/graphic-coordinates")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(graphicCoordinateDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(graphicCoordinate)))
             .andExpect(status().isBadRequest());
 
         // Validate the GraphicCoordinate in the database
@@ -295,28 +282,5 @@ public class GraphicCoordinateResourceIT {
         assertThat(graphicCoordinate1).isNotEqualTo(graphicCoordinate2);
         graphicCoordinate1.setId(null);
         assertThat(graphicCoordinate1).isNotEqualTo(graphicCoordinate2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(GraphicCoordinateDTO.class);
-        GraphicCoordinateDTO graphicCoordinateDTO1 = new GraphicCoordinateDTO();
-        graphicCoordinateDTO1.setId(1L);
-        GraphicCoordinateDTO graphicCoordinateDTO2 = new GraphicCoordinateDTO();
-        assertThat(graphicCoordinateDTO1).isNotEqualTo(graphicCoordinateDTO2);
-        graphicCoordinateDTO2.setId(graphicCoordinateDTO1.getId());
-        assertThat(graphicCoordinateDTO1).isEqualTo(graphicCoordinateDTO2);
-        graphicCoordinateDTO2.setId(2L);
-        assertThat(graphicCoordinateDTO1).isNotEqualTo(graphicCoordinateDTO2);
-        graphicCoordinateDTO1.setId(null);
-        assertThat(graphicCoordinateDTO1).isNotEqualTo(graphicCoordinateDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(graphicCoordinateMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(graphicCoordinateMapper.fromId(null)).isNull();
     }
 }

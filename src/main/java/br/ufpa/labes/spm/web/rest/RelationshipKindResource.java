@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.RelationshipKindService;
+import br.ufpa.labes.spm.domain.RelationshipKind;
+import br.ufpa.labes.spm.repository.RelationshipKindRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.RelationshipKindDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class RelationshipKindResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final RelationshipKindService relationshipKindService;
+    private final RelationshipKindRepository relationshipKindRepository;
 
-    public RelationshipKindResource(RelationshipKindService relationshipKindService) {
-        this.relationshipKindService = relationshipKindService;
+    public RelationshipKindResource(RelationshipKindRepository relationshipKindRepository) {
+        this.relationshipKindRepository = relationshipKindRepository;
     }
 
     /**
      * {@code POST  /relationship-kinds} : Create a new relationshipKind.
      *
-     * @param relationshipKindDTO the relationshipKindDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new relationshipKindDTO, or with status {@code 400 (Bad Request)} if the relationshipKind has already an ID.
+     * @param relationshipKind the relationshipKind to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new relationshipKind, or with status {@code 400 (Bad Request)} if the relationshipKind has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/relationship-kinds")
-    public ResponseEntity<RelationshipKindDTO> createRelationshipKind(@RequestBody RelationshipKindDTO relationshipKindDTO) throws URISyntaxException {
-        log.debug("REST request to save RelationshipKind : {}", relationshipKindDTO);
-        if (relationshipKindDTO.getId() != null) {
+    public ResponseEntity<RelationshipKind> createRelationshipKind(@RequestBody RelationshipKind relationshipKind) throws URISyntaxException {
+        log.debug("REST request to save RelationshipKind : {}", relationshipKind);
+        if (relationshipKind.getId() != null) {
             throw new BadRequestAlertException("A new relationshipKind cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        RelationshipKindDTO result = relationshipKindService.save(relationshipKindDTO);
+        RelationshipKind result = relationshipKindRepository.save(relationshipKind);
         return ResponseEntity.created(new URI("/api/relationship-kinds/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class RelationshipKindResource {
     /**
      * {@code PUT  /relationship-kinds} : Updates an existing relationshipKind.
      *
-     * @param relationshipKindDTO the relationshipKindDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated relationshipKindDTO,
-     * or with status {@code 400 (Bad Request)} if the relationshipKindDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the relationshipKindDTO couldn't be updated.
+     * @param relationshipKind the relationshipKind to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated relationshipKind,
+     * or with status {@code 400 (Bad Request)} if the relationshipKind is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the relationshipKind couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/relationship-kinds")
-    public ResponseEntity<RelationshipKindDTO> updateRelationshipKind(@RequestBody RelationshipKindDTO relationshipKindDTO) throws URISyntaxException {
-        log.debug("REST request to update RelationshipKind : {}", relationshipKindDTO);
-        if (relationshipKindDTO.getId() == null) {
+    public ResponseEntity<RelationshipKind> updateRelationshipKind(@RequestBody RelationshipKind relationshipKind) throws URISyntaxException {
+        log.debug("REST request to update RelationshipKind : {}", relationshipKind);
+        if (relationshipKind.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        RelationshipKindDTO result = relationshipKindService.save(relationshipKindDTO);
+        RelationshipKind result = relationshipKindRepository.save(relationshipKind);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, relationshipKindDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, relationshipKind.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class RelationshipKindResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of relationshipKinds in body.
      */
     @GetMapping("/relationship-kinds")
-    public List<RelationshipKindDTO> getAllRelationshipKinds() {
+    public List<RelationshipKind> getAllRelationshipKinds() {
         log.debug("REST request to get all RelationshipKinds");
-        return relationshipKindService.findAll();
+        return relationshipKindRepository.findAll();
     }
 
     /**
      * {@code GET  /relationship-kinds/:id} : get the "id" relationshipKind.
      *
-     * @param id the id of the relationshipKindDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the relationshipKindDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the relationshipKind to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the relationshipKind, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/relationship-kinds/{id}")
-    public ResponseEntity<RelationshipKindDTO> getRelationshipKind(@PathVariable Long id) {
+    public ResponseEntity<RelationshipKind> getRelationshipKind(@PathVariable Long id) {
         log.debug("REST request to get RelationshipKind : {}", id);
-        Optional<RelationshipKindDTO> relationshipKindDTO = relationshipKindService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(relationshipKindDTO);
+        Optional<RelationshipKind> relationshipKind = relationshipKindRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(relationshipKind);
     }
 
     /**
      * {@code DELETE  /relationship-kinds/:id} : delete the "id" relationshipKind.
      *
-     * @param id the id of the relationshipKindDTO to delete.
+     * @param id the id of the relationshipKind to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/relationship-kinds/{id}")
     public ResponseEntity<Void> deleteRelationshipKind(@PathVariable Long id) {
         log.debug("REST request to delete RelationshipKind : {}", id);
-        relationshipKindService.delete(id);
+        relationshipKindRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

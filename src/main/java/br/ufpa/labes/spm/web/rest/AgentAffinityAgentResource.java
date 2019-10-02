@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AgentAffinityAgentService;
+import br.ufpa.labes.spm.domain.AgentAffinityAgent;
+import br.ufpa.labes.spm.repository.AgentAffinityAgentRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AgentAffinityAgentDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class AgentAffinityAgentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AgentAffinityAgentService agentAffinityAgentService;
+    private final AgentAffinityAgentRepository agentAffinityAgentRepository;
 
-    public AgentAffinityAgentResource(AgentAffinityAgentService agentAffinityAgentService) {
-        this.agentAffinityAgentService = agentAffinityAgentService;
+    public AgentAffinityAgentResource(AgentAffinityAgentRepository agentAffinityAgentRepository) {
+        this.agentAffinityAgentRepository = agentAffinityAgentRepository;
     }
 
     /**
      * {@code POST  /agent-affinity-agents} : Create a new agentAffinityAgent.
      *
-     * @param agentAffinityAgentDTO the agentAffinityAgentDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentAffinityAgentDTO, or with status {@code 400 (Bad Request)} if the agentAffinityAgent has already an ID.
+     * @param agentAffinityAgent the agentAffinityAgent to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentAffinityAgent, or with status {@code 400 (Bad Request)} if the agentAffinityAgent has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/agent-affinity-agents")
-    public ResponseEntity<AgentAffinityAgentDTO> createAgentAffinityAgent(@RequestBody AgentAffinityAgentDTO agentAffinityAgentDTO) throws URISyntaxException {
-        log.debug("REST request to save AgentAffinityAgent : {}", agentAffinityAgentDTO);
-        if (agentAffinityAgentDTO.getId() != null) {
+    public ResponseEntity<AgentAffinityAgent> createAgentAffinityAgent(@RequestBody AgentAffinityAgent agentAffinityAgent) throws URISyntaxException {
+        log.debug("REST request to save AgentAffinityAgent : {}", agentAffinityAgent);
+        if (agentAffinityAgent.getId() != null) {
             throw new BadRequestAlertException("A new agentAffinityAgent cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AgentAffinityAgentDTO result = agentAffinityAgentService.save(agentAffinityAgentDTO);
+        AgentAffinityAgent result = agentAffinityAgentRepository.save(agentAffinityAgent);
         return ResponseEntity.created(new URI("/api/agent-affinity-agents/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class AgentAffinityAgentResource {
     /**
      * {@code PUT  /agent-affinity-agents} : Updates an existing agentAffinityAgent.
      *
-     * @param agentAffinityAgentDTO the agentAffinityAgentDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentAffinityAgentDTO,
-     * or with status {@code 400 (Bad Request)} if the agentAffinityAgentDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the agentAffinityAgentDTO couldn't be updated.
+     * @param agentAffinityAgent the agentAffinityAgent to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentAffinityAgent,
+     * or with status {@code 400 (Bad Request)} if the agentAffinityAgent is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the agentAffinityAgent couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/agent-affinity-agents")
-    public ResponseEntity<AgentAffinityAgentDTO> updateAgentAffinityAgent(@RequestBody AgentAffinityAgentDTO agentAffinityAgentDTO) throws URISyntaxException {
-        log.debug("REST request to update AgentAffinityAgent : {}", agentAffinityAgentDTO);
-        if (agentAffinityAgentDTO.getId() == null) {
+    public ResponseEntity<AgentAffinityAgent> updateAgentAffinityAgent(@RequestBody AgentAffinityAgent agentAffinityAgent) throws URISyntaxException {
+        log.debug("REST request to update AgentAffinityAgent : {}", agentAffinityAgent);
+        if (agentAffinityAgent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AgentAffinityAgentDTO result = agentAffinityAgentService.save(agentAffinityAgentDTO);
+        AgentAffinityAgent result = agentAffinityAgentRepository.save(agentAffinityAgent);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentAffinityAgentDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentAffinityAgent.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class AgentAffinityAgentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of agentAffinityAgents in body.
      */
     @GetMapping("/agent-affinity-agents")
-    public List<AgentAffinityAgentDTO> getAllAgentAffinityAgents() {
+    public List<AgentAffinityAgent> getAllAgentAffinityAgents() {
         log.debug("REST request to get all AgentAffinityAgents");
-        return agentAffinityAgentService.findAll();
+        return agentAffinityAgentRepository.findAll();
     }
 
     /**
      * {@code GET  /agent-affinity-agents/:id} : get the "id" agentAffinityAgent.
      *
-     * @param id the id of the agentAffinityAgentDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentAffinityAgentDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the agentAffinityAgent to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentAffinityAgent, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/agent-affinity-agents/{id}")
-    public ResponseEntity<AgentAffinityAgentDTO> getAgentAffinityAgent(@PathVariable Long id) {
+    public ResponseEntity<AgentAffinityAgent> getAgentAffinityAgent(@PathVariable Long id) {
         log.debug("REST request to get AgentAffinityAgent : {}", id);
-        Optional<AgentAffinityAgentDTO> agentAffinityAgentDTO = agentAffinityAgentService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(agentAffinityAgentDTO);
+        Optional<AgentAffinityAgent> agentAffinityAgent = agentAffinityAgentRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(agentAffinityAgent);
     }
 
     /**
      * {@code DELETE  /agent-affinity-agents/:id} : delete the "id" agentAffinityAgent.
      *
-     * @param id the id of the agentAffinityAgentDTO to delete.
+     * @param id the id of the agentAffinityAgent to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/agent-affinity-agents/{id}")
     public ResponseEntity<Void> deleteAgentAffinityAgent(@PathVariable Long id) {
         log.debug("REST request to delete AgentAffinityAgent : {}", id);
-        agentAffinityAgentService.delete(id);
+        agentAffinityAgentRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

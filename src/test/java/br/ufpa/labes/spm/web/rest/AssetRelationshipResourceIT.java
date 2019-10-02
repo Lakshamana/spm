@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AssetRelationship;
 import br.ufpa.labes.spm.repository.AssetRelationshipRepository;
-import br.ufpa.labes.spm.service.AssetRelationshipService;
-import br.ufpa.labes.spm.service.dto.AssetRelationshipDTO;
-import br.ufpa.labes.spm.service.mapper.AssetRelationshipMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class AssetRelationshipResourceIT {
     private AssetRelationshipRepository assetRelationshipRepository;
 
     @Autowired
-    private AssetRelationshipMapper assetRelationshipMapper;
-
-    @Autowired
-    private AssetRelationshipService assetRelationshipService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class AssetRelationshipResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AssetRelationshipResource assetRelationshipResource = new AssetRelationshipResource(assetRelationshipService);
+        final AssetRelationshipResource assetRelationshipResource = new AssetRelationshipResource(assetRelationshipRepository);
         this.restAssetRelationshipMockMvc = MockMvcBuilders.standaloneSetup(assetRelationshipResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class AssetRelationshipResourceIT {
         int databaseSizeBeforeCreate = assetRelationshipRepository.findAll().size();
 
         // Create the AssetRelationship
-        AssetRelationshipDTO assetRelationshipDTO = assetRelationshipMapper.toDto(assetRelationship);
         restAssetRelationshipMockMvc.perform(post("/api/asset-relationships")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assetRelationshipDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(assetRelationship)))
             .andExpect(status().isCreated());
 
         // Validate the AssetRelationship in the database
@@ -135,12 +125,11 @@ public class AssetRelationshipResourceIT {
 
         // Create the AssetRelationship with an existing ID
         assetRelationship.setId(1L);
-        AssetRelationshipDTO assetRelationshipDTO = assetRelationshipMapper.toDto(assetRelationship);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAssetRelationshipMockMvc.perform(post("/api/asset-relationships")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assetRelationshipDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(assetRelationship)))
             .andExpect(status().isBadRequest());
 
         // Validate the AssetRelationship in the database
@@ -199,11 +188,10 @@ public class AssetRelationshipResourceIT {
         em.detach(updatedAssetRelationship);
         updatedAssetRelationship
             .description(UPDATED_DESCRIPTION);
-        AssetRelationshipDTO assetRelationshipDTO = assetRelationshipMapper.toDto(updatedAssetRelationship);
 
         restAssetRelationshipMockMvc.perform(put("/api/asset-relationships")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assetRelationshipDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAssetRelationship)))
             .andExpect(status().isOk());
 
         // Validate the AssetRelationship in the database
@@ -219,12 +207,11 @@ public class AssetRelationshipResourceIT {
         int databaseSizeBeforeUpdate = assetRelationshipRepository.findAll().size();
 
         // Create the AssetRelationship
-        AssetRelationshipDTO assetRelationshipDTO = assetRelationshipMapper.toDto(assetRelationship);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAssetRelationshipMockMvc.perform(put("/api/asset-relationships")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assetRelationshipDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(assetRelationship)))
             .andExpect(status().isBadRequest());
 
         // Validate the AssetRelationship in the database
@@ -263,28 +250,5 @@ public class AssetRelationshipResourceIT {
         assertThat(assetRelationship1).isNotEqualTo(assetRelationship2);
         assetRelationship1.setId(null);
         assertThat(assetRelationship1).isNotEqualTo(assetRelationship2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AssetRelationshipDTO.class);
-        AssetRelationshipDTO assetRelationshipDTO1 = new AssetRelationshipDTO();
-        assetRelationshipDTO1.setId(1L);
-        AssetRelationshipDTO assetRelationshipDTO2 = new AssetRelationshipDTO();
-        assertThat(assetRelationshipDTO1).isNotEqualTo(assetRelationshipDTO2);
-        assetRelationshipDTO2.setId(assetRelationshipDTO1.getId());
-        assertThat(assetRelationshipDTO1).isEqualTo(assetRelationshipDTO2);
-        assetRelationshipDTO2.setId(2L);
-        assertThat(assetRelationshipDTO1).isNotEqualTo(assetRelationshipDTO2);
-        assetRelationshipDTO1.setId(null);
-        assertThat(assetRelationshipDTO1).isNotEqualTo(assetRelationshipDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(assetRelationshipMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(assetRelationshipMapper.fromId(null)).isNull();
     }
 }

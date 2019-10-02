@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.NotWorkingDay;
 import br.ufpa.labes.spm.repository.NotWorkingDayRepository;
-import br.ufpa.labes.spm.service.NotWorkingDayService;
-import br.ufpa.labes.spm.service.dto.NotWorkingDayDTO;
-import br.ufpa.labes.spm.service.mapper.NotWorkingDayMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class NotWorkingDayResourceIT {
     private NotWorkingDayRepository notWorkingDayRepository;
 
     @Autowired
-    private NotWorkingDayMapper notWorkingDayMapper;
-
-    @Autowired
-    private NotWorkingDayService notWorkingDayService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class NotWorkingDayResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final NotWorkingDayResource notWorkingDayResource = new NotWorkingDayResource(notWorkingDayService);
+        final NotWorkingDayResource notWorkingDayResource = new NotWorkingDayResource(notWorkingDayRepository);
         this.restNotWorkingDayMockMvc = MockMvcBuilders.standaloneSetup(notWorkingDayResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class NotWorkingDayResourceIT {
         int databaseSizeBeforeCreate = notWorkingDayRepository.findAll().size();
 
         // Create the NotWorkingDay
-        NotWorkingDayDTO notWorkingDayDTO = notWorkingDayMapper.toDto(notWorkingDay);
         restNotWorkingDayMockMvc.perform(post("/api/not-working-days")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(notWorkingDayDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(notWorkingDay)))
             .andExpect(status().isCreated());
 
         // Validate the NotWorkingDay in the database
@@ -135,12 +125,11 @@ public class NotWorkingDayResourceIT {
 
         // Create the NotWorkingDay with an existing ID
         notWorkingDay.setId(1L);
-        NotWorkingDayDTO notWorkingDayDTO = notWorkingDayMapper.toDto(notWorkingDay);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restNotWorkingDayMockMvc.perform(post("/api/not-working-days")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(notWorkingDayDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(notWorkingDay)))
             .andExpect(status().isBadRequest());
 
         // Validate the NotWorkingDay in the database
@@ -199,11 +188,10 @@ public class NotWorkingDayResourceIT {
         em.detach(updatedNotWorkingDay);
         updatedNotWorkingDay
             .name(UPDATED_NAME);
-        NotWorkingDayDTO notWorkingDayDTO = notWorkingDayMapper.toDto(updatedNotWorkingDay);
 
         restNotWorkingDayMockMvc.perform(put("/api/not-working-days")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(notWorkingDayDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedNotWorkingDay)))
             .andExpect(status().isOk());
 
         // Validate the NotWorkingDay in the database
@@ -219,12 +207,11 @@ public class NotWorkingDayResourceIT {
         int databaseSizeBeforeUpdate = notWorkingDayRepository.findAll().size();
 
         // Create the NotWorkingDay
-        NotWorkingDayDTO notWorkingDayDTO = notWorkingDayMapper.toDto(notWorkingDay);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restNotWorkingDayMockMvc.perform(put("/api/not-working-days")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(notWorkingDayDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(notWorkingDay)))
             .andExpect(status().isBadRequest());
 
         // Validate the NotWorkingDay in the database
@@ -263,28 +250,5 @@ public class NotWorkingDayResourceIT {
         assertThat(notWorkingDay1).isNotEqualTo(notWorkingDay2);
         notWorkingDay1.setId(null);
         assertThat(notWorkingDay1).isNotEqualTo(notWorkingDay2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(NotWorkingDayDTO.class);
-        NotWorkingDayDTO notWorkingDayDTO1 = new NotWorkingDayDTO();
-        notWorkingDayDTO1.setId(1L);
-        NotWorkingDayDTO notWorkingDayDTO2 = new NotWorkingDayDTO();
-        assertThat(notWorkingDayDTO1).isNotEqualTo(notWorkingDayDTO2);
-        notWorkingDayDTO2.setId(notWorkingDayDTO1.getId());
-        assertThat(notWorkingDayDTO1).isEqualTo(notWorkingDayDTO2);
-        notWorkingDayDTO2.setId(2L);
-        assertThat(notWorkingDayDTO1).isNotEqualTo(notWorkingDayDTO2);
-        notWorkingDayDTO1.setId(null);
-        assertThat(notWorkingDayDTO1).isNotEqualTo(notWorkingDayDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(notWorkingDayMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(notWorkingDayMapper.fromId(null)).isNull();
     }
 }

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ResourceEventService;
+import br.ufpa.labes.spm.domain.ResourceEvent;
+import br.ufpa.labes.spm.repository.ResourceEventRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ResourceEventDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ResourceEventResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ResourceEventService resourceEventService;
+    private final ResourceEventRepository resourceEventRepository;
 
-    public ResourceEventResource(ResourceEventService resourceEventService) {
-        this.resourceEventService = resourceEventService;
+    public ResourceEventResource(ResourceEventRepository resourceEventRepository) {
+        this.resourceEventRepository = resourceEventRepository;
     }
 
     /**
      * {@code POST  /resource-events} : Create a new resourceEvent.
      *
-     * @param resourceEventDTO the resourceEventDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new resourceEventDTO, or with status {@code 400 (Bad Request)} if the resourceEvent has already an ID.
+     * @param resourceEvent the resourceEvent to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new resourceEvent, or with status {@code 400 (Bad Request)} if the resourceEvent has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/resource-events")
-    public ResponseEntity<ResourceEventDTO> createResourceEvent(@RequestBody ResourceEventDTO resourceEventDTO) throws URISyntaxException {
-        log.debug("REST request to save ResourceEvent : {}", resourceEventDTO);
-        if (resourceEventDTO.getId() != null) {
+    public ResponseEntity<ResourceEvent> createResourceEvent(@RequestBody ResourceEvent resourceEvent) throws URISyntaxException {
+        log.debug("REST request to save ResourceEvent : {}", resourceEvent);
+        if (resourceEvent.getId() != null) {
             throw new BadRequestAlertException("A new resourceEvent cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ResourceEventDTO result = resourceEventService.save(resourceEventDTO);
+        ResourceEvent result = resourceEventRepository.save(resourceEvent);
         return ResponseEntity.created(new URI("/api/resource-events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ResourceEventResource {
     /**
      * {@code PUT  /resource-events} : Updates an existing resourceEvent.
      *
-     * @param resourceEventDTO the resourceEventDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated resourceEventDTO,
-     * or with status {@code 400 (Bad Request)} if the resourceEventDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the resourceEventDTO couldn't be updated.
+     * @param resourceEvent the resourceEvent to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated resourceEvent,
+     * or with status {@code 400 (Bad Request)} if the resourceEvent is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the resourceEvent couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/resource-events")
-    public ResponseEntity<ResourceEventDTO> updateResourceEvent(@RequestBody ResourceEventDTO resourceEventDTO) throws URISyntaxException {
-        log.debug("REST request to update ResourceEvent : {}", resourceEventDTO);
-        if (resourceEventDTO.getId() == null) {
+    public ResponseEntity<ResourceEvent> updateResourceEvent(@RequestBody ResourceEvent resourceEvent) throws URISyntaxException {
+        log.debug("REST request to update ResourceEvent : {}", resourceEvent);
+        if (resourceEvent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ResourceEventDTO result = resourceEventService.save(resourceEventDTO);
+        ResourceEvent result = resourceEventRepository.save(resourceEvent);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, resourceEventDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, resourceEvent.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ResourceEventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of resourceEvents in body.
      */
     @GetMapping("/resource-events")
-    public List<ResourceEventDTO> getAllResourceEvents() {
+    public List<ResourceEvent> getAllResourceEvents() {
         log.debug("REST request to get all ResourceEvents");
-        return resourceEventService.findAll();
+        return resourceEventRepository.findAll();
     }
 
     /**
      * {@code GET  /resource-events/:id} : get the "id" resourceEvent.
      *
-     * @param id the id of the resourceEventDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the resourceEventDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the resourceEvent to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the resourceEvent, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/resource-events/{id}")
-    public ResponseEntity<ResourceEventDTO> getResourceEvent(@PathVariable Long id) {
+    public ResponseEntity<ResourceEvent> getResourceEvent(@PathVariable Long id) {
         log.debug("REST request to get ResourceEvent : {}", id);
-        Optional<ResourceEventDTO> resourceEventDTO = resourceEventService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(resourceEventDTO);
+        Optional<ResourceEvent> resourceEvent = resourceEventRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(resourceEvent);
     }
 
     /**
      * {@code DELETE  /resource-events/:id} : delete the "id" resourceEvent.
      *
-     * @param id the id of the resourceEventDTO to delete.
+     * @param id the id of the resourceEvent to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/resource-events/{id}")
     public ResponseEntity<Void> deleteResourceEvent(@PathVariable Long id) {
         log.debug("REST request to delete ResourceEvent : {}", id);
-        resourceEventService.delete(id);
+        resourceEventRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

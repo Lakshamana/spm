@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.RequiredResource;
 import br.ufpa.labes.spm.repository.RequiredResourceRepository;
-import br.ufpa.labes.spm.service.RequiredResourceService;
-import br.ufpa.labes.spm.service.dto.RequiredResourceDTO;
-import br.ufpa.labes.spm.service.mapper.RequiredResourceMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,12 +43,6 @@ public class RequiredResourceResourceIT {
     private RequiredResourceRepository requiredResourceRepository;
 
     @Autowired
-    private RequiredResourceMapper requiredResourceMapper;
-
-    @Autowired
-    private RequiredResourceService requiredResourceService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +64,7 @@ public class RequiredResourceResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RequiredResourceResource requiredResourceResource = new RequiredResourceResource(requiredResourceService);
+        final RequiredResourceResource requiredResourceResource = new RequiredResourceResource(requiredResourceRepository);
         this.restRequiredResourceMockMvc = MockMvcBuilders.standaloneSetup(requiredResourceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -116,10 +107,9 @@ public class RequiredResourceResourceIT {
         int databaseSizeBeforeCreate = requiredResourceRepository.findAll().size();
 
         // Create the RequiredResource
-        RequiredResourceDTO requiredResourceDTO = requiredResourceMapper.toDto(requiredResource);
         restRequiredResourceMockMvc.perform(post("/api/required-resources")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(requiredResourceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(requiredResource)))
             .andExpect(status().isCreated());
 
         // Validate the RequiredResource in the database
@@ -136,12 +126,11 @@ public class RequiredResourceResourceIT {
 
         // Create the RequiredResource with an existing ID
         requiredResource.setId(1L);
-        RequiredResourceDTO requiredResourceDTO = requiredResourceMapper.toDto(requiredResource);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restRequiredResourceMockMvc.perform(post("/api/required-resources")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(requiredResourceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(requiredResource)))
             .andExpect(status().isBadRequest());
 
         // Validate the RequiredResource in the database
@@ -200,11 +189,10 @@ public class RequiredResourceResourceIT {
         em.detach(updatedRequiredResource);
         updatedRequiredResource
             .amountNeeded(UPDATED_AMOUNT_NEEDED);
-        RequiredResourceDTO requiredResourceDTO = requiredResourceMapper.toDto(updatedRequiredResource);
 
         restRequiredResourceMockMvc.perform(put("/api/required-resources")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(requiredResourceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedRequiredResource)))
             .andExpect(status().isOk());
 
         // Validate the RequiredResource in the database
@@ -220,12 +208,11 @@ public class RequiredResourceResourceIT {
         int databaseSizeBeforeUpdate = requiredResourceRepository.findAll().size();
 
         // Create the RequiredResource
-        RequiredResourceDTO requiredResourceDTO = requiredResourceMapper.toDto(requiredResource);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restRequiredResourceMockMvc.perform(put("/api/required-resources")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(requiredResourceDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(requiredResource)))
             .andExpect(status().isBadRequest());
 
         // Validate the RequiredResource in the database
@@ -264,28 +251,5 @@ public class RequiredResourceResourceIT {
         assertThat(requiredResource1).isNotEqualTo(requiredResource2);
         requiredResource1.setId(null);
         assertThat(requiredResource1).isNotEqualTo(requiredResource2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RequiredResourceDTO.class);
-        RequiredResourceDTO requiredResourceDTO1 = new RequiredResourceDTO();
-        requiredResourceDTO1.setId(1L);
-        RequiredResourceDTO requiredResourceDTO2 = new RequiredResourceDTO();
-        assertThat(requiredResourceDTO1).isNotEqualTo(requiredResourceDTO2);
-        requiredResourceDTO2.setId(requiredResourceDTO1.getId());
-        assertThat(requiredResourceDTO1).isEqualTo(requiredResourceDTO2);
-        requiredResourceDTO2.setId(2L);
-        assertThat(requiredResourceDTO1).isNotEqualTo(requiredResourceDTO2);
-        requiredResourceDTO1.setId(null);
-        assertThat(requiredResourceDTO1).isNotEqualTo(requiredResourceDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(requiredResourceMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(requiredResourceMapper.fromId(null)).isNull();
     }
 }

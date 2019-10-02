@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ExclusiveService;
+import br.ufpa.labes.spm.domain.Exclusive;
+import br.ufpa.labes.spm.repository.ExclusiveRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ExclusiveDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ExclusiveResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ExclusiveService exclusiveService;
+    private final ExclusiveRepository exclusiveRepository;
 
-    public ExclusiveResource(ExclusiveService exclusiveService) {
-        this.exclusiveService = exclusiveService;
+    public ExclusiveResource(ExclusiveRepository exclusiveRepository) {
+        this.exclusiveRepository = exclusiveRepository;
     }
 
     /**
      * {@code POST  /exclusives} : Create a new exclusive.
      *
-     * @param exclusiveDTO the exclusiveDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new exclusiveDTO, or with status {@code 400 (Bad Request)} if the exclusive has already an ID.
+     * @param exclusive the exclusive to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new exclusive, or with status {@code 400 (Bad Request)} if the exclusive has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/exclusives")
-    public ResponseEntity<ExclusiveDTO> createExclusive(@RequestBody ExclusiveDTO exclusiveDTO) throws URISyntaxException {
-        log.debug("REST request to save Exclusive : {}", exclusiveDTO);
-        if (exclusiveDTO.getId() != null) {
+    public ResponseEntity<Exclusive> createExclusive(@RequestBody Exclusive exclusive) throws URISyntaxException {
+        log.debug("REST request to save Exclusive : {}", exclusive);
+        if (exclusive.getId() != null) {
             throw new BadRequestAlertException("A new exclusive cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ExclusiveDTO result = exclusiveService.save(exclusiveDTO);
+        Exclusive result = exclusiveRepository.save(exclusive);
         return ResponseEntity.created(new URI("/api/exclusives/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ExclusiveResource {
     /**
      * {@code PUT  /exclusives} : Updates an existing exclusive.
      *
-     * @param exclusiveDTO the exclusiveDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exclusiveDTO,
-     * or with status {@code 400 (Bad Request)} if the exclusiveDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the exclusiveDTO couldn't be updated.
+     * @param exclusive the exclusive to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exclusive,
+     * or with status {@code 400 (Bad Request)} if the exclusive is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the exclusive couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/exclusives")
-    public ResponseEntity<ExclusiveDTO> updateExclusive(@RequestBody ExclusiveDTO exclusiveDTO) throws URISyntaxException {
-        log.debug("REST request to update Exclusive : {}", exclusiveDTO);
-        if (exclusiveDTO.getId() == null) {
+    public ResponseEntity<Exclusive> updateExclusive(@RequestBody Exclusive exclusive) throws URISyntaxException {
+        log.debug("REST request to update Exclusive : {}", exclusive);
+        if (exclusive.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ExclusiveDTO result = exclusiveService.save(exclusiveDTO);
+        Exclusive result = exclusiveRepository.save(exclusive);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exclusiveDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exclusive.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ExclusiveResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exclusives in body.
      */
     @GetMapping("/exclusives")
-    public List<ExclusiveDTO> getAllExclusives() {
+    public List<Exclusive> getAllExclusives() {
         log.debug("REST request to get all Exclusives");
-        return exclusiveService.findAll();
+        return exclusiveRepository.findAll();
     }
 
     /**
      * {@code GET  /exclusives/:id} : get the "id" exclusive.
      *
-     * @param id the id of the exclusiveDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exclusiveDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the exclusive to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exclusive, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/exclusives/{id}")
-    public ResponseEntity<ExclusiveDTO> getExclusive(@PathVariable Long id) {
+    public ResponseEntity<Exclusive> getExclusive(@PathVariable Long id) {
         log.debug("REST request to get Exclusive : {}", id);
-        Optional<ExclusiveDTO> exclusiveDTO = exclusiveService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(exclusiveDTO);
+        Optional<Exclusive> exclusive = exclusiveRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(exclusive);
     }
 
     /**
      * {@code DELETE  /exclusives/:id} : delete the "id" exclusive.
      *
-     * @param id the id of the exclusiveDTO to delete.
+     * @param id the id of the exclusive to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/exclusives/{id}")
     public ResponseEntity<Void> deleteExclusive(@PathVariable Long id) {
         log.debug("REST request to delete Exclusive : {}", id);
-        exclusiveService.delete(id);
+        exclusiveRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

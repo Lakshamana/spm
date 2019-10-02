@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.PrimitiveType;
 import br.ufpa.labes.spm.repository.PrimitiveTypeRepository;
-import br.ufpa.labes.spm.service.PrimitiveTypeService;
-import br.ufpa.labes.spm.service.dto.PrimitiveTypeDTO;
-import br.ufpa.labes.spm.service.mapper.PrimitiveTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class PrimitiveTypeResourceIT {
     private PrimitiveTypeRepository primitiveTypeRepository;
 
     @Autowired
-    private PrimitiveTypeMapper primitiveTypeMapper;
-
-    @Autowired
-    private PrimitiveTypeService primitiveTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class PrimitiveTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PrimitiveTypeResource primitiveTypeResource = new PrimitiveTypeResource(primitiveTypeService);
+        final PrimitiveTypeResource primitiveTypeResource = new PrimitiveTypeResource(primitiveTypeRepository);
         this.restPrimitiveTypeMockMvc = MockMvcBuilders.standaloneSetup(primitiveTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class PrimitiveTypeResourceIT {
         int databaseSizeBeforeCreate = primitiveTypeRepository.findAll().size();
 
         // Create the PrimitiveType
-        PrimitiveTypeDTO primitiveTypeDTO = primitiveTypeMapper.toDto(primitiveType);
         restPrimitiveTypeMockMvc.perform(post("/api/primitive-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(primitiveTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(primitiveType)))
             .andExpect(status().isCreated());
 
         // Validate the PrimitiveType in the database
@@ -135,12 +125,11 @@ public class PrimitiveTypeResourceIT {
 
         // Create the PrimitiveType with an existing ID
         primitiveType.setId(1L);
-        PrimitiveTypeDTO primitiveTypeDTO = primitiveTypeMapper.toDto(primitiveType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPrimitiveTypeMockMvc.perform(post("/api/primitive-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(primitiveTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(primitiveType)))
             .andExpect(status().isBadRequest());
 
         // Validate the PrimitiveType in the database
@@ -199,11 +188,10 @@ public class PrimitiveTypeResourceIT {
         em.detach(updatedPrimitiveType);
         updatedPrimitiveType
             .ident(UPDATED_IDENT);
-        PrimitiveTypeDTO primitiveTypeDTO = primitiveTypeMapper.toDto(updatedPrimitiveType);
 
         restPrimitiveTypeMockMvc.perform(put("/api/primitive-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(primitiveTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedPrimitiveType)))
             .andExpect(status().isOk());
 
         // Validate the PrimitiveType in the database
@@ -219,12 +207,11 @@ public class PrimitiveTypeResourceIT {
         int databaseSizeBeforeUpdate = primitiveTypeRepository.findAll().size();
 
         // Create the PrimitiveType
-        PrimitiveTypeDTO primitiveTypeDTO = primitiveTypeMapper.toDto(primitiveType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restPrimitiveTypeMockMvc.perform(put("/api/primitive-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(primitiveTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(primitiveType)))
             .andExpect(status().isBadRequest());
 
         // Validate the PrimitiveType in the database
@@ -263,28 +250,5 @@ public class PrimitiveTypeResourceIT {
         assertThat(primitiveType1).isNotEqualTo(primitiveType2);
         primitiveType1.setId(null);
         assertThat(primitiveType1).isNotEqualTo(primitiveType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(PrimitiveTypeDTO.class);
-        PrimitiveTypeDTO primitiveTypeDTO1 = new PrimitiveTypeDTO();
-        primitiveTypeDTO1.setId(1L);
-        PrimitiveTypeDTO primitiveTypeDTO2 = new PrimitiveTypeDTO();
-        assertThat(primitiveTypeDTO1).isNotEqualTo(primitiveTypeDTO2);
-        primitiveTypeDTO2.setId(primitiveTypeDTO1.getId());
-        assertThat(primitiveTypeDTO1).isEqualTo(primitiveTypeDTO2);
-        primitiveTypeDTO2.setId(2L);
-        assertThat(primitiveTypeDTO1).isNotEqualTo(primitiveTypeDTO2);
-        primitiveTypeDTO1.setId(null);
-        assertThat(primitiveTypeDTO1).isNotEqualTo(primitiveTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(primitiveTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(primitiveTypeMapper.fromId(null)).isNull();
     }
 }

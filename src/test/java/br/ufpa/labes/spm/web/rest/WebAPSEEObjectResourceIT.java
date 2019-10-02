@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.WebAPSEEObject;
 import br.ufpa.labes.spm.repository.WebAPSEEObjectRepository;
-import br.ufpa.labes.spm.service.WebAPSEEObjectService;
-import br.ufpa.labes.spm.service.dto.WebAPSEEObjectDTO;
-import br.ufpa.labes.spm.service.mapper.WebAPSEEObjectMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -49,12 +46,6 @@ public class WebAPSEEObjectResourceIT {
     private WebAPSEEObjectRepository webAPSEEObjectRepository;
 
     @Autowired
-    private WebAPSEEObjectMapper webAPSEEObjectMapper;
-
-    @Autowired
-    private WebAPSEEObjectService webAPSEEObjectService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -76,7 +67,7 @@ public class WebAPSEEObjectResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WebAPSEEObjectResource webAPSEEObjectResource = new WebAPSEEObjectResource(webAPSEEObjectService);
+        final WebAPSEEObjectResource webAPSEEObjectResource = new WebAPSEEObjectResource(webAPSEEObjectRepository);
         this.restWebAPSEEObjectMockMvc = MockMvcBuilders.standaloneSetup(webAPSEEObjectResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -121,10 +112,9 @@ public class WebAPSEEObjectResourceIT {
         int databaseSizeBeforeCreate = webAPSEEObjectRepository.findAll().size();
 
         // Create the WebAPSEEObject
-        WebAPSEEObjectDTO webAPSEEObjectDTO = webAPSEEObjectMapper.toDto(webAPSEEObject);
         restWebAPSEEObjectMockMvc.perform(post("/api/web-apsee-objects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObjectDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObject)))
             .andExpect(status().isCreated());
 
         // Validate the WebAPSEEObject in the database
@@ -142,12 +132,11 @@ public class WebAPSEEObjectResourceIT {
 
         // Create the WebAPSEEObject with an existing ID
         webAPSEEObject.setId(1L);
-        WebAPSEEObjectDTO webAPSEEObjectDTO = webAPSEEObjectMapper.toDto(webAPSEEObject);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWebAPSEEObjectMockMvc.perform(post("/api/web-apsee-objects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObjectDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObject)))
             .andExpect(status().isBadRequest());
 
         // Validate the WebAPSEEObject in the database
@@ -164,11 +153,10 @@ public class WebAPSEEObjectResourceIT {
         webAPSEEObject.setTheReferredOid(null);
 
         // Create the WebAPSEEObject, which fails.
-        WebAPSEEObjectDTO webAPSEEObjectDTO = webAPSEEObjectMapper.toDto(webAPSEEObject);
 
         restWebAPSEEObjectMockMvc.perform(post("/api/web-apsee-objects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObjectDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObject)))
             .andExpect(status().isBadRequest());
 
         List<WebAPSEEObject> webAPSEEObjectList = webAPSEEObjectRepository.findAll();
@@ -183,11 +171,10 @@ public class WebAPSEEObjectResourceIT {
         webAPSEEObject.setClassName(null);
 
         // Create the WebAPSEEObject, which fails.
-        WebAPSEEObjectDTO webAPSEEObjectDTO = webAPSEEObjectMapper.toDto(webAPSEEObject);
 
         restWebAPSEEObjectMockMvc.perform(post("/api/web-apsee-objects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObjectDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObject)))
             .andExpect(status().isBadRequest());
 
         List<WebAPSEEObject> webAPSEEObjectList = webAPSEEObjectRepository.findAll();
@@ -247,11 +234,10 @@ public class WebAPSEEObjectResourceIT {
         updatedWebAPSEEObject
             .theReferredOid(UPDATED_THE_REFERRED_OID)
             .className(UPDATED_CLASS_NAME);
-        WebAPSEEObjectDTO webAPSEEObjectDTO = webAPSEEObjectMapper.toDto(updatedWebAPSEEObject);
 
         restWebAPSEEObjectMockMvc.perform(put("/api/web-apsee-objects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObjectDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedWebAPSEEObject)))
             .andExpect(status().isOk());
 
         // Validate the WebAPSEEObject in the database
@@ -268,12 +254,11 @@ public class WebAPSEEObjectResourceIT {
         int databaseSizeBeforeUpdate = webAPSEEObjectRepository.findAll().size();
 
         // Create the WebAPSEEObject
-        WebAPSEEObjectDTO webAPSEEObjectDTO = webAPSEEObjectMapper.toDto(webAPSEEObject);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWebAPSEEObjectMockMvc.perform(put("/api/web-apsee-objects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObjectDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(webAPSEEObject)))
             .andExpect(status().isBadRequest());
 
         // Validate the WebAPSEEObject in the database
@@ -312,28 +297,5 @@ public class WebAPSEEObjectResourceIT {
         assertThat(webAPSEEObject1).isNotEqualTo(webAPSEEObject2);
         webAPSEEObject1.setId(null);
         assertThat(webAPSEEObject1).isNotEqualTo(webAPSEEObject2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(WebAPSEEObjectDTO.class);
-        WebAPSEEObjectDTO webAPSEEObjectDTO1 = new WebAPSEEObjectDTO();
-        webAPSEEObjectDTO1.setId(1L);
-        WebAPSEEObjectDTO webAPSEEObjectDTO2 = new WebAPSEEObjectDTO();
-        assertThat(webAPSEEObjectDTO1).isNotEqualTo(webAPSEEObjectDTO2);
-        webAPSEEObjectDTO2.setId(webAPSEEObjectDTO1.getId());
-        assertThat(webAPSEEObjectDTO1).isEqualTo(webAPSEEObjectDTO2);
-        webAPSEEObjectDTO2.setId(2L);
-        assertThat(webAPSEEObjectDTO1).isNotEqualTo(webAPSEEObjectDTO2);
-        webAPSEEObjectDTO1.setId(null);
-        assertThat(webAPSEEObjectDTO1).isNotEqualTo(webAPSEEObjectDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(webAPSEEObjectMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(webAPSEEObjectMapper.fromId(null)).isNull();
     }
 }

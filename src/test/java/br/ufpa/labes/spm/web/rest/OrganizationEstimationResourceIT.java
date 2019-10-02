@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.OrganizationEstimation;
 import br.ufpa.labes.spm.repository.OrganizationEstimationRepository;
-import br.ufpa.labes.spm.service.OrganizationEstimationService;
-import br.ufpa.labes.spm.service.dto.OrganizationEstimationDTO;
-import br.ufpa.labes.spm.service.mapper.OrganizationEstimationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class OrganizationEstimationResourceIT {
     private OrganizationEstimationRepository organizationEstimationRepository;
 
     @Autowired
-    private OrganizationEstimationMapper organizationEstimationMapper;
-
-    @Autowired
-    private OrganizationEstimationService organizationEstimationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class OrganizationEstimationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final OrganizationEstimationResource organizationEstimationResource = new OrganizationEstimationResource(organizationEstimationService);
+        final OrganizationEstimationResource organizationEstimationResource = new OrganizationEstimationResource(organizationEstimationRepository);
         this.restOrganizationEstimationMockMvc = MockMvcBuilders.standaloneSetup(organizationEstimationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class OrganizationEstimationResourceIT {
         int databaseSizeBeforeCreate = organizationEstimationRepository.findAll().size();
 
         // Create the OrganizationEstimation
-        OrganizationEstimationDTO organizationEstimationDTO = organizationEstimationMapper.toDto(organizationEstimation);
         restOrganizationEstimationMockMvc.perform(post("/api/organization-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(organizationEstimation)))
             .andExpect(status().isCreated());
 
         // Validate the OrganizationEstimation in the database
@@ -129,12 +119,11 @@ public class OrganizationEstimationResourceIT {
 
         // Create the OrganizationEstimation with an existing ID
         organizationEstimation.setId(1L);
-        OrganizationEstimationDTO organizationEstimationDTO = organizationEstimationMapper.toDto(organizationEstimation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restOrganizationEstimationMockMvc.perform(post("/api/organization-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(organizationEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the OrganizationEstimation in the database
@@ -189,11 +178,10 @@ public class OrganizationEstimationResourceIT {
         OrganizationEstimation updatedOrganizationEstimation = organizationEstimationRepository.findById(organizationEstimation.getId()).get();
         // Disconnect from session so that the updates on updatedOrganizationEstimation are not directly saved in db
         em.detach(updatedOrganizationEstimation);
-        OrganizationEstimationDTO organizationEstimationDTO = organizationEstimationMapper.toDto(updatedOrganizationEstimation);
 
         restOrganizationEstimationMockMvc.perform(put("/api/organization-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedOrganizationEstimation)))
             .andExpect(status().isOk());
 
         // Validate the OrganizationEstimation in the database
@@ -208,12 +196,11 @@ public class OrganizationEstimationResourceIT {
         int databaseSizeBeforeUpdate = organizationEstimationRepository.findAll().size();
 
         // Create the OrganizationEstimation
-        OrganizationEstimationDTO organizationEstimationDTO = organizationEstimationMapper.toDto(organizationEstimation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restOrganizationEstimationMockMvc.perform(put("/api/organization-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(organizationEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the OrganizationEstimation in the database
@@ -252,28 +239,5 @@ public class OrganizationEstimationResourceIT {
         assertThat(organizationEstimation1).isNotEqualTo(organizationEstimation2);
         organizationEstimation1.setId(null);
         assertThat(organizationEstimation1).isNotEqualTo(organizationEstimation2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(OrganizationEstimationDTO.class);
-        OrganizationEstimationDTO organizationEstimationDTO1 = new OrganizationEstimationDTO();
-        organizationEstimationDTO1.setId(1L);
-        OrganizationEstimationDTO organizationEstimationDTO2 = new OrganizationEstimationDTO();
-        assertThat(organizationEstimationDTO1).isNotEqualTo(organizationEstimationDTO2);
-        organizationEstimationDTO2.setId(organizationEstimationDTO1.getId());
-        assertThat(organizationEstimationDTO1).isEqualTo(organizationEstimationDTO2);
-        organizationEstimationDTO2.setId(2L);
-        assertThat(organizationEstimationDTO1).isNotEqualTo(organizationEstimationDTO2);
-        organizationEstimationDTO1.setId(null);
-        assertThat(organizationEstimationDTO1).isNotEqualTo(organizationEstimationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(organizationEstimationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(organizationEstimationMapper.fromId(null)).isNull();
     }
 }

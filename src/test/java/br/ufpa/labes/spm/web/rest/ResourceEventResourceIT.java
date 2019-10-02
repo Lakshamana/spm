@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ResourceEvent;
 import br.ufpa.labes.spm.repository.ResourceEventRepository;
-import br.ufpa.labes.spm.service.ResourceEventService;
-import br.ufpa.labes.spm.service.dto.ResourceEventDTO;
-import br.ufpa.labes.spm.service.mapper.ResourceEventMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ResourceEventResourceIT {
     private ResourceEventRepository resourceEventRepository;
 
     @Autowired
-    private ResourceEventMapper resourceEventMapper;
-
-    @Autowired
-    private ResourceEventService resourceEventService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ResourceEventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ResourceEventResource resourceEventResource = new ResourceEventResource(resourceEventService);
+        final ResourceEventResource resourceEventResource = new ResourceEventResource(resourceEventRepository);
         this.restResourceEventMockMvc = MockMvcBuilders.standaloneSetup(resourceEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ResourceEventResourceIT {
         int databaseSizeBeforeCreate = resourceEventRepository.findAll().size();
 
         // Create the ResourceEvent
-        ResourceEventDTO resourceEventDTO = resourceEventMapper.toDto(resourceEvent);
         restResourceEventMockMvc.perform(post("/api/resource-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceEvent)))
             .andExpect(status().isCreated());
 
         // Validate the ResourceEvent in the database
@@ -129,12 +119,11 @@ public class ResourceEventResourceIT {
 
         // Create the ResourceEvent with an existing ID
         resourceEvent.setId(1L);
-        ResourceEventDTO resourceEventDTO = resourceEventMapper.toDto(resourceEvent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restResourceEventMockMvc.perform(post("/api/resource-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourceEvent in the database
@@ -189,11 +178,10 @@ public class ResourceEventResourceIT {
         ResourceEvent updatedResourceEvent = resourceEventRepository.findById(resourceEvent.getId()).get();
         // Disconnect from session so that the updates on updatedResourceEvent are not directly saved in db
         em.detach(updatedResourceEvent);
-        ResourceEventDTO resourceEventDTO = resourceEventMapper.toDto(updatedResourceEvent);
 
         restResourceEventMockMvc.perform(put("/api/resource-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedResourceEvent)))
             .andExpect(status().isOk());
 
         // Validate the ResourceEvent in the database
@@ -208,12 +196,11 @@ public class ResourceEventResourceIT {
         int databaseSizeBeforeUpdate = resourceEventRepository.findAll().size();
 
         // Create the ResourceEvent
-        ResourceEventDTO resourceEventDTO = resourceEventMapper.toDto(resourceEvent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restResourceEventMockMvc.perform(put("/api/resource-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourceEvent in the database
@@ -252,28 +239,5 @@ public class ResourceEventResourceIT {
         assertThat(resourceEvent1).isNotEqualTo(resourceEvent2);
         resourceEvent1.setId(null);
         assertThat(resourceEvent1).isNotEqualTo(resourceEvent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ResourceEventDTO.class);
-        ResourceEventDTO resourceEventDTO1 = new ResourceEventDTO();
-        resourceEventDTO1.setId(1L);
-        ResourceEventDTO resourceEventDTO2 = new ResourceEventDTO();
-        assertThat(resourceEventDTO1).isNotEqualTo(resourceEventDTO2);
-        resourceEventDTO2.setId(resourceEventDTO1.getId());
-        assertThat(resourceEventDTO1).isEqualTo(resourceEventDTO2);
-        resourceEventDTO2.setId(2L);
-        assertThat(resourceEventDTO1).isNotEqualTo(resourceEventDTO2);
-        resourceEventDTO1.setId(null);
-        assertThat(resourceEventDTO1).isNotEqualTo(resourceEventDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(resourceEventMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(resourceEventMapper.fromId(null)).isNull();
     }
 }

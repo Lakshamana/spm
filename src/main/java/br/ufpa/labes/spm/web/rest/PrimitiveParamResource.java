@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.PrimitiveParamService;
+import br.ufpa.labes.spm.domain.PrimitiveParam;
+import br.ufpa.labes.spm.repository.PrimitiveParamRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.PrimitiveParamDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class PrimitiveParamResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PrimitiveParamService primitiveParamService;
+    private final PrimitiveParamRepository primitiveParamRepository;
 
-    public PrimitiveParamResource(PrimitiveParamService primitiveParamService) {
-        this.primitiveParamService = primitiveParamService;
+    public PrimitiveParamResource(PrimitiveParamRepository primitiveParamRepository) {
+        this.primitiveParamRepository = primitiveParamRepository;
     }
 
     /**
      * {@code POST  /primitive-params} : Create a new primitiveParam.
      *
-     * @param primitiveParamDTO the primitiveParamDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new primitiveParamDTO, or with status {@code 400 (Bad Request)} if the primitiveParam has already an ID.
+     * @param primitiveParam the primitiveParam to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new primitiveParam, or with status {@code 400 (Bad Request)} if the primitiveParam has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/primitive-params")
-    public ResponseEntity<PrimitiveParamDTO> createPrimitiveParam(@RequestBody PrimitiveParamDTO primitiveParamDTO) throws URISyntaxException {
-        log.debug("REST request to save PrimitiveParam : {}", primitiveParamDTO);
-        if (primitiveParamDTO.getId() != null) {
+    public ResponseEntity<PrimitiveParam> createPrimitiveParam(@RequestBody PrimitiveParam primitiveParam) throws URISyntaxException {
+        log.debug("REST request to save PrimitiveParam : {}", primitiveParam);
+        if (primitiveParam.getId() != null) {
             throw new BadRequestAlertException("A new primitiveParam cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        PrimitiveParamDTO result = primitiveParamService.save(primitiveParamDTO);
+        PrimitiveParam result = primitiveParamRepository.save(primitiveParam);
         return ResponseEntity.created(new URI("/api/primitive-params/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class PrimitiveParamResource {
     /**
      * {@code PUT  /primitive-params} : Updates an existing primitiveParam.
      *
-     * @param primitiveParamDTO the primitiveParamDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated primitiveParamDTO,
-     * or with status {@code 400 (Bad Request)} if the primitiveParamDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the primitiveParamDTO couldn't be updated.
+     * @param primitiveParam the primitiveParam to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated primitiveParam,
+     * or with status {@code 400 (Bad Request)} if the primitiveParam is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the primitiveParam couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/primitive-params")
-    public ResponseEntity<PrimitiveParamDTO> updatePrimitiveParam(@RequestBody PrimitiveParamDTO primitiveParamDTO) throws URISyntaxException {
-        log.debug("REST request to update PrimitiveParam : {}", primitiveParamDTO);
-        if (primitiveParamDTO.getId() == null) {
+    public ResponseEntity<PrimitiveParam> updatePrimitiveParam(@RequestBody PrimitiveParam primitiveParam) throws URISyntaxException {
+        log.debug("REST request to update PrimitiveParam : {}", primitiveParam);
+        if (primitiveParam.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        PrimitiveParamDTO result = primitiveParamService.save(primitiveParamDTO);
+        PrimitiveParam result = primitiveParamRepository.save(primitiveParam);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, primitiveParamDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, primitiveParam.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class PrimitiveParamResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of primitiveParams in body.
      */
     @GetMapping("/primitive-params")
-    public List<PrimitiveParamDTO> getAllPrimitiveParams() {
+    public List<PrimitiveParam> getAllPrimitiveParams() {
         log.debug("REST request to get all PrimitiveParams");
-        return primitiveParamService.findAll();
+        return primitiveParamRepository.findAll();
     }
 
     /**
      * {@code GET  /primitive-params/:id} : get the "id" primitiveParam.
      *
-     * @param id the id of the primitiveParamDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the primitiveParamDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the primitiveParam to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the primitiveParam, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/primitive-params/{id}")
-    public ResponseEntity<PrimitiveParamDTO> getPrimitiveParam(@PathVariable Long id) {
+    public ResponseEntity<PrimitiveParam> getPrimitiveParam(@PathVariable Long id) {
         log.debug("REST request to get PrimitiveParam : {}", id);
-        Optional<PrimitiveParamDTO> primitiveParamDTO = primitiveParamService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(primitiveParamDTO);
+        Optional<PrimitiveParam> primitiveParam = primitiveParamRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(primitiveParam);
     }
 
     /**
      * {@code DELETE  /primitive-params/:id} : delete the "id" primitiveParam.
      *
-     * @param id the id of the primitiveParamDTO to delete.
+     * @param id the id of the primitiveParam to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/primitive-params/{id}")
     public ResponseEntity<Void> deletePrimitiveParam(@PathVariable Long id) {
         log.debug("REST request to delete PrimitiveParam : {}", id);
-        primitiveParamService.delete(id);
+        primitiveParamRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

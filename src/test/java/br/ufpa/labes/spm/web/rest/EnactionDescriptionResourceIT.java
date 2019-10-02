@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.EnactionDescription;
 import br.ufpa.labes.spm.repository.EnactionDescriptionRepository;
-import br.ufpa.labes.spm.service.EnactionDescriptionService;
-import br.ufpa.labes.spm.service.dto.EnactionDescriptionDTO;
-import br.ufpa.labes.spm.service.mapper.EnactionDescriptionMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -55,12 +52,6 @@ public class EnactionDescriptionResourceIT {
     private EnactionDescriptionRepository enactionDescriptionRepository;
 
     @Autowired
-    private EnactionDescriptionMapper enactionDescriptionMapper;
-
-    @Autowired
-    private EnactionDescriptionService enactionDescriptionService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -82,7 +73,7 @@ public class EnactionDescriptionResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EnactionDescriptionResource enactionDescriptionResource = new EnactionDescriptionResource(enactionDescriptionService);
+        final EnactionDescriptionResource enactionDescriptionResource = new EnactionDescriptionResource(enactionDescriptionRepository);
         this.restEnactionDescriptionMockMvc = MockMvcBuilders.standaloneSetup(enactionDescriptionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -129,10 +120,9 @@ public class EnactionDescriptionResourceIT {
         int databaseSizeBeforeCreate = enactionDescriptionRepository.findAll().size();
 
         // Create the EnactionDescription
-        EnactionDescriptionDTO enactionDescriptionDTO = enactionDescriptionMapper.toDto(enactionDescription);
         restEnactionDescriptionMockMvc.perform(post("/api/enaction-descriptions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(enactionDescriptionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(enactionDescription)))
             .andExpect(status().isCreated());
 
         // Validate the EnactionDescription in the database
@@ -151,12 +141,11 @@ public class EnactionDescriptionResourceIT {
 
         // Create the EnactionDescription with an existing ID
         enactionDescription.setId(1L);
-        EnactionDescriptionDTO enactionDescriptionDTO = enactionDescriptionMapper.toDto(enactionDescription);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEnactionDescriptionMockMvc.perform(post("/api/enaction-descriptions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(enactionDescriptionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(enactionDescription)))
             .andExpect(status().isBadRequest());
 
         // Validate the EnactionDescription in the database
@@ -221,11 +210,10 @@ public class EnactionDescriptionResourceIT {
             .actualBegin(UPDATED_ACTUAL_BEGIN)
             .actualEnd(UPDATED_ACTUAL_END)
             .state(UPDATED_STATE);
-        EnactionDescriptionDTO enactionDescriptionDTO = enactionDescriptionMapper.toDto(updatedEnactionDescription);
 
         restEnactionDescriptionMockMvc.perform(put("/api/enaction-descriptions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(enactionDescriptionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedEnactionDescription)))
             .andExpect(status().isOk());
 
         // Validate the EnactionDescription in the database
@@ -243,12 +231,11 @@ public class EnactionDescriptionResourceIT {
         int databaseSizeBeforeUpdate = enactionDescriptionRepository.findAll().size();
 
         // Create the EnactionDescription
-        EnactionDescriptionDTO enactionDescriptionDTO = enactionDescriptionMapper.toDto(enactionDescription);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restEnactionDescriptionMockMvc.perform(put("/api/enaction-descriptions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(enactionDescriptionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(enactionDescription)))
             .andExpect(status().isBadRequest());
 
         // Validate the EnactionDescription in the database
@@ -287,28 +274,5 @@ public class EnactionDescriptionResourceIT {
         assertThat(enactionDescription1).isNotEqualTo(enactionDescription2);
         enactionDescription1.setId(null);
         assertThat(enactionDescription1).isNotEqualTo(enactionDescription2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(EnactionDescriptionDTO.class);
-        EnactionDescriptionDTO enactionDescriptionDTO1 = new EnactionDescriptionDTO();
-        enactionDescriptionDTO1.setId(1L);
-        EnactionDescriptionDTO enactionDescriptionDTO2 = new EnactionDescriptionDTO();
-        assertThat(enactionDescriptionDTO1).isNotEqualTo(enactionDescriptionDTO2);
-        enactionDescriptionDTO2.setId(enactionDescriptionDTO1.getId());
-        assertThat(enactionDescriptionDTO1).isEqualTo(enactionDescriptionDTO2);
-        enactionDescriptionDTO2.setId(2L);
-        assertThat(enactionDescriptionDTO1).isNotEqualTo(enactionDescriptionDTO2);
-        enactionDescriptionDTO1.setId(null);
-        assertThat(enactionDescriptionDTO1).isNotEqualTo(enactionDescriptionDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(enactionDescriptionMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(enactionDescriptionMapper.fromId(null)).isNull();
     }
 }

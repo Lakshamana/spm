@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.WorkGroup;
 import br.ufpa.labes.spm.repository.WorkGroupRepository;
-import br.ufpa.labes.spm.service.WorkGroupService;
-import br.ufpa.labes.spm.service.dto.WorkGroupDTO;
-import br.ufpa.labes.spm.service.mapper.WorkGroupMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -55,12 +52,6 @@ public class WorkGroupResourceIT {
     private WorkGroupRepository workGroupRepository;
 
     @Autowired
-    private WorkGroupMapper workGroupMapper;
-
-    @Autowired
-    private WorkGroupService workGroupService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -82,7 +73,7 @@ public class WorkGroupResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WorkGroupResource workGroupResource = new WorkGroupResource(workGroupService);
+        final WorkGroupResource workGroupResource = new WorkGroupResource(workGroupRepository);
         this.restWorkGroupMockMvc = MockMvcBuilders.standaloneSetup(workGroupResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -131,10 +122,9 @@ public class WorkGroupResourceIT {
         int databaseSizeBeforeCreate = workGroupRepository.findAll().size();
 
         // Create the WorkGroup
-        WorkGroupDTO workGroupDTO = workGroupMapper.toDto(workGroup);
         restWorkGroupMockMvc.perform(post("/api/work-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroup)))
             .andExpect(status().isCreated());
 
         // Validate the WorkGroup in the database
@@ -154,12 +144,11 @@ public class WorkGroupResourceIT {
 
         // Create the WorkGroup with an existing ID
         workGroup.setId(1L);
-        WorkGroupDTO workGroupDTO = workGroupMapper.toDto(workGroup);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWorkGroupMockMvc.perform(post("/api/work-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroup)))
             .andExpect(status().isBadRequest());
 
         // Validate the WorkGroup in the database
@@ -227,11 +216,10 @@ public class WorkGroupResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .isActive(UPDATED_IS_ACTIVE);
-        WorkGroupDTO workGroupDTO = workGroupMapper.toDto(updatedWorkGroup);
 
         restWorkGroupMockMvc.perform(put("/api/work-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedWorkGroup)))
             .andExpect(status().isOk());
 
         // Validate the WorkGroup in the database
@@ -250,12 +238,11 @@ public class WorkGroupResourceIT {
         int databaseSizeBeforeUpdate = workGroupRepository.findAll().size();
 
         // Create the WorkGroup
-        WorkGroupDTO workGroupDTO = workGroupMapper.toDto(workGroup);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkGroupMockMvc.perform(put("/api/work-groups")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroup)))
             .andExpect(status().isBadRequest());
 
         // Validate the WorkGroup in the database
@@ -294,28 +281,5 @@ public class WorkGroupResourceIT {
         assertThat(workGroup1).isNotEqualTo(workGroup2);
         workGroup1.setId(null);
         assertThat(workGroup1).isNotEqualTo(workGroup2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(WorkGroupDTO.class);
-        WorkGroupDTO workGroupDTO1 = new WorkGroupDTO();
-        workGroupDTO1.setId(1L);
-        WorkGroupDTO workGroupDTO2 = new WorkGroupDTO();
-        assertThat(workGroupDTO1).isNotEqualTo(workGroupDTO2);
-        workGroupDTO2.setId(workGroupDTO1.getId());
-        assertThat(workGroupDTO1).isEqualTo(workGroupDTO2);
-        workGroupDTO2.setId(2L);
-        assertThat(workGroupDTO1).isNotEqualTo(workGroupDTO2);
-        workGroupDTO1.setId(null);
-        assertThat(workGroupDTO1).isNotEqualTo(workGroupDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(workGroupMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(workGroupMapper.fromId(null)).isNull();
     }
 }

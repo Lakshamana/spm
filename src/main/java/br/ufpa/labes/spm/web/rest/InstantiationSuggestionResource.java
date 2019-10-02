@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.InstantiationSuggestionService;
+import br.ufpa.labes.spm.domain.InstantiationSuggestion;
+import br.ufpa.labes.spm.repository.InstantiationSuggestionRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.InstantiationSuggestionDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class InstantiationSuggestionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final InstantiationSuggestionService instantiationSuggestionService;
+    private final InstantiationSuggestionRepository instantiationSuggestionRepository;
 
-    public InstantiationSuggestionResource(InstantiationSuggestionService instantiationSuggestionService) {
-        this.instantiationSuggestionService = instantiationSuggestionService;
+    public InstantiationSuggestionResource(InstantiationSuggestionRepository instantiationSuggestionRepository) {
+        this.instantiationSuggestionRepository = instantiationSuggestionRepository;
     }
 
     /**
      * {@code POST  /instantiation-suggestions} : Create a new instantiationSuggestion.
      *
-     * @param instantiationSuggestionDTO the instantiationSuggestionDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new instantiationSuggestionDTO, or with status {@code 400 (Bad Request)} if the instantiationSuggestion has already an ID.
+     * @param instantiationSuggestion the instantiationSuggestion to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new instantiationSuggestion, or with status {@code 400 (Bad Request)} if the instantiationSuggestion has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/instantiation-suggestions")
-    public ResponseEntity<InstantiationSuggestionDTO> createInstantiationSuggestion(@RequestBody InstantiationSuggestionDTO instantiationSuggestionDTO) throws URISyntaxException {
-        log.debug("REST request to save InstantiationSuggestion : {}", instantiationSuggestionDTO);
-        if (instantiationSuggestionDTO.getId() != null) {
+    public ResponseEntity<InstantiationSuggestion> createInstantiationSuggestion(@RequestBody InstantiationSuggestion instantiationSuggestion) throws URISyntaxException {
+        log.debug("REST request to save InstantiationSuggestion : {}", instantiationSuggestion);
+        if (instantiationSuggestion.getId() != null) {
             throw new BadRequestAlertException("A new instantiationSuggestion cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        InstantiationSuggestionDTO result = instantiationSuggestionService.save(instantiationSuggestionDTO);
+        InstantiationSuggestion result = instantiationSuggestionRepository.save(instantiationSuggestion);
         return ResponseEntity.created(new URI("/api/instantiation-suggestions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class InstantiationSuggestionResource {
     /**
      * {@code PUT  /instantiation-suggestions} : Updates an existing instantiationSuggestion.
      *
-     * @param instantiationSuggestionDTO the instantiationSuggestionDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated instantiationSuggestionDTO,
-     * or with status {@code 400 (Bad Request)} if the instantiationSuggestionDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the instantiationSuggestionDTO couldn't be updated.
+     * @param instantiationSuggestion the instantiationSuggestion to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated instantiationSuggestion,
+     * or with status {@code 400 (Bad Request)} if the instantiationSuggestion is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the instantiationSuggestion couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/instantiation-suggestions")
-    public ResponseEntity<InstantiationSuggestionDTO> updateInstantiationSuggestion(@RequestBody InstantiationSuggestionDTO instantiationSuggestionDTO) throws URISyntaxException {
-        log.debug("REST request to update InstantiationSuggestion : {}", instantiationSuggestionDTO);
-        if (instantiationSuggestionDTO.getId() == null) {
+    public ResponseEntity<InstantiationSuggestion> updateInstantiationSuggestion(@RequestBody InstantiationSuggestion instantiationSuggestion) throws URISyntaxException {
+        log.debug("REST request to update InstantiationSuggestion : {}", instantiationSuggestion);
+        if (instantiationSuggestion.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        InstantiationSuggestionDTO result = instantiationSuggestionService.save(instantiationSuggestionDTO);
+        InstantiationSuggestion result = instantiationSuggestionRepository.save(instantiationSuggestion);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, instantiationSuggestionDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, instantiationSuggestion.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class InstantiationSuggestionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of instantiationSuggestions in body.
      */
     @GetMapping("/instantiation-suggestions")
-    public List<InstantiationSuggestionDTO> getAllInstantiationSuggestions() {
+    public List<InstantiationSuggestion> getAllInstantiationSuggestions() {
         log.debug("REST request to get all InstantiationSuggestions");
-        return instantiationSuggestionService.findAll();
+        return instantiationSuggestionRepository.findAll();
     }
 
     /**
      * {@code GET  /instantiation-suggestions/:id} : get the "id" instantiationSuggestion.
      *
-     * @param id the id of the instantiationSuggestionDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the instantiationSuggestionDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the instantiationSuggestion to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the instantiationSuggestion, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/instantiation-suggestions/{id}")
-    public ResponseEntity<InstantiationSuggestionDTO> getInstantiationSuggestion(@PathVariable Long id) {
+    public ResponseEntity<InstantiationSuggestion> getInstantiationSuggestion(@PathVariable Long id) {
         log.debug("REST request to get InstantiationSuggestion : {}", id);
-        Optional<InstantiationSuggestionDTO> instantiationSuggestionDTO = instantiationSuggestionService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(instantiationSuggestionDTO);
+        Optional<InstantiationSuggestion> instantiationSuggestion = instantiationSuggestionRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(instantiationSuggestion);
     }
 
     /**
      * {@code DELETE  /instantiation-suggestions/:id} : delete the "id" instantiationSuggestion.
      *
-     * @param id the id of the instantiationSuggestionDTO to delete.
+     * @param id the id of the instantiationSuggestion to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/instantiation-suggestions/{id}")
     public ResponseEntity<Void> deleteInstantiationSuggestion(@PathVariable Long id) {
         log.debug("REST request to delete InstantiationSuggestion : {}", id);
-        instantiationSuggestionService.delete(id);
+        instantiationSuggestionRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

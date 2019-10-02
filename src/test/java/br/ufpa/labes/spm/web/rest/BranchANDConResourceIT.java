@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.BranchANDCon;
 import br.ufpa.labes.spm.repository.BranchANDConRepository;
-import br.ufpa.labes.spm.service.BranchANDConService;
-import br.ufpa.labes.spm.service.dto.BranchANDConDTO;
-import br.ufpa.labes.spm.service.mapper.BranchANDConMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -50,15 +47,6 @@ public class BranchANDConResourceIT {
     private BranchANDConRepository branchANDConRepositoryMock;
 
     @Autowired
-    private BranchANDConMapper branchANDConMapper;
-
-    @Mock
-    private BranchANDConService branchANDConServiceMock;
-
-    @Autowired
-    private BranchANDConService branchANDConService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -80,7 +68,7 @@ public class BranchANDConResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final BranchANDConResource branchANDConResource = new BranchANDConResource(branchANDConService);
+        final BranchANDConResource branchANDConResource = new BranchANDConResource(branchANDConRepository);
         this.restBranchANDConMockMvc = MockMvcBuilders.standaloneSetup(branchANDConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -121,10 +109,9 @@ public class BranchANDConResourceIT {
         int databaseSizeBeforeCreate = branchANDConRepository.findAll().size();
 
         // Create the BranchANDCon
-        BranchANDConDTO branchANDConDTO = branchANDConMapper.toDto(branchANDCon);
         restBranchANDConMockMvc.perform(post("/api/branch-and-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchANDConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(branchANDCon)))
             .andExpect(status().isCreated());
 
         // Validate the BranchANDCon in the database
@@ -140,12 +127,11 @@ public class BranchANDConResourceIT {
 
         // Create the BranchANDCon with an existing ID
         branchANDCon.setId(1L);
-        BranchANDConDTO branchANDConDTO = branchANDConMapper.toDto(branchANDCon);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restBranchANDConMockMvc.perform(post("/api/branch-and-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchANDConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(branchANDCon)))
             .andExpect(status().isBadRequest());
 
         // Validate the BranchANDCon in the database
@@ -169,8 +155,8 @@ public class BranchANDConResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllBranchANDConsWithEagerRelationshipsIsEnabled() throws Exception {
-        BranchANDConResource branchANDConResource = new BranchANDConResource(branchANDConServiceMock);
-        when(branchANDConServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        BranchANDConResource branchANDConResource = new BranchANDConResource(branchANDConRepositoryMock);
+        when(branchANDConRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restBranchANDConMockMvc = MockMvcBuilders.standaloneSetup(branchANDConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -181,13 +167,13 @@ public class BranchANDConResourceIT {
         restBranchANDConMockMvc.perform(get("/api/branch-and-cons?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(branchANDConServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(branchANDConRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllBranchANDConsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        BranchANDConResource branchANDConResource = new BranchANDConResource(branchANDConServiceMock);
-            when(branchANDConServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        BranchANDConResource branchANDConResource = new BranchANDConResource(branchANDConRepositoryMock);
+            when(branchANDConRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restBranchANDConMockMvc = MockMvcBuilders.standaloneSetup(branchANDConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -197,7 +183,7 @@ public class BranchANDConResourceIT {
         restBranchANDConMockMvc.perform(get("/api/branch-and-cons?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(branchANDConServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(branchANDConRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -233,11 +219,10 @@ public class BranchANDConResourceIT {
         BranchANDCon updatedBranchANDCon = branchANDConRepository.findById(branchANDCon.getId()).get();
         // Disconnect from session so that the updates on updatedBranchANDCon are not directly saved in db
         em.detach(updatedBranchANDCon);
-        BranchANDConDTO branchANDConDTO = branchANDConMapper.toDto(updatedBranchANDCon);
 
         restBranchANDConMockMvc.perform(put("/api/branch-and-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchANDConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedBranchANDCon)))
             .andExpect(status().isOk());
 
         // Validate the BranchANDCon in the database
@@ -252,12 +237,11 @@ public class BranchANDConResourceIT {
         int databaseSizeBeforeUpdate = branchANDConRepository.findAll().size();
 
         // Create the BranchANDCon
-        BranchANDConDTO branchANDConDTO = branchANDConMapper.toDto(branchANDCon);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restBranchANDConMockMvc.perform(put("/api/branch-and-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchANDConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(branchANDCon)))
             .andExpect(status().isBadRequest());
 
         // Validate the BranchANDCon in the database
@@ -296,28 +280,5 @@ public class BranchANDConResourceIT {
         assertThat(branchANDCon1).isNotEqualTo(branchANDCon2);
         branchANDCon1.setId(null);
         assertThat(branchANDCon1).isNotEqualTo(branchANDCon2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(BranchANDConDTO.class);
-        BranchANDConDTO branchANDConDTO1 = new BranchANDConDTO();
-        branchANDConDTO1.setId(1L);
-        BranchANDConDTO branchANDConDTO2 = new BranchANDConDTO();
-        assertThat(branchANDConDTO1).isNotEqualTo(branchANDConDTO2);
-        branchANDConDTO2.setId(branchANDConDTO1.getId());
-        assertThat(branchANDConDTO1).isEqualTo(branchANDConDTO2);
-        branchANDConDTO2.setId(2L);
-        assertThat(branchANDConDTO1).isNotEqualTo(branchANDConDTO2);
-        branchANDConDTO1.setId(null);
-        assertThat(branchANDConDTO1).isNotEqualTo(branchANDConDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(branchANDConMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(branchANDConMapper.fromId(null)).isNull();
     }
 }

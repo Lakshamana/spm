@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.MetricDefinitionUnit;
 import br.ufpa.labes.spm.repository.MetricDefinitionUnitRepository;
-import br.ufpa.labes.spm.service.MetricDefinitionUnitService;
-import br.ufpa.labes.spm.service.dto.MetricDefinitionUnitDTO;
-import br.ufpa.labes.spm.service.mapper.MetricDefinitionUnitMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +42,6 @@ public class MetricDefinitionUnitResourceIT {
     private MetricDefinitionUnitRepository metricDefinitionUnitRepository;
 
     @Autowired
-    private MetricDefinitionUnitMapper metricDefinitionUnitMapper;
-
-    @Autowired
-    private MetricDefinitionUnitService metricDefinitionUnitService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -72,7 +63,7 @@ public class MetricDefinitionUnitResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MetricDefinitionUnitResource metricDefinitionUnitResource = new MetricDefinitionUnitResource(metricDefinitionUnitService);
+        final MetricDefinitionUnitResource metricDefinitionUnitResource = new MetricDefinitionUnitResource(metricDefinitionUnitRepository);
         this.restMetricDefinitionUnitMockMvc = MockMvcBuilders.standaloneSetup(metricDefinitionUnitResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -115,10 +106,9 @@ public class MetricDefinitionUnitResourceIT {
         int databaseSizeBeforeCreate = metricDefinitionUnitRepository.findAll().size();
 
         // Create the MetricDefinitionUnit
-        MetricDefinitionUnitDTO metricDefinitionUnitDTO = metricDefinitionUnitMapper.toDto(metricDefinitionUnit);
         restMetricDefinitionUnitMockMvc.perform(post("/api/metric-definition-units")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricDefinitionUnitDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(metricDefinitionUnit)))
             .andExpect(status().isCreated());
 
         // Validate the MetricDefinitionUnit in the database
@@ -135,12 +125,11 @@ public class MetricDefinitionUnitResourceIT {
 
         // Create the MetricDefinitionUnit with an existing ID
         metricDefinitionUnit.setId(1L);
-        MetricDefinitionUnitDTO metricDefinitionUnitDTO = metricDefinitionUnitMapper.toDto(metricDefinitionUnit);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMetricDefinitionUnitMockMvc.perform(post("/api/metric-definition-units")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricDefinitionUnitDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(metricDefinitionUnit)))
             .andExpect(status().isBadRequest());
 
         // Validate the MetricDefinitionUnit in the database
@@ -199,11 +188,10 @@ public class MetricDefinitionUnitResourceIT {
         em.detach(updatedMetricDefinitionUnit);
         updatedMetricDefinitionUnit
             .unit(UPDATED_UNIT);
-        MetricDefinitionUnitDTO metricDefinitionUnitDTO = metricDefinitionUnitMapper.toDto(updatedMetricDefinitionUnit);
 
         restMetricDefinitionUnitMockMvc.perform(put("/api/metric-definition-units")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricDefinitionUnitDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedMetricDefinitionUnit)))
             .andExpect(status().isOk());
 
         // Validate the MetricDefinitionUnit in the database
@@ -219,12 +207,11 @@ public class MetricDefinitionUnitResourceIT {
         int databaseSizeBeforeUpdate = metricDefinitionUnitRepository.findAll().size();
 
         // Create the MetricDefinitionUnit
-        MetricDefinitionUnitDTO metricDefinitionUnitDTO = metricDefinitionUnitMapper.toDto(metricDefinitionUnit);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMetricDefinitionUnitMockMvc.perform(put("/api/metric-definition-units")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricDefinitionUnitDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(metricDefinitionUnit)))
             .andExpect(status().isBadRequest());
 
         // Validate the MetricDefinitionUnit in the database
@@ -263,28 +250,5 @@ public class MetricDefinitionUnitResourceIT {
         assertThat(metricDefinitionUnit1).isNotEqualTo(metricDefinitionUnit2);
         metricDefinitionUnit1.setId(null);
         assertThat(metricDefinitionUnit1).isNotEqualTo(metricDefinitionUnit2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MetricDefinitionUnitDTO.class);
-        MetricDefinitionUnitDTO metricDefinitionUnitDTO1 = new MetricDefinitionUnitDTO();
-        metricDefinitionUnitDTO1.setId(1L);
-        MetricDefinitionUnitDTO metricDefinitionUnitDTO2 = new MetricDefinitionUnitDTO();
-        assertThat(metricDefinitionUnitDTO1).isNotEqualTo(metricDefinitionUnitDTO2);
-        metricDefinitionUnitDTO2.setId(metricDefinitionUnitDTO1.getId());
-        assertThat(metricDefinitionUnitDTO1).isEqualTo(metricDefinitionUnitDTO2);
-        metricDefinitionUnitDTO2.setId(2L);
-        assertThat(metricDefinitionUnitDTO1).isNotEqualTo(metricDefinitionUnitDTO2);
-        metricDefinitionUnitDTO1.setId(null);
-        assertThat(metricDefinitionUnitDTO1).isNotEqualTo(metricDefinitionUnitDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(metricDefinitionUnitMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(metricDefinitionUnitMapper.fromId(null)).isNull();
     }
 }

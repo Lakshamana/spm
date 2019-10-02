@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ProcessModelEvent;
 import br.ufpa.labes.spm.repository.ProcessModelEventRepository;
-import br.ufpa.labes.spm.service.ProcessModelEventService;
-import br.ufpa.labes.spm.service.dto.ProcessModelEventDTO;
-import br.ufpa.labes.spm.service.mapper.ProcessModelEventMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ProcessModelEventResourceIT {
     private ProcessModelEventRepository processModelEventRepository;
 
     @Autowired
-    private ProcessModelEventMapper processModelEventMapper;
-
-    @Autowired
-    private ProcessModelEventService processModelEventService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ProcessModelEventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ProcessModelEventResource processModelEventResource = new ProcessModelEventResource(processModelEventService);
+        final ProcessModelEventResource processModelEventResource = new ProcessModelEventResource(processModelEventRepository);
         this.restProcessModelEventMockMvc = MockMvcBuilders.standaloneSetup(processModelEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ProcessModelEventResourceIT {
         int databaseSizeBeforeCreate = processModelEventRepository.findAll().size();
 
         // Create the ProcessModelEvent
-        ProcessModelEventDTO processModelEventDTO = processModelEventMapper.toDto(processModelEvent);
         restProcessModelEventMockMvc.perform(post("/api/process-model-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processModelEvent)))
             .andExpect(status().isCreated());
 
         // Validate the ProcessModelEvent in the database
@@ -129,12 +119,11 @@ public class ProcessModelEventResourceIT {
 
         // Create the ProcessModelEvent with an existing ID
         processModelEvent.setId(1L);
-        ProcessModelEventDTO processModelEventDTO = processModelEventMapper.toDto(processModelEvent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProcessModelEventMockMvc.perform(post("/api/process-model-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processModelEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the ProcessModelEvent in the database
@@ -189,11 +178,10 @@ public class ProcessModelEventResourceIT {
         ProcessModelEvent updatedProcessModelEvent = processModelEventRepository.findById(processModelEvent.getId()).get();
         // Disconnect from session so that the updates on updatedProcessModelEvent are not directly saved in db
         em.detach(updatedProcessModelEvent);
-        ProcessModelEventDTO processModelEventDTO = processModelEventMapper.toDto(updatedProcessModelEvent);
 
         restProcessModelEventMockMvc.perform(put("/api/process-model-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedProcessModelEvent)))
             .andExpect(status().isOk());
 
         // Validate the ProcessModelEvent in the database
@@ -208,12 +196,11 @@ public class ProcessModelEventResourceIT {
         int databaseSizeBeforeUpdate = processModelEventRepository.findAll().size();
 
         // Create the ProcessModelEvent
-        ProcessModelEventDTO processModelEventDTO = processModelEventMapper.toDto(processModelEvent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProcessModelEventMockMvc.perform(put("/api/process-model-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processModelEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processModelEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the ProcessModelEvent in the database
@@ -252,28 +239,5 @@ public class ProcessModelEventResourceIT {
         assertThat(processModelEvent1).isNotEqualTo(processModelEvent2);
         processModelEvent1.setId(null);
         assertThat(processModelEvent1).isNotEqualTo(processModelEvent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProcessModelEventDTO.class);
-        ProcessModelEventDTO processModelEventDTO1 = new ProcessModelEventDTO();
-        processModelEventDTO1.setId(1L);
-        ProcessModelEventDTO processModelEventDTO2 = new ProcessModelEventDTO();
-        assertThat(processModelEventDTO1).isNotEqualTo(processModelEventDTO2);
-        processModelEventDTO2.setId(processModelEventDTO1.getId());
-        assertThat(processModelEventDTO1).isEqualTo(processModelEventDTO2);
-        processModelEventDTO2.setId(2L);
-        assertThat(processModelEventDTO1).isNotEqualTo(processModelEventDTO2);
-        processModelEventDTO1.setId(null);
-        assertThat(processModelEventDTO1).isNotEqualTo(processModelEventDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(processModelEventMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(processModelEventMapper.fromId(null)).isNull();
     }
 }

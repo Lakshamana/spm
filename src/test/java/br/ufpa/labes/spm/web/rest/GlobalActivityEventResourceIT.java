@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.GlobalActivityEvent;
 import br.ufpa.labes.spm.repository.GlobalActivityEventRepository;
-import br.ufpa.labes.spm.service.GlobalActivityEventService;
-import br.ufpa.labes.spm.service.dto.GlobalActivityEventDTO;
-import br.ufpa.labes.spm.service.mapper.GlobalActivityEventMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class GlobalActivityEventResourceIT {
     private GlobalActivityEventRepository globalActivityEventRepository;
 
     @Autowired
-    private GlobalActivityEventMapper globalActivityEventMapper;
-
-    @Autowired
-    private GlobalActivityEventService globalActivityEventService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class GlobalActivityEventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final GlobalActivityEventResource globalActivityEventResource = new GlobalActivityEventResource(globalActivityEventService);
+        final GlobalActivityEventResource globalActivityEventResource = new GlobalActivityEventResource(globalActivityEventRepository);
         this.restGlobalActivityEventMockMvc = MockMvcBuilders.standaloneSetup(globalActivityEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class GlobalActivityEventResourceIT {
         int databaseSizeBeforeCreate = globalActivityEventRepository.findAll().size();
 
         // Create the GlobalActivityEvent
-        GlobalActivityEventDTO globalActivityEventDTO = globalActivityEventMapper.toDto(globalActivityEvent);
         restGlobalActivityEventMockMvc.perform(post("/api/global-activity-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(globalActivityEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(globalActivityEvent)))
             .andExpect(status().isCreated());
 
         // Validate the GlobalActivityEvent in the database
@@ -129,12 +119,11 @@ public class GlobalActivityEventResourceIT {
 
         // Create the GlobalActivityEvent with an existing ID
         globalActivityEvent.setId(1L);
-        GlobalActivityEventDTO globalActivityEventDTO = globalActivityEventMapper.toDto(globalActivityEvent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restGlobalActivityEventMockMvc.perform(post("/api/global-activity-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(globalActivityEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(globalActivityEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the GlobalActivityEvent in the database
@@ -189,11 +178,10 @@ public class GlobalActivityEventResourceIT {
         GlobalActivityEvent updatedGlobalActivityEvent = globalActivityEventRepository.findById(globalActivityEvent.getId()).get();
         // Disconnect from session so that the updates on updatedGlobalActivityEvent are not directly saved in db
         em.detach(updatedGlobalActivityEvent);
-        GlobalActivityEventDTO globalActivityEventDTO = globalActivityEventMapper.toDto(updatedGlobalActivityEvent);
 
         restGlobalActivityEventMockMvc.perform(put("/api/global-activity-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(globalActivityEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedGlobalActivityEvent)))
             .andExpect(status().isOk());
 
         // Validate the GlobalActivityEvent in the database
@@ -208,12 +196,11 @@ public class GlobalActivityEventResourceIT {
         int databaseSizeBeforeUpdate = globalActivityEventRepository.findAll().size();
 
         // Create the GlobalActivityEvent
-        GlobalActivityEventDTO globalActivityEventDTO = globalActivityEventMapper.toDto(globalActivityEvent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restGlobalActivityEventMockMvc.perform(put("/api/global-activity-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(globalActivityEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(globalActivityEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the GlobalActivityEvent in the database
@@ -252,28 +239,5 @@ public class GlobalActivityEventResourceIT {
         assertThat(globalActivityEvent1).isNotEqualTo(globalActivityEvent2);
         globalActivityEvent1.setId(null);
         assertThat(globalActivityEvent1).isNotEqualTo(globalActivityEvent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(GlobalActivityEventDTO.class);
-        GlobalActivityEventDTO globalActivityEventDTO1 = new GlobalActivityEventDTO();
-        globalActivityEventDTO1.setId(1L);
-        GlobalActivityEventDTO globalActivityEventDTO2 = new GlobalActivityEventDTO();
-        assertThat(globalActivityEventDTO1).isNotEqualTo(globalActivityEventDTO2);
-        globalActivityEventDTO2.setId(globalActivityEventDTO1.getId());
-        assertThat(globalActivityEventDTO1).isEqualTo(globalActivityEventDTO2);
-        globalActivityEventDTO2.setId(2L);
-        assertThat(globalActivityEventDTO1).isNotEqualTo(globalActivityEventDTO2);
-        globalActivityEventDTO1.setId(null);
-        assertThat(globalActivityEventDTO1).isNotEqualTo(globalActivityEventDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(globalActivityEventMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(globalActivityEventMapper.fromId(null)).isNull();
     }
 }

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ParameterService;
+import br.ufpa.labes.spm.domain.Parameter;
+import br.ufpa.labes.spm.repository.ParameterRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ParameterDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ParameterResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ParameterService parameterService;
+    private final ParameterRepository parameterRepository;
 
-    public ParameterResource(ParameterService parameterService) {
-        this.parameterService = parameterService;
+    public ParameterResource(ParameterRepository parameterRepository) {
+        this.parameterRepository = parameterRepository;
     }
 
     /**
      * {@code POST  /parameters} : Create a new parameter.
      *
-     * @param parameterDTO the parameterDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new parameterDTO, or with status {@code 400 (Bad Request)} if the parameter has already an ID.
+     * @param parameter the parameter to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new parameter, or with status {@code 400 (Bad Request)} if the parameter has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/parameters")
-    public ResponseEntity<ParameterDTO> createParameter(@RequestBody ParameterDTO parameterDTO) throws URISyntaxException {
-        log.debug("REST request to save Parameter : {}", parameterDTO);
-        if (parameterDTO.getId() != null) {
+    public ResponseEntity<Parameter> createParameter(@RequestBody Parameter parameter) throws URISyntaxException {
+        log.debug("REST request to save Parameter : {}", parameter);
+        if (parameter.getId() != null) {
             throw new BadRequestAlertException("A new parameter cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ParameterDTO result = parameterService.save(parameterDTO);
+        Parameter result = parameterRepository.save(parameter);
         return ResponseEntity.created(new URI("/api/parameters/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ParameterResource {
     /**
      * {@code PUT  /parameters} : Updates an existing parameter.
      *
-     * @param parameterDTO the parameterDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated parameterDTO,
-     * or with status {@code 400 (Bad Request)} if the parameterDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the parameterDTO couldn't be updated.
+     * @param parameter the parameter to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated parameter,
+     * or with status {@code 400 (Bad Request)} if the parameter is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the parameter couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/parameters")
-    public ResponseEntity<ParameterDTO> updateParameter(@RequestBody ParameterDTO parameterDTO) throws URISyntaxException {
-        log.debug("REST request to update Parameter : {}", parameterDTO);
-        if (parameterDTO.getId() == null) {
+    public ResponseEntity<Parameter> updateParameter(@RequestBody Parameter parameter) throws URISyntaxException {
+        log.debug("REST request to update Parameter : {}", parameter);
+        if (parameter.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ParameterDTO result = parameterService.save(parameterDTO);
+        Parameter result = parameterRepository.save(parameter);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, parameterDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, parameter.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ParameterResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of parameters in body.
      */
     @GetMapping("/parameters")
-    public List<ParameterDTO> getAllParameters() {
+    public List<Parameter> getAllParameters() {
         log.debug("REST request to get all Parameters");
-        return parameterService.findAll();
+        return parameterRepository.findAll();
     }
 
     /**
      * {@code GET  /parameters/:id} : get the "id" parameter.
      *
-     * @param id the id of the parameterDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the parameterDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the parameter to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the parameter, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/parameters/{id}")
-    public ResponseEntity<ParameterDTO> getParameter(@PathVariable Long id) {
+    public ResponseEntity<Parameter> getParameter(@PathVariable Long id) {
         log.debug("REST request to get Parameter : {}", id);
-        Optional<ParameterDTO> parameterDTO = parameterService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(parameterDTO);
+        Optional<Parameter> parameter = parameterRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(parameter);
     }
 
     /**
      * {@code DELETE  /parameters/:id} : delete the "id" parameter.
      *
-     * @param id the id of the parameterDTO to delete.
+     * @param id the id of the parameter to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/parameters/{id}")
     public ResponseEntity<Void> deleteParameter(@PathVariable Long id) {
         log.debug("REST request to delete Parameter : {}", id);
-        parameterService.delete(id);
+        parameterRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

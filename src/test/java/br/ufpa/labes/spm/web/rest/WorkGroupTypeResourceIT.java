@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.WorkGroupType;
 import br.ufpa.labes.spm.repository.WorkGroupTypeRepository;
-import br.ufpa.labes.spm.service.WorkGroupTypeService;
-import br.ufpa.labes.spm.service.dto.WorkGroupTypeDTO;
-import br.ufpa.labes.spm.service.mapper.WorkGroupTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class WorkGroupTypeResourceIT {
     private WorkGroupTypeRepository workGroupTypeRepository;
 
     @Autowired
-    private WorkGroupTypeMapper workGroupTypeMapper;
-
-    @Autowired
-    private WorkGroupTypeService workGroupTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class WorkGroupTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WorkGroupTypeResource workGroupTypeResource = new WorkGroupTypeResource(workGroupTypeService);
+        final WorkGroupTypeResource workGroupTypeResource = new WorkGroupTypeResource(workGroupTypeRepository);
         this.restWorkGroupTypeMockMvc = MockMvcBuilders.standaloneSetup(workGroupTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class WorkGroupTypeResourceIT {
         int databaseSizeBeforeCreate = workGroupTypeRepository.findAll().size();
 
         // Create the WorkGroupType
-        WorkGroupTypeDTO workGroupTypeDTO = workGroupTypeMapper.toDto(workGroupType);
         restWorkGroupTypeMockMvc.perform(post("/api/work-group-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupType)))
             .andExpect(status().isCreated());
 
         // Validate the WorkGroupType in the database
@@ -129,12 +119,11 @@ public class WorkGroupTypeResourceIT {
 
         // Create the WorkGroupType with an existing ID
         workGroupType.setId(1L);
-        WorkGroupTypeDTO workGroupTypeDTO = workGroupTypeMapper.toDto(workGroupType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWorkGroupTypeMockMvc.perform(post("/api/work-group-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupType)))
             .andExpect(status().isBadRequest());
 
         // Validate the WorkGroupType in the database
@@ -189,11 +178,10 @@ public class WorkGroupTypeResourceIT {
         WorkGroupType updatedWorkGroupType = workGroupTypeRepository.findById(workGroupType.getId()).get();
         // Disconnect from session so that the updates on updatedWorkGroupType are not directly saved in db
         em.detach(updatedWorkGroupType);
-        WorkGroupTypeDTO workGroupTypeDTO = workGroupTypeMapper.toDto(updatedWorkGroupType);
 
         restWorkGroupTypeMockMvc.perform(put("/api/work-group-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedWorkGroupType)))
             .andExpect(status().isOk());
 
         // Validate the WorkGroupType in the database
@@ -208,12 +196,11 @@ public class WorkGroupTypeResourceIT {
         int databaseSizeBeforeUpdate = workGroupTypeRepository.findAll().size();
 
         // Create the WorkGroupType
-        WorkGroupTypeDTO workGroupTypeDTO = workGroupTypeMapper.toDto(workGroupType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkGroupTypeMockMvc.perform(put("/api/work-group-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupType)))
             .andExpect(status().isBadRequest());
 
         // Validate the WorkGroupType in the database
@@ -252,28 +239,5 @@ public class WorkGroupTypeResourceIT {
         assertThat(workGroupType1).isNotEqualTo(workGroupType2);
         workGroupType1.setId(null);
         assertThat(workGroupType1).isNotEqualTo(workGroupType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(WorkGroupTypeDTO.class);
-        WorkGroupTypeDTO workGroupTypeDTO1 = new WorkGroupTypeDTO();
-        workGroupTypeDTO1.setId(1L);
-        WorkGroupTypeDTO workGroupTypeDTO2 = new WorkGroupTypeDTO();
-        assertThat(workGroupTypeDTO1).isNotEqualTo(workGroupTypeDTO2);
-        workGroupTypeDTO2.setId(workGroupTypeDTO1.getId());
-        assertThat(workGroupTypeDTO1).isEqualTo(workGroupTypeDTO2);
-        workGroupTypeDTO2.setId(2L);
-        assertThat(workGroupTypeDTO1).isNotEqualTo(workGroupTypeDTO2);
-        workGroupTypeDTO1.setId(null);
-        assertThat(workGroupTypeDTO1).isNotEqualTo(workGroupTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(workGroupTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(workGroupTypeMapper.fromId(null)).isNull();
     }
 }

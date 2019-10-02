@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ActivityInstantiated;
 import br.ufpa.labes.spm.repository.ActivityInstantiatedRepository;
-import br.ufpa.labes.spm.service.ActivityInstantiatedService;
-import br.ufpa.labes.spm.service.dto.ActivityInstantiatedDTO;
-import br.ufpa.labes.spm.service.mapper.ActivityInstantiatedMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ActivityInstantiatedResourceIT {
     private ActivityInstantiatedRepository activityInstantiatedRepository;
 
     @Autowired
-    private ActivityInstantiatedMapper activityInstantiatedMapper;
-
-    @Autowired
-    private ActivityInstantiatedService activityInstantiatedService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ActivityInstantiatedResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ActivityInstantiatedResource activityInstantiatedResource = new ActivityInstantiatedResource(activityInstantiatedService);
+        final ActivityInstantiatedResource activityInstantiatedResource = new ActivityInstantiatedResource(activityInstantiatedRepository);
         this.restActivityInstantiatedMockMvc = MockMvcBuilders.standaloneSetup(activityInstantiatedResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ActivityInstantiatedResourceIT {
         int databaseSizeBeforeCreate = activityInstantiatedRepository.findAll().size();
 
         // Create the ActivityInstantiated
-        ActivityInstantiatedDTO activityInstantiatedDTO = activityInstantiatedMapper.toDto(activityInstantiated);
         restActivityInstantiatedMockMvc.perform(post("/api/activity-instantiateds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityInstantiatedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityInstantiated)))
             .andExpect(status().isCreated());
 
         // Validate the ActivityInstantiated in the database
@@ -129,12 +119,11 @@ public class ActivityInstantiatedResourceIT {
 
         // Create the ActivityInstantiated with an existing ID
         activityInstantiated.setId(1L);
-        ActivityInstantiatedDTO activityInstantiatedDTO = activityInstantiatedMapper.toDto(activityInstantiated);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restActivityInstantiatedMockMvc.perform(post("/api/activity-instantiateds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityInstantiatedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityInstantiated)))
             .andExpect(status().isBadRequest());
 
         // Validate the ActivityInstantiated in the database
@@ -189,11 +178,10 @@ public class ActivityInstantiatedResourceIT {
         ActivityInstantiated updatedActivityInstantiated = activityInstantiatedRepository.findById(activityInstantiated.getId()).get();
         // Disconnect from session so that the updates on updatedActivityInstantiated are not directly saved in db
         em.detach(updatedActivityInstantiated);
-        ActivityInstantiatedDTO activityInstantiatedDTO = activityInstantiatedMapper.toDto(updatedActivityInstantiated);
 
         restActivityInstantiatedMockMvc.perform(put("/api/activity-instantiateds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityInstantiatedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedActivityInstantiated)))
             .andExpect(status().isOk());
 
         // Validate the ActivityInstantiated in the database
@@ -208,12 +196,11 @@ public class ActivityInstantiatedResourceIT {
         int databaseSizeBeforeUpdate = activityInstantiatedRepository.findAll().size();
 
         // Create the ActivityInstantiated
-        ActivityInstantiatedDTO activityInstantiatedDTO = activityInstantiatedMapper.toDto(activityInstantiated);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restActivityInstantiatedMockMvc.perform(put("/api/activity-instantiateds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(activityInstantiatedDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(activityInstantiated)))
             .andExpect(status().isBadRequest());
 
         // Validate the ActivityInstantiated in the database
@@ -252,28 +239,5 @@ public class ActivityInstantiatedResourceIT {
         assertThat(activityInstantiated1).isNotEqualTo(activityInstantiated2);
         activityInstantiated1.setId(null);
         assertThat(activityInstantiated1).isNotEqualTo(activityInstantiated2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ActivityInstantiatedDTO.class);
-        ActivityInstantiatedDTO activityInstantiatedDTO1 = new ActivityInstantiatedDTO();
-        activityInstantiatedDTO1.setId(1L);
-        ActivityInstantiatedDTO activityInstantiatedDTO2 = new ActivityInstantiatedDTO();
-        assertThat(activityInstantiatedDTO1).isNotEqualTo(activityInstantiatedDTO2);
-        activityInstantiatedDTO2.setId(activityInstantiatedDTO1.getId());
-        assertThat(activityInstantiatedDTO1).isEqualTo(activityInstantiatedDTO2);
-        activityInstantiatedDTO2.setId(2L);
-        assertThat(activityInstantiatedDTO1).isNotEqualTo(activityInstantiatedDTO2);
-        activityInstantiatedDTO1.setId(null);
-        assertThat(activityInstantiatedDTO1).isNotEqualTo(activityInstantiatedDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(activityInstantiatedMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(activityInstantiatedMapper.fromId(null)).isNull();
     }
 }

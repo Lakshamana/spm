@@ -164,14 +164,7 @@ public class Dependency implements Serializable {
             ", kindDep='" + getKindDep() + "'" +
             "}";
     }
-
-    public void removeFromTheSequence() {
-      if (this.theSequence!=null) {
-        this.theSequence.setTheDependency(null);
-        this.setTheSequence(null);
-      }
-    }
-
+    
     public void insertIntoTheSequence(Sequence theSequence) {
       this.setTheSequence(theSequence);
       theSequence.setTheDependency(this);

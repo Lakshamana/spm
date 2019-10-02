@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.WorkGroupMetric;
 import br.ufpa.labes.spm.repository.WorkGroupMetricRepository;
-import br.ufpa.labes.spm.service.WorkGroupMetricService;
-import br.ufpa.labes.spm.service.dto.WorkGroupMetricDTO;
-import br.ufpa.labes.spm.service.mapper.WorkGroupMetricMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class WorkGroupMetricResourceIT {
     private WorkGroupMetricRepository workGroupMetricRepository;
 
     @Autowired
-    private WorkGroupMetricMapper workGroupMetricMapper;
-
-    @Autowired
-    private WorkGroupMetricService workGroupMetricService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class WorkGroupMetricResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WorkGroupMetricResource workGroupMetricResource = new WorkGroupMetricResource(workGroupMetricService);
+        final WorkGroupMetricResource workGroupMetricResource = new WorkGroupMetricResource(workGroupMetricRepository);
         this.restWorkGroupMetricMockMvc = MockMvcBuilders.standaloneSetup(workGroupMetricResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class WorkGroupMetricResourceIT {
         int databaseSizeBeforeCreate = workGroupMetricRepository.findAll().size();
 
         // Create the WorkGroupMetric
-        WorkGroupMetricDTO workGroupMetricDTO = workGroupMetricMapper.toDto(workGroupMetric);
         restWorkGroupMetricMockMvc.perform(post("/api/work-group-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupMetric)))
             .andExpect(status().isCreated());
 
         // Validate the WorkGroupMetric in the database
@@ -129,12 +119,11 @@ public class WorkGroupMetricResourceIT {
 
         // Create the WorkGroupMetric with an existing ID
         workGroupMetric.setId(1L);
-        WorkGroupMetricDTO workGroupMetricDTO = workGroupMetricMapper.toDto(workGroupMetric);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWorkGroupMetricMockMvc.perform(post("/api/work-group-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the WorkGroupMetric in the database
@@ -189,11 +178,10 @@ public class WorkGroupMetricResourceIT {
         WorkGroupMetric updatedWorkGroupMetric = workGroupMetricRepository.findById(workGroupMetric.getId()).get();
         // Disconnect from session so that the updates on updatedWorkGroupMetric are not directly saved in db
         em.detach(updatedWorkGroupMetric);
-        WorkGroupMetricDTO workGroupMetricDTO = workGroupMetricMapper.toDto(updatedWorkGroupMetric);
 
         restWorkGroupMetricMockMvc.perform(put("/api/work-group-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedWorkGroupMetric)))
             .andExpect(status().isOk());
 
         // Validate the WorkGroupMetric in the database
@@ -208,12 +196,11 @@ public class WorkGroupMetricResourceIT {
         int databaseSizeBeforeUpdate = workGroupMetricRepository.findAll().size();
 
         // Create the WorkGroupMetric
-        WorkGroupMetricDTO workGroupMetricDTO = workGroupMetricMapper.toDto(workGroupMetric);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkGroupMetricMockMvc.perform(put("/api/work-group-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the WorkGroupMetric in the database
@@ -252,28 +239,5 @@ public class WorkGroupMetricResourceIT {
         assertThat(workGroupMetric1).isNotEqualTo(workGroupMetric2);
         workGroupMetric1.setId(null);
         assertThat(workGroupMetric1).isNotEqualTo(workGroupMetric2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(WorkGroupMetricDTO.class);
-        WorkGroupMetricDTO workGroupMetricDTO1 = new WorkGroupMetricDTO();
-        workGroupMetricDTO1.setId(1L);
-        WorkGroupMetricDTO workGroupMetricDTO2 = new WorkGroupMetricDTO();
-        assertThat(workGroupMetricDTO1).isNotEqualTo(workGroupMetricDTO2);
-        workGroupMetricDTO2.setId(workGroupMetricDTO1.getId());
-        assertThat(workGroupMetricDTO1).isEqualTo(workGroupMetricDTO2);
-        workGroupMetricDTO2.setId(2L);
-        assertThat(workGroupMetricDTO1).isNotEqualTo(workGroupMetricDTO2);
-        workGroupMetricDTO1.setId(null);
-        assertThat(workGroupMetricDTO1).isNotEqualTo(workGroupMetricDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(workGroupMetricMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(workGroupMetricMapper.fromId(null)).isNull();
     }
 }

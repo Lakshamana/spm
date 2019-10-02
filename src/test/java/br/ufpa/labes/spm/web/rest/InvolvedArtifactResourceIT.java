@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.InvolvedArtifact;
 import br.ufpa.labes.spm.repository.InvolvedArtifactRepository;
-import br.ufpa.labes.spm.service.InvolvedArtifactService;
-import br.ufpa.labes.spm.service.dto.InvolvedArtifactDTO;
-import br.ufpa.labes.spm.service.mapper.InvolvedArtifactMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class InvolvedArtifactResourceIT {
     private InvolvedArtifactRepository involvedArtifactRepository;
 
     @Autowired
-    private InvolvedArtifactMapper involvedArtifactMapper;
-
-    @Autowired
-    private InvolvedArtifactService involvedArtifactService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class InvolvedArtifactResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final InvolvedArtifactResource involvedArtifactResource = new InvolvedArtifactResource(involvedArtifactService);
+        final InvolvedArtifactResource involvedArtifactResource = new InvolvedArtifactResource(involvedArtifactRepository);
         this.restInvolvedArtifactMockMvc = MockMvcBuilders.standaloneSetup(involvedArtifactResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class InvolvedArtifactResourceIT {
         int databaseSizeBeforeCreate = involvedArtifactRepository.findAll().size();
 
         // Create the InvolvedArtifact
-        InvolvedArtifactDTO involvedArtifactDTO = involvedArtifactMapper.toDto(involvedArtifact);
         restInvolvedArtifactMockMvc.perform(post("/api/involved-artifacts")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(involvedArtifactDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(involvedArtifact)))
             .andExpect(status().isCreated());
 
         // Validate the InvolvedArtifact in the database
@@ -129,12 +119,11 @@ public class InvolvedArtifactResourceIT {
 
         // Create the InvolvedArtifact with an existing ID
         involvedArtifact.setId(1L);
-        InvolvedArtifactDTO involvedArtifactDTO = involvedArtifactMapper.toDto(involvedArtifact);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInvolvedArtifactMockMvc.perform(post("/api/involved-artifacts")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(involvedArtifactDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(involvedArtifact)))
             .andExpect(status().isBadRequest());
 
         // Validate the InvolvedArtifact in the database
@@ -189,11 +178,10 @@ public class InvolvedArtifactResourceIT {
         InvolvedArtifact updatedInvolvedArtifact = involvedArtifactRepository.findById(involvedArtifact.getId()).get();
         // Disconnect from session so that the updates on updatedInvolvedArtifact are not directly saved in db
         em.detach(updatedInvolvedArtifact);
-        InvolvedArtifactDTO involvedArtifactDTO = involvedArtifactMapper.toDto(updatedInvolvedArtifact);
 
         restInvolvedArtifactMockMvc.perform(put("/api/involved-artifacts")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(involvedArtifactDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedInvolvedArtifact)))
             .andExpect(status().isOk());
 
         // Validate the InvolvedArtifact in the database
@@ -208,12 +196,11 @@ public class InvolvedArtifactResourceIT {
         int databaseSizeBeforeUpdate = involvedArtifactRepository.findAll().size();
 
         // Create the InvolvedArtifact
-        InvolvedArtifactDTO involvedArtifactDTO = involvedArtifactMapper.toDto(involvedArtifact);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInvolvedArtifactMockMvc.perform(put("/api/involved-artifacts")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(involvedArtifactDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(involvedArtifact)))
             .andExpect(status().isBadRequest());
 
         // Validate the InvolvedArtifact in the database
@@ -252,28 +239,5 @@ public class InvolvedArtifactResourceIT {
         assertThat(involvedArtifact1).isNotEqualTo(involvedArtifact2);
         involvedArtifact1.setId(null);
         assertThat(involvedArtifact1).isNotEqualTo(involvedArtifact2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(InvolvedArtifactDTO.class);
-        InvolvedArtifactDTO involvedArtifactDTO1 = new InvolvedArtifactDTO();
-        involvedArtifactDTO1.setId(1L);
-        InvolvedArtifactDTO involvedArtifactDTO2 = new InvolvedArtifactDTO();
-        assertThat(involvedArtifactDTO1).isNotEqualTo(involvedArtifactDTO2);
-        involvedArtifactDTO2.setId(involvedArtifactDTO1.getId());
-        assertThat(involvedArtifactDTO1).isEqualTo(involvedArtifactDTO2);
-        involvedArtifactDTO2.setId(2L);
-        assertThat(involvedArtifactDTO1).isNotEqualTo(involvedArtifactDTO2);
-        involvedArtifactDTO1.setId(null);
-        assertThat(involvedArtifactDTO1).isNotEqualTo(involvedArtifactDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(involvedArtifactMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(involvedArtifactMapper.fromId(null)).isNull();
     }
 }

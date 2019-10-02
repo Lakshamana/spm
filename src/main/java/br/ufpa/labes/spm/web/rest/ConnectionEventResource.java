@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ConnectionEventService;
+import br.ufpa.labes.spm.domain.ConnectionEvent;
+import br.ufpa.labes.spm.repository.ConnectionEventRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ConnectionEventDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ConnectionEventResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ConnectionEventService connectionEventService;
+    private final ConnectionEventRepository connectionEventRepository;
 
-    public ConnectionEventResource(ConnectionEventService connectionEventService) {
-        this.connectionEventService = connectionEventService;
+    public ConnectionEventResource(ConnectionEventRepository connectionEventRepository) {
+        this.connectionEventRepository = connectionEventRepository;
     }
 
     /**
      * {@code POST  /connection-events} : Create a new connectionEvent.
      *
-     * @param connectionEventDTO the connectionEventDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new connectionEventDTO, or with status {@code 400 (Bad Request)} if the connectionEvent has already an ID.
+     * @param connectionEvent the connectionEvent to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new connectionEvent, or with status {@code 400 (Bad Request)} if the connectionEvent has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/connection-events")
-    public ResponseEntity<ConnectionEventDTO> createConnectionEvent(@RequestBody ConnectionEventDTO connectionEventDTO) throws URISyntaxException {
-        log.debug("REST request to save ConnectionEvent : {}", connectionEventDTO);
-        if (connectionEventDTO.getId() != null) {
+    public ResponseEntity<ConnectionEvent> createConnectionEvent(@RequestBody ConnectionEvent connectionEvent) throws URISyntaxException {
+        log.debug("REST request to save ConnectionEvent : {}", connectionEvent);
+        if (connectionEvent.getId() != null) {
             throw new BadRequestAlertException("A new connectionEvent cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ConnectionEventDTO result = connectionEventService.save(connectionEventDTO);
+        ConnectionEvent result = connectionEventRepository.save(connectionEvent);
         return ResponseEntity.created(new URI("/api/connection-events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ConnectionEventResource {
     /**
      * {@code PUT  /connection-events} : Updates an existing connectionEvent.
      *
-     * @param connectionEventDTO the connectionEventDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated connectionEventDTO,
-     * or with status {@code 400 (Bad Request)} if the connectionEventDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the connectionEventDTO couldn't be updated.
+     * @param connectionEvent the connectionEvent to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated connectionEvent,
+     * or with status {@code 400 (Bad Request)} if the connectionEvent is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the connectionEvent couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/connection-events")
-    public ResponseEntity<ConnectionEventDTO> updateConnectionEvent(@RequestBody ConnectionEventDTO connectionEventDTO) throws URISyntaxException {
-        log.debug("REST request to update ConnectionEvent : {}", connectionEventDTO);
-        if (connectionEventDTO.getId() == null) {
+    public ResponseEntity<ConnectionEvent> updateConnectionEvent(@RequestBody ConnectionEvent connectionEvent) throws URISyntaxException {
+        log.debug("REST request to update ConnectionEvent : {}", connectionEvent);
+        if (connectionEvent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ConnectionEventDTO result = connectionEventService.save(connectionEventDTO);
+        ConnectionEvent result = connectionEventRepository.save(connectionEvent);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, connectionEventDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, connectionEvent.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ConnectionEventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of connectionEvents in body.
      */
     @GetMapping("/connection-events")
-    public List<ConnectionEventDTO> getAllConnectionEvents() {
+    public List<ConnectionEvent> getAllConnectionEvents() {
         log.debug("REST request to get all ConnectionEvents");
-        return connectionEventService.findAll();
+        return connectionEventRepository.findAll();
     }
 
     /**
      * {@code GET  /connection-events/:id} : get the "id" connectionEvent.
      *
-     * @param id the id of the connectionEventDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the connectionEventDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the connectionEvent to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the connectionEvent, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/connection-events/{id}")
-    public ResponseEntity<ConnectionEventDTO> getConnectionEvent(@PathVariable Long id) {
+    public ResponseEntity<ConnectionEvent> getConnectionEvent(@PathVariable Long id) {
         log.debug("REST request to get ConnectionEvent : {}", id);
-        Optional<ConnectionEventDTO> connectionEventDTO = connectionEventService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(connectionEventDTO);
+        Optional<ConnectionEvent> connectionEvent = connectionEventRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(connectionEvent);
     }
 
     /**
      * {@code DELETE  /connection-events/:id} : delete the "id" connectionEvent.
      *
-     * @param id the id of the connectionEventDTO to delete.
+     * @param id the id of the connectionEvent to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/connection-events/{id}")
     public ResponseEntity<Void> deleteConnectionEvent(@PathVariable Long id) {
         log.debug("REST request to delete ConnectionEvent : {}", id);
-        connectionEventService.delete(id);
+        connectionEventRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

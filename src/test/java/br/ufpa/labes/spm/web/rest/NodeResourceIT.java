@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Node;
 import br.ufpa.labes.spm.repository.NodeRepository;
-import br.ufpa.labes.spm.service.NodeService;
-import br.ufpa.labes.spm.service.dto.NodeDTO;
-import br.ufpa.labes.spm.service.mapper.NodeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -51,12 +48,6 @@ public class NodeResourceIT {
     private NodeRepository nodeRepository;
 
     @Autowired
-    private NodeMapper nodeMapper;
-
-    @Autowired
-    private NodeService nodeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -78,7 +69,7 @@ public class NodeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final NodeResource nodeResource = new NodeResource(nodeService);
+        final NodeResource nodeResource = new NodeResource(nodeRepository);
         this.restNodeMockMvc = MockMvcBuilders.standaloneSetup(nodeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -125,10 +116,9 @@ public class NodeResourceIT {
         int databaseSizeBeforeCreate = nodeRepository.findAll().size();
 
         // Create the Node
-        NodeDTO nodeDTO = nodeMapper.toDto(node);
         restNodeMockMvc.perform(post("/api/nodes")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(nodeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(node)))
             .andExpect(status().isCreated());
 
         // Validate the Node in the database
@@ -147,12 +137,11 @@ public class NodeResourceIT {
 
         // Create the Node with an existing ID
         node.setId(1L);
-        NodeDTO nodeDTO = nodeMapper.toDto(node);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restNodeMockMvc.perform(post("/api/nodes")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(nodeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(node)))
             .andExpect(status().isBadRequest());
 
         // Validate the Node in the database
@@ -217,11 +206,10 @@ public class NodeResourceIT {
             .ident(UPDATED_IDENT)
             .data(UPDATED_DATA)
             .serviceFileId(UPDATED_SERVICE_FILE_ID);
-        NodeDTO nodeDTO = nodeMapper.toDto(updatedNode);
 
         restNodeMockMvc.perform(put("/api/nodes")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(nodeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedNode)))
             .andExpect(status().isOk());
 
         // Validate the Node in the database
@@ -239,12 +227,11 @@ public class NodeResourceIT {
         int databaseSizeBeforeUpdate = nodeRepository.findAll().size();
 
         // Create the Node
-        NodeDTO nodeDTO = nodeMapper.toDto(node);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restNodeMockMvc.perform(put("/api/nodes")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(nodeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(node)))
             .andExpect(status().isBadRequest());
 
         // Validate the Node in the database
@@ -283,28 +270,5 @@ public class NodeResourceIT {
         assertThat(node1).isNotEqualTo(node2);
         node1.setId(null);
         assertThat(node1).isNotEqualTo(node2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(NodeDTO.class);
-        NodeDTO nodeDTO1 = new NodeDTO();
-        nodeDTO1.setId(1L);
-        NodeDTO nodeDTO2 = new NodeDTO();
-        assertThat(nodeDTO1).isNotEqualTo(nodeDTO2);
-        nodeDTO2.setId(nodeDTO1.getId());
-        assertThat(nodeDTO1).isEqualTo(nodeDTO2);
-        nodeDTO2.setId(2L);
-        assertThat(nodeDTO1).isNotEqualTo(nodeDTO2);
-        nodeDTO1.setId(null);
-        assertThat(nodeDTO1).isNotEqualTo(nodeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(nodeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(nodeMapper.fromId(null)).isNull();
     }
 }

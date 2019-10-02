@@ -1,5 +1,6 @@
 package br.ufpa.labes.spm.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 /**
  * MetricDefinition String Values List Wrapper
  */
+@ApiModel(description = "MetricDefinition String Values List Wrapper")
 @Entity
 @Table(name = "metric_definition_unit")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)

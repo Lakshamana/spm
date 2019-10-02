@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.PrimitiveParam;
 import br.ufpa.labes.spm.repository.PrimitiveParamRepository;
-import br.ufpa.labes.spm.service.PrimitiveParamService;
-import br.ufpa.labes.spm.service.dto.PrimitiveParamDTO;
-import br.ufpa.labes.spm.service.mapper.PrimitiveParamMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class PrimitiveParamResourceIT {
     private PrimitiveParamRepository primitiveParamRepository;
 
     @Autowired
-    private PrimitiveParamMapper primitiveParamMapper;
-
-    @Autowired
-    private PrimitiveParamService primitiveParamService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class PrimitiveParamResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PrimitiveParamResource primitiveParamResource = new PrimitiveParamResource(primitiveParamService);
+        final PrimitiveParamResource primitiveParamResource = new PrimitiveParamResource(primitiveParamRepository);
         this.restPrimitiveParamMockMvc = MockMvcBuilders.standaloneSetup(primitiveParamResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class PrimitiveParamResourceIT {
         int databaseSizeBeforeCreate = primitiveParamRepository.findAll().size();
 
         // Create the PrimitiveParam
-        PrimitiveParamDTO primitiveParamDTO = primitiveParamMapper.toDto(primitiveParam);
         restPrimitiveParamMockMvc.perform(post("/api/primitive-params")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(primitiveParamDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(primitiveParam)))
             .andExpect(status().isCreated());
 
         // Validate the PrimitiveParam in the database
@@ -129,12 +119,11 @@ public class PrimitiveParamResourceIT {
 
         // Create the PrimitiveParam with an existing ID
         primitiveParam.setId(1L);
-        PrimitiveParamDTO primitiveParamDTO = primitiveParamMapper.toDto(primitiveParam);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPrimitiveParamMockMvc.perform(post("/api/primitive-params")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(primitiveParamDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(primitiveParam)))
             .andExpect(status().isBadRequest());
 
         // Validate the PrimitiveParam in the database
@@ -189,11 +178,10 @@ public class PrimitiveParamResourceIT {
         PrimitiveParam updatedPrimitiveParam = primitiveParamRepository.findById(primitiveParam.getId()).get();
         // Disconnect from session so that the updates on updatedPrimitiveParam are not directly saved in db
         em.detach(updatedPrimitiveParam);
-        PrimitiveParamDTO primitiveParamDTO = primitiveParamMapper.toDto(updatedPrimitiveParam);
 
         restPrimitiveParamMockMvc.perform(put("/api/primitive-params")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(primitiveParamDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedPrimitiveParam)))
             .andExpect(status().isOk());
 
         // Validate the PrimitiveParam in the database
@@ -208,12 +196,11 @@ public class PrimitiveParamResourceIT {
         int databaseSizeBeforeUpdate = primitiveParamRepository.findAll().size();
 
         // Create the PrimitiveParam
-        PrimitiveParamDTO primitiveParamDTO = primitiveParamMapper.toDto(primitiveParam);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restPrimitiveParamMockMvc.perform(put("/api/primitive-params")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(primitiveParamDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(primitiveParam)))
             .andExpect(status().isBadRequest());
 
         // Validate the PrimitiveParam in the database
@@ -252,28 +239,5 @@ public class PrimitiveParamResourceIT {
         assertThat(primitiveParam1).isNotEqualTo(primitiveParam2);
         primitiveParam1.setId(null);
         assertThat(primitiveParam1).isNotEqualTo(primitiveParam2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(PrimitiveParamDTO.class);
-        PrimitiveParamDTO primitiveParamDTO1 = new PrimitiveParamDTO();
-        primitiveParamDTO1.setId(1L);
-        PrimitiveParamDTO primitiveParamDTO2 = new PrimitiveParamDTO();
-        assertThat(primitiveParamDTO1).isNotEqualTo(primitiveParamDTO2);
-        primitiveParamDTO2.setId(primitiveParamDTO1.getId());
-        assertThat(primitiveParamDTO1).isEqualTo(primitiveParamDTO2);
-        primitiveParamDTO2.setId(2L);
-        assertThat(primitiveParamDTO1).isNotEqualTo(primitiveParamDTO2);
-        primitiveParamDTO1.setId(null);
-        assertThat(primitiveParamDTO1).isNotEqualTo(primitiveParamDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(primitiveParamMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(primitiveParamMapper.fromId(null)).isNull();
     }
 }

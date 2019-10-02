@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.MetricTypeService;
+import br.ufpa.labes.spm.domain.MetricType;
+import br.ufpa.labes.spm.repository.MetricTypeRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.MetricTypeDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class MetricTypeResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final MetricTypeService metricTypeService;
+    private final MetricTypeRepository metricTypeRepository;
 
-    public MetricTypeResource(MetricTypeService metricTypeService) {
-        this.metricTypeService = metricTypeService;
+    public MetricTypeResource(MetricTypeRepository metricTypeRepository) {
+        this.metricTypeRepository = metricTypeRepository;
     }
 
     /**
      * {@code POST  /metric-types} : Create a new metricType.
      *
-     * @param metricTypeDTO the metricTypeDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new metricTypeDTO, or with status {@code 400 (Bad Request)} if the metricType has already an ID.
+     * @param metricType the metricType to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new metricType, or with status {@code 400 (Bad Request)} if the metricType has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/metric-types")
-    public ResponseEntity<MetricTypeDTO> createMetricType(@RequestBody MetricTypeDTO metricTypeDTO) throws URISyntaxException {
-        log.debug("REST request to save MetricType : {}", metricTypeDTO);
-        if (metricTypeDTO.getId() != null) {
+    public ResponseEntity<MetricType> createMetricType(@RequestBody MetricType metricType) throws URISyntaxException {
+        log.debug("REST request to save MetricType : {}", metricType);
+        if (metricType.getId() != null) {
             throw new BadRequestAlertException("A new metricType cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        MetricTypeDTO result = metricTypeService.save(metricTypeDTO);
+        MetricType result = metricTypeRepository.save(metricType);
         return ResponseEntity.created(new URI("/api/metric-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class MetricTypeResource {
     /**
      * {@code PUT  /metric-types} : Updates an existing metricType.
      *
-     * @param metricTypeDTO the metricTypeDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated metricTypeDTO,
-     * or with status {@code 400 (Bad Request)} if the metricTypeDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the metricTypeDTO couldn't be updated.
+     * @param metricType the metricType to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated metricType,
+     * or with status {@code 400 (Bad Request)} if the metricType is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the metricType couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/metric-types")
-    public ResponseEntity<MetricTypeDTO> updateMetricType(@RequestBody MetricTypeDTO metricTypeDTO) throws URISyntaxException {
-        log.debug("REST request to update MetricType : {}", metricTypeDTO);
-        if (metricTypeDTO.getId() == null) {
+    public ResponseEntity<MetricType> updateMetricType(@RequestBody MetricType metricType) throws URISyntaxException {
+        log.debug("REST request to update MetricType : {}", metricType);
+        if (metricType.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        MetricTypeDTO result = metricTypeService.save(metricTypeDTO);
+        MetricType result = metricTypeRepository.save(metricType);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, metricTypeDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, metricType.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class MetricTypeResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of metricTypes in body.
      */
     @GetMapping("/metric-types")
-    public List<MetricTypeDTO> getAllMetricTypes() {
+    public List<MetricType> getAllMetricTypes() {
         log.debug("REST request to get all MetricTypes");
-        return metricTypeService.findAll();
+        return metricTypeRepository.findAll();
     }
 
     /**
      * {@code GET  /metric-types/:id} : get the "id" metricType.
      *
-     * @param id the id of the metricTypeDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the metricTypeDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the metricType to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the metricType, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/metric-types/{id}")
-    public ResponseEntity<MetricTypeDTO> getMetricType(@PathVariable Long id) {
+    public ResponseEntity<MetricType> getMetricType(@PathVariable Long id) {
         log.debug("REST request to get MetricType : {}", id);
-        Optional<MetricTypeDTO> metricTypeDTO = metricTypeService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(metricTypeDTO);
+        Optional<MetricType> metricType = metricTypeRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(metricType);
     }
 
     /**
      * {@code DELETE  /metric-types/:id} : delete the "id" metricType.
      *
-     * @param id the id of the metricTypeDTO to delete.
+     * @param id the id of the metricType to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/metric-types/{id}")
     public ResponseEntity<Void> deleteMetricType(@PathVariable Long id) {
         log.debug("REST request to delete MetricType : {}", id);
-        metricTypeService.delete(id);
+        metricTypeRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

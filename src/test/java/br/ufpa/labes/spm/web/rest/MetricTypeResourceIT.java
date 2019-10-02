@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.MetricType;
 import br.ufpa.labes.spm.repository.MetricTypeRepository;
-import br.ufpa.labes.spm.service.MetricTypeService;
-import br.ufpa.labes.spm.service.dto.MetricTypeDTO;
-import br.ufpa.labes.spm.service.mapper.MetricTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class MetricTypeResourceIT {
     private MetricTypeRepository metricTypeRepository;
 
     @Autowired
-    private MetricTypeMapper metricTypeMapper;
-
-    @Autowired
-    private MetricTypeService metricTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class MetricTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MetricTypeResource metricTypeResource = new MetricTypeResource(metricTypeService);
+        final MetricTypeResource metricTypeResource = new MetricTypeResource(metricTypeRepository);
         this.restMetricTypeMockMvc = MockMvcBuilders.standaloneSetup(metricTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class MetricTypeResourceIT {
         int databaseSizeBeforeCreate = metricTypeRepository.findAll().size();
 
         // Create the MetricType
-        MetricTypeDTO metricTypeDTO = metricTypeMapper.toDto(metricType);
         restMetricTypeMockMvc.perform(post("/api/metric-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(metricType)))
             .andExpect(status().isCreated());
 
         // Validate the MetricType in the database
@@ -129,12 +119,11 @@ public class MetricTypeResourceIT {
 
         // Create the MetricType with an existing ID
         metricType.setId(1L);
-        MetricTypeDTO metricTypeDTO = metricTypeMapper.toDto(metricType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMetricTypeMockMvc.perform(post("/api/metric-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(metricType)))
             .andExpect(status().isBadRequest());
 
         // Validate the MetricType in the database
@@ -189,11 +178,10 @@ public class MetricTypeResourceIT {
         MetricType updatedMetricType = metricTypeRepository.findById(metricType.getId()).get();
         // Disconnect from session so that the updates on updatedMetricType are not directly saved in db
         em.detach(updatedMetricType);
-        MetricTypeDTO metricTypeDTO = metricTypeMapper.toDto(updatedMetricType);
 
         restMetricTypeMockMvc.perform(put("/api/metric-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedMetricType)))
             .andExpect(status().isOk());
 
         // Validate the MetricType in the database
@@ -208,12 +196,11 @@ public class MetricTypeResourceIT {
         int databaseSizeBeforeUpdate = metricTypeRepository.findAll().size();
 
         // Create the MetricType
-        MetricTypeDTO metricTypeDTO = metricTypeMapper.toDto(metricType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMetricTypeMockMvc.perform(put("/api/metric-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(metricType)))
             .andExpect(status().isBadRequest());
 
         // Validate the MetricType in the database
@@ -252,28 +239,5 @@ public class MetricTypeResourceIT {
         assertThat(metricType1).isNotEqualTo(metricType2);
         metricType1.setId(null);
         assertThat(metricType1).isNotEqualTo(metricType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MetricTypeDTO.class);
-        MetricTypeDTO metricTypeDTO1 = new MetricTypeDTO();
-        metricTypeDTO1.setId(1L);
-        MetricTypeDTO metricTypeDTO2 = new MetricTypeDTO();
-        assertThat(metricTypeDTO1).isNotEqualTo(metricTypeDTO2);
-        metricTypeDTO2.setId(metricTypeDTO1.getId());
-        assertThat(metricTypeDTO1).isEqualTo(metricTypeDTO2);
-        metricTypeDTO2.setId(2L);
-        assertThat(metricTypeDTO1).isNotEqualTo(metricTypeDTO2);
-        metricTypeDTO1.setId(null);
-        assertThat(metricTypeDTO1).isNotEqualTo(metricTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(metricTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(metricTypeMapper.fromId(null)).isNull();
     }
 }

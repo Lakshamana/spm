@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Process;
 import br.ufpa.labes.spm.repository.ProcessRepository;
-import br.ufpa.labes.spm.service.ProcessService;
-import br.ufpa.labes.spm.service.dto.ProcessDTO;
-import br.ufpa.labes.spm.service.mapper.ProcessMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +45,6 @@ public class ProcessResourceIT {
     private ProcessRepository processRepository;
 
     @Autowired
-    private ProcessMapper processMapper;
-
-    @Autowired
-    private ProcessService processService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +66,7 @@ public class ProcessResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ProcessResource processResource = new ProcessResource(processService);
+        final ProcessResource processResource = new ProcessResource(processRepository);
         this.restProcessMockMvc = MockMvcBuilders.standaloneSetup(processResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,10 +111,9 @@ public class ProcessResourceIT {
         int databaseSizeBeforeCreate = processRepository.findAll().size();
 
         // Create the Process
-        ProcessDTO processDTO = processMapper.toDto(process);
         restProcessMockMvc.perform(post("/api/processes")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(process)))
             .andExpect(status().isCreated());
 
         // Validate the Process in the database
@@ -141,12 +131,11 @@ public class ProcessResourceIT {
 
         // Create the Process with an existing ID
         process.setId(1L);
-        ProcessDTO processDTO = processMapper.toDto(process);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProcessMockMvc.perform(post("/api/processes")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(process)))
             .andExpect(status().isBadRequest());
 
         // Validate the Process in the database
@@ -208,11 +197,10 @@ public class ProcessResourceIT {
         updatedProcess
             .ident(UPDATED_IDENT)
             .pState(UPDATED_P_STATE);
-        ProcessDTO processDTO = processMapper.toDto(updatedProcess);
 
         restProcessMockMvc.perform(put("/api/processes")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedProcess)))
             .andExpect(status().isOk());
 
         // Validate the Process in the database
@@ -229,12 +217,11 @@ public class ProcessResourceIT {
         int databaseSizeBeforeUpdate = processRepository.findAll().size();
 
         // Create the Process
-        ProcessDTO processDTO = processMapper.toDto(process);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProcessMockMvc.perform(put("/api/processes")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(process)))
             .andExpect(status().isBadRequest());
 
         // Validate the Process in the database
@@ -273,28 +260,5 @@ public class ProcessResourceIT {
         assertThat(process1).isNotEqualTo(process2);
         process1.setId(null);
         assertThat(process1).isNotEqualTo(process2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProcessDTO.class);
-        ProcessDTO processDTO1 = new ProcessDTO();
-        processDTO1.setId(1L);
-        ProcessDTO processDTO2 = new ProcessDTO();
-        assertThat(processDTO1).isNotEqualTo(processDTO2);
-        processDTO2.setId(processDTO1.getId());
-        assertThat(processDTO1).isEqualTo(processDTO2);
-        processDTO2.setId(2L);
-        assertThat(processDTO1).isNotEqualTo(processDTO2);
-        processDTO1.setId(null);
-        assertThat(processDTO1).isNotEqualTo(processDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(processMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(processMapper.fromId(null)).isNull();
     }
 }

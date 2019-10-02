@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ToolDefinition;
 import br.ufpa.labes.spm.repository.ToolDefinitionRepository;
-import br.ufpa.labes.spm.service.ToolDefinitionService;
-import br.ufpa.labes.spm.service.dto.ToolDefinitionDTO;
-import br.ufpa.labes.spm.service.mapper.ToolDefinitionMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -60,15 +57,6 @@ public class ToolDefinitionResourceIT {
     private ToolDefinitionRepository toolDefinitionRepositoryMock;
 
     @Autowired
-    private ToolDefinitionMapper toolDefinitionMapper;
-
-    @Mock
-    private ToolDefinitionService toolDefinitionServiceMock;
-
-    @Autowired
-    private ToolDefinitionService toolDefinitionService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -90,7 +78,7 @@ public class ToolDefinitionResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ToolDefinitionResource toolDefinitionResource = new ToolDefinitionResource(toolDefinitionService);
+        final ToolDefinitionResource toolDefinitionResource = new ToolDefinitionResource(toolDefinitionRepository);
         this.restToolDefinitionMockMvc = MockMvcBuilders.standaloneSetup(toolDefinitionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -137,10 +125,9 @@ public class ToolDefinitionResourceIT {
         int databaseSizeBeforeCreate = toolDefinitionRepository.findAll().size();
 
         // Create the ToolDefinition
-        ToolDefinitionDTO toolDefinitionDTO = toolDefinitionMapper.toDto(toolDefinition);
         restToolDefinitionMockMvc.perform(post("/api/tool-definitions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolDefinitionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(toolDefinition)))
             .andExpect(status().isCreated());
 
         // Validate the ToolDefinition in the database
@@ -159,12 +146,11 @@ public class ToolDefinitionResourceIT {
 
         // Create the ToolDefinition with an existing ID
         toolDefinition.setId(1L);
-        ToolDefinitionDTO toolDefinitionDTO = toolDefinitionMapper.toDto(toolDefinition);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restToolDefinitionMockMvc.perform(post("/api/tool-definitions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolDefinitionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(toolDefinition)))
             .andExpect(status().isBadRequest());
 
         // Validate the ToolDefinition in the database
@@ -191,8 +177,8 @@ public class ToolDefinitionResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllToolDefinitionsWithEagerRelationshipsIsEnabled() throws Exception {
-        ToolDefinitionResource toolDefinitionResource = new ToolDefinitionResource(toolDefinitionServiceMock);
-        when(toolDefinitionServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ToolDefinitionResource toolDefinitionResource = new ToolDefinitionResource(toolDefinitionRepositoryMock);
+        when(toolDefinitionRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restToolDefinitionMockMvc = MockMvcBuilders.standaloneSetup(toolDefinitionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -203,13 +189,13 @@ public class ToolDefinitionResourceIT {
         restToolDefinitionMockMvc.perform(get("/api/tool-definitions?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(toolDefinitionServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(toolDefinitionRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllToolDefinitionsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ToolDefinitionResource toolDefinitionResource = new ToolDefinitionResource(toolDefinitionServiceMock);
-            when(toolDefinitionServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ToolDefinitionResource toolDefinitionResource = new ToolDefinitionResource(toolDefinitionRepositoryMock);
+            when(toolDefinitionRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restToolDefinitionMockMvc = MockMvcBuilders.standaloneSetup(toolDefinitionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -219,7 +205,7 @@ public class ToolDefinitionResourceIT {
         restToolDefinitionMockMvc.perform(get("/api/tool-definitions?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(toolDefinitionServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(toolDefinitionRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -262,11 +248,10 @@ public class ToolDefinitionResourceIT {
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION);
-        ToolDefinitionDTO toolDefinitionDTO = toolDefinitionMapper.toDto(updatedToolDefinition);
 
         restToolDefinitionMockMvc.perform(put("/api/tool-definitions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolDefinitionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedToolDefinition)))
             .andExpect(status().isOk());
 
         // Validate the ToolDefinition in the database
@@ -284,12 +269,11 @@ public class ToolDefinitionResourceIT {
         int databaseSizeBeforeUpdate = toolDefinitionRepository.findAll().size();
 
         // Create the ToolDefinition
-        ToolDefinitionDTO toolDefinitionDTO = toolDefinitionMapper.toDto(toolDefinition);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restToolDefinitionMockMvc.perform(put("/api/tool-definitions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(toolDefinitionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(toolDefinition)))
             .andExpect(status().isBadRequest());
 
         // Validate the ToolDefinition in the database
@@ -328,28 +312,5 @@ public class ToolDefinitionResourceIT {
         assertThat(toolDefinition1).isNotEqualTo(toolDefinition2);
         toolDefinition1.setId(null);
         assertThat(toolDefinition1).isNotEqualTo(toolDefinition2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ToolDefinitionDTO.class);
-        ToolDefinitionDTO toolDefinitionDTO1 = new ToolDefinitionDTO();
-        toolDefinitionDTO1.setId(1L);
-        ToolDefinitionDTO toolDefinitionDTO2 = new ToolDefinitionDTO();
-        assertThat(toolDefinitionDTO1).isNotEqualTo(toolDefinitionDTO2);
-        toolDefinitionDTO2.setId(toolDefinitionDTO1.getId());
-        assertThat(toolDefinitionDTO1).isEqualTo(toolDefinitionDTO2);
-        toolDefinitionDTO2.setId(2L);
-        assertThat(toolDefinitionDTO1).isNotEqualTo(toolDefinitionDTO2);
-        toolDefinitionDTO1.setId(null);
-        assertThat(toolDefinitionDTO1).isNotEqualTo(toolDefinitionDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(toolDefinitionMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(toolDefinitionMapper.fromId(null)).isNull();
     }
 }

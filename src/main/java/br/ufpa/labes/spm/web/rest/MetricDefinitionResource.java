@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.MetricDefinitionService;
+import br.ufpa.labes.spm.domain.MetricDefinition;
+import br.ufpa.labes.spm.repository.MetricDefinitionRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.MetricDefinitionDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class MetricDefinitionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final MetricDefinitionService metricDefinitionService;
+    private final MetricDefinitionRepository metricDefinitionRepository;
 
-    public MetricDefinitionResource(MetricDefinitionService metricDefinitionService) {
-        this.metricDefinitionService = metricDefinitionService;
+    public MetricDefinitionResource(MetricDefinitionRepository metricDefinitionRepository) {
+        this.metricDefinitionRepository = metricDefinitionRepository;
     }
 
     /**
      * {@code POST  /metric-definitions} : Create a new metricDefinition.
      *
-     * @param metricDefinitionDTO the metricDefinitionDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new metricDefinitionDTO, or with status {@code 400 (Bad Request)} if the metricDefinition has already an ID.
+     * @param metricDefinition the metricDefinition to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new metricDefinition, or with status {@code 400 (Bad Request)} if the metricDefinition has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/metric-definitions")
-    public ResponseEntity<MetricDefinitionDTO> createMetricDefinition(@RequestBody MetricDefinitionDTO metricDefinitionDTO) throws URISyntaxException {
-        log.debug("REST request to save MetricDefinition : {}", metricDefinitionDTO);
-        if (metricDefinitionDTO.getId() != null) {
+    public ResponseEntity<MetricDefinition> createMetricDefinition(@RequestBody MetricDefinition metricDefinition) throws URISyntaxException {
+        log.debug("REST request to save MetricDefinition : {}", metricDefinition);
+        if (metricDefinition.getId() != null) {
             throw new BadRequestAlertException("A new metricDefinition cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        MetricDefinitionDTO result = metricDefinitionService.save(metricDefinitionDTO);
+        MetricDefinition result = metricDefinitionRepository.save(metricDefinition);
         return ResponseEntity.created(new URI("/api/metric-definitions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class MetricDefinitionResource {
     /**
      * {@code PUT  /metric-definitions} : Updates an existing metricDefinition.
      *
-     * @param metricDefinitionDTO the metricDefinitionDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated metricDefinitionDTO,
-     * or with status {@code 400 (Bad Request)} if the metricDefinitionDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the metricDefinitionDTO couldn't be updated.
+     * @param metricDefinition the metricDefinition to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated metricDefinition,
+     * or with status {@code 400 (Bad Request)} if the metricDefinition is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the metricDefinition couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/metric-definitions")
-    public ResponseEntity<MetricDefinitionDTO> updateMetricDefinition(@RequestBody MetricDefinitionDTO metricDefinitionDTO) throws URISyntaxException {
-        log.debug("REST request to update MetricDefinition : {}", metricDefinitionDTO);
-        if (metricDefinitionDTO.getId() == null) {
+    public ResponseEntity<MetricDefinition> updateMetricDefinition(@RequestBody MetricDefinition metricDefinition) throws URISyntaxException {
+        log.debug("REST request to update MetricDefinition : {}", metricDefinition);
+        if (metricDefinition.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        MetricDefinitionDTO result = metricDefinitionService.save(metricDefinitionDTO);
+        MetricDefinition result = metricDefinitionRepository.save(metricDefinition);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, metricDefinitionDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, metricDefinition.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class MetricDefinitionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of metricDefinitions in body.
      */
     @GetMapping("/metric-definitions")
-    public List<MetricDefinitionDTO> getAllMetricDefinitions() {
+    public List<MetricDefinition> getAllMetricDefinitions() {
         log.debug("REST request to get all MetricDefinitions");
-        return metricDefinitionService.findAll();
+        return metricDefinitionRepository.findAll();
     }
 
     /**
      * {@code GET  /metric-definitions/:id} : get the "id" metricDefinition.
      *
-     * @param id the id of the metricDefinitionDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the metricDefinitionDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the metricDefinition to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the metricDefinition, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/metric-definitions/{id}")
-    public ResponseEntity<MetricDefinitionDTO> getMetricDefinition(@PathVariable Long id) {
+    public ResponseEntity<MetricDefinition> getMetricDefinition(@PathVariable Long id) {
         log.debug("REST request to get MetricDefinition : {}", id);
-        Optional<MetricDefinitionDTO> metricDefinitionDTO = metricDefinitionService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(metricDefinitionDTO);
+        Optional<MetricDefinition> metricDefinition = metricDefinitionRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(metricDefinition);
     }
 
     /**
      * {@code DELETE  /metric-definitions/:id} : delete the "id" metricDefinition.
      *
-     * @param id the id of the metricDefinitionDTO to delete.
+     * @param id the id of the metricDefinition to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/metric-definitions/{id}")
     public ResponseEntity<Void> deleteMetricDefinition(@PathVariable Long id) {
         log.debug("REST request to delete MetricDefinition : {}", id);
-        metricDefinitionService.delete(id);
+        metricDefinitionRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Driver;
 import br.ufpa.labes.spm.repository.DriverRepository;
-import br.ufpa.labes.spm.service.DriverService;
-import br.ufpa.labes.spm.service.dto.DriverDTO;
-import br.ufpa.labes.spm.service.mapper.DriverMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -60,12 +57,6 @@ public class DriverResourceIT {
     private DriverRepository driverRepository;
 
     @Autowired
-    private DriverMapper driverMapper;
-
-    @Autowired
-    private DriverService driverService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -87,7 +78,7 @@ public class DriverResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final DriverResource driverResource = new DriverResource(driverService);
+        final DriverResource driverResource = new DriverResource(driverRepository);
         this.restDriverMockMvc = MockMvcBuilders.standaloneSetup(driverResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -140,10 +131,9 @@ public class DriverResourceIT {
         int databaseSizeBeforeCreate = driverRepository.findAll().size();
 
         // Create the Driver
-        DriverDTO driverDTO = driverMapper.toDto(driver);
         restDriverMockMvc.perform(post("/api/drivers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(driverDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(driver)))
             .andExpect(status().isCreated());
 
         // Validate the Driver in the database
@@ -165,12 +155,11 @@ public class DriverResourceIT {
 
         // Create the Driver with an existing ID
         driver.setId(1L);
-        DriverDTO driverDTO = driverMapper.toDto(driver);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDriverMockMvc.perform(post("/api/drivers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(driverDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(driver)))
             .andExpect(status().isBadRequest());
 
         // Validate the Driver in the database
@@ -244,11 +233,10 @@ public class DriverResourceIT {
             .appKeyGoogle(UPDATED_APP_KEY_GOOGLE)
             .appSecretGoogle(UPDATED_APP_SECRET_GOOGLE)
             .requestUrl(UPDATED_REQUEST_URL);
-        DriverDTO driverDTO = driverMapper.toDto(updatedDriver);
 
         restDriverMockMvc.perform(put("/api/drivers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(driverDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedDriver)))
             .andExpect(status().isOk());
 
         // Validate the Driver in the database
@@ -269,12 +257,11 @@ public class DriverResourceIT {
         int databaseSizeBeforeUpdate = driverRepository.findAll().size();
 
         // Create the Driver
-        DriverDTO driverDTO = driverMapper.toDto(driver);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDriverMockMvc.perform(put("/api/drivers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(driverDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(driver)))
             .andExpect(status().isBadRequest());
 
         // Validate the Driver in the database
@@ -313,28 +300,5 @@ public class DriverResourceIT {
         assertThat(driver1).isNotEqualTo(driver2);
         driver1.setId(null);
         assertThat(driver1).isNotEqualTo(driver2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DriverDTO.class);
-        DriverDTO driverDTO1 = new DriverDTO();
-        driverDTO1.setId(1L);
-        DriverDTO driverDTO2 = new DriverDTO();
-        assertThat(driverDTO1).isNotEqualTo(driverDTO2);
-        driverDTO2.setId(driverDTO1.getId());
-        assertThat(driverDTO1).isEqualTo(driverDTO2);
-        driverDTO2.setId(2L);
-        assertThat(driverDTO1).isNotEqualTo(driverDTO2);
-        driverDTO1.setId(null);
-        assertThat(driverDTO1).isNotEqualTo(driverDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(driverMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(driverMapper.fromId(null)).isNull();
     }
 }

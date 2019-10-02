@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Role;
 import br.ufpa.labes.spm.repository.RoleRepository;
-import br.ufpa.labes.spm.service.RoleService;
-import br.ufpa.labes.spm.service.dto.RoleDTO;
-import br.ufpa.labes.spm.service.mapper.RoleMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class RoleResourceIT {
     private RoleRepository roleRepository;
 
     @Autowired
-    private RoleMapper roleMapper;
-
-    @Autowired
-    private RoleService roleService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class RoleResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RoleResource roleResource = new RoleResource(roleService);
+        final RoleResource roleResource = new RoleResource(roleRepository);
         this.restRoleMockMvc = MockMvcBuilders.standaloneSetup(roleResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -126,10 +117,9 @@ public class RoleResourceIT {
         int databaseSizeBeforeCreate = roleRepository.findAll().size();
 
         // Create the Role
-        RoleDTO roleDTO = roleMapper.toDto(role);
         restRoleMockMvc.perform(post("/api/roles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(role)))
             .andExpect(status().isCreated());
 
         // Validate the Role in the database
@@ -148,12 +138,11 @@ public class RoleResourceIT {
 
         // Create the Role with an existing ID
         role.setId(1L);
-        RoleDTO roleDTO = roleMapper.toDto(role);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restRoleMockMvc.perform(post("/api/roles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(role)))
             .andExpect(status().isBadRequest());
 
         // Validate the Role in the database
@@ -218,11 +207,10 @@ public class RoleResourceIT {
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION);
-        RoleDTO roleDTO = roleMapper.toDto(updatedRole);
 
         restRoleMockMvc.perform(put("/api/roles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedRole)))
             .andExpect(status().isOk());
 
         // Validate the Role in the database
@@ -240,12 +228,11 @@ public class RoleResourceIT {
         int databaseSizeBeforeUpdate = roleRepository.findAll().size();
 
         // Create the Role
-        RoleDTO roleDTO = roleMapper.toDto(role);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restRoleMockMvc.perform(put("/api/roles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(role)))
             .andExpect(status().isBadRequest());
 
         // Validate the Role in the database
@@ -284,28 +271,5 @@ public class RoleResourceIT {
         assertThat(role1).isNotEqualTo(role2);
         role1.setId(null);
         assertThat(role1).isNotEqualTo(role2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RoleDTO.class);
-        RoleDTO roleDTO1 = new RoleDTO();
-        roleDTO1.setId(1L);
-        RoleDTO roleDTO2 = new RoleDTO();
-        assertThat(roleDTO1).isNotEqualTo(roleDTO2);
-        roleDTO2.setId(roleDTO1.getId());
-        assertThat(roleDTO1).isEqualTo(roleDTO2);
-        roleDTO2.setId(2L);
-        assertThat(roleDTO1).isNotEqualTo(roleDTO2);
-        roleDTO1.setId(null);
-        assertThat(roleDTO1).isNotEqualTo(roleDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(roleMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(roleMapper.fromId(null)).isNull();
     }
 }

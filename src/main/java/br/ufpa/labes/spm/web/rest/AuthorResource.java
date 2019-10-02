@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AuthorService;
+import br.ufpa.labes.spm.domain.Author;
+import br.ufpa.labes.spm.repository.AuthorRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AuthorDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -33,26 +33,26 @@ public class AuthorResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AuthorService authorService;
+    private final AuthorRepository authorRepository;
 
-    public AuthorResource(AuthorService authorService) {
-        this.authorService = authorService;
+    public AuthorResource(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
     }
 
     /**
      * {@code POST  /authors} : Create a new author.
      *
-     * @param authorDTO the authorDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new authorDTO, or with status {@code 400 (Bad Request)} if the author has already an ID.
+     * @param author the author to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new author, or with status {@code 400 (Bad Request)} if the author has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/authors")
-    public ResponseEntity<AuthorDTO> createAuthor(@Valid @RequestBody AuthorDTO authorDTO) throws URISyntaxException {
-        log.debug("REST request to save Author : {}", authorDTO);
-        if (authorDTO.getId() != null) {
+    public ResponseEntity<Author> createAuthor(@Valid @RequestBody Author author) throws URISyntaxException {
+        log.debug("REST request to save Author : {}", author);
+        if (author.getId() != null) {
             throw new BadRequestAlertException("A new author cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AuthorDTO result = authorService.save(authorDTO);
+        Author result = authorRepository.save(author);
         return ResponseEntity.created(new URI("/api/authors/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -61,21 +61,21 @@ public class AuthorResource {
     /**
      * {@code PUT  /authors} : Updates an existing author.
      *
-     * @param authorDTO the authorDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated authorDTO,
-     * or with status {@code 400 (Bad Request)} if the authorDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the authorDTO couldn't be updated.
+     * @param author the author to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated author,
+     * or with status {@code 400 (Bad Request)} if the author is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the author couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/authors")
-    public ResponseEntity<AuthorDTO> updateAuthor(@Valid @RequestBody AuthorDTO authorDTO) throws URISyntaxException {
-        log.debug("REST request to update Author : {}", authorDTO);
-        if (authorDTO.getId() == null) {
+    public ResponseEntity<Author> updateAuthor(@Valid @RequestBody Author author) throws URISyntaxException {
+        log.debug("REST request to update Author : {}", author);
+        if (author.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AuthorDTO result = authorService.save(authorDTO);
+        Author result = authorRepository.save(author);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, authorDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, author.getId().toString()))
             .body(result);
     }
 
@@ -86,34 +86,34 @@ public class AuthorResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of authors in body.
      */
     @GetMapping("/authors")
-    public List<AuthorDTO> getAllAuthors(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<Author> getAllAuthors(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Authors");
-        return authorService.findAll();
+        return authorRepository.findAllWithEagerRelationships();
     }
 
     /**
      * {@code GET  /authors/:id} : get the "id" author.
      *
-     * @param id the id of the authorDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the authorDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the author to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the author, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/authors/{id}")
-    public ResponseEntity<AuthorDTO> getAuthor(@PathVariable Long id) {
+    public ResponseEntity<Author> getAuthor(@PathVariable Long id) {
         log.debug("REST request to get Author : {}", id);
-        Optional<AuthorDTO> authorDTO = authorService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(authorDTO);
+        Optional<Author> author = authorRepository.findOneWithEagerRelationships(id);
+        return ResponseUtil.wrapOrNotFound(author);
     }
 
     /**
      * {@code DELETE  /authors/:id} : delete the "id" author.
      *
-     * @param id the id of the authorDTO to delete.
+     * @param id the id of the author to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/authors/{id}")
     public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
         log.debug("REST request to delete Author : {}", id);
-        authorService.delete(id);
+        authorRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

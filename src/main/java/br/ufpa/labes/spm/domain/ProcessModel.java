@@ -20,16 +20,6 @@ public class ProcessModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final transient String
-    REQUIREMENTS	= "Requirements",
-    ABSTRACT        = "Abstract",
-    INSTANTIATED	= "Instantiated",
-    ENACTING		= "Enacting",
-    FAILED          = "Failed",
-    CANCELED        = "Canceled",
-    MIXED           = "Mixed",
-    FINISHED        = "Finished";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.RoleService;
+import br.ufpa.labes.spm.domain.Role;
+import br.ufpa.labes.spm.repository.RoleRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.RoleDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class RoleResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final RoleService roleService;
+    private final RoleRepository roleRepository;
 
-    public RoleResource(RoleService roleService) {
-        this.roleService = roleService;
+    public RoleResource(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
     }
 
     /**
      * {@code POST  /roles} : Create a new role.
      *
-     * @param roleDTO the roleDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new roleDTO, or with status {@code 400 (Bad Request)} if the role has already an ID.
+     * @param role the role to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new role, or with status {@code 400 (Bad Request)} if the role has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/roles")
-    public ResponseEntity<RoleDTO> createRole(@RequestBody RoleDTO roleDTO) throws URISyntaxException {
-        log.debug("REST request to save Role : {}", roleDTO);
-        if (roleDTO.getId() != null) {
+    public ResponseEntity<Role> createRole(@RequestBody Role role) throws URISyntaxException {
+        log.debug("REST request to save Role : {}", role);
+        if (role.getId() != null) {
             throw new BadRequestAlertException("A new role cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        RoleDTO result = roleService.save(roleDTO);
+        Role result = roleRepository.save(role);
         return ResponseEntity.created(new URI("/api/roles/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class RoleResource {
     /**
      * {@code PUT  /roles} : Updates an existing role.
      *
-     * @param roleDTO the roleDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated roleDTO,
-     * or with status {@code 400 (Bad Request)} if the roleDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the roleDTO couldn't be updated.
+     * @param role the role to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated role,
+     * or with status {@code 400 (Bad Request)} if the role is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the role couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/roles")
-    public ResponseEntity<RoleDTO> updateRole(@RequestBody RoleDTO roleDTO) throws URISyntaxException {
-        log.debug("REST request to update Role : {}", roleDTO);
-        if (roleDTO.getId() == null) {
+    public ResponseEntity<Role> updateRole(@RequestBody Role role) throws URISyntaxException {
+        log.debug("REST request to update Role : {}", role);
+        if (role.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        RoleDTO result = roleService.save(roleDTO);
+        Role result = roleRepository.save(role);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, roleDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, role.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class RoleResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of roles in body.
      */
     @GetMapping("/roles")
-    public List<RoleDTO> getAllRoles() {
+    public List<Role> getAllRoles() {
         log.debug("REST request to get all Roles");
-        return roleService.findAll();
+        return roleRepository.findAll();
     }
 
     /**
      * {@code GET  /roles/:id} : get the "id" role.
      *
-     * @param id the id of the roleDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the roleDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the role to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the role, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/roles/{id}")
-    public ResponseEntity<RoleDTO> getRole(@PathVariable Long id) {
+    public ResponseEntity<Role> getRole(@PathVariable Long id) {
         log.debug("REST request to get Role : {}", id);
-        Optional<RoleDTO> roleDTO = roleService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(roleDTO);
+        Optional<Role> role = roleRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(role);
     }
 
     /**
      * {@code DELETE  /roles/:id} : delete the "id" role.
      *
-     * @param id the id of the roleDTO to delete.
+     * @param id the id of the role to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/roles/{id}")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         log.debug("REST request to delete Role : {}", id);
-        roleService.delete(id);
+        roleRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

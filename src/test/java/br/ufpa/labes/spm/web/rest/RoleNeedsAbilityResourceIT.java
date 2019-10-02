@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.RoleNeedsAbility;
 import br.ufpa.labes.spm.repository.RoleNeedsAbilityRepository;
-import br.ufpa.labes.spm.service.RoleNeedsAbilityService;
-import br.ufpa.labes.spm.service.dto.RoleNeedsAbilityDTO;
-import br.ufpa.labes.spm.service.mapper.RoleNeedsAbilityMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,12 +43,6 @@ public class RoleNeedsAbilityResourceIT {
     private RoleNeedsAbilityRepository roleNeedsAbilityRepository;
 
     @Autowired
-    private RoleNeedsAbilityMapper roleNeedsAbilityMapper;
-
-    @Autowired
-    private RoleNeedsAbilityService roleNeedsAbilityService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +64,7 @@ public class RoleNeedsAbilityResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RoleNeedsAbilityResource roleNeedsAbilityResource = new RoleNeedsAbilityResource(roleNeedsAbilityService);
+        final RoleNeedsAbilityResource roleNeedsAbilityResource = new RoleNeedsAbilityResource(roleNeedsAbilityRepository);
         this.restRoleNeedsAbilityMockMvc = MockMvcBuilders.standaloneSetup(roleNeedsAbilityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -116,10 +107,9 @@ public class RoleNeedsAbilityResourceIT {
         int databaseSizeBeforeCreate = roleNeedsAbilityRepository.findAll().size();
 
         // Create the RoleNeedsAbility
-        RoleNeedsAbilityDTO roleNeedsAbilityDTO = roleNeedsAbilityMapper.toDto(roleNeedsAbility);
         restRoleNeedsAbilityMockMvc.perform(post("/api/role-needs-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleNeedsAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(roleNeedsAbility)))
             .andExpect(status().isCreated());
 
         // Validate the RoleNeedsAbility in the database
@@ -136,12 +126,11 @@ public class RoleNeedsAbilityResourceIT {
 
         // Create the RoleNeedsAbility with an existing ID
         roleNeedsAbility.setId(1L);
-        RoleNeedsAbilityDTO roleNeedsAbilityDTO = roleNeedsAbilityMapper.toDto(roleNeedsAbility);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restRoleNeedsAbilityMockMvc.perform(post("/api/role-needs-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleNeedsAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(roleNeedsAbility)))
             .andExpect(status().isBadRequest());
 
         // Validate the RoleNeedsAbility in the database
@@ -200,11 +189,10 @@ public class RoleNeedsAbilityResourceIT {
         em.detach(updatedRoleNeedsAbility);
         updatedRoleNeedsAbility
             .degree(UPDATED_DEGREE);
-        RoleNeedsAbilityDTO roleNeedsAbilityDTO = roleNeedsAbilityMapper.toDto(updatedRoleNeedsAbility);
 
         restRoleNeedsAbilityMockMvc.perform(put("/api/role-needs-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleNeedsAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedRoleNeedsAbility)))
             .andExpect(status().isOk());
 
         // Validate the RoleNeedsAbility in the database
@@ -220,12 +208,11 @@ public class RoleNeedsAbilityResourceIT {
         int databaseSizeBeforeUpdate = roleNeedsAbilityRepository.findAll().size();
 
         // Create the RoleNeedsAbility
-        RoleNeedsAbilityDTO roleNeedsAbilityDTO = roleNeedsAbilityMapper.toDto(roleNeedsAbility);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restRoleNeedsAbilityMockMvc.perform(put("/api/role-needs-abilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(roleNeedsAbilityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(roleNeedsAbility)))
             .andExpect(status().isBadRequest());
 
         // Validate the RoleNeedsAbility in the database
@@ -264,28 +251,5 @@ public class RoleNeedsAbilityResourceIT {
         assertThat(roleNeedsAbility1).isNotEqualTo(roleNeedsAbility2);
         roleNeedsAbility1.setId(null);
         assertThat(roleNeedsAbility1).isNotEqualTo(roleNeedsAbility2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RoleNeedsAbilityDTO.class);
-        RoleNeedsAbilityDTO roleNeedsAbilityDTO1 = new RoleNeedsAbilityDTO();
-        roleNeedsAbilityDTO1.setId(1L);
-        RoleNeedsAbilityDTO roleNeedsAbilityDTO2 = new RoleNeedsAbilityDTO();
-        assertThat(roleNeedsAbilityDTO1).isNotEqualTo(roleNeedsAbilityDTO2);
-        roleNeedsAbilityDTO2.setId(roleNeedsAbilityDTO1.getId());
-        assertThat(roleNeedsAbilityDTO1).isEqualTo(roleNeedsAbilityDTO2);
-        roleNeedsAbilityDTO2.setId(2L);
-        assertThat(roleNeedsAbilityDTO1).isNotEqualTo(roleNeedsAbilityDTO2);
-        roleNeedsAbilityDTO1.setId(null);
-        assertThat(roleNeedsAbilityDTO1).isNotEqualTo(roleNeedsAbilityDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(roleNeedsAbilityMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(roleNeedsAbilityMapper.fromId(null)).isNull();
     }
 }

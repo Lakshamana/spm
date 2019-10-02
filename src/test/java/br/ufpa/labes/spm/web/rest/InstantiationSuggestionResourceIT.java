@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.InstantiationSuggestion;
 import br.ufpa.labes.spm.repository.InstantiationSuggestionRepository;
-import br.ufpa.labes.spm.service.InstantiationSuggestionService;
-import br.ufpa.labes.spm.service.dto.InstantiationSuggestionDTO;
-import br.ufpa.labes.spm.service.mapper.InstantiationSuggestionMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class InstantiationSuggestionResourceIT {
     private InstantiationSuggestionRepository instantiationSuggestionRepository;
 
     @Autowired
-    private InstantiationSuggestionMapper instantiationSuggestionMapper;
-
-    @Autowired
-    private InstantiationSuggestionService instantiationSuggestionService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class InstantiationSuggestionResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final InstantiationSuggestionResource instantiationSuggestionResource = new InstantiationSuggestionResource(instantiationSuggestionService);
+        final InstantiationSuggestionResource instantiationSuggestionResource = new InstantiationSuggestionResource(instantiationSuggestionRepository);
         this.restInstantiationSuggestionMockMvc = MockMvcBuilders.standaloneSetup(instantiationSuggestionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class InstantiationSuggestionResourceIT {
         int databaseSizeBeforeCreate = instantiationSuggestionRepository.findAll().size();
 
         // Create the InstantiationSuggestion
-        InstantiationSuggestionDTO instantiationSuggestionDTO = instantiationSuggestionMapper.toDto(instantiationSuggestion);
         restInstantiationSuggestionMockMvc.perform(post("/api/instantiation-suggestions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(instantiationSuggestionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(instantiationSuggestion)))
             .andExpect(status().isCreated());
 
         // Validate the InstantiationSuggestion in the database
@@ -129,12 +119,11 @@ public class InstantiationSuggestionResourceIT {
 
         // Create the InstantiationSuggestion with an existing ID
         instantiationSuggestion.setId(1L);
-        InstantiationSuggestionDTO instantiationSuggestionDTO = instantiationSuggestionMapper.toDto(instantiationSuggestion);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInstantiationSuggestionMockMvc.perform(post("/api/instantiation-suggestions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(instantiationSuggestionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(instantiationSuggestion)))
             .andExpect(status().isBadRequest());
 
         // Validate the InstantiationSuggestion in the database
@@ -189,11 +178,10 @@ public class InstantiationSuggestionResourceIT {
         InstantiationSuggestion updatedInstantiationSuggestion = instantiationSuggestionRepository.findById(instantiationSuggestion.getId()).get();
         // Disconnect from session so that the updates on updatedInstantiationSuggestion are not directly saved in db
         em.detach(updatedInstantiationSuggestion);
-        InstantiationSuggestionDTO instantiationSuggestionDTO = instantiationSuggestionMapper.toDto(updatedInstantiationSuggestion);
 
         restInstantiationSuggestionMockMvc.perform(put("/api/instantiation-suggestions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(instantiationSuggestionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedInstantiationSuggestion)))
             .andExpect(status().isOk());
 
         // Validate the InstantiationSuggestion in the database
@@ -208,12 +196,11 @@ public class InstantiationSuggestionResourceIT {
         int databaseSizeBeforeUpdate = instantiationSuggestionRepository.findAll().size();
 
         // Create the InstantiationSuggestion
-        InstantiationSuggestionDTO instantiationSuggestionDTO = instantiationSuggestionMapper.toDto(instantiationSuggestion);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInstantiationSuggestionMockMvc.perform(put("/api/instantiation-suggestions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(instantiationSuggestionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(instantiationSuggestion)))
             .andExpect(status().isBadRequest());
 
         // Validate the InstantiationSuggestion in the database
@@ -252,28 +239,5 @@ public class InstantiationSuggestionResourceIT {
         assertThat(instantiationSuggestion1).isNotEqualTo(instantiationSuggestion2);
         instantiationSuggestion1.setId(null);
         assertThat(instantiationSuggestion1).isNotEqualTo(instantiationSuggestion2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(InstantiationSuggestionDTO.class);
-        InstantiationSuggestionDTO instantiationSuggestionDTO1 = new InstantiationSuggestionDTO();
-        instantiationSuggestionDTO1.setId(1L);
-        InstantiationSuggestionDTO instantiationSuggestionDTO2 = new InstantiationSuggestionDTO();
-        assertThat(instantiationSuggestionDTO1).isNotEqualTo(instantiationSuggestionDTO2);
-        instantiationSuggestionDTO2.setId(instantiationSuggestionDTO1.getId());
-        assertThat(instantiationSuggestionDTO1).isEqualTo(instantiationSuggestionDTO2);
-        instantiationSuggestionDTO2.setId(2L);
-        assertThat(instantiationSuggestionDTO1).isNotEqualTo(instantiationSuggestionDTO2);
-        instantiationSuggestionDTO1.setId(null);
-        assertThat(instantiationSuggestionDTO1).isNotEqualTo(instantiationSuggestionDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(instantiationSuggestionMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(instantiationSuggestionMapper.fromId(null)).isNull();
     }
 }

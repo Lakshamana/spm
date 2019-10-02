@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AgentMetric;
 import br.ufpa.labes.spm.repository.AgentMetricRepository;
-import br.ufpa.labes.spm.service.AgentMetricService;
-import br.ufpa.labes.spm.service.dto.AgentMetricDTO;
-import br.ufpa.labes.spm.service.mapper.AgentMetricMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class AgentMetricResourceIT {
     private AgentMetricRepository agentMetricRepository;
 
     @Autowired
-    private AgentMetricMapper agentMetricMapper;
-
-    @Autowired
-    private AgentMetricService agentMetricService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class AgentMetricResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgentMetricResource agentMetricResource = new AgentMetricResource(agentMetricService);
+        final AgentMetricResource agentMetricResource = new AgentMetricResource(agentMetricRepository);
         this.restAgentMetricMockMvc = MockMvcBuilders.standaloneSetup(agentMetricResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class AgentMetricResourceIT {
         int databaseSizeBeforeCreate = agentMetricRepository.findAll().size();
 
         // Create the AgentMetric
-        AgentMetricDTO agentMetricDTO = agentMetricMapper.toDto(agentMetric);
         restAgentMetricMockMvc.perform(post("/api/agent-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentMetric)))
             .andExpect(status().isCreated());
 
         // Validate the AgentMetric in the database
@@ -129,12 +119,11 @@ public class AgentMetricResourceIT {
 
         // Create the AgentMetric with an existing ID
         agentMetric.setId(1L);
-        AgentMetricDTO agentMetricDTO = agentMetricMapper.toDto(agentMetric);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAgentMetricMockMvc.perform(post("/api/agent-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentMetric in the database
@@ -189,11 +178,10 @@ public class AgentMetricResourceIT {
         AgentMetric updatedAgentMetric = agentMetricRepository.findById(agentMetric.getId()).get();
         // Disconnect from session so that the updates on updatedAgentMetric are not directly saved in db
         em.detach(updatedAgentMetric);
-        AgentMetricDTO agentMetricDTO = agentMetricMapper.toDto(updatedAgentMetric);
 
         restAgentMetricMockMvc.perform(put("/api/agent-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAgentMetric)))
             .andExpect(status().isOk());
 
         // Validate the AgentMetric in the database
@@ -208,12 +196,11 @@ public class AgentMetricResourceIT {
         int databaseSizeBeforeUpdate = agentMetricRepository.findAll().size();
 
         // Create the AgentMetric
-        AgentMetricDTO agentMetricDTO = agentMetricMapper.toDto(agentMetric);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAgentMetricMockMvc.perform(put("/api/agent-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentMetric in the database
@@ -252,28 +239,5 @@ public class AgentMetricResourceIT {
         assertThat(agentMetric1).isNotEqualTo(agentMetric2);
         agentMetric1.setId(null);
         assertThat(agentMetric1).isNotEqualTo(agentMetric2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgentMetricDTO.class);
-        AgentMetricDTO agentMetricDTO1 = new AgentMetricDTO();
-        agentMetricDTO1.setId(1L);
-        AgentMetricDTO agentMetricDTO2 = new AgentMetricDTO();
-        assertThat(agentMetricDTO1).isNotEqualTo(agentMetricDTO2);
-        agentMetricDTO2.setId(agentMetricDTO1.getId());
-        assertThat(agentMetricDTO1).isEqualTo(agentMetricDTO2);
-        agentMetricDTO2.setId(2L);
-        assertThat(agentMetricDTO1).isNotEqualTo(agentMetricDTO2);
-        agentMetricDTO1.setId(null);
-        assertThat(agentMetricDTO1).isNotEqualTo(agentMetricDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(agentMetricMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(agentMetricMapper.fromId(null)).isNull();
     }
 }

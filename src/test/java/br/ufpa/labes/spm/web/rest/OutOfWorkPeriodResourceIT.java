@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.OutOfWorkPeriod;
 import br.ufpa.labes.spm.repository.OutOfWorkPeriodRepository;
-import br.ufpa.labes.spm.service.OutOfWorkPeriodService;
-import br.ufpa.labes.spm.service.dto.OutOfWorkPeriodDTO;
-import br.ufpa.labes.spm.service.mapper.OutOfWorkPeriodMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class OutOfWorkPeriodResourceIT {
     private OutOfWorkPeriodRepository outOfWorkPeriodRepository;
 
     @Autowired
-    private OutOfWorkPeriodMapper outOfWorkPeriodMapper;
-
-    @Autowired
-    private OutOfWorkPeriodService outOfWorkPeriodService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class OutOfWorkPeriodResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final OutOfWorkPeriodResource outOfWorkPeriodResource = new OutOfWorkPeriodResource(outOfWorkPeriodService);
+        final OutOfWorkPeriodResource outOfWorkPeriodResource = new OutOfWorkPeriodResource(outOfWorkPeriodRepository);
         this.restOutOfWorkPeriodMockMvc = MockMvcBuilders.standaloneSetup(outOfWorkPeriodResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -126,10 +117,9 @@ public class OutOfWorkPeriodResourceIT {
         int databaseSizeBeforeCreate = outOfWorkPeriodRepository.findAll().size();
 
         // Create the OutOfWorkPeriod
-        OutOfWorkPeriodDTO outOfWorkPeriodDTO = outOfWorkPeriodMapper.toDto(outOfWorkPeriod);
         restOutOfWorkPeriodMockMvc.perform(post("/api/out-of-work-periods")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(outOfWorkPeriodDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(outOfWorkPeriod)))
             .andExpect(status().isCreated());
 
         // Validate the OutOfWorkPeriod in the database
@@ -148,12 +138,11 @@ public class OutOfWorkPeriodResourceIT {
 
         // Create the OutOfWorkPeriod with an existing ID
         outOfWorkPeriod.setId(1L);
-        OutOfWorkPeriodDTO outOfWorkPeriodDTO = outOfWorkPeriodMapper.toDto(outOfWorkPeriod);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restOutOfWorkPeriodMockMvc.perform(post("/api/out-of-work-periods")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(outOfWorkPeriodDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(outOfWorkPeriod)))
             .andExpect(status().isBadRequest());
 
         // Validate the OutOfWorkPeriod in the database
@@ -218,11 +207,10 @@ public class OutOfWorkPeriodResourceIT {
             .why(UPDATED_WHY)
             .fromDate(UPDATED_FROM_DATE)
             .toDate(UPDATED_TO_DATE);
-        OutOfWorkPeriodDTO outOfWorkPeriodDTO = outOfWorkPeriodMapper.toDto(updatedOutOfWorkPeriod);
 
         restOutOfWorkPeriodMockMvc.perform(put("/api/out-of-work-periods")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(outOfWorkPeriodDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedOutOfWorkPeriod)))
             .andExpect(status().isOk());
 
         // Validate the OutOfWorkPeriod in the database
@@ -240,12 +228,11 @@ public class OutOfWorkPeriodResourceIT {
         int databaseSizeBeforeUpdate = outOfWorkPeriodRepository.findAll().size();
 
         // Create the OutOfWorkPeriod
-        OutOfWorkPeriodDTO outOfWorkPeriodDTO = outOfWorkPeriodMapper.toDto(outOfWorkPeriod);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restOutOfWorkPeriodMockMvc.perform(put("/api/out-of-work-periods")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(outOfWorkPeriodDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(outOfWorkPeriod)))
             .andExpect(status().isBadRequest());
 
         // Validate the OutOfWorkPeriod in the database
@@ -284,28 +271,5 @@ public class OutOfWorkPeriodResourceIT {
         assertThat(outOfWorkPeriod1).isNotEqualTo(outOfWorkPeriod2);
         outOfWorkPeriod1.setId(null);
         assertThat(outOfWorkPeriod1).isNotEqualTo(outOfWorkPeriod2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(OutOfWorkPeriodDTO.class);
-        OutOfWorkPeriodDTO outOfWorkPeriodDTO1 = new OutOfWorkPeriodDTO();
-        outOfWorkPeriodDTO1.setId(1L);
-        OutOfWorkPeriodDTO outOfWorkPeriodDTO2 = new OutOfWorkPeriodDTO();
-        assertThat(outOfWorkPeriodDTO1).isNotEqualTo(outOfWorkPeriodDTO2);
-        outOfWorkPeriodDTO2.setId(outOfWorkPeriodDTO1.getId());
-        assertThat(outOfWorkPeriodDTO1).isEqualTo(outOfWorkPeriodDTO2);
-        outOfWorkPeriodDTO2.setId(2L);
-        assertThat(outOfWorkPeriodDTO1).isNotEqualTo(outOfWorkPeriodDTO2);
-        outOfWorkPeriodDTO1.setId(null);
-        assertThat(outOfWorkPeriodDTO1).isNotEqualTo(outOfWorkPeriodDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(outOfWorkPeriodMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(outOfWorkPeriodMapper.fromId(null)).isNull();
     }
 }

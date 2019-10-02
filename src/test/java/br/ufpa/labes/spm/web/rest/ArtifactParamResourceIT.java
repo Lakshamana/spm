@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ArtifactParam;
 import br.ufpa.labes.spm.repository.ArtifactParamRepository;
-import br.ufpa.labes.spm.service.ArtifactParamService;
-import br.ufpa.labes.spm.service.dto.ArtifactParamDTO;
-import br.ufpa.labes.spm.service.mapper.ArtifactParamMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ArtifactParamResourceIT {
     private ArtifactParamRepository artifactParamRepository;
 
     @Autowired
-    private ArtifactParamMapper artifactParamMapper;
-
-    @Autowired
-    private ArtifactParamService artifactParamService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ArtifactParamResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ArtifactParamResource artifactParamResource = new ArtifactParamResource(artifactParamService);
+        final ArtifactParamResource artifactParamResource = new ArtifactParamResource(artifactParamRepository);
         this.restArtifactParamMockMvc = MockMvcBuilders.standaloneSetup(artifactParamResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ArtifactParamResourceIT {
         int databaseSizeBeforeCreate = artifactParamRepository.findAll().size();
 
         // Create the ArtifactParam
-        ArtifactParamDTO artifactParamDTO = artifactParamMapper.toDto(artifactParam);
         restArtifactParamMockMvc.perform(post("/api/artifact-params")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactParamDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactParam)))
             .andExpect(status().isCreated());
 
         // Validate the ArtifactParam in the database
@@ -129,12 +119,11 @@ public class ArtifactParamResourceIT {
 
         // Create the ArtifactParam with an existing ID
         artifactParam.setId(1L);
-        ArtifactParamDTO artifactParamDTO = artifactParamMapper.toDto(artifactParam);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restArtifactParamMockMvc.perform(post("/api/artifact-params")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactParamDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactParam)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactParam in the database
@@ -189,11 +178,10 @@ public class ArtifactParamResourceIT {
         ArtifactParam updatedArtifactParam = artifactParamRepository.findById(artifactParam.getId()).get();
         // Disconnect from session so that the updates on updatedArtifactParam are not directly saved in db
         em.detach(updatedArtifactParam);
-        ArtifactParamDTO artifactParamDTO = artifactParamMapper.toDto(updatedArtifactParam);
 
         restArtifactParamMockMvc.perform(put("/api/artifact-params")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactParamDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedArtifactParam)))
             .andExpect(status().isOk());
 
         // Validate the ArtifactParam in the database
@@ -208,12 +196,11 @@ public class ArtifactParamResourceIT {
         int databaseSizeBeforeUpdate = artifactParamRepository.findAll().size();
 
         // Create the ArtifactParam
-        ArtifactParamDTO artifactParamDTO = artifactParamMapper.toDto(artifactParam);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restArtifactParamMockMvc.perform(put("/api/artifact-params")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactParamDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactParam)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactParam in the database
@@ -252,28 +239,5 @@ public class ArtifactParamResourceIT {
         assertThat(artifactParam1).isNotEqualTo(artifactParam2);
         artifactParam1.setId(null);
         assertThat(artifactParam1).isNotEqualTo(artifactParam2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ArtifactParamDTO.class);
-        ArtifactParamDTO artifactParamDTO1 = new ArtifactParamDTO();
-        artifactParamDTO1.setId(1L);
-        ArtifactParamDTO artifactParamDTO2 = new ArtifactParamDTO();
-        assertThat(artifactParamDTO1).isNotEqualTo(artifactParamDTO2);
-        artifactParamDTO2.setId(artifactParamDTO1.getId());
-        assertThat(artifactParamDTO1).isEqualTo(artifactParamDTO2);
-        artifactParamDTO2.setId(2L);
-        assertThat(artifactParamDTO1).isNotEqualTo(artifactParamDTO2);
-        artifactParamDTO1.setId(null);
-        assertThat(artifactParamDTO1).isNotEqualTo(artifactParamDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(artifactParamMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(artifactParamMapper.fromId(null)).isNull();
     }
 }

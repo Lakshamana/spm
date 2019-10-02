@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.StructureService;
+import br.ufpa.labes.spm.domain.Structure;
+import br.ufpa.labes.spm.repository.StructureRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.StructureDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class StructureResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final StructureService structureService;
+    private final StructureRepository structureRepository;
 
-    public StructureResource(StructureService structureService) {
-        this.structureService = structureService;
+    public StructureResource(StructureRepository structureRepository) {
+        this.structureRepository = structureRepository;
     }
 
     /**
      * {@code POST  /structures} : Create a new structure.
      *
-     * @param structureDTO the structureDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new structureDTO, or with status {@code 400 (Bad Request)} if the structure has already an ID.
+     * @param structure the structure to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new structure, or with status {@code 400 (Bad Request)} if the structure has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/structures")
-    public ResponseEntity<StructureDTO> createStructure(@RequestBody StructureDTO structureDTO) throws URISyntaxException {
-        log.debug("REST request to save Structure : {}", structureDTO);
-        if (structureDTO.getId() != null) {
+    public ResponseEntity<Structure> createStructure(@RequestBody Structure structure) throws URISyntaxException {
+        log.debug("REST request to save Structure : {}", structure);
+        if (structure.getId() != null) {
             throw new BadRequestAlertException("A new structure cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        StructureDTO result = structureService.save(structureDTO);
+        Structure result = structureRepository.save(structure);
         return ResponseEntity.created(new URI("/api/structures/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class StructureResource {
     /**
      * {@code PUT  /structures} : Updates an existing structure.
      *
-     * @param structureDTO the structureDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated structureDTO,
-     * or with status {@code 400 (Bad Request)} if the structureDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the structureDTO couldn't be updated.
+     * @param structure the structure to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated structure,
+     * or with status {@code 400 (Bad Request)} if the structure is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the structure couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/structures")
-    public ResponseEntity<StructureDTO> updateStructure(@RequestBody StructureDTO structureDTO) throws URISyntaxException {
-        log.debug("REST request to update Structure : {}", structureDTO);
-        if (structureDTO.getId() == null) {
+    public ResponseEntity<Structure> updateStructure(@RequestBody Structure structure) throws URISyntaxException {
+        log.debug("REST request to update Structure : {}", structure);
+        if (structure.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        StructureDTO result = structureService.save(structureDTO);
+        Structure result = structureRepository.save(structure);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, structureDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, structure.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class StructureResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of structures in body.
      */
     @GetMapping("/structures")
-    public List<StructureDTO> getAllStructures() {
+    public List<Structure> getAllStructures() {
         log.debug("REST request to get all Structures");
-        return structureService.findAll();
+        return structureRepository.findAll();
     }
 
     /**
      * {@code GET  /structures/:id} : get the "id" structure.
      *
-     * @param id the id of the structureDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the structureDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the structure to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the structure, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/structures/{id}")
-    public ResponseEntity<StructureDTO> getStructure(@PathVariable Long id) {
+    public ResponseEntity<Structure> getStructure(@PathVariable Long id) {
         log.debug("REST request to get Structure : {}", id);
-        Optional<StructureDTO> structureDTO = structureService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(structureDTO);
+        Optional<Structure> structure = structureRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(structure);
     }
 
     /**
      * {@code DELETE  /structures/:id} : delete the "id" structure.
      *
-     * @param id the id of the structureDTO to delete.
+     * @param id the id of the structure to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/structures/{id}")
     public ResponseEntity<Void> deleteStructure(@PathVariable Long id) {
         log.debug("REST request to delete Structure : {}", id);
-        structureService.delete(id);
+        structureRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

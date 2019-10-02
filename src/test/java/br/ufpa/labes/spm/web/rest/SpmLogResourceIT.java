@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.SpmLog;
 import br.ufpa.labes.spm.repository.SpmLogRepository;
-import br.ufpa.labes.spm.service.SpmLogService;
-import br.ufpa.labes.spm.service.dto.SpmLogDTO;
-import br.ufpa.labes.spm.service.mapper.SpmLogMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class SpmLogResourceIT {
     private SpmLogRepository spmLogRepository;
 
     @Autowired
-    private SpmLogMapper spmLogMapper;
-
-    @Autowired
-    private SpmLogService spmLogService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class SpmLogResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SpmLogResource spmLogResource = new SpmLogResource(spmLogService);
+        final SpmLogResource spmLogResource = new SpmLogResource(spmLogRepository);
         this.restSpmLogMockMvc = MockMvcBuilders.standaloneSetup(spmLogResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class SpmLogResourceIT {
         int databaseSizeBeforeCreate = spmLogRepository.findAll().size();
 
         // Create the SpmLog
-        SpmLogDTO spmLogDTO = spmLogMapper.toDto(spmLog);
         restSpmLogMockMvc.perform(post("/api/spm-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(spmLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(spmLog)))
             .andExpect(status().isCreated());
 
         // Validate the SpmLog in the database
@@ -129,12 +119,11 @@ public class SpmLogResourceIT {
 
         // Create the SpmLog with an existing ID
         spmLog.setId(1L);
-        SpmLogDTO spmLogDTO = spmLogMapper.toDto(spmLog);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restSpmLogMockMvc.perform(post("/api/spm-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(spmLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(spmLog)))
             .andExpect(status().isBadRequest());
 
         // Validate the SpmLog in the database
@@ -189,11 +178,10 @@ public class SpmLogResourceIT {
         SpmLog updatedSpmLog = spmLogRepository.findById(spmLog.getId()).get();
         // Disconnect from session so that the updates on updatedSpmLog are not directly saved in db
         em.detach(updatedSpmLog);
-        SpmLogDTO spmLogDTO = spmLogMapper.toDto(updatedSpmLog);
 
         restSpmLogMockMvc.perform(put("/api/spm-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(spmLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedSpmLog)))
             .andExpect(status().isOk());
 
         // Validate the SpmLog in the database
@@ -208,12 +196,11 @@ public class SpmLogResourceIT {
         int databaseSizeBeforeUpdate = spmLogRepository.findAll().size();
 
         // Create the SpmLog
-        SpmLogDTO spmLogDTO = spmLogMapper.toDto(spmLog);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restSpmLogMockMvc.perform(put("/api/spm-logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(spmLogDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(spmLog)))
             .andExpect(status().isBadRequest());
 
         // Validate the SpmLog in the database
@@ -252,28 +239,5 @@ public class SpmLogResourceIT {
         assertThat(spmLog1).isNotEqualTo(spmLog2);
         spmLog1.setId(null);
         assertThat(spmLog1).isNotEqualTo(spmLog2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(SpmLogDTO.class);
-        SpmLogDTO spmLogDTO1 = new SpmLogDTO();
-        spmLogDTO1.setId(1L);
-        SpmLogDTO spmLogDTO2 = new SpmLogDTO();
-        assertThat(spmLogDTO1).isNotEqualTo(spmLogDTO2);
-        spmLogDTO2.setId(spmLogDTO1.getId());
-        assertThat(spmLogDTO1).isEqualTo(spmLogDTO2);
-        spmLogDTO2.setId(2L);
-        assertThat(spmLogDTO1).isNotEqualTo(spmLogDTO2);
-        spmLogDTO1.setId(null);
-        assertThat(spmLogDTO1).isNotEqualTo(spmLogDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(spmLogMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(spmLogMapper.fromId(null)).isNull();
     }
 }

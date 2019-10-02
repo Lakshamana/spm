@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ArtifactConService;
+import br.ufpa.labes.spm.domain.ArtifactCon;
+import br.ufpa.labes.spm.repository.ArtifactConRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ArtifactConDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ArtifactConResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ArtifactConService artifactConService;
+    private final ArtifactConRepository artifactConRepository;
 
-    public ArtifactConResource(ArtifactConService artifactConService) {
-        this.artifactConService = artifactConService;
+    public ArtifactConResource(ArtifactConRepository artifactConRepository) {
+        this.artifactConRepository = artifactConRepository;
     }
 
     /**
      * {@code POST  /artifact-cons} : Create a new artifactCon.
      *
-     * @param artifactConDTO the artifactConDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new artifactConDTO, or with status {@code 400 (Bad Request)} if the artifactCon has already an ID.
+     * @param artifactCon the artifactCon to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new artifactCon, or with status {@code 400 (Bad Request)} if the artifactCon has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/artifact-cons")
-    public ResponseEntity<ArtifactConDTO> createArtifactCon(@RequestBody ArtifactConDTO artifactConDTO) throws URISyntaxException {
-        log.debug("REST request to save ArtifactCon : {}", artifactConDTO);
-        if (artifactConDTO.getId() != null) {
+    public ResponseEntity<ArtifactCon> createArtifactCon(@RequestBody ArtifactCon artifactCon) throws URISyntaxException {
+        log.debug("REST request to save ArtifactCon : {}", artifactCon);
+        if (artifactCon.getId() != null) {
             throw new BadRequestAlertException("A new artifactCon cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ArtifactConDTO result = artifactConService.save(artifactConDTO);
+        ArtifactCon result = artifactConRepository.save(artifactCon);
         return ResponseEntity.created(new URI("/api/artifact-cons/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ArtifactConResource {
     /**
      * {@code PUT  /artifact-cons} : Updates an existing artifactCon.
      *
-     * @param artifactConDTO the artifactConDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated artifactConDTO,
-     * or with status {@code 400 (Bad Request)} if the artifactConDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the artifactConDTO couldn't be updated.
+     * @param artifactCon the artifactCon to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated artifactCon,
+     * or with status {@code 400 (Bad Request)} if the artifactCon is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the artifactCon couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/artifact-cons")
-    public ResponseEntity<ArtifactConDTO> updateArtifactCon(@RequestBody ArtifactConDTO artifactConDTO) throws URISyntaxException {
-        log.debug("REST request to update ArtifactCon : {}", artifactConDTO);
-        if (artifactConDTO.getId() == null) {
+    public ResponseEntity<ArtifactCon> updateArtifactCon(@RequestBody ArtifactCon artifactCon) throws URISyntaxException {
+        log.debug("REST request to update ArtifactCon : {}", artifactCon);
+        if (artifactCon.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ArtifactConDTO result = artifactConService.save(artifactConDTO);
+        ArtifactCon result = artifactConRepository.save(artifactCon);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artifactConDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artifactCon.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ArtifactConResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of artifactCons in body.
      */
     @GetMapping("/artifact-cons")
-    public List<ArtifactConDTO> getAllArtifactCons(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<ArtifactCon> getAllArtifactCons(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all ArtifactCons");
-        return artifactConService.findAll();
+        return artifactConRepository.findAllWithEagerRelationships();
     }
 
     /**
      * {@code GET  /artifact-cons/:id} : get the "id" artifactCon.
      *
-     * @param id the id of the artifactConDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the artifactConDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the artifactCon to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the artifactCon, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/artifact-cons/{id}")
-    public ResponseEntity<ArtifactConDTO> getArtifactCon(@PathVariable Long id) {
+    public ResponseEntity<ArtifactCon> getArtifactCon(@PathVariable Long id) {
         log.debug("REST request to get ArtifactCon : {}", id);
-        Optional<ArtifactConDTO> artifactConDTO = artifactConService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(artifactConDTO);
+        Optional<ArtifactCon> artifactCon = artifactConRepository.findOneWithEagerRelationships(id);
+        return ResponseUtil.wrapOrNotFound(artifactCon);
     }
 
     /**
      * {@code DELETE  /artifact-cons/:id} : delete the "id" artifactCon.
      *
-     * @param id the id of the artifactConDTO to delete.
+     * @param id the id of the artifactCon to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/artifact-cons/{id}")
     public ResponseEntity<Void> deleteArtifactCon(@PathVariable Long id) {
         log.debug("REST request to delete ArtifactCon : {}", id);
-        artifactConService.delete(id);
+        artifactConRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

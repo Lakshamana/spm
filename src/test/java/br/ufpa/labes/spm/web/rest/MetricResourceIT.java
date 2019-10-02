@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Metric;
 import br.ufpa.labes.spm.repository.MetricRepository;
-import br.ufpa.labes.spm.service.MetricService;
-import br.ufpa.labes.spm.service.dto.MetricDTO;
-import br.ufpa.labes.spm.service.mapper.MetricMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -59,12 +56,6 @@ public class MetricResourceIT {
     private MetricRepository metricRepository;
 
     @Autowired
-    private MetricMapper metricMapper;
-
-    @Autowired
-    private MetricService metricService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -86,7 +77,7 @@ public class MetricResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MetricResource metricResource = new MetricResource(metricService);
+        final MetricResource metricResource = new MetricResource(metricRepository);
         this.restMetricMockMvc = MockMvcBuilders.standaloneSetup(metricResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -135,10 +126,9 @@ public class MetricResourceIT {
         int databaseSizeBeforeCreate = metricRepository.findAll().size();
 
         // Create the Metric
-        MetricDTO metricDTO = metricMapper.toDto(metric);
         restMetricMockMvc.perform(post("/api/metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(metric)))
             .andExpect(status().isCreated());
 
         // Validate the Metric in the database
@@ -158,12 +148,11 @@ public class MetricResourceIT {
 
         // Create the Metric with an existing ID
         metric.setId(1L);
-        MetricDTO metricDTO = metricMapper.toDto(metric);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMetricMockMvc.perform(post("/api/metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(metric)))
             .andExpect(status().isBadRequest());
 
         // Validate the Metric in the database
@@ -231,11 +220,10 @@ public class MetricResourceIT {
             .unit(UPDATED_UNIT)
             .periodBegin(UPDATED_PERIOD_BEGIN)
             .periodEnd(UPDATED_PERIOD_END);
-        MetricDTO metricDTO = metricMapper.toDto(updatedMetric);
 
         restMetricMockMvc.perform(put("/api/metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedMetric)))
             .andExpect(status().isOk());
 
         // Validate the Metric in the database
@@ -254,12 +242,11 @@ public class MetricResourceIT {
         int databaseSizeBeforeUpdate = metricRepository.findAll().size();
 
         // Create the Metric
-        MetricDTO metricDTO = metricMapper.toDto(metric);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMetricMockMvc.perform(put("/api/metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(metricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(metric)))
             .andExpect(status().isBadRequest());
 
         // Validate the Metric in the database
@@ -298,28 +285,5 @@ public class MetricResourceIT {
         assertThat(metric1).isNotEqualTo(metric2);
         metric1.setId(null);
         assertThat(metric1).isNotEqualTo(metric2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(MetricDTO.class);
-        MetricDTO metricDTO1 = new MetricDTO();
-        metricDTO1.setId(1L);
-        MetricDTO metricDTO2 = new MetricDTO();
-        assertThat(metricDTO1).isNotEqualTo(metricDTO2);
-        metricDTO2.setId(metricDTO1.getId());
-        assertThat(metricDTO1).isEqualTo(metricDTO2);
-        metricDTO2.setId(2L);
-        assertThat(metricDTO1).isNotEqualTo(metricDTO2);
-        metricDTO1.setId(null);
-        assertThat(metricDTO1).isNotEqualTo(metricDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(metricMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(metricMapper.fromId(null)).isNull();
     }
 }

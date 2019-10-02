@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.RequiredPeople;
 import br.ufpa.labes.spm.repository.RequiredPeopleRepository;
-import br.ufpa.labes.spm.service.RequiredPeopleService;
-import br.ufpa.labes.spm.service.dto.RequiredPeopleDTO;
-import br.ufpa.labes.spm.service.mapper.RequiredPeopleMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class RequiredPeopleResourceIT {
     private RequiredPeopleRepository requiredPeopleRepository;
 
     @Autowired
-    private RequiredPeopleMapper requiredPeopleMapper;
-
-    @Autowired
-    private RequiredPeopleService requiredPeopleService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class RequiredPeopleResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RequiredPeopleResource requiredPeopleResource = new RequiredPeopleResource(requiredPeopleService);
+        final RequiredPeopleResource requiredPeopleResource = new RequiredPeopleResource(requiredPeopleRepository);
         this.restRequiredPeopleMockMvc = MockMvcBuilders.standaloneSetup(requiredPeopleResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class RequiredPeopleResourceIT {
         int databaseSizeBeforeCreate = requiredPeopleRepository.findAll().size();
 
         // Create the RequiredPeople
-        RequiredPeopleDTO requiredPeopleDTO = requiredPeopleMapper.toDto(requiredPeople);
         restRequiredPeopleMockMvc.perform(post("/api/required-people")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(requiredPeopleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(requiredPeople)))
             .andExpect(status().isCreated());
 
         // Validate the RequiredPeople in the database
@@ -129,12 +119,11 @@ public class RequiredPeopleResourceIT {
 
         // Create the RequiredPeople with an existing ID
         requiredPeople.setId(1L);
-        RequiredPeopleDTO requiredPeopleDTO = requiredPeopleMapper.toDto(requiredPeople);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restRequiredPeopleMockMvc.perform(post("/api/required-people")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(requiredPeopleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(requiredPeople)))
             .andExpect(status().isBadRequest());
 
         // Validate the RequiredPeople in the database
@@ -189,11 +178,10 @@ public class RequiredPeopleResourceIT {
         RequiredPeople updatedRequiredPeople = requiredPeopleRepository.findById(requiredPeople.getId()).get();
         // Disconnect from session so that the updates on updatedRequiredPeople are not directly saved in db
         em.detach(updatedRequiredPeople);
-        RequiredPeopleDTO requiredPeopleDTO = requiredPeopleMapper.toDto(updatedRequiredPeople);
 
         restRequiredPeopleMockMvc.perform(put("/api/required-people")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(requiredPeopleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedRequiredPeople)))
             .andExpect(status().isOk());
 
         // Validate the RequiredPeople in the database
@@ -208,12 +196,11 @@ public class RequiredPeopleResourceIT {
         int databaseSizeBeforeUpdate = requiredPeopleRepository.findAll().size();
 
         // Create the RequiredPeople
-        RequiredPeopleDTO requiredPeopleDTO = requiredPeopleMapper.toDto(requiredPeople);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restRequiredPeopleMockMvc.perform(put("/api/required-people")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(requiredPeopleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(requiredPeople)))
             .andExpect(status().isBadRequest());
 
         // Validate the RequiredPeople in the database
@@ -252,28 +239,5 @@ public class RequiredPeopleResourceIT {
         assertThat(requiredPeople1).isNotEqualTo(requiredPeople2);
         requiredPeople1.setId(null);
         assertThat(requiredPeople1).isNotEqualTo(requiredPeople2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RequiredPeopleDTO.class);
-        RequiredPeopleDTO requiredPeopleDTO1 = new RequiredPeopleDTO();
-        requiredPeopleDTO1.setId(1L);
-        RequiredPeopleDTO requiredPeopleDTO2 = new RequiredPeopleDTO();
-        assertThat(requiredPeopleDTO1).isNotEqualTo(requiredPeopleDTO2);
-        requiredPeopleDTO2.setId(requiredPeopleDTO1.getId());
-        assertThat(requiredPeopleDTO1).isEqualTo(requiredPeopleDTO2);
-        requiredPeopleDTO2.setId(2L);
-        assertThat(requiredPeopleDTO1).isNotEqualTo(requiredPeopleDTO2);
-        requiredPeopleDTO1.setId(null);
-        assertThat(requiredPeopleDTO1).isNotEqualTo(requiredPeopleDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(requiredPeopleMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(requiredPeopleMapper.fromId(null)).isNull();
     }
 }

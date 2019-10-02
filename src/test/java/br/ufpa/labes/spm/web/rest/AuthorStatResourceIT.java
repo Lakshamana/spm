@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AuthorStat;
 import br.ufpa.labes.spm.repository.AuthorStatRepository;
-import br.ufpa.labes.spm.service.AuthorStatService;
-import br.ufpa.labes.spm.service.dto.AuthorStatDTO;
-import br.ufpa.labes.spm.service.mapper.AuthorStatMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class AuthorStatResourceIT {
     private AuthorStatRepository authorStatRepository;
 
     @Autowired
-    private AuthorStatMapper authorStatMapper;
-
-    @Autowired
-    private AuthorStatService authorStatService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class AuthorStatResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AuthorStatResource authorStatResource = new AuthorStatResource(authorStatService);
+        final AuthorStatResource authorStatResource = new AuthorStatResource(authorStatRepository);
         this.restAuthorStatMockMvc = MockMvcBuilders.standaloneSetup(authorStatResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class AuthorStatResourceIT {
         int databaseSizeBeforeCreate = authorStatRepository.findAll().size();
 
         // Create the AuthorStat
-        AuthorStatDTO authorStatDTO = authorStatMapper.toDto(authorStat);
         restAuthorStatMockMvc.perform(post("/api/author-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(authorStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(authorStat)))
             .andExpect(status().isCreated());
 
         // Validate the AuthorStat in the database
@@ -129,12 +119,11 @@ public class AuthorStatResourceIT {
 
         // Create the AuthorStat with an existing ID
         authorStat.setId(1L);
-        AuthorStatDTO authorStatDTO = authorStatMapper.toDto(authorStat);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAuthorStatMockMvc.perform(post("/api/author-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(authorStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(authorStat)))
             .andExpect(status().isBadRequest());
 
         // Validate the AuthorStat in the database
@@ -189,11 +178,10 @@ public class AuthorStatResourceIT {
         AuthorStat updatedAuthorStat = authorStatRepository.findById(authorStat.getId()).get();
         // Disconnect from session so that the updates on updatedAuthorStat are not directly saved in db
         em.detach(updatedAuthorStat);
-        AuthorStatDTO authorStatDTO = authorStatMapper.toDto(updatedAuthorStat);
 
         restAuthorStatMockMvc.perform(put("/api/author-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(authorStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAuthorStat)))
             .andExpect(status().isOk());
 
         // Validate the AuthorStat in the database
@@ -208,12 +196,11 @@ public class AuthorStatResourceIT {
         int databaseSizeBeforeUpdate = authorStatRepository.findAll().size();
 
         // Create the AuthorStat
-        AuthorStatDTO authorStatDTO = authorStatMapper.toDto(authorStat);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAuthorStatMockMvc.perform(put("/api/author-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(authorStatDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(authorStat)))
             .andExpect(status().isBadRequest());
 
         // Validate the AuthorStat in the database
@@ -252,28 +239,5 @@ public class AuthorStatResourceIT {
         assertThat(authorStat1).isNotEqualTo(authorStat2);
         authorStat1.setId(null);
         assertThat(authorStat1).isNotEqualTo(authorStat2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AuthorStatDTO.class);
-        AuthorStatDTO authorStatDTO1 = new AuthorStatDTO();
-        authorStatDTO1.setId(1L);
-        AuthorStatDTO authorStatDTO2 = new AuthorStatDTO();
-        assertThat(authorStatDTO1).isNotEqualTo(authorStatDTO2);
-        authorStatDTO2.setId(authorStatDTO1.getId());
-        assertThat(authorStatDTO1).isEqualTo(authorStatDTO2);
-        authorStatDTO2.setId(2L);
-        assertThat(authorStatDTO1).isNotEqualTo(authorStatDTO2);
-        authorStatDTO1.setId(null);
-        assertThat(authorStatDTO1).isNotEqualTo(authorStatDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(authorStatMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(authorStatMapper.fromId(null)).isNull();
     }
 }

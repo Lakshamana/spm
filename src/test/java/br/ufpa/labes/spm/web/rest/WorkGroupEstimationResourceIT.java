@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.WorkGroupEstimation;
 import br.ufpa.labes.spm.repository.WorkGroupEstimationRepository;
-import br.ufpa.labes.spm.service.WorkGroupEstimationService;
-import br.ufpa.labes.spm.service.dto.WorkGroupEstimationDTO;
-import br.ufpa.labes.spm.service.mapper.WorkGroupEstimationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class WorkGroupEstimationResourceIT {
     private WorkGroupEstimationRepository workGroupEstimationRepository;
 
     @Autowired
-    private WorkGroupEstimationMapper workGroupEstimationMapper;
-
-    @Autowired
-    private WorkGroupEstimationService workGroupEstimationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class WorkGroupEstimationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WorkGroupEstimationResource workGroupEstimationResource = new WorkGroupEstimationResource(workGroupEstimationService);
+        final WorkGroupEstimationResource workGroupEstimationResource = new WorkGroupEstimationResource(workGroupEstimationRepository);
         this.restWorkGroupEstimationMockMvc = MockMvcBuilders.standaloneSetup(workGroupEstimationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class WorkGroupEstimationResourceIT {
         int databaseSizeBeforeCreate = workGroupEstimationRepository.findAll().size();
 
         // Create the WorkGroupEstimation
-        WorkGroupEstimationDTO workGroupEstimationDTO = workGroupEstimationMapper.toDto(workGroupEstimation);
         restWorkGroupEstimationMockMvc.perform(post("/api/work-group-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupEstimation)))
             .andExpect(status().isCreated());
 
         // Validate the WorkGroupEstimation in the database
@@ -129,12 +119,11 @@ public class WorkGroupEstimationResourceIT {
 
         // Create the WorkGroupEstimation with an existing ID
         workGroupEstimation.setId(1L);
-        WorkGroupEstimationDTO workGroupEstimationDTO = workGroupEstimationMapper.toDto(workGroupEstimation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWorkGroupEstimationMockMvc.perform(post("/api/work-group-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the WorkGroupEstimation in the database
@@ -189,11 +178,10 @@ public class WorkGroupEstimationResourceIT {
         WorkGroupEstimation updatedWorkGroupEstimation = workGroupEstimationRepository.findById(workGroupEstimation.getId()).get();
         // Disconnect from session so that the updates on updatedWorkGroupEstimation are not directly saved in db
         em.detach(updatedWorkGroupEstimation);
-        WorkGroupEstimationDTO workGroupEstimationDTO = workGroupEstimationMapper.toDto(updatedWorkGroupEstimation);
 
         restWorkGroupEstimationMockMvc.perform(put("/api/work-group-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedWorkGroupEstimation)))
             .andExpect(status().isOk());
 
         // Validate the WorkGroupEstimation in the database
@@ -208,12 +196,11 @@ public class WorkGroupEstimationResourceIT {
         int databaseSizeBeforeUpdate = workGroupEstimationRepository.findAll().size();
 
         // Create the WorkGroupEstimation
-        WorkGroupEstimationDTO workGroupEstimationDTO = workGroupEstimationMapper.toDto(workGroupEstimation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkGroupEstimationMockMvc.perform(put("/api/work-group-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the WorkGroupEstimation in the database
@@ -252,28 +239,5 @@ public class WorkGroupEstimationResourceIT {
         assertThat(workGroupEstimation1).isNotEqualTo(workGroupEstimation2);
         workGroupEstimation1.setId(null);
         assertThat(workGroupEstimation1).isNotEqualTo(workGroupEstimation2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(WorkGroupEstimationDTO.class);
-        WorkGroupEstimationDTO workGroupEstimationDTO1 = new WorkGroupEstimationDTO();
-        workGroupEstimationDTO1.setId(1L);
-        WorkGroupEstimationDTO workGroupEstimationDTO2 = new WorkGroupEstimationDTO();
-        assertThat(workGroupEstimationDTO1).isNotEqualTo(workGroupEstimationDTO2);
-        workGroupEstimationDTO2.setId(workGroupEstimationDTO1.getId());
-        assertThat(workGroupEstimationDTO1).isEqualTo(workGroupEstimationDTO2);
-        workGroupEstimationDTO2.setId(2L);
-        assertThat(workGroupEstimationDTO1).isNotEqualTo(workGroupEstimationDTO2);
-        workGroupEstimationDTO1.setId(null);
-        assertThat(workGroupEstimationDTO1).isNotEqualTo(workGroupEstimationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(workGroupEstimationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(workGroupEstimationMapper.fromId(null)).isNull();
     }
 }

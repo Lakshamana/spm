@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Description;
 import br.ufpa.labes.spm.repository.DescriptionRepository;
-import br.ufpa.labes.spm.service.DescriptionService;
-import br.ufpa.labes.spm.service.dto.DescriptionDTO;
-import br.ufpa.labes.spm.service.mapper.DescriptionMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class DescriptionResourceIT {
     private DescriptionRepository descriptionRepository;
 
     @Autowired
-    private DescriptionMapper descriptionMapper;
-
-    @Autowired
-    private DescriptionService descriptionService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class DescriptionResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final DescriptionResource descriptionResource = new DescriptionResource(descriptionService);
+        final DescriptionResource descriptionResource = new DescriptionResource(descriptionRepository);
         this.restDescriptionMockMvc = MockMvcBuilders.standaloneSetup(descriptionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -124,10 +115,9 @@ public class DescriptionResourceIT {
         int databaseSizeBeforeCreate = descriptionRepository.findAll().size();
 
         // Create the Description
-        DescriptionDTO descriptionDTO = descriptionMapper.toDto(description);
         restDescriptionMockMvc.perform(post("/api/descriptions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(descriptionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(description)))
             .andExpect(status().isCreated());
 
         // Validate the Description in the database
@@ -145,12 +135,11 @@ public class DescriptionResourceIT {
 
         // Create the Description with an existing ID
         description.setId(1L);
-        DescriptionDTO descriptionDTO = descriptionMapper.toDto(description);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDescriptionMockMvc.perform(post("/api/descriptions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(descriptionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(description)))
             .andExpect(status().isBadRequest());
 
         // Validate the Description in the database
@@ -212,11 +201,10 @@ public class DescriptionResourceIT {
         updatedDescription
             .date(UPDATED_DATE)
             .why(UPDATED_WHY);
-        DescriptionDTO descriptionDTO = descriptionMapper.toDto(updatedDescription);
 
         restDescriptionMockMvc.perform(put("/api/descriptions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(descriptionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedDescription)))
             .andExpect(status().isOk());
 
         // Validate the Description in the database
@@ -233,12 +221,11 @@ public class DescriptionResourceIT {
         int databaseSizeBeforeUpdate = descriptionRepository.findAll().size();
 
         // Create the Description
-        DescriptionDTO descriptionDTO = descriptionMapper.toDto(description);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDescriptionMockMvc.perform(put("/api/descriptions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(descriptionDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(description)))
             .andExpect(status().isBadRequest());
 
         // Validate the Description in the database
@@ -277,28 +264,5 @@ public class DescriptionResourceIT {
         assertThat(description1).isNotEqualTo(description2);
         description1.setId(null);
         assertThat(description1).isNotEqualTo(description2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DescriptionDTO.class);
-        DescriptionDTO descriptionDTO1 = new DescriptionDTO();
-        descriptionDTO1.setId(1L);
-        DescriptionDTO descriptionDTO2 = new DescriptionDTO();
-        assertThat(descriptionDTO1).isNotEqualTo(descriptionDTO2);
-        descriptionDTO2.setId(descriptionDTO1.getId());
-        assertThat(descriptionDTO1).isEqualTo(descriptionDTO2);
-        descriptionDTO2.setId(2L);
-        assertThat(descriptionDTO1).isNotEqualTo(descriptionDTO2);
-        descriptionDTO1.setId(null);
-        assertThat(descriptionDTO1).isNotEqualTo(descriptionDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(descriptionMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(descriptionMapper.fromId(null)).isNull();
     }
 }

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Parameter;
 import br.ufpa.labes.spm.repository.ParameterRepository;
-import br.ufpa.labes.spm.service.ParameterService;
-import br.ufpa.labes.spm.service.dto.ParameterDTO;
-import br.ufpa.labes.spm.service.mapper.ParameterMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,12 +43,6 @@ public class ParameterResourceIT {
     private ParameterRepository parameterRepository;
 
     @Autowired
-    private ParameterMapper parameterMapper;
-
-    @Autowired
-    private ParameterService parameterService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +64,7 @@ public class ParameterResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ParameterResource parameterResource = new ParameterResource(parameterService);
+        final ParameterResource parameterResource = new ParameterResource(parameterRepository);
         this.restParameterMockMvc = MockMvcBuilders.standaloneSetup(parameterResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -116,10 +107,9 @@ public class ParameterResourceIT {
         int databaseSizeBeforeCreate = parameterRepository.findAll().size();
 
         // Create the Parameter
-        ParameterDTO parameterDTO = parameterMapper.toDto(parameter);
         restParameterMockMvc.perform(post("/api/parameters")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(parameterDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(parameter)))
             .andExpect(status().isCreated());
 
         // Validate the Parameter in the database
@@ -136,12 +126,11 @@ public class ParameterResourceIT {
 
         // Create the Parameter with an existing ID
         parameter.setId(1L);
-        ParameterDTO parameterDTO = parameterMapper.toDto(parameter);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restParameterMockMvc.perform(post("/api/parameters")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(parameterDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(parameter)))
             .andExpect(status().isBadRequest());
 
         // Validate the Parameter in the database
@@ -200,11 +189,10 @@ public class ParameterResourceIT {
         em.detach(updatedParameter);
         updatedParameter
             .description(UPDATED_DESCRIPTION);
-        ParameterDTO parameterDTO = parameterMapper.toDto(updatedParameter);
 
         restParameterMockMvc.perform(put("/api/parameters")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(parameterDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedParameter)))
             .andExpect(status().isOk());
 
         // Validate the Parameter in the database
@@ -220,12 +208,11 @@ public class ParameterResourceIT {
         int databaseSizeBeforeUpdate = parameterRepository.findAll().size();
 
         // Create the Parameter
-        ParameterDTO parameterDTO = parameterMapper.toDto(parameter);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restParameterMockMvc.perform(put("/api/parameters")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(parameterDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(parameter)))
             .andExpect(status().isBadRequest());
 
         // Validate the Parameter in the database
@@ -264,28 +251,5 @@ public class ParameterResourceIT {
         assertThat(parameter1).isNotEqualTo(parameter2);
         parameter1.setId(null);
         assertThat(parameter1).isNotEqualTo(parameter2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ParameterDTO.class);
-        ParameterDTO parameterDTO1 = new ParameterDTO();
-        parameterDTO1.setId(1L);
-        ParameterDTO parameterDTO2 = new ParameterDTO();
-        assertThat(parameterDTO1).isNotEqualTo(parameterDTO2);
-        parameterDTO2.setId(parameterDTO1.getId());
-        assertThat(parameterDTO1).isEqualTo(parameterDTO2);
-        parameterDTO2.setId(2L);
-        assertThat(parameterDTO1).isNotEqualTo(parameterDTO2);
-        parameterDTO1.setId(null);
-        assertThat(parameterDTO1).isNotEqualTo(parameterDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(parameterMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(parameterMapper.fromId(null)).isNull();
     }
 }

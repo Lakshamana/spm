@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ResourceInstSug;
 import br.ufpa.labes.spm.repository.ResourceInstSugRepository;
-import br.ufpa.labes.spm.service.ResourceInstSugService;
-import br.ufpa.labes.spm.service.dto.ResourceInstSugDTO;
-import br.ufpa.labes.spm.service.mapper.ResourceInstSugMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -50,15 +47,6 @@ public class ResourceInstSugResourceIT {
     private ResourceInstSugRepository resourceInstSugRepositoryMock;
 
     @Autowired
-    private ResourceInstSugMapper resourceInstSugMapper;
-
-    @Mock
-    private ResourceInstSugService resourceInstSugServiceMock;
-
-    @Autowired
-    private ResourceInstSugService resourceInstSugService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -80,7 +68,7 @@ public class ResourceInstSugResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ResourceInstSugResource resourceInstSugResource = new ResourceInstSugResource(resourceInstSugService);
+        final ResourceInstSugResource resourceInstSugResource = new ResourceInstSugResource(resourceInstSugRepository);
         this.restResourceInstSugMockMvc = MockMvcBuilders.standaloneSetup(resourceInstSugResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -121,10 +109,9 @@ public class ResourceInstSugResourceIT {
         int databaseSizeBeforeCreate = resourceInstSugRepository.findAll().size();
 
         // Create the ResourceInstSug
-        ResourceInstSugDTO resourceInstSugDTO = resourceInstSugMapper.toDto(resourceInstSug);
         restResourceInstSugMockMvc.perform(post("/api/resource-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceInstSug)))
             .andExpect(status().isCreated());
 
         // Validate the ResourceInstSug in the database
@@ -140,12 +127,11 @@ public class ResourceInstSugResourceIT {
 
         // Create the ResourceInstSug with an existing ID
         resourceInstSug.setId(1L);
-        ResourceInstSugDTO resourceInstSugDTO = resourceInstSugMapper.toDto(resourceInstSug);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restResourceInstSugMockMvc.perform(post("/api/resource-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceInstSug)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourceInstSug in the database
@@ -169,8 +155,8 @@ public class ResourceInstSugResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllResourceInstSugsWithEagerRelationshipsIsEnabled() throws Exception {
-        ResourceInstSugResource resourceInstSugResource = new ResourceInstSugResource(resourceInstSugServiceMock);
-        when(resourceInstSugServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ResourceInstSugResource resourceInstSugResource = new ResourceInstSugResource(resourceInstSugRepositoryMock);
+        when(resourceInstSugRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restResourceInstSugMockMvc = MockMvcBuilders.standaloneSetup(resourceInstSugResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -181,13 +167,13 @@ public class ResourceInstSugResourceIT {
         restResourceInstSugMockMvc.perform(get("/api/resource-inst-sugs?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(resourceInstSugServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(resourceInstSugRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllResourceInstSugsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ResourceInstSugResource resourceInstSugResource = new ResourceInstSugResource(resourceInstSugServiceMock);
-            when(resourceInstSugServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ResourceInstSugResource resourceInstSugResource = new ResourceInstSugResource(resourceInstSugRepositoryMock);
+            when(resourceInstSugRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restResourceInstSugMockMvc = MockMvcBuilders.standaloneSetup(resourceInstSugResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -197,7 +183,7 @@ public class ResourceInstSugResourceIT {
         restResourceInstSugMockMvc.perform(get("/api/resource-inst-sugs?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(resourceInstSugServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(resourceInstSugRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -233,11 +219,10 @@ public class ResourceInstSugResourceIT {
         ResourceInstSug updatedResourceInstSug = resourceInstSugRepository.findById(resourceInstSug.getId()).get();
         // Disconnect from session so that the updates on updatedResourceInstSug are not directly saved in db
         em.detach(updatedResourceInstSug);
-        ResourceInstSugDTO resourceInstSugDTO = resourceInstSugMapper.toDto(updatedResourceInstSug);
 
         restResourceInstSugMockMvc.perform(put("/api/resource-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedResourceInstSug)))
             .andExpect(status().isOk());
 
         // Validate the ResourceInstSug in the database
@@ -252,12 +237,11 @@ public class ResourceInstSugResourceIT {
         int databaseSizeBeforeUpdate = resourceInstSugRepository.findAll().size();
 
         // Create the ResourceInstSug
-        ResourceInstSugDTO resourceInstSugDTO = resourceInstSugMapper.toDto(resourceInstSug);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restResourceInstSugMockMvc.perform(put("/api/resource-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(resourceInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(resourceInstSug)))
             .andExpect(status().isBadRequest());
 
         // Validate the ResourceInstSug in the database
@@ -296,28 +280,5 @@ public class ResourceInstSugResourceIT {
         assertThat(resourceInstSug1).isNotEqualTo(resourceInstSug2);
         resourceInstSug1.setId(null);
         assertThat(resourceInstSug1).isNotEqualTo(resourceInstSug2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ResourceInstSugDTO.class);
-        ResourceInstSugDTO resourceInstSugDTO1 = new ResourceInstSugDTO();
-        resourceInstSugDTO1.setId(1L);
-        ResourceInstSugDTO resourceInstSugDTO2 = new ResourceInstSugDTO();
-        assertThat(resourceInstSugDTO1).isNotEqualTo(resourceInstSugDTO2);
-        resourceInstSugDTO2.setId(resourceInstSugDTO1.getId());
-        assertThat(resourceInstSugDTO1).isEqualTo(resourceInstSugDTO2);
-        resourceInstSugDTO2.setId(2L);
-        assertThat(resourceInstSugDTO1).isNotEqualTo(resourceInstSugDTO2);
-        resourceInstSugDTO1.setId(null);
-        assertThat(resourceInstSugDTO1).isNotEqualTo(resourceInstSugDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(resourceInstSugMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(resourceInstSugMapper.fromId(null)).isNull();
     }
 }

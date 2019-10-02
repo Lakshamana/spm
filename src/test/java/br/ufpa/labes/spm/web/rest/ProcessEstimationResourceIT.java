@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ProcessEstimation;
 import br.ufpa.labes.spm.repository.ProcessEstimationRepository;
-import br.ufpa.labes.spm.service.ProcessEstimationService;
-import br.ufpa.labes.spm.service.dto.ProcessEstimationDTO;
-import br.ufpa.labes.spm.service.mapper.ProcessEstimationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ProcessEstimationResourceIT {
     private ProcessEstimationRepository processEstimationRepository;
 
     @Autowired
-    private ProcessEstimationMapper processEstimationMapper;
-
-    @Autowired
-    private ProcessEstimationService processEstimationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ProcessEstimationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ProcessEstimationResource processEstimationResource = new ProcessEstimationResource(processEstimationService);
+        final ProcessEstimationResource processEstimationResource = new ProcessEstimationResource(processEstimationRepository);
         this.restProcessEstimationMockMvc = MockMvcBuilders.standaloneSetup(processEstimationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ProcessEstimationResourceIT {
         int databaseSizeBeforeCreate = processEstimationRepository.findAll().size();
 
         // Create the ProcessEstimation
-        ProcessEstimationDTO processEstimationDTO = processEstimationMapper.toDto(processEstimation);
         restProcessEstimationMockMvc.perform(post("/api/process-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processEstimation)))
             .andExpect(status().isCreated());
 
         // Validate the ProcessEstimation in the database
@@ -129,12 +119,11 @@ public class ProcessEstimationResourceIT {
 
         // Create the ProcessEstimation with an existing ID
         processEstimation.setId(1L);
-        ProcessEstimationDTO processEstimationDTO = processEstimationMapper.toDto(processEstimation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProcessEstimationMockMvc.perform(post("/api/process-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the ProcessEstimation in the database
@@ -189,11 +178,10 @@ public class ProcessEstimationResourceIT {
         ProcessEstimation updatedProcessEstimation = processEstimationRepository.findById(processEstimation.getId()).get();
         // Disconnect from session so that the updates on updatedProcessEstimation are not directly saved in db
         em.detach(updatedProcessEstimation);
-        ProcessEstimationDTO processEstimationDTO = processEstimationMapper.toDto(updatedProcessEstimation);
 
         restProcessEstimationMockMvc.perform(put("/api/process-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedProcessEstimation)))
             .andExpect(status().isOk());
 
         // Validate the ProcessEstimation in the database
@@ -208,12 +196,11 @@ public class ProcessEstimationResourceIT {
         int databaseSizeBeforeUpdate = processEstimationRepository.findAll().size();
 
         // Create the ProcessEstimation
-        ProcessEstimationDTO processEstimationDTO = processEstimationMapper.toDto(processEstimation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProcessEstimationMockMvc.perform(put("/api/process-estimations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(processEstimationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(processEstimation)))
             .andExpect(status().isBadRequest());
 
         // Validate the ProcessEstimation in the database
@@ -252,28 +239,5 @@ public class ProcessEstimationResourceIT {
         assertThat(processEstimation1).isNotEqualTo(processEstimation2);
         processEstimation1.setId(null);
         assertThat(processEstimation1).isNotEqualTo(processEstimation2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProcessEstimationDTO.class);
-        ProcessEstimationDTO processEstimationDTO1 = new ProcessEstimationDTO();
-        processEstimationDTO1.setId(1L);
-        ProcessEstimationDTO processEstimationDTO2 = new ProcessEstimationDTO();
-        assertThat(processEstimationDTO1).isNotEqualTo(processEstimationDTO2);
-        processEstimationDTO2.setId(processEstimationDTO1.getId());
-        assertThat(processEstimationDTO1).isEqualTo(processEstimationDTO2);
-        processEstimationDTO2.setId(2L);
-        assertThat(processEstimationDTO1).isNotEqualTo(processEstimationDTO2);
-        processEstimationDTO1.setId(null);
-        assertThat(processEstimationDTO1).isNotEqualTo(processEstimationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(processEstimationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(processEstimationMapper.fromId(null)).isNull();
     }
 }

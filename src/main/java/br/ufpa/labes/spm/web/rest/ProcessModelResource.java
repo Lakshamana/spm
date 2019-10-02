@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ProcessModelService;
+import br.ufpa.labes.spm.domain.ProcessModel;
+import br.ufpa.labes.spm.repository.ProcessModelRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ProcessModelDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
@@ -33,26 +34,26 @@ public class ProcessModelResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ProcessModelService processModelService;
+    private final ProcessModelRepository processModelRepository;
 
-    public ProcessModelResource(ProcessModelService processModelService) {
-        this.processModelService = processModelService;
+    public ProcessModelResource(ProcessModelRepository processModelRepository) {
+        this.processModelRepository = processModelRepository;
     }
 
     /**
      * {@code POST  /process-models} : Create a new processModel.
      *
-     * @param processModelDTO the processModelDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new processModelDTO, or with status {@code 400 (Bad Request)} if the processModel has already an ID.
+     * @param processModel the processModel to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new processModel, or with status {@code 400 (Bad Request)} if the processModel has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/process-models")
-    public ResponseEntity<ProcessModelDTO> createProcessModel(@RequestBody ProcessModelDTO processModelDTO) throws URISyntaxException {
-        log.debug("REST request to save ProcessModel : {}", processModelDTO);
-        if (processModelDTO.getId() != null) {
+    public ResponseEntity<ProcessModel> createProcessModel(@RequestBody ProcessModel processModel) throws URISyntaxException {
+        log.debug("REST request to save ProcessModel : {}", processModel);
+        if (processModel.getId() != null) {
             throw new BadRequestAlertException("A new processModel cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ProcessModelDTO result = processModelService.save(processModelDTO);
+        ProcessModel result = processModelRepository.save(processModel);
         return ResponseEntity.created(new URI("/api/process-models/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -61,21 +62,21 @@ public class ProcessModelResource {
     /**
      * {@code PUT  /process-models} : Updates an existing processModel.
      *
-     * @param processModelDTO the processModelDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated processModelDTO,
-     * or with status {@code 400 (Bad Request)} if the processModelDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the processModelDTO couldn't be updated.
+     * @param processModel the processModel to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated processModel,
+     * or with status {@code 400 (Bad Request)} if the processModel is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the processModel couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/process-models")
-    public ResponseEntity<ProcessModelDTO> updateProcessModel(@RequestBody ProcessModelDTO processModelDTO) throws URISyntaxException {
-        log.debug("REST request to update ProcessModel : {}", processModelDTO);
-        if (processModelDTO.getId() == null) {
+    public ResponseEntity<ProcessModel> updateProcessModel(@RequestBody ProcessModel processModel) throws URISyntaxException {
+        log.debug("REST request to update ProcessModel : {}", processModel);
+        if (processModel.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ProcessModelDTO result = processModelService.save(processModelDTO);
+        ProcessModel result = processModelRepository.save(processModel);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, processModelDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, processModel.getId().toString()))
             .body(result);
     }
 
@@ -87,42 +88,48 @@ public class ProcessModelResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of processModels in body.
      */
     @GetMapping("/process-models")
-    public List<ProcessModelDTO> getAllProcessModels(@RequestParam(required = false) String filter) {
+    public List<ProcessModel> getAllProcessModels(@RequestParam(required = false) String filter) {
         if ("thedecomposed-is-null".equals(filter)) {
             log.debug("REST request to get all ProcessModels where theDecomposed is null");
-            return processModelService.findAllWhereTheDecomposedIsNull();
+            return StreamSupport
+                .stream(processModelRepository.findAll().spliterator(), false)
+                .filter(processModel -> processModel.getTheDecomposed() == null)
+                .collect(Collectors.toList());
         }
         if ("theprocess-is-null".equals(filter)) {
             log.debug("REST request to get all ProcessModels where theProcess is null");
-            return processModelService.findAllWhereTheProcessIsNull();
+            return StreamSupport
+                .stream(processModelRepository.findAll().spliterator(), false)
+                .filter(processModel -> processModel.getTheProcess() == null)
+                .collect(Collectors.toList());
         }
         log.debug("REST request to get all ProcessModels");
-        return processModelService.findAll();
+        return processModelRepository.findAll();
     }
 
     /**
      * {@code GET  /process-models/:id} : get the "id" processModel.
      *
-     * @param id the id of the processModelDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the processModelDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the processModel to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the processModel, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/process-models/{id}")
-    public ResponseEntity<ProcessModelDTO> getProcessModel(@PathVariable Long id) {
+    public ResponseEntity<ProcessModel> getProcessModel(@PathVariable Long id) {
         log.debug("REST request to get ProcessModel : {}", id);
-        Optional<ProcessModelDTO> processModelDTO = processModelService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(processModelDTO);
+        Optional<ProcessModel> processModel = processModelRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(processModel);
     }
 
     /**
      * {@code DELETE  /process-models/:id} : delete the "id" processModel.
      *
-     * @param id the id of the processModelDTO to delete.
+     * @param id the id of the processModel to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/process-models/{id}")
     public ResponseEntity<Void> deleteProcessModel(@PathVariable Long id) {
         log.debug("REST request to delete ProcessModel : {}", id);
-        processModelService.delete(id);
+        processModelRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -2168,18 +2168,18 @@ public class ProjectServicesImpl implements ProjectServices {
 			if(artTypeElm == null) continue; // Inconsistency handle
 
 			String artifactTypeKey = artTypeElm.getAttributeValue("REF");
-			invArt.insertIntoTheArtifactType((ArtifactType) this.organizational.get(artifactTypeKey));
+			invArt.setTheArtifactType((ArtifactType) this.organizational.get(artifactTypeKey));
 
 			Element in = invArtElm.getChild("InInvolvedArtifacts");
 			if(in != null){
 				String normalInKey = in.getAttributeValue("REF");
-				invArt.insertIntoInInvolvedArtifacts((Normal) this.processComponents.get(normalInKey));
+				invArt.setInInvolvedArtifacts((Normal) this.processComponents.get(normalInKey));
 			}
 
 			Element out = invArtElm.getChild("OutInvolvedArtifacts");
 			if(out != null){
 				String normalOutKey = out.getAttributeValue("REF");
-				invArt.insertIntoOutInvolvedArtifacts((Normal) this.processComponents.get(normalOutKey));
+				invArt.setOutInvolvedArtifacts((Normal) this.processComponents.get(normalOutKey));
 			}
 
 			Element artifactElm = invArtElm.getChild("TheArtifact");

@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.RelationshipKind;
 import br.ufpa.labes.spm.repository.RelationshipKindRepository;
-import br.ufpa.labes.spm.service.RelationshipKindService;
-import br.ufpa.labes.spm.service.dto.RelationshipKindDTO;
-import br.ufpa.labes.spm.service.mapper.RelationshipKindMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +45,6 @@ public class RelationshipKindResourceIT {
     private RelationshipKindRepository relationshipKindRepository;
 
     @Autowired
-    private RelationshipKindMapper relationshipKindMapper;
-
-    @Autowired
-    private RelationshipKindService relationshipKindService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +66,7 @@ public class RelationshipKindResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RelationshipKindResource relationshipKindResource = new RelationshipKindResource(relationshipKindService);
+        final RelationshipKindResource relationshipKindResource = new RelationshipKindResource(relationshipKindRepository);
         this.restRelationshipKindMockMvc = MockMvcBuilders.standaloneSetup(relationshipKindResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,10 +111,9 @@ public class RelationshipKindResourceIT {
         int databaseSizeBeforeCreate = relationshipKindRepository.findAll().size();
 
         // Create the RelationshipKind
-        RelationshipKindDTO relationshipKindDTO = relationshipKindMapper.toDto(relationshipKind);
         restRelationshipKindMockMvc.perform(post("/api/relationship-kinds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(relationshipKindDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(relationshipKind)))
             .andExpect(status().isCreated());
 
         // Validate the RelationshipKind in the database
@@ -141,12 +131,11 @@ public class RelationshipKindResourceIT {
 
         // Create the RelationshipKind with an existing ID
         relationshipKind.setId(1L);
-        RelationshipKindDTO relationshipKindDTO = relationshipKindMapper.toDto(relationshipKind);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restRelationshipKindMockMvc.perform(post("/api/relationship-kinds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(relationshipKindDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(relationshipKind)))
             .andExpect(status().isBadRequest());
 
         // Validate the RelationshipKind in the database
@@ -208,11 +197,10 @@ public class RelationshipKindResourceIT {
         updatedRelationshipKind
             .typeIdent(UPDATED_TYPE_IDENT)
             .description(UPDATED_DESCRIPTION);
-        RelationshipKindDTO relationshipKindDTO = relationshipKindMapper.toDto(updatedRelationshipKind);
 
         restRelationshipKindMockMvc.perform(put("/api/relationship-kinds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(relationshipKindDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedRelationshipKind)))
             .andExpect(status().isOk());
 
         // Validate the RelationshipKind in the database
@@ -229,12 +217,11 @@ public class RelationshipKindResourceIT {
         int databaseSizeBeforeUpdate = relationshipKindRepository.findAll().size();
 
         // Create the RelationshipKind
-        RelationshipKindDTO relationshipKindDTO = relationshipKindMapper.toDto(relationshipKind);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restRelationshipKindMockMvc.perform(put("/api/relationship-kinds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(relationshipKindDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(relationshipKind)))
             .andExpect(status().isBadRequest());
 
         // Validate the RelationshipKind in the database
@@ -273,28 +260,5 @@ public class RelationshipKindResourceIT {
         assertThat(relationshipKind1).isNotEqualTo(relationshipKind2);
         relationshipKind1.setId(null);
         assertThat(relationshipKind1).isNotEqualTo(relationshipKind2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(RelationshipKindDTO.class);
-        RelationshipKindDTO relationshipKindDTO1 = new RelationshipKindDTO();
-        relationshipKindDTO1.setId(1L);
-        RelationshipKindDTO relationshipKindDTO2 = new RelationshipKindDTO();
-        assertThat(relationshipKindDTO1).isNotEqualTo(relationshipKindDTO2);
-        relationshipKindDTO2.setId(relationshipKindDTO1.getId());
-        assertThat(relationshipKindDTO1).isEqualTo(relationshipKindDTO2);
-        relationshipKindDTO2.setId(2L);
-        assertThat(relationshipKindDTO1).isNotEqualTo(relationshipKindDTO2);
-        relationshipKindDTO1.setId(null);
-        assertThat(relationshipKindDTO1).isNotEqualTo(relationshipKindDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(relationshipKindMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(relationshipKindMapper.fromId(null)).isNull();
     }
 }

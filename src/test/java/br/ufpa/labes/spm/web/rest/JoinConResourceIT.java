@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.JoinCon;
 import br.ufpa.labes.spm.repository.JoinConRepository;
-import br.ufpa.labes.spm.service.JoinConService;
-import br.ufpa.labes.spm.service.dto.JoinConDTO;
-import br.ufpa.labes.spm.service.mapper.JoinConMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -53,15 +50,6 @@ public class JoinConResourceIT {
     private JoinConRepository joinConRepositoryMock;
 
     @Autowired
-    private JoinConMapper joinConMapper;
-
-    @Mock
-    private JoinConService joinConServiceMock;
-
-    @Autowired
-    private JoinConService joinConService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -83,7 +71,7 @@ public class JoinConResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final JoinConResource joinConResource = new JoinConResource(joinConService);
+        final JoinConResource joinConResource = new JoinConResource(joinConRepository);
         this.restJoinConMockMvc = MockMvcBuilders.standaloneSetup(joinConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -126,10 +114,9 @@ public class JoinConResourceIT {
         int databaseSizeBeforeCreate = joinConRepository.findAll().size();
 
         // Create the JoinCon
-        JoinConDTO joinConDTO = joinConMapper.toDto(joinCon);
         restJoinConMockMvc.perform(post("/api/join-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(joinConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(joinCon)))
             .andExpect(status().isCreated());
 
         // Validate the JoinCon in the database
@@ -146,12 +133,11 @@ public class JoinConResourceIT {
 
         // Create the JoinCon with an existing ID
         joinCon.setId(1L);
-        JoinConDTO joinConDTO = joinConMapper.toDto(joinCon);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restJoinConMockMvc.perform(post("/api/join-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(joinConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(joinCon)))
             .andExpect(status().isBadRequest());
 
         // Validate the JoinCon in the database
@@ -176,8 +162,8 @@ public class JoinConResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllJoinConsWithEagerRelationshipsIsEnabled() throws Exception {
-        JoinConResource joinConResource = new JoinConResource(joinConServiceMock);
-        when(joinConServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        JoinConResource joinConResource = new JoinConResource(joinConRepositoryMock);
+        when(joinConRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restJoinConMockMvc = MockMvcBuilders.standaloneSetup(joinConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -188,13 +174,13 @@ public class JoinConResourceIT {
         restJoinConMockMvc.perform(get("/api/join-cons?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(joinConServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(joinConRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllJoinConsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        JoinConResource joinConResource = new JoinConResource(joinConServiceMock);
-            when(joinConServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        JoinConResource joinConResource = new JoinConResource(joinConRepositoryMock);
+            when(joinConRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restJoinConMockMvc = MockMvcBuilders.standaloneSetup(joinConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -204,7 +190,7 @@ public class JoinConResourceIT {
         restJoinConMockMvc.perform(get("/api/join-cons?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(joinConServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(joinConRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -243,11 +229,10 @@ public class JoinConResourceIT {
         em.detach(updatedJoinCon);
         updatedJoinCon
             .kindJoin(UPDATED_KIND_JOIN);
-        JoinConDTO joinConDTO = joinConMapper.toDto(updatedJoinCon);
 
         restJoinConMockMvc.perform(put("/api/join-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(joinConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedJoinCon)))
             .andExpect(status().isOk());
 
         // Validate the JoinCon in the database
@@ -263,12 +248,11 @@ public class JoinConResourceIT {
         int databaseSizeBeforeUpdate = joinConRepository.findAll().size();
 
         // Create the JoinCon
-        JoinConDTO joinConDTO = joinConMapper.toDto(joinCon);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restJoinConMockMvc.perform(put("/api/join-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(joinConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(joinCon)))
             .andExpect(status().isBadRequest());
 
         // Validate the JoinCon in the database
@@ -307,28 +291,5 @@ public class JoinConResourceIT {
         assertThat(joinCon1).isNotEqualTo(joinCon2);
         joinCon1.setId(null);
         assertThat(joinCon1).isNotEqualTo(joinCon2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(JoinConDTO.class);
-        JoinConDTO joinConDTO1 = new JoinConDTO();
-        joinConDTO1.setId(1L);
-        JoinConDTO joinConDTO2 = new JoinConDTO();
-        assertThat(joinConDTO1).isNotEqualTo(joinConDTO2);
-        joinConDTO2.setId(joinConDTO1.getId());
-        assertThat(joinConDTO1).isEqualTo(joinConDTO2);
-        joinConDTO2.setId(2L);
-        assertThat(joinConDTO1).isNotEqualTo(joinConDTO2);
-        joinConDTO1.setId(null);
-        assertThat(joinConDTO1).isNotEqualTo(joinConDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(joinConMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(joinConMapper.fromId(null)).isNull();
     }
 }

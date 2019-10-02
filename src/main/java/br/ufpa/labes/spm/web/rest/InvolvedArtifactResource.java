@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.InvolvedArtifactService;
+import br.ufpa.labes.spm.domain.InvolvedArtifact;
+import br.ufpa.labes.spm.repository.InvolvedArtifactRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.InvolvedArtifactDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class InvolvedArtifactResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final InvolvedArtifactService involvedArtifactService;
+    private final InvolvedArtifactRepository involvedArtifactRepository;
 
-    public InvolvedArtifactResource(InvolvedArtifactService involvedArtifactService) {
-        this.involvedArtifactService = involvedArtifactService;
+    public InvolvedArtifactResource(InvolvedArtifactRepository involvedArtifactRepository) {
+        this.involvedArtifactRepository = involvedArtifactRepository;
     }
 
     /**
      * {@code POST  /involved-artifacts} : Create a new involvedArtifact.
      *
-     * @param involvedArtifactDTO the involvedArtifactDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new involvedArtifactDTO, or with status {@code 400 (Bad Request)} if the involvedArtifact has already an ID.
+     * @param involvedArtifact the involvedArtifact to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new involvedArtifact, or with status {@code 400 (Bad Request)} if the involvedArtifact has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/involved-artifacts")
-    public ResponseEntity<InvolvedArtifactDTO> createInvolvedArtifact(@RequestBody InvolvedArtifactDTO involvedArtifactDTO) throws URISyntaxException {
-        log.debug("REST request to save InvolvedArtifact : {}", involvedArtifactDTO);
-        if (involvedArtifactDTO.getId() != null) {
+    public ResponseEntity<InvolvedArtifact> createInvolvedArtifact(@RequestBody InvolvedArtifact involvedArtifact) throws URISyntaxException {
+        log.debug("REST request to save InvolvedArtifact : {}", involvedArtifact);
+        if (involvedArtifact.getId() != null) {
             throw new BadRequestAlertException("A new involvedArtifact cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        InvolvedArtifactDTO result = involvedArtifactService.save(involvedArtifactDTO);
+        InvolvedArtifact result = involvedArtifactRepository.save(involvedArtifact);
         return ResponseEntity.created(new URI("/api/involved-artifacts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class InvolvedArtifactResource {
     /**
      * {@code PUT  /involved-artifacts} : Updates an existing involvedArtifact.
      *
-     * @param involvedArtifactDTO the involvedArtifactDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated involvedArtifactDTO,
-     * or with status {@code 400 (Bad Request)} if the involvedArtifactDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the involvedArtifactDTO couldn't be updated.
+     * @param involvedArtifact the involvedArtifact to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated involvedArtifact,
+     * or with status {@code 400 (Bad Request)} if the involvedArtifact is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the involvedArtifact couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/involved-artifacts")
-    public ResponseEntity<InvolvedArtifactDTO> updateInvolvedArtifact(@RequestBody InvolvedArtifactDTO involvedArtifactDTO) throws URISyntaxException {
-        log.debug("REST request to update InvolvedArtifact : {}", involvedArtifactDTO);
-        if (involvedArtifactDTO.getId() == null) {
+    public ResponseEntity<InvolvedArtifact> updateInvolvedArtifact(@RequestBody InvolvedArtifact involvedArtifact) throws URISyntaxException {
+        log.debug("REST request to update InvolvedArtifact : {}", involvedArtifact);
+        if (involvedArtifact.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        InvolvedArtifactDTO result = involvedArtifactService.save(involvedArtifactDTO);
+        InvolvedArtifact result = involvedArtifactRepository.save(involvedArtifact);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, involvedArtifactDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, involvedArtifact.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class InvolvedArtifactResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of involvedArtifacts in body.
      */
     @GetMapping("/involved-artifacts")
-    public List<InvolvedArtifactDTO> getAllInvolvedArtifacts() {
+    public List<InvolvedArtifact> getAllInvolvedArtifacts() {
         log.debug("REST request to get all InvolvedArtifacts");
-        return involvedArtifactService.findAll();
+        return involvedArtifactRepository.findAll();
     }
 
     /**
      * {@code GET  /involved-artifacts/:id} : get the "id" involvedArtifact.
      *
-     * @param id the id of the involvedArtifactDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the involvedArtifactDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the involvedArtifact to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the involvedArtifact, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/involved-artifacts/{id}")
-    public ResponseEntity<InvolvedArtifactDTO> getInvolvedArtifact(@PathVariable Long id) {
+    public ResponseEntity<InvolvedArtifact> getInvolvedArtifact(@PathVariable Long id) {
         log.debug("REST request to get InvolvedArtifact : {}", id);
-        Optional<InvolvedArtifactDTO> involvedArtifactDTO = involvedArtifactService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(involvedArtifactDTO);
+        Optional<InvolvedArtifact> involvedArtifact = involvedArtifactRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(involvedArtifact);
     }
 
     /**
      * {@code DELETE  /involved-artifacts/:id} : delete the "id" involvedArtifact.
      *
-     * @param id the id of the involvedArtifactDTO to delete.
+     * @param id the id of the involvedArtifact to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/involved-artifacts/{id}")
     public ResponseEntity<Void> deleteInvolvedArtifact(@PathVariable Long id) {
         log.debug("REST request to delete InvolvedArtifact : {}", id);
-        involvedArtifactService.delete(id);
+        involvedArtifactRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

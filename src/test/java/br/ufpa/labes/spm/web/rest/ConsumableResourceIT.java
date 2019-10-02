@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Consumable;
 import br.ufpa.labes.spm.repository.ConsumableRepository;
-import br.ufpa.labes.spm.service.ConsumableService;
-import br.ufpa.labes.spm.service.dto.ConsumableDTO;
-import br.ufpa.labes.spm.service.mapper.ConsumableMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -56,12 +53,6 @@ public class ConsumableResourceIT {
     private ConsumableRepository consumableRepository;
 
     @Autowired
-    private ConsumableMapper consumableMapper;
-
-    @Autowired
-    private ConsumableService consumableService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -83,7 +74,7 @@ public class ConsumableResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ConsumableResource consumableResource = new ConsumableResource(consumableService);
+        final ConsumableResource consumableResource = new ConsumableResource(consumableRepository);
         this.restConsumableMockMvc = MockMvcBuilders.standaloneSetup(consumableResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -132,10 +123,9 @@ public class ConsumableResourceIT {
         int databaseSizeBeforeCreate = consumableRepository.findAll().size();
 
         // Create the Consumable
-        ConsumableDTO consumableDTO = consumableMapper.toDto(consumable);
         restConsumableMockMvc.perform(post("/api/consumables")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(consumableDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(consumable)))
             .andExpect(status().isCreated());
 
         // Validate the Consumable in the database
@@ -155,12 +145,11 @@ public class ConsumableResourceIT {
 
         // Create the Consumable with an existing ID
         consumable.setId(1L);
-        ConsumableDTO consumableDTO = consumableMapper.toDto(consumable);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restConsumableMockMvc.perform(post("/api/consumables")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(consumableDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(consumable)))
             .andExpect(status().isBadRequest());
 
         // Validate the Consumable in the database
@@ -228,11 +217,10 @@ public class ConsumableResourceIT {
             .unit(UPDATED_UNIT)
             .totalQuantity(UPDATED_TOTAL_QUANTITY)
             .amountUsed(UPDATED_AMOUNT_USED);
-        ConsumableDTO consumableDTO = consumableMapper.toDto(updatedConsumable);
 
         restConsumableMockMvc.perform(put("/api/consumables")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(consumableDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedConsumable)))
             .andExpect(status().isOk());
 
         // Validate the Consumable in the database
@@ -251,12 +239,11 @@ public class ConsumableResourceIT {
         int databaseSizeBeforeUpdate = consumableRepository.findAll().size();
 
         // Create the Consumable
-        ConsumableDTO consumableDTO = consumableMapper.toDto(consumable);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restConsumableMockMvc.perform(put("/api/consumables")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(consumableDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(consumable)))
             .andExpect(status().isBadRequest());
 
         // Validate the Consumable in the database
@@ -295,28 +282,5 @@ public class ConsumableResourceIT {
         assertThat(consumable1).isNotEqualTo(consumable2);
         consumable1.setId(null);
         assertThat(consumable1).isNotEqualTo(consumable2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ConsumableDTO.class);
-        ConsumableDTO consumableDTO1 = new ConsumableDTO();
-        consumableDTO1.setId(1L);
-        ConsumableDTO consumableDTO2 = new ConsumableDTO();
-        assertThat(consumableDTO1).isNotEqualTo(consumableDTO2);
-        consumableDTO2.setId(consumableDTO1.getId());
-        assertThat(consumableDTO1).isEqualTo(consumableDTO2);
-        consumableDTO2.setId(2L);
-        assertThat(consumableDTO1).isNotEqualTo(consumableDTO2);
-        consumableDTO1.setId(null);
-        assertThat(consumableDTO1).isNotEqualTo(consumableDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(consumableMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(consumableMapper.fromId(null)).isNull();
     }
 }

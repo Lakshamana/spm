@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ArtifactType;
 import br.ufpa.labes.spm.repository.ArtifactTypeRepository;
-import br.ufpa.labes.spm.service.ArtifactTypeService;
-import br.ufpa.labes.spm.service.dto.ArtifactTypeDTO;
-import br.ufpa.labes.spm.service.mapper.ArtifactTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ArtifactTypeResourceIT {
     private ArtifactTypeRepository artifactTypeRepository;
 
     @Autowired
-    private ArtifactTypeMapper artifactTypeMapper;
-
-    @Autowired
-    private ArtifactTypeService artifactTypeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ArtifactTypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ArtifactTypeResource artifactTypeResource = new ArtifactTypeResource(artifactTypeService);
+        final ArtifactTypeResource artifactTypeResource = new ArtifactTypeResource(artifactTypeRepository);
         this.restArtifactTypeMockMvc = MockMvcBuilders.standaloneSetup(artifactTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ArtifactTypeResourceIT {
         int databaseSizeBeforeCreate = artifactTypeRepository.findAll().size();
 
         // Create the ArtifactType
-        ArtifactTypeDTO artifactTypeDTO = artifactTypeMapper.toDto(artifactType);
         restArtifactTypeMockMvc.perform(post("/api/artifact-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactType)))
             .andExpect(status().isCreated());
 
         // Validate the ArtifactType in the database
@@ -129,12 +119,11 @@ public class ArtifactTypeResourceIT {
 
         // Create the ArtifactType with an existing ID
         artifactType.setId(1L);
-        ArtifactTypeDTO artifactTypeDTO = artifactTypeMapper.toDto(artifactType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restArtifactTypeMockMvc.perform(post("/api/artifact-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactType)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactType in the database
@@ -189,11 +178,10 @@ public class ArtifactTypeResourceIT {
         ArtifactType updatedArtifactType = artifactTypeRepository.findById(artifactType.getId()).get();
         // Disconnect from session so that the updates on updatedArtifactType are not directly saved in db
         em.detach(updatedArtifactType);
-        ArtifactTypeDTO artifactTypeDTO = artifactTypeMapper.toDto(updatedArtifactType);
 
         restArtifactTypeMockMvc.perform(put("/api/artifact-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedArtifactType)))
             .andExpect(status().isOk());
 
         // Validate the ArtifactType in the database
@@ -208,12 +196,11 @@ public class ArtifactTypeResourceIT {
         int databaseSizeBeforeUpdate = artifactTypeRepository.findAll().size();
 
         // Create the ArtifactType
-        ArtifactTypeDTO artifactTypeDTO = artifactTypeMapper.toDto(artifactType);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restArtifactTypeMockMvc.perform(put("/api/artifact-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactType)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactType in the database
@@ -252,28 +239,5 @@ public class ArtifactTypeResourceIT {
         assertThat(artifactType1).isNotEqualTo(artifactType2);
         artifactType1.setId(null);
         assertThat(artifactType1).isNotEqualTo(artifactType2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ArtifactTypeDTO.class);
-        ArtifactTypeDTO artifactTypeDTO1 = new ArtifactTypeDTO();
-        artifactTypeDTO1.setId(1L);
-        ArtifactTypeDTO artifactTypeDTO2 = new ArtifactTypeDTO();
-        assertThat(artifactTypeDTO1).isNotEqualTo(artifactTypeDTO2);
-        artifactTypeDTO2.setId(artifactTypeDTO1.getId());
-        assertThat(artifactTypeDTO1).isEqualTo(artifactTypeDTO2);
-        artifactTypeDTO2.setId(2L);
-        assertThat(artifactTypeDTO1).isNotEqualTo(artifactTypeDTO2);
-        artifactTypeDTO1.setId(null);
-        assertThat(artifactTypeDTO1).isNotEqualTo(artifactTypeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(artifactTypeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(artifactTypeMapper.fromId(null)).isNull();
     }
 }

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AgendaEventService;
+import br.ufpa.labes.spm.domain.AgendaEvent;
+import br.ufpa.labes.spm.repository.AgendaEventRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AgendaEventDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class AgendaEventResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AgendaEventService agendaEventService;
+    private final AgendaEventRepository agendaEventRepository;
 
-    public AgendaEventResource(AgendaEventService agendaEventService) {
-        this.agendaEventService = agendaEventService;
+    public AgendaEventResource(AgendaEventRepository agendaEventRepository) {
+        this.agendaEventRepository = agendaEventRepository;
     }
 
     /**
      * {@code POST  /agenda-events} : Create a new agendaEvent.
      *
-     * @param agendaEventDTO the agendaEventDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agendaEventDTO, or with status {@code 400 (Bad Request)} if the agendaEvent has already an ID.
+     * @param agendaEvent the agendaEvent to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agendaEvent, or with status {@code 400 (Bad Request)} if the agendaEvent has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/agenda-events")
-    public ResponseEntity<AgendaEventDTO> createAgendaEvent(@RequestBody AgendaEventDTO agendaEventDTO) throws URISyntaxException {
-        log.debug("REST request to save AgendaEvent : {}", agendaEventDTO);
-        if (agendaEventDTO.getId() != null) {
+    public ResponseEntity<AgendaEvent> createAgendaEvent(@RequestBody AgendaEvent agendaEvent) throws URISyntaxException {
+        log.debug("REST request to save AgendaEvent : {}", agendaEvent);
+        if (agendaEvent.getId() != null) {
             throw new BadRequestAlertException("A new agendaEvent cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AgendaEventDTO result = agendaEventService.save(agendaEventDTO);
+        AgendaEvent result = agendaEventRepository.save(agendaEvent);
         return ResponseEntity.created(new URI("/api/agenda-events/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class AgendaEventResource {
     /**
      * {@code PUT  /agenda-events} : Updates an existing agendaEvent.
      *
-     * @param agendaEventDTO the agendaEventDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agendaEventDTO,
-     * or with status {@code 400 (Bad Request)} if the agendaEventDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the agendaEventDTO couldn't be updated.
+     * @param agendaEvent the agendaEvent to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agendaEvent,
+     * or with status {@code 400 (Bad Request)} if the agendaEvent is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the agendaEvent couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/agenda-events")
-    public ResponseEntity<AgendaEventDTO> updateAgendaEvent(@RequestBody AgendaEventDTO agendaEventDTO) throws URISyntaxException {
-        log.debug("REST request to update AgendaEvent : {}", agendaEventDTO);
-        if (agendaEventDTO.getId() == null) {
+    public ResponseEntity<AgendaEvent> updateAgendaEvent(@RequestBody AgendaEvent agendaEvent) throws URISyntaxException {
+        log.debug("REST request to update AgendaEvent : {}", agendaEvent);
+        if (agendaEvent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AgendaEventDTO result = agendaEventService.save(agendaEventDTO);
+        AgendaEvent result = agendaEventRepository.save(agendaEvent);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agendaEventDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agendaEvent.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class AgendaEventResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of agendaEvents in body.
      */
     @GetMapping("/agenda-events")
-    public List<AgendaEventDTO> getAllAgendaEvents() {
+    public List<AgendaEvent> getAllAgendaEvents() {
         log.debug("REST request to get all AgendaEvents");
-        return agendaEventService.findAll();
+        return agendaEventRepository.findAll();
     }
 
     /**
      * {@code GET  /agenda-events/:id} : get the "id" agendaEvent.
      *
-     * @param id the id of the agendaEventDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agendaEventDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the agendaEvent to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agendaEvent, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/agenda-events/{id}")
-    public ResponseEntity<AgendaEventDTO> getAgendaEvent(@PathVariable Long id) {
+    public ResponseEntity<AgendaEvent> getAgendaEvent(@PathVariable Long id) {
         log.debug("REST request to get AgendaEvent : {}", id);
-        Optional<AgendaEventDTO> agendaEventDTO = agendaEventService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(agendaEventDTO);
+        Optional<AgendaEvent> agendaEvent = agendaEventRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(agendaEvent);
     }
 
     /**
      * {@code DELETE  /agenda-events/:id} : delete the "id" agendaEvent.
      *
-     * @param id the id of the agendaEventDTO to delete.
+     * @param id the id of the agendaEvent to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/agenda-events/{id}")
     public ResponseEntity<Void> deleteAgendaEvent(@PathVariable Long id) {
         log.debug("REST request to delete AgendaEvent : {}", id);
-        agendaEventService.delete(id);
+        agendaEventRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

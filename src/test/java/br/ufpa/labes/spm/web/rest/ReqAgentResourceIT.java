@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ReqAgent;
 import br.ufpa.labes.spm.repository.ReqAgentRepository;
-import br.ufpa.labes.spm.service.ReqAgentService;
-import br.ufpa.labes.spm.service.dto.ReqAgentDTO;
-import br.ufpa.labes.spm.service.mapper.ReqAgentMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ReqAgentResourceIT {
     private ReqAgentRepository reqAgentRepository;
 
     @Autowired
-    private ReqAgentMapper reqAgentMapper;
-
-    @Autowired
-    private ReqAgentService reqAgentService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ReqAgentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ReqAgentResource reqAgentResource = new ReqAgentResource(reqAgentService);
+        final ReqAgentResource reqAgentResource = new ReqAgentResource(reqAgentRepository);
         this.restReqAgentMockMvc = MockMvcBuilders.standaloneSetup(reqAgentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ReqAgentResourceIT {
         int databaseSizeBeforeCreate = reqAgentRepository.findAll().size();
 
         // Create the ReqAgent
-        ReqAgentDTO reqAgentDTO = reqAgentMapper.toDto(reqAgent);
         restReqAgentMockMvc.perform(post("/api/req-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reqAgent)))
             .andExpect(status().isCreated());
 
         // Validate the ReqAgent in the database
@@ -129,12 +119,11 @@ public class ReqAgentResourceIT {
 
         // Create the ReqAgent with an existing ID
         reqAgent.setId(1L);
-        ReqAgentDTO reqAgentDTO = reqAgentMapper.toDto(reqAgent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restReqAgentMockMvc.perform(post("/api/req-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reqAgent)))
             .andExpect(status().isBadRequest());
 
         // Validate the ReqAgent in the database
@@ -189,11 +178,10 @@ public class ReqAgentResourceIT {
         ReqAgent updatedReqAgent = reqAgentRepository.findById(reqAgent.getId()).get();
         // Disconnect from session so that the updates on updatedReqAgent are not directly saved in db
         em.detach(updatedReqAgent);
-        ReqAgentDTO reqAgentDTO = reqAgentMapper.toDto(updatedReqAgent);
 
         restReqAgentMockMvc.perform(put("/api/req-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedReqAgent)))
             .andExpect(status().isOk());
 
         // Validate the ReqAgent in the database
@@ -208,12 +196,11 @@ public class ReqAgentResourceIT {
         int databaseSizeBeforeUpdate = reqAgentRepository.findAll().size();
 
         // Create the ReqAgent
-        ReqAgentDTO reqAgentDTO = reqAgentMapper.toDto(reqAgent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restReqAgentMockMvc.perform(put("/api/req-agents")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reqAgentDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reqAgent)))
             .andExpect(status().isBadRequest());
 
         // Validate the ReqAgent in the database
@@ -252,28 +239,5 @@ public class ReqAgentResourceIT {
         assertThat(reqAgent1).isNotEqualTo(reqAgent2);
         reqAgent1.setId(null);
         assertThat(reqAgent1).isNotEqualTo(reqAgent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ReqAgentDTO.class);
-        ReqAgentDTO reqAgentDTO1 = new ReqAgentDTO();
-        reqAgentDTO1.setId(1L);
-        ReqAgentDTO reqAgentDTO2 = new ReqAgentDTO();
-        assertThat(reqAgentDTO1).isNotEqualTo(reqAgentDTO2);
-        reqAgentDTO2.setId(reqAgentDTO1.getId());
-        assertThat(reqAgentDTO1).isEqualTo(reqAgentDTO2);
-        reqAgentDTO2.setId(2L);
-        assertThat(reqAgentDTO1).isNotEqualTo(reqAgentDTO2);
-        reqAgentDTO1.setId(null);
-        assertThat(reqAgentDTO1).isNotEqualTo(reqAgentDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(reqAgentMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(reqAgentMapper.fromId(null)).isNull();
     }
 }

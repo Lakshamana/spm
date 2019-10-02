@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.WorkGroupInstSug;
 import br.ufpa.labes.spm.repository.WorkGroupInstSugRepository;
-import br.ufpa.labes.spm.service.WorkGroupInstSugService;
-import br.ufpa.labes.spm.service.dto.WorkGroupInstSugDTO;
-import br.ufpa.labes.spm.service.mapper.WorkGroupInstSugMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -50,15 +47,6 @@ public class WorkGroupInstSugResourceIT {
     private WorkGroupInstSugRepository workGroupInstSugRepositoryMock;
 
     @Autowired
-    private WorkGroupInstSugMapper workGroupInstSugMapper;
-
-    @Mock
-    private WorkGroupInstSugService workGroupInstSugServiceMock;
-
-    @Autowired
-    private WorkGroupInstSugService workGroupInstSugService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -80,7 +68,7 @@ public class WorkGroupInstSugResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WorkGroupInstSugResource workGroupInstSugResource = new WorkGroupInstSugResource(workGroupInstSugService);
+        final WorkGroupInstSugResource workGroupInstSugResource = new WorkGroupInstSugResource(workGroupInstSugRepository);
         this.restWorkGroupInstSugMockMvc = MockMvcBuilders.standaloneSetup(workGroupInstSugResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -121,10 +109,9 @@ public class WorkGroupInstSugResourceIT {
         int databaseSizeBeforeCreate = workGroupInstSugRepository.findAll().size();
 
         // Create the WorkGroupInstSug
-        WorkGroupInstSugDTO workGroupInstSugDTO = workGroupInstSugMapper.toDto(workGroupInstSug);
         restWorkGroupInstSugMockMvc.perform(post("/api/work-group-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupInstSug)))
             .andExpect(status().isCreated());
 
         // Validate the WorkGroupInstSug in the database
@@ -140,12 +127,11 @@ public class WorkGroupInstSugResourceIT {
 
         // Create the WorkGroupInstSug with an existing ID
         workGroupInstSug.setId(1L);
-        WorkGroupInstSugDTO workGroupInstSugDTO = workGroupInstSugMapper.toDto(workGroupInstSug);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWorkGroupInstSugMockMvc.perform(post("/api/work-group-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupInstSug)))
             .andExpect(status().isBadRequest());
 
         // Validate the WorkGroupInstSug in the database
@@ -169,8 +155,8 @@ public class WorkGroupInstSugResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllWorkGroupInstSugsWithEagerRelationshipsIsEnabled() throws Exception {
-        WorkGroupInstSugResource workGroupInstSugResource = new WorkGroupInstSugResource(workGroupInstSugServiceMock);
-        when(workGroupInstSugServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        WorkGroupInstSugResource workGroupInstSugResource = new WorkGroupInstSugResource(workGroupInstSugRepositoryMock);
+        when(workGroupInstSugRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restWorkGroupInstSugMockMvc = MockMvcBuilders.standaloneSetup(workGroupInstSugResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -181,13 +167,13 @@ public class WorkGroupInstSugResourceIT {
         restWorkGroupInstSugMockMvc.perform(get("/api/work-group-inst-sugs?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(workGroupInstSugServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(workGroupInstSugRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllWorkGroupInstSugsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        WorkGroupInstSugResource workGroupInstSugResource = new WorkGroupInstSugResource(workGroupInstSugServiceMock);
-            when(workGroupInstSugServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        WorkGroupInstSugResource workGroupInstSugResource = new WorkGroupInstSugResource(workGroupInstSugRepositoryMock);
+            when(workGroupInstSugRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restWorkGroupInstSugMockMvc = MockMvcBuilders.standaloneSetup(workGroupInstSugResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -197,7 +183,7 @@ public class WorkGroupInstSugResourceIT {
         restWorkGroupInstSugMockMvc.perform(get("/api/work-group-inst-sugs?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(workGroupInstSugServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(workGroupInstSugRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -233,11 +219,10 @@ public class WorkGroupInstSugResourceIT {
         WorkGroupInstSug updatedWorkGroupInstSug = workGroupInstSugRepository.findById(workGroupInstSug.getId()).get();
         // Disconnect from session so that the updates on updatedWorkGroupInstSug are not directly saved in db
         em.detach(updatedWorkGroupInstSug);
-        WorkGroupInstSugDTO workGroupInstSugDTO = workGroupInstSugMapper.toDto(updatedWorkGroupInstSug);
 
         restWorkGroupInstSugMockMvc.perform(put("/api/work-group-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedWorkGroupInstSug)))
             .andExpect(status().isOk());
 
         // Validate the WorkGroupInstSug in the database
@@ -252,12 +237,11 @@ public class WorkGroupInstSugResourceIT {
         int databaseSizeBeforeUpdate = workGroupInstSugRepository.findAll().size();
 
         // Create the WorkGroupInstSug
-        WorkGroupInstSugDTO workGroupInstSugDTO = workGroupInstSugMapper.toDto(workGroupInstSug);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkGroupInstSugMockMvc.perform(put("/api/work-group-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(workGroupInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(workGroupInstSug)))
             .andExpect(status().isBadRequest());
 
         // Validate the WorkGroupInstSug in the database
@@ -296,28 +280,5 @@ public class WorkGroupInstSugResourceIT {
         assertThat(workGroupInstSug1).isNotEqualTo(workGroupInstSug2);
         workGroupInstSug1.setId(null);
         assertThat(workGroupInstSug1).isNotEqualTo(workGroupInstSug2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(WorkGroupInstSugDTO.class);
-        WorkGroupInstSugDTO workGroupInstSugDTO1 = new WorkGroupInstSugDTO();
-        workGroupInstSugDTO1.setId(1L);
-        WorkGroupInstSugDTO workGroupInstSugDTO2 = new WorkGroupInstSugDTO();
-        assertThat(workGroupInstSugDTO1).isNotEqualTo(workGroupInstSugDTO2);
-        workGroupInstSugDTO2.setId(workGroupInstSugDTO1.getId());
-        assertThat(workGroupInstSugDTO1).isEqualTo(workGroupInstSugDTO2);
-        workGroupInstSugDTO2.setId(2L);
-        assertThat(workGroupInstSugDTO1).isNotEqualTo(workGroupInstSugDTO2);
-        workGroupInstSugDTO1.setId(null);
-        assertThat(workGroupInstSugDTO1).isNotEqualTo(workGroupInstSugDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(workGroupInstSugMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(workGroupInstSugMapper.fromId(null)).isNull();
     }
 }

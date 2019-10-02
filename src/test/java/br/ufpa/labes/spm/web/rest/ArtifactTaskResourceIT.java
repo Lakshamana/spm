@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ArtifactTask;
 import br.ufpa.labes.spm.repository.ArtifactTaskRepository;
-import br.ufpa.labes.spm.service.ArtifactTaskService;
-import br.ufpa.labes.spm.service.dto.ArtifactTaskDTO;
-import br.ufpa.labes.spm.service.mapper.ArtifactTaskMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +45,6 @@ public class ArtifactTaskResourceIT {
     private ArtifactTaskRepository artifactTaskRepository;
 
     @Autowired
-    private ArtifactTaskMapper artifactTaskMapper;
-
-    @Autowired
-    private ArtifactTaskService artifactTaskService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +66,7 @@ public class ArtifactTaskResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ArtifactTaskResource artifactTaskResource = new ArtifactTaskResource(artifactTaskService);
+        final ArtifactTaskResource artifactTaskResource = new ArtifactTaskResource(artifactTaskRepository);
         this.restArtifactTaskMockMvc = MockMvcBuilders.standaloneSetup(artifactTaskResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,10 +111,9 @@ public class ArtifactTaskResourceIT {
         int databaseSizeBeforeCreate = artifactTaskRepository.findAll().size();
 
         // Create the ArtifactTask
-        ArtifactTaskDTO artifactTaskDTO = artifactTaskMapper.toDto(artifactTask);
         restArtifactTaskMockMvc.perform(post("/api/artifact-tasks")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactTaskDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactTask)))
             .andExpect(status().isCreated());
 
         // Validate the ArtifactTask in the database
@@ -141,12 +131,11 @@ public class ArtifactTaskResourceIT {
 
         // Create the ArtifactTask with an existing ID
         artifactTask.setId(1L);
-        ArtifactTaskDTO artifactTaskDTO = artifactTaskMapper.toDto(artifactTask);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restArtifactTaskMockMvc.perform(post("/api/artifact-tasks")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactTaskDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactTask)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactTask in the database
@@ -208,11 +197,10 @@ public class ArtifactTaskResourceIT {
         updatedArtifactTask
             .inWorkspaceVersion(UPDATED_IN_WORKSPACE_VERSION)
             .outWorkspaceVersion(UPDATED_OUT_WORKSPACE_VERSION);
-        ArtifactTaskDTO artifactTaskDTO = artifactTaskMapper.toDto(updatedArtifactTask);
 
         restArtifactTaskMockMvc.perform(put("/api/artifact-tasks")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactTaskDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedArtifactTask)))
             .andExpect(status().isOk());
 
         // Validate the ArtifactTask in the database
@@ -229,12 +217,11 @@ public class ArtifactTaskResourceIT {
         int databaseSizeBeforeUpdate = artifactTaskRepository.findAll().size();
 
         // Create the ArtifactTask
-        ArtifactTaskDTO artifactTaskDTO = artifactTaskMapper.toDto(artifactTask);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restArtifactTaskMockMvc.perform(put("/api/artifact-tasks")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactTaskDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactTask)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactTask in the database
@@ -273,28 +260,5 @@ public class ArtifactTaskResourceIT {
         assertThat(artifactTask1).isNotEqualTo(artifactTask2);
         artifactTask1.setId(null);
         assertThat(artifactTask1).isNotEqualTo(artifactTask2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ArtifactTaskDTO.class);
-        ArtifactTaskDTO artifactTaskDTO1 = new ArtifactTaskDTO();
-        artifactTaskDTO1.setId(1L);
-        ArtifactTaskDTO artifactTaskDTO2 = new ArtifactTaskDTO();
-        assertThat(artifactTaskDTO1).isNotEqualTo(artifactTaskDTO2);
-        artifactTaskDTO2.setId(artifactTaskDTO1.getId());
-        assertThat(artifactTaskDTO1).isEqualTo(artifactTaskDTO2);
-        artifactTaskDTO2.setId(2L);
-        assertThat(artifactTaskDTO1).isNotEqualTo(artifactTaskDTO2);
-        artifactTaskDTO1.setId(null);
-        assertThat(artifactTaskDTO1).isNotEqualTo(artifactTaskDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(artifactTaskMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(artifactTaskMapper.fromId(null)).isNull();
     }
 }

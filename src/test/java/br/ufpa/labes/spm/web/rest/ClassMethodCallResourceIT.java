@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ClassMethodCall;
 import br.ufpa.labes.spm.repository.ClassMethodCallRepository;
-import br.ufpa.labes.spm.service.ClassMethodCallService;
-import br.ufpa.labes.spm.service.dto.ClassMethodCallDTO;
-import br.ufpa.labes.spm.service.mapper.ClassMethodCallMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -55,12 +52,6 @@ public class ClassMethodCallResourceIT {
     private ClassMethodCallRepository classMethodCallRepository;
 
     @Autowired
-    private ClassMethodCallMapper classMethodCallMapper;
-
-    @Autowired
-    private ClassMethodCallService classMethodCallService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -82,7 +73,7 @@ public class ClassMethodCallResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ClassMethodCallResource classMethodCallResource = new ClassMethodCallResource(classMethodCallService);
+        final ClassMethodCallResource classMethodCallResource = new ClassMethodCallResource(classMethodCallRepository);
         this.restClassMethodCallMockMvc = MockMvcBuilders.standaloneSetup(classMethodCallResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -131,10 +122,9 @@ public class ClassMethodCallResourceIT {
         int databaseSizeBeforeCreate = classMethodCallRepository.findAll().size();
 
         // Create the ClassMethodCall
-        ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(classMethodCall);
         restClassMethodCallMockMvc.perform(post("/api/class-method-calls")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(classMethodCall)))
             .andExpect(status().isCreated());
 
         // Validate the ClassMethodCall in the database
@@ -154,12 +144,11 @@ public class ClassMethodCallResourceIT {
 
         // Create the ClassMethodCall with an existing ID
         classMethodCall.setId(1L);
-        ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(classMethodCall);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restClassMethodCallMockMvc.perform(post("/api/class-method-calls")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(classMethodCall)))
             .andExpect(status().isBadRequest());
 
         // Validate the ClassMethodCall in the database
@@ -227,11 +216,10 @@ public class ClassMethodCallResourceIT {
             .className(UPDATED_CLASS_NAME)
             .methodName(UPDATED_METHOD_NAME)
             .description(UPDATED_DESCRIPTION);
-        ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(updatedClassMethodCall);
 
         restClassMethodCallMockMvc.perform(put("/api/class-method-calls")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedClassMethodCall)))
             .andExpect(status().isOk());
 
         // Validate the ClassMethodCall in the database
@@ -250,12 +238,11 @@ public class ClassMethodCallResourceIT {
         int databaseSizeBeforeUpdate = classMethodCallRepository.findAll().size();
 
         // Create the ClassMethodCall
-        ClassMethodCallDTO classMethodCallDTO = classMethodCallMapper.toDto(classMethodCall);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restClassMethodCallMockMvc.perform(put("/api/class-method-calls")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(classMethodCallDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(classMethodCall)))
             .andExpect(status().isBadRequest());
 
         // Validate the ClassMethodCall in the database
@@ -294,28 +281,5 @@ public class ClassMethodCallResourceIT {
         assertThat(classMethodCall1).isNotEqualTo(classMethodCall2);
         classMethodCall1.setId(null);
         assertThat(classMethodCall1).isNotEqualTo(classMethodCall2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ClassMethodCallDTO.class);
-        ClassMethodCallDTO classMethodCallDTO1 = new ClassMethodCallDTO();
-        classMethodCallDTO1.setId(1L);
-        ClassMethodCallDTO classMethodCallDTO2 = new ClassMethodCallDTO();
-        assertThat(classMethodCallDTO1).isNotEqualTo(classMethodCallDTO2);
-        classMethodCallDTO2.setId(classMethodCallDTO1.getId());
-        assertThat(classMethodCallDTO1).isEqualTo(classMethodCallDTO2);
-        classMethodCallDTO2.setId(2L);
-        assertThat(classMethodCallDTO1).isNotEqualTo(classMethodCallDTO2);
-        classMethodCallDTO1.setId(null);
-        assertThat(classMethodCallDTO1).isNotEqualTo(classMethodCallDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(classMethodCallMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(classMethodCallMapper.fromId(null)).isNull();
     }
 }

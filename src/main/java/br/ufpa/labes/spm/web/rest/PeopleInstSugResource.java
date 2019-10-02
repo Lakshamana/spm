@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.PeopleInstSugService;
+import br.ufpa.labes.spm.domain.PeopleInstSug;
+import br.ufpa.labes.spm.repository.PeopleInstSugRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.PeopleInstSugDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class PeopleInstSugResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PeopleInstSugService peopleInstSugService;
+    private final PeopleInstSugRepository peopleInstSugRepository;
 
-    public PeopleInstSugResource(PeopleInstSugService peopleInstSugService) {
-        this.peopleInstSugService = peopleInstSugService;
+    public PeopleInstSugResource(PeopleInstSugRepository peopleInstSugRepository) {
+        this.peopleInstSugRepository = peopleInstSugRepository;
     }
 
     /**
      * {@code POST  /people-inst-sugs} : Create a new peopleInstSug.
      *
-     * @param peopleInstSugDTO the peopleInstSugDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new peopleInstSugDTO, or with status {@code 400 (Bad Request)} if the peopleInstSug has already an ID.
+     * @param peopleInstSug the peopleInstSug to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new peopleInstSug, or with status {@code 400 (Bad Request)} if the peopleInstSug has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/people-inst-sugs")
-    public ResponseEntity<PeopleInstSugDTO> createPeopleInstSug(@RequestBody PeopleInstSugDTO peopleInstSugDTO) throws URISyntaxException {
-        log.debug("REST request to save PeopleInstSug : {}", peopleInstSugDTO);
-        if (peopleInstSugDTO.getId() != null) {
+    public ResponseEntity<PeopleInstSug> createPeopleInstSug(@RequestBody PeopleInstSug peopleInstSug) throws URISyntaxException {
+        log.debug("REST request to save PeopleInstSug : {}", peopleInstSug);
+        if (peopleInstSug.getId() != null) {
             throw new BadRequestAlertException("A new peopleInstSug cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        PeopleInstSugDTO result = peopleInstSugService.save(peopleInstSugDTO);
+        PeopleInstSug result = peopleInstSugRepository.save(peopleInstSug);
         return ResponseEntity.created(new URI("/api/people-inst-sugs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class PeopleInstSugResource {
     /**
      * {@code PUT  /people-inst-sugs} : Updates an existing peopleInstSug.
      *
-     * @param peopleInstSugDTO the peopleInstSugDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated peopleInstSugDTO,
-     * or with status {@code 400 (Bad Request)} if the peopleInstSugDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the peopleInstSugDTO couldn't be updated.
+     * @param peopleInstSug the peopleInstSug to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated peopleInstSug,
+     * or with status {@code 400 (Bad Request)} if the peopleInstSug is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the peopleInstSug couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/people-inst-sugs")
-    public ResponseEntity<PeopleInstSugDTO> updatePeopleInstSug(@RequestBody PeopleInstSugDTO peopleInstSugDTO) throws URISyntaxException {
-        log.debug("REST request to update PeopleInstSug : {}", peopleInstSugDTO);
-        if (peopleInstSugDTO.getId() == null) {
+    public ResponseEntity<PeopleInstSug> updatePeopleInstSug(@RequestBody PeopleInstSug peopleInstSug) throws URISyntaxException {
+        log.debug("REST request to update PeopleInstSug : {}", peopleInstSug);
+        if (peopleInstSug.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        PeopleInstSugDTO result = peopleInstSugService.save(peopleInstSugDTO);
+        PeopleInstSug result = peopleInstSugRepository.save(peopleInstSug);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, peopleInstSugDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, peopleInstSug.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class PeopleInstSugResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of peopleInstSugs in body.
      */
     @GetMapping("/people-inst-sugs")
-    public List<PeopleInstSugDTO> getAllPeopleInstSugs() {
+    public List<PeopleInstSug> getAllPeopleInstSugs() {
         log.debug("REST request to get all PeopleInstSugs");
-        return peopleInstSugService.findAll();
+        return peopleInstSugRepository.findAll();
     }
 
     /**
      * {@code GET  /people-inst-sugs/:id} : get the "id" peopleInstSug.
      *
-     * @param id the id of the peopleInstSugDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the peopleInstSugDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the peopleInstSug to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the peopleInstSug, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/people-inst-sugs/{id}")
-    public ResponseEntity<PeopleInstSugDTO> getPeopleInstSug(@PathVariable Long id) {
+    public ResponseEntity<PeopleInstSug> getPeopleInstSug(@PathVariable Long id) {
         log.debug("REST request to get PeopleInstSug : {}", id);
-        Optional<PeopleInstSugDTO> peopleInstSugDTO = peopleInstSugService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(peopleInstSugDTO);
+        Optional<PeopleInstSug> peopleInstSug = peopleInstSugRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(peopleInstSug);
     }
 
     /**
      * {@code DELETE  /people-inst-sugs/:id} : delete the "id" peopleInstSug.
      *
-     * @param id the id of the peopleInstSugDTO to delete.
+     * @param id the id of the peopleInstSug to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/people-inst-sugs/{id}")
     public ResponseEntity<Void> deletePeopleInstSug(@PathVariable Long id) {
         log.debug("REST request to delete PeopleInstSug : {}", id);
-        peopleInstSugService.delete(id);
+        peopleInstSugRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

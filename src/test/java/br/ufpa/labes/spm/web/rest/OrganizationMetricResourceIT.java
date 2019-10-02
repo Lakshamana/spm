@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.OrganizationMetric;
 import br.ufpa.labes.spm.repository.OrganizationMetricRepository;
-import br.ufpa.labes.spm.service.OrganizationMetricService;
-import br.ufpa.labes.spm.service.dto.OrganizationMetricDTO;
-import br.ufpa.labes.spm.service.mapper.OrganizationMetricMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class OrganizationMetricResourceIT {
     private OrganizationMetricRepository organizationMetricRepository;
 
     @Autowired
-    private OrganizationMetricMapper organizationMetricMapper;
-
-    @Autowired
-    private OrganizationMetricService organizationMetricService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class OrganizationMetricResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final OrganizationMetricResource organizationMetricResource = new OrganizationMetricResource(organizationMetricService);
+        final OrganizationMetricResource organizationMetricResource = new OrganizationMetricResource(organizationMetricRepository);
         this.restOrganizationMetricMockMvc = MockMvcBuilders.standaloneSetup(organizationMetricResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class OrganizationMetricResourceIT {
         int databaseSizeBeforeCreate = organizationMetricRepository.findAll().size();
 
         // Create the OrganizationMetric
-        OrganizationMetricDTO organizationMetricDTO = organizationMetricMapper.toDto(organizationMetric);
         restOrganizationMetricMockMvc.perform(post("/api/organization-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(organizationMetric)))
             .andExpect(status().isCreated());
 
         // Validate the OrganizationMetric in the database
@@ -129,12 +119,11 @@ public class OrganizationMetricResourceIT {
 
         // Create the OrganizationMetric with an existing ID
         organizationMetric.setId(1L);
-        OrganizationMetricDTO organizationMetricDTO = organizationMetricMapper.toDto(organizationMetric);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restOrganizationMetricMockMvc.perform(post("/api/organization-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(organizationMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the OrganizationMetric in the database
@@ -189,11 +178,10 @@ public class OrganizationMetricResourceIT {
         OrganizationMetric updatedOrganizationMetric = organizationMetricRepository.findById(organizationMetric.getId()).get();
         // Disconnect from session so that the updates on updatedOrganizationMetric are not directly saved in db
         em.detach(updatedOrganizationMetric);
-        OrganizationMetricDTO organizationMetricDTO = organizationMetricMapper.toDto(updatedOrganizationMetric);
 
         restOrganizationMetricMockMvc.perform(put("/api/organization-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedOrganizationMetric)))
             .andExpect(status().isOk());
 
         // Validate the OrganizationMetric in the database
@@ -208,12 +196,11 @@ public class OrganizationMetricResourceIT {
         int databaseSizeBeforeUpdate = organizationMetricRepository.findAll().size();
 
         // Create the OrganizationMetric
-        OrganizationMetricDTO organizationMetricDTO = organizationMetricMapper.toDto(organizationMetric);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restOrganizationMetricMockMvc.perform(put("/api/organization-metrics")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(organizationMetricDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(organizationMetric)))
             .andExpect(status().isBadRequest());
 
         // Validate the OrganizationMetric in the database
@@ -252,28 +239,5 @@ public class OrganizationMetricResourceIT {
         assertThat(organizationMetric1).isNotEqualTo(organizationMetric2);
         organizationMetric1.setId(null);
         assertThat(organizationMetric1).isNotEqualTo(organizationMetric2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(OrganizationMetricDTO.class);
-        OrganizationMetricDTO organizationMetricDTO1 = new OrganizationMetricDTO();
-        organizationMetricDTO1.setId(1L);
-        OrganizationMetricDTO organizationMetricDTO2 = new OrganizationMetricDTO();
-        assertThat(organizationMetricDTO1).isNotEqualTo(organizationMetricDTO2);
-        organizationMetricDTO2.setId(organizationMetricDTO1.getId());
-        assertThat(organizationMetricDTO1).isEqualTo(organizationMetricDTO2);
-        organizationMetricDTO2.setId(2L);
-        assertThat(organizationMetricDTO1).isNotEqualTo(organizationMetricDTO2);
-        organizationMetricDTO1.setId(null);
-        assertThat(organizationMetricDTO1).isNotEqualTo(organizationMetricDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(organizationMetricMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(organizationMetricMapper.fromId(null)).isNull();
     }
 }

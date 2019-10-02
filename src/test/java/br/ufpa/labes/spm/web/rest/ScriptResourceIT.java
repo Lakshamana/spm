@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Script;
 import br.ufpa.labes.spm.repository.ScriptRepository;
-import br.ufpa.labes.spm.service.ScriptService;
-import br.ufpa.labes.spm.service.dto.ScriptDTO;
-import br.ufpa.labes.spm.service.mapper.ScriptMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class ScriptResourceIT {
     private ScriptRepository scriptRepository;
 
     @Autowired
-    private ScriptMapper scriptMapper;
-
-    @Autowired
-    private ScriptService scriptService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class ScriptResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ScriptResource scriptResource = new ScriptResource(scriptService);
+        final ScriptResource scriptResource = new ScriptResource(scriptRepository);
         this.restScriptMockMvc = MockMvcBuilders.standaloneSetup(scriptResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -126,10 +117,9 @@ public class ScriptResourceIT {
         int databaseSizeBeforeCreate = scriptRepository.findAll().size();
 
         // Create the Script
-        ScriptDTO scriptDTO = scriptMapper.toDto(script);
         restScriptMockMvc.perform(post("/api/scripts")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(scriptDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(script)))
             .andExpect(status().isCreated());
 
         // Validate the Script in the database
@@ -148,12 +138,11 @@ public class ScriptResourceIT {
 
         // Create the Script with an existing ID
         script.setId(1L);
-        ScriptDTO scriptDTO = scriptMapper.toDto(script);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restScriptMockMvc.perform(post("/api/scripts")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(scriptDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(script)))
             .andExpect(status().isBadRequest());
 
         // Validate the Script in the database
@@ -218,11 +207,10 @@ public class ScriptResourceIT {
             .ident(UPDATED_IDENT)
             .fileName(UPDATED_FILE_NAME)
             .description(UPDATED_DESCRIPTION);
-        ScriptDTO scriptDTO = scriptMapper.toDto(updatedScript);
 
         restScriptMockMvc.perform(put("/api/scripts")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(scriptDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedScript)))
             .andExpect(status().isOk());
 
         // Validate the Script in the database
@@ -240,12 +228,11 @@ public class ScriptResourceIT {
         int databaseSizeBeforeUpdate = scriptRepository.findAll().size();
 
         // Create the Script
-        ScriptDTO scriptDTO = scriptMapper.toDto(script);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restScriptMockMvc.perform(put("/api/scripts")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(scriptDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(script)))
             .andExpect(status().isBadRequest());
 
         // Validate the Script in the database
@@ -284,28 +271,5 @@ public class ScriptResourceIT {
         assertThat(script1).isNotEqualTo(script2);
         script1.setId(null);
         assertThat(script1).isNotEqualTo(script2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ScriptDTO.class);
-        ScriptDTO scriptDTO1 = new ScriptDTO();
-        scriptDTO1.setId(1L);
-        ScriptDTO scriptDTO2 = new ScriptDTO();
-        assertThat(scriptDTO1).isNotEqualTo(scriptDTO2);
-        scriptDTO2.setId(scriptDTO1.getId());
-        assertThat(scriptDTO1).isEqualTo(scriptDTO2);
-        scriptDTO2.setId(2L);
-        assertThat(scriptDTO1).isNotEqualTo(scriptDTO2);
-        scriptDTO1.setId(null);
-        assertThat(scriptDTO1).isNotEqualTo(scriptDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(scriptMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(scriptMapper.fromId(null)).isNull();
     }
 }

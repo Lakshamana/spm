@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ArtifactCon;
 import br.ufpa.labes.spm.repository.ArtifactConRepository;
-import br.ufpa.labes.spm.service.ArtifactConService;
-import br.ufpa.labes.spm.service.dto.ArtifactConDTO;
-import br.ufpa.labes.spm.service.mapper.ArtifactConMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -50,15 +47,6 @@ public class ArtifactConResourceIT {
     private ArtifactConRepository artifactConRepositoryMock;
 
     @Autowired
-    private ArtifactConMapper artifactConMapper;
-
-    @Mock
-    private ArtifactConService artifactConServiceMock;
-
-    @Autowired
-    private ArtifactConService artifactConService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -80,7 +68,7 @@ public class ArtifactConResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ArtifactConResource artifactConResource = new ArtifactConResource(artifactConService);
+        final ArtifactConResource artifactConResource = new ArtifactConResource(artifactConRepository);
         this.restArtifactConMockMvc = MockMvcBuilders.standaloneSetup(artifactConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -121,10 +109,9 @@ public class ArtifactConResourceIT {
         int databaseSizeBeforeCreate = artifactConRepository.findAll().size();
 
         // Create the ArtifactCon
-        ArtifactConDTO artifactConDTO = artifactConMapper.toDto(artifactCon);
         restArtifactConMockMvc.perform(post("/api/artifact-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactCon)))
             .andExpect(status().isCreated());
 
         // Validate the ArtifactCon in the database
@@ -140,12 +127,11 @@ public class ArtifactConResourceIT {
 
         // Create the ArtifactCon with an existing ID
         artifactCon.setId(1L);
-        ArtifactConDTO artifactConDTO = artifactConMapper.toDto(artifactCon);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restArtifactConMockMvc.perform(post("/api/artifact-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactCon)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactCon in the database
@@ -169,8 +155,8 @@ public class ArtifactConResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllArtifactConsWithEagerRelationshipsIsEnabled() throws Exception {
-        ArtifactConResource artifactConResource = new ArtifactConResource(artifactConServiceMock);
-        when(artifactConServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ArtifactConResource artifactConResource = new ArtifactConResource(artifactConRepositoryMock);
+        when(artifactConRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restArtifactConMockMvc = MockMvcBuilders.standaloneSetup(artifactConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -181,13 +167,13 @@ public class ArtifactConResourceIT {
         restArtifactConMockMvc.perform(get("/api/artifact-cons?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(artifactConServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(artifactConRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllArtifactConsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ArtifactConResource artifactConResource = new ArtifactConResource(artifactConServiceMock);
-            when(artifactConServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ArtifactConResource artifactConResource = new ArtifactConResource(artifactConRepositoryMock);
+            when(artifactConRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restArtifactConMockMvc = MockMvcBuilders.standaloneSetup(artifactConResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -197,7 +183,7 @@ public class ArtifactConResourceIT {
         restArtifactConMockMvc.perform(get("/api/artifact-cons?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(artifactConServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(artifactConRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -233,11 +219,10 @@ public class ArtifactConResourceIT {
         ArtifactCon updatedArtifactCon = artifactConRepository.findById(artifactCon.getId()).get();
         // Disconnect from session so that the updates on updatedArtifactCon are not directly saved in db
         em.detach(updatedArtifactCon);
-        ArtifactConDTO artifactConDTO = artifactConMapper.toDto(updatedArtifactCon);
 
         restArtifactConMockMvc.perform(put("/api/artifact-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedArtifactCon)))
             .andExpect(status().isOk());
 
         // Validate the ArtifactCon in the database
@@ -252,12 +237,11 @@ public class ArtifactConResourceIT {
         int databaseSizeBeforeUpdate = artifactConRepository.findAll().size();
 
         // Create the ArtifactCon
-        ArtifactConDTO artifactConDTO = artifactConMapper.toDto(artifactCon);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restArtifactConMockMvc.perform(put("/api/artifact-cons")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(artifactConDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(artifactCon)))
             .andExpect(status().isBadRequest());
 
         // Validate the ArtifactCon in the database
@@ -296,28 +280,5 @@ public class ArtifactConResourceIT {
         assertThat(artifactCon1).isNotEqualTo(artifactCon2);
         artifactCon1.setId(null);
         assertThat(artifactCon1).isNotEqualTo(artifactCon2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ArtifactConDTO.class);
-        ArtifactConDTO artifactConDTO1 = new ArtifactConDTO();
-        artifactConDTO1.setId(1L);
-        ArtifactConDTO artifactConDTO2 = new ArtifactConDTO();
-        assertThat(artifactConDTO1).isNotEqualTo(artifactConDTO2);
-        artifactConDTO2.setId(artifactConDTO1.getId());
-        assertThat(artifactConDTO1).isEqualTo(artifactConDTO2);
-        artifactConDTO2.setId(2L);
-        assertThat(artifactConDTO1).isNotEqualTo(artifactConDTO2);
-        artifactConDTO1.setId(null);
-        assertThat(artifactConDTO1).isNotEqualTo(artifactConDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(artifactConMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(artifactConMapper.fromId(null)).isNull();
     }
 }

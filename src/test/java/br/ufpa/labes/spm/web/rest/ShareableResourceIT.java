@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Shareable;
 import br.ufpa.labes.spm.repository.ShareableRepository;
-import br.ufpa.labes.spm.service.ShareableService;
-import br.ufpa.labes.spm.service.dto.ShareableDTO;
-import br.ufpa.labes.spm.service.mapper.ShareableMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +45,6 @@ public class ShareableResourceIT {
     private ShareableRepository shareableRepository;
 
     @Autowired
-    private ShareableMapper shareableMapper;
-
-    @Autowired
-    private ShareableService shareableService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +66,7 @@ public class ShareableResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ShareableResource shareableResource = new ShareableResource(shareableService);
+        final ShareableResource shareableResource = new ShareableResource(shareableRepository);
         this.restShareableMockMvc = MockMvcBuilders.standaloneSetup(shareableResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,10 +111,9 @@ public class ShareableResourceIT {
         int databaseSizeBeforeCreate = shareableRepository.findAll().size();
 
         // Create the Shareable
-        ShareableDTO shareableDTO = shareableMapper.toDto(shareable);
         restShareableMockMvc.perform(post("/api/shareables")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(shareableDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(shareable)))
             .andExpect(status().isCreated());
 
         // Validate the Shareable in the database
@@ -141,12 +131,11 @@ public class ShareableResourceIT {
 
         // Create the Shareable with an existing ID
         shareable.setId(1L);
-        ShareableDTO shareableDTO = shareableMapper.toDto(shareable);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restShareableMockMvc.perform(post("/api/shareables")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(shareableDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(shareable)))
             .andExpect(status().isBadRequest());
 
         // Validate the Shareable in the database
@@ -208,11 +197,10 @@ public class ShareableResourceIT {
         updatedShareable
             .state(UPDATED_STATE)
             .unitOfCost(UPDATED_UNIT_OF_COST);
-        ShareableDTO shareableDTO = shareableMapper.toDto(updatedShareable);
 
         restShareableMockMvc.perform(put("/api/shareables")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(shareableDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedShareable)))
             .andExpect(status().isOk());
 
         // Validate the Shareable in the database
@@ -229,12 +217,11 @@ public class ShareableResourceIT {
         int databaseSizeBeforeUpdate = shareableRepository.findAll().size();
 
         // Create the Shareable
-        ShareableDTO shareableDTO = shareableMapper.toDto(shareable);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restShareableMockMvc.perform(put("/api/shareables")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(shareableDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(shareable)))
             .andExpect(status().isBadRequest());
 
         // Validate the Shareable in the database
@@ -273,28 +260,5 @@ public class ShareableResourceIT {
         assertThat(shareable1).isNotEqualTo(shareable2);
         shareable1.setId(null);
         assertThat(shareable1).isNotEqualTo(shareable2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ShareableDTO.class);
-        ShareableDTO shareableDTO1 = new ShareableDTO();
-        shareableDTO1.setId(1L);
-        ShareableDTO shareableDTO2 = new ShareableDTO();
-        assertThat(shareableDTO1).isNotEqualTo(shareableDTO2);
-        shareableDTO2.setId(shareableDTO1.getId());
-        assertThat(shareableDTO1).isEqualTo(shareableDTO2);
-        shareableDTO2.setId(2L);
-        assertThat(shareableDTO1).isNotEqualTo(shareableDTO2);
-        shareableDTO1.setId(null);
-        assertThat(shareableDTO1).isNotEqualTo(shareableDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(shareableMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(shareableMapper.fromId(null)).isNull();
     }
 }

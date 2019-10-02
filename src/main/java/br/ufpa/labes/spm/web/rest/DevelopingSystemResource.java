@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.DevelopingSystemService;
+import br.ufpa.labes.spm.domain.DevelopingSystem;
+import br.ufpa.labes.spm.repository.DevelopingSystemRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.DevelopingSystemDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class DevelopingSystemResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final DevelopingSystemService developingSystemService;
+    private final DevelopingSystemRepository developingSystemRepository;
 
-    public DevelopingSystemResource(DevelopingSystemService developingSystemService) {
-        this.developingSystemService = developingSystemService;
+    public DevelopingSystemResource(DevelopingSystemRepository developingSystemRepository) {
+        this.developingSystemRepository = developingSystemRepository;
     }
 
     /**
      * {@code POST  /developing-systems} : Create a new developingSystem.
      *
-     * @param developingSystemDTO the developingSystemDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new developingSystemDTO, or with status {@code 400 (Bad Request)} if the developingSystem has already an ID.
+     * @param developingSystem the developingSystem to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new developingSystem, or with status {@code 400 (Bad Request)} if the developingSystem has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/developing-systems")
-    public ResponseEntity<DevelopingSystemDTO> createDevelopingSystem(@RequestBody DevelopingSystemDTO developingSystemDTO) throws URISyntaxException {
-        log.debug("REST request to save DevelopingSystem : {}", developingSystemDTO);
-        if (developingSystemDTO.getId() != null) {
+    public ResponseEntity<DevelopingSystem> createDevelopingSystem(@RequestBody DevelopingSystem developingSystem) throws URISyntaxException {
+        log.debug("REST request to save DevelopingSystem : {}", developingSystem);
+        if (developingSystem.getId() != null) {
             throw new BadRequestAlertException("A new developingSystem cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        DevelopingSystemDTO result = developingSystemService.save(developingSystemDTO);
+        DevelopingSystem result = developingSystemRepository.save(developingSystem);
         return ResponseEntity.created(new URI("/api/developing-systems/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class DevelopingSystemResource {
     /**
      * {@code PUT  /developing-systems} : Updates an existing developingSystem.
      *
-     * @param developingSystemDTO the developingSystemDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated developingSystemDTO,
-     * or with status {@code 400 (Bad Request)} if the developingSystemDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the developingSystemDTO couldn't be updated.
+     * @param developingSystem the developingSystem to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated developingSystem,
+     * or with status {@code 400 (Bad Request)} if the developingSystem is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the developingSystem couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/developing-systems")
-    public ResponseEntity<DevelopingSystemDTO> updateDevelopingSystem(@RequestBody DevelopingSystemDTO developingSystemDTO) throws URISyntaxException {
-        log.debug("REST request to update DevelopingSystem : {}", developingSystemDTO);
-        if (developingSystemDTO.getId() == null) {
+    public ResponseEntity<DevelopingSystem> updateDevelopingSystem(@RequestBody DevelopingSystem developingSystem) throws URISyntaxException {
+        log.debug("REST request to update DevelopingSystem : {}", developingSystem);
+        if (developingSystem.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        DevelopingSystemDTO result = developingSystemService.save(developingSystemDTO);
+        DevelopingSystem result = developingSystemRepository.save(developingSystem);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, developingSystemDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, developingSystem.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class DevelopingSystemResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of developingSystems in body.
      */
     @GetMapping("/developing-systems")
-    public List<DevelopingSystemDTO> getAllDevelopingSystems() {
+    public List<DevelopingSystem> getAllDevelopingSystems() {
         log.debug("REST request to get all DevelopingSystems");
-        return developingSystemService.findAll();
+        return developingSystemRepository.findAll();
     }
 
     /**
      * {@code GET  /developing-systems/:id} : get the "id" developingSystem.
      *
-     * @param id the id of the developingSystemDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the developingSystemDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the developingSystem to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the developingSystem, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/developing-systems/{id}")
-    public ResponseEntity<DevelopingSystemDTO> getDevelopingSystem(@PathVariable Long id) {
+    public ResponseEntity<DevelopingSystem> getDevelopingSystem(@PathVariable Long id) {
         log.debug("REST request to get DevelopingSystem : {}", id);
-        Optional<DevelopingSystemDTO> developingSystemDTO = developingSystemService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(developingSystemDTO);
+        Optional<DevelopingSystem> developingSystem = developingSystemRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(developingSystem);
     }
 
     /**
      * {@code DELETE  /developing-systems/:id} : delete the "id" developingSystem.
      *
-     * @param id the id of the developingSystemDTO to delete.
+     * @param id the id of the developingSystem to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/developing-systems/{id}")
     public ResponseEntity<Void> deleteDevelopingSystem(@PathVariable Long id) {
         log.debug("REST request to delete DevelopingSystem : {}", id);
-        developingSystemService.delete(id);
+        developingSystemRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

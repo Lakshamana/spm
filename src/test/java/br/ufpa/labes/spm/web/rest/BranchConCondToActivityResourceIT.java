@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.BranchConCondToActivity;
 import br.ufpa.labes.spm.repository.BranchConCondToActivityRepository;
-import br.ufpa.labes.spm.service.BranchConCondToActivityService;
-import br.ufpa.labes.spm.service.dto.BranchConCondToActivityDTO;
-import br.ufpa.labes.spm.service.mapper.BranchConCondToActivityMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class BranchConCondToActivityResourceIT {
     private BranchConCondToActivityRepository branchConCondToActivityRepository;
 
     @Autowired
-    private BranchConCondToActivityMapper branchConCondToActivityMapper;
-
-    @Autowired
-    private BranchConCondToActivityService branchConCondToActivityService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class BranchConCondToActivityResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final BranchConCondToActivityResource branchConCondToActivityResource = new BranchConCondToActivityResource(branchConCondToActivityService);
+        final BranchConCondToActivityResource branchConCondToActivityResource = new BranchConCondToActivityResource(branchConCondToActivityRepository);
         this.restBranchConCondToActivityMockMvc = MockMvcBuilders.standaloneSetup(branchConCondToActivityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class BranchConCondToActivityResourceIT {
         int databaseSizeBeforeCreate = branchConCondToActivityRepository.findAll().size();
 
         // Create the BranchConCondToActivity
-        BranchConCondToActivityDTO branchConCondToActivityDTO = branchConCondToActivityMapper.toDto(branchConCondToActivity);
         restBranchConCondToActivityMockMvc.perform(post("/api/branch-con-cond-to-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchConCondToActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(branchConCondToActivity)))
             .andExpect(status().isCreated());
 
         // Validate the BranchConCondToActivity in the database
@@ -129,12 +119,11 @@ public class BranchConCondToActivityResourceIT {
 
         // Create the BranchConCondToActivity with an existing ID
         branchConCondToActivity.setId(1L);
-        BranchConCondToActivityDTO branchConCondToActivityDTO = branchConCondToActivityMapper.toDto(branchConCondToActivity);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restBranchConCondToActivityMockMvc.perform(post("/api/branch-con-cond-to-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchConCondToActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(branchConCondToActivity)))
             .andExpect(status().isBadRequest());
 
         // Validate the BranchConCondToActivity in the database
@@ -189,11 +178,10 @@ public class BranchConCondToActivityResourceIT {
         BranchConCondToActivity updatedBranchConCondToActivity = branchConCondToActivityRepository.findById(branchConCondToActivity.getId()).get();
         // Disconnect from session so that the updates on updatedBranchConCondToActivity are not directly saved in db
         em.detach(updatedBranchConCondToActivity);
-        BranchConCondToActivityDTO branchConCondToActivityDTO = branchConCondToActivityMapper.toDto(updatedBranchConCondToActivity);
 
         restBranchConCondToActivityMockMvc.perform(put("/api/branch-con-cond-to-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchConCondToActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedBranchConCondToActivity)))
             .andExpect(status().isOk());
 
         // Validate the BranchConCondToActivity in the database
@@ -208,12 +196,11 @@ public class BranchConCondToActivityResourceIT {
         int databaseSizeBeforeUpdate = branchConCondToActivityRepository.findAll().size();
 
         // Create the BranchConCondToActivity
-        BranchConCondToActivityDTO branchConCondToActivityDTO = branchConCondToActivityMapper.toDto(branchConCondToActivity);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restBranchConCondToActivityMockMvc.perform(put("/api/branch-con-cond-to-activities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(branchConCondToActivityDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(branchConCondToActivity)))
             .andExpect(status().isBadRequest());
 
         // Validate the BranchConCondToActivity in the database
@@ -252,28 +239,5 @@ public class BranchConCondToActivityResourceIT {
         assertThat(branchConCondToActivity1).isNotEqualTo(branchConCondToActivity2);
         branchConCondToActivity1.setId(null);
         assertThat(branchConCondToActivity1).isNotEqualTo(branchConCondToActivity2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(BranchConCondToActivityDTO.class);
-        BranchConCondToActivityDTO branchConCondToActivityDTO1 = new BranchConCondToActivityDTO();
-        branchConCondToActivityDTO1.setId(1L);
-        BranchConCondToActivityDTO branchConCondToActivityDTO2 = new BranchConCondToActivityDTO();
-        assertThat(branchConCondToActivityDTO1).isNotEqualTo(branchConCondToActivityDTO2);
-        branchConCondToActivityDTO2.setId(branchConCondToActivityDTO1.getId());
-        assertThat(branchConCondToActivityDTO1).isEqualTo(branchConCondToActivityDTO2);
-        branchConCondToActivityDTO2.setId(2L);
-        assertThat(branchConCondToActivityDTO1).isNotEqualTo(branchConCondToActivityDTO2);
-        branchConCondToActivityDTO1.setId(null);
-        assertThat(branchConCondToActivityDTO1).isNotEqualTo(branchConCondToActivityDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(branchConCondToActivityMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(branchConCondToActivityMapper.fromId(null)).isNull();
     }
 }

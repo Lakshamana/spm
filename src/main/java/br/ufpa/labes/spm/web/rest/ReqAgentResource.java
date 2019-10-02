@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.ReqAgentService;
+import br.ufpa.labes.spm.domain.ReqAgent;
+import br.ufpa.labes.spm.repository.ReqAgentRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.ReqAgentDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class ReqAgentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ReqAgentService reqAgentService;
+    private final ReqAgentRepository reqAgentRepository;
 
-    public ReqAgentResource(ReqAgentService reqAgentService) {
-        this.reqAgentService = reqAgentService;
+    public ReqAgentResource(ReqAgentRepository reqAgentRepository) {
+        this.reqAgentRepository = reqAgentRepository;
     }
 
     /**
      * {@code POST  /req-agents} : Create a new reqAgent.
      *
-     * @param reqAgentDTO the reqAgentDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new reqAgentDTO, or with status {@code 400 (Bad Request)} if the reqAgent has already an ID.
+     * @param reqAgent the reqAgent to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new reqAgent, or with status {@code 400 (Bad Request)} if the reqAgent has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/req-agents")
-    public ResponseEntity<ReqAgentDTO> createReqAgent(@RequestBody ReqAgentDTO reqAgentDTO) throws URISyntaxException {
-        log.debug("REST request to save ReqAgent : {}", reqAgentDTO);
-        if (reqAgentDTO.getId() != null) {
+    public ResponseEntity<ReqAgent> createReqAgent(@RequestBody ReqAgent reqAgent) throws URISyntaxException {
+        log.debug("REST request to save ReqAgent : {}", reqAgent);
+        if (reqAgent.getId() != null) {
             throw new BadRequestAlertException("A new reqAgent cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ReqAgentDTO result = reqAgentService.save(reqAgentDTO);
+        ReqAgent result = reqAgentRepository.save(reqAgent);
         return ResponseEntity.created(new URI("/api/req-agents/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class ReqAgentResource {
     /**
      * {@code PUT  /req-agents} : Updates an existing reqAgent.
      *
-     * @param reqAgentDTO the reqAgentDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated reqAgentDTO,
-     * or with status {@code 400 (Bad Request)} if the reqAgentDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the reqAgentDTO couldn't be updated.
+     * @param reqAgent the reqAgent to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated reqAgent,
+     * or with status {@code 400 (Bad Request)} if the reqAgent is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the reqAgent couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/req-agents")
-    public ResponseEntity<ReqAgentDTO> updateReqAgent(@RequestBody ReqAgentDTO reqAgentDTO) throws URISyntaxException {
-        log.debug("REST request to update ReqAgent : {}", reqAgentDTO);
-        if (reqAgentDTO.getId() == null) {
+    public ResponseEntity<ReqAgent> updateReqAgent(@RequestBody ReqAgent reqAgent) throws URISyntaxException {
+        log.debug("REST request to update ReqAgent : {}", reqAgent);
+        if (reqAgent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ReqAgentDTO result = reqAgentService.save(reqAgentDTO);
+        ReqAgent result = reqAgentRepository.save(reqAgent);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, reqAgentDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, reqAgent.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class ReqAgentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reqAgents in body.
      */
     @GetMapping("/req-agents")
-    public List<ReqAgentDTO> getAllReqAgents() {
+    public List<ReqAgent> getAllReqAgents() {
         log.debug("REST request to get all ReqAgents");
-        return reqAgentService.findAll();
+        return reqAgentRepository.findAll();
     }
 
     /**
      * {@code GET  /req-agents/:id} : get the "id" reqAgent.
      *
-     * @param id the id of the reqAgentDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the reqAgentDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the reqAgent to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the reqAgent, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/req-agents/{id}")
-    public ResponseEntity<ReqAgentDTO> getReqAgent(@PathVariable Long id) {
+    public ResponseEntity<ReqAgent> getReqAgent(@PathVariable Long id) {
         log.debug("REST request to get ReqAgent : {}", id);
-        Optional<ReqAgentDTO> reqAgentDTO = reqAgentService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(reqAgentDTO);
+        Optional<ReqAgent> reqAgent = reqAgentRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(reqAgent);
     }
 
     /**
      * {@code DELETE  /req-agents/:id} : delete the "id" reqAgent.
      *
-     * @param id the id of the reqAgentDTO to delete.
+     * @param id the id of the reqAgent to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/req-agents/{id}")
     public ResponseEntity<Void> deleteReqAgent(@PathVariable Long id) {
         log.debug("REST request to delete ReqAgent : {}", id);
-        reqAgentService.delete(id);
+        reqAgentRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

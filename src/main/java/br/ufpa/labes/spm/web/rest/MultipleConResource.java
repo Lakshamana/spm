@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.MultipleConService;
+import br.ufpa.labes.spm.domain.MultipleCon;
+import br.ufpa.labes.spm.repository.MultipleConRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.MultipleConDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class MultipleConResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final MultipleConService multipleConService;
+    private final MultipleConRepository multipleConRepository;
 
-    public MultipleConResource(MultipleConService multipleConService) {
-        this.multipleConService = multipleConService;
+    public MultipleConResource(MultipleConRepository multipleConRepository) {
+        this.multipleConRepository = multipleConRepository;
     }
 
     /**
      * {@code POST  /multiple-cons} : Create a new multipleCon.
      *
-     * @param multipleConDTO the multipleConDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new multipleConDTO, or with status {@code 400 (Bad Request)} if the multipleCon has already an ID.
+     * @param multipleCon the multipleCon to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new multipleCon, or with status {@code 400 (Bad Request)} if the multipleCon has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/multiple-cons")
-    public ResponseEntity<MultipleConDTO> createMultipleCon(@RequestBody MultipleConDTO multipleConDTO) throws URISyntaxException {
-        log.debug("REST request to save MultipleCon : {}", multipleConDTO);
-        if (multipleConDTO.getId() != null) {
+    public ResponseEntity<MultipleCon> createMultipleCon(@RequestBody MultipleCon multipleCon) throws URISyntaxException {
+        log.debug("REST request to save MultipleCon : {}", multipleCon);
+        if (multipleCon.getId() != null) {
             throw new BadRequestAlertException("A new multipleCon cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        MultipleConDTO result = multipleConService.save(multipleConDTO);
+        MultipleCon result = multipleConRepository.save(multipleCon);
         return ResponseEntity.created(new URI("/api/multiple-cons/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class MultipleConResource {
     /**
      * {@code PUT  /multiple-cons} : Updates an existing multipleCon.
      *
-     * @param multipleConDTO the multipleConDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated multipleConDTO,
-     * or with status {@code 400 (Bad Request)} if the multipleConDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the multipleConDTO couldn't be updated.
+     * @param multipleCon the multipleCon to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated multipleCon,
+     * or with status {@code 400 (Bad Request)} if the multipleCon is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the multipleCon couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/multiple-cons")
-    public ResponseEntity<MultipleConDTO> updateMultipleCon(@RequestBody MultipleConDTO multipleConDTO) throws URISyntaxException {
-        log.debug("REST request to update MultipleCon : {}", multipleConDTO);
-        if (multipleConDTO.getId() == null) {
+    public ResponseEntity<MultipleCon> updateMultipleCon(@RequestBody MultipleCon multipleCon) throws URISyntaxException {
+        log.debug("REST request to update MultipleCon : {}", multipleCon);
+        if (multipleCon.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        MultipleConDTO result = multipleConService.save(multipleConDTO);
+        MultipleCon result = multipleConRepository.save(multipleCon);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, multipleConDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, multipleCon.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class MultipleConResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of multipleCons in body.
      */
     @GetMapping("/multiple-cons")
-    public List<MultipleConDTO> getAllMultipleCons() {
+    public List<MultipleCon> getAllMultipleCons() {
         log.debug("REST request to get all MultipleCons");
-        return multipleConService.findAll();
+        return multipleConRepository.findAll();
     }
 
     /**
      * {@code GET  /multiple-cons/:id} : get the "id" multipleCon.
      *
-     * @param id the id of the multipleConDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the multipleConDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the multipleCon to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the multipleCon, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/multiple-cons/{id}")
-    public ResponseEntity<MultipleConDTO> getMultipleCon(@PathVariable Long id) {
+    public ResponseEntity<MultipleCon> getMultipleCon(@PathVariable Long id) {
         log.debug("REST request to get MultipleCon : {}", id);
-        Optional<MultipleConDTO> multipleConDTO = multipleConService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(multipleConDTO);
+        Optional<MultipleCon> multipleCon = multipleConRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(multipleCon);
     }
 
     /**
      * {@code DELETE  /multiple-cons/:id} : delete the "id" multipleCon.
      *
-     * @param id the id of the multipleConDTO to delete.
+     * @param id the id of the multipleCon to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/multiple-cons/{id}")
     public ResponseEntity<Void> deleteMultipleCon(@PathVariable Long id) {
         log.debug("REST request to delete MultipleCon : {}", id);
-        multipleConService.delete(id);
+        multipleConRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

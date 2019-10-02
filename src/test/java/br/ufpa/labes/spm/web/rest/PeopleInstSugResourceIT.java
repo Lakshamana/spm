@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.PeopleInstSug;
 import br.ufpa.labes.spm.repository.PeopleInstSugRepository;
-import br.ufpa.labes.spm.service.PeopleInstSugService;
-import br.ufpa.labes.spm.service.dto.PeopleInstSugDTO;
-import br.ufpa.labes.spm.service.mapper.PeopleInstSugMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class PeopleInstSugResourceIT {
     private PeopleInstSugRepository peopleInstSugRepository;
 
     @Autowired
-    private PeopleInstSugMapper peopleInstSugMapper;
-
-    @Autowired
-    private PeopleInstSugService peopleInstSugService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class PeopleInstSugResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PeopleInstSugResource peopleInstSugResource = new PeopleInstSugResource(peopleInstSugService);
+        final PeopleInstSugResource peopleInstSugResource = new PeopleInstSugResource(peopleInstSugRepository);
         this.restPeopleInstSugMockMvc = MockMvcBuilders.standaloneSetup(peopleInstSugResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class PeopleInstSugResourceIT {
         int databaseSizeBeforeCreate = peopleInstSugRepository.findAll().size();
 
         // Create the PeopleInstSug
-        PeopleInstSugDTO peopleInstSugDTO = peopleInstSugMapper.toDto(peopleInstSug);
         restPeopleInstSugMockMvc.perform(post("/api/people-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(peopleInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(peopleInstSug)))
             .andExpect(status().isCreated());
 
         // Validate the PeopleInstSug in the database
@@ -129,12 +119,11 @@ public class PeopleInstSugResourceIT {
 
         // Create the PeopleInstSug with an existing ID
         peopleInstSug.setId(1L);
-        PeopleInstSugDTO peopleInstSugDTO = peopleInstSugMapper.toDto(peopleInstSug);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPeopleInstSugMockMvc.perform(post("/api/people-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(peopleInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(peopleInstSug)))
             .andExpect(status().isBadRequest());
 
         // Validate the PeopleInstSug in the database
@@ -189,11 +178,10 @@ public class PeopleInstSugResourceIT {
         PeopleInstSug updatedPeopleInstSug = peopleInstSugRepository.findById(peopleInstSug.getId()).get();
         // Disconnect from session so that the updates on updatedPeopleInstSug are not directly saved in db
         em.detach(updatedPeopleInstSug);
-        PeopleInstSugDTO peopleInstSugDTO = peopleInstSugMapper.toDto(updatedPeopleInstSug);
 
         restPeopleInstSugMockMvc.perform(put("/api/people-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(peopleInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedPeopleInstSug)))
             .andExpect(status().isOk());
 
         // Validate the PeopleInstSug in the database
@@ -208,12 +196,11 @@ public class PeopleInstSugResourceIT {
         int databaseSizeBeforeUpdate = peopleInstSugRepository.findAll().size();
 
         // Create the PeopleInstSug
-        PeopleInstSugDTO peopleInstSugDTO = peopleInstSugMapper.toDto(peopleInstSug);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restPeopleInstSugMockMvc.perform(put("/api/people-inst-sugs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(peopleInstSugDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(peopleInstSug)))
             .andExpect(status().isBadRequest());
 
         // Validate the PeopleInstSug in the database
@@ -252,28 +239,5 @@ public class PeopleInstSugResourceIT {
         assertThat(peopleInstSug1).isNotEqualTo(peopleInstSug2);
         peopleInstSug1.setId(null);
         assertThat(peopleInstSug1).isNotEqualTo(peopleInstSug2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(PeopleInstSugDTO.class);
-        PeopleInstSugDTO peopleInstSugDTO1 = new PeopleInstSugDTO();
-        peopleInstSugDTO1.setId(1L);
-        PeopleInstSugDTO peopleInstSugDTO2 = new PeopleInstSugDTO();
-        assertThat(peopleInstSugDTO1).isNotEqualTo(peopleInstSugDTO2);
-        peopleInstSugDTO2.setId(peopleInstSugDTO1.getId());
-        assertThat(peopleInstSugDTO1).isEqualTo(peopleInstSugDTO2);
-        peopleInstSugDTO2.setId(2L);
-        assertThat(peopleInstSugDTO1).isNotEqualTo(peopleInstSugDTO2);
-        peopleInstSugDTO1.setId(null);
-        assertThat(peopleInstSugDTO1).isNotEqualTo(peopleInstSugDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(peopleInstSugMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(peopleInstSugMapper.fromId(null)).isNull();
     }
 }

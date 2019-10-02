@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.PrimitiveTypeService;
+import br.ufpa.labes.spm.domain.PrimitiveType;
+import br.ufpa.labes.spm.repository.PrimitiveTypeRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.PrimitiveTypeDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class PrimitiveTypeResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PrimitiveTypeService primitiveTypeService;
+    private final PrimitiveTypeRepository primitiveTypeRepository;
 
-    public PrimitiveTypeResource(PrimitiveTypeService primitiveTypeService) {
-        this.primitiveTypeService = primitiveTypeService;
+    public PrimitiveTypeResource(PrimitiveTypeRepository primitiveTypeRepository) {
+        this.primitiveTypeRepository = primitiveTypeRepository;
     }
 
     /**
      * {@code POST  /primitive-types} : Create a new primitiveType.
      *
-     * @param primitiveTypeDTO the primitiveTypeDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new primitiveTypeDTO, or with status {@code 400 (Bad Request)} if the primitiveType has already an ID.
+     * @param primitiveType the primitiveType to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new primitiveType, or with status {@code 400 (Bad Request)} if the primitiveType has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/primitive-types")
-    public ResponseEntity<PrimitiveTypeDTO> createPrimitiveType(@RequestBody PrimitiveTypeDTO primitiveTypeDTO) throws URISyntaxException {
-        log.debug("REST request to save PrimitiveType : {}", primitiveTypeDTO);
-        if (primitiveTypeDTO.getId() != null) {
+    public ResponseEntity<PrimitiveType> createPrimitiveType(@RequestBody PrimitiveType primitiveType) throws URISyntaxException {
+        log.debug("REST request to save PrimitiveType : {}", primitiveType);
+        if (primitiveType.getId() != null) {
             throw new BadRequestAlertException("A new primitiveType cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        PrimitiveTypeDTO result = primitiveTypeService.save(primitiveTypeDTO);
+        PrimitiveType result = primitiveTypeRepository.save(primitiveType);
         return ResponseEntity.created(new URI("/api/primitive-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class PrimitiveTypeResource {
     /**
      * {@code PUT  /primitive-types} : Updates an existing primitiveType.
      *
-     * @param primitiveTypeDTO the primitiveTypeDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated primitiveTypeDTO,
-     * or with status {@code 400 (Bad Request)} if the primitiveTypeDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the primitiveTypeDTO couldn't be updated.
+     * @param primitiveType the primitiveType to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated primitiveType,
+     * or with status {@code 400 (Bad Request)} if the primitiveType is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the primitiveType couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/primitive-types")
-    public ResponseEntity<PrimitiveTypeDTO> updatePrimitiveType(@RequestBody PrimitiveTypeDTO primitiveTypeDTO) throws URISyntaxException {
-        log.debug("REST request to update PrimitiveType : {}", primitiveTypeDTO);
-        if (primitiveTypeDTO.getId() == null) {
+    public ResponseEntity<PrimitiveType> updatePrimitiveType(@RequestBody PrimitiveType primitiveType) throws URISyntaxException {
+        log.debug("REST request to update PrimitiveType : {}", primitiveType);
+        if (primitiveType.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        PrimitiveTypeDTO result = primitiveTypeService.save(primitiveTypeDTO);
+        PrimitiveType result = primitiveTypeRepository.save(primitiveType);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, primitiveTypeDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, primitiveType.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class PrimitiveTypeResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of primitiveTypes in body.
      */
     @GetMapping("/primitive-types")
-    public List<PrimitiveTypeDTO> getAllPrimitiveTypes() {
+    public List<PrimitiveType> getAllPrimitiveTypes() {
         log.debug("REST request to get all PrimitiveTypes");
-        return primitiveTypeService.findAll();
+        return primitiveTypeRepository.findAll();
     }
 
     /**
      * {@code GET  /primitive-types/:id} : get the "id" primitiveType.
      *
-     * @param id the id of the primitiveTypeDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the primitiveTypeDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the primitiveType to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the primitiveType, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/primitive-types/{id}")
-    public ResponseEntity<PrimitiveTypeDTO> getPrimitiveType(@PathVariable Long id) {
+    public ResponseEntity<PrimitiveType> getPrimitiveType(@PathVariable Long id) {
         log.debug("REST request to get PrimitiveType : {}", id);
-        Optional<PrimitiveTypeDTO> primitiveTypeDTO = primitiveTypeService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(primitiveTypeDTO);
+        Optional<PrimitiveType> primitiveType = primitiveTypeRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(primitiveType);
     }
 
     /**
      * {@code DELETE  /primitive-types/:id} : delete the "id" primitiveType.
      *
-     * @param id the id of the primitiveTypeDTO to delete.
+     * @param id the id of the primitiveType to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/primitive-types/{id}")
     public ResponseEntity<Void> deletePrimitiveType(@PathVariable Long id) {
         log.debug("REST request to delete PrimitiveType : {}", id);
-        primitiveTypeService.delete(id);
+        primitiveTypeRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

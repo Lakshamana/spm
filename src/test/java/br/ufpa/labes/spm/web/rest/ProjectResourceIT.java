@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Project;
 import br.ufpa.labes.spm.repository.ProjectRepository;
-import br.ufpa.labes.spm.service.ProjectService;
-import br.ufpa.labes.spm.service.dto.ProjectDTO;
-import br.ufpa.labes.spm.service.mapper.ProjectMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -65,12 +62,6 @@ public class ProjectResourceIT {
     private ProjectRepository projectRepository;
 
     @Autowired
-    private ProjectMapper projectMapper;
-
-    @Autowired
-    private ProjectService projectService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -92,7 +83,7 @@ public class ProjectResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ProjectResource projectResource = new ProjectResource(projectService);
+        final ProjectResource projectResource = new ProjectResource(projectRepository);
         this.restProjectMockMvc = MockMvcBuilders.standaloneSetup(projectResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -145,10 +136,9 @@ public class ProjectResourceIT {
         int databaseSizeBeforeCreate = projectRepository.findAll().size();
 
         // Create the Project
-        ProjectDTO projectDTO = projectMapper.toDto(project);
         restProjectMockMvc.perform(post("/api/projects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(projectDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(project)))
             .andExpect(status().isCreated());
 
         // Validate the Project in the database
@@ -170,12 +160,11 @@ public class ProjectResourceIT {
 
         // Create the Project with an existing ID
         project.setId(1L);
-        ProjectDTO projectDTO = projectMapper.toDto(project);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProjectMockMvc.perform(post("/api/projects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(projectDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(project)))
             .andExpect(status().isBadRequest());
 
         // Validate the Project in the database
@@ -249,11 +238,10 @@ public class ProjectResourceIT {
             .beginDate(UPDATED_BEGIN_DATE)
             .endDate(UPDATED_END_DATE)
             .active(UPDATED_ACTIVE);
-        ProjectDTO projectDTO = projectMapper.toDto(updatedProject);
 
         restProjectMockMvc.perform(put("/api/projects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(projectDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedProject)))
             .andExpect(status().isOk());
 
         // Validate the Project in the database
@@ -274,12 +262,11 @@ public class ProjectResourceIT {
         int databaseSizeBeforeUpdate = projectRepository.findAll().size();
 
         // Create the Project
-        ProjectDTO projectDTO = projectMapper.toDto(project);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProjectMockMvc.perform(put("/api/projects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(projectDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(project)))
             .andExpect(status().isBadRequest());
 
         // Validate the Project in the database
@@ -318,28 +305,5 @@ public class ProjectResourceIT {
         assertThat(project1).isNotEqualTo(project2);
         project1.setId(null);
         assertThat(project1).isNotEqualTo(project2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProjectDTO.class);
-        ProjectDTO projectDTO1 = new ProjectDTO();
-        projectDTO1.setId(1L);
-        ProjectDTO projectDTO2 = new ProjectDTO();
-        assertThat(projectDTO1).isNotEqualTo(projectDTO2);
-        projectDTO2.setId(projectDTO1.getId());
-        assertThat(projectDTO1).isEqualTo(projectDTO2);
-        projectDTO2.setId(2L);
-        assertThat(projectDTO1).isNotEqualTo(projectDTO2);
-        projectDTO1.setId(null);
-        assertThat(projectDTO1).isNotEqualTo(projectDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(projectMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(projectMapper.fromId(null)).isNull();
     }
 }

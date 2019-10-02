@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AgentWorkingLoad;
 import br.ufpa.labes.spm.repository.AgentWorkingLoadRepository;
-import br.ufpa.labes.spm.service.AgentWorkingLoadService;
-import br.ufpa.labes.spm.service.dto.AgentWorkingLoadDTO;
-import br.ufpa.labes.spm.service.mapper.AgentWorkingLoadMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class AgentWorkingLoadResourceIT {
     private AgentWorkingLoadRepository agentWorkingLoadRepository;
 
     @Autowired
-    private AgentWorkingLoadMapper agentWorkingLoadMapper;
-
-    @Autowired
-    private AgentWorkingLoadService agentWorkingLoadService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class AgentWorkingLoadResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgentWorkingLoadResource agentWorkingLoadResource = new AgentWorkingLoadResource(agentWorkingLoadService);
+        final AgentWorkingLoadResource agentWorkingLoadResource = new AgentWorkingLoadResource(agentWorkingLoadRepository);
         this.restAgentWorkingLoadMockMvc = MockMvcBuilders.standaloneSetup(agentWorkingLoadResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -124,10 +115,9 @@ public class AgentWorkingLoadResourceIT {
         int databaseSizeBeforeCreate = agentWorkingLoadRepository.findAll().size();
 
         // Create the AgentWorkingLoad
-        AgentWorkingLoadDTO agentWorkingLoadDTO = agentWorkingLoadMapper.toDto(agentWorkingLoad);
         restAgentWorkingLoadMockMvc.perform(post("/api/agent-working-loads")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentWorkingLoadDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentWorkingLoad)))
             .andExpect(status().isCreated());
 
         // Validate the AgentWorkingLoad in the database
@@ -145,12 +135,11 @@ public class AgentWorkingLoadResourceIT {
 
         // Create the AgentWorkingLoad with an existing ID
         agentWorkingLoad.setId(1L);
-        AgentWorkingLoadDTO agentWorkingLoadDTO = agentWorkingLoadMapper.toDto(agentWorkingLoad);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAgentWorkingLoadMockMvc.perform(post("/api/agent-working-loads")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentWorkingLoadDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentWorkingLoad)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentWorkingLoad in the database
@@ -212,11 +201,10 @@ public class AgentWorkingLoadResourceIT {
         updatedAgentWorkingLoad
             .begin(UPDATED_BEGIN)
             .end(UPDATED_END);
-        AgentWorkingLoadDTO agentWorkingLoadDTO = agentWorkingLoadMapper.toDto(updatedAgentWorkingLoad);
 
         restAgentWorkingLoadMockMvc.perform(put("/api/agent-working-loads")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentWorkingLoadDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAgentWorkingLoad)))
             .andExpect(status().isOk());
 
         // Validate the AgentWorkingLoad in the database
@@ -233,12 +221,11 @@ public class AgentWorkingLoadResourceIT {
         int databaseSizeBeforeUpdate = agentWorkingLoadRepository.findAll().size();
 
         // Create the AgentWorkingLoad
-        AgentWorkingLoadDTO agentWorkingLoadDTO = agentWorkingLoadMapper.toDto(agentWorkingLoad);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAgentWorkingLoadMockMvc.perform(put("/api/agent-working-loads")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentWorkingLoadDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentWorkingLoad)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentWorkingLoad in the database
@@ -277,28 +264,5 @@ public class AgentWorkingLoadResourceIT {
         assertThat(agentWorkingLoad1).isNotEqualTo(agentWorkingLoad2);
         agentWorkingLoad1.setId(null);
         assertThat(agentWorkingLoad1).isNotEqualTo(agentWorkingLoad2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgentWorkingLoadDTO.class);
-        AgentWorkingLoadDTO agentWorkingLoadDTO1 = new AgentWorkingLoadDTO();
-        agentWorkingLoadDTO1.setId(1L);
-        AgentWorkingLoadDTO agentWorkingLoadDTO2 = new AgentWorkingLoadDTO();
-        assertThat(agentWorkingLoadDTO1).isNotEqualTo(agentWorkingLoadDTO2);
-        agentWorkingLoadDTO2.setId(agentWorkingLoadDTO1.getId());
-        assertThat(agentWorkingLoadDTO1).isEqualTo(agentWorkingLoadDTO2);
-        agentWorkingLoadDTO2.setId(2L);
-        assertThat(agentWorkingLoadDTO1).isNotEqualTo(agentWorkingLoadDTO2);
-        agentWorkingLoadDTO1.setId(null);
-        assertThat(agentWorkingLoadDTO1).isNotEqualTo(agentWorkingLoadDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(agentWorkingLoadMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(agentWorkingLoadMapper.fromId(null)).isNull();
     }
 }

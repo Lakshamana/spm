@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.TaskService;
+import br.ufpa.labes.spm.domain.Task;
+import br.ufpa.labes.spm.repository.TaskRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.TaskDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class TaskResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final TaskService taskService;
+    private final TaskRepository taskRepository;
 
-    public TaskResource(TaskService taskService) {
-        this.taskService = taskService;
+    public TaskResource(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 
     /**
      * {@code POST  /tasks} : Create a new task.
      *
-     * @param taskDTO the taskDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new taskDTO, or with status {@code 400 (Bad Request)} if the task has already an ID.
+     * @param task the task to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new task, or with status {@code 400 (Bad Request)} if the task has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/tasks")
-    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) throws URISyntaxException {
-        log.debug("REST request to save Task : {}", taskDTO);
-        if (taskDTO.getId() != null) {
+    public ResponseEntity<Task> createTask(@RequestBody Task task) throws URISyntaxException {
+        log.debug("REST request to save Task : {}", task);
+        if (task.getId() != null) {
             throw new BadRequestAlertException("A new task cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        TaskDTO result = taskService.save(taskDTO);
+        Task result = taskRepository.save(task);
         return ResponseEntity.created(new URI("/api/tasks/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class TaskResource {
     /**
      * {@code PUT  /tasks} : Updates an existing task.
      *
-     * @param taskDTO the taskDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated taskDTO,
-     * or with status {@code 400 (Bad Request)} if the taskDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the taskDTO couldn't be updated.
+     * @param task the task to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated task,
+     * or with status {@code 400 (Bad Request)} if the task is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the task couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/tasks")
-    public ResponseEntity<TaskDTO> updateTask(@RequestBody TaskDTO taskDTO) throws URISyntaxException {
-        log.debug("REST request to update Task : {}", taskDTO);
-        if (taskDTO.getId() == null) {
+    public ResponseEntity<Task> updateTask(@RequestBody Task task) throws URISyntaxException {
+        log.debug("REST request to update Task : {}", task);
+        if (task.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        TaskDTO result = taskService.save(taskDTO);
+        Task result = taskRepository.save(task);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, taskDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, task.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class TaskResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tasks in body.
      */
     @GetMapping("/tasks")
-    public List<TaskDTO> getAllTasks() {
+    public List<Task> getAllTasks() {
         log.debug("REST request to get all Tasks");
-        return taskService.findAll();
+        return taskRepository.findAll();
     }
 
     /**
      * {@code GET  /tasks/:id} : get the "id" task.
      *
-     * @param id the id of the taskDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the taskDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the task to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the task, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/tasks/{id}")
-    public ResponseEntity<TaskDTO> getTask(@PathVariable Long id) {
+    public ResponseEntity<Task> getTask(@PathVariable Long id) {
         log.debug("REST request to get Task : {}", id);
-        Optional<TaskDTO> taskDTO = taskService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(taskDTO);
+        Optional<Task> task = taskRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(task);
     }
 
     /**
      * {@code DELETE  /tasks/:id} : delete the "id" task.
      *
-     * @param id the id of the taskDTO to delete.
+     * @param id the id of the task to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/tasks/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         log.debug("REST request to delete Task : {}", id);
-        taskService.delete(id);
+        taskRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

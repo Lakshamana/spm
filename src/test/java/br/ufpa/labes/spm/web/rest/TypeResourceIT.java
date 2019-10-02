@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Type;
 import br.ufpa.labes.spm.repository.TypeRepository;
-import br.ufpa.labes.spm.service.TypeService;
-import br.ufpa.labes.spm.service.dto.TypeDTO;
-import br.ufpa.labes.spm.service.mapper.TypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class TypeResourceIT {
     private TypeRepository typeRepository;
 
     @Autowired
-    private TypeMapper typeMapper;
-
-    @Autowired
-    private TypeService typeService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class TypeResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TypeResource typeResource = new TypeResource(typeService);
+        final TypeResource typeResource = new TypeResource(typeRepository);
         this.restTypeMockMvc = MockMvcBuilders.standaloneSetup(typeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -126,10 +117,9 @@ public class TypeResourceIT {
         int databaseSizeBeforeCreate = typeRepository.findAll().size();
 
         // Create the Type
-        TypeDTO typeDTO = typeMapper.toDto(type);
         restTypeMockMvc.perform(post("/api/types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(typeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(type)))
             .andExpect(status().isCreated());
 
         // Validate the Type in the database
@@ -148,12 +138,11 @@ public class TypeResourceIT {
 
         // Create the Type with an existing ID
         type.setId(1L);
-        TypeDTO typeDTO = typeMapper.toDto(type);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restTypeMockMvc.perform(post("/api/types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(typeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(type)))
             .andExpect(status().isBadRequest());
 
         // Validate the Type in the database
@@ -218,11 +207,10 @@ public class TypeResourceIT {
             .ident(UPDATED_IDENT)
             .description(UPDATED_DESCRIPTION)
             .userDefined(UPDATED_USER_DEFINED);
-        TypeDTO typeDTO = typeMapper.toDto(updatedType);
 
         restTypeMockMvc.perform(put("/api/types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(typeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedType)))
             .andExpect(status().isOk());
 
         // Validate the Type in the database
@@ -240,12 +228,11 @@ public class TypeResourceIT {
         int databaseSizeBeforeUpdate = typeRepository.findAll().size();
 
         // Create the Type
-        TypeDTO typeDTO = typeMapper.toDto(type);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTypeMockMvc.perform(put("/api/types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(typeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(type)))
             .andExpect(status().isBadRequest());
 
         // Validate the Type in the database
@@ -284,28 +271,5 @@ public class TypeResourceIT {
         assertThat(type1).isNotEqualTo(type2);
         type1.setId(null);
         assertThat(type1).isNotEqualTo(type2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(TypeDTO.class);
-        TypeDTO typeDTO1 = new TypeDTO();
-        typeDTO1.setId(1L);
-        TypeDTO typeDTO2 = new TypeDTO();
-        assertThat(typeDTO1).isNotEqualTo(typeDTO2);
-        typeDTO2.setId(typeDTO1.getId());
-        assertThat(typeDTO1).isEqualTo(typeDTO2);
-        typeDTO2.setId(2L);
-        assertThat(typeDTO1).isNotEqualTo(typeDTO2);
-        typeDTO1.setId(null);
-        assertThat(typeDTO1).isNotEqualTo(typeDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(typeMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(typeMapper.fromId(null)).isNull();
     }
 }

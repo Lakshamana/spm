@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ConnectionEvent;
 import br.ufpa.labes.spm.repository.ConnectionEventRepository;
-import br.ufpa.labes.spm.service.ConnectionEventService;
-import br.ufpa.labes.spm.service.dto.ConnectionEventDTO;
-import br.ufpa.labes.spm.service.mapper.ConnectionEventMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +39,6 @@ public class ConnectionEventResourceIT {
     private ConnectionEventRepository connectionEventRepository;
 
     @Autowired
-    private ConnectionEventMapper connectionEventMapper;
-
-    @Autowired
-    private ConnectionEventService connectionEventService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +60,7 @@ public class ConnectionEventResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ConnectionEventResource connectionEventResource = new ConnectionEventResource(connectionEventService);
+        final ConnectionEventResource connectionEventResource = new ConnectionEventResource(connectionEventRepository);
         this.restConnectionEventMockMvc = MockMvcBuilders.standaloneSetup(connectionEventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class ConnectionEventResourceIT {
         int databaseSizeBeforeCreate = connectionEventRepository.findAll().size();
 
         // Create the ConnectionEvent
-        ConnectionEventDTO connectionEventDTO = connectionEventMapper.toDto(connectionEvent);
         restConnectionEventMockMvc.perform(post("/api/connection-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(connectionEvent)))
             .andExpect(status().isCreated());
 
         // Validate the ConnectionEvent in the database
@@ -129,12 +119,11 @@ public class ConnectionEventResourceIT {
 
         // Create the ConnectionEvent with an existing ID
         connectionEvent.setId(1L);
-        ConnectionEventDTO connectionEventDTO = connectionEventMapper.toDto(connectionEvent);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restConnectionEventMockMvc.perform(post("/api/connection-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(connectionEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the ConnectionEvent in the database
@@ -189,11 +178,10 @@ public class ConnectionEventResourceIT {
         ConnectionEvent updatedConnectionEvent = connectionEventRepository.findById(connectionEvent.getId()).get();
         // Disconnect from session so that the updates on updatedConnectionEvent are not directly saved in db
         em.detach(updatedConnectionEvent);
-        ConnectionEventDTO connectionEventDTO = connectionEventMapper.toDto(updatedConnectionEvent);
 
         restConnectionEventMockMvc.perform(put("/api/connection-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedConnectionEvent)))
             .andExpect(status().isOk());
 
         // Validate the ConnectionEvent in the database
@@ -208,12 +196,11 @@ public class ConnectionEventResourceIT {
         int databaseSizeBeforeUpdate = connectionEventRepository.findAll().size();
 
         // Create the ConnectionEvent
-        ConnectionEventDTO connectionEventDTO = connectionEventMapper.toDto(connectionEvent);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restConnectionEventMockMvc.perform(put("/api/connection-events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connectionEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(connectionEvent)))
             .andExpect(status().isBadRequest());
 
         // Validate the ConnectionEvent in the database
@@ -252,28 +239,5 @@ public class ConnectionEventResourceIT {
         assertThat(connectionEvent1).isNotEqualTo(connectionEvent2);
         connectionEvent1.setId(null);
         assertThat(connectionEvent1).isNotEqualTo(connectionEvent2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ConnectionEventDTO.class);
-        ConnectionEventDTO connectionEventDTO1 = new ConnectionEventDTO();
-        connectionEventDTO1.setId(1L);
-        ConnectionEventDTO connectionEventDTO2 = new ConnectionEventDTO();
-        assertThat(connectionEventDTO1).isNotEqualTo(connectionEventDTO2);
-        connectionEventDTO2.setId(connectionEventDTO1.getId());
-        assertThat(connectionEventDTO1).isEqualTo(connectionEventDTO2);
-        connectionEventDTO2.setId(2L);
-        assertThat(connectionEventDTO1).isNotEqualTo(connectionEventDTO2);
-        connectionEventDTO1.setId(null);
-        assertThat(connectionEventDTO1).isNotEqualTo(connectionEventDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(connectionEventMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(connectionEventMapper.fromId(null)).isNull();
     }
 }

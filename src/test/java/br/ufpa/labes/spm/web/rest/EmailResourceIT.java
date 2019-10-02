@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Email;
 import br.ufpa.labes.spm.repository.EmailRepository;
-import br.ufpa.labes.spm.service.EmailService;
-import br.ufpa.labes.spm.service.dto.EmailDTO;
-import br.ufpa.labes.spm.service.mapper.EmailMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,12 +60,6 @@ public class EmailResourceIT {
     private EmailRepository emailRepository;
 
     @Autowired
-    private EmailMapper emailMapper;
-
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -90,7 +81,7 @@ public class EmailResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EmailResource emailResource = new EmailResource(emailService);
+        final EmailResource emailResource = new EmailResource(emailRepository);
         this.restEmailMockMvc = MockMvcBuilders.standaloneSetup(emailResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -145,10 +136,9 @@ public class EmailResourceIT {
         int databaseSizeBeforeCreate = emailRepository.findAll().size();
 
         // Create the Email
-        EmailDTO emailDTO = emailMapper.toDto(email);
         restEmailMockMvc.perform(post("/api/emails")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(emailDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(email)))
             .andExpect(status().isCreated());
 
         // Validate the Email in the database
@@ -171,12 +161,11 @@ public class EmailResourceIT {
 
         // Create the Email with an existing ID
         email.setId(1L);
-        EmailDTO emailDTO = emailMapper.toDto(email);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEmailMockMvc.perform(post("/api/emails")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(emailDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(email)))
             .andExpect(status().isBadRequest());
 
         // Validate the Email in the database
@@ -253,11 +242,10 @@ public class EmailResourceIT {
             .servicoTls(UPDATED_SERVICO_TLS)
             .servicoSsl(UPDATED_SERVICO_SSL)
             .teste(UPDATED_TESTE);
-        EmailDTO emailDTO = emailMapper.toDto(updatedEmail);
 
         restEmailMockMvc.perform(put("/api/emails")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(emailDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedEmail)))
             .andExpect(status().isOk());
 
         // Validate the Email in the database
@@ -279,12 +267,11 @@ public class EmailResourceIT {
         int databaseSizeBeforeUpdate = emailRepository.findAll().size();
 
         // Create the Email
-        EmailDTO emailDTO = emailMapper.toDto(email);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restEmailMockMvc.perform(put("/api/emails")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(emailDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(email)))
             .andExpect(status().isBadRequest());
 
         // Validate the Email in the database
@@ -323,28 +310,5 @@ public class EmailResourceIT {
         assertThat(email1).isNotEqualTo(email2);
         email1.setId(null);
         assertThat(email1).isNotEqualTo(email2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(EmailDTO.class);
-        EmailDTO emailDTO1 = new EmailDTO();
-        emailDTO1.setId(1L);
-        EmailDTO emailDTO2 = new EmailDTO();
-        assertThat(emailDTO1).isNotEqualTo(emailDTO2);
-        emailDTO2.setId(emailDTO1.getId());
-        assertThat(emailDTO1).isEqualTo(emailDTO2);
-        emailDTO2.setId(2L);
-        assertThat(emailDTO1).isNotEqualTo(emailDTO2);
-        emailDTO1.setId(null);
-        assertThat(emailDTO1).isNotEqualTo(emailDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(emailMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(emailMapper.fromId(null)).isNull();
     }
 }

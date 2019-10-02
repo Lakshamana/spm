@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.service.AgentWorkingLoadService;
+import br.ufpa.labes.spm.domain.AgentWorkingLoad;
+import br.ufpa.labes.spm.repository.AgentWorkingLoadRepository;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
-import br.ufpa.labes.spm.service.dto.AgentWorkingLoadDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -32,26 +32,26 @@ public class AgentWorkingLoadResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AgentWorkingLoadService agentWorkingLoadService;
+    private final AgentWorkingLoadRepository agentWorkingLoadRepository;
 
-    public AgentWorkingLoadResource(AgentWorkingLoadService agentWorkingLoadService) {
-        this.agentWorkingLoadService = agentWorkingLoadService;
+    public AgentWorkingLoadResource(AgentWorkingLoadRepository agentWorkingLoadRepository) {
+        this.agentWorkingLoadRepository = agentWorkingLoadRepository;
     }
 
     /**
      * {@code POST  /agent-working-loads} : Create a new agentWorkingLoad.
      *
-     * @param agentWorkingLoadDTO the agentWorkingLoadDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentWorkingLoadDTO, or with status {@code 400 (Bad Request)} if the agentWorkingLoad has already an ID.
+     * @param agentWorkingLoad the agentWorkingLoad to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new agentWorkingLoad, or with status {@code 400 (Bad Request)} if the agentWorkingLoad has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/agent-working-loads")
-    public ResponseEntity<AgentWorkingLoadDTO> createAgentWorkingLoad(@RequestBody AgentWorkingLoadDTO agentWorkingLoadDTO) throws URISyntaxException {
-        log.debug("REST request to save AgentWorkingLoad : {}", agentWorkingLoadDTO);
-        if (agentWorkingLoadDTO.getId() != null) {
+    public ResponseEntity<AgentWorkingLoad> createAgentWorkingLoad(@RequestBody AgentWorkingLoad agentWorkingLoad) throws URISyntaxException {
+        log.debug("REST request to save AgentWorkingLoad : {}", agentWorkingLoad);
+        if (agentWorkingLoad.getId() != null) {
             throw new BadRequestAlertException("A new agentWorkingLoad cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AgentWorkingLoadDTO result = agentWorkingLoadService.save(agentWorkingLoadDTO);
+        AgentWorkingLoad result = agentWorkingLoadRepository.save(agentWorkingLoad);
         return ResponseEntity.created(new URI("/api/agent-working-loads/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +60,21 @@ public class AgentWorkingLoadResource {
     /**
      * {@code PUT  /agent-working-loads} : Updates an existing agentWorkingLoad.
      *
-     * @param agentWorkingLoadDTO the agentWorkingLoadDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentWorkingLoadDTO,
-     * or with status {@code 400 (Bad Request)} if the agentWorkingLoadDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the agentWorkingLoadDTO couldn't be updated.
+     * @param agentWorkingLoad the agentWorkingLoad to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated agentWorkingLoad,
+     * or with status {@code 400 (Bad Request)} if the agentWorkingLoad is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the agentWorkingLoad couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/agent-working-loads")
-    public ResponseEntity<AgentWorkingLoadDTO> updateAgentWorkingLoad(@RequestBody AgentWorkingLoadDTO agentWorkingLoadDTO) throws URISyntaxException {
-        log.debug("REST request to update AgentWorkingLoad : {}", agentWorkingLoadDTO);
-        if (agentWorkingLoadDTO.getId() == null) {
+    public ResponseEntity<AgentWorkingLoad> updateAgentWorkingLoad(@RequestBody AgentWorkingLoad agentWorkingLoad) throws URISyntaxException {
+        log.debug("REST request to update AgentWorkingLoad : {}", agentWorkingLoad);
+        if (agentWorkingLoad.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AgentWorkingLoadDTO result = agentWorkingLoadService.save(agentWorkingLoadDTO);
+        AgentWorkingLoad result = agentWorkingLoadRepository.save(agentWorkingLoad);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentWorkingLoadDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, agentWorkingLoad.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +85,34 @@ public class AgentWorkingLoadResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of agentWorkingLoads in body.
      */
     @GetMapping("/agent-working-loads")
-    public List<AgentWorkingLoadDTO> getAllAgentWorkingLoads() {
+    public List<AgentWorkingLoad> getAllAgentWorkingLoads() {
         log.debug("REST request to get all AgentWorkingLoads");
-        return agentWorkingLoadService.findAll();
+        return agentWorkingLoadRepository.findAll();
     }
 
     /**
      * {@code GET  /agent-working-loads/:id} : get the "id" agentWorkingLoad.
      *
-     * @param id the id of the agentWorkingLoadDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentWorkingLoadDTO, or with status {@code 404 (Not Found)}.
+     * @param id the id of the agentWorkingLoad to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the agentWorkingLoad, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/agent-working-loads/{id}")
-    public ResponseEntity<AgentWorkingLoadDTO> getAgentWorkingLoad(@PathVariable Long id) {
+    public ResponseEntity<AgentWorkingLoad> getAgentWorkingLoad(@PathVariable Long id) {
         log.debug("REST request to get AgentWorkingLoad : {}", id);
-        Optional<AgentWorkingLoadDTO> agentWorkingLoadDTO = agentWorkingLoadService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(agentWorkingLoadDTO);
+        Optional<AgentWorkingLoad> agentWorkingLoad = agentWorkingLoadRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(agentWorkingLoad);
     }
 
     /**
      * {@code DELETE  /agent-working-loads/:id} : delete the "id" agentWorkingLoad.
      *
-     * @param id the id of the agentWorkingLoadDTO to delete.
+     * @param id the id of the agentWorkingLoad to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/agent-working-loads/{id}")
     public ResponseEntity<Void> deleteAgentWorkingLoad(@PathVariable Long id) {
         log.debug("REST request to delete AgentWorkingLoad : {}", id);
-        agentWorkingLoadService.delete(id);
+        agentWorkingLoadRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

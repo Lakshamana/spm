@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Reservation;
 import br.ufpa.labes.spm.repository.ReservationRepository;
-import br.ufpa.labes.spm.service.ReservationService;
-import br.ufpa.labes.spm.service.dto.ReservationDTO;
-import br.ufpa.labes.spm.service.mapper.ReservationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +49,6 @@ public class ReservationResourceIT {
     private ReservationRepository reservationRepository;
 
     @Autowired
-    private ReservationMapper reservationMapper;
-
-    @Autowired
-    private ReservationService reservationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +70,7 @@ public class ReservationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ReservationResource reservationResource = new ReservationResource(reservationService);
+        final ReservationResource reservationResource = new ReservationResource(reservationRepository);
         this.restReservationMockMvc = MockMvcBuilders.standaloneSetup(reservationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -124,10 +115,9 @@ public class ReservationResourceIT {
         int databaseSizeBeforeCreate = reservationRepository.findAll().size();
 
         // Create the Reservation
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
         restReservationMockMvc.perform(post("/api/reservations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reservationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reservation)))
             .andExpect(status().isCreated());
 
         // Validate the Reservation in the database
@@ -145,12 +135,11 @@ public class ReservationResourceIT {
 
         // Create the Reservation with an existing ID
         reservation.setId(1L);
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restReservationMockMvc.perform(post("/api/reservations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reservationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reservation)))
             .andExpect(status().isBadRequest());
 
         // Validate the Reservation in the database
@@ -212,11 +201,10 @@ public class ReservationResourceIT {
         updatedReservation
             .fromDate(UPDATED_FROM_DATE)
             .toDate(UPDATED_TO_DATE);
-        ReservationDTO reservationDTO = reservationMapper.toDto(updatedReservation);
 
         restReservationMockMvc.perform(put("/api/reservations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reservationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedReservation)))
             .andExpect(status().isOk());
 
         // Validate the Reservation in the database
@@ -233,12 +221,11 @@ public class ReservationResourceIT {
         int databaseSizeBeforeUpdate = reservationRepository.findAll().size();
 
         // Create the Reservation
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restReservationMockMvc.perform(put("/api/reservations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(reservationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(reservation)))
             .andExpect(status().isBadRequest());
 
         // Validate the Reservation in the database
@@ -277,28 +264,5 @@ public class ReservationResourceIT {
         assertThat(reservation1).isNotEqualTo(reservation2);
         reservation1.setId(null);
         assertThat(reservation1).isNotEqualTo(reservation2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ReservationDTO.class);
-        ReservationDTO reservationDTO1 = new ReservationDTO();
-        reservationDTO1.setId(1L);
-        ReservationDTO reservationDTO2 = new ReservationDTO();
-        assertThat(reservationDTO1).isNotEqualTo(reservationDTO2);
-        reservationDTO2.setId(reservationDTO1.getId());
-        assertThat(reservationDTO1).isEqualTo(reservationDTO2);
-        reservationDTO2.setId(2L);
-        assertThat(reservationDTO1).isNotEqualTo(reservationDTO2);
-        reservationDTO1.setId(null);
-        assertThat(reservationDTO1).isNotEqualTo(reservationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(reservationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(reservationMapper.fromId(null)).isNull();
     }
 }

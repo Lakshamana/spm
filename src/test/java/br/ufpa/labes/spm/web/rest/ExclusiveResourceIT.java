@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Exclusive;
 import br.ufpa.labes.spm.repository.ExclusiveRepository;
-import br.ufpa.labes.spm.service.ExclusiveService;
-import br.ufpa.labes.spm.service.dto.ExclusiveDTO;
-import br.ufpa.labes.spm.service.mapper.ExclusiveMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +45,6 @@ public class ExclusiveResourceIT {
     private ExclusiveRepository exclusiveRepository;
 
     @Autowired
-    private ExclusiveMapper exclusiveMapper;
-
-    @Autowired
-    private ExclusiveService exclusiveService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +66,7 @@ public class ExclusiveResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ExclusiveResource exclusiveResource = new ExclusiveResource(exclusiveService);
+        final ExclusiveResource exclusiveResource = new ExclusiveResource(exclusiveRepository);
         this.restExclusiveMockMvc = MockMvcBuilders.standaloneSetup(exclusiveResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -120,10 +111,9 @@ public class ExclusiveResourceIT {
         int databaseSizeBeforeCreate = exclusiveRepository.findAll().size();
 
         // Create the Exclusive
-        ExclusiveDTO exclusiveDTO = exclusiveMapper.toDto(exclusive);
         restExclusiveMockMvc.perform(post("/api/exclusives")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(exclusiveDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(exclusive)))
             .andExpect(status().isCreated());
 
         // Validate the Exclusive in the database
@@ -141,12 +131,11 @@ public class ExclusiveResourceIT {
 
         // Create the Exclusive with an existing ID
         exclusive.setId(1L);
-        ExclusiveDTO exclusiveDTO = exclusiveMapper.toDto(exclusive);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restExclusiveMockMvc.perform(post("/api/exclusives")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(exclusiveDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(exclusive)))
             .andExpect(status().isBadRequest());
 
         // Validate the Exclusive in the database
@@ -208,11 +197,10 @@ public class ExclusiveResourceIT {
         updatedExclusive
             .state(UPDATED_STATE)
             .unitOfCost(UPDATED_UNIT_OF_COST);
-        ExclusiveDTO exclusiveDTO = exclusiveMapper.toDto(updatedExclusive);
 
         restExclusiveMockMvc.perform(put("/api/exclusives")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(exclusiveDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedExclusive)))
             .andExpect(status().isOk());
 
         // Validate the Exclusive in the database
@@ -229,12 +217,11 @@ public class ExclusiveResourceIT {
         int databaseSizeBeforeUpdate = exclusiveRepository.findAll().size();
 
         // Create the Exclusive
-        ExclusiveDTO exclusiveDTO = exclusiveMapper.toDto(exclusive);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restExclusiveMockMvc.perform(put("/api/exclusives")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(exclusiveDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(exclusive)))
             .andExpect(status().isBadRequest());
 
         // Validate the Exclusive in the database
@@ -273,28 +260,5 @@ public class ExclusiveResourceIT {
         assertThat(exclusive1).isNotEqualTo(exclusive2);
         exclusive1.setId(null);
         assertThat(exclusive1).isNotEqualTo(exclusive2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ExclusiveDTO.class);
-        ExclusiveDTO exclusiveDTO1 = new ExclusiveDTO();
-        exclusiveDTO1.setId(1L);
-        ExclusiveDTO exclusiveDTO2 = new ExclusiveDTO();
-        assertThat(exclusiveDTO1).isNotEqualTo(exclusiveDTO2);
-        exclusiveDTO2.setId(exclusiveDTO1.getId());
-        assertThat(exclusiveDTO1).isEqualTo(exclusiveDTO2);
-        exclusiveDTO2.setId(2L);
-        assertThat(exclusiveDTO1).isNotEqualTo(exclusiveDTO2);
-        exclusiveDTO1.setId(null);
-        assertThat(exclusiveDTO1).isNotEqualTo(exclusiveDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(exclusiveMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(exclusiveMapper.fromId(null)).isNull();
     }
 }

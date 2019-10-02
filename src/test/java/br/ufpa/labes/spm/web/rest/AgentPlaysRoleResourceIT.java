@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AgentPlaysRole;
 import br.ufpa.labes.spm.repository.AgentPlaysRoleRepository;
-import br.ufpa.labes.spm.service.AgentPlaysRoleService;
-import br.ufpa.labes.spm.service.dto.AgentPlaysRoleDTO;
-import br.ufpa.labes.spm.service.mapper.AgentPlaysRoleMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +45,6 @@ public class AgentPlaysRoleResourceIT {
     private AgentPlaysRoleRepository agentPlaysRoleRepository;
 
     @Autowired
-    private AgentPlaysRoleMapper agentPlaysRoleMapper;
-
-    @Autowired
-    private AgentPlaysRoleService agentPlaysRoleService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +66,7 @@ public class AgentPlaysRoleResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgentPlaysRoleResource agentPlaysRoleResource = new AgentPlaysRoleResource(agentPlaysRoleService);
+        final AgentPlaysRoleResource agentPlaysRoleResource = new AgentPlaysRoleResource(agentPlaysRoleRepository);
         this.restAgentPlaysRoleMockMvc = MockMvcBuilders.standaloneSetup(agentPlaysRoleResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -118,10 +109,9 @@ public class AgentPlaysRoleResourceIT {
         int databaseSizeBeforeCreate = agentPlaysRoleRepository.findAll().size();
 
         // Create the AgentPlaysRole
-        AgentPlaysRoleDTO agentPlaysRoleDTO = agentPlaysRoleMapper.toDto(agentPlaysRole);
         restAgentPlaysRoleMockMvc.perform(post("/api/agent-plays-roles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentPlaysRoleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentPlaysRole)))
             .andExpect(status().isCreated());
 
         // Validate the AgentPlaysRole in the database
@@ -138,12 +128,11 @@ public class AgentPlaysRoleResourceIT {
 
         // Create the AgentPlaysRole with an existing ID
         agentPlaysRole.setId(1L);
-        AgentPlaysRoleDTO agentPlaysRoleDTO = agentPlaysRoleMapper.toDto(agentPlaysRole);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAgentPlaysRoleMockMvc.perform(post("/api/agent-plays-roles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentPlaysRoleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentPlaysRole)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentPlaysRole in the database
@@ -202,11 +191,10 @@ public class AgentPlaysRoleResourceIT {
         em.detach(updatedAgentPlaysRole);
         updatedAgentPlaysRole
             .sinceDate(UPDATED_SINCE_DATE);
-        AgentPlaysRoleDTO agentPlaysRoleDTO = agentPlaysRoleMapper.toDto(updatedAgentPlaysRole);
 
         restAgentPlaysRoleMockMvc.perform(put("/api/agent-plays-roles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentPlaysRoleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAgentPlaysRole)))
             .andExpect(status().isOk());
 
         // Validate the AgentPlaysRole in the database
@@ -222,12 +210,11 @@ public class AgentPlaysRoleResourceIT {
         int databaseSizeBeforeUpdate = agentPlaysRoleRepository.findAll().size();
 
         // Create the AgentPlaysRole
-        AgentPlaysRoleDTO agentPlaysRoleDTO = agentPlaysRoleMapper.toDto(agentPlaysRole);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAgentPlaysRoleMockMvc.perform(put("/api/agent-plays-roles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentPlaysRoleDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(agentPlaysRole)))
             .andExpect(status().isBadRequest());
 
         // Validate the AgentPlaysRole in the database
@@ -266,28 +253,5 @@ public class AgentPlaysRoleResourceIT {
         assertThat(agentPlaysRole1).isNotEqualTo(agentPlaysRole2);
         agentPlaysRole1.setId(null);
         assertThat(agentPlaysRole1).isNotEqualTo(agentPlaysRole2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgentPlaysRoleDTO.class);
-        AgentPlaysRoleDTO agentPlaysRoleDTO1 = new AgentPlaysRoleDTO();
-        agentPlaysRoleDTO1.setId(1L);
-        AgentPlaysRoleDTO agentPlaysRoleDTO2 = new AgentPlaysRoleDTO();
-        assertThat(agentPlaysRoleDTO1).isNotEqualTo(agentPlaysRoleDTO2);
-        agentPlaysRoleDTO2.setId(agentPlaysRoleDTO1.getId());
-        assertThat(agentPlaysRoleDTO1).isEqualTo(agentPlaysRoleDTO2);
-        agentPlaysRoleDTO2.setId(2L);
-        assertThat(agentPlaysRoleDTO1).isNotEqualTo(agentPlaysRoleDTO2);
-        agentPlaysRoleDTO1.setId(null);
-        assertThat(agentPlaysRoleDTO1).isNotEqualTo(agentPlaysRoleDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(agentPlaysRoleMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(agentPlaysRoleMapper.fromId(null)).isNull();
     }
 }

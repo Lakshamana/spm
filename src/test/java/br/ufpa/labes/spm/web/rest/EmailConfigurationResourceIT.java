@@ -3,9 +3,6 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.EmailConfiguration;
 import br.ufpa.labes.spm.repository.EmailConfigurationRepository;
-import br.ufpa.labes.spm.service.EmailConfigurationService;
-import br.ufpa.labes.spm.service.dto.EmailConfigurationDTO;
-import br.ufpa.labes.spm.service.mapper.EmailConfigurationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -60,12 +57,6 @@ public class EmailConfigurationResourceIT {
     private EmailConfigurationRepository emailConfigurationRepository;
 
     @Autowired
-    private EmailConfigurationMapper emailConfigurationMapper;
-
-    @Autowired
-    private EmailConfigurationService emailConfigurationService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -87,7 +78,7 @@ public class EmailConfigurationResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EmailConfigurationResource emailConfigurationResource = new EmailConfigurationResource(emailConfigurationService);
+        final EmailConfigurationResource emailConfigurationResource = new EmailConfigurationResource(emailConfigurationRepository);
         this.restEmailConfigurationMockMvc = MockMvcBuilders.standaloneSetup(emailConfigurationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -140,10 +131,9 @@ public class EmailConfigurationResourceIT {
         int databaseSizeBeforeCreate = emailConfigurationRepository.findAll().size();
 
         // Create the EmailConfiguration
-        EmailConfigurationDTO emailConfigurationDTO = emailConfigurationMapper.toDto(emailConfiguration);
         restEmailConfigurationMockMvc.perform(post("/api/email-configurations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(emailConfigurationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(emailConfiguration)))
             .andExpect(status().isCreated());
 
         // Validate the EmailConfiguration in the database
@@ -165,12 +155,11 @@ public class EmailConfigurationResourceIT {
 
         // Create the EmailConfiguration with an existing ID
         emailConfiguration.setId(1L);
-        EmailConfigurationDTO emailConfigurationDTO = emailConfigurationMapper.toDto(emailConfiguration);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEmailConfigurationMockMvc.perform(post("/api/email-configurations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(emailConfigurationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(emailConfiguration)))
             .andExpect(status().isBadRequest());
 
         // Validate the EmailConfiguration in the database
@@ -244,11 +233,10 @@ public class EmailConfigurationResourceIT {
             .activityInstantied(UPDATED_ACTIVITY_INSTANTIED)
             .taskDelegated(UPDATED_TASK_DELEGATED)
             .decisionBranchCond(UPDATED_DECISION_BRANCH_COND);
-        EmailConfigurationDTO emailConfigurationDTO = emailConfigurationMapper.toDto(updatedEmailConfiguration);
 
         restEmailConfigurationMockMvc.perform(put("/api/email-configurations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(emailConfigurationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedEmailConfiguration)))
             .andExpect(status().isOk());
 
         // Validate the EmailConfiguration in the database
@@ -269,12 +257,11 @@ public class EmailConfigurationResourceIT {
         int databaseSizeBeforeUpdate = emailConfigurationRepository.findAll().size();
 
         // Create the EmailConfiguration
-        EmailConfigurationDTO emailConfigurationDTO = emailConfigurationMapper.toDto(emailConfiguration);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restEmailConfigurationMockMvc.perform(put("/api/email-configurations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(emailConfigurationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(emailConfiguration)))
             .andExpect(status().isBadRequest());
 
         // Validate the EmailConfiguration in the database
@@ -313,28 +300,5 @@ public class EmailConfigurationResourceIT {
         assertThat(emailConfiguration1).isNotEqualTo(emailConfiguration2);
         emailConfiguration1.setId(null);
         assertThat(emailConfiguration1).isNotEqualTo(emailConfiguration2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(EmailConfigurationDTO.class);
-        EmailConfigurationDTO emailConfigurationDTO1 = new EmailConfigurationDTO();
-        emailConfigurationDTO1.setId(1L);
-        EmailConfigurationDTO emailConfigurationDTO2 = new EmailConfigurationDTO();
-        assertThat(emailConfigurationDTO1).isNotEqualTo(emailConfigurationDTO2);
-        emailConfigurationDTO2.setId(emailConfigurationDTO1.getId());
-        assertThat(emailConfigurationDTO1).isEqualTo(emailConfigurationDTO2);
-        emailConfigurationDTO2.setId(2L);
-        assertThat(emailConfigurationDTO1).isNotEqualTo(emailConfigurationDTO2);
-        emailConfigurationDTO1.setId(null);
-        assertThat(emailConfigurationDTO1).isNotEqualTo(emailConfigurationDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(emailConfigurationMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(emailConfigurationMapper.fromId(null)).isNull();
     }
 }
