@@ -1,8 +1,4 @@
 package br.ufpa.labes.spm.domain;
-
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -20,7 +16,6 @@ import java.util.Set;
 @Entity
 @Table(name = "resource")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Resource implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,12 +54,15 @@ public class Resource implements Serializable {
     private Resource belongsTo;
 
     @ManyToOne
-    @JsonIgnoreProperties("isRequireds")
-    private Resource requires;
-
-    @ManyToOne
     @JsonIgnoreProperties("theResources")
     private ResourceType theResourceType;
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "resource_requires",
+               joinColumns = @JoinColumn(name = "resource_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "requires_id", referencedColumnName = "id"))
+    private Set<Resource> requires = new HashSet<>();
 
     @OneToMany(mappedBy = "theResource")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -94,14 +92,15 @@ public class Resource implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Resource> possesses = new HashSet<>();
 
-    @OneToMany(mappedBy = "requires")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Resource> isRequireds = new HashSet<>();
-
     @ManyToMany(mappedBy = "resourceSuggesteds")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
     private Set<ResourceInstSug> theResourceSuggestions = new HashSet<>();
+
+    @ManyToMany(mappedBy = "requires")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private Set<Resource> isRequireds = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -229,19 +228,6 @@ public class Resource implements Serializable {
         this.belongsTo = resource;
     }
 
-    public Resource getRequires() {
-        return requires;
-    }
-
-    public Resource requires(Resource resource) {
-        this.requires = resource;
-        return this;
-    }
-
-    public void setRequires(Resource resource) {
-        this.requires = resource;
-    }
-
     public ResourceType getTheResourceType() {
         return theResourceType;
     }
@@ -253,6 +239,31 @@ public class Resource implements Serializable {
 
     public void setTheResourceType(ResourceType resourceType) {
         this.theResourceType = resourceType;
+    }
+
+    public Set<Resource> getRequires() {
+        return requires;
+    }
+
+    public Resource requires(Set<Resource> resources) {
+        this.requires = resources;
+        return this;
+    }
+
+    public Resource addRequires(Resource resource) {
+        this.requires.add(resource);
+        resource.getIsRequireds().add(this);
+        return this;
+    }
+
+    public Resource removeRequires(Resource resource) {
+        this.requires.remove(resource);
+        resource.getIsRequireds().remove(this);
+        return this;
+    }
+
+    public void setRequires(Set<Resource> resources) {
+        this.requires = resources;
     }
 
     public Set<ResourceEvent> getTheResourceEvents() {
@@ -430,31 +441,6 @@ public class Resource implements Serializable {
         this.possesses = resources;
     }
 
-    public Set<Resource> getIsRequireds() {
-        return isRequireds;
-    }
-
-    public Resource isRequireds(Set<Resource> resources) {
-        this.isRequireds = resources;
-        return this;
-    }
-
-    public Resource addIsRequired(Resource resource) {
-        this.isRequireds.add(resource);
-        resource.setRequires(this);
-        return this;
-    }
-
-    public Resource removeIsRequired(Resource resource) {
-        this.isRequireds.remove(resource);
-        resource.setRequires(null);
-        return this;
-    }
-
-    public void setIsRequireds(Set<Resource> resources) {
-        this.isRequireds = resources;
-    }
-
     public Set<ResourceInstSug> getTheResourceSuggestions() {
         return theResourceSuggestions;
     }
@@ -478,6 +464,31 @@ public class Resource implements Serializable {
 
     public void setTheResourceSuggestions(Set<ResourceInstSug> resourceInstSugs) {
         this.theResourceSuggestions = resourceInstSugs;
+    }
+
+    public Set<Resource> getIsRequireds() {
+        return isRequireds;
+    }
+
+    public Resource isRequireds(Set<Resource> resources) {
+        this.isRequireds = resources;
+        return this;
+    }
+
+    public Resource addIsRequired(Resource resource) {
+        this.isRequireds.add(resource);
+        resource.getRequires().add(this);
+        return this;
+    }
+
+    public Resource removeIsRequired(Resource resource) {
+        this.isRequireds.remove(resource);
+        resource.getRequires().remove(this);
+        return this;
+    }
+
+    public void setIsRequireds(Set<Resource> resources) {
+        this.isRequireds = resources;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

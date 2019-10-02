@@ -8,6 +8,8 @@ import br.ufpa.labes.spm.service.mapper.ResourceMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,11 +59,20 @@ public class ResourceServiceImpl implements ResourceService {
     @Transactional(readOnly = true)
     public List<ResourceDTO> findAll() {
         log.debug("Request to get all Resources");
-        return resourceRepository.findAll().stream()
+        return resourceRepository.findAllWithEagerRelationships().stream()
             .map(resourceMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+    /**
+     * Get all the resources with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<ResourceDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return resourceRepository.findAllWithEagerRelationships(pageable).map(resourceMapper::toDto);
+    }
+    
 
     /**
      * Get one resource by id.
@@ -73,7 +84,7 @@ public class ResourceServiceImpl implements ResourceService {
     @Transactional(readOnly = true)
     public Optional<ResourceDTO> findOne(Long id) {
         log.debug("Request to get Resource : {}", id);
-        return resourceRepository.findById(id)
+        return resourceRepository.findOneWithEagerRelationships(id)
             .map(resourceMapper::toDto);
     }
 

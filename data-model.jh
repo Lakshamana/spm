@@ -1026,8 +1026,11 @@ relationship ManyToOne {
     Reservation{theExclusive} to Exclusive{theReservation},
 
     Resource{belongsTo} to Resource{possess},
-    Resource{requires} to Resource{isRequired},
     Resource{theResourceType} to ResourceType{theResource}
+}
+
+relationship ManyToMany {
+  Resource{requires} to Resource{isRequired}
 }
 
 //package security ------------------------------------------- OK

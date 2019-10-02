@@ -12,13 +12,12 @@ import org.mapstruct.*;
 public interface ResourceMapper extends EntityMapper<ResourceDTO, Resource> {
 
     @Mapping(source = "belongsTo.id", target = "belongsToId")
-    @Mapping(source = "requires.id", target = "requiresId")
     @Mapping(source = "theResourceType.id", target = "theResourceTypeId")
     ResourceDTO toDto(Resource resource);
 
     @Mapping(source = "belongsToId", target = "belongsTo")
-    @Mapping(source = "requiresId", target = "requires")
     @Mapping(source = "theResourceTypeId", target = "theResourceType")
+    @Mapping(target = "removeRequires", ignore = true)
     @Mapping(target = "theResourceEvents", ignore = true)
     @Mapping(target = "removeTheResourceEvent", ignore = true)
     @Mapping(target = "theRequiredResources", ignore = true)
@@ -33,10 +32,10 @@ public interface ResourceMapper extends EntityMapper<ResourceDTO, Resource> {
     @Mapping(target = "removeTheResourceEstimation", ignore = true)
     @Mapping(target = "possesses", ignore = true)
     @Mapping(target = "removePossess", ignore = true)
-    @Mapping(target = "isRequireds", ignore = true)
-    @Mapping(target = "removeIsRequired", ignore = true)
     @Mapping(target = "theResourceSuggestions", ignore = true)
     @Mapping(target = "removeTheResourceSuggestions", ignore = true)
+    @Mapping(target = "isRequireds", ignore = true)
+    @Mapping(target = "removeIsRequired", ignore = true)
     Resource toEntity(ResourceDTO resourceDTO);
 
     default Resource fromId(Long id) {

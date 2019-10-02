@@ -645,6 +645,7 @@ public class CacheConfiguration {
       createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theGlobalActivityEvents");
       createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theModelingActivityEvents");
       createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theProcessEvents");
+      createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".requires");
       // jhipster-needle-ehcache-add-entry
     };
   }

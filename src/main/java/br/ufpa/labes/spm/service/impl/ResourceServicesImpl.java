@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -147,7 +148,7 @@ public class ResourceServicesImpl implements ResourceServices{
 				resource.setIsActive(resourceDTO.getIsActive());
 				resource.setDescription(resourceDTO.getDescription());
 			}
-			resource.setRequires(requires);
+			resource.setRequires(requires.stream().collect(Collectors.toSet()));
 
 			resourceDAO.update(resource);
 		} catch (ImplementationException e) {

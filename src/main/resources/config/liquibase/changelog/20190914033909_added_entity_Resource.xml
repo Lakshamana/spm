@@ -52,10 +52,6 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="requires_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
             <column name="the_resource_type_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -67,6 +63,17 @@
 
     <changeSet id="20190914033909-1-relations" author="jhipster">
 
+        <createTable tableName="resource_requires">
+            <column name="requires_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="resource_id, requires_id" tableName="resource_requires"/>
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

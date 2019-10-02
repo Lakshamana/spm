@@ -45,17 +45,18 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "resource",
-            "otherEntityRelationshipName": "isRequired",
-            "relationshipName": "requires",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "resourceType",
             "otherEntityRelationshipName": "theResource",
             "relationshipName": "theResourceType",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "isRequired",
+            "relationshipName": "requires",
+            "otherEntityField": "id",
+            "ownerSide": true
         },
         {
             "relationshipType": "one-to-many",
@@ -100,16 +101,18 @@
             "relationshipName": "possess"
         },
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "resource",
-            "otherEntityRelationshipName": "requires",
-            "relationshipName": "isRequired"
-        },
-        {
             "relationshipType": "many-to-many",
             "otherEntityName": "resourceInstSug",
             "otherEntityRelationshipName": "resourceSuggested",
             "relationshipName": "theResourceSuggestions",
+            "otherEntityField": "id",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "resource",
+            "otherEntityRelationshipName": "requires",
+            "relationshipName": "isRequired",
             "otherEntityField": "id",
             "ownerSide": false
         }
