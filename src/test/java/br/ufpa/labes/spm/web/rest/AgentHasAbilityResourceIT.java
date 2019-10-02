@@ -28,228 +28,234 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Integration tests for the {@link AgentHasAbilityResource} REST controller.
- */
+/** Integration tests for the {@link AgentHasAbilityResource} REST controller. */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class AgentHasAbilityResourceIT {
 
-    private static final Integer DEFAULT_DEGREE = 1;
-    private static final Integer UPDATED_DEGREE = 2;
-    private static final Integer SMALLER_DEGREE = 1 - 1;
+  private static final Integer DEFAULT_DEGREE = 1;
+  private static final Integer UPDATED_DEGREE = 2;
+  private static final Integer SMALLER_DEGREE = 1 - 1;
 
-    @Autowired
-    private AgentHasAbilityRepository agentHasAbilityRepository;
+  @Autowired private AgentHasAbilityRepository agentHasAbilityRepository;
 
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
+  @Autowired private ExceptionTranslator exceptionTranslator;
 
-    @Autowired
-    private EntityManager em;
+  @Autowired private EntityManager em;
 
-    @Autowired
-    private Validator validator;
+  @Autowired private Validator validator;
 
-    private MockMvc restAgentHasAbilityMockMvc;
+  private MockMvc restAgentHasAbilityMockMvc;
 
-    private AgentHasAbility agentHasAbility;
+  private AgentHasAbility agentHasAbility;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final AgentHasAbilityResource agentHasAbilityResource = new AgentHasAbilityResource(agentHasAbilityRepository);
-        this.restAgentHasAbilityMockMvc = MockMvcBuilders.standaloneSetup(agentHasAbilityResource)
+  @BeforeEach
+  public void setup() {
+    MockitoAnnotations.initMocks(this);
+    final AgentHasAbilityResource agentHasAbilityResource =
+        new AgentHasAbilityResource(agentHasAbilityRepository);
+    this.restAgentHasAbilityMockMvc =
+        MockMvcBuilders.standaloneSetup(agentHasAbilityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
+            .setValidator(validator)
+            .build();
+  }
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static AgentHasAbility createEntity(EntityManager em) {
-        AgentHasAbility agentHasAbility = new AgentHasAbility()
-            .degree(DEFAULT_DEGREE);
-        return agentHasAbility;
-    }
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static AgentHasAbility createUpdatedEntity(EntityManager em) {
-        AgentHasAbility agentHasAbility = new AgentHasAbility()
-            .degree(UPDATED_DEGREE);
-        return agentHasAbility;
-    }
+  /**
+   * Create an entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static AgentHasAbility createEntity(EntityManager em) {
+    AgentHasAbility agentHasAbility = new AgentHasAbility().degree(DEFAULT_DEGREE);
+    return agentHasAbility;
+  }
+  /**
+   * Create an updated entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static AgentHasAbility createUpdatedEntity(EntityManager em) {
+    AgentHasAbility agentHasAbility = new AgentHasAbility().degree(UPDATED_DEGREE);
+    return agentHasAbility;
+  }
 
-    @BeforeEach
-    public void initTest() {
-        agentHasAbility = createEntity(em);
-    }
+  @BeforeEach
+  public void initTest() {
+    agentHasAbility = createEntity(em);
+  }
 
-    @Test
-    @Transactional
-    public void createAgentHasAbility() throws Exception {
-        int databaseSizeBeforeCreate = agentHasAbilityRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createAgentHasAbility() throws Exception {
+    int databaseSizeBeforeCreate = agentHasAbilityRepository.findAll().size();
 
-        // Create the AgentHasAbility
-        restAgentHasAbilityMockMvc.perform(post("/api/agent-has-abilities")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentHasAbility)))
-            .andExpect(status().isCreated());
+    // Create the AgentHasAbility
+    restAgentHasAbilityMockMvc
+        .perform(
+            post("/api/agent-has-abilities")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(agentHasAbility)))
+        .andExpect(status().isCreated());
 
-        // Validate the AgentHasAbility in the database
-        List<AgentHasAbility> agentHasAbilityList = agentHasAbilityRepository.findAll();
-        assertThat(agentHasAbilityList).hasSize(databaseSizeBeforeCreate + 1);
-        AgentHasAbility testAgentHasAbility = agentHasAbilityList.get(agentHasAbilityList.size() - 1);
-        assertThat(testAgentHasAbility.getDegree()).isEqualTo(DEFAULT_DEGREE);
-    }
+    // Validate the AgentHasAbility in the database
+    List<AgentHasAbility> agentHasAbilityList = agentHasAbilityRepository.findAll();
+    assertThat(agentHasAbilityList).hasSize(databaseSizeBeforeCreate + 1);
+    AgentHasAbility testAgentHasAbility = agentHasAbilityList.get(agentHasAbilityList.size() - 1);
+    assertThat(testAgentHasAbility.getDegree()).isEqualTo(DEFAULT_DEGREE);
+  }
 
-    @Test
-    @Transactional
-    public void createAgentHasAbilityWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = agentHasAbilityRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createAgentHasAbilityWithExistingId() throws Exception {
+    int databaseSizeBeforeCreate = agentHasAbilityRepository.findAll().size();
 
-        // Create the AgentHasAbility with an existing ID
-        agentHasAbility.setId(1L);
+    // Create the AgentHasAbility with an existing ID
+    agentHasAbility.setId(1L);
 
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restAgentHasAbilityMockMvc.perform(post("/api/agent-has-abilities")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentHasAbility)))
-            .andExpect(status().isBadRequest());
+    // An entity with an existing ID cannot be created, so this API call must fail
+    restAgentHasAbilityMockMvc
+        .perform(
+            post("/api/agent-has-abilities")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(agentHasAbility)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the AgentHasAbility in the database
-        List<AgentHasAbility> agentHasAbilityList = agentHasAbilityRepository.findAll();
-        assertThat(agentHasAbilityList).hasSize(databaseSizeBeforeCreate);
-    }
+    // Validate the AgentHasAbility in the database
+    List<AgentHasAbility> agentHasAbilityList = agentHasAbilityRepository.findAll();
+    assertThat(agentHasAbilityList).hasSize(databaseSizeBeforeCreate);
+  }
 
+  @Test
+  @Transactional
+  public void getAllAgentHasAbilities() throws Exception {
+    // Initialize the database
+    agentHasAbilityRepository.saveAndFlush(agentHasAbility);
 
-    @Test
-    @Transactional
-    public void getAllAgentHasAbilities() throws Exception {
-        // Initialize the database
-        agentHasAbilityRepository.saveAndFlush(agentHasAbility);
+    // Get all the agentHasAbilityList
+    restAgentHasAbilityMockMvc
+        .perform(get("/api/agent-has-abilities?sort=id,desc"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.[*].id").value(hasItem(agentHasAbility.getId().intValue())))
+        .andExpect(jsonPath("$.[*].degree").value(hasItem(DEFAULT_DEGREE)));
+  }
 
-        // Get all the agentHasAbilityList
-        restAgentHasAbilityMockMvc.perform(get("/api/agent-has-abilities?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(agentHasAbility.getId().intValue())))
-            .andExpect(jsonPath("$.[*].degree").value(hasItem(DEFAULT_DEGREE)));
-    }
-    
-    @Test
-    @Transactional
-    public void getAgentHasAbility() throws Exception {
-        // Initialize the database
-        agentHasAbilityRepository.saveAndFlush(agentHasAbility);
+  @Test
+  @Transactional
+  public void getAgentHasAbility() throws Exception {
+    // Initialize the database
+    agentHasAbilityRepository.saveAndFlush(agentHasAbility);
 
-        // Get the agentHasAbility
-        restAgentHasAbilityMockMvc.perform(get("/api/agent-has-abilities/{id}", agentHasAbility.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(agentHasAbility.getId().intValue()))
-            .andExpect(jsonPath("$.degree").value(DEFAULT_DEGREE));
-    }
+    // Get the agentHasAbility
+    restAgentHasAbilityMockMvc
+        .perform(get("/api/agent-has-abilities/{id}", agentHasAbility.getId()))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.id").value(agentHasAbility.getId().intValue()))
+        .andExpect(jsonPath("$.degree").value(DEFAULT_DEGREE));
+  }
 
-    @Test
-    @Transactional
-    public void getNonExistingAgentHasAbility() throws Exception {
-        // Get the agentHasAbility
-        restAgentHasAbilityMockMvc.perform(get("/api/agent-has-abilities/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
-    }
+  @Test
+  @Transactional
+  public void getNonExistingAgentHasAbility() throws Exception {
+    // Get the agentHasAbility
+    restAgentHasAbilityMockMvc
+        .perform(get("/api/agent-has-abilities/{id}", Long.MAX_VALUE))
+        .andExpect(status().isNotFound());
+  }
 
-    @Test
-    @Transactional
-    public void updateAgentHasAbility() throws Exception {
-        // Initialize the database
-        agentHasAbilityRepository.saveAndFlush(agentHasAbility);
+  @Test
+  @Transactional
+  public void updateAgentHasAbility() throws Exception {
+    // Initialize the database
+    agentHasAbilityRepository.saveAndFlush(agentHasAbility);
 
-        int databaseSizeBeforeUpdate = agentHasAbilityRepository.findAll().size();
+    int databaseSizeBeforeUpdate = agentHasAbilityRepository.findAll().size();
 
-        // Update the agentHasAbility
-        AgentHasAbility updatedAgentHasAbility = agentHasAbilityRepository.findById(agentHasAbility.getId()).get();
-        // Disconnect from session so that the updates on updatedAgentHasAbility are not directly saved in db
-        em.detach(updatedAgentHasAbility);
-        updatedAgentHasAbility
-            .degree(UPDATED_DEGREE);
+    // Update the agentHasAbility
+    AgentHasAbility updatedAgentHasAbility =
+        agentHasAbilityRepository.findById(agentHasAbility.getId()).get();
+    // Disconnect from session so that the updates on updatedAgentHasAbility are not directly saved
+    // in db
+    em.detach(updatedAgentHasAbility);
+    updatedAgentHasAbility.degree(UPDATED_DEGREE);
 
-        restAgentHasAbilityMockMvc.perform(put("/api/agent-has-abilities")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedAgentHasAbility)))
-            .andExpect(status().isOk());
+    restAgentHasAbilityMockMvc
+        .perform(
+            put("/api/agent-has-abilities")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(updatedAgentHasAbility)))
+        .andExpect(status().isOk());
 
-        // Validate the AgentHasAbility in the database
-        List<AgentHasAbility> agentHasAbilityList = agentHasAbilityRepository.findAll();
-        assertThat(agentHasAbilityList).hasSize(databaseSizeBeforeUpdate);
-        AgentHasAbility testAgentHasAbility = agentHasAbilityList.get(agentHasAbilityList.size() - 1);
-        assertThat(testAgentHasAbility.getDegree()).isEqualTo(UPDATED_DEGREE);
-    }
+    // Validate the AgentHasAbility in the database
+    List<AgentHasAbility> agentHasAbilityList = agentHasAbilityRepository.findAll();
+    assertThat(agentHasAbilityList).hasSize(databaseSizeBeforeUpdate);
+    AgentHasAbility testAgentHasAbility = agentHasAbilityList.get(agentHasAbilityList.size() - 1);
+    assertThat(testAgentHasAbility.getDegree()).isEqualTo(UPDATED_DEGREE);
+  }
 
-    @Test
-    @Transactional
-    public void updateNonExistingAgentHasAbility() throws Exception {
-        int databaseSizeBeforeUpdate = agentHasAbilityRepository.findAll().size();
+  @Test
+  @Transactional
+  public void updateNonExistingAgentHasAbility() throws Exception {
+    int databaseSizeBeforeUpdate = agentHasAbilityRepository.findAll().size();
 
-        // Create the AgentHasAbility
+    // Create the AgentHasAbility
 
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restAgentHasAbilityMockMvc.perform(put("/api/agent-has-abilities")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(agentHasAbility)))
-            .andExpect(status().isBadRequest());
+    // If the entity doesn't have an ID, it will throw BadRequestAlertException
+    restAgentHasAbilityMockMvc
+        .perform(
+            put("/api/agent-has-abilities")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(agentHasAbility)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the AgentHasAbility in the database
-        List<AgentHasAbility> agentHasAbilityList = agentHasAbilityRepository.findAll();
-        assertThat(agentHasAbilityList).hasSize(databaseSizeBeforeUpdate);
-    }
+    // Validate the AgentHasAbility in the database
+    List<AgentHasAbility> agentHasAbilityList = agentHasAbilityRepository.findAll();
+    assertThat(agentHasAbilityList).hasSize(databaseSizeBeforeUpdate);
+  }
 
-    @Test
-    @Transactional
-    public void deleteAgentHasAbility() throws Exception {
-        // Initialize the database
-        agentHasAbilityRepository.saveAndFlush(agentHasAbility);
+  @Test
+  @Transactional
+  public void deleteAgentHasAbility() throws Exception {
+    // Initialize the database
+    agentHasAbilityRepository.saveAndFlush(agentHasAbility);
 
-        int databaseSizeBeforeDelete = agentHasAbilityRepository.findAll().size();
+    int databaseSizeBeforeDelete = agentHasAbilityRepository.findAll().size();
 
-        // Delete the agentHasAbility
-        restAgentHasAbilityMockMvc.perform(delete("/api/agent-has-abilities/{id}", agentHasAbility.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
+    // Delete the agentHasAbility
+    restAgentHasAbilityMockMvc
+        .perform(
+            delete("/api/agent-has-abilities/{id}", agentHasAbility.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+        .andExpect(status().isNoContent());
 
-        // Validate the database contains one less item
-        List<AgentHasAbility> agentHasAbilityList = agentHasAbilityRepository.findAll();
-        assertThat(agentHasAbilityList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    // Validate the database contains one less item
+    List<AgentHasAbility> agentHasAbilityList = agentHasAbilityRepository.findAll();
+    assertThat(agentHasAbilityList).hasSize(databaseSizeBeforeDelete - 1);
+  }
 
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AgentHasAbility.class);
-        AgentHasAbility agentHasAbility1 = new AgentHasAbility();
-        agentHasAbility1.setId(1L);
-        AgentHasAbility agentHasAbility2 = new AgentHasAbility();
-        agentHasAbility2.setId(agentHasAbility1.getId());
-        assertThat(agentHasAbility1).isEqualTo(agentHasAbility2);
-        agentHasAbility2.setId(2L);
-        assertThat(agentHasAbility1).isNotEqualTo(agentHasAbility2);
-        agentHasAbility1.setId(null);
-        assertThat(agentHasAbility1).isNotEqualTo(agentHasAbility2);
-    }
+  @Test
+  @Transactional
+  public void equalsVerifier() throws Exception {
+    TestUtil.equalsVerifier(AgentHasAbility.class);
+    AgentHasAbility agentHasAbility1 = new AgentHasAbility();
+    agentHasAbility1.setId(1L);
+    AgentHasAbility agentHasAbility2 = new AgentHasAbility();
+    agentHasAbility2.setId(agentHasAbility1.getId());
+    assertThat(agentHasAbility1).isEqualTo(agentHasAbility2);
+    agentHasAbility2.setId(2L);
+    assertThat(agentHasAbility1).isNotEqualTo(agentHasAbility2);
+    agentHasAbility1.setId(null);
+    assertThat(agentHasAbility1).isNotEqualTo(agentHasAbility2);
+  }
 }

@@ -15,71 +15,69 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Service Implementation for managing {@link AssetRelationship}.
- */
+/** Service Implementation for managing {@link AssetRelationship}. */
 @Service
 @Transactional
 public class AssetRelationshipService {
 
-    private final Logger log = LoggerFactory.getLogger(AssetRelationshipService.class);
+  private final Logger log = LoggerFactory.getLogger(AssetRelationshipService.class);
 
-    private final AssetRelationshipRepository assetRelationshipRepository;
+  private final AssetRelationshipRepository assetRelationshipRepository;
 
-    private final AssetRelationshipMapper assetRelationshipMapper;
+  private final AssetRelationshipMapper assetRelationshipMapper;
 
-    public AssetRelationshipService(AssetRelationshipRepository assetRelationshipRepository, AssetRelationshipMapper assetRelationshipMapper) {
-        this.assetRelationshipRepository = assetRelationshipRepository;
-        this.assetRelationshipMapper = assetRelationshipMapper;
-    }
+  public AssetRelationshipService(
+      AssetRelationshipRepository assetRelationshipRepository,
+      AssetRelationshipMapper assetRelationshipMapper) {
+    this.assetRelationshipRepository = assetRelationshipRepository;
+    this.assetRelationshipMapper = assetRelationshipMapper;
+  }
 
-    /**
-     * Save a assetRelationship.
-     *
-     * @param assetRelationshipDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public AssetRelationshipDTO save(AssetRelationshipDTO assetRelationshipDTO) {
-        log.debug("Request to save AssetRelationship : {}", assetRelationshipDTO);
-        AssetRelationship assetRelationship = assetRelationshipMapper.toEntity(assetRelationshipDTO);
-        assetRelationship = assetRelationshipRepository.save(assetRelationship);
-        return assetRelationshipMapper.toDto(assetRelationship);
-    }
+  /**
+   * Save a assetRelationship.
+   *
+   * @param assetRelationshipDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public AssetRelationshipDTO save(AssetRelationshipDTO assetRelationshipDTO) {
+    log.debug("Request to save AssetRelationship : {}", assetRelationshipDTO);
+    AssetRelationship assetRelationship = assetRelationshipMapper.toEntity(assetRelationshipDTO);
+    assetRelationship = assetRelationshipRepository.save(assetRelationship);
+    return assetRelationshipMapper.toDto(assetRelationship);
+  }
 
-    /**
-     * Get all the assetRelationships.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<AssetRelationshipDTO> findAll() {
-        log.debug("Request to get all AssetRelationships");
-        return assetRelationshipRepository.findAll().stream()
-            .map(assetRelationshipMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the assetRelationships.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<AssetRelationshipDTO> findAll() {
+    log.debug("Request to get all AssetRelationships");
+    return assetRelationshipRepository.findAll().stream()
+        .map(assetRelationshipMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one assetRelationship by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<AssetRelationshipDTO> findOne(Long id) {
+    log.debug("Request to get AssetRelationship : {}", id);
+    return assetRelationshipRepository.findById(id).map(assetRelationshipMapper::toDto);
+  }
 
-    /**
-     * Get one assetRelationship by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<AssetRelationshipDTO> findOne(Long id) {
-        log.debug("Request to get AssetRelationship : {}", id);
-        return assetRelationshipRepository.findById(id)
-            .map(assetRelationshipMapper::toDto);
-    }
-
-    /**
-     * Delete the assetRelationship by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete AssetRelationship : {}", id);
-        assetRelationshipRepository.deleteById(id);
-    }
+  /**
+   * Delete the assetRelationship by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete AssetRelationship : {}", id);
+    assetRelationshipRepository.deleteById(id);
+  }
 }

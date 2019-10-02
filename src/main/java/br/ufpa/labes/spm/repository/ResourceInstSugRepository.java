@@ -10,20 +10,21 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Spring Data  repository for the ResourceInstSug entity.
- */
+/** Spring Data repository for the ResourceInstSug entity. */
 @Repository
 public interface ResourceInstSugRepository extends JpaRepository<ResourceInstSug, Long> {
 
-    @Query(value = "select distinct resourceInstSug from ResourceInstSug resourceInstSug left join fetch resourceInstSug.resourceSuggesteds",
-        countQuery = "select count(distinct resourceInstSug) from ResourceInstSug resourceInstSug")
-    Page<ResourceInstSug> findAllWithEagerRelationships(Pageable pageable);
+  @Query(
+      value =
+          "select distinct resourceInstSug from ResourceInstSug resourceInstSug left join fetch resourceInstSug.resourceSuggesteds",
+      countQuery = "select count(distinct resourceInstSug) from ResourceInstSug resourceInstSug")
+  Page<ResourceInstSug> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct resourceInstSug from ResourceInstSug resourceInstSug left join fetch resourceInstSug.resourceSuggesteds")
-    List<ResourceInstSug> findAllWithEagerRelationships();
+  @Query(
+      "select distinct resourceInstSug from ResourceInstSug resourceInstSug left join fetch resourceInstSug.resourceSuggesteds")
+  List<ResourceInstSug> findAllWithEagerRelationships();
 
-    @Query("select resourceInstSug from ResourceInstSug resourceInstSug left join fetch resourceInstSug.resourceSuggesteds where resourceInstSug.id =:id")
-    Optional<ResourceInstSug> findOneWithEagerRelationships(@Param("id") Long id);
-
+  @Query(
+      "select resourceInstSug from ResourceInstSug resourceInstSug left join fetch resourceInstSug.resourceSuggesteds where resourceInstSug.id =:id")
+  Optional<ResourceInstSug> findOneWithEagerRelationships(@Param("id") Long id);
 }

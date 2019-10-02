@@ -3,87 +3,76 @@ package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class DriverDTO implements Serializable{
+public class DriverDTO implements Serializable {
 
+  /** */
+  private String appKeyGoogle;
 
-	/**
-	 *
-	 */
-	private String appKeyGoogle;
+  private String appSecretGoogle;
 
+  private Long id;
 
-	private String appSecretGoogle;
+  private String tipo;
 
-	private Long id;
+  private String appKey;
 
+  private String appSecret;
 
-	private String tipo;
+  private String requestUrl;
 
+  public Long getId() {
+    return id;
+  }
 
-	private String appKey;
+  public void setId(Long id) {
+    this.id = id;
+  }
 
+  public String getTipo() {
+    return tipo;
+  }
 
-	private String appSecret;
+  public void setTipo(String tipo) {
+    this.tipo = tipo;
+  }
 
+  public String getAppKey() {
+    return appKey;
+  }
 
-	private String requestUrl;
+  public void setAppKey(String appKey) {
+    this.appKey = appKey;
+  }
 
+  public String getAppSecret() {
+    return appSecret;
+  }
 
-	public Long getId() {
-		return id;
-	}
+  public void setAppSecret(String appSecret) {
+    this.appSecret = appSecret;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public String getRequestUrl() {
+    return requestUrl;
+  }
 
-	public String getTipo() {
-		return tipo;
-	}
+  public void setRequestUrl(String requestUrl) {
+    this.requestUrl = requestUrl;
+  }
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
+  public String getAppKeyGoogle() {
+    return appKeyGoogle;
+  }
 
-	public String getAppKey() {
-		return appKey;
-	}
+  public void setAppKeyGoogle(String appKeyGoogle) {
+    this.appKeyGoogle = appKeyGoogle;
+  }
 
-	public void setAppKey(String appKey) {
-		this.appKey = appKey;
-	}
+  public String getAppSecretGoogle() {
+    return appSecretGoogle;
+  }
 
-	public String getAppSecret() {
-		return appSecret;
-	}
-
-	public void setAppSecret(String appSecret) {
-		this.appSecret = appSecret;
-	}
-
-	public String getRequestUrl() {
-		return requestUrl;
-	}
-	public void setRequestUrl(String requestUrl) {
-		this.requestUrl = requestUrl;
-	}
-
-	public String getAppKeyGoogle() {
-		return appKeyGoogle;
-	}
-
-
-	public void setAppKeyGoogle(String appKeyGoogle) {
-		this.appKeyGoogle = appKeyGoogle;
-	}
-
-	public String getAppSecretGoogle() {
-		return appSecretGoogle;
-	}
-
-
-	public void setAppSecretGoogle(String appSecretGoogle) {
-		this.appSecretGoogle = appSecretGoogle;
-	}
-
+  public void setAppSecretGoogle(String appSecretGoogle) {
+    this.appSecretGoogle = appSecretGoogle;
+  }
 }

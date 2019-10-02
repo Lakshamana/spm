@@ -4,12 +4,7 @@ import br.ufpa.labes.spm.domain.Consumable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-
-/**
- * Spring Data  repository for the Consumable entity.
- */
+/** Spring Data repository for the Consumable entity. */
 @SuppressWarnings("unused")
 @Repository
-public interface ConsumableRepository extends JpaRepository<Consumable, Long> {
-
-}
+public interface ConsumableRepository extends JpaRepository<Consumable, Long> {}

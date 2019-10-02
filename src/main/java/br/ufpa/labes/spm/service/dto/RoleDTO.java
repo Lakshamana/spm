@@ -6,94 +6,85 @@ import java.util.List;
 import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
-public class RoleDTO implements Serializable{
-	/**
-	 *
-	 */
+public class RoleDTO implements Serializable {
+  /** */
+  private Long id;
 
-	private Long id;
+  private String ident;
 
-	private String ident;
+  private String name;
 
-	private String name;
+  private String description;
 
-	private String description;
+  @IgnoreMapping private String superType;
 
+  @IgnoreMapping private List<AbilityDTO> abilityToRole;
 
-	@IgnoreMapping
-	private String superType;
+  @IgnoreMapping private Integer nivelAbility;
 
-	@IgnoreMapping
-	private List<AbilityDTO> abilityToRole;
+  @IgnoreMapping private List<AgentDTO> agentToRole;
 
-	@IgnoreMapping
-	private Integer nivelAbility;
+  public List<AgentDTO> getAgentToRole() {
+    return agentToRole;
+  }
 
-	@IgnoreMapping
-	private List<AgentDTO> agentToRole;
+  public void setAgentToRole(List<AgentDTO> agentToRole) {
+    this.agentToRole = agentToRole;
+  }
 
-	public List<AgentDTO> getAgentToRole() {
-		return agentToRole;
-	}
+  public List<AbilityDTO> getAbilityToRole() {
+    return abilityToRole;
+  }
 
-	public void setAgentToRole(List<AgentDTO> agentToRole) {
-		this.agentToRole = agentToRole;
-	}
+  public void setAbilityToRole(List<AbilityDTO> abilityToRole) {
+    this.abilityToRole = abilityToRole;
+  }
 
-	public List<AbilityDTO> getAbilityToRole() {
-		return abilityToRole;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setAbilityToRole(List<AbilityDTO> abilityToRole) {
-		this.abilityToRole = abilityToRole;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public Long getId() {
-		return id;
-	}
+  public String getIdent() {
+    return ident;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setIdent(String ident) {
+    this.ident = ident;
+  }
 
-	public String getIdent() {
-		return ident;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setIdent(String ident) {
-		this.ident = ident;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getSuperType() {
+    return superType;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setSuperType(String superType) {
+    this.superType = superType;
+  }
 
-	public String getSuperType() {
-		return superType;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public void setSuperType(String superType) {
-		this.superType = superType;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public Integer getNivelAbility() {
+    return nivelAbility;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Integer getNivelAbility() {
-		return nivelAbility;
-	}
-
-	public void setNivelAbility(Integer nivelAbility) {
-		this.nivelAbility = nivelAbility;
-	}
-
+  public void setNivelAbility(Integer nivelAbility) {
+    this.nivelAbility = nivelAbility;
+  }
 }

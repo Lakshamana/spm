@@ -4,5 +4,5 @@ import java.io.Serializable;
 import java.util.Date;
 
 public interface AgendaEventFormatter extends Serializable {
-	public String formatDate(Date data);
+  public String formatDate(Date data);
 }

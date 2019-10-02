@@ -1,9 +1,9 @@
 package br.ufpa.labes.spm.service.dto;
 
 public class RoleNeedsAbilityDTO {
-	private Long id;
+  private Long id;
 
-	private Integer degree;
+  private Integer degree;
 
   public Long getId() {
     return id;
@@ -20,5 +20,4 @@ public class RoleNeedsAbilityDTO {
   public void setDegree(Integer degree) {
     this.degree = degree;
   }
-
 }

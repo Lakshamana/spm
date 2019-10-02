@@ -15,71 +15,70 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Service Implementation for managing {@link OrganizationMetric}.
- */
+/** Service Implementation for managing {@link OrganizationMetric}. */
 @Service
 @Transactional
 public class OrganizationMetricService {
 
-    private final Logger log = LoggerFactory.getLogger(OrganizationMetricService.class);
+  private final Logger log = LoggerFactory.getLogger(OrganizationMetricService.class);
 
-    private final OrganizationMetricRepository organizationMetricRepository;
+  private final OrganizationMetricRepository organizationMetricRepository;
 
-    private final OrganizationMetricMapper organizationMetricMapper;
+  private final OrganizationMetricMapper organizationMetricMapper;
 
-    public OrganizationMetricService(OrganizationMetricRepository organizationMetricRepository, OrganizationMetricMapper organizationMetricMapper) {
-        this.organizationMetricRepository = organizationMetricRepository;
-        this.organizationMetricMapper = organizationMetricMapper;
-    }
+  public OrganizationMetricService(
+      OrganizationMetricRepository organizationMetricRepository,
+      OrganizationMetricMapper organizationMetricMapper) {
+    this.organizationMetricRepository = organizationMetricRepository;
+    this.organizationMetricMapper = organizationMetricMapper;
+  }
 
-    /**
-     * Save a organizationMetric.
-     *
-     * @param organizationMetricDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public OrganizationMetricDTO save(OrganizationMetricDTO organizationMetricDTO) {
-        log.debug("Request to save OrganizationMetric : {}", organizationMetricDTO);
-        OrganizationMetric organizationMetric = organizationMetricMapper.toEntity(organizationMetricDTO);
-        organizationMetric = organizationMetricRepository.save(organizationMetric);
-        return organizationMetricMapper.toDto(organizationMetric);
-    }
+  /**
+   * Save a organizationMetric.
+   *
+   * @param organizationMetricDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public OrganizationMetricDTO save(OrganizationMetricDTO organizationMetricDTO) {
+    log.debug("Request to save OrganizationMetric : {}", organizationMetricDTO);
+    OrganizationMetric organizationMetric =
+        organizationMetricMapper.toEntity(organizationMetricDTO);
+    organizationMetric = organizationMetricRepository.save(organizationMetric);
+    return organizationMetricMapper.toDto(organizationMetric);
+  }
 
-    /**
-     * Get all the organizationMetrics.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<OrganizationMetricDTO> findAll() {
-        log.debug("Request to get all OrganizationMetrics");
-        return organizationMetricRepository.findAll().stream()
-            .map(organizationMetricMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the organizationMetrics.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<OrganizationMetricDTO> findAll() {
+    log.debug("Request to get all OrganizationMetrics");
+    return organizationMetricRepository.findAll().stream()
+        .map(organizationMetricMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one organizationMetric by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<OrganizationMetricDTO> findOne(Long id) {
+    log.debug("Request to get OrganizationMetric : {}", id);
+    return organizationMetricRepository.findById(id).map(organizationMetricMapper::toDto);
+  }
 
-    /**
-     * Get one organizationMetric by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<OrganizationMetricDTO> findOne(Long id) {
-        log.debug("Request to get OrganizationMetric : {}", id);
-        return organizationMetricRepository.findById(id)
-            .map(organizationMetricMapper::toDto);
-    }
-
-    /**
-     * Delete the organizationMetric by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete OrganizationMetric : {}", id);
-        organizationMetricRepository.deleteById(id);
-    }
+  /**
+   * Delete the organizationMetric by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete OrganizationMetric : {}", id);
+    organizationMetricRepository.deleteById(id);
+  }
 }

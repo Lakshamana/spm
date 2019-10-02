@@ -4,12 +4,8 @@ import br.ufpa.labes.spm.domain.BranchConCondToMultipleCon;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-
-/**
- * Spring Data  repository for the BranchConCondToMultipleCon entity.
- */
+/** Spring Data repository for the BranchConCondToMultipleCon entity. */
 @SuppressWarnings("unused")
 @Repository
-public interface BranchConCondToMultipleConRepository extends JpaRepository<BranchConCondToMultipleCon, Long> {
-
-}
+public interface BranchConCondToMultipleConRepository
+    extends JpaRepository<BranchConCondToMultipleCon, Long> {}

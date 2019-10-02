@@ -8,182 +8,187 @@ import java.util.List;
 import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
 @SuppressWarnings("serial")
-public class CompanyDTO implements Serializable{
-	private Long id;
-	private String ident;
-	private String cnpj;
-	private String fantasyName;
-	private String socialReason;
-	private String acronym;
-	private String address;
-	private String phone;
-	private String description;
-	private String url;
-	private Boolean automaticInstantiation;
+public class CompanyDTO implements Serializable {
+  private Long id;
+  private String ident;
+  private String cnpj;
+  private String fantasyName;
+  private String socialReason;
+  private String acronym;
+  private String address;
+  private String phone;
+  private String description;
+  private String url;
+  private Boolean automaticInstantiation;
 
-	@IgnoreMapping
-	private Collection<String> policyEnabled;
-	@IgnoreMapping
-	private Collection<String> theSystem;
-	@IgnoreMapping
-	private Collection<String> organizationMetric;
-	@IgnoreMapping
-	private Collection<String> organizationEstimation;
-	@IgnoreMapping
-	private List<CompanyUnitDTO> theOrganizationalUnits;
-	public CompanyDTO(){
-		ident = "";
-		cnpj = "";
-		fantasyName = "";
-		socialReason = "";
-		acronym = "";
-		address = "";
-		phone = "";
-		description = "";
-		automaticInstantiation = new Boolean(false);
+  @IgnoreMapping private Collection<String> policyEnabled;
+  @IgnoreMapping private Collection<String> theSystem;
+  @IgnoreMapping private Collection<String> organizationMetric;
+  @IgnoreMapping private Collection<String> organizationEstimation;
+  @IgnoreMapping private List<CompanyUnitDTO> theOrganizationalUnits;
 
-		policyEnabled = new ArrayList<String>();
-		theSystem = new ArrayList<String>();
-		organizationMetric = new ArrayList<String>();
-		organizationEstimation = new ArrayList<String>();
-		setTheOrganizationalUnits(new ArrayList<CompanyUnitDTO>());
-	}
+  public CompanyDTO() {
+    ident = "";
+    cnpj = "";
+    fantasyName = "";
+    socialReason = "";
+    acronym = "";
+    address = "";
+    phone = "";
+    description = "";
+    automaticInstantiation = new Boolean(false);
 
-	public Long getId() {
-		return id;
-	}
+    policyEnabled = new ArrayList<String>();
+    theSystem = new ArrayList<String>();
+    organizationMetric = new ArrayList<String>();
+    organizationEstimation = new ArrayList<String>();
+    setTheOrganizationalUnits(new ArrayList<CompanyUnitDTO>());
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public String getIdent() {
-		return ident;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public void setIdent(String ident) {
-		this.ident = ident;
-	}
+  public String getIdent() {
+    return ident;
+  }
 
-	public String getCnpj() {
-		return cnpj;
-	}
+  public void setIdent(String ident) {
+    this.ident = ident;
+  }
 
-	public void setCnpj(String cnpj) {
-		this.cnpj = cnpj;
-	}
+  public String getCnpj() {
+    return cnpj;
+  }
 
-	public String getFantasyName() {
-		return fantasyName;
-	}
+  public void setCnpj(String cnpj) {
+    this.cnpj = cnpj;
+  }
 
-	public void setFantasyName(String fantasyName) {
-		this.fantasyName = fantasyName;
-	}
+  public String getFantasyName() {
+    return fantasyName;
+  }
 
-	public String getSocialReason() {
-		return socialReason;
-	}
+  public void setFantasyName(String fantasyName) {
+    this.fantasyName = fantasyName;
+  }
 
-	public void setSocialReason(String socialReason) {
-		this.socialReason = socialReason;
-	}
+  public String getSocialReason() {
+    return socialReason;
+  }
 
-	public String getAcronym() {
-		return acronym;
-	}
+  public void setSocialReason(String socialReason) {
+    this.socialReason = socialReason;
+  }
 
-	public void setAcronym(String acronym) {
-		this.acronym = acronym;
-	}
+  public String getAcronym() {
+    return acronym;
+  }
 
-	public String getAddress() {
-		return address;
-	}
+  public void setAcronym(String acronym) {
+    this.acronym = acronym;
+  }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+  public String getAddress() {
+    return address;
+  }
 
-	public String getPhone() {
-		return phone;
-	}
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+  public String getPhone() {
+    return phone;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	/*public Blob getImage() {
-		return image;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public void setImage(Blob image) {
-		this.image = image;
-	}*/
+  /*public Blob getImage() {
+  	return image;
+  }
 
-	public Boolean isAutomaticInstantiation() {
-		return automaticInstantiation;
-	}
+  public void setImage(Blob image) {
+  	this.image = image;
+  }*/
 
-	public void setAutomaticInstantiation(Boolean automaticInstantiation) {
-		this.automaticInstantiation = automaticInstantiation;
-	}
+  public Boolean isAutomaticInstantiation() {
+    return automaticInstantiation;
+  }
 
-	public String getUrl() {
-		return url;
-	}
+  public void setAutomaticInstantiation(Boolean automaticInstantiation) {
+    this.automaticInstantiation = automaticInstantiation;
+  }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+  public String getUrl() {
+    return url;
+  }
 
-	@Override
-	public String toString() {
-		return "CompanyDTO [id=" + id + ", ident=" + ident + ", cnpj=" + cnpj
-				+ ", fantasyName=" + fantasyName + ", socialReason="
-				+ socialReason + ", acronym=" + acronym + ", address="
-				+ address + ", phone=" + phone + ", description=" + description
-				+ "]";
-	}
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((ident == null) ? 0 : ident.hashCode());
-		return result;
-	}
+  @Override
+  public String toString() {
+    return "CompanyDTO [id="
+        + id
+        + ", ident="
+        + ident
+        + ", cnpj="
+        + cnpj
+        + ", fantasyName="
+        + fantasyName
+        + ", socialReason="
+        + socialReason
+        + ", acronym="
+        + acronym
+        + ", address="
+        + address
+        + ", phone="
+        + phone
+        + ", description="
+        + description
+        + "]";
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CompanyDTO other = (CompanyDTO) obj;
-		if (ident == null) {
-			if (other.ident != null)
-				return false;
-		} else if (!ident.equals(other.ident))
-			return false;
-		return true;
-	}
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((ident == null) ? 0 : ident.hashCode());
+    return result;
+  }
 
-	public List<CompanyUnitDTO> getTheOrganizationalUnits() {
-		return theOrganizationalUnits;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    CompanyDTO other = (CompanyDTO) obj;
+    if (ident == null) {
+      if (other.ident != null) return false;
+    } else if (!ident.equals(other.ident)) return false;
+    return true;
+  }
 
-	public void setTheOrganizationalUnits(List<CompanyUnitDTO> theOrganizationalUnits) {
-		this.theOrganizationalUnits = theOrganizationalUnits;
-	}
+  public List<CompanyUnitDTO> getTheOrganizationalUnits() {
+    return theOrganizationalUnits;
+  }
+
+  public void setTheOrganizationalUnits(List<CompanyUnitDTO> theOrganizationalUnits) {
+    this.theOrganizationalUnits = theOrganizationalUnits;
+  }
 }

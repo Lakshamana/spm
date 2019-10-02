@@ -27,31 +27,30 @@ public class ProcessModelDTO {
   }
 
   public void setPmState(String pmState) {
-		this.pmState = pmState;
-	}
+    this.pmState = pmState;
+  }
 
-	public String getTheProcess() {
-		return theProcess;
-	}
+  public String getTheProcess() {
+    return theProcess;
+  }
 
-	public void setTheProcess(String theProcess) {
-		this.theProcess = theProcess;
-	}
+  public void setTheProcess(String theProcess) {
+    this.theProcess = theProcess;
+  }
 
-	public TemplateDTO getTheOrigin() {
-		return theOrigin;
-	}
+  public TemplateDTO getTheOrigin() {
+    return theOrigin;
+  }
 
-	public void setTheOrigin(TemplateDTO theOrigin) {
-		this.theOrigin = theOrigin;
-	}
+  public void setTheOrigin(TemplateDTO theOrigin) {
+    this.theOrigin = theOrigin;
+  }
 
-	public List<String> getTheActivity() {
-		return theActivity;
-	}
+  public List<String> getTheActivity() {
+    return theActivity;
+  }
 
-	public void setTheActivity(List<String> theActivity) {
-		this.theActivity = theActivity;
-	}
-
+  public void setTheActivity(List<String> theActivity) {
+    this.theActivity = theActivity;
+  }
 }

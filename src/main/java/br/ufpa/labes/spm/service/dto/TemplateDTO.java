@@ -23,23 +23,22 @@ public class TemplateDTO implements Serializable {
   }
 
   public void setTemplateState(String templateState) {
-		this.templateState = templateState;
-	}
+    this.templateState = templateState;
+  }
 
-	public List<ProcessModelDTO> getTheInstances() {
-		return theInstances;
-	}
+  public List<ProcessModelDTO> getTheInstances() {
+    return theInstances;
+  }
 
-	public void setTheInstances(List<ProcessModelDTO> theInstances) {
-		this.theInstances = theInstances;
-	}
+  public void setTheInstances(List<ProcessModelDTO> theInstances) {
+    this.theInstances = theInstances;
+  }
 
-	public String getIdent() {
-		return ident;
-	}
+  public String getIdent() {
+    return ident;
+  }
 
-	public void setIdent(String ident) {
-		this.ident = ident;
-	}
-
+  public void setIdent(String ident) {
+    this.ident = ident;
+  }
 }

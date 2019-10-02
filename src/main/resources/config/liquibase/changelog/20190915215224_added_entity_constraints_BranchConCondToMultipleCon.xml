@@ -9,14 +9,14 @@
     <changeSet id="20190915215224-2" author="jhipster">
         
         <addForeignKeyConstraint baseColumnNames="the_multiple_con_id"
-                                 baseTableName="b_con_cond_t_m_con"
-                                 constraintName="fk_b_con_cond_t_m_con_the_multiple_con_id"
+                                 baseTableName="b_con_cond_to_m_con"
+                                 constraintName="fk_b_con_cond_to_m_con_the_multiple_con_id"
                                  referencedColumnNames="id"
                                  referencedTableName="multiple_con"/>
 
         <addForeignKeyConstraint baseColumnNames="the_branch_con_cond_id"
-                                 baseTableName="b_con_cond_t_m_con"
-                                 constraintName="fk_b_con_cond_t_m_con_the_branch_con_cond_id"
+                                 baseTableName="b_con_cond_to_m_con"
+                                 constraintName="fk_b_con_cond_to_m_con_the_branch_con_cond_id"
                                  referencedColumnNames="id"
                                  referencedTableName="branch_con_cond"/>
 

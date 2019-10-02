@@ -28,216 +28,222 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Integration tests for the {@link StructureResource} REST controller.
- */
+/** Integration tests for the {@link StructureResource} REST controller. */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class StructureResourceIT {
 
-    @Autowired
-    private StructureRepository structureRepository;
+  @Autowired private StructureRepository structureRepository;
 
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
+  @Autowired private ExceptionTranslator exceptionTranslator;
 
-    @Autowired
-    private EntityManager em;
+  @Autowired private EntityManager em;
 
-    @Autowired
-    private Validator validator;
+  @Autowired private Validator validator;
 
-    private MockMvc restStructureMockMvc;
+  private MockMvc restStructureMockMvc;
 
-    private Structure structure;
+  private Structure structure;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final StructureResource structureResource = new StructureResource(structureRepository);
-        this.restStructureMockMvc = MockMvcBuilders.standaloneSetup(structureResource)
+  @BeforeEach
+  public void setup() {
+    MockitoAnnotations.initMocks(this);
+    final StructureResource structureResource = new StructureResource(structureRepository);
+    this.restStructureMockMvc =
+        MockMvcBuilders.standaloneSetup(structureResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
+            .setValidator(validator)
+            .build();
+  }
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Structure createEntity(EntityManager em) {
-        Structure structure = new Structure();
-        return structure;
-    }
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Structure createUpdatedEntity(EntityManager em) {
-        Structure structure = new Structure();
-        return structure;
-    }
+  /**
+   * Create an entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static Structure createEntity(EntityManager em) {
+    Structure structure = new Structure();
+    return structure;
+  }
+  /**
+   * Create an updated entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static Structure createUpdatedEntity(EntityManager em) {
+    Structure structure = new Structure();
+    return structure;
+  }
 
-    @BeforeEach
-    public void initTest() {
-        structure = createEntity(em);
-    }
+  @BeforeEach
+  public void initTest() {
+    structure = createEntity(em);
+  }
 
-    @Test
-    @Transactional
-    public void createStructure() throws Exception {
-        int databaseSizeBeforeCreate = structureRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createStructure() throws Exception {
+    int databaseSizeBeforeCreate = structureRepository.findAll().size();
 
-        // Create the Structure
-        restStructureMockMvc.perform(post("/api/structures")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(structure)))
-            .andExpect(status().isCreated());
+    // Create the Structure
+    restStructureMockMvc
+        .perform(
+            post("/api/structures")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(structure)))
+        .andExpect(status().isCreated());
 
-        // Validate the Structure in the database
-        List<Structure> structureList = structureRepository.findAll();
-        assertThat(structureList).hasSize(databaseSizeBeforeCreate + 1);
-        Structure testStructure = structureList.get(structureList.size() - 1);
-    }
+    // Validate the Structure in the database
+    List<Structure> structureList = structureRepository.findAll();
+    assertThat(structureList).hasSize(databaseSizeBeforeCreate + 1);
+    Structure testStructure = structureList.get(structureList.size() - 1);
+  }
 
-    @Test
-    @Transactional
-    public void createStructureWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = structureRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createStructureWithExistingId() throws Exception {
+    int databaseSizeBeforeCreate = structureRepository.findAll().size();
 
-        // Create the Structure with an existing ID
-        structure.setId(1L);
+    // Create the Structure with an existing ID
+    structure.setId(1L);
 
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restStructureMockMvc.perform(post("/api/structures")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(structure)))
-            .andExpect(status().isBadRequest());
+    // An entity with an existing ID cannot be created, so this API call must fail
+    restStructureMockMvc
+        .perform(
+            post("/api/structures")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(structure)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the Structure in the database
-        List<Structure> structureList = structureRepository.findAll();
-        assertThat(structureList).hasSize(databaseSizeBeforeCreate);
-    }
+    // Validate the Structure in the database
+    List<Structure> structureList = structureRepository.findAll();
+    assertThat(structureList).hasSize(databaseSizeBeforeCreate);
+  }
 
+  @Test
+  @Transactional
+  public void getAllStructures() throws Exception {
+    // Initialize the database
+    structureRepository.saveAndFlush(structure);
 
-    @Test
-    @Transactional
-    public void getAllStructures() throws Exception {
-        // Initialize the database
-        structureRepository.saveAndFlush(structure);
+    // Get all the structureList
+    restStructureMockMvc
+        .perform(get("/api/structures?sort=id,desc"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.[*].id").value(hasItem(structure.getId().intValue())));
+  }
 
-        // Get all the structureList
-        restStructureMockMvc.perform(get("/api/structures?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(structure.getId().intValue())));
-    }
-    
-    @Test
-    @Transactional
-    public void getStructure() throws Exception {
-        // Initialize the database
-        structureRepository.saveAndFlush(structure);
+  @Test
+  @Transactional
+  public void getStructure() throws Exception {
+    // Initialize the database
+    structureRepository.saveAndFlush(structure);
 
-        // Get the structure
-        restStructureMockMvc.perform(get("/api/structures/{id}", structure.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(structure.getId().intValue()));
-    }
+    // Get the structure
+    restStructureMockMvc
+        .perform(get("/api/structures/{id}", structure.getId()))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.id").value(structure.getId().intValue()));
+  }
 
-    @Test
-    @Transactional
-    public void getNonExistingStructure() throws Exception {
-        // Get the structure
-        restStructureMockMvc.perform(get("/api/structures/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
-    }
+  @Test
+  @Transactional
+  public void getNonExistingStructure() throws Exception {
+    // Get the structure
+    restStructureMockMvc
+        .perform(get("/api/structures/{id}", Long.MAX_VALUE))
+        .andExpect(status().isNotFound());
+  }
 
-    @Test
-    @Transactional
-    public void updateStructure() throws Exception {
-        // Initialize the database
-        structureRepository.saveAndFlush(structure);
+  @Test
+  @Transactional
+  public void updateStructure() throws Exception {
+    // Initialize the database
+    structureRepository.saveAndFlush(structure);
 
-        int databaseSizeBeforeUpdate = structureRepository.findAll().size();
+    int databaseSizeBeforeUpdate = structureRepository.findAll().size();
 
-        // Update the structure
-        Structure updatedStructure = structureRepository.findById(structure.getId()).get();
-        // Disconnect from session so that the updates on updatedStructure are not directly saved in db
-        em.detach(updatedStructure);
+    // Update the structure
+    Structure updatedStructure = structureRepository.findById(structure.getId()).get();
+    // Disconnect from session so that the updates on updatedStructure are not directly saved in db
+    em.detach(updatedStructure);
 
-        restStructureMockMvc.perform(put("/api/structures")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedStructure)))
-            .andExpect(status().isOk());
+    restStructureMockMvc
+        .perform(
+            put("/api/structures")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(updatedStructure)))
+        .andExpect(status().isOk());
 
-        // Validate the Structure in the database
-        List<Structure> structureList = structureRepository.findAll();
-        assertThat(structureList).hasSize(databaseSizeBeforeUpdate);
-        Structure testStructure = structureList.get(structureList.size() - 1);
-    }
+    // Validate the Structure in the database
+    List<Structure> structureList = structureRepository.findAll();
+    assertThat(structureList).hasSize(databaseSizeBeforeUpdate);
+    Structure testStructure = structureList.get(structureList.size() - 1);
+  }
 
-    @Test
-    @Transactional
-    public void updateNonExistingStructure() throws Exception {
-        int databaseSizeBeforeUpdate = structureRepository.findAll().size();
+  @Test
+  @Transactional
+  public void updateNonExistingStructure() throws Exception {
+    int databaseSizeBeforeUpdate = structureRepository.findAll().size();
 
-        // Create the Structure
+    // Create the Structure
 
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restStructureMockMvc.perform(put("/api/structures")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(structure)))
-            .andExpect(status().isBadRequest());
+    // If the entity doesn't have an ID, it will throw BadRequestAlertException
+    restStructureMockMvc
+        .perform(
+            put("/api/structures")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(structure)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the Structure in the database
-        List<Structure> structureList = structureRepository.findAll();
-        assertThat(structureList).hasSize(databaseSizeBeforeUpdate);
-    }
+    // Validate the Structure in the database
+    List<Structure> structureList = structureRepository.findAll();
+    assertThat(structureList).hasSize(databaseSizeBeforeUpdate);
+  }
 
-    @Test
-    @Transactional
-    public void deleteStructure() throws Exception {
-        // Initialize the database
-        structureRepository.saveAndFlush(structure);
+  @Test
+  @Transactional
+  public void deleteStructure() throws Exception {
+    // Initialize the database
+    structureRepository.saveAndFlush(structure);
 
-        int databaseSizeBeforeDelete = structureRepository.findAll().size();
+    int databaseSizeBeforeDelete = structureRepository.findAll().size();
 
-        // Delete the structure
-        restStructureMockMvc.perform(delete("/api/structures/{id}", structure.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
+    // Delete the structure
+    restStructureMockMvc
+        .perform(
+            delete("/api/structures/{id}", structure.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+        .andExpect(status().isNoContent());
 
-        // Validate the database contains one less item
-        List<Structure> structureList = structureRepository.findAll();
-        assertThat(structureList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    // Validate the database contains one less item
+    List<Structure> structureList = structureRepository.findAll();
+    assertThat(structureList).hasSize(databaseSizeBeforeDelete - 1);
+  }
 
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Structure.class);
-        Structure structure1 = new Structure();
-        structure1.setId(1L);
-        Structure structure2 = new Structure();
-        structure2.setId(structure1.getId());
-        assertThat(structure1).isEqualTo(structure2);
-        structure2.setId(2L);
-        assertThat(structure1).isNotEqualTo(structure2);
-        structure1.setId(null);
-        assertThat(structure1).isNotEqualTo(structure2);
-    }
+  @Test
+  @Transactional
+  public void equalsVerifier() throws Exception {
+    TestUtil.equalsVerifier(Structure.class);
+    Structure structure1 = new Structure();
+    structure1.setId(1L);
+    Structure structure2 = new Structure();
+    structure2.setId(structure1.getId());
+    assertThat(structure1).isEqualTo(structure2);
+    structure2.setId(2L);
+    assertThat(structure1).isNotEqualTo(structure2);
+    structure1.setId(null);
+    assertThat(structure1).isNotEqualTo(structure2);
+  }
 }

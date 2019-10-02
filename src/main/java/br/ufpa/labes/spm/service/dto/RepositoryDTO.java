@@ -1,147 +1,137 @@
 package br.ufpa.labes.spm.service.dto;
 
-//import Oid;
+// import Oid;
 
 import java.io.Serializable;
 
 import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
-
 @SuppressWarnings("serial")
 public class RepositoryDTO implements Serializable {
 
-	private Long id;
-	private String ident;
-	private String controlVersionSystem;
-	public Long getId() {
-		return id;
-	}
+  private Long id;
+  private String ident;
+  private String controlVersionSystem;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	private String server;
-	private String port;
-	private String connectionMethod;
-	private String repository;
-	private String username;
-	private String password;
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	private boolean defaultUser;
+  private String server;
+  private String port;
+  private String connectionMethod;
+  private String repository;
+  private String username;
+  private String password;
 
-	@IgnoreMapping
-	private StructureDTO theStructure;
+  private boolean defaultUser;
 
-	public RepositoryDTO() {
-		super();
-		this.setControlVersionSystem("");// Repository.CVS;
-		this.setIdent("");
-		this.server = "localhost";
-		this.port = "2401";
-		this.connectionMethod = "";//Repository.CVS_PSERVER_CONNECTIONTYPE;
-		this.repository = "/var/cvs";
-		this.username = "";
-		this.setPassword("");
-		this.defaultUser = false;
-		this.theStructure = null;
-	}
+  @IgnoreMapping private StructureDTO theStructure;
 
+  public RepositoryDTO() {
+    super();
+    this.setControlVersionSystem(""); // Repository.CVS;
+    this.setIdent("");
+    this.server = "localhost";
+    this.port = "2401";
+    this.connectionMethod = ""; // Repository.CVS_PSERVER_CONNECTIONTYPE;
+    this.repository = "/var/cvs";
+    this.username = "";
+    this.setPassword("");
+    this.defaultUser = false;
+    this.theStructure = null;
+  }
 
+  public StructureDTO getTheStructure() {
+    return theStructure;
+  }
 
+  public void setTheStructure(StructureDTO theStructure) {
+    this.theStructure = theStructure;
+  }
 
-	public StructureDTO getTheStructure() {
-		return theStructure;
-	}
+  public String getPassword() {
+    return password;
+  }
 
-	public void setTheStructure(StructureDTO theStructure) {
-		this.theStructure = theStructure;
-	}
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-	public String getPassword() {
-		return password;
-	}
+  public String getControlVersionSystem() {
+    return controlVersionSystem;
+  }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+  public void setControlVersionSystem(String controlVersionSystem) {
+    this.controlVersionSystem = controlVersionSystem;
+  }
 
-	public String getControlVersionSystem() {
-		return controlVersionSystem;
-	}
+  public String getServer() {
+    return server;
+  }
 
-	public void setControlVersionSystem(String controlVersionSystem) {
-		this.controlVersionSystem = controlVersionSystem;
-	}
+  public void setServer(String server) {
+    this.server = server;
+  }
 
-	public String getServer() {
-		return server;
-	}
+  public String getPort() {
+    return port;
+  }
 
-	public void setServer(String server) {
-		this.server = server;
-	}
+  public void setPort(String port) {
+    this.port = port;
+  }
 
-	public String getPort() {
-		return port;
-	}
+  public String getConnectionMethod() {
+    return connectionMethod;
+  }
 
-	public void setPort(String port) {
-		this.port = port;
-	}
+  public void setConnectionMethod(String connectionMethod) {
+    this.connectionMethod = connectionMethod;
+  }
 
-	public String getConnectionMethod() {
-		return connectionMethod;
-	}
+  public String getRepository() {
+    return repository;
+  }
 
-	public void setConnectionMethod(String connectionMethod) {
-		this.connectionMethod = connectionMethod;
-	}
+  public void setRepository(String repository) {
+    this.repository = repository;
+  }
 
-	public String getRepository() {
-		return repository;
-	}
+  public String getUsername() {
+    return username;
+  }
 
-	public void setRepository(String repository) {
-		this.repository = repository;
-	}
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-	public String getUsername() {
-		return username;
-	}
+  public boolean isDefaultUser() {
+    return defaultUser;
+  }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  public boolean getDefaultUser() {
+    return defaultUser;
+  }
 
-	public boolean isDefaultUser() {
-		return defaultUser;
-	}
+  public void setDefaultUser(boolean defaultUser) {
+    this.defaultUser = defaultUser;
+  }
 
-	public boolean getDefaultUser() {
-		return defaultUser;
-	}
+  public String getIdent() {
+    return ident;
+  }
 
-	public void setDefaultUser(boolean defaultUser) {
-		this.defaultUser = defaultUser;
-	}
+  public void setIdent(String ident) {
+    this.ident = ident;
+  }
 
-	public String getIdent() {
-		return ident;
-	}
-
-	public void setIdent(String ident) {
-		this.ident = ident;
-	}
-
-	@Override
-	public String toString() {
-		return "repository=" + repository + ", theStructure="
-				+ theStructure;
-	}
-
-
-
+  @Override
+  public String toString() {
+    return "repository=" + repository + ", theStructure=" + theStructure;
+  }
 }
-
-

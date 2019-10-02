@@ -6,53 +6,51 @@ import java.util.List;
 
 public class CalendarsDTO implements Serializable {
 
-/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-private List<CalendarDTO> calendars;
+  /** */
+  private static final long serialVersionUID = 1L;
 
-	public CalendarsDTO() {}
+  private List<CalendarDTO> calendars;
 
-	public CalendarsDTO(List<CalendarDTO> calendars) {
-		this.calendars = calendars;
-	}
+  public CalendarsDTO() {}
 
-	public boolean addCalendar(CalendarDTO calendarDTO) {
-		return this.calendars.add(calendarDTO);
-	}
+  public CalendarsDTO(List<CalendarDTO> calendars) {
+    this.calendars = calendars;
+  }
 
-	public boolean addCalendarsDTO(CalendarsDTO calendarsDTO) {
-		return this.calendars.addAll(calendarsDTO.getCalendars());
-	}
+  public boolean addCalendar(CalendarDTO calendarDTO) {
+    return this.calendars.add(calendarDTO);
+  }
 
-	public boolean removeCalendar(CalendarDTO calendarDTO) {
-		return this.calendars.remove(calendarDTO);
-	}
+  public boolean addCalendarsDTO(CalendarsDTO calendarsDTO) {
+    return this.calendars.addAll(calendarsDTO.getCalendars());
+  }
 
-	public CalendarDTO getCalendarDTO(int index) {
-		return this.calendars.get(index);
-	}
+  public boolean removeCalendar(CalendarDTO calendarDTO) {
+    return this.calendars.remove(calendarDTO);
+  }
 
-	public boolean isEmpty() {
-		return this.calendars.isEmpty();
-	}
+  public CalendarDTO getCalendarDTO(int index) {
+    return this.calendars.get(index);
+  }
 
-	public int size() {
-		return this.calendars.size();
-	}
+  public boolean isEmpty() {
+    return this.calendars.isEmpty();
+  }
 
-	public List<String> getCalendarsNames() {
-		List<String> names = new ArrayList<String>();
-		for (CalendarDTO calendarDTO : this.calendars) {
-			names.add(calendarDTO.getName());
-		}
+  public int size() {
+    return this.calendars.size();
+  }
 
-		return names;
-	}
+  public List<String> getCalendarsNames() {
+    List<String> names = new ArrayList<String>();
+    for (CalendarDTO calendarDTO : this.calendars) {
+      names.add(calendarDTO.getName());
+    }
 
-	public List<CalendarDTO> getCalendars() {
-		return calendars;
-	}
+    return names;
+  }
 
+  public List<CalendarDTO> getCalendars() {
+    return calendars;
+  }
 }

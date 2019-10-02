@@ -15,71 +15,67 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Service Implementation for managing {@link LogEntry}.
- */
+/** Service Implementation for managing {@link LogEntry}. */
 @Service
 @Transactional
 public class LogEntryService {
 
-    private final Logger log = LoggerFactory.getLogger(LogEntryService.class);
+  private final Logger log = LoggerFactory.getLogger(LogEntryService.class);
 
-    private final LogEntryRepository logEntryRepository;
+  private final LogEntryRepository logEntryRepository;
 
-    private final LogEntryMapper logEntryMapper;
+  private final LogEntryMapper logEntryMapper;
 
-    public LogEntryService(LogEntryRepository logEntryRepository, LogEntryMapper logEntryMapper) {
-        this.logEntryRepository = logEntryRepository;
-        this.logEntryMapper = logEntryMapper;
-    }
+  public LogEntryService(LogEntryRepository logEntryRepository, LogEntryMapper logEntryMapper) {
+    this.logEntryRepository = logEntryRepository;
+    this.logEntryMapper = logEntryMapper;
+  }
 
-    /**
-     * Save a logEntry.
-     *
-     * @param logEntryDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public LogEntryDTO save(LogEntryDTO logEntryDTO) {
-        log.debug("Request to save LogEntry : {}", logEntryDTO);
-        LogEntry logEntry = logEntryMapper.toEntity(logEntryDTO);
-        logEntry = logEntryRepository.save(logEntry);
-        return logEntryMapper.toDto(logEntry);
-    }
+  /**
+   * Save a logEntry.
+   *
+   * @param logEntryDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public LogEntryDTO save(LogEntryDTO logEntryDTO) {
+    log.debug("Request to save LogEntry : {}", logEntryDTO);
+    LogEntry logEntry = logEntryMapper.toEntity(logEntryDTO);
+    logEntry = logEntryRepository.save(logEntry);
+    return logEntryMapper.toDto(logEntry);
+  }
 
-    /**
-     * Get all the logEntries.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<LogEntryDTO> findAll() {
-        log.debug("Request to get all LogEntries");
-        return logEntryRepository.findAll().stream()
-            .map(logEntryMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the logEntries.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<LogEntryDTO> findAll() {
+    log.debug("Request to get all LogEntries");
+    return logEntryRepository.findAll().stream()
+        .map(logEntryMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one logEntry by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<LogEntryDTO> findOne(Long id) {
+    log.debug("Request to get LogEntry : {}", id);
+    return logEntryRepository.findById(id).map(logEntryMapper::toDto);
+  }
 
-    /**
-     * Get one logEntry by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<LogEntryDTO> findOne(Long id) {
-        log.debug("Request to get LogEntry : {}", id);
-        return logEntryRepository.findById(id)
-            .map(logEntryMapper::toDto);
-    }
-
-    /**
-     * Delete the logEntry by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete LogEntry : {}", id);
-        logEntryRepository.deleteById(id);
-    }
+  /**
+   * Delete the logEntry by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete LogEntry : {}", id);
+    logEntryRepository.deleteById(id);
+  }
 }

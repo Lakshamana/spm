@@ -12,25 +12,20 @@ import br.ufpa.labes.spm.domain.Task;
 
 public interface Logging {
 
-	public abstract void registerModelingActivityEvent(Activity activity,
-			String what, String why);
+  public abstract void registerModelingActivityEvent(Activity activity, String what, String why);
 
-	public abstract void registerGlobalActivityEvent(Plain activity,
-			String what, String why);
+  public abstract void registerGlobalActivityEvent(Plain activity, String what, String why);
 
-	public abstract void registerProcessEvent(Process process, String what,
-			String why);
+  public abstract void registerProcessEvent(Process process, String what, String why);
 
-	public abstract void registerBranchEvent(BranchCon branchCon, String why);
+  public abstract void registerBranchEvent(BranchCon branchCon, String why);
 
-	public abstract void registerJoinEvent(JoinCon joinCon, String why);
+  public abstract void registerJoinEvent(JoinCon joinCon, String why);
 
-	public abstract void registerProcessModelEvent(ProcessModel model,
-			String what, String why);
+  public abstract void registerProcessModelEvent(ProcessModel model, String what, String why);
 
-	public abstract void registerResourceEvent(Resource resource,
-			Normal actNorm, String what, String why);
+  public abstract void registerResourceEvent(
+      Resource resource, Normal actNorm, String what, String why);
 
-	public abstract void registerAgendaEvent(Task task, String what, String why);
-
+  public abstract void registerAgendaEvent(Task task, String what, String why);
 }

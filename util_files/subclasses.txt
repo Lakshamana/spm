@@ -32,7 +32,7 @@ Connection MultipleCon
 Connection ArtifactCon
 Connection SimpleCon
 BranchCon BranchANDCon
-BranchConCond BranchCon
+BranchCon BranchConCond
 SimpleCon Sequence
 SimpleCon Feedback
 Resource Consumable
@@ -55,5 +55,5 @@ Event CatalogEvent
 Event GlobalActivityEvent
 Event ConnectionEvent
 Event ProcessEvent
-ReqAgent RequiredPeople
-ReqWorkGroup RequiredPeople
+RequiredPeople ReqAgent
+RequiredPeople ReqWorkGroup

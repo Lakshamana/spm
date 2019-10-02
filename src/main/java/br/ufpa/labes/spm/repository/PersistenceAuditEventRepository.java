@@ -1,7 +1,5 @@
 package br.ufpa.labes.spm.repository;
 
-
-
 import br.ufpa.labes.spm.domain.PersistentAuditEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

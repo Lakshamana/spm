@@ -1,81 +1,83 @@
 package br.ufpa.labes.spm.service.dto;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * A DTO for the {@link br.ufpa.labes.spm.domain.ModelingActivityEvent} entity.
- */
+/** A DTO for the {@link br.ufpa.labes.spm.domain.ModelingActivityEvent} entity. */
 public class ModelingActivityEventDTO implements Serializable {
 
-    private Long id;
+  private Long id;
 
+  private Long theCatalogEventId;
 
-    private Long theCatalogEventId;
+  private Long theActivityId;
 
-    private Long theActivityId;
+  private Long theAgentId;
 
-    private Long theAgentId;
+  public Long getId() {
+    return id;
+  }
 
-    public Long getId() {
-        return id;
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Long getTheCatalogEventId() {
+    return theCatalogEventId;
+  }
+
+  public void setTheCatalogEventId(Long catalogEventId) {
+    this.theCatalogEventId = catalogEventId;
+  }
+
+  public Long getTheActivityId() {
+    return theActivityId;
+  }
+
+  public void setTheActivityId(Long activityId) {
+    this.theActivityId = activityId;
+  }
+
+  public Long getTheAgentId() {
+    return theAgentId;
+  }
+
+  public void setTheAgentId(Long agentId) {
+    this.theAgentId = agentId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    ModelingActivityEventDTO modelingActivityEventDTO = (ModelingActivityEventDTO) o;
+    if (modelingActivityEventDTO.getId() == null || getId() == null) {
+      return false;
     }
+    return Objects.equals(getId(), modelingActivityEventDTO.getId());
+  }
 
-    public Long getTheCatalogEventId() {
-        return theCatalogEventId;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getId());
+  }
 
-    public void setTheCatalogEventId(Long catalogEventId) {
-        this.theCatalogEventId = catalogEventId;
-    }
-
-    public Long getTheActivityId() {
-        return theActivityId;
-    }
-
-    public void setTheActivityId(Long activityId) {
-        this.theActivityId = activityId;
-    }
-
-    public Long getTheAgentId() {
-        return theAgentId;
-    }
-
-    public void setTheAgentId(Long agentId) {
-        this.theAgentId = agentId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        ModelingActivityEventDTO modelingActivityEventDTO = (ModelingActivityEventDTO) o;
-        if (modelingActivityEventDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), modelingActivityEventDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "ModelingActivityEventDTO{" +
-            "id=" + getId() +
-            ", theCatalogEvent=" + getTheCatalogEventId() +
-            ", theActivity=" + getTheActivityId() +
-            ", theAgent=" + getTheAgentId() +
-            "}";
-    }
+  @Override
+  public String toString() {
+    return "ModelingActivityEventDTO{"
+        + "id="
+        + getId()
+        + ", theCatalogEvent="
+        + getTheCatalogEventId()
+        + ", theActivity="
+        + getTheActivityId()
+        + ", theAgent="
+        + getTheAgentId()
+        + "}";
+  }
 }

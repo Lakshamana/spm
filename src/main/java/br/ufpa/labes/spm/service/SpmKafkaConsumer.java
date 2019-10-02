@@ -10,11 +10,11 @@ import java.io.IOException;
 @Service
 public class SpmKafkaConsumer {
 
-    private final Logger log = LoggerFactory.getLogger(SpmKafkaConsumer.class);
-    private static final String TOPIC = "topic_spmtmp";
+  private final Logger log = LoggerFactory.getLogger(SpmKafkaConsumer.class);
+  private static final String TOPIC = "topic_spmtmp";
 
-    @KafkaListener(topics = "topic_spmtmp", groupId = "group_id")
-    public void consume(String message) throws IOException {
-        log.info("Consumed message in {} : {}", TOPIC, message);
-    }
+  @KafkaListener(topics = "topic_spmtmp", groupId = "group_id")
+  public void consume(String message) throws IOException {
+    log.info("Consumed message in {} : {}", TOPIC, message);
+  }
 }

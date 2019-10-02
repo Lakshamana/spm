@@ -1,8 +1,15 @@
 package br.ufpa.labes.spm.domain.enumeration;
 
-/**
- * The OperationEnum enumeration.
- */
+/** The OperationEnum enumeration. */
 public enum OperationEnum {
-    CREATE, DELETE, UPDATE, VIEW, VOTE, FAVORITE, UNFAVORITE, FOLLOW, UNFOLLOW, COMMENT
+  CREATE,
+  DELETE,
+  UPDATE,
+  VIEW,
+  VOTE,
+  FAVORITE,
+  UNFAVORITE,
+  FOLLOW,
+  UNFOLLOW,
+  COMMENT
 }

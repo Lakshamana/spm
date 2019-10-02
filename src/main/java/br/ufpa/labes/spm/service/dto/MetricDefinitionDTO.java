@@ -6,157 +6,118 @@ import java.util.List;
 
 import br.ufpa.labes.spm.annotations.IgnoreMapping;
 
-
 @SuppressWarnings("serial")
-public class MetricDefinitionDTO implements Serializable{
+public class MetricDefinitionDTO implements Serializable {
 
-	private Long id;
+  private Long id;
 
+  private String name;
 
-	private String name;
+  private String description;
 
+  private String kind;
 
-	private String description;
+  private Float rangeFrom;
 
+  private Float rangeTo;
 
-	private String kind;
+  private String howToMeasure;
 
+  @IgnoreMapping private String metricType;
 
-	private Float rangeFrom;
+  @IgnoreMapping private List<MetricDTO> metric;
 
+  @IgnoreMapping private List<EstimationDTO> estimation;
 
-	private Float rangeTo;
+  @IgnoreMapping private List<String> units;
 
+  public MetricDefinitionDTO() {}
 
-	private String howToMeasure;
+  public Long getId() {
+    return id;
+  }
 
-	@IgnoreMapping
-	private String metricType;
+  public void setId(Long id) {
+    this.id = id;
+  }
 
+  public String getName() {
+    return name;
+  }
 
-	@IgnoreMapping
-	private List<MetricDTO> metric;
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	@IgnoreMapping
-	private List<EstimationDTO> estimation;
+  public String getDescription() {
+    return description;
+  }
 
-	@IgnoreMapping
-	private List<String> units;
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
+  public String getKind() {
+    return kind;
+  }
 
-	public MetricDefinitionDTO() {
+  public void setKind(String kind) {
+    this.kind = kind;
+  }
 
-	}
+  public Float getRangeFrom() {
+    return rangeFrom;
+  }
 
-	public Long getId() {
-		return id;
-	}
+  public void setRangeFrom(Float rangeFrom) {
+    this.rangeFrom = rangeFrom;
+  }
 
+  public Float getRangeTo() {
+    return rangeTo;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setRangeTo(Float rangeTo) {
+    this.rangeTo = rangeTo;
+  }
 
+  public String getHowToMeasure() {
+    return howToMeasure;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public void setHowToMeasure(String howToMeasure) {
+    this.howToMeasure = howToMeasure;
+  }
 
+  public String getMetricType() {
+    return metricType;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setMetricType(String metricType) {
+    this.metricType = metricType;
+  }
 
+  public Collection<MetricDTO> getMetric() {
+    return metric;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public void setMetric(List<MetricDTO> metric) {
+    this.metric = metric;
+  }
 
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-
-	public String getKind() {
-		return kind;
-	}
-
-
-	public void setKind(String kind) {
-		this.kind = kind;
-	}
-
-
-	public Float getRangeFrom() {
-		return rangeFrom;
-	}
-
-
-	public void setRangeFrom(Float rangeFrom) {
-		this.rangeFrom = rangeFrom;
-	}
-
-
-	public Float getRangeTo() {
-		return rangeTo;
-	}
-
-
-	public void setRangeTo(Float rangeTo) {
-		this.rangeTo = rangeTo;
-	}
-
-
-	public String getHowToMeasure() {
-		return howToMeasure;
-	}
-
-
-	public void setHowToMeasure(String howToMeasure) {
-		this.howToMeasure = howToMeasure;
-	}
-
-
-	public String getMetricType() {
-		return metricType;
-	}
-
-
-	public void setMetricType(String metricType) {
-		this.metricType = metricType;
-	}
-
-
-	public Collection<MetricDTO> getMetric() {
-		return metric;
-	}
-
-
-	public void setMetric(List<MetricDTO> metric) {
-		this.metric = metric;
-	}
-
-
-	public List<EstimationDTO> getEstimation() {
-		return estimation;
-	}
-
-
-	public void setEstimation(List<EstimationDTO> estimation) {
-		this.estimation = estimation;
-	}
-
-
-	public List<String> getUnits() {
-		return units;
-	}
-
-
-	public void setUnits(List<String> units) {
-		this.units = units;
-	}
-
-
-
+  public List<EstimationDTO> getEstimation() {
+    return estimation;
+  }
+
+  public void setEstimation(List<EstimationDTO> estimation) {
+    this.estimation = estimation;
+  }
+
+  public List<String> getUnits() {
+    return units;
+  }
+
+  public void setUnits(List<String> units) {
+    this.units = units;
+  }
 }

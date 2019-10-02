@@ -536,50 +536,114 @@ public class CacheConfiguration {
           cm, br.ufpa.labes.spm.domain.MetricType.class.getName() + ".theMetricDefinitions");
       createCache(
           cm, br.ufpa.labes.spm.domain.ResourceType.class.getName() + ".theRequiredResources");
-      createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theModelingActivityEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theActivityEstimations");
-      createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theBranchConCondToActivities");
-      createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theActivityInstantiateds");
-      createCache(cm, br.ufpa.labes.spm.domain.Ability.class.getName() + ".theReqAgentRequiresAbilities");
-      createCache(cm, br.ufpa.labes.spm.domain.Agent.class.getName() + ".theModelingActivityEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.EmailConfiguration.class.getName() + ".theProcesses");
-      createCache(cm, br.ufpa.labes.spm.domain.WorkGroup.class.getName() + ".theWorkGroupEstimations");
-      createCache(cm, br.ufpa.labes.spm.domain.WorkGroup.class.getName() + ".sugToChosenWorkGroups");
-      createCache(cm, br.ufpa.labes.spm.domain.Artifact.class.getName() + ".theArtifactEstimations");
-      createCache(cm, br.ufpa.labes.spm.domain.RelationshipKind.class.getName() + ".theAssetRelationships");
-      createCache(cm, br.ufpa.labes.spm.domain.MultipleCon.class.getName() + ".theBranchConCondToMultipleCons");
-      createCache(cm, br.ufpa.labes.spm.domain.BranchConCond.class.getName() + ".theBranchConCondToActivities");
-      createCache(cm, br.ufpa.labes.spm.domain.BranchConCond.class.getName() + ".theBranchConCondToMultipleCons");
-      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theCatalogEventToCatalogs");
-      createCache(cm, br.ufpa.labes.spm.domain.AgendaEvent.class.getName() + ".theCatalogEventToAgenda");
-      createCache(cm, br.ufpa.labes.spm.domain.ConnectionEvent.class.getName() + ".theCatalogEventToConnections");
-      createCache(cm, br.ufpa.labes.spm.domain.GlobalActivityEvent.class.getName() + ".theCatalogEventToGlobalActivities");
-      createCache(cm, br.ufpa.labes.spm.domain.ModelingActivityEvent.class.getName() + ".theCatalogEventToModelingActivities");
-      createCache(cm, br.ufpa.labes.spm.domain.ProcessEvent.class.getName() + ".theCatalogEventToProcesses");
-      createCache(cm, br.ufpa.labes.spm.domain.ProcessModelEvent.class.getName() + ".theCatalogEventToProcessModels");
-      createCache(cm, br.ufpa.labes.spm.domain.ResourceEvent.class.getName() + ".theCatalogEventToResources");
-      createCache(cm, br.ufpa.labes.spm.domain.Organization.class.getName() + ".theOrganizationMetrics");
-      createCache(cm, br.ufpa.labes.spm.domain.Organization.class.getName() + ".theOrganizationEstimations");
-      createCache(cm, br.ufpa.labes.spm.domain.Normal.class.getName() + ".theInvolvedArtifactToNormals");
-      createCache(cm, br.ufpa.labes.spm.domain.Normal.class.getName() + ".theInvolvedArtifactsFromNormals");
-      createCache(cm, br.ufpa.labes.spm.domain.RequiredPeople.class.getName() + ".theReqAgentRequiresAbilities");
-      createCache(cm, br.ufpa.labes.spm.domain.ActivityInstantiated.class.getName() + ".theInstSugs");
-      createCache(cm, br.ufpa.labes.spm.domain.InstantiationSuggestion.class.getName() + ".sugRsrcs");
-      createCache(cm, br.ufpa.labes.spm.domain.InstantiationPolicyLog.class.getName() + ".theActivityInstantiateds");
-      createCache(cm, br.ufpa.labes.spm.domain.PeopleInstSug.class.getName() + ".theAgentInstSugToAgents");
-      createCache(cm, br.ufpa.labes.spm.domain.MetricDefinition.class.getName() + ".theEstimations");
-      createCache(cm, br.ufpa.labes.spm.domain.Description.class.getName() + ".descTemplateOriginalVersions");
-      createCache(cm, br.ufpa.labes.spm.domain.ProcessModel.class.getName() + ".theProcessModelEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.Template.class.getName() + ".theDerivedVersionDescriptions");
-      createCache(cm, br.ufpa.labes.spm.domain.Template.class.getName() + ".theTemplateNewDescriptions");
-      createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourcePossibleUses");
-      createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceEstimations");
-      createCache(cm, br.ufpa.labes.spm.domain.PrimitiveType.class.getName() + ".theToolParameters");
-      createCache(cm, br.ufpa.labes.spm.domain.ToolDefinition.class.getName() + ".theArtifactTypes");
-      createCache(cm, br.ufpa.labes.spm.domain.Type.class.getName() + ".theToolDefinitionToArtifactTypes");
-      createCache(cm, br.ufpa.labes.spm.domain.ArtifactType.class.getName() + ".theInvolvedArtifacts");
-      createCache(cm, br.ufpa.labes.spm.domain.MetricType.class.getName() + ".theMetricDefinitions");
-      createCache(cm, br.ufpa.labes.spm.domain.ResourceType.class.getName() + ".theRequiredResources");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theModelingActivityEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theActivityEstimations");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theBranchConCondToActivities");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".theActivityInstantiateds");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Ability.class.getName() + ".theReqAgentRequiresAbilities");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Agent.class.getName() + ".theModelingActivityEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.EmailConfiguration.class.getName() + ".theProcesses");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.WorkGroup.class.getName() + ".theWorkGroupEstimations");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.WorkGroup.class.getName() + ".sugToChosenWorkGroups");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Artifact.class.getName() + ".theArtifactEstimations");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.RelationshipKind.class.getName() + ".theAssetRelationships");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.MultipleCon.class.getName() + ".theBranchConCondToMultipleCons");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.BranchConCond.class.getName() + ".theBranchConCondToActivities");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.BranchConCond.class.getName()
+              + ".theBranchConCondToMultipleCons");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theCatalogEventToCatalogs");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.AgendaEvent.class.getName() + ".theCatalogEventToAgenda");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.ConnectionEvent.class.getName()
+              + ".theCatalogEventToConnections");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.GlobalActivityEvent.class.getName()
+              + ".theCatalogEventToGlobalActivities");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.ModelingActivityEvent.class.getName()
+              + ".theCatalogEventToModelingActivities");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.ProcessEvent.class.getName() + ".theCatalogEventToProcesses");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.ProcessModelEvent.class.getName()
+              + ".theCatalogEventToProcessModels");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.ResourceEvent.class.getName() + ".theCatalogEventToResources");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Organization.class.getName() + ".theOrganizationMetrics");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.Organization.class.getName() + ".theOrganizationEstimations");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Normal.class.getName() + ".theInvolvedArtifactToNormals");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Normal.class.getName() + ".theInvolvedArtifactsFromNormals");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.RequiredPeople.class.getName()
+              + ".theReqAgentRequiresAbilities");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ActivityInstantiated.class.getName() + ".theInstSugs");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.InstantiationSuggestion.class.getName() + ".sugRsrcs");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.InstantiationPolicyLog.class.getName()
+              + ".theActivityInstantiateds");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.PeopleInstSug.class.getName() + ".theAgentInstSugToAgents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.MetricDefinition.class.getName() + ".theEstimations");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.Description.class.getName() + ".descTemplateOriginalVersions");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ProcessModel.class.getName() + ".theProcessModelEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Template.class.getName() + ".theDerivedVersionDescriptions");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Template.class.getName() + ".theTemplateNewDescriptions");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourcePossibleUses");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceEstimations");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.PrimitiveType.class.getName() + ".theToolParameters");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ToolDefinition.class.getName() + ".theArtifactTypes");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Type.class.getName() + ".theToolDefinitionToArtifactTypes");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ArtifactType.class.getName() + ".theInvolvedArtifacts");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.MetricType.class.getName() + ".theMetricDefinitions");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ResourceType.class.getName() + ".theRequiredResources");
       createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".activityEstimations");
       createCache(cm, br.ufpa.labes.spm.domain.Activity.class.getName() + ".fromBranchANDCons");
       createCache(cm, br.ufpa.labes.spm.domain.WorkGroup.class.getName() + ".theReqGroups");
@@ -593,12 +657,17 @@ public class CacheConfiguration {
       createCache(cm, br.ufpa.labes.spm.domain.BranchANDCon.class.getName() + ".toActivities");
       createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theCatalogEvents");
       createCache(cm, br.ufpa.labes.spm.domain.AgendaEvent.class.getName() + ".theCatalogEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.ConnectionEvent.class.getName() + ".theCatalogEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.GlobalActivityEvent.class.getName() + ".theCatalogEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.ModelingActivityEvent.class.getName() + ".theCatalogEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ConnectionEvent.class.getName() + ".theCatalogEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.GlobalActivityEvent.class.getName() + ".theCatalogEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ModelingActivityEvent.class.getName() + ".theCatalogEvents");
       createCache(cm, br.ufpa.labes.spm.domain.ProcessEvent.class.getName() + ".theCatalogEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.ProcessModelEvent.class.getName() + ".theCatalogEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.ResourceEvent.class.getName() + ".theRequestorAgents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ProcessModelEvent.class.getName() + ".theCatalogEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ResourceEvent.class.getName() + ".theRequestorAgents");
       createCache(cm, br.ufpa.labes.spm.domain.ResourceEvent.class.getName() + ".theCatalogEvents");
       createCache(cm, br.ufpa.labes.spm.domain.Company.class.getName() + ".theOrganizationalUnits");
       createCache(cm, br.ufpa.labes.spm.domain.Company.class.getName() + ".theSystems");
@@ -609,16 +678,26 @@ public class CacheConfiguration {
       createCache(cm, br.ufpa.labes.spm.domain.Author.class.getName() + ".stats");
       createCache(cm, br.ufpa.labes.spm.domain.Author.class.getName() + ".assets");
       createCache(cm, br.ufpa.labes.spm.domain.Author.class.getName() + ".followers");
-      createCache(cm, br.ufpa.labes.spm.domain.Organization.class.getName() + ".organizationMetrics");
-      createCache(cm, br.ufpa.labes.spm.domain.Organization.class.getName() + ".organizationEstimations");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Organization.class.getName() + ".organizationMetrics");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Organization.class.getName() + ".organizationEstimations");
       createCache(cm, br.ufpa.labes.spm.domain.Normal.class.getName() + ".theAgendaEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.Normal.class.getName() + ".involvedArtifactToNormals");
-      createCache(cm, br.ufpa.labes.spm.domain.Normal.class.getName() + ".involvedArtifactFromNormals");
-      createCache(cm, br.ufpa.labes.spm.domain.ReqAgent.class.getName() + ".theReqAgentRequiresAbilities");
-      createCache(cm, br.ufpa.labes.spm.domain.ActivityInstantiated.class.getName() + ".theInstantiationSuggestions");
-      createCache(cm, br.ufpa.labes.spm.domain.ResourceInstSug.class.getName() + ".resourceSuggesteds");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Normal.class.getName() + ".involvedArtifactToNormals");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Normal.class.getName() + ".involvedArtifactFromNormals");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ReqAgent.class.getName() + ".theReqAgentRequiresAbilities");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.ActivityInstantiated.class.getName()
+              + ".theInstantiationSuggestions");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ResourceInstSug.class.getName() + ".resourceSuggesteds");
       createCache(cm, br.ufpa.labes.spm.domain.AgentInstSug.class.getName() + ".agentSuggesteds");
-      createCache(cm, br.ufpa.labes.spm.domain.WorkGroupInstSug.class.getName() + ".groupSuggesteds");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.WorkGroupInstSug.class.getName() + ".groupSuggesteds");
       createCache(cm, br.ufpa.labes.spm.domain.MetricDefinition.class.getName() + ".estimations");
       createCache(cm, br.ufpa.labes.spm.domain.MetricDefinition.class.getName() + ".metrics");
       createCache(cm, br.ufpa.labes.spm.domain.Process.class.getName() + ".theProcessAgenda");
@@ -627,23 +706,36 @@ public class CacheConfiguration {
       createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".possesses");
       createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".isRequireds");
       createCache(cm, br.ufpa.labes.spm.domain.Task.class.getName() + ".ocurrences");
-      createCache(cm, br.ufpa.labes.spm.domain.ArtifactType.class.getName() + ".theToolDefinitions");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ArtifactType.class.getName() + ".theToolDefinitions");
       createCache(cm, br.ufpa.labes.spm.domain.WorkGroupType.class.getName() + ".theReqGroups");
-      createCache(cm, br.ufpa.labes.spm.domain.WorkGroupType.class.getName() + ".theWorkGroupInstSugs");
-      createCache(cm, br.ufpa.labes.spm.domain.ResourceType.class.getName() + ".theResourceInstSugs");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.WorkGroupType.class.getName() + ".theWorkGroupInstSugs");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.ResourceType.class.getName() + ".theResourceInstSugs");
       createCache(cm, br.ufpa.labes.spm.domain.WorkGroup.class.getName() + ".theSuggestedGroups");
-      createCache(cm, br.ufpa.labes.spm.domain.Dependency.class.getName() + ".theMultipleConsToDependencies");
-      createCache(cm, br.ufpa.labes.spm.domain.Dependency.class.getName() + ".theMultipleSequences");
-      createCache(cm, br.ufpa.labes.spm.domain.MultipleCon.class.getName() + ".theJoinConToMultipleCons");
-      createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceChosenSuggestions");
-      createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceSuggestions");
+      createCache(
+          cm,
+          br.ufpa.labes.spm.domain.Dependency.class.getName() + ".theMultipleConsToDependencies");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Dependency.class.getName() + ".theMultipleSequences");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.MultipleCon.class.getName() + ".theJoinConToMultipleCons");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceChosenSuggestions");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceSuggestions");
       createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theEvents");
       createCache(cm, br.ufpa.labes.spm.domain.Artifact.class.getName() + ".derivedTos");
       createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theResourceEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theProcessModelEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theConnectionEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theGlobalActivityEvents");
-      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theModelingActivityEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theProcessModelEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theConnectionEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theGlobalActivityEvents");
+      createCache(
+          cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theModelingActivityEvents");
       createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theProcessEvents");
       createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".requires");
       // jhipster-needle-ehcache-add-entry

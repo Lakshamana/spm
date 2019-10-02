@@ -5,20 +5,18 @@ import br.ufpa.labes.spm.service.dto.ScriptDTO;
 
 import org.mapstruct.*;
 
-/**
- * Mapper for the entity {@link Script} and its DTO {@link ScriptDTO}.
- */
-@Mapper(componentModel = "spring", uses = {})
+/** Mapper for the entity {@link Script} and its DTO {@link ScriptDTO}. */
+@Mapper(
+    componentModel = "spring",
+    uses = {})
 public interface ScriptMapper extends EntityMapper<ScriptDTO, Script> {
 
-
-
-    default Script fromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        Script script = new Script();
-        script.setId(id);
-        return script;
+  default Script fromId(Long id) {
+    if (id == null) {
+      return null;
     }
+    Script script = new Script();
+    script.setId(id);
+    return script;
+  }
 }

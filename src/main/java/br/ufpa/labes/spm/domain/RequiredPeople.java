@@ -1,4 +1,5 @@
 package br.ufpa.labes.spm.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -7,80 +8,74 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 
-/**
- * A RequiredPeople.
- */
+/** A RequiredPeople. */
 @Entity
 @Table(name = "required_people")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class RequiredPeople implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne
-    @JsonIgnoreProperties("theRequiredPeople")
-    private Normal theNormal;
+  @ManyToOne
+  @JsonIgnoreProperties("theRequiredPeople")
+  private Normal theNormal;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public Long getId() {
-        return id;
+  // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Normal getTheNormal() {
+    return theNormal;
+  }
+
+  public RequiredPeople theNormal(Normal normal) {
+    this.theNormal = normal;
+    return this;
+  }
+
+  public void setTheNormal(Normal normal) {
+    this.theNormal = normal;
+  }
+  // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not
+  // remove
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    if (!(o instanceof RequiredPeople)) {
+      return false;
     }
+    return id != null && id.equals(((RequiredPeople) o).id);
+  }
 
-    public Normal getTheNormal() {
-        return theNormal;
+  @Override
+  public int hashCode() {
+    return 31;
+  }
+
+  @Override
+  public String toString() {
+    return "RequiredPeople{" + "id=" + getId() + "}";
+  }
+
+  public void removeFromTheNormal() {
+    if (this.theNormal != null) {
+      this.theNormal.removeTheRequiredPeople(this);
     }
+  }
 
-    public RequiredPeople theNormal(Normal normal) {
-        this.theNormal = normal;
-        return this;
-    }
-
-    public void setTheNormal(Normal normal) {
-        this.theNormal = normal;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof RequiredPeople)) {
-            return false;
-        }
-        return id != null && id.equals(((RequiredPeople) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
-
-    @Override
-    public String toString() {
-        return "RequiredPeople{" +
-            "id=" + getId() +
-            "}";
-    }
-
-    public void removeFromTheNormal(){
-      if (this.theNormal!=null){
-        this.theNormal.removeTheRequiredPeople(this);
-      }
-    }
-
-    public void insertIntoTheNormal(Normal theNormal){
-      if(theNormal != null)
-        theNormal.addTheRequiredPeople(this);
-    }
-
-
+  public void insertIntoTheNormal(Normal theNormal) {
+    if (theNormal != null) theNormal.addTheRequiredPeople(this);
+  }
 }

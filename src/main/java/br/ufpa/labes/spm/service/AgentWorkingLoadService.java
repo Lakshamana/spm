@@ -15,71 +15,69 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Service Implementation for managing {@link AgentWorkingLoad}.
- */
+/** Service Implementation for managing {@link AgentWorkingLoad}. */
 @Service
 @Transactional
 public class AgentWorkingLoadService {
 
-    private final Logger log = LoggerFactory.getLogger(AgentWorkingLoadService.class);
+  private final Logger log = LoggerFactory.getLogger(AgentWorkingLoadService.class);
 
-    private final AgentWorkingLoadRepository agentWorkingLoadRepository;
+  private final AgentWorkingLoadRepository agentWorkingLoadRepository;
 
-    private final AgentWorkingLoadMapper agentWorkingLoadMapper;
+  private final AgentWorkingLoadMapper agentWorkingLoadMapper;
 
-    public AgentWorkingLoadService(AgentWorkingLoadRepository agentWorkingLoadRepository, AgentWorkingLoadMapper agentWorkingLoadMapper) {
-        this.agentWorkingLoadRepository = agentWorkingLoadRepository;
-        this.agentWorkingLoadMapper = agentWorkingLoadMapper;
-    }
+  public AgentWorkingLoadService(
+      AgentWorkingLoadRepository agentWorkingLoadRepository,
+      AgentWorkingLoadMapper agentWorkingLoadMapper) {
+    this.agentWorkingLoadRepository = agentWorkingLoadRepository;
+    this.agentWorkingLoadMapper = agentWorkingLoadMapper;
+  }
 
-    /**
-     * Save a agentWorkingLoad.
-     *
-     * @param agentWorkingLoadDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public AgentWorkingLoadDTO save(AgentWorkingLoadDTO agentWorkingLoadDTO) {
-        log.debug("Request to save AgentWorkingLoad : {}", agentWorkingLoadDTO);
-        AgentWorkingLoad agentWorkingLoad = agentWorkingLoadMapper.toEntity(agentWorkingLoadDTO);
-        agentWorkingLoad = agentWorkingLoadRepository.save(agentWorkingLoad);
-        return agentWorkingLoadMapper.toDto(agentWorkingLoad);
-    }
+  /**
+   * Save a agentWorkingLoad.
+   *
+   * @param agentWorkingLoadDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public AgentWorkingLoadDTO save(AgentWorkingLoadDTO agentWorkingLoadDTO) {
+    log.debug("Request to save AgentWorkingLoad : {}", agentWorkingLoadDTO);
+    AgentWorkingLoad agentWorkingLoad = agentWorkingLoadMapper.toEntity(agentWorkingLoadDTO);
+    agentWorkingLoad = agentWorkingLoadRepository.save(agentWorkingLoad);
+    return agentWorkingLoadMapper.toDto(agentWorkingLoad);
+  }
 
-    /**
-     * Get all the agentWorkingLoads.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<AgentWorkingLoadDTO> findAll() {
-        log.debug("Request to get all AgentWorkingLoads");
-        return agentWorkingLoadRepository.findAll().stream()
-            .map(agentWorkingLoadMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the agentWorkingLoads.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<AgentWorkingLoadDTO> findAll() {
+    log.debug("Request to get all AgentWorkingLoads");
+    return agentWorkingLoadRepository.findAll().stream()
+        .map(agentWorkingLoadMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one agentWorkingLoad by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<AgentWorkingLoadDTO> findOne(Long id) {
+    log.debug("Request to get AgentWorkingLoad : {}", id);
+    return agentWorkingLoadRepository.findById(id).map(agentWorkingLoadMapper::toDto);
+  }
 
-    /**
-     * Get one agentWorkingLoad by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<AgentWorkingLoadDTO> findOne(Long id) {
-        log.debug("Request to get AgentWorkingLoad : {}", id);
-        return agentWorkingLoadRepository.findById(id)
-            .map(agentWorkingLoadMapper::toDto);
-    }
-
-    /**
-     * Delete the agentWorkingLoad by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete AgentWorkingLoad : {}", id);
-        agentWorkingLoadRepository.deleteById(id);
-    }
+  /**
+   * Delete the agentWorkingLoad by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete AgentWorkingLoad : {}", id);
+    agentWorkingLoadRepository.deleteById(id);
+  }
 }

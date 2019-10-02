@@ -28,227 +28,230 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Integration tests for the {@link ConnectionResource} REST controller.
- */
+/** Integration tests for the {@link ConnectionResource} REST controller. */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class ConnectionResourceIT {
 
-    private static final String DEFAULT_IDENT = "AAAAAAAAAA";
-    private static final String UPDATED_IDENT = "BBBBBBBBBB";
+  private static final String DEFAULT_IDENT = "AAAAAAAAAA";
+  private static final String UPDATED_IDENT = "BBBBBBBBBB";
 
-    @Autowired
-    private ConnectionRepository connectionRepository;
+  @Autowired private ConnectionRepository connectionRepository;
 
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
+  @Autowired private ExceptionTranslator exceptionTranslator;
 
-    @Autowired
-    private EntityManager em;
+  @Autowired private EntityManager em;
 
-    @Autowired
-    private Validator validator;
+  @Autowired private Validator validator;
 
-    private MockMvc restConnectionMockMvc;
+  private MockMvc restConnectionMockMvc;
 
-    private Connection connection;
+  private Connection connection;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final ConnectionResource connectionResource = new ConnectionResource(connectionRepository);
-        this.restConnectionMockMvc = MockMvcBuilders.standaloneSetup(connectionResource)
+  @BeforeEach
+  public void setup() {
+    MockitoAnnotations.initMocks(this);
+    final ConnectionResource connectionResource = new ConnectionResource(connectionRepository);
+    this.restConnectionMockMvc =
+        MockMvcBuilders.standaloneSetup(connectionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
+            .setValidator(validator)
+            .build();
+  }
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Connection createEntity(EntityManager em) {
-        Connection connection = new Connection()
-            .ident(DEFAULT_IDENT);
-        return connection;
-    }
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Connection createUpdatedEntity(EntityManager em) {
-        Connection connection = new Connection()
-            .ident(UPDATED_IDENT);
-        return connection;
-    }
+  /**
+   * Create an entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static Connection createEntity(EntityManager em) {
+    Connection connection = new Connection().ident(DEFAULT_IDENT);
+    return connection;
+  }
+  /**
+   * Create an updated entity for this test.
+   *
+   * <p>This is a static method, as tests for other entities might also need it, if they test an
+   * entity which requires the current entity.
+   */
+  public static Connection createUpdatedEntity(EntityManager em) {
+    Connection connection = new Connection().ident(UPDATED_IDENT);
+    return connection;
+  }
 
-    @BeforeEach
-    public void initTest() {
-        connection = createEntity(em);
-    }
+  @BeforeEach
+  public void initTest() {
+    connection = createEntity(em);
+  }
 
-    @Test
-    @Transactional
-    public void createConnection() throws Exception {
-        int databaseSizeBeforeCreate = connectionRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createConnection() throws Exception {
+    int databaseSizeBeforeCreate = connectionRepository.findAll().size();
 
-        // Create the Connection
-        restConnectionMockMvc.perform(post("/api/connections")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connection)))
-            .andExpect(status().isCreated());
+    // Create the Connection
+    restConnectionMockMvc
+        .perform(
+            post("/api/connections")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(connection)))
+        .andExpect(status().isCreated());
 
-        // Validate the Connection in the database
-        List<Connection> connectionList = connectionRepository.findAll();
-        assertThat(connectionList).hasSize(databaseSizeBeforeCreate + 1);
-        Connection testConnection = connectionList.get(connectionList.size() - 1);
-        assertThat(testConnection.getIdent()).isEqualTo(DEFAULT_IDENT);
-    }
+    // Validate the Connection in the database
+    List<Connection> connectionList = connectionRepository.findAll();
+    assertThat(connectionList).hasSize(databaseSizeBeforeCreate + 1);
+    Connection testConnection = connectionList.get(connectionList.size() - 1);
+    assertThat(testConnection.getIdent()).isEqualTo(DEFAULT_IDENT);
+  }
 
-    @Test
-    @Transactional
-    public void createConnectionWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = connectionRepository.findAll().size();
+  @Test
+  @Transactional
+  public void createConnectionWithExistingId() throws Exception {
+    int databaseSizeBeforeCreate = connectionRepository.findAll().size();
 
-        // Create the Connection with an existing ID
-        connection.setId(1L);
+    // Create the Connection with an existing ID
+    connection.setId(1L);
 
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restConnectionMockMvc.perform(post("/api/connections")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connection)))
-            .andExpect(status().isBadRequest());
+    // An entity with an existing ID cannot be created, so this API call must fail
+    restConnectionMockMvc
+        .perform(
+            post("/api/connections")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(connection)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the Connection in the database
-        List<Connection> connectionList = connectionRepository.findAll();
-        assertThat(connectionList).hasSize(databaseSizeBeforeCreate);
-    }
+    // Validate the Connection in the database
+    List<Connection> connectionList = connectionRepository.findAll();
+    assertThat(connectionList).hasSize(databaseSizeBeforeCreate);
+  }
 
+  @Test
+  @Transactional
+  public void getAllConnections() throws Exception {
+    // Initialize the database
+    connectionRepository.saveAndFlush(connection);
 
-    @Test
-    @Transactional
-    public void getAllConnections() throws Exception {
-        // Initialize the database
-        connectionRepository.saveAndFlush(connection);
+    // Get all the connectionList
+    restConnectionMockMvc
+        .perform(get("/api/connections?sort=id,desc"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.[*].id").value(hasItem(connection.getId().intValue())))
+        .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())));
+  }
 
-        // Get all the connectionList
-        restConnectionMockMvc.perform(get("/api/connections?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(connection.getId().intValue())))
-            .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())));
-    }
-    
-    @Test
-    @Transactional
-    public void getConnection() throws Exception {
-        // Initialize the database
-        connectionRepository.saveAndFlush(connection);
+  @Test
+  @Transactional
+  public void getConnection() throws Exception {
+    // Initialize the database
+    connectionRepository.saveAndFlush(connection);
 
-        // Get the connection
-        restConnectionMockMvc.perform(get("/api/connections/{id}", connection.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(connection.getId().intValue()))
-            .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()));
-    }
+    // Get the connection
+    restConnectionMockMvc
+        .perform(get("/api/connections/{id}", connection.getId()))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .andExpect(jsonPath("$.id").value(connection.getId().intValue()))
+        .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()));
+  }
 
-    @Test
-    @Transactional
-    public void getNonExistingConnection() throws Exception {
-        // Get the connection
-        restConnectionMockMvc.perform(get("/api/connections/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
-    }
+  @Test
+  @Transactional
+  public void getNonExistingConnection() throws Exception {
+    // Get the connection
+    restConnectionMockMvc
+        .perform(get("/api/connections/{id}", Long.MAX_VALUE))
+        .andExpect(status().isNotFound());
+  }
 
-    @Test
-    @Transactional
-    public void updateConnection() throws Exception {
-        // Initialize the database
-        connectionRepository.saveAndFlush(connection);
+  @Test
+  @Transactional
+  public void updateConnection() throws Exception {
+    // Initialize the database
+    connectionRepository.saveAndFlush(connection);
 
-        int databaseSizeBeforeUpdate = connectionRepository.findAll().size();
+    int databaseSizeBeforeUpdate = connectionRepository.findAll().size();
 
-        // Update the connection
-        Connection updatedConnection = connectionRepository.findById(connection.getId()).get();
-        // Disconnect from session so that the updates on updatedConnection are not directly saved in db
-        em.detach(updatedConnection);
-        updatedConnection
-            .ident(UPDATED_IDENT);
+    // Update the connection
+    Connection updatedConnection = connectionRepository.findById(connection.getId()).get();
+    // Disconnect from session so that the updates on updatedConnection are not directly saved in db
+    em.detach(updatedConnection);
+    updatedConnection.ident(UPDATED_IDENT);
 
-        restConnectionMockMvc.perform(put("/api/connections")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedConnection)))
-            .andExpect(status().isOk());
+    restConnectionMockMvc
+        .perform(
+            put("/api/connections")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(updatedConnection)))
+        .andExpect(status().isOk());
 
-        // Validate the Connection in the database
-        List<Connection> connectionList = connectionRepository.findAll();
-        assertThat(connectionList).hasSize(databaseSizeBeforeUpdate);
-        Connection testConnection = connectionList.get(connectionList.size() - 1);
-        assertThat(testConnection.getIdent()).isEqualTo(UPDATED_IDENT);
-    }
+    // Validate the Connection in the database
+    List<Connection> connectionList = connectionRepository.findAll();
+    assertThat(connectionList).hasSize(databaseSizeBeforeUpdate);
+    Connection testConnection = connectionList.get(connectionList.size() - 1);
+    assertThat(testConnection.getIdent()).isEqualTo(UPDATED_IDENT);
+  }
 
-    @Test
-    @Transactional
-    public void updateNonExistingConnection() throws Exception {
-        int databaseSizeBeforeUpdate = connectionRepository.findAll().size();
+  @Test
+  @Transactional
+  public void updateNonExistingConnection() throws Exception {
+    int databaseSizeBeforeUpdate = connectionRepository.findAll().size();
 
-        // Create the Connection
+    // Create the Connection
 
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restConnectionMockMvc.perform(put("/api/connections")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(connection)))
-            .andExpect(status().isBadRequest());
+    // If the entity doesn't have an ID, it will throw BadRequestAlertException
+    restConnectionMockMvc
+        .perform(
+            put("/api/connections")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(connection)))
+        .andExpect(status().isBadRequest());
 
-        // Validate the Connection in the database
-        List<Connection> connectionList = connectionRepository.findAll();
-        assertThat(connectionList).hasSize(databaseSizeBeforeUpdate);
-    }
+    // Validate the Connection in the database
+    List<Connection> connectionList = connectionRepository.findAll();
+    assertThat(connectionList).hasSize(databaseSizeBeforeUpdate);
+  }
 
-    @Test
-    @Transactional
-    public void deleteConnection() throws Exception {
-        // Initialize the database
-        connectionRepository.saveAndFlush(connection);
+  @Test
+  @Transactional
+  public void deleteConnection() throws Exception {
+    // Initialize the database
+    connectionRepository.saveAndFlush(connection);
 
-        int databaseSizeBeforeDelete = connectionRepository.findAll().size();
+    int databaseSizeBeforeDelete = connectionRepository.findAll().size();
 
-        // Delete the connection
-        restConnectionMockMvc.perform(delete("/api/connections/{id}", connection.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
+    // Delete the connection
+    restConnectionMockMvc
+        .perform(
+            delete("/api/connections/{id}", connection.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+        .andExpect(status().isNoContent());
 
-        // Validate the database contains one less item
-        List<Connection> connectionList = connectionRepository.findAll();
-        assertThat(connectionList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    // Validate the database contains one less item
+    List<Connection> connectionList = connectionRepository.findAll();
+    assertThat(connectionList).hasSize(databaseSizeBeforeDelete - 1);
+  }
 
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Connection.class);
-        Connection connection1 = new Connection();
-        connection1.setId(1L);
-        Connection connection2 = new Connection();
-        connection2.setId(connection1.getId());
-        assertThat(connection1).isEqualTo(connection2);
-        connection2.setId(2L);
-        assertThat(connection1).isNotEqualTo(connection2);
-        connection1.setId(null);
-        assertThat(connection1).isNotEqualTo(connection2);
-    }
+  @Test
+  @Transactional
+  public void equalsVerifier() throws Exception {
+    TestUtil.equalsVerifier(Connection.class);
+    Connection connection1 = new Connection();
+    connection1.setId(1L);
+    Connection connection2 = new Connection();
+    connection2.setId(connection1.getId());
+    assertThat(connection1).isEqualTo(connection2);
+    connection2.setId(2L);
+    assertThat(connection1).isNotEqualTo(connection2);
+    connection1.setId(null);
+    assertThat(connection1).isNotEqualTo(connection2);
+  }
 }

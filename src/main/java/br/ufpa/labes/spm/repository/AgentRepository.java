@@ -10,20 +10,21 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Spring Data  repository for the Agent entity.
- */
+/** Spring Data repository for the Agent entity. */
 @Repository
 public interface AgentRepository extends JpaRepository<Agent, Long> {
 
-    @Query(value = "select distinct agent from Agent agent left join fetch agent.theProcesses left join fetch agent.theWorkGroups left join fetch agent.theOrgUnits",
-        countQuery = "select count(distinct agent) from Agent agent")
-    Page<Agent> findAllWithEagerRelationships(Pageable pageable);
+  @Query(
+      value =
+          "select distinct agent from Agent agent left join fetch agent.theProcesses left join fetch agent.theWorkGroups left join fetch agent.theOrgUnits",
+      countQuery = "select count(distinct agent) from Agent agent")
+  Page<Agent> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct agent from Agent agent left join fetch agent.theProcesses left join fetch agent.theWorkGroups left join fetch agent.theOrgUnits")
-    List<Agent> findAllWithEagerRelationships();
+  @Query(
+      "select distinct agent from Agent agent left join fetch agent.theProcesses left join fetch agent.theWorkGroups left join fetch agent.theOrgUnits")
+  List<Agent> findAllWithEagerRelationships();
 
-    @Query("select agent from Agent agent left join fetch agent.theProcesses left join fetch agent.theWorkGroups left join fetch agent.theOrgUnits where agent.id =:id")
-    Optional<Agent> findOneWithEagerRelationships(@Param("id") Long id);
-
+  @Query(
+      "select agent from Agent agent left join fetch agent.theProcesses left join fetch agent.theWorkGroups left join fetch agent.theOrgUnits where agent.id =:id")
+  Optional<Agent> findOneWithEagerRelationships(@Param("id") Long id);
 }

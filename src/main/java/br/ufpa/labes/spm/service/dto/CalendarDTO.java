@@ -3,47 +3,36 @@ package br.ufpa.labes.spm.service.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-
-
-
 @SuppressWarnings("serial")
-public class CalendarDTO implements Serializable{
+public class CalendarDTO implements Serializable {
 
+  private Long id;
 
-	private Long id;
+  private String name;
 
+  private ArrayList<String> notWorkingDays;
 
-	private String name;
+  public Long getId() {
+    return id;
+  }
 
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	private ArrayList<String> notWorkingDays;
+  public String getName() {
+    return name;
+  }
 
+  public void setName(String name) {
+    this.name = name;
+  }
 
+  public ArrayList<String> getNotWorkingDays() {
+    return notWorkingDays;
+  }
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-
-	public ArrayList<String> getNotWorkingDays() {
-		return notWorkingDays;
-	}
-
-	public void setNotWorkingDays(ArrayList<String> notWorkingDays) {
-		this.notWorkingDays = notWorkingDays;
-	}
-
+  public void setNotWorkingDays(ArrayList<String> notWorkingDays) {
+    this.notWorkingDays = notWorkingDays;
+  }
 }

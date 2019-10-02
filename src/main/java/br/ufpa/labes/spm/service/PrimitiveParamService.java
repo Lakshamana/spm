@@ -15,71 +15,69 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Service Implementation for managing {@link PrimitiveParam}.
- */
+/** Service Implementation for managing {@link PrimitiveParam}. */
 @Service
 @Transactional
 public class PrimitiveParamService {
 
-    private final Logger log = LoggerFactory.getLogger(PrimitiveParamService.class);
+  private final Logger log = LoggerFactory.getLogger(PrimitiveParamService.class);
 
-    private final PrimitiveParamRepository primitiveParamRepository;
+  private final PrimitiveParamRepository primitiveParamRepository;
 
-    private final PrimitiveParamMapper primitiveParamMapper;
+  private final PrimitiveParamMapper primitiveParamMapper;
 
-    public PrimitiveParamService(PrimitiveParamRepository primitiveParamRepository, PrimitiveParamMapper primitiveParamMapper) {
-        this.primitiveParamRepository = primitiveParamRepository;
-        this.primitiveParamMapper = primitiveParamMapper;
-    }
+  public PrimitiveParamService(
+      PrimitiveParamRepository primitiveParamRepository,
+      PrimitiveParamMapper primitiveParamMapper) {
+    this.primitiveParamRepository = primitiveParamRepository;
+    this.primitiveParamMapper = primitiveParamMapper;
+  }
 
-    /**
-     * Save a primitiveParam.
-     *
-     * @param primitiveParamDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public PrimitiveParamDTO save(PrimitiveParamDTO primitiveParamDTO) {
-        log.debug("Request to save PrimitiveParam : {}", primitiveParamDTO);
-        PrimitiveParam primitiveParam = primitiveParamMapper.toEntity(primitiveParamDTO);
-        primitiveParam = primitiveParamRepository.save(primitiveParam);
-        return primitiveParamMapper.toDto(primitiveParam);
-    }
+  /**
+   * Save a primitiveParam.
+   *
+   * @param primitiveParamDTO the entity to save.
+   * @return the persisted entity.
+   */
+  public PrimitiveParamDTO save(PrimitiveParamDTO primitiveParamDTO) {
+    log.debug("Request to save PrimitiveParam : {}", primitiveParamDTO);
+    PrimitiveParam primitiveParam = primitiveParamMapper.toEntity(primitiveParamDTO);
+    primitiveParam = primitiveParamRepository.save(primitiveParam);
+    return primitiveParamMapper.toDto(primitiveParam);
+  }
 
-    /**
-     * Get all the primitiveParams.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<PrimitiveParamDTO> findAll() {
-        log.debug("Request to get all PrimitiveParams");
-        return primitiveParamRepository.findAll().stream()
-            .map(primitiveParamMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
+  /**
+   * Get all the primitiveParams.
+   *
+   * @return the list of entities.
+   */
+  @Transactional(readOnly = true)
+  public List<PrimitiveParamDTO> findAll() {
+    log.debug("Request to get all PrimitiveParams");
+    return primitiveParamRepository.findAll().stream()
+        .map(primitiveParamMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
+  }
 
+  /**
+   * Get one primitiveParam by id.
+   *
+   * @param id the id of the entity.
+   * @return the entity.
+   */
+  @Transactional(readOnly = true)
+  public Optional<PrimitiveParamDTO> findOne(Long id) {
+    log.debug("Request to get PrimitiveParam : {}", id);
+    return primitiveParamRepository.findById(id).map(primitiveParamMapper::toDto);
+  }
 
-    /**
-     * Get one primitiveParam by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Transactional(readOnly = true)
-    public Optional<PrimitiveParamDTO> findOne(Long id) {
-        log.debug("Request to get PrimitiveParam : {}", id);
-        return primitiveParamRepository.findById(id)
-            .map(primitiveParamMapper::toDto);
-    }
-
-    /**
-     * Delete the primitiveParam by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete PrimitiveParam : {}", id);
-        primitiveParamRepository.deleteById(id);
-    }
+  /**
+   * Delete the primitiveParam by id.
+   *
+   * @param id the id of the entity.
+   */
+  public void delete(Long id) {
+    log.debug("Request to delete PrimitiveParam : {}", id);
+    primitiveParamRepository.deleteById(id);
+  }
 }
