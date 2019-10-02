@@ -10,6 +10,8 @@ public class ProcessModelEventDTO implements Serializable {
     private Long id;
 
 
+    private Long theCatalogEventId;
+
     private Long theProcessModelId;
 
     public Long getId() {
@@ -18,6 +20,14 @@ public class ProcessModelEventDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getTheCatalogEventId() {
+        return theCatalogEventId;
+    }
+
+    public void setTheCatalogEventId(Long catalogEventId) {
+        this.theCatalogEventId = catalogEventId;
     }
 
     public Long getTheProcessModelId() {
@@ -53,6 +63,7 @@ public class ProcessModelEventDTO implements Serializable {
     public String toString() {
         return "ProcessModelEventDTO{" +
             "id=" + getId() +
+            ", theCatalogEvent=" + getTheCatalogEventId() +
             ", theProcessModel=" + getTheProcessModelId() +
             "}";
     }

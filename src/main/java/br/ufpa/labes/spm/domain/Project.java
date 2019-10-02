@@ -40,6 +40,9 @@ public class Project implements Serializable {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @Column(name = "active")
+    private Boolean active;
+
     @OneToMany(mappedBy = "project")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Calendar> theCalendars = new HashSet<>();
@@ -128,6 +131,19 @@ public class Project implements Serializable {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public Project active(Boolean active) {
+        this.active = active;
+        return this;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Set<Calendar> getTheCalendars() {
@@ -232,6 +248,7 @@ public class Project implements Serializable {
             ", description='" + getDescription() + "'" +
             ", beginDate='" + getBeginDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", active='" + isActive() + "'" +
             "}";
     }
 }

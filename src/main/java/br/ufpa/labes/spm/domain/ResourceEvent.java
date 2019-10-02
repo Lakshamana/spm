@@ -29,15 +29,15 @@ public class ResourceEvent extends Event implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theResourceEvents")
+    private CatalogEvent theCatalogEvent;
+
+    @ManyToOne
+    @JsonIgnoreProperties("theResourceEvents")
     private Resource theResource;
 
     @OneToMany(mappedBy = "theResourceEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Agent> theRequestorAgents = new HashSet<>();
-
-    @OneToMany(mappedBy = "theResourceEvent")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CatalogEvent> theCatalogEvents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -59,6 +59,19 @@ public class ResourceEvent extends Event implements Serializable {
 
     public void setTheNormal(Normal normal) {
         this.theNormal = normal;
+    }
+
+    public CatalogEvent getTheCatalogEvent() {
+        return theCatalogEvent;
+    }
+
+    public ResourceEvent theCatalogEvent(CatalogEvent catalogEvent) {
+        this.theCatalogEvent = catalogEvent;
+        return this;
+    }
+
+    public void setTheCatalogEvent(CatalogEvent catalogEvent) {
+        this.theCatalogEvent = catalogEvent;
     }
 
     public Resource getTheResource() {
@@ -97,31 +110,6 @@ public class ResourceEvent extends Event implements Serializable {
 
     public void setTheRequestorAgents(Set<Agent> agents) {
         this.theRequestorAgents = agents;
-    }
-
-    public Set<CatalogEvent> getTheCatalogEvents() {
-        return theCatalogEvents;
-    }
-
-    public ResourceEvent theCatalogEvents(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEvents = catalogEvents;
-        return this;
-    }
-
-    public ResourceEvent addTheCatalogEvents(CatalogEvent catalogEvent) {
-        this.theCatalogEvents.add(catalogEvent);
-        catalogEvent.setTheResourceEvent(this);
-        return this;
-    }
-
-    public ResourceEvent removeTheCatalogEvents(CatalogEvent catalogEvent) {
-        this.theCatalogEvents.remove(catalogEvent);
-        catalogEvent.setTheResourceEvent(null);
-        return this;
-    }
-
-    public void setTheCatalogEvents(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEvents = catalogEvents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

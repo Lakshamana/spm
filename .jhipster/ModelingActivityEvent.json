@@ -4,6 +4,13 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theModelingActivityEvent",
+            "relationshipName": "theCatalogEvent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "activity",
             "otherEntityRelationshipName": "theModelingActivityEvent",
             "relationshipName": "theActivity",
@@ -15,12 +22,6 @@
             "otherEntityRelationshipName": "theModelingActivityEvent",
             "relationshipName": "theAgent",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "catalogEvent",
-            "otherEntityRelationshipName": "theModelingActivityEvent",
-            "relationshipName": "theCatalogEvents"
         }
     ],
     "changelogDate": "20190914033806",

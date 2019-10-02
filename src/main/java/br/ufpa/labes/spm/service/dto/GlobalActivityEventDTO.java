@@ -10,6 +10,8 @@ public class GlobalActivityEventDTO implements Serializable {
     private Long id;
 
 
+    private Long theCatalogEventId;
+
     private Long thePlainId;
 
     public Long getId() {
@@ -18,6 +20,14 @@ public class GlobalActivityEventDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getTheCatalogEventId() {
+        return theCatalogEventId;
+    }
+
+    public void setTheCatalogEventId(Long catalogEventId) {
+        this.theCatalogEventId = catalogEventId;
     }
 
     public Long getThePlainId() {
@@ -53,6 +63,7 @@ public class GlobalActivityEventDTO implements Serializable {
     public String toString() {
         return "GlobalActivityEventDTO{" +
             "id=" + getId() +
+            ", theCatalogEvent=" + getTheCatalogEventId() +
             ", thePlain=" + getThePlainId() +
             "}";
     }

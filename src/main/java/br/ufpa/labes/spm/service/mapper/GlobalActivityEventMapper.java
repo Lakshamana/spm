@@ -8,15 +8,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link GlobalActivityEvent} and its DTO {@link GlobalActivityEventDTO}.
  */
-@Mapper(componentModel = "spring", uses = {PlainMapper.class})
+@Mapper(componentModel = "spring", uses = {CatalogEventMapper.class, PlainMapper.class})
 public interface GlobalActivityEventMapper extends EntityMapper<GlobalActivityEventDTO, GlobalActivityEvent> {
 
+    @Mapping(source = "theCatalogEvent.id", target = "theCatalogEventId")
     @Mapping(source = "thePlain.id", target = "thePlainId")
     GlobalActivityEventDTO toDto(GlobalActivityEvent globalActivityEvent);
 
+    @Mapping(source = "theCatalogEventId", target = "theCatalogEvent")
     @Mapping(source = "thePlainId", target = "thePlain")
-    @Mapping(target = "theCatalogEvents", ignore = true)
-    @Mapping(target = "removeTheCatalogEvents", ignore = true)
     GlobalActivityEvent toEntity(GlobalActivityEventDTO globalActivityEventDTO);
 
     default GlobalActivityEvent fromId(Long id) {

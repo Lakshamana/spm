@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.persistence.Query;
 
@@ -139,20 +141,20 @@ public class ArtifactServicesImpl implements ArtifactServices {
 					artifact.setIsActive(artifactDTO.isIsActive());
 				}
 
-				for (Artifact derived : artifact.getDerivedTo()) { //Quebrar todas as
+				for (Artifact derived : artifact.getDerivedTos()) { //Quebrar todas as
 					derived.setDerivedFrom(null);				   //rela��es que estavam
 				}										   //anteriormente, pra salvar
-				artifact.setDerivedTo(null);					   //somente as novas
+				artifact.setDerivedTos(null);					   //somente as novas
 
-				for (Artifact poss : artifact.getPossess()) { //Quebrar todas as
+				for (Artifact poss : artifact.getPossesses()) { //Quebrar todas as
 					poss.setBelongsTo(null);				  //rela��es que estavam
 				}											  //anteriormente, pra salvar
-				artifact.setPossess(null);					  //somente as novas
+				artifact.setPossesses(null);					  //somente as novas
 
 //				artifactDAO.update(artifact);
 
-				artifact.setPossess(possess);
-				artifact.setDerivedTo(derivedTo);
+				artifact.setPossesses(possess.stream().collect(Collectors.toSet()));
+				artifact.setDerivedTos(derivedTo.stream().collect(Collectors.toSet()));
 
 				this.setPossessBelongsTo(artifact, possess);
 				this.setDerivedToDerivedFrom(artifact, derivedTo);

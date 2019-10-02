@@ -4,16 +4,17 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theProcessModelEvent",
+            "relationshipName": "theCatalogEvent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "processModel",
             "otherEntityRelationshipName": "theProcessModelEvent",
             "relationshipName": "theProcessModel",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "catalogEvent",
-            "otherEntityRelationshipName": "theProcessModelEvent",
-            "relationshipName": "theCatalogEvents"
         }
     ],
     "changelogDate": "20190914033808",

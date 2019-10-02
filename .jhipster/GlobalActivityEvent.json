@@ -4,16 +4,17 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theGlobalActivityEvent",
+            "relationshipName": "theCatalogEvent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "plain",
             "otherEntityRelationshipName": "theGlobalActivityEvent",
             "relationshipName": "thePlain",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "catalogEvent",
-            "otherEntityRelationshipName": "theGlobalActivityEvent",
-            "relationshipName": "theCatalogEvents"
         }
     ],
     "changelogDate": "20190914033805",

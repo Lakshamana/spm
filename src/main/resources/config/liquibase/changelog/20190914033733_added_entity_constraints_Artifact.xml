@@ -14,15 +14,15 @@
                                  referencedColumnNames="id"
                                  referencedTableName="artifact_type"/>
 
-        <addForeignKeyConstraint baseColumnNames="derived_to_id"
+        <addForeignKeyConstraint baseColumnNames="derived_from_id"
                                  baseTableName="artifact"
-                                 constraintName="fk_artifact_derived_to_id"
+                                 constraintName="fk_artifact_derived_from_id"
                                  referencedColumnNames="id"
                                  referencedTableName="artifact"/>
 
-        <addForeignKeyConstraint baseColumnNames="possess_id"
+        <addForeignKeyConstraint baseColumnNames="belongs_to_id"
                                  baseTableName="artifact"
-                                 constraintName="fk_artifact_possess_id"
+                                 constraintName="fk_artifact_belongs_to_id"
                                  referencedColumnNames="id"
                                  referencedTableName="artifact"/>
 

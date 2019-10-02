@@ -8,15 +8,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ProcessEvent} and its DTO {@link ProcessEventDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ProcessMapper.class})
+@Mapper(componentModel = "spring", uses = {CatalogEventMapper.class, ProcessMapper.class})
 public interface ProcessEventMapper extends EntityMapper<ProcessEventDTO, ProcessEvent> {
 
+    @Mapping(source = "theCatalogEvent.id", target = "theCatalogEventId")
     @Mapping(source = "theProcess.id", target = "theProcessId")
     ProcessEventDTO toDto(ProcessEvent processEvent);
 
+    @Mapping(source = "theCatalogEventId", target = "theCatalogEvent")
     @Mapping(source = "theProcessId", target = "theProcess")
-    @Mapping(target = "theCatalogEvents", ignore = true)
-    @Mapping(target = "removeTheCatalogEvents", ignore = true)
     ProcessEvent toEntity(ProcessEventDTO processEventDTO);
 
     default ProcessEvent fromId(Long id) {

@@ -3,10 +3,11 @@
     "fields": [],
     "relationships": [
         {
-            "relationshipType": "one-to-many",
+            "relationshipType": "many-to-one",
             "otherEntityName": "catalogEvent",
             "otherEntityRelationshipName": "theConnectionEvent",
-            "relationshipName": "theCatalogEvents"
+            "relationshipName": "theCatalogEvent",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20190914033804",

@@ -10,62 +10,6 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "resourceEvent",
-            "otherEntityRelationshipName": "theCatalogEvents",
-            "relationshipName": "theResourceEvent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "processModelEvent",
-            "otherEntityRelationshipName": "theCatalogEvents",
-            "relationshipName": "theProcessModelEvent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "agendaEvent",
-            "otherEntityRelationshipName": "theCatalogEvents",
-            "relationshipName": "theAgendaEvent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "catalogEvent",
-            "otherEntityRelationshipName": "theCatalogEvents",
-            "relationshipName": "theCatalogEvent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "connectionEvent",
-            "otherEntityRelationshipName": "theCatalogEvents",
-            "relationshipName": "theConnectionEvent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "globalActivityEvent",
-            "otherEntityRelationshipName": "theCatalogEvents",
-            "relationshipName": "theGlobalActivityEvent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "modelingActivityEvent",
-            "otherEntityRelationshipName": "theCatalogEvents",
-            "relationshipName": "theModelingActivityEvent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "processEvent",
-            "otherEntityRelationshipName": "theCatalogEvents",
-            "relationshipName": "theProcessEvent",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "plain",
             "otherEntityRelationshipName": "theCatalogEvent",
             "relationshipName": "thePlain",
@@ -73,15 +17,45 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "event",
+            "otherEntityName": "resourceEvent",
             "otherEntityRelationshipName": "theCatalogEvent",
-            "relationshipName": "theEvent"
+            "relationshipName": "theResourceEvent"
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "catalogEvent",
+            "otherEntityName": "processModelEvent",
             "otherEntityRelationshipName": "theCatalogEvent",
-            "relationshipName": "theCatalogEvents"
+            "relationshipName": "theProcessModelEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "agendaEvent",
+            "otherEntityRelationshipName": "theCatalogEvent",
+            "relationshipName": "theAgendaEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "connectionEvent",
+            "otherEntityRelationshipName": "theCatalogEvent",
+            "relationshipName": "theConnectionEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "globalActivityEvent",
+            "otherEntityRelationshipName": "theCatalogEvent",
+            "relationshipName": "theGlobalActivityEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "modelingActivityEvent",
+            "otherEntityRelationshipName": "theCatalogEvent",
+            "relationshipName": "theModelingActivityEvent"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "processEvent",
+            "otherEntityRelationshipName": "theCatalogEvent",
+            "relationshipName": "theProcessEvent"
         }
     ],
     "changelogDate": "20190914033800",

@@ -10,12 +10,22 @@ public class ConnectionEventDTO implements Serializable {
     private Long id;
 
 
+    private Long theCatalogEventId;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getTheCatalogEventId() {
+        return theCatalogEventId;
+    }
+
+    public void setTheCatalogEventId(Long catalogEventId) {
+        this.theCatalogEventId = catalogEventId;
     }
 
     @Override
@@ -43,6 +53,7 @@ public class ConnectionEventDTO implements Serializable {
     public String toString() {
         return "ConnectionEventDTO{" +
             "id=" + getId() +
+            ", theCatalogEvent=" + getTheCatalogEventId() +
             "}";
     }
 }

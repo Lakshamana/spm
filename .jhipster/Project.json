@@ -21,6 +21,10 @@
         {
             "fieldName": "endDate",
             "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [

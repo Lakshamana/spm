@@ -14,6 +14,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="normal"/>
 
+        <addForeignKeyConstraint baseColumnNames="the_catalog_event_id"
+                                 baseTableName="resource_event"
+                                 constraintName="fk_resource_event_the_catalog_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="catalog_event"/>
+
         <addForeignKeyConstraint baseColumnNames="the_resource_id"
                                  baseTableName="resource_event"
                                  constraintName="fk_resource_event_the_resource_id"

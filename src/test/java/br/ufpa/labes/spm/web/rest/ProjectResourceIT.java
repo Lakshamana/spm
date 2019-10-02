@@ -58,6 +58,9 @@ public class ProjectResourceIT {
     private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
 
+    private static final Boolean DEFAULT_ACTIVE = false;
+    private static final Boolean UPDATED_ACTIVE = true;
+
     @Autowired
     private ProjectRepository projectRepository;
 
@@ -110,7 +113,8 @@ public class ProjectResourceIT {
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .beginDate(DEFAULT_BEGIN_DATE)
-            .endDate(DEFAULT_END_DATE);
+            .endDate(DEFAULT_END_DATE)
+            .active(DEFAULT_ACTIVE);
         return project;
     }
     /**
@@ -125,7 +129,8 @@ public class ProjectResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .beginDate(UPDATED_BEGIN_DATE)
-            .endDate(UPDATED_END_DATE);
+            .endDate(UPDATED_END_DATE)
+            .active(UPDATED_ACTIVE);
         return project;
     }
 
@@ -155,6 +160,7 @@ public class ProjectResourceIT {
         assertThat(testProject.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testProject.getBeginDate()).isEqualTo(DEFAULT_BEGIN_DATE);
         assertThat(testProject.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testProject.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
     @Test
@@ -193,7 +199,8 @@ public class ProjectResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].beginDate").value(hasItem(DEFAULT_BEGIN_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
     @Test
@@ -211,7 +218,8 @@ public class ProjectResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.beginDate").value(DEFAULT_BEGIN_DATE.toString()))
-            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
     @Test
@@ -239,7 +247,8 @@ public class ProjectResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .beginDate(UPDATED_BEGIN_DATE)
-            .endDate(UPDATED_END_DATE);
+            .endDate(UPDATED_END_DATE)
+            .active(UPDATED_ACTIVE);
         ProjectDTO projectDTO = projectMapper.toDto(updatedProject);
 
         restProjectMockMvc.perform(put("/api/projects")
@@ -256,6 +265,7 @@ public class ProjectResourceIT {
         assertThat(testProject.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testProject.getBeginDate()).isEqualTo(UPDATED_BEGIN_DATE);
         assertThat(testProject.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testProject.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 
     @Test

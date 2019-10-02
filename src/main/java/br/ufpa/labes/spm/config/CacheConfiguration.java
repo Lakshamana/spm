@@ -638,6 +638,13 @@ public class CacheConfiguration {
       createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceChosenSuggestions");
       createCache(cm, br.ufpa.labes.spm.domain.Resource.class.getName() + ".theResourceSuggestions");
       createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theEvents");
+      createCache(cm, br.ufpa.labes.spm.domain.Artifact.class.getName() + ".derivedTos");
+      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theResourceEvents");
+      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theProcessModelEvents");
+      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theConnectionEvents");
+      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theGlobalActivityEvents");
+      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theModelingActivityEvents");
+      createCache(cm, br.ufpa.labes.spm.domain.CatalogEvent.class.getName() + ".theProcessEvents");
       // jhipster-needle-ehcache-add-entry
     };
   }

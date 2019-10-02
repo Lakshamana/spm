@@ -30,14 +30,14 @@ public class Agent implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "e_mail")
-    private String eMail;
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "cost_hour")
     private Float costHour;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "password_hash")
+    private String passwordHash;
 
     @Column(name = "tipo_user")
     private Integer tipoUser;
@@ -203,17 +203,17 @@ public class Agent implements Serializable {
         this.name = name;
     }
 
-    public String geteMail() {
-        return eMail;
+    public String getEmail() {
+        return email;
     }
 
-    public Agent eMail(String eMail) {
-        this.eMail = eMail;
+    public Agent email(String email) {
+        this.email = email;
         return this;
     }
 
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Float getCostHour() {
@@ -229,17 +229,17 @@ public class Agent implements Serializable {
         this.costHour = costHour;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public Agent password(String password) {
-        this.password = password;
+    public Agent passwordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
         return this;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public Integer getTipoUser() {
@@ -896,9 +896,9 @@ public class Agent implements Serializable {
             "id=" + getId() +
             ", ident='" + getIdent() + "'" +
             ", name='" + getName() + "'" +
-            ", eMail='" + geteMail() + "'" +
+            ", email='" + getEmail() + "'" +
             ", costHour=" + getCostHour() +
-            ", password='" + getPassword() + "'" +
+            ", passwordHash='" + getPasswordHash() + "'" +
             ", tipoUser=" + getTipoUser() +
             ", isActive='" + isIsActive() + "'" +
             ", online='" + isOnline() + "'" +
@@ -908,6 +908,4 @@ public class Agent implements Serializable {
             ", description='" + getDescription() + "'" +
             "}";
     }
-
-
 }

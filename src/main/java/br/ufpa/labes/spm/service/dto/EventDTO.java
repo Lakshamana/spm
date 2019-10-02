@@ -19,8 +19,6 @@ public class EventDTO implements Serializable {
     private Boolean isCreatedByApsee;
 
 
-    private Long theCatalogEventId;
-
     private Long theLogId;
 
     private Long theEventTypeId;
@@ -55,14 +53,6 @@ public class EventDTO implements Serializable {
 
     public void setIsCreatedByApsee(Boolean isCreatedByApsee) {
         this.isCreatedByApsee = isCreatedByApsee;
-    }
-
-    public Long getTheCatalogEventId() {
-        return theCatalogEventId;
-    }
-
-    public void setTheCatalogEventId(Long catalogEventId) {
-        this.theCatalogEventId = catalogEventId;
     }
 
     public Long getTheLogId() {
@@ -109,7 +99,6 @@ public class EventDTO implements Serializable {
             ", why='" + getWhy() + "'" +
             ", when='" + getWhen() + "'" +
             ", isCreatedByApsee='" + isIsCreatedByApsee() + "'" +
-            ", theCatalogEvent=" + getTheCatalogEventId() +
             ", theLog=" + getTheLogId() +
             ", theEventType=" + getTheEventTypeId() +
             "}";

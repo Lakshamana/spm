@@ -4,15 +4,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <!--
-        Added the constraints for entity CatalogEvent.
+        Added the constraints for entity ConnectionEvent.
     -->
-    <changeSet id="20190914033800-2" author="jhipster">
+    <changeSet id="20190914033804-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="the_plain_id"
-                                 baseTableName="catalog_event"
-                                 constraintName="fk_catalog_event_the_plain_id"
+        <addForeignKeyConstraint baseColumnNames="the_catalog_event_id"
+                                 baseTableName="connection_event"
+                                 constraintName="fk_connection_event_the_catalog_event_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="plain"/>
+                                 referencedTableName="catalog_event"/>
 
     </changeSet>
 </databaseChangeLog>

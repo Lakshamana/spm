@@ -24,7 +24,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="e_mail" type="varchar(255)">
+            <column name="email" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
@@ -32,7 +32,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="password" type="varchar(255)">
+            <column name="password_hash" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
@@ -134,9 +134,9 @@
             <column name="id" type="numeric"/>
             <column name="ident" type="string"/>
             <column name="name" type="string"/>
-            <column name="e_mail" type="string"/>
+            <column name="email" type="string"/>
             <column name="cost_hour" type="numeric"/>
-            <column name="password" type="string"/>
+            <column name="password_hash" type="string"/>
             <column name="tipo_user" type="numeric"/>
             <column name="is_active" type="boolean"/>
             <column name="online" type="boolean"/>

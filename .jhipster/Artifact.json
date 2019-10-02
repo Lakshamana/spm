@@ -76,15 +76,15 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "artifact",
-            "otherEntityRelationshipName": "derivedFrom",
-            "relationshipName": "derivedTo",
+            "otherEntityRelationshipName": "derivedTo",
+            "relationshipName": "derivedFrom",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "artifact",
-            "otherEntityRelationshipName": "belongsTo",
-            "relationshipName": "possess",
+            "otherEntityRelationshipName": "possess",
+            "relationshipName": "belongsTo",
             "otherEntityField": "id"
         },
         {
@@ -104,14 +104,14 @@
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "artifact",
-            "otherEntityRelationshipName": "derivedTo",
-            "relationshipName": "derivedFrom"
+            "otherEntityRelationshipName": "derivedFrom",
+            "relationshipName": "derivedTo"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "artifact",
-            "otherEntityRelationshipName": "possess",
-            "relationshipName": "belongsTo"
+            "otherEntityRelationshipName": "belongsTo",
+            "relationshipName": "possess"
         },
         {
             "relationshipType": "one-to-many",

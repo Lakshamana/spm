@@ -50,15 +50,15 @@ public class AgentResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_E_MAIL = "AAAAAAAAAA";
-    private static final String UPDATED_E_MAIL = "BBBBBBBBBB";
+    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
+    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
 
     private static final Float DEFAULT_COST_HOUR = 1F;
     private static final Float UPDATED_COST_HOUR = 2F;
     private static final Float SMALLER_COST_HOUR = 1F - 1F;
 
-    private static final String DEFAULT_PASSWORD = "AAAAAAAAAA";
-    private static final String UPDATED_PASSWORD = "BBBBBBBBBB";
+    private static final String DEFAULT_PASSWORD_HASH = "AAAAAAAAAA";
+    private static final String UPDATED_PASSWORD_HASH = "BBBBBBBBBB";
 
     private static final Integer DEFAULT_TIPO_USER = 1;
     private static final Integer UPDATED_TIPO_USER = 2;
@@ -137,9 +137,9 @@ public class AgentResourceIT {
         Agent agent = new Agent()
             .ident(DEFAULT_IDENT)
             .name(DEFAULT_NAME)
-            .eMail(DEFAULT_E_MAIL)
+            .email(DEFAULT_EMAIL)
             .costHour(DEFAULT_COST_HOUR)
-            .password(DEFAULT_PASSWORD)
+            .passwordHash(DEFAULT_PASSWORD_HASH)
             .tipoUser(DEFAULT_TIPO_USER)
             .isActive(DEFAULT_IS_ACTIVE)
             .online(DEFAULT_ONLINE)
@@ -159,9 +159,9 @@ public class AgentResourceIT {
         Agent agent = new Agent()
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
-            .eMail(UPDATED_E_MAIL)
+            .email(UPDATED_EMAIL)
             .costHour(UPDATED_COST_HOUR)
-            .password(UPDATED_PASSWORD)
+            .passwordHash(UPDATED_PASSWORD_HASH)
             .tipoUser(UPDATED_TIPO_USER)
             .isActive(UPDATED_IS_ACTIVE)
             .online(UPDATED_ONLINE)
@@ -195,9 +195,9 @@ public class AgentResourceIT {
         Agent testAgent = agentList.get(agentList.size() - 1);
         assertThat(testAgent.getIdent()).isEqualTo(DEFAULT_IDENT);
         assertThat(testAgent.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testAgent.geteMail()).isEqualTo(DEFAULT_E_MAIL);
+        assertThat(testAgent.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testAgent.getCostHour()).isEqualTo(DEFAULT_COST_HOUR);
-        assertThat(testAgent.getPassword()).isEqualTo(DEFAULT_PASSWORD);
+        assertThat(testAgent.getPasswordHash()).isEqualTo(DEFAULT_PASSWORD_HASH);
         assertThat(testAgent.getTipoUser()).isEqualTo(DEFAULT_TIPO_USER);
         assertThat(testAgent.isIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
         assertThat(testAgent.isOnline()).isEqualTo(DEFAULT_ONLINE);
@@ -241,9 +241,9 @@ public class AgentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(agent.getId().intValue())))
             .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].eMail").value(hasItem(DEFAULT_E_MAIL.toString())))
+            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
             .andExpect(jsonPath("$.[*].costHour").value(hasItem(DEFAULT_COST_HOUR.doubleValue())))
-            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())))
+            .andExpect(jsonPath("$.[*].passwordHash").value(hasItem(DEFAULT_PASSWORD_HASH.toString())))
             .andExpect(jsonPath("$.[*].tipoUser").value(hasItem(DEFAULT_TIPO_USER)))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].online").value(hasItem(DEFAULT_ONLINE.booleanValue())))
@@ -299,9 +299,9 @@ public class AgentResourceIT {
             .andExpect(jsonPath("$.id").value(agent.getId().intValue()))
             .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(jsonPath("$.eMail").value(DEFAULT_E_MAIL.toString()))
+            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
             .andExpect(jsonPath("$.costHour").value(DEFAULT_COST_HOUR.doubleValue()))
-            .andExpect(jsonPath("$.password").value(DEFAULT_PASSWORD.toString()))
+            .andExpect(jsonPath("$.passwordHash").value(DEFAULT_PASSWORD_HASH.toString()))
             .andExpect(jsonPath("$.tipoUser").value(DEFAULT_TIPO_USER))
             .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.online").value(DEFAULT_ONLINE.booleanValue()))
@@ -334,9 +334,9 @@ public class AgentResourceIT {
         updatedAgent
             .ident(UPDATED_IDENT)
             .name(UPDATED_NAME)
-            .eMail(UPDATED_E_MAIL)
+            .email(UPDATED_EMAIL)
             .costHour(UPDATED_COST_HOUR)
-            .password(UPDATED_PASSWORD)
+            .passwordHash(UPDATED_PASSWORD_HASH)
             .tipoUser(UPDATED_TIPO_USER)
             .isActive(UPDATED_IS_ACTIVE)
             .online(UPDATED_ONLINE)
@@ -357,9 +357,9 @@ public class AgentResourceIT {
         Agent testAgent = agentList.get(agentList.size() - 1);
         assertThat(testAgent.getIdent()).isEqualTo(UPDATED_IDENT);
         assertThat(testAgent.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testAgent.geteMail()).isEqualTo(UPDATED_E_MAIL);
+        assertThat(testAgent.getEmail()).isEqualTo(UPDATED_EMAIL);
         assertThat(testAgent.getCostHour()).isEqualTo(UPDATED_COST_HOUR);
-        assertThat(testAgent.getPassword()).isEqualTo(UPDATED_PASSWORD);
+        assertThat(testAgent.getPasswordHash()).isEqualTo(UPDATED_PASSWORD_HASH);
         assertThat(testAgent.getTipoUser()).isEqualTo(UPDATED_TIPO_USER);
         assertThat(testAgent.isIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testAgent.isOnline()).isEqualTo(UPDATED_ONLINE);

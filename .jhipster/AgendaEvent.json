@@ -4,6 +4,13 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "catalogEvent",
+            "otherEntityRelationshipName": "theAgendaEvent",
+            "relationshipName": "theCatalogEvent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "task",
             "otherEntityRelationshipName": "theAgendaEvent",
             "relationshipName": "theTask",
@@ -15,12 +22,6 @@
             "otherEntityRelationshipName": "theAgendaEvent",
             "relationshipName": "theNormal",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "catalogEvent",
-            "otherEntityRelationshipName": "theAgendaEvent",
-            "relationshipName": "theCatalogEvents"
         }
     ],
     "changelogDate": "20190914033803",

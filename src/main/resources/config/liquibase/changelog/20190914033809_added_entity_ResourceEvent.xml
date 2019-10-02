@@ -18,6 +18,10 @@
             </column>            <column name="the_normal_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_resource_event_the_normal_id" />
             </column>
+            <column name="the_catalog_event_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
             <column name="the_resource_id" type="bigint">
                 <constraints nullable="true" />
             </column>

@@ -29,47 +29,35 @@ public class CatalogEvent implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("theCatalogEvents")
-    private ResourceEvent theResourceEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEvents")
-    private ProcessModelEvent theProcessModelEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEvents")
-    private AgendaEvent theAgendaEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEvents")
-    private CatalogEvent theCatalogEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEvents")
-    private ConnectionEvent theConnectionEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEvents")
-    private GlobalActivityEvent theGlobalActivityEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEvents")
-    private ModelingActivityEvent theModelingActivityEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEvents")
-    private ProcessEvent theProcessEvent;
-
-    @ManyToOne
-    @JsonIgnoreProperties("theCatalogEvents")
     private Plain thePlain;
 
     @OneToMany(mappedBy = "theCatalogEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Event> theEvents = new HashSet<>();
+    private Set<ResourceEvent> theResourceEvents = new HashSet<>();
 
     @OneToMany(mappedBy = "theCatalogEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CatalogEvent> theCatalogEvents = new HashSet<>();
+    private Set<ProcessModelEvent> theProcessModelEvents = new HashSet<>();
+
+    @OneToMany(mappedBy = "theCatalogEvent")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<AgendaEvent> theAgendaEvents = new HashSet<>();
+
+    @OneToMany(mappedBy = "theCatalogEvent")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ConnectionEvent> theConnectionEvents = new HashSet<>();
+
+    @OneToMany(mappedBy = "theCatalogEvent")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<GlobalActivityEvent> theGlobalActivityEvents = new HashSet<>();
+
+    @OneToMany(mappedBy = "theCatalogEvent")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ModelingActivityEvent> theModelingActivityEvents = new HashSet<>();
+
+    @OneToMany(mappedBy = "theCatalogEvent")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ProcessEvent> theProcessEvents = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -93,110 +81,6 @@ public class CatalogEvent implements Serializable {
         this.description = description;
     }
 
-    public ResourceEvent getTheResourceEvent() {
-        return theResourceEvent;
-    }
-
-    public CatalogEvent theResourceEvent(ResourceEvent resourceEvent) {
-        this.theResourceEvent = resourceEvent;
-        return this;
-    }
-
-    public void setTheResourceEvent(ResourceEvent resourceEvent) {
-        this.theResourceEvent = resourceEvent;
-    }
-
-    public ProcessModelEvent getTheProcessModelEvent() {
-        return theProcessModelEvent;
-    }
-
-    public CatalogEvent theProcessModelEvent(ProcessModelEvent processModelEvent) {
-        this.theProcessModelEvent = processModelEvent;
-        return this;
-    }
-
-    public void setTheProcessModelEvent(ProcessModelEvent processModelEvent) {
-        this.theProcessModelEvent = processModelEvent;
-    }
-
-    public AgendaEvent getTheAgendaEvent() {
-        return theAgendaEvent;
-    }
-
-    public CatalogEvent theAgendaEvent(AgendaEvent agendaEvent) {
-        this.theAgendaEvent = agendaEvent;
-        return this;
-    }
-
-    public void setTheAgendaEvent(AgendaEvent agendaEvent) {
-        this.theAgendaEvent = agendaEvent;
-    }
-
-    public CatalogEvent getTheCatalogEvent() {
-        return theCatalogEvent;
-    }
-
-    public CatalogEvent theCatalogEvent(CatalogEvent catalogEvent) {
-        this.theCatalogEvent = catalogEvent;
-        return this;
-    }
-
-    public void setTheCatalogEvent(CatalogEvent catalogEvent) {
-        this.theCatalogEvent = catalogEvent;
-    }
-
-    public ConnectionEvent getTheConnectionEvent() {
-        return theConnectionEvent;
-    }
-
-    public CatalogEvent theConnectionEvent(ConnectionEvent connectionEvent) {
-        this.theConnectionEvent = connectionEvent;
-        return this;
-    }
-
-    public void setTheConnectionEvent(ConnectionEvent connectionEvent) {
-        this.theConnectionEvent = connectionEvent;
-    }
-
-    public GlobalActivityEvent getTheGlobalActivityEvent() {
-        return theGlobalActivityEvent;
-    }
-
-    public CatalogEvent theGlobalActivityEvent(GlobalActivityEvent globalActivityEvent) {
-        this.theGlobalActivityEvent = globalActivityEvent;
-        return this;
-    }
-
-    public void setTheGlobalActivityEvent(GlobalActivityEvent globalActivityEvent) {
-        this.theGlobalActivityEvent = globalActivityEvent;
-    }
-
-    public ModelingActivityEvent getTheModelingActivityEvent() {
-        return theModelingActivityEvent;
-    }
-
-    public CatalogEvent theModelingActivityEvent(ModelingActivityEvent modelingActivityEvent) {
-        this.theModelingActivityEvent = modelingActivityEvent;
-        return this;
-    }
-
-    public void setTheModelingActivityEvent(ModelingActivityEvent modelingActivityEvent) {
-        this.theModelingActivityEvent = modelingActivityEvent;
-    }
-
-    public ProcessEvent getTheProcessEvent() {
-        return theProcessEvent;
-    }
-
-    public CatalogEvent theProcessEvent(ProcessEvent processEvent) {
-        this.theProcessEvent = processEvent;
-        return this;
-    }
-
-    public void setTheProcessEvent(ProcessEvent processEvent) {
-        this.theProcessEvent = processEvent;
-    }
-
     public Plain getThePlain() {
         return thePlain;
     }
@@ -210,54 +94,179 @@ public class CatalogEvent implements Serializable {
         this.thePlain = plain;
     }
 
-    public Set<Event> getTheEvents() {
-        return theEvents;
+    public Set<ResourceEvent> getTheResourceEvents() {
+        return theResourceEvents;
     }
 
-    public CatalogEvent theEvents(Set<Event> events) {
-        this.theEvents = events;
+    public CatalogEvent theResourceEvents(Set<ResourceEvent> resourceEvents) {
+        this.theResourceEvents = resourceEvents;
         return this;
     }
 
-    public CatalogEvent addTheEvent(Event event) {
-        this.theEvents.add(event);
-        event.setTheCatalogEvent(this);
+    public CatalogEvent addTheResourceEvent(ResourceEvent resourceEvent) {
+        this.theResourceEvents.add(resourceEvent);
+        resourceEvent.setTheCatalogEvent(this);
         return this;
     }
 
-    public CatalogEvent removeTheEvent(Event event) {
-        this.theEvents.remove(event);
-        event.setTheCatalogEvent(null);
+    public CatalogEvent removeTheResourceEvent(ResourceEvent resourceEvent) {
+        this.theResourceEvents.remove(resourceEvent);
+        resourceEvent.setTheCatalogEvent(null);
         return this;
     }
 
-    public void setTheEvents(Set<Event> events) {
-        this.theEvents = events;
+    public void setTheResourceEvents(Set<ResourceEvent> resourceEvents) {
+        this.theResourceEvents = resourceEvents;
     }
 
-    public Set<CatalogEvent> getTheCatalogEvents() {
-        return theCatalogEvents;
+    public Set<ProcessModelEvent> getTheProcessModelEvents() {
+        return theProcessModelEvents;
     }
 
-    public CatalogEvent theCatalogEvents(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEvents = catalogEvents;
+    public CatalogEvent theProcessModelEvents(Set<ProcessModelEvent> processModelEvents) {
+        this.theProcessModelEvents = processModelEvents;
         return this;
     }
 
-    public CatalogEvent addTheCatalogEvents(CatalogEvent catalogEvent) {
-        this.theCatalogEvents.add(catalogEvent);
-        catalogEvent.setTheCatalogEvent(this);
+    public CatalogEvent addTheProcessModelEvent(ProcessModelEvent processModelEvent) {
+        this.theProcessModelEvents.add(processModelEvent);
+        processModelEvent.setTheCatalogEvent(this);
         return this;
     }
 
-    public CatalogEvent removeTheCatalogEvents(CatalogEvent catalogEvent) {
-        this.theCatalogEvents.remove(catalogEvent);
-        catalogEvent.setTheCatalogEvent(null);
+    public CatalogEvent removeTheProcessModelEvent(ProcessModelEvent processModelEvent) {
+        this.theProcessModelEvents.remove(processModelEvent);
+        processModelEvent.setTheCatalogEvent(null);
         return this;
     }
 
-    public void setTheCatalogEvents(Set<CatalogEvent> catalogEvents) {
-        this.theCatalogEvents = catalogEvents;
+    public void setTheProcessModelEvents(Set<ProcessModelEvent> processModelEvents) {
+        this.theProcessModelEvents = processModelEvents;
+    }
+
+    public Set<AgendaEvent> getTheAgendaEvents() {
+        return theAgendaEvents;
+    }
+
+    public CatalogEvent theAgendaEvents(Set<AgendaEvent> agendaEvents) {
+        this.theAgendaEvents = agendaEvents;
+        return this;
+    }
+
+    public CatalogEvent addTheAgendaEvent(AgendaEvent agendaEvent) {
+        this.theAgendaEvents.add(agendaEvent);
+        agendaEvent.setTheCatalogEvent(this);
+        return this;
+    }
+
+    public CatalogEvent removeTheAgendaEvent(AgendaEvent agendaEvent) {
+        this.theAgendaEvents.remove(agendaEvent);
+        agendaEvent.setTheCatalogEvent(null);
+        return this;
+    }
+
+    public void setTheAgendaEvents(Set<AgendaEvent> agendaEvents) {
+        this.theAgendaEvents = agendaEvents;
+    }
+
+    public Set<ConnectionEvent> getTheConnectionEvents() {
+        return theConnectionEvents;
+    }
+
+    public CatalogEvent theConnectionEvents(Set<ConnectionEvent> connectionEvents) {
+        this.theConnectionEvents = connectionEvents;
+        return this;
+    }
+
+    public CatalogEvent addTheConnectionEvent(ConnectionEvent connectionEvent) {
+        this.theConnectionEvents.add(connectionEvent);
+        connectionEvent.setTheCatalogEvent(this);
+        return this;
+    }
+
+    public CatalogEvent removeTheConnectionEvent(ConnectionEvent connectionEvent) {
+        this.theConnectionEvents.remove(connectionEvent);
+        connectionEvent.setTheCatalogEvent(null);
+        return this;
+    }
+
+    public void setTheConnectionEvents(Set<ConnectionEvent> connectionEvents) {
+        this.theConnectionEvents = connectionEvents;
+    }
+
+    public Set<GlobalActivityEvent> getTheGlobalActivityEvents() {
+        return theGlobalActivityEvents;
+    }
+
+    public CatalogEvent theGlobalActivityEvents(Set<GlobalActivityEvent> globalActivityEvents) {
+        this.theGlobalActivityEvents = globalActivityEvents;
+        return this;
+    }
+
+    public CatalogEvent addTheGlobalActivityEvent(GlobalActivityEvent globalActivityEvent) {
+        this.theGlobalActivityEvents.add(globalActivityEvent);
+        globalActivityEvent.setTheCatalogEvent(this);
+        return this;
+    }
+
+    public CatalogEvent removeTheGlobalActivityEvent(GlobalActivityEvent globalActivityEvent) {
+        this.theGlobalActivityEvents.remove(globalActivityEvent);
+        globalActivityEvent.setTheCatalogEvent(null);
+        return this;
+    }
+
+    public void setTheGlobalActivityEvents(Set<GlobalActivityEvent> globalActivityEvents) {
+        this.theGlobalActivityEvents = globalActivityEvents;
+    }
+
+    public Set<ModelingActivityEvent> getTheModelingActivityEvents() {
+        return theModelingActivityEvents;
+    }
+
+    public CatalogEvent theModelingActivityEvents(Set<ModelingActivityEvent> modelingActivityEvents) {
+        this.theModelingActivityEvents = modelingActivityEvents;
+        return this;
+    }
+
+    public CatalogEvent addTheModelingActivityEvent(ModelingActivityEvent modelingActivityEvent) {
+        this.theModelingActivityEvents.add(modelingActivityEvent);
+        modelingActivityEvent.setTheCatalogEvent(this);
+        return this;
+    }
+
+    public CatalogEvent removeTheModelingActivityEvent(ModelingActivityEvent modelingActivityEvent) {
+        this.theModelingActivityEvents.remove(modelingActivityEvent);
+        modelingActivityEvent.setTheCatalogEvent(null);
+        return this;
+    }
+
+    public void setTheModelingActivityEvents(Set<ModelingActivityEvent> modelingActivityEvents) {
+        this.theModelingActivityEvents = modelingActivityEvents;
+    }
+
+    public Set<ProcessEvent> getTheProcessEvents() {
+        return theProcessEvents;
+    }
+
+    public CatalogEvent theProcessEvents(Set<ProcessEvent> processEvents) {
+        this.theProcessEvents = processEvents;
+        return this;
+    }
+
+    public CatalogEvent addTheProcessEvent(ProcessEvent processEvent) {
+        this.theProcessEvents.add(processEvent);
+        processEvent.setTheCatalogEvent(this);
+        return this;
+    }
+
+    public CatalogEvent removeTheProcessEvent(ProcessEvent processEvent) {
+        this.theProcessEvents.remove(processEvent);
+        processEvent.setTheCatalogEvent(null);
+        return this;
+    }
+
+    public void setTheProcessEvents(Set<ProcessEvent> processEvents) {
+        this.theProcessEvents = processEvents;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

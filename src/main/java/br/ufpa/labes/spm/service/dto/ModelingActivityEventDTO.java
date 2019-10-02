@@ -10,6 +10,8 @@ public class ModelingActivityEventDTO implements Serializable {
     private Long id;
 
 
+    private Long theCatalogEventId;
+
     private Long theActivityId;
 
     private Long theAgentId;
@@ -20,6 +22,14 @@ public class ModelingActivityEventDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getTheCatalogEventId() {
+        return theCatalogEventId;
+    }
+
+    public void setTheCatalogEventId(Long catalogEventId) {
+        this.theCatalogEventId = catalogEventId;
     }
 
     public Long getTheActivityId() {
@@ -63,6 +73,7 @@ public class ModelingActivityEventDTO implements Serializable {
     public String toString() {
         return "ModelingActivityEventDTO{" +
             "id=" + getId() +
+            ", theCatalogEvent=" + getTheCatalogEventId() +
             ", theActivity=" + getTheActivityId() +
             ", theAgent=" + getTheAgentId() +
             "}";

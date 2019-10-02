@@ -73,12 +73,12 @@ public class Artifact implements Serializable {
     private ArtifactType theArtifactType;
 
     @ManyToOne
-    @JsonIgnoreProperties("derivedFroms")
-    private Artifact derivedTo;
+    @JsonIgnoreProperties("derivedTos")
+    private Artifact derivedFrom;
 
     @ManyToOne
-    @JsonIgnoreProperties("belongsTos")
-    private Artifact possess;
+    @JsonIgnoreProperties("possesses")
+    private Artifact belongsTo;
 
     @ManyToOne
     @JsonIgnoreProperties("theArtifacts")
@@ -88,13 +88,13 @@ public class Artifact implements Serializable {
     @JsonIgnoreProperties("finalArtifacts")
     private Project theProject;
 
-    @OneToMany(mappedBy = "derivedTo")
+    @OneToMany(mappedBy = "derivedFrom")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Artifact> derivedFroms = new HashSet<>();
+    private Set<Artifact> derivedTos = new HashSet<>();
 
-    @OneToMany(mappedBy = "possess")
+    @OneToMany(mappedBy = "belongsTo")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Artifact> belongsTos = new HashSet<>();
+    private Set<Artifact> possesses = new HashSet<>();
 
     @OneToMany(mappedBy = "theArtifact")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -355,30 +355,30 @@ public class Artifact implements Serializable {
         this.theArtifactType = artifactType;
     }
 
-    public Artifact getDerivedTo() {
-        return derivedTo;
+    public Artifact getDerivedFrom() {
+        return derivedFrom;
     }
 
-    public Artifact derivedTo(Artifact artifact) {
-        this.derivedTo = artifact;
+    public Artifact derivedFrom(Artifact artifact) {
+        this.derivedFrom = artifact;
         return this;
     }
 
-    public void setDerivedTo(Artifact artifact) {
-        this.derivedTo = artifact;
+    public void setDerivedFrom(Artifact artifact) {
+        this.derivedFrom = artifact;
     }
 
-    public Artifact getPossess() {
-        return possess;
+    public Artifact getBelongsTo() {
+        return belongsTo;
     }
 
-    public Artifact possess(Artifact artifact) {
-        this.possess = artifact;
+    public Artifact belongsTo(Artifact artifact) {
+        this.belongsTo = artifact;
         return this;
     }
 
-    public void setPossess(Artifact artifact) {
-        this.possess = artifact;
+    public void setBelongsTo(Artifact artifact) {
+        this.belongsTo = artifact;
     }
 
     public VCSRepository getTheRepository() {
@@ -407,54 +407,54 @@ public class Artifact implements Serializable {
         this.theProject = project;
     }
 
-    public Set<Artifact> getDerivedFroms() {
-        return derivedFroms;
+    public Set<Artifact> getDerivedTos() {
+        return derivedTos;
     }
 
-    public Artifact derivedFroms(Set<Artifact> artifacts) {
-        this.derivedFroms = artifacts;
+    public Artifact derivedTos(Set<Artifact> artifacts) {
+        this.derivedTos = artifacts;
         return this;
     }
 
-    public Artifact addDerivedFrom(Artifact artifact) {
-        this.derivedFroms.add(artifact);
-        artifact.setDerivedTo(this);
+    public Artifact addDerivedTo(Artifact artifact) {
+        this.derivedTos.add(artifact);
+        artifact.setDerivedFrom(this);
         return this;
     }
 
-    public Artifact removeDerivedFrom(Artifact artifact) {
-        this.derivedFroms.remove(artifact);
-        artifact.setDerivedTo(null);
+    public Artifact removeDerivedTo(Artifact artifact) {
+        this.derivedTos.remove(artifact);
+        artifact.setDerivedFrom(null);
         return this;
     }
 
-    public void setDerivedFroms(Set<Artifact> artifacts) {
-        this.derivedFroms = artifacts;
+    public void setDerivedTos(Set<Artifact> artifacts) {
+        this.derivedTos = artifacts;
     }
 
-    public Set<Artifact> getBelongsTos() {
-        return belongsTos;
+    public Set<Artifact> getPossesses() {
+        return possesses;
     }
 
-    public Artifact belongsTos(Set<Artifact> artifacts) {
-        this.belongsTos = artifacts;
+    public Artifact possesses(Set<Artifact> artifacts) {
+        this.possesses = artifacts;
         return this;
     }
 
-    public Artifact addBelongsTo(Artifact artifact) {
-        this.belongsTos.add(artifact);
-        artifact.setPossess(this);
+    public Artifact addPossess(Artifact artifact) {
+        this.possesses.add(artifact);
+        artifact.setBelongsTo(this);
         return this;
     }
 
-    public Artifact removeBelongsTo(Artifact artifact) {
-        this.belongsTos.remove(artifact);
-        artifact.setPossess(null);
+    public Artifact removePossess(Artifact artifact) {
+        this.possesses.remove(artifact);
+        artifact.setBelongsTo(null);
         return this;
     }
 
-    public void setBelongsTos(Set<Artifact> artifacts) {
-        this.belongsTos = artifacts;
+    public void setPossesses(Set<Artifact> artifacts) {
+        this.possesses = artifacts;
     }
 
     public Set<ArtifactTask> getTheArtifactTasks() {

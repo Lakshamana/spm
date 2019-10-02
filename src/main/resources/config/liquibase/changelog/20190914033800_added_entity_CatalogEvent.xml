@@ -20,38 +20,6 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="the_resource_event_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_process_model_event_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_agenda_event_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_catalog_event_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_connection_event_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_global_activity_event_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_modeling_activity_event_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="the_process_event_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
             <column name="the_plain_id" type="bigint">
                 <constraints nullable="true" />
             </column>

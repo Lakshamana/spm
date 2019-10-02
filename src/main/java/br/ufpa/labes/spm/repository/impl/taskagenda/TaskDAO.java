@@ -38,13 +38,13 @@ public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO {
     long elapsedTime = -1;
 
     for (int i = 0; i < event.length; i++) {
-      if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
+      if (event[i].getTheCatalogEvent().getDescription().equals("ToActive")) {
         isCounting = true;
 
         startTimeMillis = event[i].getWhen().toEpochDay();
-      } else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
-          || event[i].getTheCatalogEvents().getDescription().equals("ToPaused")
-          || event[i].getTheCatalogEvents().getDescription().equals("ToFailed")) {
+      } else if (event[i].getTheCatalogEvent().getDescription().equals("ToFinished")
+          || event[i].getTheCatalogEvent().getDescription().equals("ToPaused")
+          || event[i].getTheCatalogEvent().getDescription().equals("ToFailed")) {
         isCounting = false;
 
         if (startTimeMillis != -1) {
@@ -95,15 +95,15 @@ public class TaskDAO extends BaseDAO<Task, Integer> implements ITaskDAO {
     long elapsedTime = -1;
 
     for (int i = (event.length - 1); i >= 0; i--) {
-      if (event[i].getTheCatalogEvents().getDescription().equals("ToActive")) {
+      if (event[i].getTheCatalogEvent().getDescription().equals("ToActive")) {
         isCounting = true;
 
         startTimeMillis = event[i].getWhen().toEpochDay();
         startDate = event[i].getWhen();
         //				System.out.println("--------> Start: " + event[i].getWhen());
-      } else if (event[i].getTheCatalogEvents().getDescription().equals("ToFinished")
-          || event[i].getTheCatalogEvents().getDescription().equals("ToPaused")
-          || event[i].getTheCatalogEvents().getDescription().equals("ToFailed")) {
+      } else if (event[i].getTheCatalogEvent().getDescription().equals("ToFinished")
+          || event[i].getTheCatalogEvent().getDescription().equals("ToPaused")
+          || event[i].getTheCatalogEvent().getDescription().equals("ToFailed")) {
         isCounting = false;
         //				System.out.println("Event: " + event[i].getTheCatalogEvents().getDescription());
 

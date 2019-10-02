@@ -12,6 +12,8 @@ public class ResourceEventDTO implements Serializable {
 
     private Long theNormalId;
 
+    private Long theCatalogEventId;
+
     private Long theResourceId;
 
     public Long getId() {
@@ -28,6 +30,14 @@ public class ResourceEventDTO implements Serializable {
 
     public void setTheNormalId(Long normalId) {
         this.theNormalId = normalId;
+    }
+
+    public Long getTheCatalogEventId() {
+        return theCatalogEventId;
+    }
+
+    public void setTheCatalogEventId(Long catalogEventId) {
+        this.theCatalogEventId = catalogEventId;
     }
 
     public Long getTheResourceId() {
@@ -64,6 +74,7 @@ public class ResourceEventDTO implements Serializable {
         return "ResourceEventDTO{" +
             "id=" + getId() +
             ", theNormal=" + getTheNormalId() +
+            ", theCatalogEvent=" + getTheCatalogEventId() +
             ", theResource=" + getTheResourceId() +
             "}";
     }

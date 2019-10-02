@@ -512,15 +512,14 @@ entity ResourceEvent {} //extends Event
 entity SpmLog {}
 
 relationship ManyToOne {
-    Event{theCatalogEvent} to CatalogEvent{theEvent},
-    ResourceEvent{theCatalogEvents} to CatalogEvent{theResourceEvent},
-    ProcessModelEvent{theCatalogEvents} to CatalogEvent{theProcessModelEvent},
-    AgendaEvent{theCatalogEvents} to CatalogEvent{theAgendaEvent},
-    CatalogEvent{theCatalogEvents} to CatalogEvent{theCatalogEvent},
-    ConnectionEvent{theCatalogEvents} to CatalogEvent{theConnectionEvent},
-    GlobalActivityEvent{theCatalogEvents} to CatalogEvent{theGlobalActivityEvent},
-    ModelingActivityEvent{theCatalogEvents} to CatalogEvent{theModelingActivityEvent},
-    ProcessEvent{theCatalogEvents} to CatalogEvent{theProcessEvent},
+    // Event{theCatalogEvent} to CatalogEvent{theEvent},
+    ResourceEvent{theCatalogEvent} to CatalogEvent{theResourceEvent},
+    ProcessModelEvent{theCatalogEvent} to CatalogEvent{theProcessModelEvent},
+    AgendaEvent{theCatalogEvent} to CatalogEvent{theAgendaEvent},
+    ConnectionEvent{theCatalogEvent} to CatalogEvent{theConnectionEvent},
+    GlobalActivityEvent{theCatalogEvent} to CatalogEvent{theGlobalActivityEvent},
+    ModelingActivityEvent{theCatalogEvent} to CatalogEvent{theModelingActivityEvent},
+    ProcessEvent{theCatalogEvent} to CatalogEvent{theProcessEvent},
 
     AgendaEvent{theTask} to Task{theAgendaEvent},
     AgendaEvent{theNormal} to Normal{theAgendaEvent}

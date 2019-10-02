@@ -14,22 +14,6 @@ public class CatalogEventDTO implements Serializable {
     private String description;
 
 
-    private Long theResourceEventId;
-
-    private Long theProcessModelEventId;
-
-    private Long theAgendaEventId;
-
-    private Long theCatalogEventId;
-
-    private Long theConnectionEventId;
-
-    private Long theGlobalActivityEventId;
-
-    private Long theModelingActivityEventId;
-
-    private Long theProcessEventId;
-
     private Long thePlainId;
 
     public Long getId() {
@@ -46,70 +30,6 @@ public class CatalogEventDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Long getTheResourceEventId() {
-        return theResourceEventId;
-    }
-
-    public void setTheResourceEventId(Long resourceEventId) {
-        this.theResourceEventId = resourceEventId;
-    }
-
-    public Long getTheProcessModelEventId() {
-        return theProcessModelEventId;
-    }
-
-    public void setTheProcessModelEventId(Long processModelEventId) {
-        this.theProcessModelEventId = processModelEventId;
-    }
-
-    public Long getTheAgendaEventId() {
-        return theAgendaEventId;
-    }
-
-    public void setTheAgendaEventId(Long agendaEventId) {
-        this.theAgendaEventId = agendaEventId;
-    }
-
-    public Long getTheCatalogEventId() {
-        return theCatalogEventId;
-    }
-
-    public void setTheCatalogEventId(Long catalogEventId) {
-        this.theCatalogEventId = catalogEventId;
-    }
-
-    public Long getTheConnectionEventId() {
-        return theConnectionEventId;
-    }
-
-    public void setTheConnectionEventId(Long connectionEventId) {
-        this.theConnectionEventId = connectionEventId;
-    }
-
-    public Long getTheGlobalActivityEventId() {
-        return theGlobalActivityEventId;
-    }
-
-    public void setTheGlobalActivityEventId(Long globalActivityEventId) {
-        this.theGlobalActivityEventId = globalActivityEventId;
-    }
-
-    public Long getTheModelingActivityEventId() {
-        return theModelingActivityEventId;
-    }
-
-    public void setTheModelingActivityEventId(Long modelingActivityEventId) {
-        this.theModelingActivityEventId = modelingActivityEventId;
-    }
-
-    public Long getTheProcessEventId() {
-        return theProcessEventId;
-    }
-
-    public void setTheProcessEventId(Long processEventId) {
-        this.theProcessEventId = processEventId;
     }
 
     public Long getThePlainId() {
@@ -146,14 +66,6 @@ public class CatalogEventDTO implements Serializable {
         return "CatalogEventDTO{" +
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
-            ", theResourceEvent=" + getTheResourceEventId() +
-            ", theProcessModelEvent=" + getTheProcessModelEventId() +
-            ", theAgendaEvent=" + getTheAgendaEventId() +
-            ", theCatalogEvent=" + getTheCatalogEventId() +
-            ", theConnectionEvent=" + getTheConnectionEventId() +
-            ", theGlobalActivityEvent=" + getTheGlobalActivityEventId() +
-            ", theModelingActivityEvent=" + getTheModelingActivityEventId() +
-            ", theProcessEvent=" + getTheProcessEventId() +
             ", thePlain=" + getThePlainId() +
             "}";
     }
