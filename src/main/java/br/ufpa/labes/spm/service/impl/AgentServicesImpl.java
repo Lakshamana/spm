@@ -9,6 +9,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import br.ufpa.labes.spm.converter.Converter;
 import br.ufpa.labes.spm.converter.ConverterImpl;
 import br.ufpa.labes.spm.exceptions.ImplementationException;
@@ -50,6 +52,11 @@ import br.ufpa.labes.spm.domain.ProcessAgenda;
 import br.ufpa.labes.spm.domain.Task;
 import br.ufpa.labes.spm.domain.TaskAgenda;
 import br.ufpa.labes.spm.service.interfaces.AgentServices;
+import br.ufpa.labes.spm.service.mapper.AbilityMapper;
+import br.ufpa.labes.spm.service.mapper.AgentMapper;
+import br.ufpa.labes.spm.service.mapper.ProjectMapper;
+import br.ufpa.labes.spm.service.mapper.RoleMapper;
+import br.ufpa.labes.spm.service.mapper.WorkGroupMapper;
 import br.ufpa.labes.spm.util.Md5;
 
 public class AgentServicesImpl implements AgentServices {
@@ -104,6 +111,21 @@ public class AgentServicesImpl implements AgentServices {
   ITaskAgendaDAO taskAgendaDAO;
 
   IActivityEstimationDAO activityEstimationDAO;
+
+  @Autowired
+  private AgentMapper agentMapper;
+
+  @Autowired
+  private AbilityMapper abilityMapper;
+
+  @Autowired
+  private RoleMapper roleMapper;
+
+  @Autowired
+  private WorkGroupMapper workGroupMapper;
+
+  @Autowired
+  private ProjectMapper projectMapper;
 
   Converter converter = new ConverterImpl();
 
