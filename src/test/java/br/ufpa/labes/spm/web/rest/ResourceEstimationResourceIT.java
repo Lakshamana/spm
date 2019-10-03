@@ -3,6 +3,9 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ResourceEstimation;
 import br.ufpa.labes.spm.repository.ResourceEstimationRepository;
+import br.ufpa.labes.spm.service.ResourceEstimationService;
+import br.ufpa.labes.spm.service.dto.ResourceEstimationDTO;
+import br.ufpa.labes.spm.service.mapper.ResourceEstimationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,227 +31,249 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Integration tests for the {@link ResourceEstimationResource} REST controller. */
+/**
+ * Integration tests for the {@link ResourceEstimationResource} REST controller.
+ */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class ResourceEstimationResourceIT {
 
-  @Autowired private ResourceEstimationRepository resourceEstimationRepository;
+    @Autowired
+    private ResourceEstimationRepository resourceEstimationRepository;
 
-  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private ResourceEstimationMapper resourceEstimationMapper;
 
-  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private ResourceEstimationService resourceEstimationService;
 
-  @Autowired private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-  @Autowired private EntityManager em;
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-  @Autowired private Validator validator;
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
-  private MockMvc restResourceEstimationMockMvc;
+    @Autowired
+    private EntityManager em;
 
-  private ResourceEstimation resourceEstimation;
+    @Autowired
+    private Validator validator;
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final ResourceEstimationResource resourceEstimationResource =
-        new ResourceEstimationResource(resourceEstimationRepository);
-    this.restResourceEstimationMockMvc =
-        MockMvcBuilders.standaloneSetup(resourceEstimationResource)
+    private MockMvc restResourceEstimationMockMvc;
+
+    private ResourceEstimation resourceEstimation;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final ResourceEstimationResource resourceEstimationResource = new ResourceEstimationResource(resourceEstimationService);
+        this.restResourceEstimationMockMvc = MockMvcBuilders.standaloneSetup(resourceEstimationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator)
-            .build();
-  }
+            .setValidator(validator).build();
+    }
 
-  /**
-   * Create an entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static ResourceEstimation createEntity(EntityManager em) {
-    ResourceEstimation resourceEstimation = new ResourceEstimation();
-    return resourceEstimation;
-  }
-  /**
-   * Create an updated entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static ResourceEstimation createUpdatedEntity(EntityManager em) {
-    ResourceEstimation resourceEstimation = new ResourceEstimation();
-    return resourceEstimation;
-  }
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static ResourceEstimation createEntity(EntityManager em) {
+        ResourceEstimation resourceEstimation = new ResourceEstimation();
+        return resourceEstimation;
+    }
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static ResourceEstimation createUpdatedEntity(EntityManager em) {
+        ResourceEstimation resourceEstimation = new ResourceEstimation();
+        return resourceEstimation;
+    }
 
-  @BeforeEach
-  public void initTest() {
-    resourceEstimation = createEntity(em);
-  }
+    @BeforeEach
+    public void initTest() {
+        resourceEstimation = createEntity(em);
+    }
 
-  @Test
-  @Transactional
-  public void createResourceEstimation() throws Exception {
-    int databaseSizeBeforeCreate = resourceEstimationRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createResourceEstimation() throws Exception {
+        int databaseSizeBeforeCreate = resourceEstimationRepository.findAll().size();
 
-    // Create the ResourceEstimation
-    restResourceEstimationMockMvc
-        .perform(
-            post("/api/resource-estimations")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(resourceEstimation)))
-        .andExpect(status().isCreated());
+        // Create the ResourceEstimation
+        ResourceEstimationDTO resourceEstimationDTO = resourceEstimationMapper.toDto(resourceEstimation);
+        restResourceEstimationMockMvc.perform(post("/api/resource-estimations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(resourceEstimationDTO)))
+            .andExpect(status().isCreated());
 
-    // Validate the ResourceEstimation in the database
-    List<ResourceEstimation> resourceEstimationList = resourceEstimationRepository.findAll();
-    assertThat(resourceEstimationList).hasSize(databaseSizeBeforeCreate + 1);
-    ResourceEstimation testResourceEstimation =
-        resourceEstimationList.get(resourceEstimationList.size() - 1);
-  }
+        // Validate the ResourceEstimation in the database
+        List<ResourceEstimation> resourceEstimationList = resourceEstimationRepository.findAll();
+        assertThat(resourceEstimationList).hasSize(databaseSizeBeforeCreate + 1);
+        ResourceEstimation testResourceEstimation = resourceEstimationList.get(resourceEstimationList.size() - 1);
+    }
 
-  @Test
-  @Transactional
-  public void createResourceEstimationWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = resourceEstimationRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createResourceEstimationWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = resourceEstimationRepository.findAll().size();
 
-    // Create the ResourceEstimation with an existing ID
-    resourceEstimation.setId(1L);
+        // Create the ResourceEstimation with an existing ID
+        resourceEstimation.setId(1L);
+        ResourceEstimationDTO resourceEstimationDTO = resourceEstimationMapper.toDto(resourceEstimation);
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restResourceEstimationMockMvc
-        .perform(
-            post("/api/resource-estimations")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(resourceEstimation)))
-        .andExpect(status().isBadRequest());
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restResourceEstimationMockMvc.perform(post("/api/resource-estimations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(resourceEstimationDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the ResourceEstimation in the database
-    List<ResourceEstimation> resourceEstimationList = resourceEstimationRepository.findAll();
-    assertThat(resourceEstimationList).hasSize(databaseSizeBeforeCreate);
-  }
+        // Validate the ResourceEstimation in the database
+        List<ResourceEstimation> resourceEstimationList = resourceEstimationRepository.findAll();
+        assertThat(resourceEstimationList).hasSize(databaseSizeBeforeCreate);
+    }
 
-  @Test
-  @Transactional
-  public void getAllResourceEstimations() throws Exception {
-    // Initialize the database
-    resourceEstimationRepository.saveAndFlush(resourceEstimation);
 
-    // Get all the resourceEstimationList
-    restResourceEstimationMockMvc
-        .perform(get("/api/resource-estimations?sort=id,desc"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.[*].id").value(hasItem(resourceEstimation.getId().intValue())));
-  }
+    @Test
+    @Transactional
+    public void getAllResourceEstimations() throws Exception {
+        // Initialize the database
+        resourceEstimationRepository.saveAndFlush(resourceEstimation);
 
-  @Test
-  @Transactional
-  public void getResourceEstimation() throws Exception {
-    // Initialize the database
-    resourceEstimationRepository.saveAndFlush(resourceEstimation);
+        // Get all the resourceEstimationList
+        restResourceEstimationMockMvc.perform(get("/api/resource-estimations?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(resourceEstimation.getId().intValue())));
+    }
+    
+    @Test
+    @Transactional
+    public void getResourceEstimation() throws Exception {
+        // Initialize the database
+        resourceEstimationRepository.saveAndFlush(resourceEstimation);
 
-    // Get the resourceEstimation
-    restResourceEstimationMockMvc
-        .perform(get("/api/resource-estimations/{id}", resourceEstimation.getId()))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.id").value(resourceEstimation.getId().intValue()));
-  }
+        // Get the resourceEstimation
+        restResourceEstimationMockMvc.perform(get("/api/resource-estimations/{id}", resourceEstimation.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(resourceEstimation.getId().intValue()));
+    }
 
-  @Test
-  @Transactional
-  public void getNonExistingResourceEstimation() throws Exception {
-    // Get the resourceEstimation
-    restResourceEstimationMockMvc
-        .perform(get("/api/resource-estimations/{id}", Long.MAX_VALUE))
-        .andExpect(status().isNotFound());
-  }
+    @Test
+    @Transactional
+    public void getNonExistingResourceEstimation() throws Exception {
+        // Get the resourceEstimation
+        restResourceEstimationMockMvc.perform(get("/api/resource-estimations/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void updateResourceEstimation() throws Exception {
-    // Initialize the database
-    resourceEstimationRepository.saveAndFlush(resourceEstimation);
+    @Test
+    @Transactional
+    public void updateResourceEstimation() throws Exception {
+        // Initialize the database
+        resourceEstimationRepository.saveAndFlush(resourceEstimation);
 
-    int databaseSizeBeforeUpdate = resourceEstimationRepository.findAll().size();
+        int databaseSizeBeforeUpdate = resourceEstimationRepository.findAll().size();
 
-    // Update the resourceEstimation
-    ResourceEstimation updatedResourceEstimation =
-        resourceEstimationRepository.findById(resourceEstimation.getId()).get();
-    // Disconnect from session so that the updates on updatedResourceEstimation are not directly
-    // saved in db
-    em.detach(updatedResourceEstimation);
+        // Update the resourceEstimation
+        ResourceEstimation updatedResourceEstimation = resourceEstimationRepository.findById(resourceEstimation.getId()).get();
+        // Disconnect from session so that the updates on updatedResourceEstimation are not directly saved in db
+        em.detach(updatedResourceEstimation);
+        ResourceEstimationDTO resourceEstimationDTO = resourceEstimationMapper.toDto(updatedResourceEstimation);
 
-    restResourceEstimationMockMvc
-        .perform(
-            put("/api/resource-estimations")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedResourceEstimation)))
-        .andExpect(status().isOk());
+        restResourceEstimationMockMvc.perform(put("/api/resource-estimations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(resourceEstimationDTO)))
+            .andExpect(status().isOk());
 
-    // Validate the ResourceEstimation in the database
-    List<ResourceEstimation> resourceEstimationList = resourceEstimationRepository.findAll();
-    assertThat(resourceEstimationList).hasSize(databaseSizeBeforeUpdate);
-    ResourceEstimation testResourceEstimation =
-        resourceEstimationList.get(resourceEstimationList.size() - 1);
-  }
+        // Validate the ResourceEstimation in the database
+        List<ResourceEstimation> resourceEstimationList = resourceEstimationRepository.findAll();
+        assertThat(resourceEstimationList).hasSize(databaseSizeBeforeUpdate);
+        ResourceEstimation testResourceEstimation = resourceEstimationList.get(resourceEstimationList.size() - 1);
+    }
 
-  @Test
-  @Transactional
-  public void updateNonExistingResourceEstimation() throws Exception {
-    int databaseSizeBeforeUpdate = resourceEstimationRepository.findAll().size();
+    @Test
+    @Transactional
+    public void updateNonExistingResourceEstimation() throws Exception {
+        int databaseSizeBeforeUpdate = resourceEstimationRepository.findAll().size();
 
-    // Create the ResourceEstimation
+        // Create the ResourceEstimation
+        ResourceEstimationDTO resourceEstimationDTO = resourceEstimationMapper.toDto(resourceEstimation);
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restResourceEstimationMockMvc
-        .perform(
-            put("/api/resource-estimations")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(resourceEstimation)))
-        .andExpect(status().isBadRequest());
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restResourceEstimationMockMvc.perform(put("/api/resource-estimations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(resourceEstimationDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the ResourceEstimation in the database
-    List<ResourceEstimation> resourceEstimationList = resourceEstimationRepository.findAll();
-    assertThat(resourceEstimationList).hasSize(databaseSizeBeforeUpdate);
-  }
+        // Validate the ResourceEstimation in the database
+        List<ResourceEstimation> resourceEstimationList = resourceEstimationRepository.findAll();
+        assertThat(resourceEstimationList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-  @Test
-  @Transactional
-  public void deleteResourceEstimation() throws Exception {
-    // Initialize the database
-    resourceEstimationRepository.saveAndFlush(resourceEstimation);
+    @Test
+    @Transactional
+    public void deleteResourceEstimation() throws Exception {
+        // Initialize the database
+        resourceEstimationRepository.saveAndFlush(resourceEstimation);
 
-    int databaseSizeBeforeDelete = resourceEstimationRepository.findAll().size();
+        int databaseSizeBeforeDelete = resourceEstimationRepository.findAll().size();
 
-    // Delete the resourceEstimation
-    restResourceEstimationMockMvc
-        .perform(
-            delete("/api/resource-estimations/{id}", resourceEstimation.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-        .andExpect(status().isNoContent());
+        // Delete the resourceEstimation
+        restResourceEstimationMockMvc.perform(delete("/api/resource-estimations/{id}", resourceEstimation.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNoContent());
 
-    // Validate the database contains one less item
-    List<ResourceEstimation> resourceEstimationList = resourceEstimationRepository.findAll();
-    assertThat(resourceEstimationList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+        // Validate the database contains one less item
+        List<ResourceEstimation> resourceEstimationList = resourceEstimationRepository.findAll();
+        assertThat(resourceEstimationList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 
-  @Test
-  @Transactional
-  public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(ResourceEstimation.class);
-    ResourceEstimation resourceEstimation1 = new ResourceEstimation();
-    resourceEstimation1.setId(1L);
-    ResourceEstimation resourceEstimation2 = new ResourceEstimation();
-    resourceEstimation2.setId(resourceEstimation1.getId());
-    assertThat(resourceEstimation1).isEqualTo(resourceEstimation2);
-    resourceEstimation2.setId(2L);
-    assertThat(resourceEstimation1).isNotEqualTo(resourceEstimation2);
-    resourceEstimation1.setId(null);
-    assertThat(resourceEstimation1).isNotEqualTo(resourceEstimation2);
-  }
+    @Test
+    @Transactional
+    public void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(ResourceEstimation.class);
+        ResourceEstimation resourceEstimation1 = new ResourceEstimation();
+        resourceEstimation1.setId(1L);
+        ResourceEstimation resourceEstimation2 = new ResourceEstimation();
+        resourceEstimation2.setId(resourceEstimation1.getId());
+        assertThat(resourceEstimation1).isEqualTo(resourceEstimation2);
+        resourceEstimation2.setId(2L);
+        assertThat(resourceEstimation1).isNotEqualTo(resourceEstimation2);
+        resourceEstimation1.setId(null);
+        assertThat(resourceEstimation1).isNotEqualTo(resourceEstimation2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(ResourceEstimationDTO.class);
+        ResourceEstimationDTO resourceEstimationDTO1 = new ResourceEstimationDTO();
+        resourceEstimationDTO1.setId(1L);
+        ResourceEstimationDTO resourceEstimationDTO2 = new ResourceEstimationDTO();
+        assertThat(resourceEstimationDTO1).isNotEqualTo(resourceEstimationDTO2);
+        resourceEstimationDTO2.setId(resourceEstimationDTO1.getId());
+        assertThat(resourceEstimationDTO1).isEqualTo(resourceEstimationDTO2);
+        resourceEstimationDTO2.setId(2L);
+        assertThat(resourceEstimationDTO1).isNotEqualTo(resourceEstimationDTO2);
+        resourceEstimationDTO1.setId(null);
+        assertThat(resourceEstimationDTO1).isNotEqualTo(resourceEstimationDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(resourceEstimationMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(resourceEstimationMapper.fromId(null)).isNull();
+    }
 }

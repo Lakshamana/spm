@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.domain.Description;
-import br.ufpa.labes.spm.repository.DescriptionRepository;
+import br.ufpa.labes.spm.service.DescriptionService;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
+import br.ufpa.labes.spm.service.dto.DescriptionDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -18,111 +18,101 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-/** REST controller for managing {@link br.ufpa.labes.spm.domain.Description}. */
+/**
+ * REST controller for managing {@link br.ufpa.labes.spm.domain.Description}.
+ */
 @RestController
 @RequestMapping("/api")
 public class DescriptionResource {
 
-  private final Logger log = LoggerFactory.getLogger(DescriptionResource.class);
+    private final Logger log = LoggerFactory.getLogger(DescriptionResource.class);
 
-  private static final String ENTITY_NAME = "description";
+    private static final String ENTITY_NAME = "description";
 
-  @Value("${jhipster.clientApp.name}")
-  private String applicationName;
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
-  private final DescriptionRepository descriptionRepository;
+    private final DescriptionService descriptionService;
 
-  public DescriptionResource(DescriptionRepository descriptionRepository) {
-    this.descriptionRepository = descriptionRepository;
-  }
-
-  /**
-   * {@code POST /descriptions} : Create a new description.
-   *
-   * @param description the description to create.
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new
-   *     description, or with status {@code 400 (Bad Request)} if the description has already an ID.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PostMapping("/descriptions")
-  public ResponseEntity<Description> createDescription(@RequestBody Description description)
-      throws URISyntaxException {
-    log.debug("REST request to save Description : {}", description);
-    if (description.getId() != null) {
-      throw new BadRequestAlertException(
-          "A new description cannot already have an ID", ENTITY_NAME, "idexists");
+    public DescriptionResource(DescriptionService descriptionService) {
+        this.descriptionService = descriptionService;
     }
-    Description result = descriptionRepository.save(description);
-    return ResponseEntity.created(new URI("/api/descriptions/" + result.getId()))
-        .headers(
-            HeaderUtil.createEntityCreationAlert(
-                applicationName, true, ENTITY_NAME, result.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code PUT /descriptions} : Updates an existing description.
-   *
-   * @param description the description to update.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated
-   *     description, or with status {@code 400 (Bad Request)} if the description is not valid, or
-   *     with status {@code 500 (Internal Server Error)} if the description couldn't be updated.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PutMapping("/descriptions")
-  public ResponseEntity<Description> updateDescription(@RequestBody Description description)
-      throws URISyntaxException {
-    log.debug("REST request to update Description : {}", description);
-    if (description.getId() == null) {
-      throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    /**
+     * {@code POST  /descriptions} : Create a new description.
+     *
+     * @param descriptionDTO the descriptionDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new descriptionDTO, or with status {@code 400 (Bad Request)} if the description has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/descriptions")
+    public ResponseEntity<DescriptionDTO> createDescription(@RequestBody DescriptionDTO descriptionDTO) throws URISyntaxException {
+        log.debug("REST request to save Description : {}", descriptionDTO);
+        if (descriptionDTO.getId() != null) {
+            throw new BadRequestAlertException("A new description cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        DescriptionDTO result = descriptionService.save(descriptionDTO);
+        return ResponseEntity.created(new URI("/api/descriptions/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
-    Description result = descriptionRepository.save(description);
-    return ResponseEntity.ok()
-        .headers(
-            HeaderUtil.createEntityUpdateAlert(
-                applicationName, true, ENTITY_NAME, description.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code GET /descriptions} : get all the descriptions.
-   *
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of descriptions in
-   *     body.
-   */
-  @GetMapping("/descriptions")
-  public List<Description> getAllDescriptions() {
-    log.debug("REST request to get all Descriptions");
-    return descriptionRepository.findAll();
-  }
+    /**
+     * {@code PUT  /descriptions} : Updates an existing description.
+     *
+     * @param descriptionDTO the descriptionDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated descriptionDTO,
+     * or with status {@code 400 (Bad Request)} if the descriptionDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the descriptionDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/descriptions")
+    public ResponseEntity<DescriptionDTO> updateDescription(@RequestBody DescriptionDTO descriptionDTO) throws URISyntaxException {
+        log.debug("REST request to update Description : {}", descriptionDTO);
+        if (descriptionDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        DescriptionDTO result = descriptionService.save(descriptionDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, descriptionDTO.getId().toString()))
+            .body(result);
+    }
 
-  /**
-   * {@code GET /descriptions/:id} : get the "id" description.
-   *
-   * @param id the id of the description to retrieve.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the description,
-   *     or with status {@code 404 (Not Found)}.
-   */
-  @GetMapping("/descriptions/{id}")
-  public ResponseEntity<Description> getDescription(@PathVariable Long id) {
-    log.debug("REST request to get Description : {}", id);
-    Optional<Description> description = descriptionRepository.findById(id);
-    return ResponseUtil.wrapOrNotFound(description);
-  }
+    /**
+     * {@code GET  /descriptions} : get all the descriptions.
+     *
 
-  /**
-   * {@code DELETE /descriptions/:id} : delete the "id" description.
-   *
-   * @param id the id of the description to delete.
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-   */
-  @DeleteMapping("/descriptions/{id}")
-  public ResponseEntity<Void> deleteDescription(@PathVariable Long id) {
-    log.debug("REST request to delete Description : {}", id);
-    descriptionRepository.deleteById(id);
-    return ResponseEntity.noContent()
-        .headers(
-            HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-        .build();
-  }
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of descriptions in body.
+     */
+    @GetMapping("/descriptions")
+    public List<DescriptionDTO> getAllDescriptions() {
+        log.debug("REST request to get all Descriptions");
+        return descriptionService.findAll();
+    }
+
+    /**
+     * {@code GET  /descriptions/:id} : get the "id" description.
+     *
+     * @param id the id of the descriptionDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the descriptionDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/descriptions/{id}")
+    public ResponseEntity<DescriptionDTO> getDescription(@PathVariable Long id) {
+        log.debug("REST request to get Description : {}", id);
+        Optional<DescriptionDTO> descriptionDTO = descriptionService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(descriptionDTO);
+    }
+
+    /**
+     * {@code DELETE  /descriptions/:id} : delete the "id" description.
+     *
+     * @param id the id of the descriptionDTO to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/descriptions/{id}")
+    public ResponseEntity<Void> deleteDescription(@PathVariable Long id) {
+        log.debug("REST request to delete Description : {}", id);
+        descriptionService.delete(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
 }

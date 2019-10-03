@@ -1,123 +1,128 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
+import java.util.Objects;
+import javax.persistence.Lob;
 
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
-@SuppressWarnings("serial")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.MetricDefinition} entity.
+ */
 public class MetricDefinitionDTO implements Serializable {
 
-  private Long id;
+    private Long id;
 
-  private String name;
+    private String name;
 
-  private String description;
+    @Lob
+    private String description;
 
-  private String kind;
+    private String kind;
 
-  private Float rangeFrom;
+    private Float rangeFrom;
 
-  private Float rangeTo;
+    private Float rangeTo;
 
-  private String howToMeasure;
+    @Lob
+    private String howToMeasure;
 
-  @IgnoreMapping private String metricType;
 
-  @IgnoreMapping private List<MetricDTO> metric;
+    private Long metricTypeId;
 
-  @IgnoreMapping private List<EstimationDTO> estimation;
+    public Long getId() {
+        return id;
+    }
 
-  @IgnoreMapping private List<String> units;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public MetricDefinitionDTO() {}
+    public String getName() {
+        return name;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getKind() {
+        return kind;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public Float getRangeFrom() {
+        return rangeFrom;
+    }
 
-  public String getKind() {
-    return kind;
-  }
+    public void setRangeFrom(Float rangeFrom) {
+        this.rangeFrom = rangeFrom;
+    }
 
-  public void setKind(String kind) {
-    this.kind = kind;
-  }
+    public Float getRangeTo() {
+        return rangeTo;
+    }
 
-  public Float getRangeFrom() {
-    return rangeFrom;
-  }
+    public void setRangeTo(Float rangeTo) {
+        this.rangeTo = rangeTo;
+    }
 
-  public void setRangeFrom(Float rangeFrom) {
-    this.rangeFrom = rangeFrom;
-  }
+    public String getHowToMeasure() {
+        return howToMeasure;
+    }
 
-  public Float getRangeTo() {
-    return rangeTo;
-  }
+    public void setHowToMeasure(String howToMeasure) {
+        this.howToMeasure = howToMeasure;
+    }
 
-  public void setRangeTo(Float rangeTo) {
-    this.rangeTo = rangeTo;
-  }
+    public Long getMetricTypeId() {
+        return metricTypeId;
+    }
 
-  public String getHowToMeasure() {
-    return howToMeasure;
-  }
+    public void setMetricTypeId(Long metricTypeId) {
+        this.metricTypeId = metricTypeId;
+    }
 
-  public void setHowToMeasure(String howToMeasure) {
-    this.howToMeasure = howToMeasure;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-  public String getMetricType() {
-    return metricType;
-  }
+        MetricDefinitionDTO metricDefinitionDTO = (MetricDefinitionDTO) o;
+        if (metricDefinitionDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), metricDefinitionDTO.getId());
+    }
 
-  public void setMetricType(String metricType) {
-    this.metricType = metricType;
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
 
-  public Collection<MetricDTO> getMetric() {
-    return metric;
-  }
-
-  public void setMetric(List<MetricDTO> metric) {
-    this.metric = metric;
-  }
-
-  public List<EstimationDTO> getEstimation() {
-    return estimation;
-  }
-
-  public void setEstimation(List<EstimationDTO> estimation) {
-    this.estimation = estimation;
-  }
-
-  public List<String> getUnits() {
-    return units;
-  }
-
-  public void setUnits(List<String> units) {
-    this.units = units;
-  }
+    @Override
+    public String toString() {
+        return "MetricDefinitionDTO{" +
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", kind='" + getKind() + "'" +
+            ", rangeFrom=" + getRangeFrom() +
+            ", rangeTo=" + getRangeTo() +
+            ", howToMeasure='" + getHowToMeasure() + "'" +
+            ", metricType=" + getMetricTypeId() +
+            "}";
+    }
 }

@@ -16,72 +16,75 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/** Service Implementation for managing {@link WorkGroup}. */
+/**
+ * Service Implementation for managing {@link WorkGroup}.
+ */
 @Service
 @Transactional
 public class WorkGroupServiceImpl implements WorkGroupService {
 
-  private final Logger log = LoggerFactory.getLogger(WorkGroupServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(WorkGroupServiceImpl.class);
 
-  private final WorkGroupRepository workGroupRepository;
+    private final WorkGroupRepository workGroupRepository;
 
-  private final WorkGroupMapper workGroupMapper;
+    private final WorkGroupMapper workGroupMapper;
 
-  public WorkGroupServiceImpl(
-      WorkGroupRepository workGroupRepository, WorkGroupMapper workGroupMapper) {
-    this.workGroupRepository = workGroupRepository;
-    this.workGroupMapper = workGroupMapper;
-  }
+    public WorkGroupServiceImpl(WorkGroupRepository workGroupRepository, WorkGroupMapper workGroupMapper) {
+        this.workGroupRepository = workGroupRepository;
+        this.workGroupMapper = workGroupMapper;
+    }
 
-  /**
-   * Save a workGroup.
-   *
-   * @param workGroupDTO the entity to save.
-   * @return the persisted entity.
-   */
-  @Override
-  public WorkGroupDTO save(WorkGroupDTO workGroupDTO) {
-    log.debug("Request to save WorkGroup : {}", workGroupDTO);
-    WorkGroup workGroup = workGroupMapper.toEntity(workGroupDTO);
-    workGroup = workGroupRepository.save(workGroup);
-    return workGroupMapper.toDto(workGroup);
-  }
+    /**
+     * Save a workGroup.
+     *
+     * @param workGroupDTO the entity to save.
+     * @return the persisted entity.
+     */
+    @Override
+    public WorkGroupDTO save(WorkGroupDTO workGroupDTO) {
+        log.debug("Request to save WorkGroup : {}", workGroupDTO);
+        WorkGroup workGroup = workGroupMapper.toEntity(workGroupDTO);
+        workGroup = workGroupRepository.save(workGroup);
+        return workGroupMapper.toDto(workGroup);
+    }
 
-  /**
-   * Get all the workGroups.
-   *
-   * @return the list of entities.
-   */
-  @Override
-  @Transactional(readOnly = true)
-  public List<WorkGroupDTO> findAll() {
-    log.debug("Request to get all WorkGroups");
-    return workGroupRepository.findAll().stream()
-        .map(workGroupMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
+    /**
+     * Get all the workGroups.
+     *
+     * @return the list of entities.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<WorkGroupDTO> findAll() {
+        log.debug("Request to get all WorkGroups");
+        return workGroupRepository.findAll().stream()
+            .map(workGroupMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
-  /**
-   * Get one workGroup by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Override
-  @Transactional(readOnly = true)
-  public Optional<WorkGroupDTO> findOne(Long id) {
-    log.debug("Request to get WorkGroup : {}", id);
-    return workGroupRepository.findById(id).map(workGroupMapper::toDto);
-  }
 
-  /**
-   * Delete the workGroup by id.
-   *
-   * @param id the id of the entity.
-   */
-  @Override
-  public void delete(Long id) {
-    log.debug("Request to delete WorkGroup : {}", id);
-    workGroupRepository.deleteById(id);
-  }
+    /**
+     * Get one workGroup by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<WorkGroupDTO> findOne(Long id) {
+        log.debug("Request to get WorkGroup : {}", id);
+        return workGroupRepository.findById(id)
+            .map(workGroupMapper::toDto);
+    }
+
+    /**
+     * Delete the workGroup by id.
+     *
+     * @param id the id of the entity.
+     */
+    @Override
+    public void delete(Long id) {
+        log.debug("Request to delete WorkGroup : {}", id);
+        workGroupRepository.deleteById(id);
+    }
 }

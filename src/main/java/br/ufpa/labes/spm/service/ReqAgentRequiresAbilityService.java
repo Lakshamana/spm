@@ -15,70 +15,71 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/** Service Implementation for managing {@link ReqAgentRequiresAbility}. */
+/**
+ * Service Implementation for managing {@link ReqAgentRequiresAbility}.
+ */
 @Service
 @Transactional
 public class ReqAgentRequiresAbilityService {
 
-  private final Logger log = LoggerFactory.getLogger(ReqAgentRequiresAbilityService.class);
+    private final Logger log = LoggerFactory.getLogger(ReqAgentRequiresAbilityService.class);
 
-  private final ReqAgentRequiresAbilityRepository reqAgentRequiresAbilityRepository;
+    private final ReqAgentRequiresAbilityRepository reqAgentRequiresAbilityRepository;
 
-  private final ReqAgentRequiresAbilityMapper reqAgentRequiresAbilityMapper;
+    private final ReqAgentRequiresAbilityMapper reqAgentRequiresAbilityMapper;
 
-  public ReqAgentRequiresAbilityService(
-      ReqAgentRequiresAbilityRepository reqAgentRequiresAbilityRepository,
-      ReqAgentRequiresAbilityMapper reqAgentRequiresAbilityMapper) {
-    this.reqAgentRequiresAbilityRepository = reqAgentRequiresAbilityRepository;
-    this.reqAgentRequiresAbilityMapper = reqAgentRequiresAbilityMapper;
-  }
+    public ReqAgentRequiresAbilityService(ReqAgentRequiresAbilityRepository reqAgentRequiresAbilityRepository, ReqAgentRequiresAbilityMapper reqAgentRequiresAbilityMapper) {
+        this.reqAgentRequiresAbilityRepository = reqAgentRequiresAbilityRepository;
+        this.reqAgentRequiresAbilityMapper = reqAgentRequiresAbilityMapper;
+    }
 
-  /**
-   * Save a reqAgentRequiresAbility.
-   *
-   * @param reqAgentRequiresAbilityDTO the entity to save.
-   * @return the persisted entity.
-   */
-  public ReqAgentRequiresAbilityDTO save(ReqAgentRequiresAbilityDTO reqAgentRequiresAbilityDTO) {
-    log.debug("Request to save ReqAgentRequiresAbility : {}", reqAgentRequiresAbilityDTO);
-    ReqAgentRequiresAbility reqAgentRequiresAbility =
-        reqAgentRequiresAbilityMapper.toEntity(reqAgentRequiresAbilityDTO);
-    reqAgentRequiresAbility = reqAgentRequiresAbilityRepository.save(reqAgentRequiresAbility);
-    return reqAgentRequiresAbilityMapper.toDto(reqAgentRequiresAbility);
-  }
+    /**
+     * Save a reqAgentRequiresAbility.
+     *
+     * @param reqAgentRequiresAbilityDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public ReqAgentRequiresAbilityDTO save(ReqAgentRequiresAbilityDTO reqAgentRequiresAbilityDTO) {
+        log.debug("Request to save ReqAgentRequiresAbility : {}", reqAgentRequiresAbilityDTO);
+        ReqAgentRequiresAbility reqAgentRequiresAbility = reqAgentRequiresAbilityMapper.toEntity(reqAgentRequiresAbilityDTO);
+        reqAgentRequiresAbility = reqAgentRequiresAbilityRepository.save(reqAgentRequiresAbility);
+        return reqAgentRequiresAbilityMapper.toDto(reqAgentRequiresAbility);
+    }
 
-  /**
-   * Get all the reqAgentRequiresAbilities.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<ReqAgentRequiresAbilityDTO> findAll() {
-    log.debug("Request to get all ReqAgentRequiresAbilities");
-    return reqAgentRequiresAbilityRepository.findAll().stream()
-        .map(reqAgentRequiresAbilityMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
+    /**
+     * Get all the reqAgentRequiresAbilities.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<ReqAgentRequiresAbilityDTO> findAll() {
+        log.debug("Request to get all ReqAgentRequiresAbilities");
+        return reqAgentRequiresAbilityRepository.findAll().stream()
+            .map(reqAgentRequiresAbilityMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
-  /**
-   * Get one reqAgentRequiresAbility by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Transactional(readOnly = true)
-  public Optional<ReqAgentRequiresAbilityDTO> findOne(Long id) {
-    log.debug("Request to get ReqAgentRequiresAbility : {}", id);
-    return reqAgentRequiresAbilityRepository.findById(id).map(reqAgentRequiresAbilityMapper::toDto);
-  }
 
-  /**
-   * Delete the reqAgentRequiresAbility by id.
-   *
-   * @param id the id of the entity.
-   */
-  public void delete(Long id) {
-    log.debug("Request to delete ReqAgentRequiresAbility : {}", id);
-    reqAgentRequiresAbilityRepository.deleteById(id);
-  }
+    /**
+     * Get one reqAgentRequiresAbility by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<ReqAgentRequiresAbilityDTO> findOne(Long id) {
+        log.debug("Request to get ReqAgentRequiresAbility : {}", id);
+        return reqAgentRequiresAbilityRepository.findById(id)
+            .map(reqAgentRequiresAbilityMapper::toDto);
+    }
+
+    /**
+     * Delete the reqAgentRequiresAbility by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+        log.debug("Request to delete ReqAgentRequiresAbility : {}", id);
+        reqAgentRequiresAbilityRepository.deleteById(id);
+    }
 }

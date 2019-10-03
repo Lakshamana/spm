@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.domain.Reservation;
-import br.ufpa.labes.spm.repository.ReservationRepository;
+import br.ufpa.labes.spm.service.ReservationService;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
+import br.ufpa.labes.spm.service.dto.ReservationDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -18,111 +18,101 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-/** REST controller for managing {@link br.ufpa.labes.spm.domain.Reservation}. */
+/**
+ * REST controller for managing {@link br.ufpa.labes.spm.domain.Reservation}.
+ */
 @RestController
 @RequestMapping("/api")
 public class ReservationResource {
 
-  private final Logger log = LoggerFactory.getLogger(ReservationResource.class);
+    private final Logger log = LoggerFactory.getLogger(ReservationResource.class);
 
-  private static final String ENTITY_NAME = "reservation";
+    private static final String ENTITY_NAME = "reservation";
 
-  @Value("${jhipster.clientApp.name}")
-  private String applicationName;
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
-  private final ReservationRepository reservationRepository;
+    private final ReservationService reservationService;
 
-  public ReservationResource(ReservationRepository reservationRepository) {
-    this.reservationRepository = reservationRepository;
-  }
-
-  /**
-   * {@code POST /reservations} : Create a new reservation.
-   *
-   * @param reservation the reservation to create.
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new
-   *     reservation, or with status {@code 400 (Bad Request)} if the reservation has already an ID.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PostMapping("/reservations")
-  public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation)
-      throws URISyntaxException {
-    log.debug("REST request to save Reservation : {}", reservation);
-    if (reservation.getId() != null) {
-      throw new BadRequestAlertException(
-          "A new reservation cannot already have an ID", ENTITY_NAME, "idexists");
+    public ReservationResource(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
-    Reservation result = reservationRepository.save(reservation);
-    return ResponseEntity.created(new URI("/api/reservations/" + result.getId()))
-        .headers(
-            HeaderUtil.createEntityCreationAlert(
-                applicationName, true, ENTITY_NAME, result.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code PUT /reservations} : Updates an existing reservation.
-   *
-   * @param reservation the reservation to update.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated
-   *     reservation, or with status {@code 400 (Bad Request)} if the reservation is not valid, or
-   *     with status {@code 500 (Internal Server Error)} if the reservation couldn't be updated.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PutMapping("/reservations")
-  public ResponseEntity<Reservation> updateReservation(@RequestBody Reservation reservation)
-      throws URISyntaxException {
-    log.debug("REST request to update Reservation : {}", reservation);
-    if (reservation.getId() == null) {
-      throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    /**
+     * {@code POST  /reservations} : Create a new reservation.
+     *
+     * @param reservationDTO the reservationDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new reservationDTO, or with status {@code 400 (Bad Request)} if the reservation has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/reservations")
+    public ResponseEntity<ReservationDTO> createReservation(@RequestBody ReservationDTO reservationDTO) throws URISyntaxException {
+        log.debug("REST request to save Reservation : {}", reservationDTO);
+        if (reservationDTO.getId() != null) {
+            throw new BadRequestAlertException("A new reservation cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        ReservationDTO result = reservationService.save(reservationDTO);
+        return ResponseEntity.created(new URI("/api/reservations/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
-    Reservation result = reservationRepository.save(reservation);
-    return ResponseEntity.ok()
-        .headers(
-            HeaderUtil.createEntityUpdateAlert(
-                applicationName, true, ENTITY_NAME, reservation.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code GET /reservations} : get all the reservations.
-   *
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reservations in
-   *     body.
-   */
-  @GetMapping("/reservations")
-  public List<Reservation> getAllReservations() {
-    log.debug("REST request to get all Reservations");
-    return reservationRepository.findAll();
-  }
+    /**
+     * {@code PUT  /reservations} : Updates an existing reservation.
+     *
+     * @param reservationDTO the reservationDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated reservationDTO,
+     * or with status {@code 400 (Bad Request)} if the reservationDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the reservationDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/reservations")
+    public ResponseEntity<ReservationDTO> updateReservation(@RequestBody ReservationDTO reservationDTO) throws URISyntaxException {
+        log.debug("REST request to update Reservation : {}", reservationDTO);
+        if (reservationDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        ReservationDTO result = reservationService.save(reservationDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, reservationDTO.getId().toString()))
+            .body(result);
+    }
 
-  /**
-   * {@code GET /reservations/:id} : get the "id" reservation.
-   *
-   * @param id the id of the reservation to retrieve.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the reservation,
-   *     or with status {@code 404 (Not Found)}.
-   */
-  @GetMapping("/reservations/{id}")
-  public ResponseEntity<Reservation> getReservation(@PathVariable Long id) {
-    log.debug("REST request to get Reservation : {}", id);
-    Optional<Reservation> reservation = reservationRepository.findById(id);
-    return ResponseUtil.wrapOrNotFound(reservation);
-  }
+    /**
+     * {@code GET  /reservations} : get all the reservations.
+     *
 
-  /**
-   * {@code DELETE /reservations/:id} : delete the "id" reservation.
-   *
-   * @param id the id of the reservation to delete.
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-   */
-  @DeleteMapping("/reservations/{id}")
-  public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
-    log.debug("REST request to delete Reservation : {}", id);
-    reservationRepository.deleteById(id);
-    return ResponseEntity.noContent()
-        .headers(
-            HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-        .build();
-  }
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reservations in body.
+     */
+    @GetMapping("/reservations")
+    public List<ReservationDTO> getAllReservations() {
+        log.debug("REST request to get all Reservations");
+        return reservationService.findAll();
+    }
+
+    /**
+     * {@code GET  /reservations/:id} : get the "id" reservation.
+     *
+     * @param id the id of the reservationDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the reservationDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/reservations/{id}")
+    public ResponseEntity<ReservationDTO> getReservation(@PathVariable Long id) {
+        log.debug("REST request to get Reservation : {}", id);
+        Optional<ReservationDTO> reservationDTO = reservationService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(reservationDTO);
+    }
+
+    /**
+     * {@code DELETE  /reservations/:id} : delete the "id" reservation.
+     *
+     * @param id the id of the reservationDTO to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/reservations/{id}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
+        log.debug("REST request to delete Reservation : {}", id);
+        reservationService.delete(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
 }

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.domain.ChatMessage;
-import br.ufpa.labes.spm.repository.ChatMessageRepository;
+import br.ufpa.labes.spm.service.ChatMessageService;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
+import br.ufpa.labes.spm.service.dto.ChatMessageDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -19,111 +19,101 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-/** REST controller for managing {@link br.ufpa.labes.spm.domain.ChatMessage}. */
+/**
+ * REST controller for managing {@link br.ufpa.labes.spm.domain.ChatMessage}.
+ */
 @RestController
 @RequestMapping("/api")
 public class ChatMessageResource {
 
-  private final Logger log = LoggerFactory.getLogger(ChatMessageResource.class);
+    private final Logger log = LoggerFactory.getLogger(ChatMessageResource.class);
 
-  private static final String ENTITY_NAME = "chatMessage";
+    private static final String ENTITY_NAME = "chatMessage";
 
-  @Value("${jhipster.clientApp.name}")
-  private String applicationName;
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
-  private final ChatMessageRepository chatMessageRepository;
+    private final ChatMessageService chatMessageService;
 
-  public ChatMessageResource(ChatMessageRepository chatMessageRepository) {
-    this.chatMessageRepository = chatMessageRepository;
-  }
-
-  /**
-   * {@code POST /chat-messages} : Create a new chatMessage.
-   *
-   * @param chatMessage the chatMessage to create.
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new
-   *     chatMessage, or with status {@code 400 (Bad Request)} if the chatMessage has already an ID.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PostMapping("/chat-messages")
-  public ResponseEntity<ChatMessage> createChatMessage(@Valid @RequestBody ChatMessage chatMessage)
-      throws URISyntaxException {
-    log.debug("REST request to save ChatMessage : {}", chatMessage);
-    if (chatMessage.getId() != null) {
-      throw new BadRequestAlertException(
-          "A new chatMessage cannot already have an ID", ENTITY_NAME, "idexists");
+    public ChatMessageResource(ChatMessageService chatMessageService) {
+        this.chatMessageService = chatMessageService;
     }
-    ChatMessage result = chatMessageRepository.save(chatMessage);
-    return ResponseEntity.created(new URI("/api/chat-messages/" + result.getId()))
-        .headers(
-            HeaderUtil.createEntityCreationAlert(
-                applicationName, true, ENTITY_NAME, result.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code PUT /chat-messages} : Updates an existing chatMessage.
-   *
-   * @param chatMessage the chatMessage to update.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated
-   *     chatMessage, or with status {@code 400 (Bad Request)} if the chatMessage is not valid, or
-   *     with status {@code 500 (Internal Server Error)} if the chatMessage couldn't be updated.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PutMapping("/chat-messages")
-  public ResponseEntity<ChatMessage> updateChatMessage(@Valid @RequestBody ChatMessage chatMessage)
-      throws URISyntaxException {
-    log.debug("REST request to update ChatMessage : {}", chatMessage);
-    if (chatMessage.getId() == null) {
-      throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    /**
+     * {@code POST  /chat-messages} : Create a new chatMessage.
+     *
+     * @param chatMessageDTO the chatMessageDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new chatMessageDTO, or with status {@code 400 (Bad Request)} if the chatMessage has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/chat-messages")
+    public ResponseEntity<ChatMessageDTO> createChatMessage(@Valid @RequestBody ChatMessageDTO chatMessageDTO) throws URISyntaxException {
+        log.debug("REST request to save ChatMessage : {}", chatMessageDTO);
+        if (chatMessageDTO.getId() != null) {
+            throw new BadRequestAlertException("A new chatMessage cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        ChatMessageDTO result = chatMessageService.save(chatMessageDTO);
+        return ResponseEntity.created(new URI("/api/chat-messages/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
-    ChatMessage result = chatMessageRepository.save(chatMessage);
-    return ResponseEntity.ok()
-        .headers(
-            HeaderUtil.createEntityUpdateAlert(
-                applicationName, true, ENTITY_NAME, chatMessage.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code GET /chat-messages} : get all the chatMessages.
-   *
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of chatMessages in
-   *     body.
-   */
-  @GetMapping("/chat-messages")
-  public List<ChatMessage> getAllChatMessages() {
-    log.debug("REST request to get all ChatMessages");
-    return chatMessageRepository.findAll();
-  }
+    /**
+     * {@code PUT  /chat-messages} : Updates an existing chatMessage.
+     *
+     * @param chatMessageDTO the chatMessageDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated chatMessageDTO,
+     * or with status {@code 400 (Bad Request)} if the chatMessageDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the chatMessageDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/chat-messages")
+    public ResponseEntity<ChatMessageDTO> updateChatMessage(@Valid @RequestBody ChatMessageDTO chatMessageDTO) throws URISyntaxException {
+        log.debug("REST request to update ChatMessage : {}", chatMessageDTO);
+        if (chatMessageDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        ChatMessageDTO result = chatMessageService.save(chatMessageDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, chatMessageDTO.getId().toString()))
+            .body(result);
+    }
 
-  /**
-   * {@code GET /chat-messages/:id} : get the "id" chatMessage.
-   *
-   * @param id the id of the chatMessage to retrieve.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the chatMessage,
-   *     or with status {@code 404 (Not Found)}.
-   */
-  @GetMapping("/chat-messages/{id}")
-  public ResponseEntity<ChatMessage> getChatMessage(@PathVariable Long id) {
-    log.debug("REST request to get ChatMessage : {}", id);
-    Optional<ChatMessage> chatMessage = chatMessageRepository.findById(id);
-    return ResponseUtil.wrapOrNotFound(chatMessage);
-  }
+    /**
+     * {@code GET  /chat-messages} : get all the chatMessages.
+     *
 
-  /**
-   * {@code DELETE /chat-messages/:id} : delete the "id" chatMessage.
-   *
-   * @param id the id of the chatMessage to delete.
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-   */
-  @DeleteMapping("/chat-messages/{id}")
-  public ResponseEntity<Void> deleteChatMessage(@PathVariable Long id) {
-    log.debug("REST request to delete ChatMessage : {}", id);
-    chatMessageRepository.deleteById(id);
-    return ResponseEntity.noContent()
-        .headers(
-            HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-        .build();
-  }
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of chatMessages in body.
+     */
+    @GetMapping("/chat-messages")
+    public List<ChatMessageDTO> getAllChatMessages() {
+        log.debug("REST request to get all ChatMessages");
+        return chatMessageService.findAll();
+    }
+
+    /**
+     * {@code GET  /chat-messages/:id} : get the "id" chatMessage.
+     *
+     * @param id the id of the chatMessageDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the chatMessageDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/chat-messages/{id}")
+    public ResponseEntity<ChatMessageDTO> getChatMessage(@PathVariable Long id) {
+        log.debug("REST request to get ChatMessage : {}", id);
+        Optional<ChatMessageDTO> chatMessageDTO = chatMessageService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(chatMessageDTO);
+    }
+
+    /**
+     * {@code DELETE  /chat-messages/:id} : delete the "id" chatMessage.
+     *
+     * @param id the id of the chatMessageDTO to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/chat-messages/{id}")
+    public ResponseEntity<Void> deleteChatMessage(@PathVariable Long id) {
+        log.debug("REST request to delete ChatMessage : {}", id);
+        chatMessageService.delete(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
 }

@@ -10,21 +10,20 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/** Spring Data repository for the ArtifactCon entity. */
+/**
+ * Spring Data  repository for the ArtifactCon entity.
+ */
 @Repository
 public interface ArtifactConRepository extends JpaRepository<ArtifactCon, Long> {
 
-  @Query(
-      value =
-          "select distinct artifactCon from ArtifactCon artifactCon left join fetch artifactCon.toMultipleCons",
-      countQuery = "select count(distinct artifactCon) from ArtifactCon artifactCon")
-  Page<ArtifactCon> findAllWithEagerRelationships(Pageable pageable);
+    @Query(value = "select distinct artifactCon from ArtifactCon artifactCon left join fetch artifactCon.toMultipleCons",
+        countQuery = "select count(distinct artifactCon) from ArtifactCon artifactCon")
+    Page<ArtifactCon> findAllWithEagerRelationships(Pageable pageable);
 
-  @Query(
-      "select distinct artifactCon from ArtifactCon artifactCon left join fetch artifactCon.toMultipleCons")
-  List<ArtifactCon> findAllWithEagerRelationships();
+    @Query("select distinct artifactCon from ArtifactCon artifactCon left join fetch artifactCon.toMultipleCons")
+    List<ArtifactCon> findAllWithEagerRelationships();
 
-  @Query(
-      "select artifactCon from ArtifactCon artifactCon left join fetch artifactCon.toMultipleCons where artifactCon.id =:id")
-  Optional<ArtifactCon> findOneWithEagerRelationships(@Param("id") Long id);
+    @Query("select artifactCon from ArtifactCon artifactCon left join fetch artifactCon.toMultipleCons where artifactCon.id =:id")
+    Optional<ArtifactCon> findOneWithEagerRelationships(@Param("id") Long id);
+
 }

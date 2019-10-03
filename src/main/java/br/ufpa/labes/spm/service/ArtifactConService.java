@@ -17,79 +17,80 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/** Service Implementation for managing {@link ArtifactCon}. */
+/**
+ * Service Implementation for managing {@link ArtifactCon}.
+ */
 @Service
 @Transactional
 public class ArtifactConService {
 
-  private final Logger log = LoggerFactory.getLogger(ArtifactConService.class);
+    private final Logger log = LoggerFactory.getLogger(ArtifactConService.class);
 
-  private final ArtifactConRepository artifactConRepository;
+    private final ArtifactConRepository artifactConRepository;
 
-  private final ArtifactConMapper artifactConMapper;
+    private final ArtifactConMapper artifactConMapper;
 
-  public ArtifactConService(
-      ArtifactConRepository artifactConRepository, ArtifactConMapper artifactConMapper) {
-    this.artifactConRepository = artifactConRepository;
-    this.artifactConMapper = artifactConMapper;
-  }
+    public ArtifactConService(ArtifactConRepository artifactConRepository, ArtifactConMapper artifactConMapper) {
+        this.artifactConRepository = artifactConRepository;
+        this.artifactConMapper = artifactConMapper;
+    }
 
-  /**
-   * Save a artifactCon.
-   *
-   * @param artifactConDTO the entity to save.
-   * @return the persisted entity.
-   */
-  public ArtifactConDTO save(ArtifactConDTO artifactConDTO) {
-    log.debug("Request to save ArtifactCon : {}", artifactConDTO);
-    ArtifactCon artifactCon = artifactConMapper.toEntity(artifactConDTO);
-    artifactCon = artifactConRepository.save(artifactCon);
-    return artifactConMapper.toDto(artifactCon);
-  }
+    /**
+     * Save a artifactCon.
+     *
+     * @param artifactConDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public ArtifactConDTO save(ArtifactConDTO artifactConDTO) {
+        log.debug("Request to save ArtifactCon : {}", artifactConDTO);
+        ArtifactCon artifactCon = artifactConMapper.toEntity(artifactConDTO);
+        artifactCon = artifactConRepository.save(artifactCon);
+        return artifactConMapper.toDto(artifactCon);
+    }
 
-  /**
-   * Get all the artifactCons.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<ArtifactConDTO> findAll() {
-    log.debug("Request to get all ArtifactCons");
-    return artifactConRepository.findAllWithEagerRelationships().stream()
-        .map(artifactConMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
+    /**
+     * Get all the artifactCons.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<ArtifactConDTO> findAll() {
+        log.debug("Request to get all ArtifactCons");
+        return artifactConRepository.findAllWithEagerRelationships().stream()
+            .map(artifactConMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
-  /**
-   * Get all the artifactCons with eager load of many-to-many relationships.
-   *
-   * @return the list of entities.
-   */
-  public Page<ArtifactConDTO> findAllWithEagerRelationships(Pageable pageable) {
-    return artifactConRepository
-        .findAllWithEagerRelationships(pageable)
-        .map(artifactConMapper::toDto);
-  }
+    /**
+     * Get all the artifactCons with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<ArtifactConDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return artifactConRepository.findAllWithEagerRelationships(pageable).map(artifactConMapper::toDto);
+    }
+    
 
-  /**
-   * Get one artifactCon by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Transactional(readOnly = true)
-  public Optional<ArtifactConDTO> findOne(Long id) {
-    log.debug("Request to get ArtifactCon : {}", id);
-    return artifactConRepository.findOneWithEagerRelationships(id).map(artifactConMapper::toDto);
-  }
+    /**
+     * Get one artifactCon by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<ArtifactConDTO> findOne(Long id) {
+        log.debug("Request to get ArtifactCon : {}", id);
+        return artifactConRepository.findOneWithEagerRelationships(id)
+            .map(artifactConMapper::toDto);
+    }
 
-  /**
-   * Delete the artifactCon by id.
-   *
-   * @param id the id of the entity.
-   */
-  public void delete(Long id) {
-    log.debug("Request to delete ArtifactCon : {}", id);
-    artifactConRepository.deleteById(id);
-  }
+    /**
+     * Delete the artifactCon by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+        log.debug("Request to delete ArtifactCon : {}", id);
+        artifactConRepository.deleteById(id);
+    }
 }

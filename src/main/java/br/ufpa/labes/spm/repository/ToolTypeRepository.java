@@ -4,7 +4,12 @@ import br.ufpa.labes.spm.domain.ToolType;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-/** Spring Data repository for the ToolType entity. */
+
+/**
+ * Spring Data  repository for the ToolType entity.
+ */
 @SuppressWarnings("unused")
 @Repository
-public interface ToolTypeRepository extends JpaRepository<ToolType, Long> {}
+public interface ToolTypeRepository extends JpaRepository<ToolType, Long> {
+
+}

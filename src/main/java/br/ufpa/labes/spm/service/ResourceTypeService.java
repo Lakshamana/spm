@@ -15,68 +15,71 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/** Service Implementation for managing {@link ResourceType}. */
+/**
+ * Service Implementation for managing {@link ResourceType}.
+ */
 @Service
 @Transactional
 public class ResourceTypeService {
 
-  private final Logger log = LoggerFactory.getLogger(ResourceTypeService.class);
+    private final Logger log = LoggerFactory.getLogger(ResourceTypeService.class);
 
-  private final ResourceTypeRepository resourceTypeRepository;
+    private final ResourceTypeRepository resourceTypeRepository;
 
-  private final ResourceTypeMapper resourceTypeMapper;
+    private final ResourceTypeMapper resourceTypeMapper;
 
-  public ResourceTypeService(
-      ResourceTypeRepository resourceTypeRepository, ResourceTypeMapper resourceTypeMapper) {
-    this.resourceTypeRepository = resourceTypeRepository;
-    this.resourceTypeMapper = resourceTypeMapper;
-  }
+    public ResourceTypeService(ResourceTypeRepository resourceTypeRepository, ResourceTypeMapper resourceTypeMapper) {
+        this.resourceTypeRepository = resourceTypeRepository;
+        this.resourceTypeMapper = resourceTypeMapper;
+    }
 
-  /**
-   * Save a resourceType.
-   *
-   * @param resourceTypeDTO the entity to save.
-   * @return the persisted entity.
-   */
-  public ResourceTypeDTO save(ResourceTypeDTO resourceTypeDTO) {
-    log.debug("Request to save ResourceType : {}", resourceTypeDTO);
-    ResourceType resourceType = resourceTypeMapper.toEntity(resourceTypeDTO);
-    resourceType = resourceTypeRepository.save(resourceType);
-    return resourceTypeMapper.toDto(resourceType);
-  }
+    /**
+     * Save a resourceType.
+     *
+     * @param resourceTypeDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public ResourceTypeDTO save(ResourceTypeDTO resourceTypeDTO) {
+        log.debug("Request to save ResourceType : {}", resourceTypeDTO);
+        ResourceType resourceType = resourceTypeMapper.toEntity(resourceTypeDTO);
+        resourceType = resourceTypeRepository.save(resourceType);
+        return resourceTypeMapper.toDto(resourceType);
+    }
 
-  /**
-   * Get all the resourceTypes.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<ResourceTypeDTO> findAll() {
-    log.debug("Request to get all ResourceTypes");
-    return resourceTypeRepository.findAll().stream()
-        .map(resourceTypeMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
+    /**
+     * Get all the resourceTypes.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<ResourceTypeDTO> findAll() {
+        log.debug("Request to get all ResourceTypes");
+        return resourceTypeRepository.findAll().stream()
+            .map(resourceTypeMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
-  /**
-   * Get one resourceType by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Transactional(readOnly = true)
-  public Optional<ResourceTypeDTO> findOne(Long id) {
-    log.debug("Request to get ResourceType : {}", id);
-    return resourceTypeRepository.findById(id).map(resourceTypeMapper::toDto);
-  }
 
-  /**
-   * Delete the resourceType by id.
-   *
-   * @param id the id of the entity.
-   */
-  public void delete(Long id) {
-    log.debug("Request to delete ResourceType : {}", id);
-    resourceTypeRepository.deleteById(id);
-  }
+    /**
+     * Get one resourceType by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<ResourceTypeDTO> findOne(Long id) {
+        log.debug("Request to get ResourceType : {}", id);
+        return resourceTypeRepository.findById(id)
+            .map(resourceTypeMapper::toDto);
+    }
+
+    /**
+     * Delete the resourceType by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+        log.debug("Request to delete ResourceType : {}", id);
+        resourceTypeRepository.deleteById(id);
+    }
 }

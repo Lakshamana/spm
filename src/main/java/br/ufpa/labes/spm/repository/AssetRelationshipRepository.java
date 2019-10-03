@@ -4,7 +4,12 @@ import br.ufpa.labes.spm.domain.AssetRelationship;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-/** Spring Data repository for the AssetRelationship entity. */
+
+/**
+ * Spring Data  repository for the AssetRelationship entity.
+ */
 @SuppressWarnings("unused")
 @Repository
-public interface AssetRelationshipRepository extends JpaRepository<AssetRelationship, Long> {}
+public interface AssetRelationshipRepository extends JpaRepository<AssetRelationship, Long> {
+
+}

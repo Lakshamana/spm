@@ -3,6 +3,9 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.PrimitiveType;
 import br.ufpa.labes.spm.repository.PrimitiveTypeRepository;
+import br.ufpa.labes.spm.service.PrimitiveTypeService;
+import br.ufpa.labes.spm.service.dto.PrimitiveTypeDTO;
+import br.ufpa.labes.spm.service.mapper.PrimitiveTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,233 +31,260 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Integration tests for the {@link PrimitiveTypeResource} REST controller. */
+/**
+ * Integration tests for the {@link PrimitiveTypeResource} REST controller.
+ */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class PrimitiveTypeResourceIT {
 
-  private static final String DEFAULT_IDENT = "AAAAAAAAAA";
-  private static final String UPDATED_IDENT = "BBBBBBBBBB";
+    private static final String DEFAULT_IDENT = "AAAAAAAAAA";
+    private static final String UPDATED_IDENT = "BBBBBBBBBB";
 
-  @Autowired private PrimitiveTypeRepository primitiveTypeRepository;
+    @Autowired
+    private PrimitiveTypeRepository primitiveTypeRepository;
 
-  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private PrimitiveTypeMapper primitiveTypeMapper;
 
-  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private PrimitiveTypeService primitiveTypeService;
 
-  @Autowired private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-  @Autowired private EntityManager em;
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-  @Autowired private Validator validator;
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
-  private MockMvc restPrimitiveTypeMockMvc;
+    @Autowired
+    private EntityManager em;
 
-  private PrimitiveType primitiveType;
+    @Autowired
+    private Validator validator;
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final PrimitiveTypeResource primitiveTypeResource =
-        new PrimitiveTypeResource(primitiveTypeRepository);
-    this.restPrimitiveTypeMockMvc =
-        MockMvcBuilders.standaloneSetup(primitiveTypeResource)
+    private MockMvc restPrimitiveTypeMockMvc;
+
+    private PrimitiveType primitiveType;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final PrimitiveTypeResource primitiveTypeResource = new PrimitiveTypeResource(primitiveTypeService);
+        this.restPrimitiveTypeMockMvc = MockMvcBuilders.standaloneSetup(primitiveTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator)
-            .build();
-  }
+            .setValidator(validator).build();
+    }
 
-  /**
-   * Create an entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static PrimitiveType createEntity(EntityManager em) {
-    PrimitiveType primitiveType = new PrimitiveType().ident(DEFAULT_IDENT);
-    return primitiveType;
-  }
-  /**
-   * Create an updated entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static PrimitiveType createUpdatedEntity(EntityManager em) {
-    PrimitiveType primitiveType = new PrimitiveType().ident(UPDATED_IDENT);
-    return primitiveType;
-  }
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static PrimitiveType createEntity(EntityManager em) {
+        PrimitiveType primitiveType = new PrimitiveType()
+            .ident(DEFAULT_IDENT);
+        return primitiveType;
+    }
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static PrimitiveType createUpdatedEntity(EntityManager em) {
+        PrimitiveType primitiveType = new PrimitiveType()
+            .ident(UPDATED_IDENT);
+        return primitiveType;
+    }
 
-  @BeforeEach
-  public void initTest() {
-    primitiveType = createEntity(em);
-  }
+    @BeforeEach
+    public void initTest() {
+        primitiveType = createEntity(em);
+    }
 
-  @Test
-  @Transactional
-  public void createPrimitiveType() throws Exception {
-    int databaseSizeBeforeCreate = primitiveTypeRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createPrimitiveType() throws Exception {
+        int databaseSizeBeforeCreate = primitiveTypeRepository.findAll().size();
 
-    // Create the PrimitiveType
-    restPrimitiveTypeMockMvc
-        .perform(
-            post("/api/primitive-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(primitiveType)))
-        .andExpect(status().isCreated());
+        // Create the PrimitiveType
+        PrimitiveTypeDTO primitiveTypeDTO = primitiveTypeMapper.toDto(primitiveType);
+        restPrimitiveTypeMockMvc.perform(post("/api/primitive-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(primitiveTypeDTO)))
+            .andExpect(status().isCreated());
 
-    // Validate the PrimitiveType in the database
-    List<PrimitiveType> primitiveTypeList = primitiveTypeRepository.findAll();
-    assertThat(primitiveTypeList).hasSize(databaseSizeBeforeCreate + 1);
-    PrimitiveType testPrimitiveType = primitiveTypeList.get(primitiveTypeList.size() - 1);
-    assertThat(testPrimitiveType.getIdent()).isEqualTo(DEFAULT_IDENT);
-  }
+        // Validate the PrimitiveType in the database
+        List<PrimitiveType> primitiveTypeList = primitiveTypeRepository.findAll();
+        assertThat(primitiveTypeList).hasSize(databaseSizeBeforeCreate + 1);
+        PrimitiveType testPrimitiveType = primitiveTypeList.get(primitiveTypeList.size() - 1);
+        assertThat(testPrimitiveType.getIdent()).isEqualTo(DEFAULT_IDENT);
+    }
 
-  @Test
-  @Transactional
-  public void createPrimitiveTypeWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = primitiveTypeRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createPrimitiveTypeWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = primitiveTypeRepository.findAll().size();
 
-    // Create the PrimitiveType with an existing ID
-    primitiveType.setId(1L);
+        // Create the PrimitiveType with an existing ID
+        primitiveType.setId(1L);
+        PrimitiveTypeDTO primitiveTypeDTO = primitiveTypeMapper.toDto(primitiveType);
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restPrimitiveTypeMockMvc
-        .perform(
-            post("/api/primitive-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(primitiveType)))
-        .andExpect(status().isBadRequest());
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restPrimitiveTypeMockMvc.perform(post("/api/primitive-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(primitiveTypeDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the PrimitiveType in the database
-    List<PrimitiveType> primitiveTypeList = primitiveTypeRepository.findAll();
-    assertThat(primitiveTypeList).hasSize(databaseSizeBeforeCreate);
-  }
+        // Validate the PrimitiveType in the database
+        List<PrimitiveType> primitiveTypeList = primitiveTypeRepository.findAll();
+        assertThat(primitiveTypeList).hasSize(databaseSizeBeforeCreate);
+    }
 
-  @Test
-  @Transactional
-  public void getAllPrimitiveTypes() throws Exception {
-    // Initialize the database
-    primitiveTypeRepository.saveAndFlush(primitiveType);
 
-    // Get all the primitiveTypeList
-    restPrimitiveTypeMockMvc
-        .perform(get("/api/primitive-types?sort=id,desc"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.[*].id").value(hasItem(primitiveType.getId().intValue())))
-        .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())));
-  }
+    @Test
+    @Transactional
+    public void getAllPrimitiveTypes() throws Exception {
+        // Initialize the database
+        primitiveTypeRepository.saveAndFlush(primitiveType);
 
-  @Test
-  @Transactional
-  public void getPrimitiveType() throws Exception {
-    // Initialize the database
-    primitiveTypeRepository.saveAndFlush(primitiveType);
+        // Get all the primitiveTypeList
+        restPrimitiveTypeMockMvc.perform(get("/api/primitive-types?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(primitiveType.getId().intValue())))
+            .andExpect(jsonPath("$.[*].ident").value(hasItem(DEFAULT_IDENT.toString())));
+    }
+    
+    @Test
+    @Transactional
+    public void getPrimitiveType() throws Exception {
+        // Initialize the database
+        primitiveTypeRepository.saveAndFlush(primitiveType);
 
-    // Get the primitiveType
-    restPrimitiveTypeMockMvc
-        .perform(get("/api/primitive-types/{id}", primitiveType.getId()))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.id").value(primitiveType.getId().intValue()))
-        .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()));
-  }
+        // Get the primitiveType
+        restPrimitiveTypeMockMvc.perform(get("/api/primitive-types/{id}", primitiveType.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(primitiveType.getId().intValue()))
+            .andExpect(jsonPath("$.ident").value(DEFAULT_IDENT.toString()));
+    }
 
-  @Test
-  @Transactional
-  public void getNonExistingPrimitiveType() throws Exception {
-    // Get the primitiveType
-    restPrimitiveTypeMockMvc
-        .perform(get("/api/primitive-types/{id}", Long.MAX_VALUE))
-        .andExpect(status().isNotFound());
-  }
+    @Test
+    @Transactional
+    public void getNonExistingPrimitiveType() throws Exception {
+        // Get the primitiveType
+        restPrimitiveTypeMockMvc.perform(get("/api/primitive-types/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void updatePrimitiveType() throws Exception {
-    // Initialize the database
-    primitiveTypeRepository.saveAndFlush(primitiveType);
+    @Test
+    @Transactional
+    public void updatePrimitiveType() throws Exception {
+        // Initialize the database
+        primitiveTypeRepository.saveAndFlush(primitiveType);
 
-    int databaseSizeBeforeUpdate = primitiveTypeRepository.findAll().size();
+        int databaseSizeBeforeUpdate = primitiveTypeRepository.findAll().size();
 
-    // Update the primitiveType
-    PrimitiveType updatedPrimitiveType =
-        primitiveTypeRepository.findById(primitiveType.getId()).get();
-    // Disconnect from session so that the updates on updatedPrimitiveType are not directly saved in
-    // db
-    em.detach(updatedPrimitiveType);
-    updatedPrimitiveType.ident(UPDATED_IDENT);
+        // Update the primitiveType
+        PrimitiveType updatedPrimitiveType = primitiveTypeRepository.findById(primitiveType.getId()).get();
+        // Disconnect from session so that the updates on updatedPrimitiveType are not directly saved in db
+        em.detach(updatedPrimitiveType);
+        updatedPrimitiveType
+            .ident(UPDATED_IDENT);
+        PrimitiveTypeDTO primitiveTypeDTO = primitiveTypeMapper.toDto(updatedPrimitiveType);
 
-    restPrimitiveTypeMockMvc
-        .perform(
-            put("/api/primitive-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedPrimitiveType)))
-        .andExpect(status().isOk());
+        restPrimitiveTypeMockMvc.perform(put("/api/primitive-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(primitiveTypeDTO)))
+            .andExpect(status().isOk());
 
-    // Validate the PrimitiveType in the database
-    List<PrimitiveType> primitiveTypeList = primitiveTypeRepository.findAll();
-    assertThat(primitiveTypeList).hasSize(databaseSizeBeforeUpdate);
-    PrimitiveType testPrimitiveType = primitiveTypeList.get(primitiveTypeList.size() - 1);
-    assertThat(testPrimitiveType.getIdent()).isEqualTo(UPDATED_IDENT);
-  }
+        // Validate the PrimitiveType in the database
+        List<PrimitiveType> primitiveTypeList = primitiveTypeRepository.findAll();
+        assertThat(primitiveTypeList).hasSize(databaseSizeBeforeUpdate);
+        PrimitiveType testPrimitiveType = primitiveTypeList.get(primitiveTypeList.size() - 1);
+        assertThat(testPrimitiveType.getIdent()).isEqualTo(UPDATED_IDENT);
+    }
 
-  @Test
-  @Transactional
-  public void updateNonExistingPrimitiveType() throws Exception {
-    int databaseSizeBeforeUpdate = primitiveTypeRepository.findAll().size();
+    @Test
+    @Transactional
+    public void updateNonExistingPrimitiveType() throws Exception {
+        int databaseSizeBeforeUpdate = primitiveTypeRepository.findAll().size();
 
-    // Create the PrimitiveType
+        // Create the PrimitiveType
+        PrimitiveTypeDTO primitiveTypeDTO = primitiveTypeMapper.toDto(primitiveType);
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restPrimitiveTypeMockMvc
-        .perform(
-            put("/api/primitive-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(primitiveType)))
-        .andExpect(status().isBadRequest());
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restPrimitiveTypeMockMvc.perform(put("/api/primitive-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(primitiveTypeDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the PrimitiveType in the database
-    List<PrimitiveType> primitiveTypeList = primitiveTypeRepository.findAll();
-    assertThat(primitiveTypeList).hasSize(databaseSizeBeforeUpdate);
-  }
+        // Validate the PrimitiveType in the database
+        List<PrimitiveType> primitiveTypeList = primitiveTypeRepository.findAll();
+        assertThat(primitiveTypeList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-  @Test
-  @Transactional
-  public void deletePrimitiveType() throws Exception {
-    // Initialize the database
-    primitiveTypeRepository.saveAndFlush(primitiveType);
+    @Test
+    @Transactional
+    public void deletePrimitiveType() throws Exception {
+        // Initialize the database
+        primitiveTypeRepository.saveAndFlush(primitiveType);
 
-    int databaseSizeBeforeDelete = primitiveTypeRepository.findAll().size();
+        int databaseSizeBeforeDelete = primitiveTypeRepository.findAll().size();
 
-    // Delete the primitiveType
-    restPrimitiveTypeMockMvc
-        .perform(
-            delete("/api/primitive-types/{id}", primitiveType.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-        .andExpect(status().isNoContent());
+        // Delete the primitiveType
+        restPrimitiveTypeMockMvc.perform(delete("/api/primitive-types/{id}", primitiveType.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNoContent());
 
-    // Validate the database contains one less item
-    List<PrimitiveType> primitiveTypeList = primitiveTypeRepository.findAll();
-    assertThat(primitiveTypeList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+        // Validate the database contains one less item
+        List<PrimitiveType> primitiveTypeList = primitiveTypeRepository.findAll();
+        assertThat(primitiveTypeList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 
-  @Test
-  @Transactional
-  public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(PrimitiveType.class);
-    PrimitiveType primitiveType1 = new PrimitiveType();
-    primitiveType1.setId(1L);
-    PrimitiveType primitiveType2 = new PrimitiveType();
-    primitiveType2.setId(primitiveType1.getId());
-    assertThat(primitiveType1).isEqualTo(primitiveType2);
-    primitiveType2.setId(2L);
-    assertThat(primitiveType1).isNotEqualTo(primitiveType2);
-    primitiveType1.setId(null);
-    assertThat(primitiveType1).isNotEqualTo(primitiveType2);
-  }
+    @Test
+    @Transactional
+    public void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(PrimitiveType.class);
+        PrimitiveType primitiveType1 = new PrimitiveType();
+        primitiveType1.setId(1L);
+        PrimitiveType primitiveType2 = new PrimitiveType();
+        primitiveType2.setId(primitiveType1.getId());
+        assertThat(primitiveType1).isEqualTo(primitiveType2);
+        primitiveType2.setId(2L);
+        assertThat(primitiveType1).isNotEqualTo(primitiveType2);
+        primitiveType1.setId(null);
+        assertThat(primitiveType1).isNotEqualTo(primitiveType2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(PrimitiveTypeDTO.class);
+        PrimitiveTypeDTO primitiveTypeDTO1 = new PrimitiveTypeDTO();
+        primitiveTypeDTO1.setId(1L);
+        PrimitiveTypeDTO primitiveTypeDTO2 = new PrimitiveTypeDTO();
+        assertThat(primitiveTypeDTO1).isNotEqualTo(primitiveTypeDTO2);
+        primitiveTypeDTO2.setId(primitiveTypeDTO1.getId());
+        assertThat(primitiveTypeDTO1).isEqualTo(primitiveTypeDTO2);
+        primitiveTypeDTO2.setId(2L);
+        assertThat(primitiveTypeDTO1).isNotEqualTo(primitiveTypeDTO2);
+        primitiveTypeDTO1.setId(null);
+        assertThat(primitiveTypeDTO1).isNotEqualTo(primitiveTypeDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(primitiveTypeMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(primitiveTypeMapper.fromId(null)).isNull();
+    }
 }

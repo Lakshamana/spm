@@ -10,19 +10,20 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/** Spring Data repository for the Author entity. */
+/**
+ * Spring Data  repository for the Author entity.
+ */
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
-  @Query(
-      value = "select distinct author from Author author left join fetch author.authorsFolloweds",
-      countQuery = "select count(distinct author) from Author author")
-  Page<Author> findAllWithEagerRelationships(Pageable pageable);
+    @Query(value = "select distinct author from Author author left join fetch author.authorsFolloweds",
+        countQuery = "select count(distinct author) from Author author")
+    Page<Author> findAllWithEagerRelationships(Pageable pageable);
 
-  @Query("select distinct author from Author author left join fetch author.authorsFolloweds")
-  List<Author> findAllWithEagerRelationships();
+    @Query("select distinct author from Author author left join fetch author.authorsFolloweds")
+    List<Author> findAllWithEagerRelationships();
 
-  @Query(
-      "select author from Author author left join fetch author.authorsFolloweds where author.id =:id")
-  Optional<Author> findOneWithEagerRelationships(@Param("id") Long id);
+    @Query("select author from Author author left join fetch author.authorsFolloweds where author.id =:id")
+    Optional<Author> findOneWithEagerRelationships(@Param("id") Long id);
+
 }

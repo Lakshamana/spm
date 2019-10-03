@@ -4,7 +4,12 @@ import br.ufpa.labes.spm.domain.AuthorStat;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-/** Spring Data repository for the AuthorStat entity. */
+
+/**
+ * Spring Data  repository for the AuthorStat entity.
+ */
 @SuppressWarnings("unused")
 @Repository
-public interface AuthorStatRepository extends JpaRepository<AuthorStat, Long> {}
+public interface AuthorStatRepository extends JpaRepository<AuthorStat, Long> {
+
+}

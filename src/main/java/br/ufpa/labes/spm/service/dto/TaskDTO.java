@@ -1,316 +1,159 @@
 package br.ufpa.labes.spm.service.dto;
-
-import java.io.Serializable;
 import java.time.LocalDate;
+import java.io.Serializable;
+import java.util.Objects;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-import br.ufpa.labes.spm.service.dto.dashboard.Time;
-
-@SuppressWarnings("serial")
-@XmlRootElement(name = "task")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Task} entity.
+ */
 public class TaskDTO implements Serializable {
-  private Long id; //
 
-  private String name;
+    private Long id;
 
-  private String localState;
+    private String localState;
 
-  private LocalDate beginDate;
+    private LocalDate beginDate;
 
-  private LocalDate endDate;
+    private LocalDate endDate;
 
-  private Float workingHours;
+    private Float workingHours;
 
-  private Time estimatedTime;
+    private LocalDate dateDelegatedTo;
 
-  private Time realWorkingTime;
+    private LocalDate dateDelegatedFrom;
 
-  private LocalDate dateDelegatedTo;
 
-  private LocalDate dateDelegatedFrom;
+    private Long delegatedFromId;
 
-  @IgnoreMapping private Float howLong;
+    private Long delegatedToId;
 
-  @IgnoreMapping private String howLongUnit;
+    private Long theNormalId;
 
-  @IgnoreMapping private LocalDate plannedBegin;
+    private Long theProcessAgendaId;
 
-  @IgnoreMapping private LocalDate plannedEnd;
+    public Long getId() {
+        return id;
+    }
 
-  @IgnoreMapping private String script;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  @IgnoreMapping private String theNormal;
+    public String getLocalState() {
+        return localState;
+    }
 
-  @IgnoreMapping private String agent;
+    public void setLocalState(String localState) {
+        this.localState = localState;
+    }
 
-  //	@IgnoreMapping
-  //	private Integer estimatedHours;
+    public LocalDate getBeginDate() {
+        return beginDate;
+    }
 
-  //	@IgnoreMapping
-  //	private Integer estimatedMinutes;
+    public void setBeginDate(LocalDate beginDate) {
+        this.beginDate = beginDate;
+    }
 
-  public TaskDTO() {}
+    public LocalDate getEndDate() {
+        return endDate;
+    }
 
-  public TaskDTO(
-      Long id,
-      String name,
-      String localState,
-      LocalDate beginDate,
-      LocalDate endDate,
-      Float workingHours,
-      LocalDate dateDelegatedTo,
-      LocalDate dateDelegatedFrom,
-      String theNormal) {
-    this.id = id;
-    this.name = name;
-    ;
-    this.localState = localState;
-    this.beginDate = beginDate;
-    this.endDate = endDate;
-    this.workingHours = workingHours;
-    this.dateDelegatedTo = dateDelegatedTo;
-    this.dateDelegatedFrom = dateDelegatedFrom;
-    this.theNormal = theNormal;
-  }
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
 
-  public TaskDTO(
-      Long id,
-      String name,
-      String localState,
-      LocalDate beginDate,
-      LocalDate endDate,
-      Float workingHours,
-      LocalDate dateDelegatedTo,
-      LocalDate dateDelegatedFrom,
-      Float howLong,
-      String howLongUnit,
-      LocalDate plannedBegin,
-      LocalDate plannedEnd,
-      String script,
-      String theNormal,
-      String agent) {
-    this.id = id;
-    this.name = name;
-    this.localState = localState;
-    this.beginDate = beginDate;
-    this.endDate = endDate;
-    this.workingHours = workingHours;
-    this.dateDelegatedTo = dateDelegatedTo;
-    this.dateDelegatedFrom = dateDelegatedFrom;
-    this.script = script;
-    this.theNormal = theNormal;
-    this.agent = agent;
-    this.howLong = howLong;
-    this.howLongUnit = howLongUnit;
-    this.plannedBegin = plannedBegin;
-    this.plannedEnd = plannedEnd;
-  }
+    public Float getWorkingHours() {
+        return workingHours;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public void setWorkingHours(Float workingHours) {
+        this.workingHours = workingHours;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public LocalDate getDateDelegatedTo() {
+        return dateDelegatedTo;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public void setDateDelegatedTo(LocalDate dateDelegatedTo) {
+        this.dateDelegatedTo = dateDelegatedTo;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public LocalDate getDateDelegatedFrom() {
+        return dateDelegatedFrom;
+    }
 
-  public String getLocalState() {
-    return localState;
-  }
+    public void setDateDelegatedFrom(LocalDate dateDelegatedFrom) {
+        this.dateDelegatedFrom = dateDelegatedFrom;
+    }
 
-  public void setLocalState(String localState) {
-    this.localState = localState;
-  }
+    public Long getDelegatedFromId() {
+        return delegatedFromId;
+    }
 
-  public LocalDate getBeginDate() {
-    return beginDate;
-  }
+    public void setDelegatedFromId(Long agentId) {
+        this.delegatedFromId = agentId;
+    }
 
-  public void setBeginDate(LocalDate beginDate) {
-    this.beginDate = beginDate;
-  }
+    public Long getDelegatedToId() {
+        return delegatedToId;
+    }
 
-  public LocalDate getEndDate() {
-    return endDate;
-  }
+    public void setDelegatedToId(Long agentId) {
+        this.delegatedToId = agentId;
+    }
 
-  public void setEndDate(LocalDate endDate) {
-    this.endDate = endDate;
-  }
+    public Long getTheNormalId() {
+        return theNormalId;
+    }
 
-  public Float getWorkingHours() {
-    return workingHours;
-  }
+    public void setTheNormalId(Long normalId) {
+        this.theNormalId = normalId;
+    }
 
-  public void setWorkingHours(Float workingHours) {
-    this.workingHours = workingHours;
-  }
+    public Long getTheProcessAgendaId() {
+        return theProcessAgendaId;
+    }
 
-  public LocalDate getDateDelegatedTo() {
-    return dateDelegatedTo;
-  }
+    public void setTheProcessAgendaId(Long processAgendaId) {
+        this.theProcessAgendaId = processAgendaId;
+    }
 
-  public void setDateDelegatedTo(LocalDate dateDelegatedTo) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-    this.dateDelegatedTo = dateDelegatedTo;
-  }
+        TaskDTO taskDTO = (TaskDTO) o;
+        if (taskDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), taskDTO.getId());
+    }
 
-  public LocalDate getDateDelegatedFrom() {
-    return dateDelegatedFrom;
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
 
-  public void setDateDelegatedFrom(LocalDate dateDelegatedFrom) {
-    this.dateDelegatedFrom = dateDelegatedFrom;
-  }
-
-  public String getTheNormal() {
-    return theNormal;
-  }
-
-  public void setTheNormal(String theNormal) {
-    this.theNormal = theNormal;
-  }
-
-  public String getScript() {
-    return script;
-  }
-
-  public void setScript(String script) {
-    this.script = script;
-  }
-
-  @XmlTransient
-  public String getAgent() {
-    return agent;
-  }
-
-  public void setAgent(String agent) {
-    this.agent = agent;
-  }
-
-  public Float getHowLong() {
-    return howLong;
-  }
-
-  public void setHowLong(Float howLong) {
-    this.howLong = howLong;
-  }
-
-  public String getHowLongUnit() {
-    return howLongUnit;
-  }
-
-  public void setHowLongUnit(String howLongUnit) {
-    this.howLongUnit = howLongUnit;
-  }
-
-  public LocalDate getPlannedBegin() {
-    return plannedBegin;
-  }
-
-  public void setPlannedBegin(LocalDate plannedBegin) {
-    this.plannedBegin = plannedBegin;
-  }
-
-  public LocalDate getPlannedEnd() {
-    return plannedEnd;
-  }
-
-  public void setPlannedEnd(LocalDate plannedEnd) {
-    this.plannedEnd = plannedEnd;
-  }
-
-  //	@XmlTransient
-  //	public Integer getEstimatedHours() {
-  //		return estimatedHours;
-  //	}
-  //
-  //	public void setEstimatedHours(Integer estimatedHours) {
-  //		this.estimatedHours = estimatedHours;
-  //	}
-  //
-  //	@XmlTransient
-  //	public Integer getEstimatedMinutes() {
-  //		return estimatedMinutes;
-  //	}
-  //
-  //	public void setEstimatedMinutes(Integer estimatedMinutes) {
-  //		this.estimatedMinutes = estimatedMinutes;
-  //	}
-
-  public Time getEstimatedTime() {
-    return estimatedTime;
-  }
-
-  public void setEstimatedTime(Time estimatedTime) {
-    this.estimatedTime = estimatedTime;
-  }
-
-  public Time getRealWorkingTime() {
-    return realWorkingTime;
-  }
-
-  public void setRealWorkingTime(Time realWorkingTime) {
-    this.realWorkingTime = realWorkingTime;
-  }
-
-  @Override
-  public String toString() {
-    return super.toString();
-
-    //		String beginDate = this.beginDate != null
-    //		? this.beginDate.toString() : "null";
-    //
-    //		String sdateDelegatedFrom = this.dateDelegatedFrom != null
-    //		? this.dateDelegatedFrom.toString() : "null";
-    //
-    //		String sdateDelegatedTo = this.dateDelegatedTo != null
-    //		? this.dateDelegatedTo.toString() : "null";
-    //
-    //		String endDate = this.endDate != null
-    //		? this.endDate.toString() : "null";
-    //
-    //		String actid = this.theNormal != null
-    //		? this.theNormal : "null";
-    //
-    //		String s = "+Task : --> LocalState: " + this.localState + "|beginDate : "
-    //		+ beginDate + "| endDate : " + endDate + "| dateDelegatedFrom"
-    //		+ sdateDelegatedFrom + "| dateDelegatedTo : "
-    //		+ sdateDelegatedTo + " | workingHours : " + this.workingHours
-    //		+ "| Activity : ID :"+actid;
-    //
-    //		return (s);
-
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    return result;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
-    TaskDTO other = (TaskDTO) obj;
-    if (name == null) {
-      if (other.name != null) return false;
-    } else if (!name.equals(other.name)) return false;
-    return true;
-  }
+    @Override
+    public String toString() {
+        return "TaskDTO{" +
+            "id=" + getId() +
+            ", localState='" + getLocalState() + "'" +
+            ", beginDate='" + getBeginDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
+            ", workingHours=" + getWorkingHours() +
+            ", dateDelegatedTo='" + getDateDelegatedTo() + "'" +
+            ", dateDelegatedFrom='" + getDateDelegatedFrom() + "'" +
+            ", delegatedFrom=" + getDelegatedFromId() +
+            ", delegatedTo=" + getDelegatedToId() +
+            ", theNormal=" + getTheNormalId() +
+            ", theProcessAgenda=" + getTheProcessAgendaId() +
+            "}";
+    }
 }

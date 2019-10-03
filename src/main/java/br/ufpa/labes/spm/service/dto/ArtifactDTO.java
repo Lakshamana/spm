@@ -1,164 +1,193 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.Objects;
+import javax.persistence.Lob;
 
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
-@SuppressWarnings("serial")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Artifact} entity.
+ */
 public class ArtifactDTO implements Serializable {
 
-  private Long id;
-  private String ident;
-  private String description;
-  private String name;
-  private Boolean isTemplate;
-  private Boolean isActive;
-  private String pathName;
-  private String fileName;
-  @IgnoreMapping private String localVersion;
-  @IgnoreMapping private String remoteVersion;
-  @IgnoreMapping private String theArtifactType;
-  @IgnoreMapping private Collection<String> possess;
-  @IgnoreMapping private List<String> derivedTo;
+    private Long id;
 
-  public ArtifactDTO() {
-    this.id = null;
-    this.ident = "";
-    this.description = "";
-    this.name = "";
-    this.pathName = "";
-    this.possess = new ArrayList<String>();
-    this.derivedTo = new ArrayList<String>();
-  }
+    private String ident;
 
-  public Long getId() {
-    return id;
-  }
+    private String name;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    @Lob
+    private String description;
 
-  public String getIdent() {
-    return ident;
-  }
+    private String pathName;
 
-  public void setIdent(String ident) {
-    this.ident = ident;
-  }
+    private String fileName;
 
-  public String getRemoteVersion() {
-    return remoteVersion;
-  }
+    private String latestVersion;
 
-  public void setRemoteVersion(String remoteVersion) {
-    this.remoteVersion = remoteVersion;
-  }
+    private Boolean isTemplate;
 
-  public String getLocalVersion() {
-    return localVersion;
-  }
+    private Boolean isActive;
 
-  public void setLocalVersion(String localVersion) {
-    this.localVersion = localVersion;
-  }
 
-  public String getDescription() {
-    return description;
-  }
+    private Long theArtifactTypeId;
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    private Long derivedFromId;
 
-  public String getName() {
-    return name;
-  }
+    private Long belongsToId;
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    private Long theRepositoryId;
 
-  public String getPathName() {
-    return pathName;
-  }
+    private Long theProjectId;
 
-  public void setPathName(String pathName) {
-    this.pathName = pathName;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public Boolean isIsTemplate() {
-    return isTemplate;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setIsTemplate(Boolean isTemplate) {
-    this.isTemplate = isTemplate;
-  }
+    public String getIdent() {
+        return ident;
+    }
 
-  public Boolean isIsActive() {
-    return isActive;
-  }
+    public void setIdent(String ident) {
+        this.ident = ident;
+    }
 
-  public void setIsActive(Boolean isActive) {
-    this.isActive = isActive;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public Collection<String> getPossess() {
-    return possess;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setPossess(Collection<String> possess) {
-    this.possess = possess;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public Collection<String> getDerivedTo() {
-    return derivedTo;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public void setDerivedTo(List<String> derivedTo) {
-    this.derivedTo = derivedTo;
-  }
+    public String getPathName() {
+        return pathName;
+    }
 
-  public String getTheArtifactType() {
-    return theArtifactType;
-  }
+    public void setPathName(String pathName) {
+        this.pathName = pathName;
+    }
 
-  public void setTheArtifactType(String theArtifactType) {
-    this.theArtifactType = theArtifactType;
-  }
+    public String getFileName() {
+        return fileName;
+    }
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    result = prime * result + ((theArtifactType == null) ? 0 : theArtifactType.hashCode());
-    return result;
-  }
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
-    ArtifactDTO other = (ArtifactDTO) obj;
-    if (name == null) {
-      if (other.name != null) return false;
-    } else if (!name.equals(other.name)) return false;
-    if (theArtifactType == null) {
-      if (other.theArtifactType != null) return false;
-    } else if (!theArtifactType.equals(other.theArtifactType)) return false;
-    return true;
-  }
+    public String getLatestVersion() {
+        return latestVersion;
+    }
 
-  public String getFileName() {
-    return fileName;
-  }
+    public void setLatestVersion(String latestVersion) {
+        this.latestVersion = latestVersion;
+    }
 
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
-  }
+    public Boolean isIsTemplate() {
+        return isTemplate;
+    }
+
+    public void setIsTemplate(Boolean isTemplate) {
+        this.isTemplate = isTemplate;
+    }
+
+    public Boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Long getTheArtifactTypeId() {
+        return theArtifactTypeId;
+    }
+
+    public void setTheArtifactTypeId(Long artifactTypeId) {
+        this.theArtifactTypeId = artifactTypeId;
+    }
+
+    public Long getDerivedFromId() {
+        return derivedFromId;
+    }
+
+    public void setDerivedFromId(Long artifactId) {
+        this.derivedFromId = artifactId;
+    }
+
+    public Long getBelongsToId() {
+        return belongsToId;
+    }
+
+    public void setBelongsToId(Long artifactId) {
+        this.belongsToId = artifactId;
+    }
+
+    public Long getTheRepositoryId() {
+        return theRepositoryId;
+    }
+
+    public void setTheRepositoryId(Long vCSRepositoryId) {
+        this.theRepositoryId = vCSRepositoryId;
+    }
+
+    public Long getTheProjectId() {
+        return theProjectId;
+    }
+
+    public void setTheProjectId(Long projectId) {
+        this.theProjectId = projectId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ArtifactDTO artifactDTO = (ArtifactDTO) o;
+        if (artifactDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), artifactDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "ArtifactDTO{" +
+            "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
+            ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", pathName='" + getPathName() + "'" +
+            ", fileName='" + getFileName() + "'" +
+            ", latestVersion='" + getLatestVersion() + "'" +
+            ", isTemplate='" + isIsTemplate() + "'" +
+            ", isActive='" + isIsActive() + "'" +
+            ", theArtifactType=" + getTheArtifactTypeId() +
+            ", derivedFrom=" + getDerivedFromId() +
+            ", belongsTo=" + getBelongsToId() +
+            ", theRepository=" + getTheRepositoryId() +
+            ", theProject=" + getTheProjectId() +
+            "}";
+    }
 }

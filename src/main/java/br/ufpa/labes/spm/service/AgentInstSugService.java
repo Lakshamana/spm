@@ -15,68 +15,71 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/** Service Implementation for managing {@link AgentInstSug}. */
+/**
+ * Service Implementation for managing {@link AgentInstSug}.
+ */
 @Service
 @Transactional
 public class AgentInstSugService {
 
-  private final Logger log = LoggerFactory.getLogger(AgentInstSugService.class);
+    private final Logger log = LoggerFactory.getLogger(AgentInstSugService.class);
 
-  private final AgentInstSugRepository agentInstSugRepository;
+    private final AgentInstSugRepository agentInstSugRepository;
 
-  private final AgentInstSugMapper agentInstSugMapper;
+    private final AgentInstSugMapper agentInstSugMapper;
 
-  public AgentInstSugService(
-      AgentInstSugRepository agentInstSugRepository, AgentInstSugMapper agentInstSugMapper) {
-    this.agentInstSugRepository = agentInstSugRepository;
-    this.agentInstSugMapper = agentInstSugMapper;
-  }
+    public AgentInstSugService(AgentInstSugRepository agentInstSugRepository, AgentInstSugMapper agentInstSugMapper) {
+        this.agentInstSugRepository = agentInstSugRepository;
+        this.agentInstSugMapper = agentInstSugMapper;
+    }
 
-  /**
-   * Save a agentInstSug.
-   *
-   * @param agentInstSugDTO the entity to save.
-   * @return the persisted entity.
-   */
-  public AgentInstSugDTO save(AgentInstSugDTO agentInstSugDTO) {
-    log.debug("Request to save AgentInstSug : {}", agentInstSugDTO);
-    AgentInstSug agentInstSug = agentInstSugMapper.toEntity(agentInstSugDTO);
-    agentInstSug = agentInstSugRepository.save(agentInstSug);
-    return agentInstSugMapper.toDto(agentInstSug);
-  }
+    /**
+     * Save a agentInstSug.
+     *
+     * @param agentInstSugDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public AgentInstSugDTO save(AgentInstSugDTO agentInstSugDTO) {
+        log.debug("Request to save AgentInstSug : {}", agentInstSugDTO);
+        AgentInstSug agentInstSug = agentInstSugMapper.toEntity(agentInstSugDTO);
+        agentInstSug = agentInstSugRepository.save(agentInstSug);
+        return agentInstSugMapper.toDto(agentInstSug);
+    }
 
-  /**
-   * Get all the agentInstSugs.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<AgentInstSugDTO> findAll() {
-    log.debug("Request to get all AgentInstSugs");
-    return agentInstSugRepository.findAll().stream()
-        .map(agentInstSugMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
+    /**
+     * Get all the agentInstSugs.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<AgentInstSugDTO> findAll() {
+        log.debug("Request to get all AgentInstSugs");
+        return agentInstSugRepository.findAll().stream()
+            .map(agentInstSugMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
-  /**
-   * Get one agentInstSug by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Transactional(readOnly = true)
-  public Optional<AgentInstSugDTO> findOne(Long id) {
-    log.debug("Request to get AgentInstSug : {}", id);
-    return agentInstSugRepository.findById(id).map(agentInstSugMapper::toDto);
-  }
 
-  /**
-   * Delete the agentInstSug by id.
-   *
-   * @param id the id of the entity.
-   */
-  public void delete(Long id) {
-    log.debug("Request to delete AgentInstSug : {}", id);
-    agentInstSugRepository.deleteById(id);
-  }
+    /**
+     * Get one agentInstSug by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<AgentInstSugDTO> findOne(Long id) {
+        log.debug("Request to get AgentInstSug : {}", id);
+        return agentInstSugRepository.findById(id)
+            .map(agentInstSugMapper::toDto);
+    }
+
+    /**
+     * Delete the agentInstSug by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+        log.debug("Request to delete AgentInstSug : {}", id);
+        agentInstSugRepository.deleteById(id);
+    }
 }

@@ -3,6 +3,9 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.ToolType;
 import br.ufpa.labes.spm.repository.ToolTypeRepository;
+import br.ufpa.labes.spm.service.ToolTypeService;
+import br.ufpa.labes.spm.service.dto.ToolTypeDTO;
+import br.ufpa.labes.spm.service.mapper.ToolTypeMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,221 +31,249 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Integration tests for the {@link ToolTypeResource} REST controller. */
+/**
+ * Integration tests for the {@link ToolTypeResource} REST controller.
+ */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class ToolTypeResourceIT {
 
-  @Autowired private ToolTypeRepository toolTypeRepository;
+    @Autowired
+    private ToolTypeRepository toolTypeRepository;
 
-  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private ToolTypeMapper toolTypeMapper;
 
-  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private ToolTypeService toolTypeService;
 
-  @Autowired private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-  @Autowired private EntityManager em;
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-  @Autowired private Validator validator;
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
-  private MockMvc restToolTypeMockMvc;
+    @Autowired
+    private EntityManager em;
 
-  private ToolType toolType;
+    @Autowired
+    private Validator validator;
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final ToolTypeResource toolTypeResource = new ToolTypeResource(toolTypeRepository);
-    this.restToolTypeMockMvc =
-        MockMvcBuilders.standaloneSetup(toolTypeResource)
+    private MockMvc restToolTypeMockMvc;
+
+    private ToolType toolType;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final ToolTypeResource toolTypeResource = new ToolTypeResource(toolTypeService);
+        this.restToolTypeMockMvc = MockMvcBuilders.standaloneSetup(toolTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator)
-            .build();
-  }
+            .setValidator(validator).build();
+    }
 
-  /**
-   * Create an entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static ToolType createEntity(EntityManager em) {
-    ToolType toolType = new ToolType();
-    return toolType;
-  }
-  /**
-   * Create an updated entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static ToolType createUpdatedEntity(EntityManager em) {
-    ToolType toolType = new ToolType();
-    return toolType;
-  }
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static ToolType createEntity(EntityManager em) {
+        ToolType toolType = new ToolType();
+        return toolType;
+    }
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static ToolType createUpdatedEntity(EntityManager em) {
+        ToolType toolType = new ToolType();
+        return toolType;
+    }
 
-  @BeforeEach
-  public void initTest() {
-    toolType = createEntity(em);
-  }
+    @BeforeEach
+    public void initTest() {
+        toolType = createEntity(em);
+    }
 
-  @Test
-  @Transactional
-  public void createToolType() throws Exception {
-    int databaseSizeBeforeCreate = toolTypeRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createToolType() throws Exception {
+        int databaseSizeBeforeCreate = toolTypeRepository.findAll().size();
 
-    // Create the ToolType
-    restToolTypeMockMvc
-        .perform(
-            post("/api/tool-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(toolType)))
-        .andExpect(status().isCreated());
+        // Create the ToolType
+        ToolTypeDTO toolTypeDTO = toolTypeMapper.toDto(toolType);
+        restToolTypeMockMvc.perform(post("/api/tool-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(toolTypeDTO)))
+            .andExpect(status().isCreated());
 
-    // Validate the ToolType in the database
-    List<ToolType> toolTypeList = toolTypeRepository.findAll();
-    assertThat(toolTypeList).hasSize(databaseSizeBeforeCreate + 1);
-    ToolType testToolType = toolTypeList.get(toolTypeList.size() - 1);
-  }
+        // Validate the ToolType in the database
+        List<ToolType> toolTypeList = toolTypeRepository.findAll();
+        assertThat(toolTypeList).hasSize(databaseSizeBeforeCreate + 1);
+        ToolType testToolType = toolTypeList.get(toolTypeList.size() - 1);
+    }
 
-  @Test
-  @Transactional
-  public void createToolTypeWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = toolTypeRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createToolTypeWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = toolTypeRepository.findAll().size();
 
-    // Create the ToolType with an existing ID
-    toolType.setId(1L);
+        // Create the ToolType with an existing ID
+        toolType.setId(1L);
+        ToolTypeDTO toolTypeDTO = toolTypeMapper.toDto(toolType);
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restToolTypeMockMvc
-        .perform(
-            post("/api/tool-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(toolType)))
-        .andExpect(status().isBadRequest());
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restToolTypeMockMvc.perform(post("/api/tool-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(toolTypeDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the ToolType in the database
-    List<ToolType> toolTypeList = toolTypeRepository.findAll();
-    assertThat(toolTypeList).hasSize(databaseSizeBeforeCreate);
-  }
+        // Validate the ToolType in the database
+        List<ToolType> toolTypeList = toolTypeRepository.findAll();
+        assertThat(toolTypeList).hasSize(databaseSizeBeforeCreate);
+    }
 
-  @Test
-  @Transactional
-  public void getAllToolTypes() throws Exception {
-    // Initialize the database
-    toolTypeRepository.saveAndFlush(toolType);
 
-    // Get all the toolTypeList
-    restToolTypeMockMvc
-        .perform(get("/api/tool-types?sort=id,desc"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.[*].id").value(hasItem(toolType.getId().intValue())));
-  }
+    @Test
+    @Transactional
+    public void getAllToolTypes() throws Exception {
+        // Initialize the database
+        toolTypeRepository.saveAndFlush(toolType);
 
-  @Test
-  @Transactional
-  public void getToolType() throws Exception {
-    // Initialize the database
-    toolTypeRepository.saveAndFlush(toolType);
+        // Get all the toolTypeList
+        restToolTypeMockMvc.perform(get("/api/tool-types?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(toolType.getId().intValue())));
+    }
+    
+    @Test
+    @Transactional
+    public void getToolType() throws Exception {
+        // Initialize the database
+        toolTypeRepository.saveAndFlush(toolType);
 
-    // Get the toolType
-    restToolTypeMockMvc
-        .perform(get("/api/tool-types/{id}", toolType.getId()))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.id").value(toolType.getId().intValue()));
-  }
+        // Get the toolType
+        restToolTypeMockMvc.perform(get("/api/tool-types/{id}", toolType.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(toolType.getId().intValue()));
+    }
 
-  @Test
-  @Transactional
-  public void getNonExistingToolType() throws Exception {
-    // Get the toolType
-    restToolTypeMockMvc
-        .perform(get("/api/tool-types/{id}", Long.MAX_VALUE))
-        .andExpect(status().isNotFound());
-  }
+    @Test
+    @Transactional
+    public void getNonExistingToolType() throws Exception {
+        // Get the toolType
+        restToolTypeMockMvc.perform(get("/api/tool-types/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void updateToolType() throws Exception {
-    // Initialize the database
-    toolTypeRepository.saveAndFlush(toolType);
+    @Test
+    @Transactional
+    public void updateToolType() throws Exception {
+        // Initialize the database
+        toolTypeRepository.saveAndFlush(toolType);
 
-    int databaseSizeBeforeUpdate = toolTypeRepository.findAll().size();
+        int databaseSizeBeforeUpdate = toolTypeRepository.findAll().size();
 
-    // Update the toolType
-    ToolType updatedToolType = toolTypeRepository.findById(toolType.getId()).get();
-    // Disconnect from session so that the updates on updatedToolType are not directly saved in db
-    em.detach(updatedToolType);
+        // Update the toolType
+        ToolType updatedToolType = toolTypeRepository.findById(toolType.getId()).get();
+        // Disconnect from session so that the updates on updatedToolType are not directly saved in db
+        em.detach(updatedToolType);
+        ToolTypeDTO toolTypeDTO = toolTypeMapper.toDto(updatedToolType);
 
-    restToolTypeMockMvc
-        .perform(
-            put("/api/tool-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedToolType)))
-        .andExpect(status().isOk());
+        restToolTypeMockMvc.perform(put("/api/tool-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(toolTypeDTO)))
+            .andExpect(status().isOk());
 
-    // Validate the ToolType in the database
-    List<ToolType> toolTypeList = toolTypeRepository.findAll();
-    assertThat(toolTypeList).hasSize(databaseSizeBeforeUpdate);
-    ToolType testToolType = toolTypeList.get(toolTypeList.size() - 1);
-  }
+        // Validate the ToolType in the database
+        List<ToolType> toolTypeList = toolTypeRepository.findAll();
+        assertThat(toolTypeList).hasSize(databaseSizeBeforeUpdate);
+        ToolType testToolType = toolTypeList.get(toolTypeList.size() - 1);
+    }
 
-  @Test
-  @Transactional
-  public void updateNonExistingToolType() throws Exception {
-    int databaseSizeBeforeUpdate = toolTypeRepository.findAll().size();
+    @Test
+    @Transactional
+    public void updateNonExistingToolType() throws Exception {
+        int databaseSizeBeforeUpdate = toolTypeRepository.findAll().size();
 
-    // Create the ToolType
+        // Create the ToolType
+        ToolTypeDTO toolTypeDTO = toolTypeMapper.toDto(toolType);
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restToolTypeMockMvc
-        .perform(
-            put("/api/tool-types")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(toolType)))
-        .andExpect(status().isBadRequest());
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restToolTypeMockMvc.perform(put("/api/tool-types")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(toolTypeDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the ToolType in the database
-    List<ToolType> toolTypeList = toolTypeRepository.findAll();
-    assertThat(toolTypeList).hasSize(databaseSizeBeforeUpdate);
-  }
+        // Validate the ToolType in the database
+        List<ToolType> toolTypeList = toolTypeRepository.findAll();
+        assertThat(toolTypeList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-  @Test
-  @Transactional
-  public void deleteToolType() throws Exception {
-    // Initialize the database
-    toolTypeRepository.saveAndFlush(toolType);
+    @Test
+    @Transactional
+    public void deleteToolType() throws Exception {
+        // Initialize the database
+        toolTypeRepository.saveAndFlush(toolType);
 
-    int databaseSizeBeforeDelete = toolTypeRepository.findAll().size();
+        int databaseSizeBeforeDelete = toolTypeRepository.findAll().size();
 
-    // Delete the toolType
-    restToolTypeMockMvc
-        .perform(
-            delete("/api/tool-types/{id}", toolType.getId()).accept(TestUtil.APPLICATION_JSON_UTF8))
-        .andExpect(status().isNoContent());
+        // Delete the toolType
+        restToolTypeMockMvc.perform(delete("/api/tool-types/{id}", toolType.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNoContent());
 
-    // Validate the database contains one less item
-    List<ToolType> toolTypeList = toolTypeRepository.findAll();
-    assertThat(toolTypeList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+        // Validate the database contains one less item
+        List<ToolType> toolTypeList = toolTypeRepository.findAll();
+        assertThat(toolTypeList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 
-  @Test
-  @Transactional
-  public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(ToolType.class);
-    ToolType toolType1 = new ToolType();
-    toolType1.setId(1L);
-    ToolType toolType2 = new ToolType();
-    toolType2.setId(toolType1.getId());
-    assertThat(toolType1).isEqualTo(toolType2);
-    toolType2.setId(2L);
-    assertThat(toolType1).isNotEqualTo(toolType2);
-    toolType1.setId(null);
-    assertThat(toolType1).isNotEqualTo(toolType2);
-  }
+    @Test
+    @Transactional
+    public void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(ToolType.class);
+        ToolType toolType1 = new ToolType();
+        toolType1.setId(1L);
+        ToolType toolType2 = new ToolType();
+        toolType2.setId(toolType1.getId());
+        assertThat(toolType1).isEqualTo(toolType2);
+        toolType2.setId(2L);
+        assertThat(toolType1).isNotEqualTo(toolType2);
+        toolType1.setId(null);
+        assertThat(toolType1).isNotEqualTo(toolType2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(ToolTypeDTO.class);
+        ToolTypeDTO toolTypeDTO1 = new ToolTypeDTO();
+        toolTypeDTO1.setId(1L);
+        ToolTypeDTO toolTypeDTO2 = new ToolTypeDTO();
+        assertThat(toolTypeDTO1).isNotEqualTo(toolTypeDTO2);
+        toolTypeDTO2.setId(toolTypeDTO1.getId());
+        assertThat(toolTypeDTO1).isEqualTo(toolTypeDTO2);
+        toolTypeDTO2.setId(2L);
+        assertThat(toolTypeDTO1).isNotEqualTo(toolTypeDTO2);
+        toolTypeDTO1.setId(null);
+        assertThat(toolTypeDTO1).isNotEqualTo(toolTypeDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(toolTypeMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(toolTypeMapper.fromId(null)).isNull();
+    }
 }

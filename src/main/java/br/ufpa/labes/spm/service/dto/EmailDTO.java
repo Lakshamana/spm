@@ -1,87 +1,125 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
+import java.util.Objects;
 
-@SuppressWarnings("serial")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Email} entity.
+ */
 public class EmailDTO implements Serializable {
 
-  private Long id;
+    private Long id;
 
-  private String serverHost;
+    private String emailServerHost;
 
-  private String serverPort;
+    private String emailServerPort;
 
-  private String userName;
+    private String userName;
 
-  private Boolean servicoTls;
+    private String password;
 
-  private Boolean teste;
+    private Boolean servicoTls;
 
-  private Boolean servicoSsl;
+    private Boolean servicoSsl;
 
-  private String password;
+    private Boolean teste;
 
-  public Boolean isServicoTls() {
-    return servicoTls;
-  }
 
-  public Boolean setServicoTls(Boolean servicoTls) {
-    return this.servicoTls = servicoTls;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public Boolean isServicoSsl() {
-    return servicoSsl;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public Boolean setTeste(Boolean teste) {
-    return this.teste = teste;
-  }
+    public String getEmailServerHost() {
+        return emailServerHost;
+    }
 
-  public Boolean isTeste() {
-    return teste;
-  }
+    public void setEmailServerHost(String emailServerHost) {
+        this.emailServerHost = emailServerHost;
+    }
 
-  public Boolean setServicoSsl(Boolean servicoSsl) {
-    return this.servicoSsl = servicoSsl;
-  }
+    public String getEmailServerPort() {
+        return emailServerPort;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public void setEmailServerPort(String emailServerPort) {
+        this.emailServerPort = emailServerPort;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public String getUserName() {
+        return userName;
+    }
 
-  public String getServerPort() {
-    return serverPort;
-  }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-  public void setServerPort(String serverp) {
-    this.serverPort = serverp;
-  }
+    public String getPassword() {
+        return password;
+    }
 
-  public String getServerHost() {
-    return serverHost;
-  }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  public void setServerHost(String serverh) {
-    this.serverHost = serverh;
-  }
+    public Boolean isServicoTls() {
+        return servicoTls;
+    }
 
-  public String getUserName() {
-    return userName;
-  }
+    public void setServicoTls(Boolean servicoTls) {
+        this.servicoTls = servicoTls;
+    }
 
-  public void setUserName(String user) {
-    this.userName = user;
-  }
+    public Boolean isServicoSsl() {
+        return servicoSsl;
+    }
 
-  public String getPassword() {
-    return password;
-  }
+    public void setServicoSsl(Boolean servicoSsl) {
+        this.servicoSsl = servicoSsl;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    public Boolean isTeste() {
+        return teste;
+    }
+
+    public void setTeste(Boolean teste) {
+        this.teste = teste;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        EmailDTO emailDTO = (EmailDTO) o;
+        if (emailDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), emailDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "EmailDTO{" +
+            "id=" + getId() +
+            ", emailServerHost='" + getEmailServerHost() + "'" +
+            ", emailServerPort='" + getEmailServerPort() + "'" +
+            ", userName='" + getUserName() + "'" +
+            ", password='" + getPassword() + "'" +
+            ", servicoTls='" + isServicoTls() + "'" +
+            ", servicoSsl='" + isServicoSsl() + "'" +
+            ", teste='" + isTeste() + "'" +
+            "}";
+    }
 }

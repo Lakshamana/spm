@@ -4,8 +4,12 @@ import br.ufpa.labes.spm.domain.ModelingActivityEvent;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-/** Spring Data repository for the ModelingActivityEvent entity. */
+
+/**
+ * Spring Data  repository for the ModelingActivityEvent entity.
+ */
 @SuppressWarnings("unused")
 @Repository
-public interface ModelingActivityEventRepository
-    extends JpaRepository<ModelingActivityEvent, Long> {}
+public interface ModelingActivityEventRepository extends JpaRepository<ModelingActivityEvent, Long> {
+
+}

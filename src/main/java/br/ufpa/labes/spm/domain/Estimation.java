@@ -11,105 +11,102 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 
-/** A Estimation. */
+/**
+ * A Estimation.
+ */
 @Entity
 @Table(name = "estimation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Estimation implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(name = "value")
-  private Float value;
+    @Column(name = "value")
+    private Float value;
 
-  @Column(name = "unit")
-  private String unit;
+    @Column(name = "unit")
+    private String unit;
 
-  @ManyToOne
-  @JsonIgnoreProperties("estimations")
-  private MetricDefinition metricDefinition;
+    @ManyToOne
+    @JsonIgnoreProperties("estimations")
+    private MetricDefinition metricDefinition;
 
-  // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Float getValue() {
-    return value;
-  }
-
-  public Estimation value(Float value) {
-    this.value = value;
-    return this;
-  }
-
-  public void setValue(Float value) {
-    this.value = value;
-  }
-
-  public String getUnit() {
-    return unit;
-  }
-
-  public Estimation unit(String unit) {
-    this.unit = unit;
-    return this;
-  }
-
-  public void setUnit(String unit) {
-    this.unit = unit;
-  }
-
-  public MetricDefinition getMetricDefinition() {
-    return metricDefinition;
-  }
-
-  public Estimation metricDefinition(MetricDefinition metricDefinition) {
-    this.metricDefinition = metricDefinition;
-    return this;
-  }
-
-  public void setMetricDefinition(MetricDefinition metricDefinition) {
-    this.metricDefinition = metricDefinition;
-  }
-  // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not
-  // remove
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+        return id;
     }
-    if (!(o instanceof Estimation)) {
-      return false;
+
+    public void setId(Long id) {
+        this.id = id;
     }
-    return id != null && id.equals(((Estimation) o).id);
-  }
 
-  @Override
-  public int hashCode() {
-    return 31;
-  }
+    public Float getValue() {
+        return value;
+    }
 
-  @Override
-  public String toString() {
-    return "Estimation{"
-        + "id="
-        + getId()
-        + ", value="
-        + getValue()
-        + ", unit='"
-        + getUnit()
-        + "'"
-        + "}";
-  }
+    public Estimation value(Float value) {
+        this.value = value;
+        return this;
+    }
+
+    public void setValue(Float value) {
+        this.value = value;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public Estimation unit(String unit) {
+        this.unit = unit;
+        return this;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public MetricDefinition getMetricDefinition() {
+        return metricDefinition;
+    }
+
+    public Estimation metricDefinition(MetricDefinition metricDefinition) {
+        this.metricDefinition = metricDefinition;
+        return this;
+    }
+
+    public void setMetricDefinition(MetricDefinition metricDefinition) {
+        this.metricDefinition = metricDefinition;
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Estimation)) {
+            return false;
+        }
+        return id != null && id.equals(((Estimation) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    @Override
+    public String toString() {
+        return "Estimation{" +
+            "id=" + getId() +
+            ", value=" + getValue() +
+            ", unit='" + getUnit() + "'" +
+            "}";
+    }
 }

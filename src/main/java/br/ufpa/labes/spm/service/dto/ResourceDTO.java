@@ -1,203 +1,172 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Objects;
+import javax.persistence.Lob;
 
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
-@SuppressWarnings("serial")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Resource} entity.
+ */
 public class ResourceDTO implements Serializable {
-  private Long id;
-  private String ident;
-  private String name;
-  private String description;
-  @IgnoreMapping private String mtbfTime;
-  private String mtbfUnitTime;
-  @IgnoreMapping private String cost;
-  private String costString;
-  private String currency;
-  private Boolean staticOk;
-  private Boolean isActive; // Added in 13/07/2008 by Murilo
 
-  @IgnoreMapping private String belongsTo;
-  @IgnoreMapping private String theResourceType;
-  @IgnoreMapping private Collection<String> requires;
-  @IgnoreMapping private Collection<String> isRequired;
+    private Long id;
 
-  @IgnoreMapping private Collection<String> possess;
+    private String ident;
 
-  public ResourceDTO() {
-    super();
-    ident = "";
-    name = "";
-    description = "";
-    mtbfTime = "";
-    mtbfUnitTime = "";
-    cost = "";
-    currency = "";
-    staticOk = false;
-    isActive = false;
-    belongsTo = "";
-    theResourceType = "";
-    requires = new ArrayList<String>();
-    isRequired = new ArrayList<String>();
-    possess = new ArrayList<String>();
-  }
+    private String name;
 
-  public Long getId() {
-    return id;
-  }
+    @Lob
+    private String description;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    private Float mtbfTime;
 
-  public String getIdent() {
-    return ident;
-  }
+    private String mtbfUnitTime;
 
-  public void setIdent(String ident) {
-    this.ident = ident;
-  }
+    private String currency;
 
-  public String getName() {
-    return name;
-  }
+    private Float cost;
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    private Boolean isActive;
 
-  public String getDescription() {
-    return description;
-  }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    private Long belongsToId;
 
-  public String getMtbfTime() {
-    return mtbfTime;
-  }
+    private Long theResourceTypeId;
 
-  public void setMtbfTime(String mtbfTime) {
-    this.mtbfTime = mtbfTime;
-  }
+    private Set<ResourceDTO> requires = new HashSet<>();
 
-  public String getMtbfUnitTime() {
-    return mtbfUnitTime;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setMtbfUnitTime(String mtbfUnitTime) {
-    this.mtbfUnitTime = mtbfUnitTime;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getCost() {
-    return cost;
-  }
+    public String getIdent() {
+        return ident;
+    }
 
-  public void setCost(String cost) {
-    this.cost = cost;
-  }
+    public void setIdent(String ident) {
+        this.ident = ident;
+    }
 
-  public Boolean getStaticOk() {
-    return staticOk;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public Boolean isStaticOk() {
-    return staticOk;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setStaticOk(Boolean staticOk) {
-    this.staticOk = staticOk;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public Boolean getIsActive() {
-    return isActive;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public Boolean isIsActive() {
-    return isActive;
-  }
+    public Float getMtbfTime() {
+        return mtbfTime;
+    }
 
-  public void setIsActive(Boolean isActive) {
-    this.isActive = isActive;
-  }
+    public void setMtbfTime(Float mtbfTime) {
+        this.mtbfTime = mtbfTime;
+    }
 
-  public String getBelongsTo() {
-    return belongsTo;
-  }
+    public String getMtbfUnitTime() {
+        return mtbfUnitTime;
+    }
 
-  public void setBelongsTo(String belongsTo) {
-    this.belongsTo = belongsTo;
-  }
+    public void setMtbfUnitTime(String mtbfUnitTime) {
+        this.mtbfUnitTime = mtbfUnitTime;
+    }
 
-  public String getTheResourceType() {
-    return theResourceType;
-  }
+    public String getCurrency() {
+        return currency;
+    }
 
-  public void setTheResourceType(String theResourceType) {
-    this.theResourceType = theResourceType;
-  }
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 
-  public Collection<String> getRequires() {
-    return requires;
-  }
+    public Float getCost() {
+        return cost;
+    }
 
-  public void setRequires(Collection<String> requires) {
-    this.requires = requires;
-  }
+    public void setCost(Float cost) {
+        this.cost = cost;
+    }
 
-  public Collection<String> getIsRequired() {
-    return isRequired;
-  }
+    public Boolean isIsActive() {
+        return isActive;
+    }
 
-  public void setIsRequired(Collection<String> isRequired) {
-    this.isRequired = isRequired;
-  }
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
 
-  public Collection<String> getPossess() {
-    return possess;
-  }
+    public Long getBelongsToId() {
+        return belongsToId;
+    }
 
-  public void setPossess(Collection<String> possess) {
-    this.possess = possess;
-  }
+    public void setBelongsToId(Long resourceId) {
+        this.belongsToId = resourceId;
+    }
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((ident == null) ? 0 : ident.hashCode());
-    return result;
-  }
+    public Long getTheResourceTypeId() {
+        return theResourceTypeId;
+    }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
-    ResourceDTO other = (ResourceDTO) obj;
-    if (ident == null) {
-      if (other.ident != null) return false;
-    } else if (!ident.equals(other.ident)) return false;
-    return true;
-  }
+    public void setTheResourceTypeId(Long resourceTypeId) {
+        this.theResourceTypeId = resourceTypeId;
+    }
 
-  public String getCurrency() {
-    return currency;
-  }
+    public Set<ResourceDTO> getRequires() {
+        return requires;
+    }
 
-  public void setCurrency(String currency) {
-    this.currency = currency;
-  }
+    public void setRequires(Set<ResourceDTO> resources) {
+        this.requires = resources;
+    }
 
-  public String getCostString() {
-    return costString;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-  public void setCostString(String costString) {
-    this.costString = costString;
-  }
+        ResourceDTO resourceDTO = (ResourceDTO) o;
+        if (resourceDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), resourceDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "ResourceDTO{" +
+            "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
+            ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", mtbfTime=" + getMtbfTime() +
+            ", mtbfUnitTime='" + getMtbfUnitTime() + "'" +
+            ", currency='" + getCurrency() + "'" +
+            ", cost=" + getCost() +
+            ", isActive='" + isIsActive() + "'" +
+            ", belongsTo=" + getBelongsToId() +
+            ", theResourceType=" + getTheResourceTypeId() +
+            "}";
+    }
 }

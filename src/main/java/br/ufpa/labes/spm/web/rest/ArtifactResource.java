@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.domain.Artifact;
-import br.ufpa.labes.spm.repository.ArtifactRepository;
+import br.ufpa.labes.spm.service.ArtifactService;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
+import br.ufpa.labes.spm.service.dto.ArtifactDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -18,111 +18,101 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-/** REST controller for managing {@link br.ufpa.labes.spm.domain.Artifact}. */
+/**
+ * REST controller for managing {@link br.ufpa.labes.spm.domain.Artifact}.
+ */
 @RestController
 @RequestMapping("/api")
 public class ArtifactResource {
 
-  private final Logger log = LoggerFactory.getLogger(ArtifactResource.class);
+    private final Logger log = LoggerFactory.getLogger(ArtifactResource.class);
 
-  private static final String ENTITY_NAME = "artifact";
+    private static final String ENTITY_NAME = "artifact";
 
-  @Value("${jhipster.clientApp.name}")
-  private String applicationName;
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
-  private final ArtifactRepository artifactRepository;
+    private final ArtifactService artifactService;
 
-  public ArtifactResource(ArtifactRepository artifactRepository) {
-    this.artifactRepository = artifactRepository;
-  }
-
-  /**
-   * {@code POST /artifacts} : Create a new artifact.
-   *
-   * @param artifact the artifact to create.
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new
-   *     artifact, or with status {@code 400 (Bad Request)} if the artifact has already an ID.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PostMapping("/artifacts")
-  public ResponseEntity<Artifact> createArtifact(@RequestBody Artifact artifact)
-      throws URISyntaxException {
-    log.debug("REST request to save Artifact : {}", artifact);
-    if (artifact.getId() != null) {
-      throw new BadRequestAlertException(
-          "A new artifact cannot already have an ID", ENTITY_NAME, "idexists");
+    public ArtifactResource(ArtifactService artifactService) {
+        this.artifactService = artifactService;
     }
-    Artifact result = artifactRepository.save(artifact);
-    return ResponseEntity.created(new URI("/api/artifacts/" + result.getId()))
-        .headers(
-            HeaderUtil.createEntityCreationAlert(
-                applicationName, true, ENTITY_NAME, result.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code PUT /artifacts} : Updates an existing artifact.
-   *
-   * @param artifact the artifact to update.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated
-   *     artifact, or with status {@code 400 (Bad Request)} if the artifact is not valid, or with
-   *     status {@code 500 (Internal Server Error)} if the artifact couldn't be updated.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PutMapping("/artifacts")
-  public ResponseEntity<Artifact> updateArtifact(@RequestBody Artifact artifact)
-      throws URISyntaxException {
-    log.debug("REST request to update Artifact : {}", artifact);
-    if (artifact.getId() == null) {
-      throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    /**
+     * {@code POST  /artifacts} : Create a new artifact.
+     *
+     * @param artifactDTO the artifactDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new artifactDTO, or with status {@code 400 (Bad Request)} if the artifact has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/artifacts")
+    public ResponseEntity<ArtifactDTO> createArtifact(@RequestBody ArtifactDTO artifactDTO) throws URISyntaxException {
+        log.debug("REST request to save Artifact : {}", artifactDTO);
+        if (artifactDTO.getId() != null) {
+            throw new BadRequestAlertException("A new artifact cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        ArtifactDTO result = artifactService.save(artifactDTO);
+        return ResponseEntity.created(new URI("/api/artifacts/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
-    Artifact result = artifactRepository.save(artifact);
-    return ResponseEntity.ok()
-        .headers(
-            HeaderUtil.createEntityUpdateAlert(
-                applicationName, true, ENTITY_NAME, artifact.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code GET /artifacts} : get all the artifacts.
-   *
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of artifacts in
-   *     body.
-   */
-  @GetMapping("/artifacts")
-  public List<Artifact> getAllArtifacts() {
-    log.debug("REST request to get all Artifacts");
-    return artifactRepository.findAll();
-  }
+    /**
+     * {@code PUT  /artifacts} : Updates an existing artifact.
+     *
+     * @param artifactDTO the artifactDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated artifactDTO,
+     * or with status {@code 400 (Bad Request)} if the artifactDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the artifactDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/artifacts")
+    public ResponseEntity<ArtifactDTO> updateArtifact(@RequestBody ArtifactDTO artifactDTO) throws URISyntaxException {
+        log.debug("REST request to update Artifact : {}", artifactDTO);
+        if (artifactDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        ArtifactDTO result = artifactService.save(artifactDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artifactDTO.getId().toString()))
+            .body(result);
+    }
 
-  /**
-   * {@code GET /artifacts/:id} : get the "id" artifact.
-   *
-   * @param id the id of the artifact to retrieve.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the artifact, or
-   *     with status {@code 404 (Not Found)}.
-   */
-  @GetMapping("/artifacts/{id}")
-  public ResponseEntity<Artifact> getArtifact(@PathVariable Long id) {
-    log.debug("REST request to get Artifact : {}", id);
-    Optional<Artifact> artifact = artifactRepository.findById(id);
-    return ResponseUtil.wrapOrNotFound(artifact);
-  }
+    /**
+     * {@code GET  /artifacts} : get all the artifacts.
+     *
 
-  /**
-   * {@code DELETE /artifacts/:id} : delete the "id" artifact.
-   *
-   * @param id the id of the artifact to delete.
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-   */
-  @DeleteMapping("/artifacts/{id}")
-  public ResponseEntity<Void> deleteArtifact(@PathVariable Long id) {
-    log.debug("REST request to delete Artifact : {}", id);
-    artifactRepository.deleteById(id);
-    return ResponseEntity.noContent()
-        .headers(
-            HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-        .build();
-  }
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of artifacts in body.
+     */
+    @GetMapping("/artifacts")
+    public List<ArtifactDTO> getAllArtifacts() {
+        log.debug("REST request to get all Artifacts");
+        return artifactService.findAll();
+    }
+
+    /**
+     * {@code GET  /artifacts/:id} : get the "id" artifact.
+     *
+     * @param id the id of the artifactDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the artifactDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/artifacts/{id}")
+    public ResponseEntity<ArtifactDTO> getArtifact(@PathVariable Long id) {
+        log.debug("REST request to get Artifact : {}", id);
+        Optional<ArtifactDTO> artifactDTO = artifactService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(artifactDTO);
+    }
+
+    /**
+     * {@code DELETE  /artifacts/:id} : delete the "id" artifact.
+     *
+     * @param id the id of the artifactDTO to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/artifacts/{id}")
+    public ResponseEntity<Void> deleteArtifact(@PathVariable Long id) {
+        log.debug("REST request to delete Artifact : {}", id);
+        artifactService.delete(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
 }

@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.domain.EventType;
-import br.ufpa.labes.spm.repository.EventTypeRepository;
+import br.ufpa.labes.spm.service.EventTypeService;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
+import br.ufpa.labes.spm.service.dto.EventTypeDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -18,111 +18,101 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-/** REST controller for managing {@link br.ufpa.labes.spm.domain.EventType}. */
+/**
+ * REST controller for managing {@link br.ufpa.labes.spm.domain.EventType}.
+ */
 @RestController
 @RequestMapping("/api")
 public class EventTypeResource {
 
-  private final Logger log = LoggerFactory.getLogger(EventTypeResource.class);
+    private final Logger log = LoggerFactory.getLogger(EventTypeResource.class);
 
-  private static final String ENTITY_NAME = "eventType";
+    private static final String ENTITY_NAME = "eventType";
 
-  @Value("${jhipster.clientApp.name}")
-  private String applicationName;
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
-  private final EventTypeRepository eventTypeRepository;
+    private final EventTypeService eventTypeService;
 
-  public EventTypeResource(EventTypeRepository eventTypeRepository) {
-    this.eventTypeRepository = eventTypeRepository;
-  }
-
-  /**
-   * {@code POST /event-types} : Create a new eventType.
-   *
-   * @param eventType the eventType to create.
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new
-   *     eventType, or with status {@code 400 (Bad Request)} if the eventType has already an ID.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PostMapping("/event-types")
-  public ResponseEntity<EventType> createEventType(@RequestBody EventType eventType)
-      throws URISyntaxException {
-    log.debug("REST request to save EventType : {}", eventType);
-    if (eventType.getId() != null) {
-      throw new BadRequestAlertException(
-          "A new eventType cannot already have an ID", ENTITY_NAME, "idexists");
+    public EventTypeResource(EventTypeService eventTypeService) {
+        this.eventTypeService = eventTypeService;
     }
-    EventType result = eventTypeRepository.save(eventType);
-    return ResponseEntity.created(new URI("/api/event-types/" + result.getId()))
-        .headers(
-            HeaderUtil.createEntityCreationAlert(
-                applicationName, true, ENTITY_NAME, result.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code PUT /event-types} : Updates an existing eventType.
-   *
-   * @param eventType the eventType to update.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated
-   *     eventType, or with status {@code 400 (Bad Request)} if the eventType is not valid, or with
-   *     status {@code 500 (Internal Server Error)} if the eventType couldn't be updated.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PutMapping("/event-types")
-  public ResponseEntity<EventType> updateEventType(@RequestBody EventType eventType)
-      throws URISyntaxException {
-    log.debug("REST request to update EventType : {}", eventType);
-    if (eventType.getId() == null) {
-      throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    /**
+     * {@code POST  /event-types} : Create a new eventType.
+     *
+     * @param eventTypeDTO the eventTypeDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new eventTypeDTO, or with status {@code 400 (Bad Request)} if the eventType has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/event-types")
+    public ResponseEntity<EventTypeDTO> createEventType(@RequestBody EventTypeDTO eventTypeDTO) throws URISyntaxException {
+        log.debug("REST request to save EventType : {}", eventTypeDTO);
+        if (eventTypeDTO.getId() != null) {
+            throw new BadRequestAlertException("A new eventType cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        EventTypeDTO result = eventTypeService.save(eventTypeDTO);
+        return ResponseEntity.created(new URI("/api/event-types/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
-    EventType result = eventTypeRepository.save(eventType);
-    return ResponseEntity.ok()
-        .headers(
-            HeaderUtil.createEntityUpdateAlert(
-                applicationName, true, ENTITY_NAME, eventType.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code GET /event-types} : get all the eventTypes.
-   *
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of eventTypes in
-   *     body.
-   */
-  @GetMapping("/event-types")
-  public List<EventType> getAllEventTypes() {
-    log.debug("REST request to get all EventTypes");
-    return eventTypeRepository.findAll();
-  }
+    /**
+     * {@code PUT  /event-types} : Updates an existing eventType.
+     *
+     * @param eventTypeDTO the eventTypeDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated eventTypeDTO,
+     * or with status {@code 400 (Bad Request)} if the eventTypeDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the eventTypeDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/event-types")
+    public ResponseEntity<EventTypeDTO> updateEventType(@RequestBody EventTypeDTO eventTypeDTO) throws URISyntaxException {
+        log.debug("REST request to update EventType : {}", eventTypeDTO);
+        if (eventTypeDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        EventTypeDTO result = eventTypeService.save(eventTypeDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, eventTypeDTO.getId().toString()))
+            .body(result);
+    }
 
-  /**
-   * {@code GET /event-types/:id} : get the "id" eventType.
-   *
-   * @param id the id of the eventType to retrieve.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the eventType, or
-   *     with status {@code 404 (Not Found)}.
-   */
-  @GetMapping("/event-types/{id}")
-  public ResponseEntity<EventType> getEventType(@PathVariable Long id) {
-    log.debug("REST request to get EventType : {}", id);
-    Optional<EventType> eventType = eventTypeRepository.findById(id);
-    return ResponseUtil.wrapOrNotFound(eventType);
-  }
+    /**
+     * {@code GET  /event-types} : get all the eventTypes.
+     *
 
-  /**
-   * {@code DELETE /event-types/:id} : delete the "id" eventType.
-   *
-   * @param id the id of the eventType to delete.
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-   */
-  @DeleteMapping("/event-types/{id}")
-  public ResponseEntity<Void> deleteEventType(@PathVariable Long id) {
-    log.debug("REST request to delete EventType : {}", id);
-    eventTypeRepository.deleteById(id);
-    return ResponseEntity.noContent()
-        .headers(
-            HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-        .build();
-  }
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of eventTypes in body.
+     */
+    @GetMapping("/event-types")
+    public List<EventTypeDTO> getAllEventTypes() {
+        log.debug("REST request to get all EventTypes");
+        return eventTypeService.findAll();
+    }
+
+    /**
+     * {@code GET  /event-types/:id} : get the "id" eventType.
+     *
+     * @param id the id of the eventTypeDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the eventTypeDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/event-types/{id}")
+    public ResponseEntity<EventTypeDTO> getEventType(@PathVariable Long id) {
+        log.debug("REST request to get EventType : {}", id);
+        Optional<EventTypeDTO> eventTypeDTO = eventTypeService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(eventTypeDTO);
+    }
+
+    /**
+     * {@code DELETE  /event-types/:id} : delete the "id" eventType.
+     *
+     * @param id the id of the eventTypeDTO to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/event-types/{id}")
+    public ResponseEntity<Void> deleteEventType(@PathVariable Long id) {
+        log.debug("REST request to delete EventType : {}", id);
+        eventTypeService.delete(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
 }

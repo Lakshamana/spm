@@ -8,24 +8,21 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link MetricDefinitionUnit} and its DTO {@link MetricDefinitionUnitDTO}.
  */
-@Mapper(
-    componentModel = "spring",
-    uses = {MetricDefinitionMapper.class})
-public interface MetricDefinitionUnitMapper
-    extends EntityMapper<MetricDefinitionUnitDTO, MetricDefinitionUnit> {
+@Mapper(componentModel = "spring", uses = {MetricDefinitionMapper.class})
+public interface MetricDefinitionUnitMapper extends EntityMapper<MetricDefinitionUnitDTO, MetricDefinitionUnit> {
 
-  @Mapping(source = "theMetricDefinition.id", target = "theMetricDefinitionId")
-  MetricDefinitionUnitDTO toDto(MetricDefinitionUnit metricDefinitionUnit);
+    @Mapping(source = "theMetricDefinition.id", target = "theMetricDefinitionId")
+    MetricDefinitionUnitDTO toDto(MetricDefinitionUnit metricDefinitionUnit);
 
-  @Mapping(source = "theMetricDefinitionId", target = "theMetricDefinition")
-  MetricDefinitionUnit toEntity(MetricDefinitionUnitDTO metricDefinitionUnitDTO);
+    @Mapping(source = "theMetricDefinitionId", target = "theMetricDefinition")
+    MetricDefinitionUnit toEntity(MetricDefinitionUnitDTO metricDefinitionUnitDTO);
 
-  default MetricDefinitionUnit fromId(Long id) {
-    if (id == null) {
-      return null;
+    default MetricDefinitionUnit fromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        MetricDefinitionUnit metricDefinitionUnit = new MetricDefinitionUnit();
+        metricDefinitionUnit.setId(id);
+        return metricDefinitionUnit;
     }
-    MetricDefinitionUnit metricDefinitionUnit = new MetricDefinitionUnit();
-    metricDefinitionUnit.setId(id);
-    return metricDefinitionUnit;
-  }
 }

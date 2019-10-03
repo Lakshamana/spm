@@ -15,69 +15,71 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/** Service Implementation for managing {@link ProcessEstimation}. */
+/**
+ * Service Implementation for managing {@link ProcessEstimation}.
+ */
 @Service
 @Transactional
 public class ProcessEstimationService {
 
-  private final Logger log = LoggerFactory.getLogger(ProcessEstimationService.class);
+    private final Logger log = LoggerFactory.getLogger(ProcessEstimationService.class);
 
-  private final ProcessEstimationRepository processEstimationRepository;
+    private final ProcessEstimationRepository processEstimationRepository;
 
-  private final ProcessEstimationMapper processEstimationMapper;
+    private final ProcessEstimationMapper processEstimationMapper;
 
-  public ProcessEstimationService(
-      ProcessEstimationRepository processEstimationRepository,
-      ProcessEstimationMapper processEstimationMapper) {
-    this.processEstimationRepository = processEstimationRepository;
-    this.processEstimationMapper = processEstimationMapper;
-  }
+    public ProcessEstimationService(ProcessEstimationRepository processEstimationRepository, ProcessEstimationMapper processEstimationMapper) {
+        this.processEstimationRepository = processEstimationRepository;
+        this.processEstimationMapper = processEstimationMapper;
+    }
 
-  /**
-   * Save a processEstimation.
-   *
-   * @param processEstimationDTO the entity to save.
-   * @return the persisted entity.
-   */
-  public ProcessEstimationDTO save(ProcessEstimationDTO processEstimationDTO) {
-    log.debug("Request to save ProcessEstimation : {}", processEstimationDTO);
-    ProcessEstimation processEstimation = processEstimationMapper.toEntity(processEstimationDTO);
-    processEstimation = processEstimationRepository.save(processEstimation);
-    return processEstimationMapper.toDto(processEstimation);
-  }
+    /**
+     * Save a processEstimation.
+     *
+     * @param processEstimationDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public ProcessEstimationDTO save(ProcessEstimationDTO processEstimationDTO) {
+        log.debug("Request to save ProcessEstimation : {}", processEstimationDTO);
+        ProcessEstimation processEstimation = processEstimationMapper.toEntity(processEstimationDTO);
+        processEstimation = processEstimationRepository.save(processEstimation);
+        return processEstimationMapper.toDto(processEstimation);
+    }
 
-  /**
-   * Get all the processEstimations.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<ProcessEstimationDTO> findAll() {
-    log.debug("Request to get all ProcessEstimations");
-    return processEstimationRepository.findAll().stream()
-        .map(processEstimationMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
+    /**
+     * Get all the processEstimations.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<ProcessEstimationDTO> findAll() {
+        log.debug("Request to get all ProcessEstimations");
+        return processEstimationRepository.findAll().stream()
+            .map(processEstimationMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
-  /**
-   * Get one processEstimation by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Transactional(readOnly = true)
-  public Optional<ProcessEstimationDTO> findOne(Long id) {
-    log.debug("Request to get ProcessEstimation : {}", id);
-    return processEstimationRepository.findById(id).map(processEstimationMapper::toDto);
-  }
 
-  /**
-   * Delete the processEstimation by id.
-   *
-   * @param id the id of the entity.
-   */
-  public void delete(Long id) {
-    log.debug("Request to delete ProcessEstimation : {}", id);
-    processEstimationRepository.deleteById(id);
-  }
+    /**
+     * Get one processEstimation by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<ProcessEstimationDTO> findOne(Long id) {
+        log.debug("Request to get ProcessEstimation : {}", id);
+        return processEstimationRepository.findById(id)
+            .map(processEstimationMapper::toDto);
+    }
+
+    /**
+     * Delete the processEstimation by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+        log.debug("Request to delete ProcessEstimation : {}", id);
+        processEstimationRepository.deleteById(id);
+    }
 }

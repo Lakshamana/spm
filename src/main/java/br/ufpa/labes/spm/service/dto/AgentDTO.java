@@ -1,264 +1,257 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Objects;
+import javax.persistence.Lob;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
-@SuppressWarnings("serial")
-@XmlRootElement(name = "agent")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Agent} entity.
+ */
 public class AgentDTO implements Serializable {
 
-  private Long id;
+    private Long id;
 
-  private String ident;
+    private String ident;
 
-  private String name;
+    private String name;
 
-  private String email;
+    private String email;
 
-  private Float costHour;
+    private Float costHour;
 
-  private String password;
+    private String passwordHash;
 
-  private Boolean staticOk;
+    private Integer tipoUser;
 
-  private Boolean isActive;
+    private Boolean isActive;
 
-  private String artifactMngLogin;
+    private Boolean online;
 
-  private String artifactMngPassword;
+    @Lob
+    private byte[] photo;
 
-  private String description;
+    private String photoContentType;
+    private String upload;
 
-  private Boolean online;
+    @Lob
+    private String description;
 
-  private String upload;
 
-  @IgnoreMapping private List<String> afinityToAgent;
-  @IgnoreMapping private List<String> abilityToAgent;
-  @IgnoreMapping private List<String> groupToAgent;
-  @IgnoreMapping private List<String> roleToAgent;
-  @IgnoreMapping private List<String> roleIdentsToAgent;
-  @IgnoreMapping private List<TaskDTO> tasks;
-  @IgnoreMapping private float workingCost;
-  @IgnoreMapping private float estimatedWorkingCost;
+    private Long theTaskAgendaId;
 
-  public AgentDTO() {
-    this.afinityToAgent = new ArrayList<String>();
-    this.abilityToAgent = new ArrayList<String>();
-    this.groupToAgent = new ArrayList<String>();
-    this.roleToAgent = new ArrayList<String>();
-    this.tasks = new ArrayList<TaskDTO>();
-  }
+    private Long configurationId;
 
-  public Long getId() {
-    return id;
-  }
+    private Long theResourceEventId;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    private Set<ProcessDTO> theProcesses = new HashSet<>();
 
-  public Boolean isOnline() {
-    return online;
-  }
+    private Set<WorkGroupDTO> theWorkGroups = new HashSet<>();
 
-  @XmlTransient
-  public Boolean getOnline() {
-    return online;
-  }
+    private Set<CompanyUnitDTO> theOrgUnits = new HashSet<>();
 
-  public void setOnline(Boolean online) {
-    this.online = online;
-  }
+    private Long theEmailConfigurationId;
 
-  public String getIdent() {
-    return ident;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setIdent(String ident) {
-    this.ident = ident;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getIdent() {
+        return ident;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setIdent(String ident) {
+        this.ident = ident;
+    }
 
-  public Float getCostHour() {
-    return costHour;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setCostHour(Float costHour) {
-    this.costHour = costHour;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  @XmlTransient
-  public String getPassword() {
-    return password;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-  @XmlTransient
-  public Boolean isIsActive() {
-    return isActive;
-  }
+    public Float getCostHour() {
+        return costHour;
+    }
 
-  public Boolean getIsActive() {
-    return isActive;
-  }
+    public void setCostHour(Float costHour) {
+        this.costHour = costHour;
+    }
 
-  public void setIsActive(Boolean isActive) {
-    this.isActive = isActive;
-  }
+    public String getPasswordHash() {
+        return passwordHash;
+    }
 
-  @XmlTransient
-  public String getArtifactMngPassword() {
-    return artifactMngPassword;
-  }
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
 
-  public void setArtifactMngPassword(String artifactMngPassword) {
-    this.artifactMngPassword = artifactMngPassword;
-  }
+    public Integer getTipoUser() {
+        return tipoUser;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public void setTipoUser(Integer tipoUser) {
+        this.tipoUser = tipoUser;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public Boolean isIsActive() {
+        return isActive;
+    }
 
-  @XmlElement(name = "email")
-  public String getEmail() {
-    return email;
-  }
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
 
-  public void setEmail(String eMail) {
-    this.email = eMail;
-  }
+    public Boolean isOnline() {
+        return online;
+    }
 
-  @XmlTransient
-  public Boolean isStaticOk() {
-    return staticOk;
-  }
+    public void setOnline(Boolean online) {
+        this.online = online;
+    }
 
-  public List<String> getAfinityToAgent() {
-    return afinityToAgent;
-  }
+    public byte[] getPhoto() {
+        return photo;
+    }
 
-  public void setAfinityToAgent(List<String> afinityToAgent) {
-    this.afinityToAgent = afinityToAgent;
-  }
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
 
-  public List<String> getAbilityToAgent() {
-    return abilityToAgent;
-  }
+    public String getPhotoContentType() {
+        return photoContentType;
+    }
 
-  public void setAbilityToAgent(List<String> abilityToAgent) {
-    this.abilityToAgent = abilityToAgent;
-  }
+    public void setPhotoContentType(String photoContentType) {
+        this.photoContentType = photoContentType;
+    }
 
-  public List<String> getGroupToAgent() {
-    return groupToAgent;
-  }
+    public String getUpload() {
+        return upload;
+    }
 
-  public void setGroupToAgent(List<String> groupToAgent) {
-    this.groupToAgent = groupToAgent;
-  }
+    public void setUpload(String upload) {
+        this.upload = upload;
+    }
 
-  public List<String> getRoleToAgent() {
-    return roleToAgent;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public void setRoleToAgent(List<String> roleToAgent) {
-    this.roleToAgent = roleToAgent;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public List<String> getRoleIdentsToAgent() {
-    return roleIdentsToAgent;
-  }
+    public Long getTheTaskAgendaId() {
+        return theTaskAgendaId;
+    }
 
-  public void setRoleIdentsToAgent(List<String> roleIdentsToAgent) {
-    this.roleIdentsToAgent = roleIdentsToAgent;
-  }
+    public void setTheTaskAgendaId(Long taskAgendaId) {
+        this.theTaskAgendaId = taskAgendaId;
+    }
 
-  //	@XmlTransient
-  public String getUpload() {
-    return upload;
-  }
+    public Long getConfigurationId() {
+        return configurationId;
+    }
 
-  public void setUpload(String upload) {
-    this.upload = upload;
-  }
+    public void setConfigurationId(Long spmConfigurationId) {
+        this.configurationId = spmConfigurationId;
+    }
 
-  public List<TaskDTO> getTasks() {
-    return tasks;
-  }
+    public Long getTheResourceEventId() {
+        return theResourceEventId;
+    }
 
-  public void setTasks(List<TaskDTO> tasks) {
-    this.tasks = tasks;
-  }
+    public void setTheResourceEventId(Long resourceEventId) {
+        this.theResourceEventId = resourceEventId;
+    }
 
-  public float getWorkingCost() {
-    return workingCost;
-  }
+    public Set<ProcessDTO> getTheProcesses() {
+        return theProcesses;
+    }
 
-  public void setWorkingCost(float workingCost) {
-    this.workingCost = workingCost;
-  }
+    public void setTheProcesses(Set<ProcessDTO> processes) {
+        this.theProcesses = processes;
+    }
 
-  public float getEstimatedWorkingCost() {
-    return estimatedWorkingCost;
-  }
+    public Set<WorkGroupDTO> getTheWorkGroups() {
+        return theWorkGroups;
+    }
 
-  public void setEstimatedWorkingCost(float estimatedWorkingCost) {
-    this.estimatedWorkingCost = estimatedWorkingCost;
-  }
+    public void setTheWorkGroups(Set<WorkGroupDTO> workGroups) {
+        this.theWorkGroups = workGroups;
+    }
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((ident == null) ? 0 : ident.hashCode());
-    return result;
-  }
+    public Set<CompanyUnitDTO> getTheOrgUnits() {
+        return theOrgUnits;
+    }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
-    AgentDTO other = (AgentDTO) obj;
-    if (ident == null) {
-      if (other.ident != null) return false;
-    } else if (!ident.equals(other.ident)) return false;
-    return true;
-  }
+    public void setTheOrgUnits(Set<CompanyUnitDTO> companyUnits) {
+        this.theOrgUnits = companyUnits;
+    }
 
-  @Override
-  public String toString() {
-    return "Name: " + this.getName() + "; Email: " + this.getEmail();
-  }
+    public Long getTheEmailConfigurationId() {
+        return theEmailConfigurationId;
+    }
 
-  @XmlTransient
-  public String getArtifactMngLogin() {
-    return artifactMngLogin;
-  }
+    public void setTheEmailConfigurationId(Long emailConfigurationId) {
+        this.theEmailConfigurationId = emailConfigurationId;
+    }
 
-  public void setArtifactMngLogin(String artifactMngLogin) {
-    this.artifactMngLogin = artifactMngLogin;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        AgentDTO agentDTO = (AgentDTO) o;
+        if (agentDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), agentDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "AgentDTO{" +
+            "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
+            ", name='" + getName() + "'" +
+            ", email='" + getEmail() + "'" +
+            ", costHour=" + getCostHour() +
+            ", passwordHash='" + getPasswordHash() + "'" +
+            ", tipoUser=" + getTipoUser() +
+            ", isActive='" + isIsActive() + "'" +
+            ", online='" + isOnline() + "'" +
+            ", photo='" + getPhoto() + "'" +
+            ", upload='" + getUpload() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", theTaskAgenda=" + getTheTaskAgendaId() +
+            ", configuration=" + getConfigurationId() +
+            ", theResourceEvent=" + getTheResourceEventId() +
+            ", theEmailConfiguration=" + getTheEmailConfigurationId() +
+            "}";
+    }
 }

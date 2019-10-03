@@ -1,48 +1,59 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
+import java.util.Objects;
 
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
-@SuppressWarnings("serial")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Structure} entity.
+ */
 public class StructureDTO implements Serializable {
-  private Long id;
 
-  @IgnoreMapping private RepositoryDTO theRepository;
+    private Long id;
 
-  @IgnoreMapping private NodeDTO rootElement;
 
-  public StructureDTO() {
-    this.theRepository = null;
-    this.rootElement = null;
-  }
+    private Long rootElementId;
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public RepositoryDTO getTheRepository() {
-    return theRepository;
-  }
+    public Long getRootElementId() {
+        return rootElementId;
+    }
 
-  public void setTheRepository(RepositoryDTO theRepository) {
-    this.theRepository = theRepository;
-  }
+    public void setRootElementId(Long nodeId) {
+        this.rootElementId = nodeId;
+    }
 
-  public NodeDTO getRootElement() {
-    return rootElement;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-  public void setRootElement(NodeDTO rootElement) {
-    this.rootElement = rootElement;
-  }
+        StructureDTO structureDTO = (StructureDTO) o;
+        if (structureDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), structureDTO.getId());
+    }
 
-  @Override
-  public String toString() {
-    return "StructureDTO [id=" + id + ", rootElement=" + rootElement + "]";
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "StructureDTO{" +
+            "id=" + getId() +
+            ", rootElement=" + getRootElementId() +
+            "}";
+    }
 }

@@ -1,194 +1,139 @@
 package br.ufpa.labes.spm.service.dto;
-
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.Lob;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
-@SuppressWarnings("serial")
-@XmlRootElement(name = "project")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Project} entity.
+ */
 public class ProjectDTO implements Serializable {
-  private Long id;
-  private String ident;
-  private String description;
-  private String name;
-  private LocalDate begin_date;
-  private LocalDate end_date;
-  private boolean active;
 
-  @IgnoreMapping private String process;
-  @IgnoreMapping private ProcessDTO processDTO;
-  @IgnoreMapping private Integer estimatedHours;
-  @IgnoreMapping private Integer estimatedMinutes;
-  @IgnoreMapping private String theSystem;
-  @IgnoreMapping private String processRefered;
-  @IgnoreMapping private Collection<String> artifacts;
-  @IgnoreMapping private Collection<String> agents;
-  @IgnoreMapping private String pState;
+    private Long id;
 
-  public ProjectDTO() {
-    //		this.begin_date = new LocalDate();
-    this.artifacts = new ArrayList<String>();
-    this.agents = new ArrayList<String>();
-  }
+    private String ident;
 
-  public Long getId() {
-    return id;
-  }
+    private String name;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    @Lob
+    private String description;
 
-  public String getIdent() {
-    return ident;
-  }
+    private LocalDate beginDate;
 
-  public void setIdent(String ident) {
-    this.ident = ident;
-  }
+    private LocalDate endDate;
 
-  public String getDescription() {
-    return description;
-  }
+    private Boolean active;
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
 
-  public String getName() {
-    return name;
-  }
+    private Long processReferedId;
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    private Long theSystemId;
 
-  public LocalDate getBegin_date() {
-    return begin_date;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setBegin_date(LocalDate begin_date) {
-    this.begin_date = begin_date;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getBegin_dateString() {
-    String date = "";
-    if (begin_date != null)
-      date = begin_date.getDayOfMonth() + "-" + begin_date.getMonth() + "-" + begin_date.getYear();
+    public String getIdent() {
+        return ident;
+    }
 
-    return date;
-  }
+    public void setIdent(String ident) {
+        this.ident = ident;
+    }
 
-  public LocalDate getEnd_date() {
-    return end_date;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setEnd_date(LocalDate end_date) {
-    this.end_date = end_date;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getTheSystem() {
-    return theSystem;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public void setTheSystem(String theSystem) {
-    this.theSystem = theSystem;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public String getProcessRefered() {
-    return processRefered;
-  }
+    public LocalDate getBeginDate() {
+        return beginDate;
+    }
 
-  public void setProcessRefered(String processRefered) {
-    this.processRefered = processRefered;
-  }
+    public void setBeginDate(LocalDate beginDate) {
+        this.beginDate = beginDate;
+    }
 
-  public Collection<String> getArtifacts() {
-    return artifacts;
-  }
+    public LocalDate getEndDate() {
+        return endDate;
+    }
 
-  public void setArtifacts(Collection<String> artifacts) {
-    this.artifacts = artifacts;
-  }
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
 
-  public Collection<String> getAgents() {
-    return agents;
-  }
+    public Boolean isActive() {
+        return active;
+    }
 
-  public void setAgents(Collection<String> agents) {
-    this.agents = agents;
-  }
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
-  public String getpState() {
-    return pState;
-  }
+    public Long getProcessReferedId() {
+        return processReferedId;
+    }
 
-  public void setpState(String pState) {
-    this.pState = pState;
-  }
+    public void setProcessReferedId(Long processId) {
+        this.processReferedId = processId;
+    }
 
-  public boolean isActive() {
-    return active;
-  }
+    public Long getTheSystemId() {
+        return theSystemId;
+    }
 
-  public void setActive(boolean active) {
-    this.active = active;
-  }
+    public void setTheSystemId(Long developingSystemId) {
+        this.theSystemId = developingSystemId;
+    }
 
-  public ProcessDTO getProcessDTO() {
-    return processDTO;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-  public void setProcessDTO(ProcessDTO processDTO) {
-    this.processDTO = processDTO;
-  }
+        ProjectDTO projectDTO = (ProjectDTO) o;
+        if (projectDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), projectDTO.getId());
+    }
 
-  public String getProcess() {
-    return process;
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
 
-  public void setProcess(String process) {
-    this.process = process;
-  }
-
-  public Integer getEstimatedHours() {
-    return estimatedHours;
-  }
-
-  public void setEstimatedHours(Integer estimatedHours) {
-    this.estimatedHours = estimatedHours;
-  }
-
-  public Integer getEstimatedMinutes() {
-    return estimatedMinutes;
-  }
-
-  public void setEstimatedMinutes(Integer estimatedMinutes) {
-    this.estimatedMinutes = estimatedMinutes;
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((ident == null) ? 0 : ident.hashCode());
-    return result;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
-    ProjectDTO other = (ProjectDTO) obj;
-    if (ident == null) {
-      if (other.ident != null) return false;
-    } else if (!ident.equals(other.ident)) return false;
-    return true;
-  }
+    @Override
+    public String toString() {
+        return "ProjectDTO{" +
+            "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
+            ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", beginDate='" + getBeginDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
+            ", active='" + isActive() + "'" +
+            ", processRefered=" + getProcessReferedId() +
+            ", theSystem=" + getTheSystemId() +
+            "}";
+    }
 }

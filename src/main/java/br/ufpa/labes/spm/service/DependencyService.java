@@ -16,82 +16,86 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/** Service Implementation for managing {@link Dependency}. */
+/**
+ * Service Implementation for managing {@link Dependency}.
+ */
 @Service
 @Transactional
 public class DependencyService {
 
-  private final Logger log = LoggerFactory.getLogger(DependencyService.class);
+    private final Logger log = LoggerFactory.getLogger(DependencyService.class);
 
-  private final DependencyRepository dependencyRepository;
+    private final DependencyRepository dependencyRepository;
 
-  private final DependencyMapper dependencyMapper;
+    private final DependencyMapper dependencyMapper;
 
-  public DependencyService(
-      DependencyRepository dependencyRepository, DependencyMapper dependencyMapper) {
-    this.dependencyRepository = dependencyRepository;
-    this.dependencyMapper = dependencyMapper;
-  }
+    public DependencyService(DependencyRepository dependencyRepository, DependencyMapper dependencyMapper) {
+        this.dependencyRepository = dependencyRepository;
+        this.dependencyMapper = dependencyMapper;
+    }
 
-  /**
-   * Save a dependency.
-   *
-   * @param dependencyDTO the entity to save.
-   * @return the persisted entity.
-   */
-  public DependencyDTO save(DependencyDTO dependencyDTO) {
-    log.debug("Request to save Dependency : {}", dependencyDTO);
-    Dependency dependency = dependencyMapper.toEntity(dependencyDTO);
-    dependency = dependencyRepository.save(dependency);
-    return dependencyMapper.toDto(dependency);
-  }
+    /**
+     * Save a dependency.
+     *
+     * @param dependencyDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public DependencyDTO save(DependencyDTO dependencyDTO) {
+        log.debug("Request to save Dependency : {}", dependencyDTO);
+        Dependency dependency = dependencyMapper.toEntity(dependencyDTO);
+        dependency = dependencyRepository.save(dependency);
+        return dependencyMapper.toDto(dependency);
+    }
 
-  /**
-   * Get all the dependencies.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<DependencyDTO> findAll() {
-    log.debug("Request to get all Dependencies");
-    return dependencyRepository.findAll().stream()
-        .map(dependencyMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
+    /**
+     * Get all the dependencies.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<DependencyDTO> findAll() {
+        log.debug("Request to get all Dependencies");
+        return dependencyRepository.findAll().stream()
+            .map(dependencyMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
-  /**
-   * Get all the dependencies where TheMultipleCon is {@code null}.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<DependencyDTO> findAllWhereTheMultipleConIsNull() {
-    log.debug("Request to get all dependencies where TheMultipleCon is null");
-    return StreamSupport.stream(dependencyRepository.findAll().spliterator(), false)
-        .filter(dependency -> dependency.getTheMultipleCon() == null)
-        .map(dependencyMapper::toDto)
-        .collect(Collectors.toCollection(LinkedList::new));
-  }
 
-  /**
-   * Get one dependency by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Transactional(readOnly = true)
-  public Optional<DependencyDTO> findOne(Long id) {
-    log.debug("Request to get Dependency : {}", id);
-    return dependencyRepository.findById(id).map(dependencyMapper::toDto);
-  }
 
-  /**
-   * Delete the dependency by id.
-   *
-   * @param id the id of the entity.
-   */
-  public void delete(Long id) {
-    log.debug("Request to delete Dependency : {}", id);
-    dependencyRepository.deleteById(id);
-  }
+    /**
+    *  Get all the dependencies where TheMultipleCon is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true) 
+    public List<DependencyDTO> findAllWhereTheMultipleConIsNull() {
+        log.debug("Request to get all dependencies where TheMultipleCon is null");
+        return StreamSupport
+            .stream(dependencyRepository.findAll().spliterator(), false)
+            .filter(dependency -> dependency.getTheMultipleCon() == null)
+            .map(dependencyMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Get one dependency by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<DependencyDTO> findOne(Long id) {
+        log.debug("Request to get Dependency : {}", id);
+        return dependencyRepository.findById(id)
+            .map(dependencyMapper::toDto);
+    }
+
+    /**
+     * Delete the dependency by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+        log.debug("Request to delete Dependency : {}", id);
+        dependencyRepository.deleteById(id);
+    }
 }

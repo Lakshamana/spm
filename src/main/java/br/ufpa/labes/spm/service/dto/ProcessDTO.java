@@ -1,101 +1,103 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
-import java.util.List;
+import java.util.Objects;
 
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
-@SuppressWarnings("serial")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Process} entity.
+ */
 public class ProcessDTO implements Serializable {
-  private Long id;
-  private String ident;
-  private String pState;
-  @IgnoreMapping private List<String> tasks;
-  @IgnoreMapping private List<String> tasksIdents;
-  @IgnoreMapping private ActivitysDTO activitys;
 
-  public ProcessDTO() {}
+    private Long id;
 
-  public ProcessDTO(String ident, String pState, List<String> tasks) {
-    this.ident = ident;
-    this.pState = pState;
-    this.tasks = tasks;
-  }
+    private String ident;
 
-  public Long getId() {
-    return id;
-  }
+    private String pState;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
 
-  public String getIdent() {
-    return ident;
-  }
+    private Long theProcessModelId;
 
-  public void setIdent(String ident) {
-    this.ident = ident;
-  }
+    private Long theActivityTypeId;
 
-  public String getPState() {
-    return pState;
-  }
+    private Long theEmailConfigurationId;
 
-  public void setPState(String pState) {
-    this.pState = pState;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public List<String> getTasks() {
-    return tasks;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setTasks(List<String> tasks) {
-    this.tasks = tasks;
-  }
+    public String getIdent() {
+        return ident;
+    }
 
-  public ActivitysDTO getActivitys() {
-    return activitys;
-  }
+    public void setIdent(String ident) {
+        this.ident = ident;
+    }
 
-  public void setActivitys(ActivitysDTO activitys) {
-    this.activitys = activitys;
-  }
+    public String getpState() {
+        return pState;
+    }
 
-  public List<String> getTasksIdents() {
-    return tasksIdents;
-  }
+    public void setpState(String pState) {
+        this.pState = pState;
+    }
 
-  public void setTasksIdents(List<String> tasksIdents) {
-    this.tasksIdents = tasksIdents;
-  }
+    public Long getTheProcessModelId() {
+        return theProcessModelId;
+    }
 
-  @Override
-  public String toString() {
-    return "Name: " + this.ident + "; activitys: " + tasks.size();
-  }
+    public void setTheProcessModelId(Long processModelId) {
+        this.theProcessModelId = processModelId;
+    }
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((ident == null) ? 0 : ident.hashCode());
-    result = prime * result + ((pState == null) ? 0 : pState.hashCode());
-    return result;
-  }
+    public Long getTheActivityTypeId() {
+        return theActivityTypeId;
+    }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
-    ProcessDTO other = (ProcessDTO) obj;
-    if (ident == null) {
-      if (other.ident != null) return false;
-    } else if (!ident.equals(other.ident)) return false;
-    if (pState == null) {
-      if (other.pState != null) return false;
-    } else if (!pState.equals(other.pState)) return false;
-    return true;
-  }
+    public void setTheActivityTypeId(Long activityTypeId) {
+        this.theActivityTypeId = activityTypeId;
+    }
+
+    public Long getTheEmailConfigurationId() {
+        return theEmailConfigurationId;
+    }
+
+    public void setTheEmailConfigurationId(Long emailConfigurationId) {
+        this.theEmailConfigurationId = emailConfigurationId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ProcessDTO processDTO = (ProcessDTO) o;
+        if (processDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), processDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "ProcessDTO{" +
+            "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
+            ", pState='" + getpState() + "'" +
+            ", theProcessModel=" + getTheProcessModelId() +
+            ", theActivityType=" + getTheActivityTypeId() +
+            ", theEmailConfiguration=" + getTheEmailConfigurationId() +
+            "}";
+    }
 }

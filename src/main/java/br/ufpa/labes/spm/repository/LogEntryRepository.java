@@ -6,12 +6,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/** Spring Data repository for the LogEntry entity. */
+/**
+ * Spring Data  repository for the LogEntry entity.
+ */
 @SuppressWarnings("unused")
 @Repository
 public interface LogEntryRepository extends JpaRepository<LogEntry, Long> {
 
-  @Query(
-      "select logEntry from LogEntry logEntry where logEntry.user.login = ?#{principal.username}")
-  List<LogEntry> findByUserIsCurrentUser();
+    @Query("select logEntry from LogEntry logEntry where logEntry.user.login = ?#{principal.username}")
+    List<LogEntry> findByUserIsCurrentUser();
+
 }

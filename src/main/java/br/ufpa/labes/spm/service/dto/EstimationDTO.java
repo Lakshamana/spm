@@ -1,52 +1,81 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
+import java.util.Objects;
 
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Estimation} entity.
+ */
 public class EstimationDTO implements Serializable {
 
-  private Long id;
-  private Float value;
-  private String unit;
-  @IgnoreMapping private String metricDefinition;
+    private Long id;
 
-  public EstimationDTO() {
-    id = null;
-    value = null;
-    unit = "";
-    metricDefinition = null;
-  }
+    private Float value;
 
-  public Long getId() {
-    return id;
-  }
+    private String unit;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
 
-  public Float getValue() {
-    return value;
-  }
+    private Long metricDefinitionId;
 
-  public void setValue(Float value) {
-    this.value = value;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getUnit() {
-    return unit;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setUnit(String unit) {
-    this.unit = unit;
-  }
+    public Float getValue() {
+        return value;
+    }
 
-  public String getMetricDefinition() {
-    return metricDefinition;
-  }
+    public void setValue(Float value) {
+        this.value = value;
+    }
 
-  public void setMetricDefinition(String metricDefinition) {
-    this.metricDefinition = metricDefinition;
-  }
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public Long getMetricDefinitionId() {
+        return metricDefinitionId;
+    }
+
+    public void setMetricDefinitionId(Long metricDefinitionId) {
+        this.metricDefinitionId = metricDefinitionId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        EstimationDTO estimationDTO = (EstimationDTO) o;
+        if (estimationDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), estimationDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "EstimationDTO{" +
+            "id=" + getId() +
+            ", value=" + getValue() +
+            ", unit='" + getUnit() + "'" +
+            ", metricDefinition=" + getMetricDefinitionId() +
+            "}";
+    }
 }

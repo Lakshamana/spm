@@ -1,90 +1,105 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
-import java.util.List;
+import java.util.Objects;
+import javax.persistence.Lob;
 
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
-@SuppressWarnings("serial")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Role} entity.
+ */
 public class RoleDTO implements Serializable {
-  /** */
-  private Long id;
 
-  private String ident;
+    private Long id;
 
-  private String name;
+    private String ident;
 
-  private String description;
+    private String name;
 
-  @IgnoreMapping private String superType;
+    @Lob
+    private String description;
 
-  @IgnoreMapping private List<AbilityDTO> abilityToRole;
 
-  @IgnoreMapping private Integer nivelAbility;
+    private Long subordinateId;
 
-  @IgnoreMapping private List<AgentDTO> agentToRole;
+    private Long theRoleTypeId;
 
-  public List<AgentDTO> getAgentToRole() {
-    return agentToRole;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setAgentToRole(List<AgentDTO> agentToRole) {
-    this.agentToRole = agentToRole;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public List<AbilityDTO> getAbilityToRole() {
-    return abilityToRole;
-  }
+    public String getIdent() {
+        return ident;
+    }
 
-  public void setAbilityToRole(List<AbilityDTO> abilityToRole) {
-    this.abilityToRole = abilityToRole;
-  }
+    public void setIdent(String ident) {
+        this.ident = ident;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getIdent() {
-    return ident;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public void setIdent(String ident) {
-    this.ident = ident;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public Long getSubordinateId() {
+        return subordinateId;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setSubordinateId(Long roleId) {
+        this.subordinateId = roleId;
+    }
 
-  public String getSuperType() {
-    return superType;
-  }
+    public Long getTheRoleTypeId() {
+        return theRoleTypeId;
+    }
 
-  public void setSuperType(String superType) {
-    this.superType = superType;
-  }
+    public void setTheRoleTypeId(Long roleTypeId) {
+        this.theRoleTypeId = roleTypeId;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+        RoleDTO roleDTO = (RoleDTO) o;
+        if (roleDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), roleDTO.getId());
+    }
 
-  public Integer getNivelAbility() {
-    return nivelAbility;
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
 
-  public void setNivelAbility(Integer nivelAbility) {
-    this.nivelAbility = nivelAbility;
-  }
+    @Override
+    public String toString() {
+        return "RoleDTO{" +
+            "id=" + getId() +
+            ", ident='" + getIdent() + "'" +
+            ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", subordinate=" + getSubordinateId() +
+            ", theRoleType=" + getTheRoleTypeId() +
+            "}";
+    }
 }

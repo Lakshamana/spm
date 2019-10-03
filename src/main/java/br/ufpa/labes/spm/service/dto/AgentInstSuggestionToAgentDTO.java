@@ -1,83 +1,81 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-/** A DTO for the {@link br.ufpa.labes.spm.domain.AgentInstSuggestionToAgent} entity. */
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.AgentInstSuggestionToAgent} entity.
+ */
 public class AgentInstSuggestionToAgentDTO implements Serializable {
 
-  private Long id;
+    private Long id;
 
-  private Float orderCriteriaResult;
+    private Float orderCriteriaResult;
 
-  private Long theInstAgSuggId;
 
-  private Long theAgentId;
+    private Long theInstAgSuggId;
 
-  public Long getId() {
-    return id;
-  }
+    private Long theAgentId;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Float getOrderCriteriaResult() {
-    return orderCriteriaResult;
-  }
-
-  public void setOrderCriteriaResult(Float orderCriteriaResult) {
-    this.orderCriteriaResult = orderCriteriaResult;
-  }
-
-  public Long getTheInstAgSuggId() {
-    return theInstAgSuggId;
-  }
-
-  public void setTheInstAgSuggId(Long agentInstSugId) {
-    this.theInstAgSuggId = agentInstSugId;
-  }
-
-  public Long getTheAgentId() {
-    return theAgentId;
-  }
-
-  public void setTheAgentId(Long agentId) {
-    this.theAgentId = agentId;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+    public Long getId() {
+        return id;
     }
 
-    AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO = (AgentInstSuggestionToAgentDTO) o;
-    if (agentInstSuggestionToAgentDTO.getId() == null || getId() == null) {
-      return false;
+    public void setId(Long id) {
+        this.id = id;
     }
-    return Objects.equals(getId(), agentInstSuggestionToAgentDTO.getId());
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(getId());
-  }
+    public Float getOrderCriteriaResult() {
+        return orderCriteriaResult;
+    }
 
-  @Override
-  public String toString() {
-    return "AgentInstSuggestionToAgentDTO{"
-        + "id="
-        + getId()
-        + ", orderCriteriaResult="
-        + getOrderCriteriaResult()
-        + ", theInstAgSugg="
-        + getTheInstAgSuggId()
-        + ", theAgent="
-        + getTheAgentId()
-        + "}";
-  }
+    public void setOrderCriteriaResult(Float orderCriteriaResult) {
+        this.orderCriteriaResult = orderCriteriaResult;
+    }
+
+    public Long getTheInstAgSuggId() {
+        return theInstAgSuggId;
+    }
+
+    public void setTheInstAgSuggId(Long agentInstSugId) {
+        this.theInstAgSuggId = agentInstSugId;
+    }
+
+    public Long getTheAgentId() {
+        return theAgentId;
+    }
+
+    public void setTheAgentId(Long agentId) {
+        this.theAgentId = agentId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        AgentInstSuggestionToAgentDTO agentInstSuggestionToAgentDTO = (AgentInstSuggestionToAgentDTO) o;
+        if (agentInstSuggestionToAgentDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), agentInstSuggestionToAgentDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "AgentInstSuggestionToAgentDTO{" +
+            "id=" + getId() +
+            ", orderCriteriaResult=" + getOrderCriteriaResult() +
+            ", theInstAgSugg=" + getTheInstAgSuggId() +
+            ", theAgent=" + getTheAgentId() +
+            "}";
+    }
 }

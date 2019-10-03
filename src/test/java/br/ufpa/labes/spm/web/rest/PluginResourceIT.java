@@ -3,6 +3,9 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.Plugin;
 import br.ufpa.labes.spm.repository.PluginRepository;
+import br.ufpa.labes.spm.service.PluginService;
+import br.ufpa.labes.spm.service.dto.PluginDTO;
+import br.ufpa.labes.spm.service.mapper.PluginMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,295 +31,318 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Integration tests for the {@link PluginResource} REST controller. */
+/**
+ * Integration tests for the {@link PluginResource} REST controller.
+ */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class PluginResourceIT {
 
-  private static final String DEFAULT_NAME = "AAAAAAAAAA";
-  private static final String UPDATED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-  private static final String DEFAULT_DEVELOPER_NAME = "AAAAAAAAAA";
-  private static final String UPDATED_DEVELOPER_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_DEVELOPER_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_DEVELOPER_NAME = "BBBBBBBBBB";
 
-  private static final String DEFAULT_CONFIG_FILE_PATH = "AAAAAAAAAA";
-  private static final String UPDATED_CONFIG_FILE_PATH = "BBBBBBBBBB";
+    private static final String DEFAULT_CONFIG_FILE_PATH = "AAAAAAAAAA";
+    private static final String UPDATED_CONFIG_FILE_PATH = "BBBBBBBBBB";
 
-  @Autowired private PluginRepository pluginRepository;
+    @Autowired
+    private PluginRepository pluginRepository;
 
-  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private PluginMapper pluginMapper;
 
-  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private PluginService pluginService;
 
-  @Autowired private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-  @Autowired private EntityManager em;
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-  @Autowired private Validator validator;
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
-  private MockMvc restPluginMockMvc;
+    @Autowired
+    private EntityManager em;
 
-  private Plugin plugin;
+    @Autowired
+    private Validator validator;
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final PluginResource pluginResource = new PluginResource(pluginRepository);
-    this.restPluginMockMvc =
-        MockMvcBuilders.standaloneSetup(pluginResource)
+    private MockMvc restPluginMockMvc;
+
+    private Plugin plugin;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final PluginResource pluginResource = new PluginResource(pluginService);
+        this.restPluginMockMvc = MockMvcBuilders.standaloneSetup(pluginResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator)
-            .build();
-  }
+            .setValidator(validator).build();
+    }
 
-  /**
-   * Create an entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static Plugin createEntity(EntityManager em) {
-    Plugin plugin =
-        new Plugin()
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Plugin createEntity(EntityManager em) {
+        Plugin plugin = new Plugin()
             .name(DEFAULT_NAME)
             .developerName(DEFAULT_DEVELOPER_NAME)
             .configFilePath(DEFAULT_CONFIG_FILE_PATH);
-    return plugin;
-  }
-  /**
-   * Create an updated entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static Plugin createUpdatedEntity(EntityManager em) {
-    Plugin plugin =
-        new Plugin()
+        return plugin;
+    }
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Plugin createUpdatedEntity(EntityManager em) {
+        Plugin plugin = new Plugin()
             .name(UPDATED_NAME)
             .developerName(UPDATED_DEVELOPER_NAME)
             .configFilePath(UPDATED_CONFIG_FILE_PATH);
-    return plugin;
-  }
+        return plugin;
+    }
 
-  @BeforeEach
-  public void initTest() {
-    plugin = createEntity(em);
-  }
+    @BeforeEach
+    public void initTest() {
+        plugin = createEntity(em);
+    }
 
-  @Test
-  @Transactional
-  public void createPlugin() throws Exception {
-    int databaseSizeBeforeCreate = pluginRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createPlugin() throws Exception {
+        int databaseSizeBeforeCreate = pluginRepository.findAll().size();
 
-    // Create the Plugin
-    restPluginMockMvc
-        .perform(
-            post("/api/plugins")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(plugin)))
-        .andExpect(status().isCreated());
+        // Create the Plugin
+        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
+        restPluginMockMvc.perform(post("/api/plugins")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .andExpect(status().isCreated());
 
-    // Validate the Plugin in the database
-    List<Plugin> pluginList = pluginRepository.findAll();
-    assertThat(pluginList).hasSize(databaseSizeBeforeCreate + 1);
-    Plugin testPlugin = pluginList.get(pluginList.size() - 1);
-    assertThat(testPlugin.getName()).isEqualTo(DEFAULT_NAME);
-    assertThat(testPlugin.getDeveloperName()).isEqualTo(DEFAULT_DEVELOPER_NAME);
-    assertThat(testPlugin.getConfigFilePath()).isEqualTo(DEFAULT_CONFIG_FILE_PATH);
-  }
+        // Validate the Plugin in the database
+        List<Plugin> pluginList = pluginRepository.findAll();
+        assertThat(pluginList).hasSize(databaseSizeBeforeCreate + 1);
+        Plugin testPlugin = pluginList.get(pluginList.size() - 1);
+        assertThat(testPlugin.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testPlugin.getDeveloperName()).isEqualTo(DEFAULT_DEVELOPER_NAME);
+        assertThat(testPlugin.getConfigFilePath()).isEqualTo(DEFAULT_CONFIG_FILE_PATH);
+    }
 
-  @Test
-  @Transactional
-  public void createPluginWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = pluginRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createPluginWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = pluginRepository.findAll().size();
 
-    // Create the Plugin with an existing ID
-    plugin.setId(1L);
+        // Create the Plugin with an existing ID
+        plugin.setId(1L);
+        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restPluginMockMvc
-        .perform(
-            post("/api/plugins")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(plugin)))
-        .andExpect(status().isBadRequest());
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restPluginMockMvc.perform(post("/api/plugins")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the Plugin in the database
-    List<Plugin> pluginList = pluginRepository.findAll();
-    assertThat(pluginList).hasSize(databaseSizeBeforeCreate);
-  }
+        // Validate the Plugin in the database
+        List<Plugin> pluginList = pluginRepository.findAll();
+        assertThat(pluginList).hasSize(databaseSizeBeforeCreate);
+    }
 
-  @Test
-  @Transactional
-  public void checkDeveloperNameIsRequired() throws Exception {
-    int databaseSizeBeforeTest = pluginRepository.findAll().size();
-    // set the field null
-    plugin.setDeveloperName(null);
 
-    // Create the Plugin, which fails.
+    @Test
+    @Transactional
+    public void checkDeveloperNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = pluginRepository.findAll().size();
+        // set the field null
+        plugin.setDeveloperName(null);
 
-    restPluginMockMvc
-        .perform(
-            post("/api/plugins")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(plugin)))
-        .andExpect(status().isBadRequest());
+        // Create the Plugin, which fails.
+        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
 
-    List<Plugin> pluginList = pluginRepository.findAll();
-    assertThat(pluginList).hasSize(databaseSizeBeforeTest);
-  }
+        restPluginMockMvc.perform(post("/api/plugins")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .andExpect(status().isBadRequest());
 
-  @Test
-  @Transactional
-  public void checkConfigFilePathIsRequired() throws Exception {
-    int databaseSizeBeforeTest = pluginRepository.findAll().size();
-    // set the field null
-    plugin.setConfigFilePath(null);
+        List<Plugin> pluginList = pluginRepository.findAll();
+        assertThat(pluginList).hasSize(databaseSizeBeforeTest);
+    }
 
-    // Create the Plugin, which fails.
+    @Test
+    @Transactional
+    public void checkConfigFilePathIsRequired() throws Exception {
+        int databaseSizeBeforeTest = pluginRepository.findAll().size();
+        // set the field null
+        plugin.setConfigFilePath(null);
 
-    restPluginMockMvc
-        .perform(
-            post("/api/plugins")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(plugin)))
-        .andExpect(status().isBadRequest());
+        // Create the Plugin, which fails.
+        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
 
-    List<Plugin> pluginList = pluginRepository.findAll();
-    assertThat(pluginList).hasSize(databaseSizeBeforeTest);
-  }
+        restPluginMockMvc.perform(post("/api/plugins")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .andExpect(status().isBadRequest());
 
-  @Test
-  @Transactional
-  public void getAllPlugins() throws Exception {
-    // Initialize the database
-    pluginRepository.saveAndFlush(plugin);
+        List<Plugin> pluginList = pluginRepository.findAll();
+        assertThat(pluginList).hasSize(databaseSizeBeforeTest);
+    }
 
-    // Get all the pluginList
-    restPluginMockMvc
-        .perform(get("/api/plugins?sort=id,desc"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.[*].id").value(hasItem(plugin.getId().intValue())))
-        .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-        .andExpect(
-            jsonPath("$.[*].developerName").value(hasItem(DEFAULT_DEVELOPER_NAME.toString())))
-        .andExpect(
-            jsonPath("$.[*].configFilePath").value(hasItem(DEFAULT_CONFIG_FILE_PATH.toString())));
-  }
+    @Test
+    @Transactional
+    public void getAllPlugins() throws Exception {
+        // Initialize the database
+        pluginRepository.saveAndFlush(plugin);
 
-  @Test
-  @Transactional
-  public void getPlugin() throws Exception {
-    // Initialize the database
-    pluginRepository.saveAndFlush(plugin);
+        // Get all the pluginList
+        restPluginMockMvc.perform(get("/api/plugins?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(plugin.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].developerName").value(hasItem(DEFAULT_DEVELOPER_NAME.toString())))
+            .andExpect(jsonPath("$.[*].configFilePath").value(hasItem(DEFAULT_CONFIG_FILE_PATH.toString())));
+    }
+    
+    @Test
+    @Transactional
+    public void getPlugin() throws Exception {
+        // Initialize the database
+        pluginRepository.saveAndFlush(plugin);
 
-    // Get the plugin
-    restPluginMockMvc
-        .perform(get("/api/plugins/{id}", plugin.getId()))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.id").value(plugin.getId().intValue()))
-        .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-        .andExpect(jsonPath("$.developerName").value(DEFAULT_DEVELOPER_NAME.toString()))
-        .andExpect(jsonPath("$.configFilePath").value(DEFAULT_CONFIG_FILE_PATH.toString()));
-  }
+        // Get the plugin
+        restPluginMockMvc.perform(get("/api/plugins/{id}", plugin.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(plugin.getId().intValue()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.developerName").value(DEFAULT_DEVELOPER_NAME.toString()))
+            .andExpect(jsonPath("$.configFilePath").value(DEFAULT_CONFIG_FILE_PATH.toString()));
+    }
 
-  @Test
-  @Transactional
-  public void getNonExistingPlugin() throws Exception {
-    // Get the plugin
-    restPluginMockMvc
-        .perform(get("/api/plugins/{id}", Long.MAX_VALUE))
-        .andExpect(status().isNotFound());
-  }
+    @Test
+    @Transactional
+    public void getNonExistingPlugin() throws Exception {
+        // Get the plugin
+        restPluginMockMvc.perform(get("/api/plugins/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void updatePlugin() throws Exception {
-    // Initialize the database
-    pluginRepository.saveAndFlush(plugin);
+    @Test
+    @Transactional
+    public void updatePlugin() throws Exception {
+        // Initialize the database
+        pluginRepository.saveAndFlush(plugin);
 
-    int databaseSizeBeforeUpdate = pluginRepository.findAll().size();
+        int databaseSizeBeforeUpdate = pluginRepository.findAll().size();
 
-    // Update the plugin
-    Plugin updatedPlugin = pluginRepository.findById(plugin.getId()).get();
-    // Disconnect from session so that the updates on updatedPlugin are not directly saved in db
-    em.detach(updatedPlugin);
-    updatedPlugin
-        .name(UPDATED_NAME)
-        .developerName(UPDATED_DEVELOPER_NAME)
-        .configFilePath(UPDATED_CONFIG_FILE_PATH);
+        // Update the plugin
+        Plugin updatedPlugin = pluginRepository.findById(plugin.getId()).get();
+        // Disconnect from session so that the updates on updatedPlugin are not directly saved in db
+        em.detach(updatedPlugin);
+        updatedPlugin
+            .name(UPDATED_NAME)
+            .developerName(UPDATED_DEVELOPER_NAME)
+            .configFilePath(UPDATED_CONFIG_FILE_PATH);
+        PluginDTO pluginDTO = pluginMapper.toDto(updatedPlugin);
 
-    restPluginMockMvc
-        .perform(
-            put("/api/plugins")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedPlugin)))
-        .andExpect(status().isOk());
+        restPluginMockMvc.perform(put("/api/plugins")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .andExpect(status().isOk());
 
-    // Validate the Plugin in the database
-    List<Plugin> pluginList = pluginRepository.findAll();
-    assertThat(pluginList).hasSize(databaseSizeBeforeUpdate);
-    Plugin testPlugin = pluginList.get(pluginList.size() - 1);
-    assertThat(testPlugin.getName()).isEqualTo(UPDATED_NAME);
-    assertThat(testPlugin.getDeveloperName()).isEqualTo(UPDATED_DEVELOPER_NAME);
-    assertThat(testPlugin.getConfigFilePath()).isEqualTo(UPDATED_CONFIG_FILE_PATH);
-  }
+        // Validate the Plugin in the database
+        List<Plugin> pluginList = pluginRepository.findAll();
+        assertThat(pluginList).hasSize(databaseSizeBeforeUpdate);
+        Plugin testPlugin = pluginList.get(pluginList.size() - 1);
+        assertThat(testPlugin.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testPlugin.getDeveloperName()).isEqualTo(UPDATED_DEVELOPER_NAME);
+        assertThat(testPlugin.getConfigFilePath()).isEqualTo(UPDATED_CONFIG_FILE_PATH);
+    }
 
-  @Test
-  @Transactional
-  public void updateNonExistingPlugin() throws Exception {
-    int databaseSizeBeforeUpdate = pluginRepository.findAll().size();
+    @Test
+    @Transactional
+    public void updateNonExistingPlugin() throws Exception {
+        int databaseSizeBeforeUpdate = pluginRepository.findAll().size();
 
-    // Create the Plugin
+        // Create the Plugin
+        PluginDTO pluginDTO = pluginMapper.toDto(plugin);
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restPluginMockMvc
-        .perform(
-            put("/api/plugins")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(plugin)))
-        .andExpect(status().isBadRequest());
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restPluginMockMvc.perform(put("/api/plugins")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(pluginDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the Plugin in the database
-    List<Plugin> pluginList = pluginRepository.findAll();
-    assertThat(pluginList).hasSize(databaseSizeBeforeUpdate);
-  }
+        // Validate the Plugin in the database
+        List<Plugin> pluginList = pluginRepository.findAll();
+        assertThat(pluginList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-  @Test
-  @Transactional
-  public void deletePlugin() throws Exception {
-    // Initialize the database
-    pluginRepository.saveAndFlush(plugin);
+    @Test
+    @Transactional
+    public void deletePlugin() throws Exception {
+        // Initialize the database
+        pluginRepository.saveAndFlush(plugin);
 
-    int databaseSizeBeforeDelete = pluginRepository.findAll().size();
+        int databaseSizeBeforeDelete = pluginRepository.findAll().size();
 
-    // Delete the plugin
-    restPluginMockMvc
-        .perform(delete("/api/plugins/{id}", plugin.getId()).accept(TestUtil.APPLICATION_JSON_UTF8))
-        .andExpect(status().isNoContent());
+        // Delete the plugin
+        restPluginMockMvc.perform(delete("/api/plugins/{id}", plugin.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNoContent());
 
-    // Validate the database contains one less item
-    List<Plugin> pluginList = pluginRepository.findAll();
-    assertThat(pluginList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+        // Validate the database contains one less item
+        List<Plugin> pluginList = pluginRepository.findAll();
+        assertThat(pluginList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 
-  @Test
-  @Transactional
-  public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(Plugin.class);
-    Plugin plugin1 = new Plugin();
-    plugin1.setId(1L);
-    Plugin plugin2 = new Plugin();
-    plugin2.setId(plugin1.getId());
-    assertThat(plugin1).isEqualTo(plugin2);
-    plugin2.setId(2L);
-    assertThat(plugin1).isNotEqualTo(plugin2);
-    plugin1.setId(null);
-    assertThat(plugin1).isNotEqualTo(plugin2);
-  }
+    @Test
+    @Transactional
+    public void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(Plugin.class);
+        Plugin plugin1 = new Plugin();
+        plugin1.setId(1L);
+        Plugin plugin2 = new Plugin();
+        plugin2.setId(plugin1.getId());
+        assertThat(plugin1).isEqualTo(plugin2);
+        plugin2.setId(2L);
+        assertThat(plugin1).isNotEqualTo(plugin2);
+        plugin1.setId(null);
+        assertThat(plugin1).isNotEqualTo(plugin2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(PluginDTO.class);
+        PluginDTO pluginDTO1 = new PluginDTO();
+        pluginDTO1.setId(1L);
+        PluginDTO pluginDTO2 = new PluginDTO();
+        assertThat(pluginDTO1).isNotEqualTo(pluginDTO2);
+        pluginDTO2.setId(pluginDTO1.getId());
+        assertThat(pluginDTO1).isEqualTo(pluginDTO2);
+        pluginDTO2.setId(2L);
+        assertThat(pluginDTO1).isNotEqualTo(pluginDTO2);
+        pluginDTO1.setId(null);
+        assertThat(pluginDTO1).isNotEqualTo(pluginDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(pluginMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(pluginMapper.fromId(null)).isNull();
+    }
 }

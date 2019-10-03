@@ -3,6 +3,9 @@ package br.ufpa.labes.spm.web.rest;
 import br.ufpa.labes.spm.SpmApp;
 import br.ufpa.labes.spm.domain.AgentEstimation;
 import br.ufpa.labes.spm.repository.AgentEstimationRepository;
+import br.ufpa.labes.spm.service.AgentEstimationService;
+import br.ufpa.labes.spm.service.dto.AgentEstimationDTO;
+import br.ufpa.labes.spm.service.mapper.AgentEstimationMapper;
 import br.ufpa.labes.spm.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,225 +31,249 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Integration tests for the {@link AgentEstimationResource} REST controller. */
+/**
+ * Integration tests for the {@link AgentEstimationResource} REST controller.
+ */
 @EmbeddedKafka
 @SpringBootTest(classes = SpmApp.class)
 public class AgentEstimationResourceIT {
 
-  @Autowired private AgentEstimationRepository agentEstimationRepository;
+    @Autowired
+    private AgentEstimationRepository agentEstimationRepository;
 
-  @Autowired private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private AgentEstimationMapper agentEstimationMapper;
 
-  @Autowired private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private AgentEstimationService agentEstimationService;
 
-  @Autowired private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-  @Autowired private EntityManager em;
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-  @Autowired private Validator validator;
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 
-  private MockMvc restAgentEstimationMockMvc;
+    @Autowired
+    private EntityManager em;
 
-  private AgentEstimation agentEstimation;
+    @Autowired
+    private Validator validator;
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final AgentEstimationResource agentEstimationResource =
-        new AgentEstimationResource(agentEstimationRepository);
-    this.restAgentEstimationMockMvc =
-        MockMvcBuilders.standaloneSetup(agentEstimationResource)
+    private MockMvc restAgentEstimationMockMvc;
+
+    private AgentEstimation agentEstimation;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final AgentEstimationResource agentEstimationResource = new AgentEstimationResource(agentEstimationService);
+        this.restAgentEstimationMockMvc = MockMvcBuilders.standaloneSetup(agentEstimationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator)
-            .build();
-  }
+            .setValidator(validator).build();
+    }
 
-  /**
-   * Create an entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static AgentEstimation createEntity(EntityManager em) {
-    AgentEstimation agentEstimation = new AgentEstimation();
-    return agentEstimation;
-  }
-  /**
-   * Create an updated entity for this test.
-   *
-   * <p>This is a static method, as tests for other entities might also need it, if they test an
-   * entity which requires the current entity.
-   */
-  public static AgentEstimation createUpdatedEntity(EntityManager em) {
-    AgentEstimation agentEstimation = new AgentEstimation();
-    return agentEstimation;
-  }
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static AgentEstimation createEntity(EntityManager em) {
+        AgentEstimation agentEstimation = new AgentEstimation();
+        return agentEstimation;
+    }
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static AgentEstimation createUpdatedEntity(EntityManager em) {
+        AgentEstimation agentEstimation = new AgentEstimation();
+        return agentEstimation;
+    }
 
-  @BeforeEach
-  public void initTest() {
-    agentEstimation = createEntity(em);
-  }
+    @BeforeEach
+    public void initTest() {
+        agentEstimation = createEntity(em);
+    }
 
-  @Test
-  @Transactional
-  public void createAgentEstimation() throws Exception {
-    int databaseSizeBeforeCreate = agentEstimationRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createAgentEstimation() throws Exception {
+        int databaseSizeBeforeCreate = agentEstimationRepository.findAll().size();
 
-    // Create the AgentEstimation
-    restAgentEstimationMockMvc
-        .perform(
-            post("/api/agent-estimations")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(agentEstimation)))
-        .andExpect(status().isCreated());
+        // Create the AgentEstimation
+        AgentEstimationDTO agentEstimationDTO = agentEstimationMapper.toDto(agentEstimation);
+        restAgentEstimationMockMvc.perform(post("/api/agent-estimations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(agentEstimationDTO)))
+            .andExpect(status().isCreated());
 
-    // Validate the AgentEstimation in the database
-    List<AgentEstimation> agentEstimationList = agentEstimationRepository.findAll();
-    assertThat(agentEstimationList).hasSize(databaseSizeBeforeCreate + 1);
-    AgentEstimation testAgentEstimation = agentEstimationList.get(agentEstimationList.size() - 1);
-  }
+        // Validate the AgentEstimation in the database
+        List<AgentEstimation> agentEstimationList = agentEstimationRepository.findAll();
+        assertThat(agentEstimationList).hasSize(databaseSizeBeforeCreate + 1);
+        AgentEstimation testAgentEstimation = agentEstimationList.get(agentEstimationList.size() - 1);
+    }
 
-  @Test
-  @Transactional
-  public void createAgentEstimationWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = agentEstimationRepository.findAll().size();
+    @Test
+    @Transactional
+    public void createAgentEstimationWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = agentEstimationRepository.findAll().size();
 
-    // Create the AgentEstimation with an existing ID
-    agentEstimation.setId(1L);
+        // Create the AgentEstimation with an existing ID
+        agentEstimation.setId(1L);
+        AgentEstimationDTO agentEstimationDTO = agentEstimationMapper.toDto(agentEstimation);
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restAgentEstimationMockMvc
-        .perform(
-            post("/api/agent-estimations")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(agentEstimation)))
-        .andExpect(status().isBadRequest());
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restAgentEstimationMockMvc.perform(post("/api/agent-estimations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(agentEstimationDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the AgentEstimation in the database
-    List<AgentEstimation> agentEstimationList = agentEstimationRepository.findAll();
-    assertThat(agentEstimationList).hasSize(databaseSizeBeforeCreate);
-  }
+        // Validate the AgentEstimation in the database
+        List<AgentEstimation> agentEstimationList = agentEstimationRepository.findAll();
+        assertThat(agentEstimationList).hasSize(databaseSizeBeforeCreate);
+    }
 
-  @Test
-  @Transactional
-  public void getAllAgentEstimations() throws Exception {
-    // Initialize the database
-    agentEstimationRepository.saveAndFlush(agentEstimation);
 
-    // Get all the agentEstimationList
-    restAgentEstimationMockMvc
-        .perform(get("/api/agent-estimations?sort=id,desc"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.[*].id").value(hasItem(agentEstimation.getId().intValue())));
-  }
+    @Test
+    @Transactional
+    public void getAllAgentEstimations() throws Exception {
+        // Initialize the database
+        agentEstimationRepository.saveAndFlush(agentEstimation);
 
-  @Test
-  @Transactional
-  public void getAgentEstimation() throws Exception {
-    // Initialize the database
-    agentEstimationRepository.saveAndFlush(agentEstimation);
+        // Get all the agentEstimationList
+        restAgentEstimationMockMvc.perform(get("/api/agent-estimations?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(agentEstimation.getId().intValue())));
+    }
+    
+    @Test
+    @Transactional
+    public void getAgentEstimation() throws Exception {
+        // Initialize the database
+        agentEstimationRepository.saveAndFlush(agentEstimation);
 
-    // Get the agentEstimation
-    restAgentEstimationMockMvc
-        .perform(get("/api/agent-estimations/{id}", agentEstimation.getId()))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(jsonPath("$.id").value(agentEstimation.getId().intValue()));
-  }
+        // Get the agentEstimation
+        restAgentEstimationMockMvc.perform(get("/api/agent-estimations/{id}", agentEstimation.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(agentEstimation.getId().intValue()));
+    }
 
-  @Test
-  @Transactional
-  public void getNonExistingAgentEstimation() throws Exception {
-    // Get the agentEstimation
-    restAgentEstimationMockMvc
-        .perform(get("/api/agent-estimations/{id}", Long.MAX_VALUE))
-        .andExpect(status().isNotFound());
-  }
+    @Test
+    @Transactional
+    public void getNonExistingAgentEstimation() throws Exception {
+        // Get the agentEstimation
+        restAgentEstimationMockMvc.perform(get("/api/agent-estimations/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void updateAgentEstimation() throws Exception {
-    // Initialize the database
-    agentEstimationRepository.saveAndFlush(agentEstimation);
+    @Test
+    @Transactional
+    public void updateAgentEstimation() throws Exception {
+        // Initialize the database
+        agentEstimationRepository.saveAndFlush(agentEstimation);
 
-    int databaseSizeBeforeUpdate = agentEstimationRepository.findAll().size();
+        int databaseSizeBeforeUpdate = agentEstimationRepository.findAll().size();
 
-    // Update the agentEstimation
-    AgentEstimation updatedAgentEstimation =
-        agentEstimationRepository.findById(agentEstimation.getId()).get();
-    // Disconnect from session so that the updates on updatedAgentEstimation are not directly saved
-    // in db
-    em.detach(updatedAgentEstimation);
+        // Update the agentEstimation
+        AgentEstimation updatedAgentEstimation = agentEstimationRepository.findById(agentEstimation.getId()).get();
+        // Disconnect from session so that the updates on updatedAgentEstimation are not directly saved in db
+        em.detach(updatedAgentEstimation);
+        AgentEstimationDTO agentEstimationDTO = agentEstimationMapper.toDto(updatedAgentEstimation);
 
-    restAgentEstimationMockMvc
-        .perform(
-            put("/api/agent-estimations")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedAgentEstimation)))
-        .andExpect(status().isOk());
+        restAgentEstimationMockMvc.perform(put("/api/agent-estimations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(agentEstimationDTO)))
+            .andExpect(status().isOk());
 
-    // Validate the AgentEstimation in the database
-    List<AgentEstimation> agentEstimationList = agentEstimationRepository.findAll();
-    assertThat(agentEstimationList).hasSize(databaseSizeBeforeUpdate);
-    AgentEstimation testAgentEstimation = agentEstimationList.get(agentEstimationList.size() - 1);
-  }
+        // Validate the AgentEstimation in the database
+        List<AgentEstimation> agentEstimationList = agentEstimationRepository.findAll();
+        assertThat(agentEstimationList).hasSize(databaseSizeBeforeUpdate);
+        AgentEstimation testAgentEstimation = agentEstimationList.get(agentEstimationList.size() - 1);
+    }
 
-  @Test
-  @Transactional
-  public void updateNonExistingAgentEstimation() throws Exception {
-    int databaseSizeBeforeUpdate = agentEstimationRepository.findAll().size();
+    @Test
+    @Transactional
+    public void updateNonExistingAgentEstimation() throws Exception {
+        int databaseSizeBeforeUpdate = agentEstimationRepository.findAll().size();
 
-    // Create the AgentEstimation
+        // Create the AgentEstimation
+        AgentEstimationDTO agentEstimationDTO = agentEstimationMapper.toDto(agentEstimation);
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restAgentEstimationMockMvc
-        .perform(
-            put("/api/agent-estimations")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(agentEstimation)))
-        .andExpect(status().isBadRequest());
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restAgentEstimationMockMvc.perform(put("/api/agent-estimations")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(agentEstimationDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Validate the AgentEstimation in the database
-    List<AgentEstimation> agentEstimationList = agentEstimationRepository.findAll();
-    assertThat(agentEstimationList).hasSize(databaseSizeBeforeUpdate);
-  }
+        // Validate the AgentEstimation in the database
+        List<AgentEstimation> agentEstimationList = agentEstimationRepository.findAll();
+        assertThat(agentEstimationList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-  @Test
-  @Transactional
-  public void deleteAgentEstimation() throws Exception {
-    // Initialize the database
-    agentEstimationRepository.saveAndFlush(agentEstimation);
+    @Test
+    @Transactional
+    public void deleteAgentEstimation() throws Exception {
+        // Initialize the database
+        agentEstimationRepository.saveAndFlush(agentEstimation);
 
-    int databaseSizeBeforeDelete = agentEstimationRepository.findAll().size();
+        int databaseSizeBeforeDelete = agentEstimationRepository.findAll().size();
 
-    // Delete the agentEstimation
-    restAgentEstimationMockMvc
-        .perform(
-            delete("/api/agent-estimations/{id}", agentEstimation.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-        .andExpect(status().isNoContent());
+        // Delete the agentEstimation
+        restAgentEstimationMockMvc.perform(delete("/api/agent-estimations/{id}", agentEstimation.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isNoContent());
 
-    // Validate the database contains one less item
-    List<AgentEstimation> agentEstimationList = agentEstimationRepository.findAll();
-    assertThat(agentEstimationList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+        // Validate the database contains one less item
+        List<AgentEstimation> agentEstimationList = agentEstimationRepository.findAll();
+        assertThat(agentEstimationList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 
-  @Test
-  @Transactional
-  public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(AgentEstimation.class);
-    AgentEstimation agentEstimation1 = new AgentEstimation();
-    agentEstimation1.setId(1L);
-    AgentEstimation agentEstimation2 = new AgentEstimation();
-    agentEstimation2.setId(agentEstimation1.getId());
-    assertThat(agentEstimation1).isEqualTo(agentEstimation2);
-    agentEstimation2.setId(2L);
-    assertThat(agentEstimation1).isNotEqualTo(agentEstimation2);
-    agentEstimation1.setId(null);
-    assertThat(agentEstimation1).isNotEqualTo(agentEstimation2);
-  }
+    @Test
+    @Transactional
+    public void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(AgentEstimation.class);
+        AgentEstimation agentEstimation1 = new AgentEstimation();
+        agentEstimation1.setId(1L);
+        AgentEstimation agentEstimation2 = new AgentEstimation();
+        agentEstimation2.setId(agentEstimation1.getId());
+        assertThat(agentEstimation1).isEqualTo(agentEstimation2);
+        agentEstimation2.setId(2L);
+        assertThat(agentEstimation1).isNotEqualTo(agentEstimation2);
+        agentEstimation1.setId(null);
+        assertThat(agentEstimation1).isNotEqualTo(agentEstimation2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(AgentEstimationDTO.class);
+        AgentEstimationDTO agentEstimationDTO1 = new AgentEstimationDTO();
+        agentEstimationDTO1.setId(1L);
+        AgentEstimationDTO agentEstimationDTO2 = new AgentEstimationDTO();
+        assertThat(agentEstimationDTO1).isNotEqualTo(agentEstimationDTO2);
+        agentEstimationDTO2.setId(agentEstimationDTO1.getId());
+        assertThat(agentEstimationDTO1).isEqualTo(agentEstimationDTO2);
+        agentEstimationDTO2.setId(2L);
+        assertThat(agentEstimationDTO1).isNotEqualTo(agentEstimationDTO2);
+        agentEstimationDTO1.setId(null);
+        assertThat(agentEstimationDTO1).isNotEqualTo(agentEstimationDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(agentEstimationMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(agentEstimationMapper.fromId(null)).isNull();
+    }
 }

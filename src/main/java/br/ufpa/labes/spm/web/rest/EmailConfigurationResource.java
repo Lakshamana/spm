@@ -1,8 +1,8 @@
 package br.ufpa.labes.spm.web.rest;
 
-import br.ufpa.labes.spm.domain.EmailConfiguration;
-import br.ufpa.labes.spm.repository.EmailConfigurationRepository;
+import br.ufpa.labes.spm.service.EmailConfigurationService;
 import br.ufpa.labes.spm.web.rest.errors.BadRequestAlertException;
+import br.ufpa.labes.spm.service.dto.EmailConfigurationDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -18,113 +18,101 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-/** REST controller for managing {@link br.ufpa.labes.spm.domain.EmailConfiguration}. */
+/**
+ * REST controller for managing {@link br.ufpa.labes.spm.domain.EmailConfiguration}.
+ */
 @RestController
 @RequestMapping("/api")
 public class EmailConfigurationResource {
 
-  private final Logger log = LoggerFactory.getLogger(EmailConfigurationResource.class);
+    private final Logger log = LoggerFactory.getLogger(EmailConfigurationResource.class);
 
-  private static final String ENTITY_NAME = "emailConfiguration";
+    private static final String ENTITY_NAME = "emailConfiguration";
 
-  @Value("${jhipster.clientApp.name}")
-  private String applicationName;
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
-  private final EmailConfigurationRepository emailConfigurationRepository;
+    private final EmailConfigurationService emailConfigurationService;
 
-  public EmailConfigurationResource(EmailConfigurationRepository emailConfigurationRepository) {
-    this.emailConfigurationRepository = emailConfigurationRepository;
-  }
-
-  /**
-   * {@code POST /email-configurations} : Create a new emailConfiguration.
-   *
-   * @param emailConfiguration the emailConfiguration to create.
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new
-   *     emailConfiguration, or with status {@code 400 (Bad Request)} if the emailConfiguration has
-   *     already an ID.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PostMapping("/email-configurations")
-  public ResponseEntity<EmailConfiguration> createEmailConfiguration(
-      @RequestBody EmailConfiguration emailConfiguration) throws URISyntaxException {
-    log.debug("REST request to save EmailConfiguration : {}", emailConfiguration);
-    if (emailConfiguration.getId() != null) {
-      throw new BadRequestAlertException(
-          "A new emailConfiguration cannot already have an ID", ENTITY_NAME, "idexists");
+    public EmailConfigurationResource(EmailConfigurationService emailConfigurationService) {
+        this.emailConfigurationService = emailConfigurationService;
     }
-    EmailConfiguration result = emailConfigurationRepository.save(emailConfiguration);
-    return ResponseEntity.created(new URI("/api/email-configurations/" + result.getId()))
-        .headers(
-            HeaderUtil.createEntityCreationAlert(
-                applicationName, true, ENTITY_NAME, result.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code PUT /email-configurations} : Updates an existing emailConfiguration.
-   *
-   * @param emailConfiguration the emailConfiguration to update.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated
-   *     emailConfiguration, or with status {@code 400 (Bad Request)} if the emailConfiguration is
-   *     not valid, or with status {@code 500 (Internal Server Error)} if the emailConfiguration
-   *     couldn't be updated.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
-   */
-  @PutMapping("/email-configurations")
-  public ResponseEntity<EmailConfiguration> updateEmailConfiguration(
-      @RequestBody EmailConfiguration emailConfiguration) throws URISyntaxException {
-    log.debug("REST request to update EmailConfiguration : {}", emailConfiguration);
-    if (emailConfiguration.getId() == null) {
-      throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    /**
+     * {@code POST  /email-configurations} : Create a new emailConfiguration.
+     *
+     * @param emailConfigurationDTO the emailConfigurationDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new emailConfigurationDTO, or with status {@code 400 (Bad Request)} if the emailConfiguration has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/email-configurations")
+    public ResponseEntity<EmailConfigurationDTO> createEmailConfiguration(@RequestBody EmailConfigurationDTO emailConfigurationDTO) throws URISyntaxException {
+        log.debug("REST request to save EmailConfiguration : {}", emailConfigurationDTO);
+        if (emailConfigurationDTO.getId() != null) {
+            throw new BadRequestAlertException("A new emailConfiguration cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        EmailConfigurationDTO result = emailConfigurationService.save(emailConfigurationDTO);
+        return ResponseEntity.created(new URI("/api/email-configurations/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
-    EmailConfiguration result = emailConfigurationRepository.save(emailConfiguration);
-    return ResponseEntity.ok()
-        .headers(
-            HeaderUtil.createEntityUpdateAlert(
-                applicationName, true, ENTITY_NAME, emailConfiguration.getId().toString()))
-        .body(result);
-  }
 
-  /**
-   * {@code GET /email-configurations} : get all the emailConfigurations.
-   *
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of
-   *     emailConfigurations in body.
-   */
-  @GetMapping("/email-configurations")
-  public List<EmailConfiguration> getAllEmailConfigurations() {
-    log.debug("REST request to get all EmailConfigurations");
-    return emailConfigurationRepository.findAll();
-  }
+    /**
+     * {@code PUT  /email-configurations} : Updates an existing emailConfiguration.
+     *
+     * @param emailConfigurationDTO the emailConfigurationDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated emailConfigurationDTO,
+     * or with status {@code 400 (Bad Request)} if the emailConfigurationDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the emailConfigurationDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/email-configurations")
+    public ResponseEntity<EmailConfigurationDTO> updateEmailConfiguration(@RequestBody EmailConfigurationDTO emailConfigurationDTO) throws URISyntaxException {
+        log.debug("REST request to update EmailConfiguration : {}", emailConfigurationDTO);
+        if (emailConfigurationDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        EmailConfigurationDTO result = emailConfigurationService.save(emailConfigurationDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, emailConfigurationDTO.getId().toString()))
+            .body(result);
+    }
 
-  /**
-   * {@code GET /email-configurations/:id} : get the "id" emailConfiguration.
-   *
-   * @param id the id of the emailConfiguration to retrieve.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the
-   *     emailConfiguration, or with status {@code 404 (Not Found)}.
-   */
-  @GetMapping("/email-configurations/{id}")
-  public ResponseEntity<EmailConfiguration> getEmailConfiguration(@PathVariable Long id) {
-    log.debug("REST request to get EmailConfiguration : {}", id);
-    Optional<EmailConfiguration> emailConfiguration = emailConfigurationRepository.findById(id);
-    return ResponseUtil.wrapOrNotFound(emailConfiguration);
-  }
+    /**
+     * {@code GET  /email-configurations} : get all the emailConfigurations.
+     *
 
-  /**
-   * {@code DELETE /email-configurations/:id} : delete the "id" emailConfiguration.
-   *
-   * @param id the id of the emailConfiguration to delete.
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-   */
-  @DeleteMapping("/email-configurations/{id}")
-  public ResponseEntity<Void> deleteEmailConfiguration(@PathVariable Long id) {
-    log.debug("REST request to delete EmailConfiguration : {}", id);
-    emailConfigurationRepository.deleteById(id);
-    return ResponseEntity.noContent()
-        .headers(
-            HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-        .build();
-  }
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of emailConfigurations in body.
+     */
+    @GetMapping("/email-configurations")
+    public List<EmailConfigurationDTO> getAllEmailConfigurations() {
+        log.debug("REST request to get all EmailConfigurations");
+        return emailConfigurationService.findAll();
+    }
+
+    /**
+     * {@code GET  /email-configurations/:id} : get the "id" emailConfiguration.
+     *
+     * @param id the id of the emailConfigurationDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the emailConfigurationDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/email-configurations/{id}")
+    public ResponseEntity<EmailConfigurationDTO> getEmailConfiguration(@PathVariable Long id) {
+        log.debug("REST request to get EmailConfiguration : {}", id);
+        Optional<EmailConfigurationDTO> emailConfigurationDTO = emailConfigurationService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(emailConfigurationDTO);
+    }
+
+    /**
+     * {@code DELETE  /email-configurations/:id} : delete the "id" emailConfiguration.
+     *
+     * @param id the id of the emailConfigurationDTO to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/email-configurations/{id}")
+    public ResponseEntity<Void> deleteEmailConfiguration(@PathVariable Long id) {
+        log.debug("REST request to delete EmailConfiguration : {}", id);
+        emailConfigurationService.delete(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
 }

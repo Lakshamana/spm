@@ -4,7 +4,12 @@ import br.ufpa.labes.spm.domain.Ocurrence;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-/** Spring Data repository for the Ocurrence entity. */
+
+/**
+ * Spring Data  repository for the Ocurrence entity.
+ */
 @SuppressWarnings("unused")
 @Repository
-public interface OcurrenceRepository extends JpaRepository<Ocurrence, Long> {}
+public interface OcurrenceRepository extends JpaRepository<Ocurrence, Long> {
+
+}

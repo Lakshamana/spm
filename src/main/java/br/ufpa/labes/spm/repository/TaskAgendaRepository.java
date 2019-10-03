@@ -4,7 +4,12 @@ import br.ufpa.labes.spm.domain.TaskAgenda;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-/** Spring Data repository for the TaskAgenda entity. */
+
+/**
+ * Spring Data  repository for the TaskAgenda entity.
+ */
 @SuppressWarnings("unused")
 @Repository
-public interface TaskAgendaRepository extends JpaRepository<TaskAgenda, Long> {}
+public interface TaskAgendaRepository extends JpaRepository<TaskAgenda, Long> {
+
+}

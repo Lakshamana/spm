@@ -1,79 +1,81 @@
 package br.ufpa.labes.spm.service.dto;
-
 import java.io.Serializable;
+import java.util.Objects;
 
-import br.ufpa.labes.spm.annotations.IgnoreMapping;
-
-@SuppressWarnings("serial")
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.AgentAffinityAgent} entity.
+ */
 public class AgentAffinityAgentDTO implements Serializable {
 
-  private Long id;
+    private Long id;
 
-  private Integer degree;
-  @IgnoreMapping private String toAffinity;
-  @IgnoreMapping private String fromAffinity;
+    private Integer degree;
 
-  public AgentAffinityAgentDTO() {}
 
-  public AgentAffinityAgentDTO(Integer degree, String toAffinity, String fromAffinity) {
-    this.degree = degree;
-    this.toAffinity = toAffinity;
-    this.fromAffinity = fromAffinity;
-  }
+    private Long toAffinityId;
 
-  public Long getId() {
-    return id;
-  }
+    private Long fromAffinityId;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public Integer getDegree() {
-    return degree;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setDegree(Integer degree) {
-    this.degree = degree;
-  }
+    public Integer getDegree() {
+        return degree;
+    }
 
-  public String getToAffinity() {
-    return toAffinity;
-  }
+    public void setDegree(Integer degree) {
+        this.degree = degree;
+    }
 
-  public void setToAffinity(String toAffinity) {
-    this.toAffinity = toAffinity;
-  }
+    public Long getToAffinityId() {
+        return toAffinityId;
+    }
 
-  public String getFromAffinity() {
-    return fromAffinity;
-  }
+    public void setToAffinityId(Long agentId) {
+        this.toAffinityId = agentId;
+    }
 
-  public void setFromAffinity(String fromAffinity) {
-    this.fromAffinity = fromAffinity;
-  }
+    public Long getFromAffinityId() {
+        return fromAffinityId;
+    }
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((fromAffinity == null) ? 0 : fromAffinity.hashCode());
-    result = prime * result + ((toAffinity == null) ? 0 : toAffinity.hashCode());
-    return result;
-  }
+    public void setFromAffinityId(Long agentId) {
+        this.fromAffinityId = agentId;
+    }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
-    AgentAffinityAgentDTO other = (AgentAffinityAgentDTO) obj;
-    if (fromAffinity == null) {
-      if (other.fromAffinity != null) return false;
-    } else if (!fromAffinity.equals(other.fromAffinity)) return false;
-    if (toAffinity == null) {
-      if (other.toAffinity != null) return false;
-    } else if (!toAffinity.equals(other.toAffinity)) return false;
-    return true;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        AgentAffinityAgentDTO agentAffinityAgentDTO = (AgentAffinityAgentDTO) o;
+        if (agentAffinityAgentDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), agentAffinityAgentDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "AgentAffinityAgentDTO{" +
+            "id=" + getId() +
+            ", degree=" + getDegree() +
+            ", toAffinity=" + getToAffinityId() +
+            ", fromAffinity=" + getFromAffinityId() +
+            "}";
+    }
 }

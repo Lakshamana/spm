@@ -1,40 +1,59 @@
 package br.ufpa.labes.spm.service.dto;
+import java.io.Serializable;
+import java.util.Objects;
 
-@SuppressWarnings("serial")
-public class DecomposedDTO extends ActivityDTO {
+/**
+ * A DTO for the {@link br.ufpa.labes.spm.domain.Decomposed} entity.
+ */
+public class DecomposedDTO implements Serializable {
 
-  private ActivitysDTO normals;
-  private DecomposedDTO decomposed;
+    private Long id;
 
-  public DecomposedDTO() {}
 
-  public DecomposedDTO(ActivitysDTO activitysDTO) {
-    this.normals = activitysDTO;
-  }
+    private Long theReferedProcessModelId;
 
-  public DecomposedDTO(ActivitysDTO normals, DecomposedDTO decomposed) {
-    this.normals = normals;
-    this.decomposed = decomposed;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public ActivitysDTO getNormals() {
-    return normals;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setNormals(ActivitysDTO normals) {
-    this.normals = normals;
-  }
+    public Long getTheReferedProcessModelId() {
+        return theReferedProcessModelId;
+    }
 
-  public DecomposedDTO getDecomposed() {
-    return decomposed;
-  }
+    public void setTheReferedProcessModelId(Long processModelId) {
+        this.theReferedProcessModelId = processModelId;
+    }
 
-  public void setDecomposed(DecomposedDTO decomposed) {
-    this.decomposed = decomposed;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-  @Override
-  public String toString() {
-    return "[ident: " + this.getIdent() + "\n" + this.normals.getActivitys() + " ]";
-  }
+        DecomposedDTO decomposedDTO = (DecomposedDTO) o;
+        if (decomposedDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), decomposedDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "DecomposedDTO{" +
+            "id=" + getId() +
+            ", theReferedProcessModel=" + getTheReferedProcessModelId() +
+            "}";
+    }
 }
