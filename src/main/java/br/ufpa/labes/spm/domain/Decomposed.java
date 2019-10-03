@@ -69,4 +69,13 @@ public class Decomposed extends Activity implements Serializable {
             "id=" + getId() +
             "}";
     }
+
+    public void removeFromTheTheReferedProcessModel() {
+      if (this.theReferedProcessModel != null) {
+        this.theReferedProcessModel.setTheDecomposed(null);
+        this.setTheReferedProcessModel(null);
+      }
+    }
+
+
 }

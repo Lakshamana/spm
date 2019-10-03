@@ -118,4 +118,26 @@ public class ReqAgent extends RequiredPeople implements Serializable {
             "id=" + getId() +
             "}";
     }
+
+    public void removeFromTheRole(){
+      if (this.theRole!=null){
+        this.theRole.removeTheReqAgent(this);
+      }
+    }
+
+    public void insertIntoTheRole(Role theRole){
+      theRole.addTheReqAgent(this);
+    }
+
+    public void removeFromTheAgent(){
+      if (this.theAgent!=null){
+        this.theAgent.removeTheReqAgent(this);
+      }
+    }
+
+    public void insertIntoTheAgent(Agent theAgent){
+      theAgent.addTheReqAgent(this);
+    }
+
+
 }

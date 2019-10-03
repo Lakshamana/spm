@@ -75,4 +75,17 @@ public class RequiredPeople implements Serializable {
             "id=" + getId() +
             "}";
     }
+
+    public void removeFromTheNormal(){
+      if (this.theNormal!=null){
+        this.theNormal.removeTheRequiredPeople(this);
+      }
+    }
+
+    public void insertIntoTheNormal(Normal theNormal){
+      if(theNormal != null)
+        theNormal.addTheRequiredPeople(this);
+    }
+
+
 }

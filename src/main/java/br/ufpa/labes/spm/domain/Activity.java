@@ -580,4 +580,6 @@ public class Activity implements Serializable {
             ", isVersion='" + isIsVersion() + "'" +
             "}";
     }
+
+
 }

@@ -15,6 +15,7 @@ public interface AgentMapper extends EntityMapper<AgentDTO, Agent> {
     @Mapping(source = "configuration.id", target = "configurationId")
     @Mapping(source = "theResourceEvent.id", target = "theResourceEventId")
     @Mapping(source = "theEmailConfiguration.id", target = "theEmailConfigurationId")
+    @Mapping(source = "passwordHash", target = "password")
     AgentDTO toDto(Agent agent);
 
     @Mapping(source = "theTaskAgendaId", target = "theTaskAgenda")
@@ -57,6 +58,7 @@ public interface AgentMapper extends EntityMapper<AgentDTO, Agent> {
     @Mapping(target = "removeTheAgentWorkingLoad", ignore = true)
     @Mapping(target = "theChatLogs", ignore = true)
     @Mapping(target = "removeTheChatLog", ignore = true)
+    @Mapping(source = "password", target = "passwordHash")
     Agent toEntity(AgentDTO agentDTO);
 
     default Agent fromId(Long id) {

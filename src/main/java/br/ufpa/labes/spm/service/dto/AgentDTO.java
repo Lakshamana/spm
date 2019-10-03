@@ -20,7 +20,7 @@ public class AgentDTO implements Serializable {
 
     private Float costHour;
 
-    private String passwordHash;
+    private String password;
 
     private Integer tipoUser;
 
@@ -90,14 +90,6 @@ public class AgentDTO implements Serializable {
 
     public void setCostHour(Float costHour) {
         this.costHour = costHour;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public Integer getTipoUser() {
@@ -241,7 +233,7 @@ public class AgentDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", email='" + getEmail() + "'" +
             ", costHour=" + getCostHour() +
-            ", passwordHash='" + getPasswordHash() + "'" +
+            ", password='" + getPassword() + "'" +
             ", tipoUser=" + getTipoUser() +
             ", isActive='" + isIsActive() + "'" +
             ", online='" + isOnline() + "'" +
@@ -254,4 +246,12 @@ public class AgentDTO implements Serializable {
             ", theEmailConfiguration=" + getTheEmailConfigurationId() +
             "}";
     }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
 }

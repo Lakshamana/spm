@@ -33,6 +33,22 @@ public class AgentHasAbility implements Serializable {
     private Ability theAbility;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+	public AgentHasAbility() {
+		this.degree = new Integer(0);
+		this.theAgent = null; // must be set explicitely
+		this.theAbility = null; // must be set explicitely
+	}
+	public AgentHasAbility(Agent theAgent, Ability theAbility) {
+		this.degree = new Integer(0);
+		this.setTheAgent(theAgent);
+		this.setTheAbility(theAbility);
+	}
+	public AgentHasAbility(Integer degree, Agent theAgent, Ability theAbility) {
+		this.degree = degree;
+		this.setTheAgent(theAgent);
+		this.setTheAbility(theAbility);
+	}
+
     public Long getId() {
         return id;
     }
@@ -104,4 +120,12 @@ public class AgentHasAbility implements Serializable {
             ", degree=" + getDegree() +
             "}";
     }
+
+    public void removeFromTheAbility() {
+      if (this.theAbility != null) {
+        this.theAbility.removeTheAgentHasAbility(this);
+      }
+    }
+
+
 }

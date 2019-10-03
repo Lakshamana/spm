@@ -34,6 +34,17 @@ public class AgentPlaysRole implements Serializable {
     private Role theRole;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+	public AgentPlaysRole() {
+		this.sinceDate = LocalDate.now();
+		this.theRole = null;
+		this.theAgent = null;
+	}
+	public AgentPlaysRole(Role theRole, Agent theAgent) {
+		this.sinceDate = LocalDate.now();
+		this.theRole = theRole;
+		this.theAgent = theAgent;
+	}
+
     public Long getId() {
         return id;
     }
@@ -105,4 +116,12 @@ public class AgentPlaysRole implements Serializable {
             ", sinceDate='" + getSinceDate() + "'" +
             "}";
     }
+
+    public void removeFromTheRole() {
+      if (this.theRole != null) {
+        this.theRole.removeTheAgentPlaysRole(this);
+      }
+    }
+
+
 }

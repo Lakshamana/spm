@@ -182,4 +182,6 @@ public class ArtifactCon extends Connection implements Serializable {
             "id=" + getId() +
             "}";
     }
+
+
 }
